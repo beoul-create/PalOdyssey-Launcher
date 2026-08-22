@@ -1,0 +1,25 @@
+{
+  "ModName": "DarnMenu",
+  "PackageName": "DarnMenu",
+  "Thumbnail": "thumbnail.png",
+  "Version": "1.8.11",
+  "DebugMode": false,
+  "MinRevision": 82182,
+  "Author": "A New Darn",
+  "Dependencies": [
+    "UE4SSExperimentalPW"
+  ],
+  "Tags": [
+    "UE4SS",
+    "Utilities",
+    "User Interface"
+  ],
+  "InstallRule": [
+    {
+      "Type": "Lua",
+      "Targets": [
+        "./Scripts"
+      ]
+    }
+  ]
+}

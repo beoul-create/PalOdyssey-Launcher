@@ -1,4 +1,4 @@
-﻿{
+{
     "serverPort":  8211,
     "updatedAt":  "2026-08-22T02:27:02.4416118Z",
     "mods":  [
@@ -11,8 +11,8 @@
                      "name":  "UE4SS 3.0.1 Core Modding Framework",
                      "description":  "Unreal Engine 5.1 C++ and Lua Scripting Injector",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\dwmapi.dll",
-                     "sizeBytes":  58368,
-                     "sha256":  "CE596412BEFA68C30B7F88F65BEB77D9BDAD55E9B96A276A5A9CF690C63F24BB"
+                     "sizeBytes":  279552,
+                     "sha256":  "BFEF7E3275387EE029856D7C12A4EDB8005B833C8BB949449CFD0649D0E7372F"
                  },
                  {
                      "version":  "1.8.11",

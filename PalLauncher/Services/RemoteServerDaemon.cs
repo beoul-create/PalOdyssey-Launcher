@@ -392,6 +392,7 @@ namespace PalLauncher.Services
 
             await resp.OutputStream.WriteAsync(bytes, 0, bytes.Length);
             await resp.OutputStream.FlushAsync();
+            resp.OutputStream.Close();
         }
 
         public async Task StopDaemonAsync()

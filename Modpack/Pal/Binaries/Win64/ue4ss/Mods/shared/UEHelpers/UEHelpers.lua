@@ -1,12 +1,4 @@
 local UEHelpers = {}
-
-if type(CreateInvalidObject) ~= "function" then
-    CreateInvalidObject = function()
-        local invalidObj = {}
-        function invalidObj:IsValid() return false end
-        return invalidObj
-    end
-end
 -- Uncomment the below require to use the Lua VM profiler on these functions
 -- local jsb = require("jsbProfiler.jsbProfi")
 

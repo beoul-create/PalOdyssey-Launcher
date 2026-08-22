@@ -1,4 +1,11 @@
-﻿; PalOdyssey Base Modpack - Active Core Mods
+CheatManagerEnablerMod : 1
+ConsoleCommandsMod : 1
+ConsoleEnablerMod : 1
+SplitScreenMod : 0
+LineTraceMod : 0
+BPML_GenericFunctions : 1
+BPModLoaderMod : 1
+
 ExpeditionXP : 1
 DarnMenu : 1
 DarnToasts : 1
@@ -8,3 +15,6 @@ PalworldBorealisEngineFix : 1
 PalOlympicsFPSBooster : 1
 RawMouseInput : 1
 PlayerCustomizationSuite : 1
+
+; Built-in keybinds, do not move up!
+Keybinds : 1
