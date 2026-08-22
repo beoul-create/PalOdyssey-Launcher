@@ -1,0 +1,23 @@
+﻿; PalOdyssey Base Modpack - Enabled Mods List
+; UE4SS core mods
+BPModLoaderMod : 1
+BPML_GenericFunctions : 1
+ConsoleCommandsMod : 1
+ConsoleEnablerMod : 1
+
+; PalOdyssey Custom Gameplay Mods
+PalSchema : 1
+ExpeditionXP : 1
+DarnMenu : 1
+DarnToasts : 1
+LevelLock : 1
+WeaponProficiency : 1
+PalworldBorealisEngineFix : 1
+PalworldTuner : 1
+RamTrimMod : 1
+PalOlympicsFPSBooster : 1
+RawMouseInput : 1
+PlayerCustomizationSuite : 1
+
+; Built-in keybinds, do not move up!
+Keybinds : 1

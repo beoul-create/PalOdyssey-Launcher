@@ -1,0 +1,10 @@
+﻿; PalOdyssey Base Modpack - Active Core Mods
+ExpeditionXP : 1
+DarnMenu : 1
+DarnToasts : 1
+LevelLock : 1
+WeaponProficiency : 1
+PalworldBorealisEngineFix : 1
+PalOlympicsFPSBooster : 1
+RawMouseInput : 1
+PlayerCustomizationSuite : 1

@@ -1,0 +1,129 @@
+﻿{
+    "serverPort":  8211,
+    "updatedAt":  "2026-08-22T02:27:02.4416118Z",
+    "mods":  [
+                 {
+                     "version":  "3.0.1",
+                     "required":  true,
+                     "id":  "ue4ss-framework",
+                     "enabledByDefault":  true,
+                     "category":  "Core",
+                     "name":  "UE4SS 3.0.1 Core Modding Framework",
+                     "description":  "Unreal Engine 5.1 C++ and Lua Scripting Injector",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\dwmapi.dll",
+                     "sizeBytes":  58368,
+                     "sha256":  "CE596412BEFA68C30B7F88F65BEB77D9BDAD55E9B96A276A5A9CF690C63F24BB"
+                 },
+                 {
+                     "version":  "1.8.11",
+                     "required":  true,
+                     "id":  "darnmenu-ui",
+                     "enabledByDefault":  true,
+                     "category":  "UI",
+                     "name":  "DarnMenu In-Game UI Suite",
+                     "description":  "ESC Mod Options \u0026 Configuration Interface",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\DarnMenu\\Scripts\\main.lua",
+                     "sizeBytes":  175961,
+                     "sha256":  "B9A56855F7C3A86494E2A2D9D92A1821F22A35A1E898636478A67545EABD19B6"
+                 },
+                 {
+                     "version":  "2.7.1",
+                     "required":  true,
+                     "id":  "darntoasts-panels",
+                     "enabledByDefault":  true,
+                     "category":  "UI",
+                     "name":  "DarnToasts + Panels",
+                     "description":  "In-Game Notifications and Progress Overlay",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\DarnToasts\\Scripts\\main.lua",
+                     "sizeBytes":  6086,
+                     "sha256":  "D85303A0B23446857DE7F7EE9CE62DA941DF779AC38946E2E4F0FD145DD4BB3F"
+                 },
+                 {
+                     "version":  "1.6.3",
+                     "required":  true,
+                     "id":  "expedition-xp-balancer",
+                     "enabledByDefault":  true,
+                     "category":  "Gameplay",
+                     "name":  "Expedition XP \u0026 Level Balancer",
+                     "description":  "Passive Experience \u0026 Level Scaling",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\ExpeditionXP\\scripts\\main.lua",
+                     "sizeBytes":  81379,
+                     "sha256":  "1AC251872C730612A481CFF33C2770BA75CAD2391CB40166F76F477BCE6EE88A"
+                 },
+                 {
+                     "version":  "1.0.0",
+                     "required":  true,
+                     "id":  "living-arsenal",
+                     "enabledByDefault":  true,
+                     "category":  "Gameplay",
+                     "name":  "Living Arsenal - Weapon Proficiency",
+                     "description":  "Weapon Mastery and Dynamic Weapon Scaling",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\WeaponProficiency\\Scripts\\main.lua",
+                     "sizeBytes":  95213,
+                     "sha256":  "61686BD98800A79B0C09B506F6B97A9064E0F4650A5F996523E38FF7683282C0"
+                 },
+                 {
+                     "version":  "2.3.3",
+                     "required":  true,
+                     "id":  "level-lock",
+                     "enabledByDefault":  true,
+                     "category":  "Progression",
+                     "name":  "LevelLock Progression Gating",
+                     "description":  "Boss-Gated Progression \u0026 Level Caps",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\LevelLock\\Scripts\\main.lua",
+                     "sizeBytes":  98696,
+                     "sha256":  "DE5404EEAEFFDA583854D60B6A3683F2F080541F1556B231932ADF0422469EB4"
+                 },
+                 {
+                     "version":  "1.0.0",
+                     "required":  true,
+                     "id":  "borealis-visual-overhaul",
+                     "enabledByDefault":  true,
+                     "category":  "Visuals",
+                     "name":  "Palworld Borealis Visual Overhaul",
+                     "description":  "Volumetric Clouds, Sky Atmosphere \u0026 Reflection Enhancement",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalworldBorealisEngineFix\\Scripts\\main.lua",
+                     "sizeBytes":  394,
+                     "sha256":  "00CAC64651A2A98DC4C7AD0E011C7453D20BF1BF27BBEF884944CB79312C2F8B"
+                 },
+                 {
+                     "version":  "1.2.0",
+                     "required":  true,
+                     "id":  "palolympics-fps-booster",
+                     "enabledByDefault":  true,
+                     "category":  "Performance",
+                     "name":  "PalOlympics FPS \u0026 Performance Booster",
+                     "description":  "Texture Streaming, Multi-Core Optimization \u0026 Instant Teleportation",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalOlympicsFPSBooster\\Scripts\\main.lua",
+                     "sizeBytes":  1945,
+                     "sha256":  "7D7FD078B8EBF81AC31806B5427F0DB52DE122E107B4C5C254F4FB937D954D79"
+                 },
+                 {
+                     "version":  "1.0.0",
+                     "required":  true,
+                     "id":  "raw-mouse-input",
+                     "enabledByDefault":  true,
+                     "category":  "QoL",
+                     "name":  "1:1 Raw Mouse Input \u0026 Linear Sensitivity",
+                     "description":  "Disables UE5 mouse smoothing, view acceleration, and equalizes X/Y sensitivity to 1:1",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\RawMouseInput\\Scripts\\main.lua",
+                     "sizeBytes":  2830,
+                     "sha256":  "932BDBBBA6445D0A294AA65531020B82598FA107C95EF316692ADF8CA34C0677"
+                 },
+                 {
+                     "version":  "1.0.0",
+                     "required":  true,
+                     "id":  "player-customization-suite",
+                     "enabledByDefault":  true,
+                     "category":  "Cosmetics",
+                     "name":  "Player Customization \u0026 Character Creator Suite",
+                     "description":  "In-depth character customization, unlock all body sliders, hairstyles, and cosmetics",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PlayerCustomizationSuite\\Scripts\\main.lua",
+                     "sizeBytes":  1902,
+                     "sha256":  "7A149121B22F5BB0774DD24FCC8BF218FE3186E311242D4E5E4F61605409DF7F"
+                 }
+             ],
+    "serverIp":  "beoul.duckdns.org",
+    "serverName":  "PalOddessey Official Expedition",
+    "manifestVersion":  "1.5.5"
+}

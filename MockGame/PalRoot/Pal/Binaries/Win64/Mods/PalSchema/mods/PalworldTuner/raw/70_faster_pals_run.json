@@ -1,0 +1,10 @@
+{
+  "DT_PalMonsterParameter": {
+    "*": {
+      "$Filters": [
+        { "FieldName": "RunSpeed", "Operation": "LessThan", "Value": 1000 }
+      ],
+      "RunSpeed": 1000
+    }
+  }
+}
