@@ -93,6 +93,7 @@ namespace PalLauncher.Services
                 {
                     _httpListener = new HttpListener();
                     _httpListener.Prefixes.Add($"http://localhost:{_port}/");
+                    _httpListener.Prefixes.Add($"http://127.0.0.1:{_port}/");
                     _httpListener.Start();
                 }
 
@@ -392,7 +393,6 @@ namespace PalLauncher.Services
 
             await resp.OutputStream.WriteAsync(bytes, 0, bytes.Length);
             await resp.OutputStream.FlushAsync();
-            resp.OutputStream.Close();
         }
 
         public async Task StopDaemonAsync()
