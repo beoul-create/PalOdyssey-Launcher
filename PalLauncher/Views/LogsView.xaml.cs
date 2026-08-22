@@ -19,6 +19,14 @@ namespace PalLauncher.Views
             }
         }
 
+        private void OnFilterCrashClicked(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is LogsViewModel vm)
+            {
+                vm.SelectedFilter = "Crash";
+            }
+        }
+
         private void OnFilterErrorsClicked(object sender, RoutedEventArgs e)
         {
             if (DataContext is LogsViewModel vm)

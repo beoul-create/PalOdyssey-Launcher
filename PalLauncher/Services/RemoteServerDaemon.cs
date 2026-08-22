@@ -390,9 +390,8 @@ namespace PalLauncher.Services
             byte[] bytes = Encoding.UTF8.GetBytes(json);
             resp.ContentLength64 = bytes.Length;
 
-            using var stream = resp.OutputStream;
-            await stream.WriteAsync(bytes, 0, bytes.Length);
-            await stream.FlushAsync();
+            await resp.OutputStream.WriteAsync(bytes, 0, bytes.Length);
+            await resp.OutputStream.FlushAsync();
         }
 
         public async Task StopDaemonAsync()

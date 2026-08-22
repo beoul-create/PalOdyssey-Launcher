@@ -46,14 +46,15 @@ namespace PalLauncher
                 _configService = new ConfigService(_logService);
                 _pathDetector = new GamePathDetector(_logService);
                 _updateService = new UpdateService(_logService);
-                _launchService = new LaunchService(_logService);
+                var crashLogService = new CrashLogService(_logService);
+                _launchService = new LaunchService(_logService, crashLogService);
                 var specService = new SystemSpecService(_logService);
                 var remoteDaemon = new RemoteServerDaemon(_logService, _launchService);
                 var remoteClient = new RemoteClientService(_logService);
                 var discordRpc = new DiscordRpcService(_logService);
 
                 // Initialize ViewModels & View
-                _mainViewModel = new MainViewModel(_configService, _pathDetector, _updateService, _launchService, _logService, specService, remoteDaemon, remoteClient, discordRpc);
+                _mainViewModel = new MainViewModel(_configService, _pathDetector, _updateService, _launchService, _logService, specService, remoteDaemon, remoteClient, discordRpc, crashLogService);
 
                 var mainWindow = new MainWindow(_mainViewModel);
                 MainWindow = mainWindow;

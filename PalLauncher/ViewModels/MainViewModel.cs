@@ -197,7 +197,8 @@ namespace PalLauncher.ViewModels
             ISystemSpecService? specService = null,
             IRemoteServerDaemon? remoteDaemon = null,
             IRemoteClientService? remoteClient = null,
-            IDiscordRpcService? discordRpc = null)
+            IDiscordRpcService? discordRpc = null,
+            ICrashLogService? crashLogService = null)
         {
             _configService = configService;
             _pathDetector = pathDetector;
@@ -209,9 +210,11 @@ namespace PalLauncher.ViewModels
             _remoteClient = remoteClient ?? new RemoteClientService(_logService);
             _discordRpc = discordRpc ?? new DiscordRpcService(_logService);
 
+            var crashService = crashLogService ?? new Services.CrashLogService(_logService);
+
             ModsVM = new ModsViewModel(_updateService, _configService, _pathDetector, _logService);
             SettingsVM = new SettingsViewModel(_configService, _pathDetector, _launchService, _updateService, _logService, _specService);
-            LogsVM = new LogsViewModel(_logService);
+            LogsVM = new LogsViewModel(_logService, crashService, _pathDetector, _configService);
 
             SettingsVM.PropertyChanged += (s, e) =>
             {

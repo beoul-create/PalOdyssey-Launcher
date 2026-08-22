@@ -12,6 +12,7 @@ namespace PalLauncher.Services
     public class LaunchService : ILaunchService
     {
         private readonly ILogService _logService;
+        private readonly ICrashLogService? _crashLogService;
         private Process? _runningClientProcess;
         private Process? _runningServerProcess;
         private GameProcessState _currentState = new();
@@ -26,9 +27,10 @@ namespace PalLauncher.Services
         public event EventHandler<GameProcessState>? ProcessStateChanged;
         public event EventHandler<int>? ProcessExited;
 
-        public LaunchService(ILogService logService)
+        public LaunchService(ILogService logService, ICrashLogService? crashLogService = null)
         {
             _logService = logService;
+            _crashLogService = crashLogService;
         }
 
         private CancellationTokenSource? _serverLogCts;
@@ -245,10 +247,30 @@ namespace PalLauncher.Services
                                 EnableRaisingEvents = true
                             };
 
-                            cProcess.Exited += (s, e) =>
+                            cProcess.Exited += async (s, e) =>
                             {
-                                _logService.LogInfo($"Game client process (PID: {cProcess.Id}) closed.", "Launcher");
+                                int exitCode = -1;
+                                try { exitCode = cProcess.ExitCode; } catch { }
+                                _logService.LogInfo($"Game client process (PID: {cProcess.Id}) closed (ExitCode: {exitCode}).", "Launcher");
                                 UpdateProcessState();
+
+                                if (exitCode != 0 && _crashLogService != null)
+                                {
+                                    try
+                                    {
+                                        await Task.Delay(1200); // Allow Unreal CrashReporter to finish writing files
+                                        var crash = await _crashLogService.GetLatestCrashReportAsync(pathInfo.GameRootPath);
+                                        if (crash != null && (DateTime.Now - crash.Timestamp).TotalMinutes < 2)
+                                        {
+                                            _logService.LogError($"[CRASH DETECTED] {crash.PrimaryModule}: {crash.ErrorMessage}", "CrashWatcher");
+                                            if (!string.IsNullOrEmpty(crash.SuggestedFix))
+                                            {
+                                                _logService.LogWarning($"[CRASH ADVICE] {crash.SuggestedFix}", "CrashWatcher");
+                                            }
+                                        }
+                                    }
+                                    catch { }
+                                }
                             };
 
                             if (cProcess.Start())
