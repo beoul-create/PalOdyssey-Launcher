@@ -289,6 +289,42 @@ namespace PalLauncher.Services
                 mod.DownloadProgress = 100.0;
                 mod.StatusMessage = "Installed & Verified";
                 _logService.LogSuccess($"Successfully installed {mod.Name} v{mod.Version} to {targetFilePath}", "Updater");
+
+                // Mirror to ue4ss\Mods if installed to Win64\Mods or vice-versa
+                try
+                {
+                    if (targetFilePath.Contains(@"\Pal\Binaries\Win64\Mods\", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string mirrorPath = targetFilePath.Replace(@"\Pal\Binaries\Win64\Mods\", @"\Pal\Binaries\Win64\ue4ss\Mods\", StringComparison.OrdinalIgnoreCase);
+                        Directory.CreateDirectory(Path.GetDirectoryName(mirrorPath)!);
+                        File.Copy(targetFilePath, mirrorPath, true);
+                    }
+                    else if (targetFilePath.Contains(@"\Pal\Binaries\Win64\ue4ss\Mods\", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string mirrorPath = targetFilePath.Replace(@"\Pal\Binaries\Win64\ue4ss\Mods\", @"\Pal\Binaries\Win64\Mods\", StringComparison.OrdinalIgnoreCase);
+                        Directory.CreateDirectory(Path.GetDirectoryName(mirrorPath)!);
+                        File.Copy(targetFilePath, mirrorPath, true);
+                    }
+
+                    // Mirror to sibling PalServer if it exists
+                    string siblingServer = Path.GetFullPath(Path.Combine(gameRootPath, "..", "PalServer"));
+                    if (Directory.Exists(siblingServer))
+                    {
+                        string relFromGame = Path.GetRelativePath(gameRootPath, targetFilePath);
+                        string serverTarget = Path.Combine(siblingServer, relFromGame);
+                        Directory.CreateDirectory(Path.GetDirectoryName(serverTarget)!);
+                        File.Copy(targetFilePath, serverTarget, true);
+
+                        if (serverTarget.Contains(@"\Pal\Binaries\Win64\Mods\", StringComparison.OrdinalIgnoreCase))
+                        {
+                            string sMirror = serverTarget.Replace(@"\Pal\Binaries\Win64\Mods\", @"\Pal\Binaries\Win64\ue4ss\Mods\", StringComparison.OrdinalIgnoreCase);
+                            Directory.CreateDirectory(Path.GetDirectoryName(sMirror)!);
+                            File.Copy(serverTarget, sMirror, true);
+                        }
+                    }
+                }
+                catch { }
+
                 return true;
             }
             catch (Exception ex)
