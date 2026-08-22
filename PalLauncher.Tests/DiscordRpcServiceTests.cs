@@ -14,7 +14,7 @@ namespace PalLauncher.Tests
             using var service = new DiscordRpcService(_logService);
 
             // Should initialize safely without throwing even if Discord is not currently running
-            await service.InitializeAsync("1215000000000000000");
+            await service.InitializeAsync("1200155050516521020");
 
             // Update presence should safely no-op when not connected
             await service.UpdatePresenceAsync("Using PalOddyssey Launcher", "Preparing Expedition", isPlaying: false);

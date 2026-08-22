@@ -50,7 +50,7 @@ namespace PalLauncher.Models
         public bool EnableDiscordRpc { get; set; } = true;
 
         [JsonPropertyName("discordApplicationId")]
-        public string DiscordApplicationId { get; set; } = "1215000000000000000";
+        public string DiscordApplicationId { get; set; } = "1200155050516521020";
 
         [JsonPropertyName("autoJoinServer")]
         public bool AutoJoinServer { get; set; } = false;

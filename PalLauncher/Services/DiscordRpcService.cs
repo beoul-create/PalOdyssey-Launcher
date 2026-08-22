@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using PalLauncher.Services.Interfaces;
@@ -15,10 +16,15 @@ namespace PalLauncher.Services
         private readonly ILogService _logService;
         private NamedPipeClientStream? _pipeClient;
         private CancellationTokenSource? _cts;
-        private string _applicationId = "1215000000000000000";
+        private string _applicationId = "1200155050516521020"; // Official Palworld Discord App ID
         private bool _isConnected;
         private DateTime? _sessionStartTime;
         private readonly object _lock = new();
+
+        private static readonly JsonSerializerOptions JsonOpts = new()
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
 
         public bool IsConnected => _isConnected;
 
@@ -50,13 +56,13 @@ namespace PalLauncher.Services
                     bool connected = await TryConnectToDiscordPipeAsync();
                     if (connected)
                     {
-                        await UpdatePresenceAsync("Using PalOddyssey Launcher", "Preparing Expedition", isPlaying: false);
+                        await UpdatePresenceAsync("Using PalOdyssey Launcher", "Preparing Expedition", isPlaying: false);
                     }
                 }
 
                 try
                 {
-                    await Task.Delay(15000, ct); // Reconnect / keepalive check
+                    await Task.Delay(10000, ct); // Reconnect / keepalive check
                 }
                 catch (OperationCanceledException) { break; }
             }
@@ -64,13 +70,21 @@ namespace PalLauncher.Services
 
         private async Task<bool> TryConnectToDiscordPipeAsync()
         {
+            lock (_lock)
+            {
+                try { _pipeClient?.Dispose(); } catch { }
+                _pipeClient = null;
+                _isConnected = false;
+            }
+
             for (int i = 0; i < 10; i++)
             {
+                NamedPipeClientStream? pipe = null;
                 try
                 {
                     string pipeName = $"discord-ipc-{i}";
-                    var pipe = new NamedPipeClientStream(".", pipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
-                    await pipe.ConnectAsync(300);
+                    pipe = new NamedPipeClientStream(".", pipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
+                    await pipe.ConnectAsync(350);
 
                     _pipeClient = pipe;
 
@@ -78,9 +92,9 @@ namespace PalLauncher.Services
                     var handshake = new { v = 1, client_id = _applicationId };
                     await WriteFrameAsync(0, handshake);
 
-                    // Read Handshake response
-                    var (op, _) = await ReadFrameAsync();
-                    if (op == 1) // Opcode 1 = Frame / READY
+                    // Read Handshake response (Opcode 1 = Frame/Ready)
+                    var (op, json) = await ReadFrameAsync();
+                    if (op == 1 || !string.IsNullOrEmpty(json))
                     {
                         _isConnected = true;
                         _logService.LogInfo($"Connected to Discord Rich Presence IPC ({pipeName}).", "DiscordRPC");
@@ -89,7 +103,8 @@ namespace PalLauncher.Services
                 }
                 catch
                 {
-                    // Pipe not available, try next index
+                    try { pipe?.Dispose(); } catch { }
+                    _pipeClient = null;
                 }
             }
 
@@ -121,7 +136,7 @@ namespace PalLauncher.Services
                     ? ((DateTimeOffset)_sessionStartTime.Value).ToUnixTimeSeconds()
                     : null;
 
-                object timestampsObj = startUnix.HasValue ? new { start = startUnix.Value } : new object();
+                object? timestampsObj = startUnix.HasValue ? new { start = startUnix.Value } : null;
 
                 var activityPayload = new
                 {
@@ -133,12 +148,15 @@ namespace PalLauncher.Services
                         {
                             details = details,
                             state = state,
-                            timestamps = startUnix.HasValue ? timestampsObj : null,
+                            timestamps = timestampsObj,
                             assets = new
                             {
-                                large_image = "palodyssey_logo",
-                                large_text = "⚡ PalOddyssey Expedition ⚔️"
-                            }
+                                large_image = "palworld_main",
+                                large_text = "⚡ PalOdyssey Realm ⚔️",
+                                small_image = "palworld_main",
+                                small_text = "Astral Expedition Engine"
+                            },
+                            instance = false
                         }
                     },
                     nonce = Guid.NewGuid().ToString("N")
@@ -179,7 +197,7 @@ namespace PalLauncher.Services
         {
             if (_pipeClient == null || !_pipeClient.IsConnected) return;
 
-            string json = JsonSerializer.Serialize(payload);
+            string json = JsonSerializer.Serialize(payload, JsonOpts);
             byte[] bytes = Encoding.UTF8.GetBytes(json);
             int length = bytes.Length;
 
