@@ -78,10 +78,37 @@ namespace PalLauncher.Services
             }
             catch (Exception ex)
             {
-                _logService.LogWarning($"Failed to fetch remote manifest from {manifestUrl}. Trying embedded fallback.", "Updater", ex.Message);
+                _logService.LogInfo($"Remote manifest check ({manifestUrl}): {ex.Message}. Checking local cached manifest...", "Updater");
             }
 
-            // Fallback: Generate or return default sample manifest
+            // Fallback 1: Local file check in SampleData or Modpack
+            string[] localFallbacks = new[]
+            {
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SampleData", "version.json"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modpack", "version.json"),
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "Modpack", "version.json")
+            };
+
+            foreach (var localFallback in localFallbacks)
+            {
+                if (File.Exists(localFallback))
+                {
+                    try
+                    {
+                        string fallbackJson = await File.ReadAllTextAsync(localFallback, cancellationToken);
+                        var manifest = JsonSerializer.Deserialize<ModManifest>(fallbackJson, _jsonOptions);
+                        if (manifest != null && manifest.Mods.Count > 0)
+                        {
+                            _currentManifest = manifest;
+                            _logService.LogSuccess($"Loaded local manifest v{manifest.ManifestVersion} with {manifest.Mods.Count} mods.", "Updater");
+                            return manifest;
+                        }
+                    }
+                    catch { }
+                }
+            }
+
+            // Fallback 2: Default embedded manifest
             _currentManifest = CreateDefaultManifest();
             _logService.LogInfo($"Using default manifest with {_currentManifest.Mods.Count} mods.", "Updater");
             return _currentManifest;

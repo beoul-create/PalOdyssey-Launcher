@@ -1,10 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using PalLauncher.Models;
 using PalLauncher.Services.Interfaces;
 
@@ -57,7 +57,8 @@ namespace PalLauncher.Services
                         Timestamp = latestDir.LastWriteTime
                     };
 
-                    string xmlContent = File.ReadAllText(xmlPath, Encoding.UTF8);
+                    string xmlContent = ReadSharedFileText(xmlPath);
+                    if (string.IsNullOrWhiteSpace(xmlContent)) return null;
 
                     // Parse ErrorMessage
                     var errMatch = Regex.Match(xmlContent, @"<ErrorMessage>(.*?)</ErrorMessage>", RegexOptions.Singleline);
@@ -82,7 +83,6 @@ namespace PalLauncher.Services
                     }
                     else
                     {
-                        // Fallback to PCallStack
                         var pStackMatch = Regex.Match(xmlContent, @"<PCallStack>(.*?)</PCallStack>", RegexOptions.Singleline);
                         if (pStackMatch.Success)
                         {
@@ -90,17 +90,29 @@ namespace PalLauncher.Services
                         }
                     }
 
-                    // Determine Primary Module and Suggested Fix
                     AnalyzeCrashRootCause(report);
-
                     return report;
                 }
                 catch (Exception ex)
                 {
-                    _logService.LogWarning("Failed to parse latest crash context.", "CrashDiagnostics", ex.Message);
+                    _logService.LogWarning("Crash diagnostics parser notice: " + ex.Message, "CrashDiagnostics");
                     return null;
                 }
             });
+        }
+
+        private static string ReadSharedFileText(string path)
+        {
+            try
+            {
+                using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                using var reader = new StreamReader(fs, Encoding.UTF8);
+                return reader.ReadToEnd();
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         private static string CleanCallStack(string raw)
@@ -160,21 +172,33 @@ namespace PalLauncher.Services
                     var candidates = new List<string>();
                     if (!string.IsNullOrEmpty(gameRootPath))
                     {
+                        candidates.Add(Path.Combine(gameRootPath, "Pal", "Binaries", "Win64", "ue4ss", "UE4SS.log"));
                         candidates.Add(Path.Combine(gameRootPath, "Pal", "Binaries", "Win64", "UE4SS.log"));
+                        candidates.Add(Path.Combine(gameRootPath, "ue4ss", "UE4SS.log"));
                         candidates.Add(Path.Combine(gameRootPath, "UE4SS.log"));
                     }
+                    candidates.Add(@"C:\SteamLibrary\steamapps\common\Palworld\Pal\Binaries\Win64\ue4ss\UE4SS.log");
                     candidates.Add(@"C:\SteamLibrary\steamapps\common\Palworld\Pal\Binaries\Win64\UE4SS.log");
-                    candidates.Add(@"C:\Program Files (x86)\Steam\steamapps\common\Palworld\Pal\Binaries\Win64\UE4SS.log");
+                    candidates.Add(@"C:\Program Files (x86)\Steam\steamapps\common\Palworld\Pal\Binaries\Win64\ue4ss\UE4SS.log");
 
                     string? logFile = candidates.FirstOrDefault(File.Exists);
                     if (logFile == null) return null;
 
-                    var lines = File.ReadLines(logFile).TakeLast(maxLines).ToList();
+                    var allLines = new List<string>();
+                    using var fs = new FileStream(logFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    using var reader = new StreamReader(fs, Encoding.UTF8);
+                    string? line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        allLines.Add(line);
+                    }
+
+                    var lines = allLines.TakeLast(maxLines).ToList();
                     return string.Join(Environment.NewLine, lines);
                 }
                 catch (Exception ex)
                 {
-                    _logService.LogWarning("Failed to read UE4SS.log", "CrashDiagnostics", ex.Message);
+                    _logService.LogWarning("Crash diagnostics note on reading UE4SS.log: " + ex.Message, "CrashDiagnostics");
                     return null;
                 }
             });
@@ -190,12 +214,21 @@ namespace PalLauncher.Services
                     string palLog = Path.Combine(localAppData, "Pal", "Saved", "Logs", "Pal.log");
                     if (!File.Exists(palLog)) return null;
 
-                    var lines = File.ReadLines(palLog).TakeLast(maxLines).ToList();
+                    var allLines = new List<string>();
+                    using var fs = new FileStream(palLog, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    using var reader = new StreamReader(fs, Encoding.UTF8);
+                    string? line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        allLines.Add(line);
+                    }
+
+                    var lines = allLines.TakeLast(maxLines).ToList();
                     return string.Join(Environment.NewLine, lines);
                 }
                 catch (Exception ex)
                 {
-                    _logService.LogWarning("Failed to read Pal.log", "CrashDiagnostics", ex.Message);
+                    _logService.LogWarning("Crash diagnostics note on reading Pal.log: " + ex.Message, "CrashDiagnostics");
                     return null;
                 }
             });

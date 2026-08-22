@@ -153,10 +153,7 @@ namespace PalLauncher.Services
                             timestamps = timestampsObj,
                             assets = new
                             {
-                                large_image = "palworld_main",
-                                large_text = "⚡ PalOdyssey Realm ⚔️",
-                                small_image = "palworld_main",
-                                small_text = "Astral Engine"
+                                large_text = "⚡ PalOdyssey Realm ⚔️"
                             },
                             instance = false
                         }
