@@ -19,7 +19,7 @@ namespace PalLauncher.Services
         private string _applicationId = "383226320970055681"; // Registered Discord Rich Presence App ID
         private bool _isConnected;
         private DateTime? _sessionStartTime;
-        private readonly object _lock = new();
+        private readonly SemaphoreSlim _pipeSemaphore = new(1, 1);
 
         private static readonly JsonSerializerOptions JsonOpts = new()
         {
@@ -62,7 +62,7 @@ namespace PalLauncher.Services
 
                 try
                 {
-                    await Task.Delay(8000, ct); // Reconnect / keepalive check
+                    await Task.Delay(10000, ct); // Reconnect / heartbeat check
                 }
                 catch (OperationCanceledException) { break; }
             }
@@ -70,47 +70,52 @@ namespace PalLauncher.Services
 
         private async Task<bool> TryConnectToDiscordPipeAsync()
         {
-            lock (_lock)
+            await _pipeSemaphore.WaitAsync();
+            try
             {
                 try { _pipeClient?.Dispose(); } catch { }
                 _pipeClient = null;
                 _isConnected = false;
-            }
 
-            for (int i = 0; i < 10; i++)
-            {
-                NamedPipeClientStream? pipe = null;
-                try
+                for (int i = 0; i < 10; i++)
                 {
-                    string pipeName = $"discord-ipc-{i}";
-                    pipe = new NamedPipeClientStream(".", pipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
-                    using var connCts = new CancellationTokenSource(500);
-                    await pipe.ConnectAsync(connCts.Token);
-
-                    _pipeClient = pipe;
-
-                    // Send Handshake (Opcode 0)
-                    var handshake = new { v = 1, client_id = _applicationId };
-                    await WriteFrameAsync(0, handshake);
-
-                    // Read Handshake response (Opcode 1 = Frame/Ready)
-                    using var readCts = new CancellationTokenSource(1500);
-                    var (op, json) = await ReadFrameAsync(readCts.Token);
-                    if (op == 1 || !string.IsNullOrEmpty(json))
+                    NamedPipeClientStream? pipe = null;
+                    try
                     {
-                        _isConnected = true;
-                        _logService.LogInfo($"Connected to Discord Rich Presence IPC ({pipeName}).", "DiscordRPC");
-                        return true;
+                        string pipeName = $"discord-ipc-{i}";
+                        pipe = new NamedPipeClientStream(".", pipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
+                        using var connCts = new CancellationTokenSource(500);
+                        await pipe.ConnectAsync(connCts.Token);
+
+                        _pipeClient = pipe;
+
+                        // Send Handshake (Opcode 0)
+                        var handshake = new { v = 1, client_id = _applicationId };
+                        await WriteFrameInternalAsync(0, handshake);
+
+                        // Read Handshake response (Opcode 1 = Frame/Ready)
+                        using var readCts = new CancellationTokenSource(1500);
+                        var (op, json) = await ReadFrameInternalAsync(readCts.Token);
+                        if (op == 1 || (!string.IsNullOrEmpty(json) && json.Contains("READY")))
+                        {
+                            _isConnected = true;
+                            _logService.LogInfo($"Connected to Discord Rich Presence IPC ({pipeName}).", "DiscordRPC");
+                            return true;
+                        }
+                    }
+                    catch
+                    {
+                        try { pipe?.Dispose(); } catch { }
+                        _pipeClient = null;
                     }
                 }
-                catch
-                {
-                    try { pipe?.Dispose(); } catch { }
-                    _pipeClient = null;
-                }
-            }
 
-            return false;
+                return false;
+            }
+            finally
+            {
+                _pipeSemaphore.Release();
+            }
         }
 
         public async Task UpdatePresenceAsync(string details, string state, bool isPlaying = false)
@@ -120,8 +125,11 @@ namespace PalLauncher.Services
                 return;
             }
 
+            await _pipeSemaphore.WaitAsync();
             try
             {
+                if (!_isConnected || _pipeClient == null || !_pipeClient.IsConnected) return;
+
                 if (isPlaying)
                 {
                     if (!_sessionStartTime.HasValue)
@@ -151,22 +159,26 @@ namespace PalLauncher.Services
                             details = details,
                             state = state,
                             timestamps = timestampsObj,
-                            assets = new
-                            {
-                                large_text = "⚡ PalOdyssey Realm ⚔️"
-                            },
                             instance = false
                         }
                     },
                     nonce = Guid.NewGuid().ToString("N")
                 };
 
-                await WriteFrameAsync(1, activityPayload);
+                await WriteFrameInternalAsync(1, activityPayload);
+
+                // Drain response frame from Discord so pipe stays clear
+                using var readCts = new CancellationTokenSource(1000);
+                await ReadFrameInternalAsync(readCts.Token);
             }
             catch (Exception ex)
             {
                 _isConnected = false;
-                _logService.LogWarning("Discord presence update error, will reconnect.", "DiscordRPC", ex.Message);
+                _logService.LogWarning("Discord presence update notice: " + ex.Message, "DiscordRPC");
+            }
+            finally
+            {
+                _pipeSemaphore.Release();
             }
         }
 
@@ -174,8 +186,11 @@ namespace PalLauncher.Services
         {
             if (!_isConnected || _pipeClient == null || !_pipeClient.IsConnected) return;
 
+            await _pipeSemaphore.WaitAsync();
             try
             {
+                if (!_isConnected || _pipeClient == null || !_pipeClient.IsConnected) return;
+
                 var clearPayload = new
                 {
                     cmd = "SET_ACTIVITY",
@@ -187,12 +202,19 @@ namespace PalLauncher.Services
                     nonce = Guid.NewGuid().ToString("N")
                 };
 
-                await WriteFrameAsync(1, clearPayload);
+                await WriteFrameInternalAsync(1, clearPayload);
+
+                using var readCts = new CancellationTokenSource(1000);
+                await ReadFrameInternalAsync(readCts.Token);
             }
             catch { }
+            finally
+            {
+                _pipeSemaphore.Release();
+            }
         }
 
-        private async Task WriteFrameAsync(int opcode, object payload)
+        private async Task WriteFrameInternalAsync(int opcode, object payload)
         {
             if (_pipeClient == null || !_pipeClient.IsConnected) return;
 
@@ -200,18 +222,16 @@ namespace PalLauncher.Services
             byte[] bytes = Encoding.UTF8.GetBytes(json);
             int length = bytes.Length;
 
-            using var ms = new MemoryStream();
-            using var writer = new BinaryWriter(ms);
-            writer.Write(opcode);
-            writer.Write(length);
-            writer.Write(bytes);
+            byte[] header = new byte[8];
+            BitConverter.TryWriteBytes(header.AsSpan(0, 4), opcode);
+            BitConverter.TryWriteBytes(header.AsSpan(4, 4), length);
 
-            byte[] packet = ms.ToArray();
-            await _pipeClient.WriteAsync(packet, 0, packet.Length);
+            await _pipeClient.WriteAsync(header, 0, 8);
+            await _pipeClient.WriteAsync(bytes, 0, length);
             await _pipeClient.FlushAsync();
         }
 
-        private async Task<(int opcode, string json)> ReadFrameAsync(CancellationToken ct = default)
+        private async Task<(int opcode, string json)> ReadFrameInternalAsync(CancellationToken ct = default)
         {
             if (_pipeClient == null || !_pipeClient.IsConnected) return (-1, string.Empty);
 
@@ -244,6 +264,7 @@ namespace PalLauncher.Services
             {
                 _ = ClearPresenceAsync();
                 _pipeClient?.Dispose();
+                _pipeSemaphore?.Dispose();
             }
             catch { }
         }

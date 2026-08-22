@@ -20,7 +20,7 @@ namespace PalLauncher.Tests
             var daemon = new RemoteServerDaemon(_logService, launchService);
             var client = new RemoteClientService(_logService);
 
-            int testPort = 18215;
+            int testPort = 19280 + Random.Shared.Next(10, 500);
             string testKey = "TestSecretKeyLiveboard";
 
             try
