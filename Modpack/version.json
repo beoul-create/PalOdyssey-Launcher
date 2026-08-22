@@ -88,6 +88,18 @@
                      "sha256":  "61686BD98800A79B0C09B506F6B97A9064E0F4650A5F996523E38FF7683282C0"
                  },
                  {
+                     "version":  "1.0.0",
+                     "required":  false,
+                     "id":  "palodyssey-optimizer",
+                     "enabledByDefault":  true,
+                     "category":  "Performance",
+                     "name":  "PalOdyssey Performance and Optimization Suite",
+                     "description":  "Raw Input, Network Latency, FPS, CPU, RAM, and Server Stability Engine",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\PalOdysseyOptimizer\\Scripts\\main.lua",
+                     "sizeBytes":  1682,
+                     "sha256":  "7CC3D71DD7BD02B5C333BFC6C56C5DDB3B6F99E35413CE1330BD13298DC5D89F"
+                 },
+                 {
                      "version":  "1.4.0",
                      "required":  false,
                      "id":  "expedition-xp",

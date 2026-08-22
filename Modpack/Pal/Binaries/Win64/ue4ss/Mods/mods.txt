@@ -18,6 +18,7 @@ DarnMenu : 1
 DarnToasts : 1
 LevelLock : 1
 WeaponProficiency : 1
+PalOdysseyOptimizer : 1
 
 ; Built-in keybinds, do not move up!
 Keybinds : 1

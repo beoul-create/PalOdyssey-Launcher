@@ -59,6 +59,7 @@ namespace PalLauncher.Tests
             Assert.Contains("PalSchema : 1", content);
             Assert.Contains("RamTrimMod : 1", content);
             Assert.Contains("PalworldTuner : 1", content);
+            Assert.Contains("PalOdysseyOptimizer : 1", content);
         }
     }
 }

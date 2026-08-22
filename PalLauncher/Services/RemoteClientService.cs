@@ -90,7 +90,6 @@ namespace PalLauncher.Services
                     {
                         string url = $"http://{h}:{port}{path}";
                         var req = new HttpRequestMessage(method, url);
-                        req.Headers.ConnectionClose = true;
                         configure?.Invoke(req);
                         var resp = await _httpClient.SendAsync(req, ct);
                         if (resp != null && (resp.IsSuccessStatusCode || resp.StatusCode == HttpStatusCode.Forbidden))
