@@ -62,7 +62,7 @@ namespace PalLauncher.Services
 
                 try
                 {
-                    await Task.Delay(10000, ct); // Reconnect / keepalive check
+                    await Task.Delay(8000, ct); // Reconnect / keepalive check
                 }
                 catch (OperationCanceledException) { break; }
             }
@@ -84,7 +84,8 @@ namespace PalLauncher.Services
                 {
                     string pipeName = $"discord-ipc-{i}";
                     pipe = new NamedPipeClientStream(".", pipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
-                    await pipe.ConnectAsync(350);
+                    using var connCts = new CancellationTokenSource(500);
+                    await pipe.ConnectAsync(connCts.Token);
 
                     _pipeClient = pipe;
 
@@ -93,7 +94,8 @@ namespace PalLauncher.Services
                     await WriteFrameAsync(0, handshake);
 
                     // Read Handshake response (Opcode 1 = Frame/Ready)
-                    var (op, json) = await ReadFrameAsync();
+                    using var readCts = new CancellationTokenSource(1500);
+                    var (op, json) = await ReadFrameAsync(readCts.Token);
                     if (op == 1 || !string.IsNullOrEmpty(json))
                     {
                         _isConnected = true;
@@ -154,7 +156,7 @@ namespace PalLauncher.Services
                                 large_image = "palworld_main",
                                 large_text = "⚡ PalOdyssey Realm ⚔️",
                                 small_image = "palworld_main",
-                                small_text = "Astral Expedition Engine"
+                                small_text = "Astral Engine"
                             },
                             instance = false
                         }
@@ -212,12 +214,12 @@ namespace PalLauncher.Services
             await _pipeClient.FlushAsync();
         }
 
-        private async Task<(int opcode, string json)> ReadFrameAsync()
+        private async Task<(int opcode, string json)> ReadFrameAsync(CancellationToken ct = default)
         {
             if (_pipeClient == null || !_pipeClient.IsConnected) return (-1, string.Empty);
 
             byte[] header = new byte[8];
-            int read = await _pipeClient.ReadAsync(header, 0, 8);
+            int read = await _pipeClient.ReadAsync(header, 0, 8, ct);
             if (read < 8) return (-1, string.Empty);
 
             int opcode = BitConverter.ToInt32(header, 0);
@@ -229,7 +231,7 @@ namespace PalLauncher.Services
             int totalRead = 0;
             while (totalRead < length)
             {
-                int r = await _pipeClient.ReadAsync(body, totalRead, length - totalRead);
+                int r = await _pipeClient.ReadAsync(body, totalRead, length - totalRead, ct);
                 if (r <= 0) break;
                 totalRead += r;
             }

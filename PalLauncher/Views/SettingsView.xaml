@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:PalLauncher.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="550" d:DesignWidth="860">
+             d:DesignHeight="560" d:DesignWidth="880">
 
     <UserControl.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -17,7 +17,7 @@
         <StackPanel Margin="0,0,0,16">
 
             <!-- Section 1: Game Installation Path -->
-            <Border Style="{StaticResource StyleCardBorder}" Margin="0,0,0,14">
+            <Border Style="{StaticResource StyleCardBorder}" Margin="0,0,0,14" Padding="18,14">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                         <Path Data="{StaticResource IconFolder}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
@@ -35,7 +35,7 @@
                     </Grid>
 
                     <!-- Path Detection Status Badge -->
-                    <Border Background="#101622" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="10,6">
+                    <Border Background="#0E1422" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="10,6">
                         <StackPanel Orientation="Horizontal">
                             <Path Data="{StaticResource IconCheckCircle}" Fill="{StaticResource BrushSuccess}" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" Visibility="{Binding IsPathValid, Converter={StaticResource BoolToVis}}" />
                             <TextBlock Text="{Binding PathStatusText}" Foreground="{Binding IsPathValid, Converter={StaticResource PathValidToBrush}}" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" />
@@ -44,103 +44,35 @@
                 </StackPanel>
             </Border>
 
-            <!-- Section 2: Dedicated Server Host & Endpoint (Locked to Official Server) -->
-            <Border Style="{StaticResource StyleCardBorder}" Margin="0,0,0,14">
+            <!-- Section 2: 1-Click Game & Engine Auto-Optimizer -->
+            <Border CornerRadius="12" Margin="0,0,0,14" Background="{StaticResource BrushCardGlowGradient}" BorderBrush="{StaticResource BrushCyberBorderGradient}" BorderThickness="1.5" Padding="20,16">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="18" ShadowDepth="3" Direction="270" Color="#00F0FF" Opacity="0.2" />
+                </Border.Effect>
+
                 <StackPanel>
-                    <Grid Margin="0,0,0,10">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconServer}" Fill="{StaticResource BrushAccentOrange}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
-                            <TextBlock Text="PalOdyssey Dedicated Realm" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                <Path Data="{StaticResource IconRocket}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <TextBlock Text="Game &amp; Engine Performance Suite" Foreground="{StaticResource BrushTextPrimary}" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock Text="Automatic hardware profiling, CPU thread scheduling, raw mouse input, and network uncapping." Foreground="{StaticResource BrushTextSecondary}" FontSize="12" />
                         </StackPanel>
 
-                        <!-- Protection / Lock Pill -->
-                        <Border Background="#162030" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="4" Padding="8,2" HorizontalAlignment="Right">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconLock}" Fill="{StaticResource BrushSuccess}" Width="10" Height="10" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
-                                <TextBlock Text="Official Dedicated Server" Foreground="{StaticResource BrushSuccess}" FontSize="10" FontWeight="SemiBold" />
-                            </StackPanel>
+                        <!-- Hardware Tier Badge -->
+                        <Border Grid.Column="1" Background="#142035" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" CornerRadius="6" Padding="10,4" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding HardwareProfile.PerformanceTier, FallbackValue='ENHANCED'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" />
                         </Border>
                     </Grid>
 
-                    <!-- Dedicated Server Endpoint display -->
-                    <Border Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="12,10" Margin="0,0,0,10">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="REALM ENDPOINT" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,4" />
-                                <StackPanel Orientation="Horizontal">
-                                    <Ellipse Width="7" Height="7" Fill="{StaticResource BrushSuccess}" Margin="0,0,6,0" VerticalAlignment="Center" />
-                                    <TextBlock Text="{Binding ServerIp}" Foreground="{StaticResource BrushTextPrimary}" FontSize="13" FontWeight="Bold" />
-                                    <TextBlock Text=":" Foreground="{StaticResource BrushTextMuted}" FontSize="13" />
-                                    <TextBlock Text="{Binding ServerPort}" Foreground="{StaticResource BrushAccentCyan}" FontSize="13" FontWeight="Bold" />
-                                </StackPanel>
-                            </StackPanel>
-
-                            <Border Grid.Column="1" Background="#101827" CornerRadius="4" Padding="8,4" VerticalAlignment="Center">
-                                <TextBlock Text="PalServer v1.5.4" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" />
-                            </Border>
-                        </Grid>
-                    </Border>
-
-                    <!-- Remote Server Wake & Host Daemon Settings -->
-                    <Border Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="10,8" Margin="0,0,0,10">
-                        <StackPanel>
-                            <TextBlock Text="REMOTE WAKE-ON-DEMAND &amp; HOST MANAGEMENT" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,6" />
-                            <CheckBox Content="⚡ Remote Wake-on-Demand (Automatically wakes host server when sleeping)" Style="{StaticResource StyleDarkCheckBox}" IsChecked="{Binding AutoRemoteWakeOnLaunch}" Margin="0,0,0,6" />
-                            <CheckBox Content="🌐 Enable Host Remote Control Daemon (Port 8212 - Host PC Only)" Style="{StaticResource StyleDarkCheckBox}" IsChecked="{Binding EnableRemoteHostDaemon}" Margin="0,0,0,6" />
-                            <CheckBox Content="💤 Inactivity Auto-Shutdown (Puts server to sleep when 0 players online)" Style="{StaticResource StyleDarkCheckBox}" IsChecked="{Binding EnableIdleAutoShutdown}" Margin="0,0,0,8" />
-                            
-                            <Grid Margin="0,0,0,4">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Realm Security Passkey" Foreground="{StaticResource BrushTextMuted}" FontSize="10" Margin="0,0,0,2" />
-                                    <TextBox Text="{Binding RemoteAccessKey, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource StyleDarkTextBox}" FontSize="11" />
-                                </StackPanel>
-                                <StackPanel Grid.Column="1" Margin="10,0,0,0" Width="80">
-                                    <TextBlock Text="Daemon Port" Foreground="{StaticResource BrushTextMuted}" FontSize="10" Margin="0,0,0,2" />
-                                    <TextBox Text="{Binding RemoteManagementPort, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource StyleDarkTextBox}" FontSize="11" />
-                                </StackPanel>
-                                <StackPanel Grid.Column="2" Margin="10,0,0,0" Width="80">
-                                    <TextBlock Text="Idle Timeout (m)" Foreground="{StaticResource BrushTextMuted}" FontSize="10" Margin="0,0,0,2" />
-                                    <TextBox Text="{Binding IdleShutdownMinutes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource StyleDarkTextBox}" FontSize="11" />
-                                </StackPanel>
-                            </Grid>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Launch Toggles -->
-                    <StackPanel Margin="0,2,0,0">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                            <CheckBox Content="Boot Local Dedicated Server on Launch (Host Machine Only)" Style="{StaticResource StyleDarkCheckBox}" IsChecked="{Binding LaunchServerWithGame}" Margin="0,0,20,0" />
-                            <CheckBox Content="Auto-Connect to Server on Game Start" Style="{StaticResource StyleDarkCheckBox}" IsChecked="{Binding AutoJoinServer}" />
-                        </StackPanel>
-                        <CheckBox Content="🎮 Discord Rich Presence (Shows 'Using PalOddyssey Launcher' / Private)" Style="{StaticResource StyleDarkCheckBox}" IsChecked="{Binding EnableDiscordRpc}" />
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-
-            <!-- Section 3: Performance & Command Arguments -->
-            <Border Style="{StaticResource StyleCardBorder}" Margin="0,0,0,14">
-                <StackPanel>
-                    <Grid Margin="0,0,0,10">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconRocket}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
-                            <TextBlock Text="Engine &amp; Performance Optimizations" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
-                        </StackPanel>
-
-                        <!-- Auto-Tune Button -->
-                        <Button Content="⚡ Auto-Tune for System Specs" Style="{StaticResource StyleCyanButton}" FontSize="11" Padding="10,4" HorizontalAlignment="Right" Command="{Binding AutoOptimizeFlagsCommand}" />
-                    </Grid>
-
-                    <!-- Detected Rig Specs Pill -->
-                    <Border Background="#0B0F17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="10,8" Margin="0,0,0,12">
+                    <!-- Detected Rig Specs Card -->
+                    <Border Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,0,14">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -148,66 +80,61 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
-                                    <TextBlock Text="DETECTED RIG:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" />
-                                    <TextBlock Text="{Binding HardwareProfile.SummaryText}" Foreground="{StaticResource BrushTextPrimary}" FontSize="11" FontWeight="SemiBold" />
+                                    <TextBlock Text="DETECTED HARDWARE:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" />
+                                    <TextBlock Text="{Binding HardwareProfile.SummaryText, FallbackValue='Detecting System Specs...'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="SemiBold" />
                                 </StackPanel>
-                                <TextBlock Text="{Binding HardwareProfile.RecommendationSummary}" Foreground="{StaticResource BrushAccentCyan}" FontSize="10" />
+                                <TextBlock Text="{Binding HardwareProfile.RecommendationSummary, FallbackValue='Ready to optimize game engine'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" />
                             </StackPanel>
-                            <Border Grid.Column="1" Background="#142033" CornerRadius="4" Padding="6,2" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding HardwareProfile.PerformanceTier}" Foreground="{StaticResource BrushAccentCyan}" FontSize="10" FontWeight="Bold" />
-                            </Border>
                         </Grid>
                     </Border>
 
-                    <!-- Flags grid -->
-                    <Grid Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
-                        <CheckBox Grid.Row="0" Grid.Column="0" Content="DirectX 11 Mode (-dx11)" Style="{StaticResource StyleDarkCheckBox}" IsChecked="{Binding UseDirectX11}" Margin="0,0,0,8" />
-                        <CheckBox Grid.Row="0" Grid.Column="1" Content="Multithreading Optimization (-USEALLAVAILABLECORES)" Style="{StaticResource StyleDarkCheckBox}" IsChecked="{Binding UseAllCores}" Margin="0,0,0,8" />
-
-                        <CheckBox Grid.Row="1" Grid.Column="0" Content="Skip Intro Splash Videos (-nosplash)" Style="{StaticResource StyleDarkCheckBox}" IsChecked="{Binding NoSplash}" Margin="0,0,0,8" />
-                        <CheckBox Grid.Row="1" Grid.Column="1" Content="High CPU Priority (-high)" Style="{StaticResource StyleDarkCheckBox}" IsChecked="{Binding UseHighPriority}" Margin="0,0,0,8" />
-
-                        <CheckBox Grid.Row="2" Grid.Column="0" Content="Borderless Windowed (-windowed)" Style="{StaticResource StyleDarkCheckBox}" IsChecked="{Binding WindowedMode}" Margin="0,0,0,8" />
-                        <CheckBox Grid.Row="2" Grid.Column="1" Content="Auto-update modpack before launch" Style="{StaticResource StyleDarkCheckBox}" IsChecked="{Binding AutoUpdateBeforeLaunch}" Margin="0,0,0,8" />
-                    </Grid>
-
-                    <!-- Custom arguments string -->
-                    <TextBlock Text="Custom Command-Line Arguments" Foreground="{StaticResource BrushTextMuted}" FontSize="11" Margin="0,0,0,4" />
-                    <TextBox Text="{Binding CustomArguments, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource StyleDarkTextBox}" Margin="0,0,0,8" />
-
-                    <!-- Live preview box -->
-                    <Border Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="10,6">
-                        <StackPanel>
-                            <TextBlock Text="COMMAND LINE PREVIEW:" Foreground="{StaticResource BrushTextMuted}" FontSize="9" FontWeight="Bold" Margin="0,0,0,2" />
-                            <TextBlock Text="{Binding GeneratedArgumentsPreview}" Foreground="{StaticResource BrushAccentCyan}" FontFamily="Consolas" FontSize="11" TextWrapping="Wrap" />
+                    <!-- Primary 1-Click Auto-Optimize Button -->
+                    <Button Style="{StaticResource StyleLaunchButton}"
+                            Command="{Binding AutoOptimizeFlagsCommand}"
+                            Padding="24,14" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Path Data="{StaticResource IconRocket}" Fill="#FFFFFF" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center" />
+                            <TextBlock Text="⚡ AUTO-OPTIMIZE GAME &amp; ENGINE" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
                         </StackPanel>
-                    </Border>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+            <!-- Section 3: Preferences & Integrations -->
+            <Border Style="{StaticResource StyleCardBorder}" Margin="0,0,0,14" Padding="18,14">
+                <StackPanel>
+                    <TextBlock Text="Launcher Preferences" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" />
+
+                    <CheckBox Content="🎮 Discord Rich Presence (Displays live status &amp; mod telemetry in Discord)"
+                              Style="{StaticResource StyleDarkCheckBox}"
+                              IsChecked="{Binding EnableDiscordRpc}"
+                              Margin="0,0,0,10" />
+
+                    <CheckBox Content="Close launcher automatically after launching game"
+                              Style="{StaticResource StyleDarkCheckBox}"
+                              IsChecked="{Binding CloseLauncherOnLaunch}"
+                              Margin="0,0,0,10" />
+
+                    <CheckBox Content="Auto-update modpack before launching"
+                              Style="{StaticResource StyleDarkCheckBox}"
+                              IsChecked="{Binding AutoUpdateBeforeLaunch}"
+                              Margin="0,0,0,6" />
                 </StackPanel>
             </Border>
 
             <!-- Bottom Actions Bar -->
-            <Border Background="{StaticResource BrushBgSurface}" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12,10">
+            <Border Background="{StaticResource BrushBgSurface}" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Text="{Binding StatusMessage}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Grid.Column="0" Text="{Binding StatusMessage}" Foreground="{StaticResource BrushAccentCyan}" FontSize="12" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,10,0" />
 
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="Reset Defaults" Style="{StaticResource StyleGhostButton}" Margin="0,0,8,0" Command="{Binding ResetDefaultsCommand}" />
-                        <Button Content="Save Settings" Style="{StaticResource StyleCyanButton}" Command="{Binding SaveSettingsCommand}" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button Content="Reset Defaults" Style="{StaticResource StyleGhostButton}" Command="{Binding ResetDefaultsCommand}" Margin="0,0,10,0" Padding="12,6" />
+                        <Button Content="Save Settings" Style="{StaticResource StyleCyanButton}" Command="{Binding SaveSettingsCommand}" Padding="16,6" />
                     </StackPanel>
                 </Grid>
             </Border>
