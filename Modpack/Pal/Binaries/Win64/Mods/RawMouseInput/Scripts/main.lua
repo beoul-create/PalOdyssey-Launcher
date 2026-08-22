@@ -1,4 +1,4 @@
-﻿-- =========================================================================
+-- =========================================================================
 -- PalOdyssey - 1:1 Raw Mouse Input & Linear Sensitivity Fix
 -- Disables Unreal Engine 5.1 mouse smoothing, mouse acceleration, and
 -- equalizes horizontal (X) and vertical (Y) aim sensitivity to true 1:1.

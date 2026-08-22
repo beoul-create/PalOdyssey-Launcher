@@ -2788,9 +2788,11 @@ end
 -- hooks + dispatch
 -- ---------------------------------------------------------------------------
 local function onButtonClicked(Context)
+  if not Context then return end
   local btn = safe(function() return Context:get() end)
-  local a = btn and UI.addr(btn)
-  if not a then log("[CLICKDBG] click but no button address") return end
+  if not btn or not UI.alive(btn) then return end
+  local a = UI.addr(btn)
+  if not a then return end
   for _, inst in pairs(instances) do
     -- UI.actionFor, NOT the raw `inst.actions[a]` (2026-07-31). An address is not an identity:
     -- UE recycles allocator addresses, so a widget built by ANOTHER MOD can land on the address

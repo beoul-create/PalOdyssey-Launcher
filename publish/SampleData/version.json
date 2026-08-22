@@ -83,8 +83,8 @@
                      "name":  "Palworld Borealis Visual Overhaul",
                      "description":  "Volumetric Clouds, Sky Atmosphere \u0026 Reflection Enhancement",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalworldBorealisEngineFix\\Scripts\\main.lua",
-                     "sizeBytes":  394,
-                     "sha256":  "00CAC64651A2A98DC4C7AD0E011C7453D20BF1BF27BBEF884944CB79312C2F8B"
+                     "sizeBytes":  391,
+                     "sha256":  "7B92EFD3834EF5755E97668DCBCB229314856E87EF0117C5B364504140F17AA0"
                  },
                  {
                      "version":  "1.2.0",
@@ -95,8 +95,8 @@
                      "name":  "PalOlympics FPS \u0026 Performance Booster",
                      "description":  "Texture Streaming, Multi-Core Optimization \u0026 Instant Teleportation",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PalOlympicsFPSBooster\\Scripts\\main.lua",
-                     "sizeBytes":  1945,
-                     "sha256":  "7D7FD078B8EBF81AC31806B5427F0DB52DE122E107B4C5C254F4FB937D954D79"
+                     "sizeBytes":  1942,
+                     "sha256":  "8D0BD8E5A4AB2F242F4A941469672F862B4B8E4A2BF06D8CF10D72351A4ABD81"
                  },
                  {
                      "version":  "1.0.0",
@@ -107,8 +107,8 @@
                      "name":  "1:1 Raw Mouse Input \u0026 Linear Sensitivity",
                      "description":  "Disables UE5 mouse smoothing, view acceleration, and equalizes X/Y sensitivity to 1:1",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\RawMouseInput\\Scripts\\main.lua",
-                     "sizeBytes":  2830,
-                     "sha256":  "932BDBBBA6445D0A294AA65531020B82598FA107C95EF316692ADF8CA34C0677"
+                     "sizeBytes":  2827,
+                     "sha256":  "CB1E68875D1DEFC5FCA12ACAF9ADB11A59237260A00E9DF8A35118048A970D15"
                  },
                  {
                      "version":  "1.0.0",
@@ -119,8 +119,8 @@
                      "name":  "Player Customization \u0026 Character Creator Suite",
                      "description":  "In-depth character customization, unlock all body sliders, hairstyles, and cosmetics",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\Mods\\PlayerCustomizationSuite\\Scripts\\main.lua",
-                     "sizeBytes":  1902,
-                     "sha256":  "7A149121B22F5BB0774DD24FCC8BF218FE3186E311242D4E5E4F61605409DF7F"
+                     "sizeBytes":  1899,
+                     "sha256":  "4D0546AA058319BC51902029F90CC5FCE7CDF0D5ABD77AB7E5529B7EFC2F9A1C"
                  }
              ],
     "serverIp":  "beoul.duckdns.org",

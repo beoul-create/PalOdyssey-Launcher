@@ -1,4 +1,4 @@
-﻿-- ====================================================================================
+-- ====================================================================================
 -- PalOdyssey Ultra FPS, Memory & Engine Fluidity Suite (v1.2.0)
 -- Zero-Crash Safe Engine: Core CVars are permanently applied via Engine.ini.
 -- This module accelerates fast travel camera fades and performs smart GC post-teleport.

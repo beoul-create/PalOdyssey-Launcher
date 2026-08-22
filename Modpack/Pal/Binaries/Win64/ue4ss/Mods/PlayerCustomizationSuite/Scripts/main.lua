@@ -1,4 +1,4 @@
-﻿-- =========================================================================
+-- =========================================================================
 -- PalOdyssey - Player Customization & Character Creator Expansion Suite
 -- Expands character creation sliders, unlocks all NPC hairstyles,
 -- removes color restrictions, and enables in-game wardrobe.

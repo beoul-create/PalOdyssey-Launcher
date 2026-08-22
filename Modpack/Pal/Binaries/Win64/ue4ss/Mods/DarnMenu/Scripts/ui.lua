@@ -634,11 +634,30 @@ function UI.config(key)
   return math.floor(v)
 end
 function UI.alive(o)
-  if o == nil then return false end
-  local ok, v = pcall(function() return o:IsValid() end)
+  if o == nil or type(o) ~= "userdata" then return false end
+  local ok, v = pcall(function()
+    if type(o.is_valid) == "function" and not o:is_valid() then return false end
+    if type(o.GetAddress) == "function" then
+      local a = o:GetAddress()
+      if not a or (type(a) == "number" and a <= 0x10000) then return false end
+    end
+    return o:IsValid()
+  end)
   return ok and v == true
 end
-function UI.addr(o) return o and safe(function() return o:GetAddress() end) or nil end
+function UI.addr(o)
+  if not o or type(o) ~= "userdata" then return nil end
+  local ok, a = pcall(function()
+    if type(o.is_valid) == "function" and not o:is_valid() then return nil end
+    if type(o.GetAddress) == "function" then
+      local addr = o:GetAddress()
+      if not addr or (type(addr) == "number" and addr <= 0x10000) then return nil end
+      return addr
+    end
+    return nil
+  end)
+  return ok and a or nil
+end
 
 -- Freeze native identity while the UObject is known live. GetAddress alone is insufficient
 -- (UE recycles addresses); Lua userdata equality is also insufficient (each hook push creates a
