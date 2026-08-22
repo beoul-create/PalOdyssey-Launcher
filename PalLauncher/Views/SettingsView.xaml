@@ -10,6 +10,7 @@
     <UserControl.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converters:BooleanToVisibilityConverter x:Key="InvertBoolToVis" Invert="True" />
+        <converters:BooleanToBrushConverter x:Key="PathValidToBrush" TrueBrush="{StaticResource BrushSuccess}" FalseBrush="{StaticResource BrushWarning}" />
     </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">

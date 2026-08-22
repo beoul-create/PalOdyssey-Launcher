@@ -168,7 +168,7 @@
                     <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,18,0">
                         <!-- Progress Bar (Visible during downloads) -->
                         <Grid Visibility="{Binding IsUpdating, Converter={StaticResource BoolToVis}}" Margin="0,0,0,6">
-                            <ProgressBar Value="{Binding UpdateProgressPercentage}" Maximum="100" Height="6" Style="{StaticResource StyleGlowProgressBar}" />
+                            <ProgressBar Value="{Binding UpdateProgressPercentage}" Maximum="100" Height="6" Style="{StaticResource StyleGlowingProgressBar}" />
                         </Grid>
 
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">

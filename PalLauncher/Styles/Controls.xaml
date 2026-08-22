@@ -367,6 +367,8 @@
         </Setter>
     </Style>
 
+    <Style x:Key="StyleGlowProgressBar" BasedOn="{StaticResource StyleGlowingProgressBar}" TargetType="ProgressBar" />
+
     <!-- Custom Sleek ScrollBar -->
     <Style TargetType="ScrollBar">
         <Setter Property="Background" Value="Transparent" />

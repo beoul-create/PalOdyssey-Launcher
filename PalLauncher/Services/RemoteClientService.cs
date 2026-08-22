@@ -24,19 +24,20 @@ namespace PalLauncher.Services
                     NoDelay = true
                 };
 
-                IPAddress targetIp = IPAddress.Loopback;
-                if (!IPAddress.TryParse(context.DnsEndPoint.Host, out targetIp!))
+                IPAddress targetIp;
+                if (IPAddress.TryParse(context.DnsEndPoint.Host, out var parsedIp))
                 {
-                    if (context.DnsEndPoint.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase))
-                    {
-                        targetIp = IPAddress.Loopback;
-                    }
-                    else
-                    {
-                        var addresses = await Dns.GetHostAddressesAsync(context.DnsEndPoint.Host, cancellationToken);
-                        targetIp = Array.Find(addresses, a => a.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                                   ?? addresses[0];
-                    }
+                    targetIp = parsedIp;
+                }
+                else if (context.DnsEndPoint.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase))
+                {
+                    targetIp = IPAddress.Loopback;
+                }
+                else
+                {
+                    var addresses = await Dns.GetHostAddressesAsync(context.DnsEndPoint.Host, cancellationToken);
+                    targetIp = Array.Find(addresses, a => a.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                               ?? addresses[0];
                 }
 
                 try
