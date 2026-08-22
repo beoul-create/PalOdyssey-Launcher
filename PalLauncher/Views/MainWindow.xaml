@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:PalLauncher.Views"
         xmlns:converters="clr-namespace:PalLauncher.Converters"
         mc:Ignorable="d"
-        Title="PalOdyssey Custom Game Launcher"
-        Height="700" Width="1060"
-        MinHeight="640" MinWidth="960"
+        Title="PalOdyssey Futuristic Game Launcher"
+        Icon="pack://application:,,,/Assets/icon.ico"
+        Height="720" Width="1080"
+        MinHeight="660" MinWidth="980"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
@@ -20,97 +21,101 @@
         <converters:ProgressPercentageConverter x:Key="ProgressConv" />
     </Window.Resources>
 
-    <!-- Outer Window Drop Shadow Border -->
-    <Border Margin="10" Background="{StaticResource BrushBgVoid}" CornerRadius="12" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1">
+    <!-- Outer Window Holographic Glow & Cyber Border -->
+    <Border Margin="12" Background="{StaticResource BrushBgVoid}" CornerRadius="16" BorderBrush="{StaticResource BrushCyberBorderGradient}" BorderThickness="1.5">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="24" ShadowDepth="4" Direction="270" Color="#000000" Opacity="0.85" />
+            <DropShadowEffect BlurRadius="28" ShadowDepth="6" Direction="270" Color="#00F0FF" Opacity="0.35" />
         </Border.Effect>
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" /> <!-- Custom Window Chrome Header -->
-                <RowDefinition Height="*" />    <!-- Content Tab Views -->
-                <RowDefinition Height="Auto" /> <!-- Bottom Action / Status Bar -->
+                <RowDefinition Height="Auto" /> <!-- Futuristic Chrome Header -->
+                <RowDefinition Height="*" />    <!-- Rotating Hologram Views -->
+                <RowDefinition Height="Auto" /> <!-- Bottom Holographic Command Deck -->
             </Grid.RowDefinitions>
 
-            <!-- 1. Minimalist Header & Window Chrome -->
-            <Border Grid.Row="0" Background="{StaticResource BrushHeaderGradient}" CornerRadius="12,12,0,0" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,0,0,1">
-                <Grid Height="52" Margin="18,0">
+            <!-- 1. Holographic Top Navigation Chrome -->
+            <Border Grid.Row="0" Background="{StaticResource BrushHeaderGradient}" CornerRadius="15,15,0,0" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,0,0,1">
+                <Grid Height="60" Margin="20,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Left: Sleek Brand Logo & Title (Draggable Area) -->
+                    <!-- Left: Astralym Brand Emblem & Title -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" MouseLeftButtonDown="OnTitleBarMouseDown" Background="Transparent" Cursor="SizeAll">
-                        <Border Width="28" Height="28" CornerRadius="7" Background="{StaticResource BrushLaunchGradient}" Margin="0,0,10,0">
-                            <Path Data="{StaticResource IconRocket}" Fill="#FFFFFF" Width="13" Height="13" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Border Width="36" Height="36" CornerRadius="10" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1.5" Margin="0,0,12,0" Background="#0C1018">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="12" Color="#00F0FF" Opacity="0.8" ShadowDepth="0" />
+                            </Border.Effect>
+                            <Image Source="pack://application:,,,/Assets/astralym_icon.png" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality" Margin="1" />
                         </Border>
 
                         <StackPanel VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="PALODYSSEY" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
-                                <Border Background="#162030" CornerRadius="4" Padding="5,1" Margin="8,0,0,0" VerticalAlignment="Center">
-                                    <TextBlock Text="1.5.4" Foreground="{StaticResource BrushAccentCyan}" FontSize="10" FontWeight="SemiBold" />
+                                <TextBlock Text="PALODYSSEY" Foreground="{StaticResource BrushTextPrimary}" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
+                                <Border Background="#162035" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" CornerRadius="5" Padding="6,1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="ASTRAL v2.0" Foreground="{StaticResource BrushAccentCyan}" FontSize="10" FontWeight="Bold" />
                                 </Border>
                             </StackPanel>
+                            <TextBlock Text="Next-Gen Realm Engine" Foreground="{StaticResource BrushTextMuted}" FontSize="11" FontWeight="Medium" Margin="0,2,0,0" />
                         </StackPanel>
                     </StackPanel>
 
-                    <!-- Center: Minimalist Navigation Tabs -->
+                    <!-- Center: Holographic Rotating Navigation Tabs -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <RadioButton Content="Dashboard" GroupName="NavTabs" Style="{StaticResource StyleNavRadioButton}"
+                        <RadioButton x:Name="TabDashboard" Content="Dashboard" GroupName="NavTabs" Style="{StaticResource StyleNavRadioButton}"
                                      IsChecked="{Binding IsDashboardActive, Mode=TwoWay}"
                                      Command="{Binding NavigateCommand}" CommandParameter="Dashboard"
                                      Checked="OnNavTabChecked" Click="OnNavTabClick">
                             <RadioButton.ContentTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Path Data="{StaticResource IconPlay}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
-                                        <TextBlock Text="Dashboard" VerticalAlignment="Center" FontSize="12" />
+                                        <Path Data="{StaticResource IconPlay}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                        <TextBlock Text="DASHBOARD" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" />
                                     </StackPanel>
                                 </DataTemplate>
                             </RadioButton.ContentTemplate>
                         </RadioButton>
 
-                        <RadioButton Content="Mods &amp; Paks" GroupName="NavTabs" Style="{StaticResource StyleNavRadioButton}"
+                        <RadioButton x:Name="TabMods" Content="Mods" GroupName="NavTabs" Style="{StaticResource StyleNavRadioButton}"
                                      IsChecked="{Binding IsModsActive, Mode=TwoWay}"
                                      Command="{Binding NavigateCommand}" CommandParameter="Mods"
                                      Checked="OnNavTabChecked" Click="OnNavTabClick">
                             <RadioButton.ContentTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Path Data="{StaticResource IconPackage}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
-                                        <TextBlock Text="Mods" VerticalAlignment="Center" FontSize="12" />
+                                        <Path Data="{StaticResource IconPackage}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                        <TextBlock Text="MODPACK" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" />
                                     </StackPanel>
                                 </DataTemplate>
                             </RadioButton.ContentTemplate>
                         </RadioButton>
 
-                        <RadioButton Content="Settings" GroupName="NavTabs" Style="{StaticResource StyleNavRadioButton}"
+                        <RadioButton x:Name="TabSettings" Content="Settings" GroupName="NavTabs" Style="{StaticResource StyleNavRadioButton}"
                                      IsChecked="{Binding IsSettingsActive, Mode=TwoWay}"
                                      Command="{Binding NavigateCommand}" CommandParameter="Settings"
                                      Checked="OnNavTabChecked" Click="OnNavTabClick">
                             <RadioButton.ContentTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Path Data="{StaticResource IconSettings}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
-                                        <TextBlock Text="Settings" VerticalAlignment="Center" FontSize="12" />
+                                        <Path Data="{StaticResource IconSettings}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                        <TextBlock Text="SETTINGS" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" />
                                     </StackPanel>
                                 </DataTemplate>
                             </RadioButton.ContentTemplate>
                         </RadioButton>
 
-                        <RadioButton Content="Logs" GroupName="NavTabs" Style="{StaticResource StyleNavRadioButton}"
+                        <RadioButton x:Name="TabLogs" Content="Logs" GroupName="NavTabs" Style="{StaticResource StyleNavRadioButton}"
                                      IsChecked="{Binding IsLogsActive, Mode=TwoWay}"
                                      Command="{Binding NavigateCommand}" CommandParameter="Logs"
                                      Checked="OnNavTabChecked" Click="OnNavTabClick">
                             <RadioButton.ContentTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Path Data="{StaticResource IconTerminal}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
-                                        <TextBlock Text="Logs" VerticalAlignment="Center" FontSize="12" />
+                                        <Path Data="{StaticResource IconTerminal}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                        <TextBlock Text="LOGS" VerticalAlignment="Center" FontSize="12" FontWeight="SemiBold" />
                                     </StackPanel>
                                 </DataTemplate>
                             </RadioButton.ContentTemplate>
@@ -126,75 +131,96 @@
                 </Grid>
             </Border>
 
-            <!-- 2. Main Content View Area -->
-            <Border Grid.Row="1" Background="{StaticResource BrushBgDark}" Padding="20,16">
+            <!-- 2. Main Holographic Viewport (Smooth Rotating Panel Transition) -->
+            <Border Grid.Row="1" Background="{StaticResource BrushBgDark}" Padding="22,16" ClipToBounds="True">
                 <Grid>
-                    <!-- Dashboard View -->
-                    <Grid Visibility="{Binding IsDashboardActive, Converter={StaticResource BoolToVis}}">
+                    <!-- Dashboard View Container -->
+                    <Grid x:Name="ViewDashboard" Visibility="{Binding IsDashboardActive, Converter={StaticResource BoolToVis}}" RenderTransformOrigin="0.5,0.5">
                         <local:DashboardView DataContext="{Binding}" />
                     </Grid>
 
-                    <!-- Mods Management View -->
-                    <Grid Visibility="{Binding IsModsActive, Converter={StaticResource BoolToVis}}">
+                    <!-- Mods Management View Container -->
+                    <Grid x:Name="ViewMods" Visibility="{Binding IsModsActive, Converter={StaticResource BoolToVis}}" RenderTransformOrigin="0.5,0.5">
                         <local:ModsView DataContext="{Binding ModsVM}" />
                     </Grid>
 
-                    <!-- Settings View -->
-                    <Grid Visibility="{Binding IsSettingsActive, Converter={StaticResource BoolToVis}}">
+                    <!-- Settings View Container -->
+                    <Grid x:Name="ViewSettings" Visibility="{Binding IsSettingsActive, Converter={StaticResource BoolToVis}}" RenderTransformOrigin="0.5,0.5">
                         <local:SettingsView DataContext="{Binding SettingsVM}" />
                     </Grid>
 
-                    <!-- Logs View -->
-                    <Grid Visibility="{Binding IsLogsActive, Converter={StaticResource BoolToVis}}">
+                    <!-- Logs View Container -->
+                    <Grid x:Name="ViewLogs" Visibility="{Binding IsLogsActive, Converter={StaticResource BoolToVis}}" RenderTransformOrigin="0.5,0.5">
                         <local:LogsView DataContext="{Binding LogsVM}" />
                     </Grid>
                 </Grid>
             </Border>
 
-            <!-- 3. Bottom Action & Status Bar -->
-            <Border Grid.Row="2" Background="{StaticResource BrushBgSurface}" CornerRadius="0,0,12,12" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,1,0,0" Padding="20,12">
+            <!-- 3. Bottom Holographic Command Deck -->
+            <Border Grid.Row="2" Background="{StaticResource BrushBgSurface}" CornerRadius="0,0,15,15" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,1,0,0" Padding="22,14">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Left: Status Info & Progress -->
-                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,24,0">
-                        <Grid Margin="0,0,0,6">
-                            <StackPanel Orientation="Horizontal">
-                                <!-- Status Indicator Pulse Dot -->
-                                <Border Width="8" Height="8" CornerRadius="4" Background="{StaticResource BrushAccentCyan}" VerticalAlignment="Center" Margin="0,0,8,0" />
-                                <TextBlock Text="{Binding StatusText}" Foreground="{StaticResource BrushTextPrimary}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" />
-                            </StackPanel>
-
-                            <!-- Percentage text -->
-                            <TextBlock Text="{Binding ProgressPercentage, Converter={StaticResource ProgressConv}}"
-                                       Foreground="{StaticResource BrushAccentCyan}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Right"
-                                       Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}" />
+                    <!-- Left: Status Indicator & Update Progress -->
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,18,0">
+                        <!-- Progress Bar (Visible during downloads) -->
+                        <Grid Visibility="{Binding IsUpdating, Converter={StaticResource BoolToVis}}" Margin="0,0,0,6">
+                            <ProgressBar Value="{Binding UpdateProgressPercentage}" Maximum="100" Height="6" Style="{StaticResource StyleGlowProgressBar}" />
                         </Grid>
 
-                        <!-- Global Progress Bar -->
-                        <ProgressBar Value="{Binding ProgressPercentage}" Maximum="100" Style="{StaticResource StyleGlowingProgressBar}" Height="6" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}" />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Ellipse Width="9" Height="9" Margin="0,0,10,0">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Setter Property="Fill" Value="{StaticResource BrushSuccess}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsUpdating}" Value="True">
+                                                <Setter Property="Fill" Value="{StaticResource BrushAccentCyan}" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsGameRunning}" Value="True">
+                                                <Setter Property="Fill" Value="{StaticResource BrushAccentOrange}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                                <Ellipse.Effect>
+                                    <DropShadowEffect BlurRadius="8" Color="#00F0FF" Opacity="0.8" ShadowDepth="0" />
+                                </Ellipse.Effect>
+                            </Ellipse>
+
+                            <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource BrushTextPrimary}" FontSize="13" FontWeight="Medium" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                        </StackPanel>
                     </StackPanel>
 
-                    <!-- Right: Big Launch Expedition Button -->
-                    <Button Grid.Column="1"
-                            Style="{StaticResource StyleLaunchButton}"
-                            Command="{Binding LaunchGameCommand}"
-                            Height="48"
-                            MinWidth="220"
-                            VerticalAlignment="Center">
-                        <Button.Content>
+                    <!-- Right: Quick Action Controls & Launch Engine -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <!-- Sync Mods Button -->
+                        <Button Style="{StaticResource StyleGhostButton}"
+                                Command="{Binding CheckForUpdatesCommand}"
+                                IsEnabled="{Binding IsUpdating, Converter={StaticResource InvertBoolToVis}}"
+                                Margin="0,0,12,0" Padding="14,10">
                             <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconRocket}" Fill="#FFFFFF" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center" />
-                                <TextBlock Text="{Binding LaunchButtonText}" FontSize="15" FontWeight="ExtraBold" VerticalAlignment="Center" />
+                                <Path Data="{StaticResource IconRefresh}" Fill="{StaticResource BrushAccentCyan}" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <TextBlock Text="SYNC REALM" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" />
                             </StackPanel>
-                        </Button.Content>
-                    </Button>
+                        </Button>
+
+                        <!-- Primary Launch Button with Astral Hologram Glow -->
+                        <Button Style="{StaticResource StyleLaunchButton}"
+                                Command="{Binding LaunchGameCommand}"
+                                IsEnabled="{Binding CanLaunch}"
+                                MinWidth="180">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Path Data="{StaticResource IconRocket}" Fill="#FFFFFF" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center" />
+                                <TextBlock Text="LAUNCH GAME" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </Grid>
             </Border>
-
         </Grid>
     </Border>
 </Window>
