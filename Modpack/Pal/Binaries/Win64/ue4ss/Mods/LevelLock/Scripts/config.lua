@@ -22,8 +22,8 @@ local Config = {
 
     -- Also cap your PALS at the same tower gate (players are ALWAYS capped).
     -- Pal levels are never lowered - this only stops them gaining past the cap.
-    LockPartyPals = true,   -- cap pals in your party        (they gain combat XP)
-    LockBasePals  = true,   -- cap pals working at base camps (they gain work XP)
+    LockPartyPals = false,  -- cap pals in your party        (they gain combat XP)
+    LockBasePals  = false,  -- cap pals working at base camps (they gain work XP)
 
     -- How a shared base-camp pal is capped in PER-PLAYER mode. Only matters when
     -- PerPlayerProgress = true AND LockBasePals = true. A base camp belongs to the
@@ -40,7 +40,7 @@ local Config = {
     -- on, it is banked instead, and paid back out as a bonus once the cap lifts.
     -- Banking is always 1:1, so you can never get back more than the cap took
     -- from you - this cannot make you level faster than playing uncapped.
-    RestedXp = true,
+    RestedXp = false,
 
     -- How fast the bank pays out, as a percentage of the XP you earn.
     -- 100 = every 10 XP earned pays 20 (10 of it from the bank).

@@ -105,8 +105,8 @@ local CFG = {
   -- RATE KNOBS -- turn these DOWN for less XP, UP for more:
   xpPerAnchorLevel = 120,  -- base XP per anchor level. Main grant scaler; biggest
                            --   effect on lower-level pals. Higher = more XP.
-  minPctOfLevel    = 0.20, -- minimum grant = this fraction of the pal's next-level
-                           --   cost (0.20 = 20%). The floor high-level pals live on;
+  minPctOfLevel    = 0.15, -- minimum grant = this fraction of the pal's next-level
+                           --   cost (0.15 = 15%). The floor high-level pals live on;
                            --   higher = more XP for them, lower = they crawl.
   -- BANDED WAGES (2026-08-10 -- the surviving payout design; see grantToParam for the
   -- one-night history of its two dead predecessors). An in-band run pays about one level
@@ -116,13 +116,13 @@ local CFG = {
   bandWidth      = 10,     -- the band: full wages from (anchor-bandWidth is where the baby
                            --   bonus stops) to anchor+bandWidth; past the top, nothing --
                            --   move up to the next expedition.
-  bandUnderBonus = 2.5,    -- multiplier for pals MORE than bandWidth under the anchor
-                           --   (babies being carried learn fastest; boosted nursery curve).
+  bandUnderBonus = 1.5,    -- multiplier for pals MORE than bandWidth under the anchor
+                           --   (babies being carried learn fastest).
 
   -- CURVE SHAPE (advanced -- how the grant bends with the level gap; defaults are tuned):
-  underBonus = 0.15,       -- bonus per level a pal is UNDER the anchor (babies leap):
+  underBonus = 0.08,       -- bonus per level a pal is UNDER the anchor (babies leap):
                            --   underMult = 1 + min(gap, underCap) * underBonus
-  underCap   = 20,         -- cap on that under-anchor bonus (max underMult = 1 + underCap*underBonus)
+  underCap   = 10,         -- cap on that under-anchor bonus (max underMult = 1 + underCap*underBonus)
   overDecay  = 0.15,       -- decay per level a pal is OVER the anchor; ~1/overDecay levels
                            --   over (~7) earns nothing, so pals age out of a tier
   maxLevel   = 80,         -- never push a pal past this level

@@ -89,7 +89,7 @@ namespace PalLauncher.Services
                     try
                     {
                         string url = $"http://{h}:{port}{path}";
-                        using var req = new HttpRequestMessage(method, url);
+                        var req = new HttpRequestMessage(method, url);
                         req.Headers.ConnectionClose = true;
                         configure?.Invoke(req);
                         var resp = await _httpClient.SendAsync(req, ct);
@@ -97,6 +97,7 @@ namespace PalLauncher.Services
                         {
                             return resp;
                         }
+                        req.Dispose();
                     }
                     catch (OperationCanceledException)
                     {
