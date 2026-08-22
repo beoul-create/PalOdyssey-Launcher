@@ -16,7 +16,7 @@ namespace PalLauncher.Services
         private readonly ILogService _logService;
         private NamedPipeClientStream? _pipeClient;
         private CancellationTokenSource? _cts;
-        private string _applicationId = "1200155050516521020"; // Official Palworld Discord App ID
+        private string _applicationId = "383226320970055681"; // Registered Discord Rich Presence App ID
         private bool _isConnected;
         private DateTime? _sessionStartTime;
         private readonly object _lock = new();
