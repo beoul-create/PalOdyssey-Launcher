@@ -1,0 +1,34 @@
+{
+  "ModName": "Living Arsenal — Weapon Proficiency (WIP)",
+  "PackageName": "WeaponProficiency",
+  "Thumbnail": "thumbnail.png",
+  "Version": "2.1.7",
+  "DebugMode": false,
+  "MinRevision": 82182,
+  "Author": "A New Darn",
+  "Dependencies": [
+    "UE4SSExperimentalPW",
+    "DarnToasts",
+    "DarnMenu"
+  ],
+  "Tags": [
+    "UE4SS",
+    "Utilities",
+    "Gameplay"
+  ],
+  "InstallRule": [
+    {
+      "Type": "Lua",
+      "Targets": [
+        "./Scripts"
+      ]
+    },
+    {
+      "Type": "Lua",
+      "IsServer": true,
+      "Targets": [
+        "./Scripts"
+      ]
+    }
+  ]
+}
