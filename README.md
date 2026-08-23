@@ -1,212 +1,106 @@
-# ⚡ PalOdyssey: Next-Gen Palworld Launcher & Unified Modpack
+# ⚡ PalOdyssey Launcher
 
 [![Platform: Windows](https://img.shields.io/badge/Platform-Windows%2010%2F11-0078D6?style=for-the-badge&logo=windows)](https://microsoft.com)
 [![Framework: .NET 8 WPF](https://img.shields.io/badge/Framework-.NET%208%20WPF-512BD4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com)
-[![Unreal Engine: 5.1](https://img.shields.io/badge/Engine-Unreal%20Engine%205.1-313131?style=for-the-badge&logo=unrealengine)](https://unrealengine.com)
-[![Modding: UE4SS 3.0.1](https://img.shields.io/badge/Modding-UE4SS%203.0.1%20C%2B%2B%20%26%20Lua-FF6F00?style=for-the-badge)](https://github.com/UE4SS-RE/RE-UE4SS)
-[![Networking: Zero-IP Exposure](https://img.shields.io/badge/Security-Zero--IP%20Exposure%20(Playit%20%2B%20DuckDNS)-00F0FF?style=for-the-badge)](https://playit.gg)
+[![Unreal Engine: 5.1](https://img.shields.io/badge/Game-Palworld%20(UE%205.1)-313131?style=for-the-badge&logo=unrealengine)](https://unrealengine.com)
+[![Modding: UE4SS 3.0.1](https://img.shields.io/badge/Modpack-UE4SS%203.0.1%20Integrated-FF6F00?style=for-the-badge)](https://github.com/UE4SS-RE/RE-UE4SS)
 
-**PalOdyssey** is a production-grade game launcher, auto-calibrating performance profiler, and synchronized modpack ecosystem engineered specifically for modded **Palworld** expeditions and dedicated server infrastructure.
-
----
-
-## 📑 Table of Contents
-- [🌟 Core Launcher Features](#-core-launcher-features)
-- [📦 Complete Unified Modpack Roster (26+ Mods)](#-complete-unified-modpack-roster-26-mods)
-- [⚙️ In-Game Mod Menu (`ESC → Mod Options`)](#️-in-game-mod-menu-esc--mod-options)
-- [⚡ 1-Click Hardware Auto-Calibration & Presets](#-1-click-hardware-auto-calibration--presets)
-- [🛡️ Zero-IP Exposure Networking (Playit.gg + DuckDNS)](#️-zero-ip-exposure-networking-playitgg--duckdns)
-- [🚀 Installation & Setup Guide](#-installation--setup-guide)
-  - [Client Installation (Players)](#client-installation-players)
-  - [Dedicated Server Setup (Hosts)](#dedicated-server-setup-hosts)
-- [🛠️ Developer & Modding Architecture](#️-developer--modding-architecture)
-- [❓ FAQ & Troubleshooting](#-faq--troubleshooting)
+**PalOdyssey Launcher** is a custom 1-click game launcher, auto-updater, and performance optimizer built specifically for **Palworld**. It automatically manages, installs, and optimizes your modpack so you can jump straight into the realm with peak framerates, crystal-clear visuals, and zero manual file copying.
 
 ---
 
-## 🌟 Core Launcher Features
+## ⚡ Quick Start: How to Install & Play
 
-### 1. ⚡ 1-Click Auto-Calibrate & Hardware Optimization Engine
-- **Hardware Detection**: Probes logical/physical CPU cores, system RAM, and GPU VRAM tiers using Windows Management Instrumentation (`WMI`) and hardware APIs.
-- **Empirical Stress Benchmarking**: Runs real-time multithreaded compute throughput and memory allocation tests to classify your PC into **Efficiency (APU)**, **Balanced (Mid-Range)**, or **Ultra (Enthusiast)**.
-- **Automated Configuration**: Applies optimal launch flags (`-USEALLAVAILABLECORES`, `-malloc=system`, `-dx11`/`-dx12`, `-high`, `-lowmemory`) and writes calibrated task graph worker thread limits directly into mod configurations.
+Getting started takes less than 60 seconds:
 
-### 2. 🔄 Remote Manifest & Automated Modpack Sync (`UpdateService.cs`)
-- **Remote GitHub Manifest**: Synchronizes with remote `version.json` manifests to pull the latest core binaries, UE4SS mods, and content paks.
-- **SHA-256 Integrity Verification**: Fast multi-threaded checksum inspection verifies every `.pak` and `.dll` to automatically repair corrupted or outdated files.
-- **Dual Target Mirroring**: One-click deployment to either local game clients or sibling `PalServer` roots via `Deploy-Modpack.ps1`.
-
-### 3. 🎮 Discord Rich Presence Integration (`DiscordRpcService.cs`)
-- **Real-Time Activity Broadcast**: Displays rich in-game activity badges on Discord (`⚡ PalOdyssey Expedition • Exploring Realm • 15 Mods Active`).
-- **Resilient Named Pipe Architecture**: Connects across `\\.\pipe\discord-ipc-0` through `\\.\pipe\discord-ipc-9` with automatic reconnect and state caching.
-
-### 4. 📡 Remote Host Management Daemon & Liveboard (`RemoteServerDaemon.cs`)
-- **RESTful Liveboard API**: Built-in lightweight HTTP server providing real-time player counts, uptime, and server health status to the launcher dashboard.
-- **Smart Idle Auto-Shutdown**: Automatically monitors active player connections and gracefully suspends the dedicated server when empty to conserve host CPU and electricity.
-- **Secure Remote Wake**: Protected with token-authenticated remote start hooks (`X-PalOdyssey-Key`).
+1. **Download the Launcher**:
+   - Download the latest release from the [Releases](https://github.com/beoul-create/PalOdyssey-Launcher/releases) page (or clone the repository).
+2. **Launch `PalLauncher.exe`**:
+   - The launcher automatically detects your Steam Palworld installation.
+3. **1-Click Auto-Calibrate**:
+   - Go to **Launch Settings** ➔ Click **`⚡ AUTO-CALIBRATE & OPTIMIZE RIG`** to automatically configure optimal graphics and CPU flags for your PC.
+4. **Launch Expedition**:
+   - Click the glowing **`Launch Expedition`** button on the Dashboard. The launcher automatically verifies mod integrity, applies updates, and launches your game!
 
 ---
 
-## 📦 Complete Unified Modpack Roster (26+ Mods)
+## 🌟 What the Launcher Has
 
-The modpack features a curated, highly optimized suite of client and server mods:
+### 🚀 1. 1-Click Hardware Auto-Calibrator (`Auto-Optimize Rig`)
+- **Instant System Benchmark**: Probes your CPU cores, RAM, and GPU to determine your system's ideal performance tier (**Efficiency APU**, **Balanced Gaming**, or **Ultra Enthusiast**).
+- **Auto-Configured Startup Flags**: Automatically applies multithreading (`-USEALLAVAILABLECORES`), memory allocators (`-malloc=system`), and DirectX settings (`-dx11` or `-dx12`) tailored specifically for your hardware.
+- **Zero Stutter Engine**: Tunes background worker threads and texture streaming so you get maximum FPS and smooth frametimes.
 
-| Mod Name | Side / Authority | Purpose & Functional Description |
-| :--- | :--- | :--- |
-| **`StuckPalRescuer`** | **Client & Server** | Continuously monitors base camp worker Pals. If a Pal gets stuck in geometry or pathfinding loops for >18s, automatically teleports them back to the Palbox in pristine condition. Prevents AI tick rate spikes and base starvation loops. |
-| **`RemoveModWarning`** | **Client** | Suppresses and auto-dismisses the third-party mods detected modal pop-up on the title screen for a clean, instant game boot. |
-| **`QuickDeposit`** | **Client** | Press **`G`** inside your base to automatically deposit all matching item stacks from your inventory into nearby chests. |
-| **`PalClearVision`** | **Client** | Removes the washed-out milky grey atmospheric fog layer, disables chromatic aberration and film grain noise, and extends shadow draw distance. |
-| **`WeaponProficiency`** | **Client & Server** | Weapon mastery progression. Client authors damage scaling while server-authoritative RPCs synchronize `MaxDurability` across network boundaries. |
-| **`ExpeditionXP`** | **Server-Authoritative** | Host-authoritative experience multiplier and expedition progression tuner. |
-| **`LevelLock`** | **Server-Authoritative** | Enforces milestone-based level caps across guilds to ensure balanced multiplayer progression. |
-| **`PalworldTuner`** | **Client & Server** | Gameplay multipliers for inventory carry weight, fast travel tech points, and boss unlocks. |
-| **`PalOdysseyOptimizer`**| **Client & Server** | Dynamic memory allocator, ambient actor tick throttler, and particle culling engine. |
-| **`RamTrimMod`** | **Client & Server** | Scheduled working-set memory trimming to prevent Unreal Engine 5 VRAM/RAM accumulation over long sessions. |
-| **`DarnMenu`** | **Client** | In-game mod configuration framework accessible via **`ESC → Mod Options`**. |
-| **`DarnToasts`** | **Client** | Sleek unobtrusive notification toast framework for in-game mod alerts. |
-| **`Keybinds`** | **Client** | Centralized hotkey dispatcher for mod utilities. |
-| **`PalSchema`** | **Core Framework** | High-performance reflection and schema metadata provider for Palworld C++ objects. |
-| **`BPModLoaderMod`** | **Core Framework** | LogicMods and Blueprint mod loader injector. |
-| **`BPML_GenericFunctions`**| **Core Framework** | Blueprint math and helper library. |
-| **`Catch All PREDATOR Bosses`**| **Pak Mod** | Expands capture mechanics to include legendary predator boss encounters. |
+### 🔄 2. Seamless Modpack Auto-Updater
+- **Zero Manual Copying**: Never worry about extracting `.zip` files or copying files into `~mods` folders.
+- **SHA-256 Checksum Verification**: Automatically detects outdated or corrupted files and updates them in seconds with streaming progress bars.
+- **Mod Manager Tab**: View all installed mods, check their verification status, and toggle individual mods on or off.
+
+### 🎮 3. Discord Rich Presence
+- **Live Status Badges**: Shows your friends when you are preparing in the launcher or actively playing in the realm (`⚡ PalOdyssey Expedition • Exploring Realm • 15 Mods Active`).
+- **Custom Game Branding**: Connects directly to Discord with high-resolution activity icons and live session timers.
+
+### 🎨 4. Futuristic Cyberpunk UI
+- **Glassmorphic Theme**: Sleek dark-mode aesthetic with neon cyan and electric violet glow accents.
+- **Real-Time Activity Console**: Built-in colored logging terminal (`Info`, `Success`, `Warning`, `Error`) with 1-click log export for quick troubleshooting.
+
+---
+
+## 📦 What's Inside the Modpack?
+
+When you launch through PalOdyssey, you get an out-of-the-box enhanced Palworld experience:
+
+* 🐾 **Stuck Pal Rescuer**: Automatically rescues base camp Pals that get stuck in building geometry or pathfinding loops and teleports them back to the Palbox so your base workers never starve or bug out.
+* 🌄 **Visual Clarity Engine**: Removes the washed-out milky grey atmospheric fog layer and disables chromatic aberration blur so distant landscapes and lighting look crisp, clear, and vibrant.
+* 📥 **Quick Deposit (`G` Key)**: Press **`G`** inside your base to automatically deposit all matching items from your inventory into nearby storage containers.
+* 🚫 **Remove Mod Warning**: Suppresses the third-party mods detected modal pop-up on the title screen for an instant, seamless game startup.
+* ⚔️ **Weapon Proficiency & Mastery**: Earn weapon experience as you fight to level up damage bonuses and increase weapon durability.
+* 👑 **Catch All Predator Bosses**: Unlocks capture mechanics for legendary predator boss encounters.
+* 🧹 **RAM Trim & Garbage Collection**: Automatically cleans up accumulated VRAM and memory leaks during long play sessions.
 
 ---
 
 ## ⚙️ In-Game Mod Menu (`ESC → Mod Options`)
 
-All client-configurable mods are natively registered with **DarnMenu**. You can adjust settings live without relaunching the game:
+You can customize mod settings live while playing without restarting your game:
 
-1. Press **`ESC` ➔ Mod Options** while in-game.
-2. Select any registered tab:
-   - **`Stuck Pal Rescuer`**: Toggle automated rescue, adjust scan frequency (3–60s), and set stuck timeout threshold.
-   - **`Visual Clarity`**: Toggle fog removal, chromatic aberration removal, film grain, and shadow distance scaling.
-   - **`Quick Deposit`**: Customize deposit keybind (`G`) and chest scan radius (500–5000 units).
-   - **`Palworld Tuner`**: Adjust carry weight multipliers and technology point rewards.
-   - **`Weapon Proficiency`**: Toggle damage bonuses, durability scaling, and network RPC synchronization.
-   - **`Performance & RAM`**: Configure RAM trim intervals (15–300s) and UE5 garbage collection cycles.
+1. Press **`ESC` ➔ Mod Options** anywhere in-game.
+2. Adjust your settings:
+   - **Stuck Pal Rescuer**: Change scan frequency or stuck timeout threshold.
+   - **Visual Clarity**: Toggle fog removal, chromatic aberration, or shadow distance.
+   - **Quick Deposit**: Change deposit hotkey (default `G`) and chest scan radius.
+   - **Palworld Tuner**: Adjust inventory carry weight multipliers.
+   - **Weapon Proficiency**: Toggle damage and durability scaling.
+   - **Performance & RAM**: Configure memory trim intervals.
 
 ---
 
-## ⚡ 1-Click Hardware Auto-Calibration & Presets
+## 🖥️ Recommended Hardware Presets
 
-The launcher analyzes your PC and automatically configures one of three optimized hardware profiles:
+Not sure what settings are best for your PC? Here is a quick guide:
 
-```
-[Hardware Profile Evaluation]
- ├── Tier 1: Efficiency / Handheld (4 Cores, 8GB RAM, <4GB VRAM) ──► Preset: efficiency_max  (40-60 FPS)
- ├── Tier 2: Balanced Gaming       (6 Cores, 16GB RAM, 6-8GB VRAM) ─► Preset: balanced        (60-85 FPS)
- └── Tier 3: Ultra / Enthusiast    (8+ Cores, 32GB+ RAM, 12GB+ VRAM) ─► Preset: ultra_optimal  (90-120+ FPS)
-```
-
-### Empirical Benchmark Summary
-
-| Hardware Tier | Target Resolution & Rendering | Applied Arguments | Memory & Task Graph Tuning |
+| Your Hardware | Recommended Preset | Target Performance | What Auto-Calibrate Applies |
 | :--- | :--- | :--- | :--- |
-| **Tier 1: Efficiency** | 1080p FSR/DLSS Performance (DX11) | `-lowmemory -USEALLAVAILABLECORES -dx11` | GC Interval: 45s • RAM Trim: 2m • SigScanner: 4 Threads |
-| **Tier 2: Balanced** | 1080p/1440p Balanced (DX11) | `-malloc=system -useperfthreads -USEALLAVAILABLECORES -dx11` | GC Interval: 60s • RAM Trim: 4m • SigScanner: 8 Threads |
-| **Tier 3: Ultra** | 1440p/4K DLSS Quality / TSR (DX12) | `-malloc=system -useperfthreads -high -NoAsyncLoadingThread` | GC Interval: 90s • RAM Trim: 3m • SigScanner: 16 Threads |
-
----
-
-## 🛡️ Zero-IP Exposure Networking (Playit.gg + DuckDNS)
-
-PalOdyssey uses **Anycast proxy tunneling** to ensure server hosts never expose their home IP address or location:
-
-```
-[Player Client]
-       │
-       ▼
- [palodyssey.duckdns.org:57294]  (DuckDNS Hostname)
-       │
-       ▼
- [147.185.221.230:57294]         (Playit.gg Anycast Proxy Datacenter)
-       │
-       ▼ (Encrypted UDP Tunnel)
- [Local playit.exe Agent]        (Host PC Background Agent)
-       │
-       ▼
- [127.0.0.1:8211]                (Local Palworld Dedicated Server)
-```
-
-- **Home IP Protection**: Players connect exclusively to the Anycast proxy. Running `ping` or `nslookup` on `palodyssey.duckdns.org` only shows Playit's datacenter IP.
-- **DDoS Mitigation**: Malicious traffic is absorbed at the Anycast edge without impacting residential internet bandwidth.
-- **Zero Port Forwarding**: The local `playit.exe` agent creates an outbound tunnel, eliminating the need to open ports on your home router.
-
----
-
-## 🚀 Installation & Setup Guide
-
-### Client Installation (Players)
-
-1. **Download & Launch**:
-   - Clone or download the repository.
-   - Run `PalLauncher.exe` (or launch via `run-dev.ps1`).
-2. **Auto-Detect Game Path**:
-   - The launcher automatically detects your Steam Palworld installation (`C:\SteamLibrary\steamapps\common\Palworld`).
-3. **1-Click Auto-Calibration**:
-   - Navigate to **Launch Settings** ➔ Click **`⚡ AUTO-CALIBRATE & OPTIMIZE RIG`**.
-4. **Deploy & Play**:
-   - Click **`Launch Expedition`** on the Dashboard. The launcher checks file checksums, deploys the modpack, and connects to the server!
-
----
-
-### Dedicated Server Setup (Hosts)
-
-1. **Deploy Server Modpack**:
-   - Open PowerShell as Administrator and run:
-     ```powershell
-     powershell.exe -ExecutionPolicy Bypass -File .\Deploy-Modpack.ps1
-     ```
-   - This automatically configures `PalServer` with headless server mods (`StuckPalRescuer`, `WeaponProficiency`, `LevelLock`, `ExpeditionXP`, `PalOdysseyOptimizer`, and memory cleaners).
-2. **Start the Playit Tunnel Agent**:
-   - Run `.\tools\playit\playit.exe` to start your secure proxy tunnel.
-3. **Launch the Dedicated Server**:
-   - In the launcher, switch **Launch Mode** to **Dedicated Server** and click **Start Server**.
-
----
-
-## 🛠️ Developer & Modding Architecture
-
-```
-c:\PalOddessey\
-├── PalLauncher.sln                  # .NET 8 Solution
-├── PalLauncher\                     # WPF MVVM Application
-│   ├── Converters\                  # XAML Value Converters
-│   ├── Models\                      # Data Contracts & Configs
-│   ├── Services\                    # Core Services (Launch, Update, RPC, Specs, Daemon)
-│   ├── ViewModels\                  # MVVM ViewModels
-│   ├── Views\                       # Cyberpunk Glassmorphic Views
-│   └── Assets\                      # 4K Launcher Icons & Badges
-├── PalLauncher.Tests\               # xUnit Diagnostic & Benchmark Suite (36 Tests)
-├── Modpack\Pal\                     # Master Modpack Staging Root
-│   ├── Binaries\Win64\ue4ss\Mods\   # 26+ Lua & C++ Mods
-│   │   ├── shared\                  # DarnMenu Schemas & Libs
-│   │   ├── StuckPalRescuer\         # Pal AI Rescue Engine
-│   │   ├── RemoveModWarning\        # Title Screen Warning Suppressor
-│   │   ├── QuickDeposit\            # Base Chest Auto-Stack
-│   │   └── PalClearVision\          # Visual De-Fogger & Post-Process
-│   └── Content\Paks\~mods\          # Pak Mods
-├── Deploy-Modpack.ps1               # Automated Deployment Script
-└── tools\playit\                    # Playit.gg Tunnel Agent
-```
+| **Integrated Graphics / APU / 8GB RAM** (Intel Iris, AMD Vega, Steam Deck) | **Efficiency Max** | 40 – 60 FPS (FSR/DLSS Perf) | `-lowmemory -USEALLAVAILABLECORES -dx11`<br>Lightweight particle budgets & fast GC. |
+| **Mid-Range Gaming PC / 16GB RAM** (GTX 1660, RTX 2060 / 3060, RX 6600) | **Balanced Gaming** | 60 – 85 FPS (1080p/1440p) | `-malloc=system -useperfthreads -USEALLAVAILABLECORES -dx11`<br>System heap allocation & ultra-stable frametimes. |
+| **High-End Enthusiast / 32GB+ RAM** (RTX 3080 / 4070 / 4080 / 4090) | **Ultra / Enthusiast** | 90 – 120+ FPS (1440p/4K) | `-malloc=system -useperfthreads -high -NoAsyncLoadingThread`<br>DX12 Async Compute & high task graph dispatch. |
 
 ---
 
 ## ❓ FAQ & Troubleshooting
 
-#### Q: How do I open the In-Game Mod Menu?
-> **A:** Press **`ESC` ➔ Mod Options** anywhere in-game. You will see configuration tabs for all active mods.
+#### Q: Do I need to manually install UE4SS or other mod loaders?
+> **A:** No! The launcher bundles and installs the entire UE4SS 3.0.1 framework and all required mod files automatically.
 
-#### Q: My Pal is stuck on a roof or cliff. What should I do?
-> **A:** `StuckPalRescuer` automatically detects stuck Pals and teleports them back to the Palbox after ~18 seconds. You can lower this threshold in **`ESC ➔ Mod Options ➔ Stuck Pal Rescuer`**.
+#### Q: How do I change mod settings in-game?
+> **A:** Press **`ESC` ➔ Mod Options** while in-game to open the mod menu.
 
-#### Q: How do I change the Quick Deposit hotkey?
-> **A:** Go to **`ESC ➔ Mod Options ➔ Quick Deposit`** and select your preferred keybind (default is `G`).
+#### Q: The game won't launch or says path not found?
+> **A:** In the launcher, go to **Launch Settings**, click **Browse**, and select your Palworld install folder (e.g. `C:\SteamLibrary\steamapps\common\Palworld`).
 
-#### Q: How do I export diagnostic logs for support?
-> **A:** In the launcher, navigate to the **Activity Logs** tab and click **`Export Logs`** or **`Copy to Clipboard`**.
+#### Q: How do I share logs if I encounter an issue?
+> **A:** Open the **Activity Logs** tab in the launcher and click **`Export Logs`** or **`Copy to Clipboard`**.
 
 ---
 
-**Developed with ❤️ for the PalOdyssey Community.**
+**Developed with ❤️ for the Palworld & PalOdyssey Community.**
