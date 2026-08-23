@@ -58,6 +58,7 @@ namespace PalLauncher.Services.Interfaces
         SystemHardwareProfile CurrentProfile { get; }
         Task<SystemHardwareProfile> DetectSystemSpecsAsync();
         Task<SystemHardwareProfile> AutoCalibrateAsync(IProgress<CalibrationProgressInfo>? progress = null, string? gameInstallPath = null);
+        void ComputeOptimalFlags(SystemHardwareProfile profile);
         void ApplyOptimalFlags(LauncherConfig config, SystemHardwareProfile? profile = null);
         string GenerateOptimizedModpackConfig(SystemHardwareProfile profile);
         void ApplyModpackCalibration(string? gameInstallPath, SystemHardwareProfile profile);
