@@ -86,5 +86,46 @@ namespace PalLauncher.Tests
             Assert.Contains("-USEALLAVAILABLECORES", args);
             Assert.Contains("-malloc=system", args);
         }
+
+        [Fact]
+        public void InjectRawInputSettingsIntoIni_WithEmptyContent_CreatesCorrectSectionAndKeys()
+        {
+            string result = LaunchService.InjectRawInputSettingsIntoIni("");
+
+            Assert.Contains("[/Script/Engine.InputSettings]", result);
+            Assert.Contains("RawMouseInputEnabled=True", result);
+            Assert.Contains("bEnableMouseSmoothing=False", result);
+            Assert.Contains("bViewAccelerationEnabled=False", result);
+            Assert.Contains("bDisableMouseAcceleration=True", result);
+        }
+
+        [Fact]
+        public void InjectRawInputSettingsIntoIni_WithExistingOtherSections_PreservesSectionsAndInjects()
+        {
+            string existing = "[/Script/Engine.GameSession]\r\nMaxPlayers=32\r\n\r\n[Core.System]\r\nPaths=../../../Engine/Content";
+            string result = LaunchService.InjectRawInputSettingsIntoIni(existing);
+
+            Assert.Contains("[/Script/Engine.GameSession]", result);
+            Assert.Contains("MaxPlayers=32", result);
+            Assert.Contains("[Core.System]", result);
+            Assert.Contains("[/Script/Engine.InputSettings]", result);
+            Assert.Contains("RawMouseInputEnabled=True", result);
+            Assert.Contains("bEnableMouseSmoothing=False", result);
+        }
+
+        [Fact]
+        public void InjectRawInputSettingsIntoIni_WithExistingInputSettings_UpdatesFlagsIdempotently()
+        {
+            string existing = "[/Script/Engine.InputSettings]\r\nbEnableMouseSmoothing=True\r\nbViewAccelerationEnabled=True\r\nCustomKey=123";
+            string result = LaunchService.InjectRawInputSettingsIntoIni(existing);
+
+            Assert.Contains("[/Script/Engine.InputSettings]", result);
+            Assert.Contains("RawMouseInputEnabled=True", result);
+            Assert.Contains("bEnableMouseSmoothing=False", result);
+            Assert.Contains("bViewAccelerationEnabled=False", result);
+            Assert.Contains("bDisableMouseAcceleration=True", result);
+            Assert.Contains("CustomKey=123", result);
+            Assert.DoesNotContain("bEnableMouseSmoothing=True", result);
+        }
     }
 }

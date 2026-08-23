@@ -16,125 +16,140 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
         <StackPanel Margin="0,0,0,16">
 
-            <!-- Section 1: Game Installation Path -->
-            <Border Style="{StaticResource StyleCardBorder}" Margin="0,0,0,14" Padding="18,14">
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                        <Path Data="{StaticResource IconFolder}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
-                        <TextBlock Text="Palworld Installation Path" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
-                    </StackPanel>
+            <!-- Responsive 2-Column Main Settings Grid -->
+            <Grid Margin="0,0,0,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                    <Grid Margin="0,0,0,8">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBox Grid.Column="0" Text="{Binding GamePath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource StyleDarkTextBox}" VerticalAlignment="Center" Margin="0,0,8,0" />
-                        <Button Grid.Column="1" Content="Browse..." Style="{StaticResource StyleGhostButton}" VerticalAlignment="Center" Command="{Binding BrowsePathCommand}" />
-                    </Grid>
-
-                    <!-- Path Detection Status Badge -->
-                    <Border Background="#0E1422" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="10,6">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Data="{StaticResource IconCheckCircle}" Fill="{StaticResource BrushSuccess}" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" Visibility="{Binding IsPathValid, Converter={StaticResource BoolToVis}}" />
-                            <TextBlock Text="{Binding PathStatusText}" Foreground="{Binding IsPathValid, Converter={StaticResource PathValidToBrush}}" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
-            </Border>
-
-            <!-- Section 2: 1-Click Game & Engine Auto-Optimizer -->
-            <Border CornerRadius="12" Margin="0,0,0,14" Background="{StaticResource BrushCardGlowGradient}" BorderBrush="{StaticResource BrushCyberBorderGradient}" BorderThickness="1.5" Padding="20,16">
-                <Border.Effect>
-                    <DropShadowEffect BlurRadius="18" ShadowDepth="3" Direction="270" Color="#00F0FF" Opacity="0.2" />
-                </Border.Effect>
-
-                <StackPanel>
-                    <Grid Margin="0,0,0,12">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0">
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                                <Path Data="{StaticResource IconRocket}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
-                                <TextBlock Text="Game &amp; Engine Performance Suite" Foreground="{StaticResource BrushTextPrimary}" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
+                <!-- Left Column: Installation & Hardware Profiler -->
+                <StackPanel Grid.Column="0">
+                    <!-- 1. Game Installation Path Card -->
+                    <Border Style="{StaticResource StyleCardBorder}" Margin="0,0,0,14" Padding="18,14">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <Path Data="{StaticResource IconFolder}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <TextBlock Text="Palworld Installation Path" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
                             </StackPanel>
-                            <TextBlock Text="Automatic hardware profiling, CPU thread scheduling, raw mouse input, and network uncapping." Foreground="{StaticResource BrushTextSecondary}" FontSize="12" />
-                        </StackPanel>
 
-                        <!-- Hardware Tier Badge -->
-                        <Border Grid.Column="1" Background="#142035" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" CornerRadius="6" Padding="10,4" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding HardwareProfile.PerformanceTier, FallbackValue='ENHANCED'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" />
-                        </Border>
-                    </Grid>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
-                    <!-- Detected Rig Specs Card -->
-                    <Border Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,0,14">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0">
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
-                                    <TextBlock Text="DETECTED HARDWARE:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" />
-                                    <TextBlock Text="{Binding HardwareProfile.SummaryText, FallbackValue='Detecting System Specs...'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="SemiBold" />
-                                </StackPanel>
-                                <TextBlock Text="{Binding HardwareProfile.RecommendationSummary, FallbackValue='Ready to optimize game engine'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" Margin="0,0,0,4" />
+                                <TextBox Grid.Column="0" Text="{Binding GamePath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource StyleDarkTextBox}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                <Button Grid.Column="1" Content="Browse..." Style="{StaticResource StyleGhostButton}" VerticalAlignment="Center" Command="{Binding BrowsePathCommand}" />
+                            </Grid>
+
+                            <!-- Path Detection Status Badge -->
+                            <Border Background="#0E1422" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="10,6">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="TARGET PERFORMANCE:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" />
-                                    <TextBlock Text="{Binding HardwareProfile.EstimatedAvgFps, FallbackValue='60-80 FPS'}" Foreground="{StaticResource BrushSuccess}" FontSize="11" FontWeight="Bold" />
+                                    <Path Data="{StaticResource IconCheckCircle}" Fill="{StaticResource BrushSuccess}" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" Visibility="{Binding IsPathValid, Converter={StaticResource BoolToVis}}" />
+                                    <TextBlock Text="{Binding PathStatusText}" Foreground="{Binding IsPathValid, Converter={StaticResource PathValidToBrush}}" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" />
                                 </StackPanel>
-                            </StackPanel>
-                        </Grid>
+                            </Border>
+                        </StackPanel>
                     </Border>
 
-                    <!-- Calibration Progress Bar (Visible during calibration) -->
-                    <StackPanel Visibility="{Binding IsCalibrating, Converter={StaticResource BoolToVis}}" Margin="0,0,0,12">
-                        <Grid Margin="0,0,0,4">
-                            <TextBlock Text="{Binding CalibrationStageText, FallbackValue='Benchmarking system throughput...'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Left" />
-                            <TextBlock Text="{Binding CalibrationProgress, StringFormat='{}{0}%'}" Foreground="{StaticResource BrushTextMuted}" FontSize="11" HorizontalAlignment="Right" />
-                        </Grid>
-                        <ProgressBar Value="{Binding CalibrationProgress}" Maximum="100" Height="6" Foreground="{StaticResource BrushAccentCyan}" Background="#0E1422" BorderThickness="0" />
-                    </StackPanel>
+                    <!-- 2. Detected Rig Specs & Profiling Details -->
+                    <Border Style="{StaticResource StyleCardBorder}" Padding="18,14">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <Path Data="{StaticResource IconStats}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <TextBlock Text="Detected Hardware Specifications" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
+                            </StackPanel>
 
-                    <!-- Primary 1-Click Auto-Calibrate Button -->
-                    <Button Style="{StaticResource StyleLaunchButton}"
-                            Command="{Binding AutoOptimizeFlagsCommand}"
-                            IsEnabled="{Binding IsCalibrating, Converter={StaticResource InvertBoolToVis}}"
-                            Padding="24,14" HorizontalAlignment="Stretch">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Path Data="{StaticResource IconRocket}" Fill="#FFFFFF" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center" />
-                            <TextBlock Text="⚡ AUTO-CALIBRATE &amp; OPTIMIZE RIG" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
+                            <Border Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,0,8">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                        <TextBlock Text="SYSTEM:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" />
+                                        <TextBlock Text="{Binding HardwareProfile.SummaryText, FallbackValue='Detecting System Specs...'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding HardwareProfile.RecommendationSummary, FallbackValue='Ready to optimize game engine'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11.5" Margin="0,0,0,6" TextWrapping="Wrap" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="TARGET PERFORMANCE:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" />
+                                        <TextBlock Text="{Binding HardwareProfile.EstimatedAvgFps, FallbackValue='60-80 FPS'}" Foreground="{StaticResource BrushSuccess}" FontSize="11.5" FontWeight="Bold" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Active Features:" Foreground="{StaticResource BrushTextMuted}" FontSize="11" FontWeight="Bold" Margin="0,0,8,0" />
+                                    <TextBlock Text="Discord RPC • Raw Mouse Input • Auto-Sync" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" />
+                                </StackPanel>
+                            </Border>
                         </StackPanel>
-                    </Button>
+                    </Border>
                 </StackPanel>
-            </Border>
 
-            <!-- Section 3: Preferences & Integrations -->
-            <Border Style="{StaticResource StyleCardBorder}" Margin="0,0,0,14" Padding="18,14">
-                <StackPanel>
-                    <TextBlock Text="Launcher Preferences" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" />
+                <!-- Right Column: Auto-Calibrator & Preferences -->
+                <StackPanel Grid.Column="2">
+                    <!-- 3. 1-Click Game & Engine Performance Suite -->
+                    <Border CornerRadius="12" Margin="0,0,0,14" Background="{StaticResource BrushCardGlowGradient}" BorderBrush="{StaticResource BrushCyberBorderGradient}" BorderThickness="1.5" Padding="18,14">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="18" ShadowDepth="3" Direction="270" Color="#00F0FF" Opacity="0.2" />
+                        </Border.Effect>
 
-                    <CheckBox Content="🎮 Discord Rich Presence (Displays live status &amp; mod telemetry in Discord)"
-                              Style="{StaticResource StyleDarkCheckBox}"
-                              IsChecked="{Binding EnableDiscordRpc}"
-                              Margin="0,0,0,10" />
+                        <StackPanel>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
-                    <CheckBox Content="Close launcher automatically after launching game"
-                              Style="{StaticResource StyleDarkCheckBox}"
-                              IsChecked="{Binding CloseLauncherOnLaunch}"
-                              Margin="0,0,0,10" />
+                                <StackPanel Grid.Column="0">
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                                        <Path Data="{StaticResource IconRocket}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                        <TextBlock Text="Performance Suite" Foreground="{StaticResource BrushTextPrimary}" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                    <TextBlock Text="Calibrates CPU threads, shader caches, and network pipeline." Foreground="{StaticResource BrushTextSecondary}" FontSize="11.5" TextWrapping="Wrap" />
+                                </StackPanel>
 
-                    <CheckBox Content="Auto-update modpack before launching"
-                              Style="{StaticResource StyleDarkCheckBox}"
-                              IsChecked="{Binding AutoUpdateBeforeLaunch}"
-                              Margin="0,0,0,6" />
+                                <!-- Hardware Tier Badge -->
+                                <Border Grid.Column="1" Background="#142035" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" CornerRadius="6" Padding="10,4" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding HardwareProfile.PerformanceTier, FallbackValue='ENHANCED'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" />
+                                </Border>
+                            </Grid>
+
+                            <!-- Calibration Progress Bar (Visible during calibration) -->
+                            <StackPanel Visibility="{Binding IsCalibrating, Converter={StaticResource BoolToVis}}" Margin="0,0,0,12">
+                                <Grid Margin="0,0,0,4">
+                                    <TextBlock Text="{Binding CalibrationStageText, FallbackValue='Benchmarking system throughput...'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Left" />
+                                    <TextBlock Text="{Binding CalibrationProgress, StringFormat='{}{0}%'}" Foreground="{StaticResource BrushTextMuted}" FontSize="11" HorizontalAlignment="Right" />
+                                </Grid>
+                                <ProgressBar Value="{Binding CalibrationProgress}" Maximum="100" Height="6" Foreground="{StaticResource BrushAccentCyan}" Background="#0E1422" BorderThickness="0" />
+                            </StackPanel>
+
+                            <!-- Primary 1-Click Auto-Calibrate Button -->
+                            <Button Style="{StaticResource StyleLaunchButton}"
+                                    Command="{Binding AutoOptimizeFlagsCommand}"
+                                    IsEnabled="{Binding IsCalibrating, Converter={StaticResource InvertBoolToVis}}"
+                                    Padding="18,12" HorizontalAlignment="Stretch">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Path Data="{StaticResource IconRocket}" Fill="#FFFFFF" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                    <TextBlock Text="⚡ AUTO-CALIBRATE &amp; OPTIMIZE RIG" FontSize="13" FontWeight="Bold" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 4. Launcher Preferences -->
+                    <Border Style="{StaticResource StyleCardBorder}" Padding="18,14">
+                        <StackPanel>
+                            <TextBlock Text="Launcher Preferences" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" />
+
+                            <CheckBox Content="Close launcher automatically after launching game"
+                                      Style="{StaticResource StyleDarkCheckBox}"
+                                      IsChecked="{Binding CloseLauncherOnLaunch}"
+                                      Margin="0,0,0,4" />
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
-            </Border>
+            </Grid>
 
             <!-- Bottom Actions Bar -->
             <Border Background="{StaticResource BrushBgSurface}" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,10">
@@ -156,3 +171,4 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
+

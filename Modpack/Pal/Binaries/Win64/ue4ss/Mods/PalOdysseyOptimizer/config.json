@@ -3,7 +3,8 @@
   "rawInput": {
     "enabled": true,
     "disableSmoothing": true,
-    "disableAcceleration": true
+    "disableAcceleration": true,
+    "highPollingRateSupport": true
   },
   "network": {
     "enabled": true,

@@ -126,6 +126,13 @@ DarnToasts : 1
 LevelLock : 1
 WeaponProficiency : 1
 PalOdysseyOptimizer : 1
+StuckPalRescuer : 1
+RemoveModWarning : 1
+QuickDeposit : 1
+PalClearVision : 1
+PalboxSearchPlus : 1
+CleanHUD : 1
+ShiningLuckies : 1
 
 ; Built-in keybinds, do not move up!
 Keybinds : 1

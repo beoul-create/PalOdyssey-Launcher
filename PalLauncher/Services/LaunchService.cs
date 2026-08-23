@@ -220,6 +220,12 @@ namespace PalLauncher.Services
                             string clientArgs = BuildCommandLineArguments(config);
                             string clientWorkDir = Path.GetDirectoryName(clientExe) ?? pathInfo.GameRootPath;
 
+                            // 2a. Ensure direct raw mouse input (2000Hz-8000Hz) is configured if enabled
+                            if (config.EnableRawInputOptimization)
+                            {
+                                EnsureDirectRawInputConfig(config, pathInfo.GameRootPath);
+                            }
+
                             // Ensure steam_appid.txt exists to bypass Steam argument verification dialog
                             try
                             {
@@ -462,6 +468,167 @@ namespace PalLauncher.Services
                     return false;
                 }
             });
+        }
+
+        public bool EnsureDirectRawInputConfig(LauncherConfig config, string? gameRootPath)
+        {
+            if (!config.EnableRawInputOptimization) return false;
+
+            try
+            {
+                var targetPaths = new List<string>();
+
+                // 1. %LOCALAPPDATA%\Pal\Saved\Config\Windows\Engine.ini (and subvariants)
+                string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                if (!string.IsNullOrEmpty(localAppData))
+                {
+                    string[] subfolders = { "Windows", "WindowsClient", "WindowsNoEditor" };
+                    foreach (var sub in subfolders)
+                    {
+                        string dir = Path.Combine(localAppData, "Pal", "Saved", "Config", sub);
+                        targetPaths.Add(Path.Combine(dir, "Engine.ini"));
+                    }
+                }
+
+                // 2. Game directory configs if present
+                if (!string.IsNullOrEmpty(gameRootPath) && Directory.Exists(gameRootPath))
+                {
+                    string[] subfolders = { "Windows", "WindowsClient", "WindowsNoEditor" };
+                    foreach (var sub in subfolders)
+                    {
+                        string dir = Path.Combine(gameRootPath, "Pal", "Saved", "Config", sub);
+                        targetPaths.Add(Path.Combine(dir, "Engine.ini"));
+                    }
+                }
+
+                bool appliedAny = false;
+                foreach (var iniPath in targetPaths)
+                {
+                    string? dir = Path.GetDirectoryName(iniPath);
+                    if (string.IsNullOrEmpty(dir)) continue;
+
+                    // Create or update if the directory exists or if it's the primary Windows config folder
+                    bool isPrimary = dir.EndsWith(@"Pal\Saved\Config\Windows", StringComparison.OrdinalIgnoreCase);
+                    if (!Directory.Exists(dir) && !isPrimary) continue;
+
+                    if (!Directory.Exists(dir))
+                    {
+                        Directory.CreateDirectory(dir);
+                    }
+
+                    string content = File.Exists(iniPath) ? File.ReadAllText(iniPath) : "";
+                    string updated = InjectRawInputSettingsIntoIni(content);
+                    if (!string.Equals(content, updated, StringComparison.Ordinal))
+                    {
+                        File.WriteAllText(iniPath, updated, Encoding.UTF8);
+                        appliedAny = true;
+                    }
+                }
+
+                if (appliedAny)
+                {
+                    _logService.LogSuccess("Configured direct raw mouse input and zero smoothing in Engine.ini (2000Hz-8000Hz ready).", "InputOptimizer");
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning("Notice during raw input Engine.ini configuration.", "InputOptimizer", ex.Message);
+                return false;
+            }
+        }
+
+        public static string InjectRawInputSettingsIntoIni(string iniContent)
+        {
+            const string sectionHeader = "[/Script/Engine.InputSettings]";
+            const string rawInputKey = "RawMouseInputEnabled=True";
+            const string smoothingKey = "bEnableMouseSmoothing=False";
+            const string accelKey = "bViewAccelerationEnabled=False";
+            const string disableAccelKey = "bDisableMouseAcceleration=True";
+
+            if (string.IsNullOrWhiteSpace(iniContent))
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine(sectionHeader);
+                sb.AppendLine(rawInputKey);
+                sb.AppendLine(smoothingKey);
+                sb.AppendLine(accelKey);
+                sb.AppendLine(disableAccelKey);
+                return sb.ToString().TrimEnd();
+            }
+
+            var lines = new List<string>(iniContent.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None));
+            int sectionIndex = -1;
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                if (lines[i].Trim().Equals(sectionHeader, StringComparison.OrdinalIgnoreCase))
+                {
+                    sectionIndex = i;
+                    break;
+                }
+            }
+
+            if (sectionIndex == -1)
+            {
+                // Section does not exist - append at the end
+                if (lines.Count > 0 && !string.IsNullOrWhiteSpace(lines[^1]))
+                {
+                    lines.Add("");
+                }
+                lines.Add(sectionHeader);
+                lines.Add(rawInputKey);
+                lines.Add(smoothingKey);
+                lines.Add(accelKey);
+                lines.Add(disableAccelKey);
+            }
+            else
+            {
+                // Section exists - find boundary of this section (until next section or EOF)
+                int nextSectionIndex = lines.Count;
+                for (int i = sectionIndex + 1; i < lines.Count; i++)
+                {
+                    string trimmed = lines[i].Trim();
+                    if (trimmed.StartsWith("[") && trimmed.EndsWith("]"))
+                    {
+                        nextSectionIndex = i;
+                        break;
+                    }
+                }
+
+                // Check and update or insert keys within [sectionIndex + 1 .. nextSectionIndex - 1]
+                var keysToSet = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "RawMouseInputEnabled", rawInputKey },
+                    { "bEnableMouseSmoothing", smoothingKey },
+                    { "bViewAccelerationEnabled", accelKey },
+                    { "bDisableMouseAcceleration", disableAccelKey }
+                };
+
+                for (int i = sectionIndex + 1; i < nextSectionIndex; i++)
+                {
+                    string line = lines[i].Trim();
+                    int eqIndex = line.IndexOf('=');
+                    if (eqIndex > 0)
+                    {
+                        string k = line.Substring(0, eqIndex).Trim();
+                        if (keysToSet.TryGetValue(k, out var targetValue))
+                        {
+                            lines[i] = targetValue;
+                            keysToSet.Remove(k);
+                        }
+                    }
+                }
+
+                // Any remaining keys to insert inside the section
+                int insertPos = nextSectionIndex;
+                foreach (var kvp in keysToSet)
+                {
+                    lines.Insert(insertPos++, kvp.Value);
+                }
+            }
+
+            return string.Join(Environment.NewLine, lines);
         }
     }
 }

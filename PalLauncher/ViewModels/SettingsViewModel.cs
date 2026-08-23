@@ -270,6 +270,14 @@ namespace PalLauncher.ViewModels
             }
         }
 
+        private bool _enableRawInputOptimization = true;
+
+        public bool EnableRawInputOptimization
+        {
+            get => _enableRawInputOptimization;
+            set => SetProperty(ref _enableRawInputOptimization, value);
+        }
+
         public string CustomArguments
         {
             get => _customArguments;
@@ -476,6 +484,7 @@ namespace PalLauncher.ViewModels
             _useHighPriority = config.UseHighPriority;
             _noSplash = config.NoSplash;
             _windowedMode = config.WindowedMode;
+            _enableRawInputOptimization = config.EnableRawInputOptimization;
             _customArguments = config.CustomArguments;
 
             OnPropertyChanged(string.Empty);
@@ -518,6 +527,7 @@ namespace PalLauncher.ViewModels
                 UseHighPriority = UseHighPriority,
                 NoSplash = NoSplash,
                 WindowedMode = WindowedMode,
+                EnableRawInputOptimization = EnableRawInputOptimization,
                 CustomArguments = CustomArguments
             };
         }

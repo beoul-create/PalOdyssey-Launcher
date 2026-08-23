@@ -125,6 +125,9 @@ namespace PalLauncher.Tests
             Assert.Contains("\"maxBandwidth\": 2097152", json);
             Assert.Contains("\"taskGraphTasksPerTick\": 120", json);
             Assert.Contains("\"asyncCompute\": true", json);
+            Assert.Contains("\"highPollingRateSupport\": true", json);
+            Assert.Contains("\"disableSmoothing\": true", json);
+            Assert.Contains("\"disableAcceleration\": true", json);
         }
     }
 }

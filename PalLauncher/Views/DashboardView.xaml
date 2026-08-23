@@ -5,26 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:PalLauncher.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="560" d:DesignWidth="880">
+             d:DesignHeight="600" d:DesignWidth="900">
 
     <UserControl.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converters:BooleanToVisibilityConverter x:Key="InvertBoolToVis" Invert="True" />
+        <converters:BooleanToBrushConverter x:Key="PathValidToBrush" TrueBrush="{StaticResource BrushSuccess}" FalseBrush="{StaticResource BrushWarning}" />
     </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,10,0">
         <StackPanel Margin="0,0,0,16">
 
-            <!-- Futuristic Holographic Hero Card with Astralym Artwork -->
-            <Border CornerRadius="12" Margin="0,0,0,16" Background="{StaticResource BrushCardGlowGradient}" BorderBrush="{StaticResource BrushCyberBorderGradient}" BorderThickness="1.5" Padding="20,16">
+            <!-- 1. Holographic Hero Banner with Astralym Artwork -->
+            <Border CornerRadius="12" Margin="0,0,0,14" Background="{StaticResource BrushCardGlowGradient}" BorderBrush="{StaticResource BrushCyberBorderGradient}" BorderThickness="1.5" Padding="22,18">
                 <Border.Effect>
-                    <DropShadowEffect BlurRadius="18" ShadowDepth="3" Direction="270" Color="#00F0FF" Opacity="0.15" />
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="3" Direction="270" Color="#00F0FF" Opacity="0.18" />
                 </Border.Effect>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
                     <!-- Left: Glowing Astralym Emblem -->
@@ -33,154 +33,166 @@
                             <DropShadowEffect BlurRadius="16" Color="#00F0FF" Opacity="0.75" ShadowDepth="0" />
                         </Border.Effect>
                         <Border CornerRadius="12" ClipToBounds="True">
-                            <Image Source="pack://application:,,,/Assets/emblem_icon.png" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="Fant" SnapsToDevicePixels="True" UseLayoutRounding="True" />
+                            <Image Source="pack://application:,,,/Assets/emblem_icon.png" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased" SnapsToDevicePixels="True" UseLayoutRounding="True" />
                         </Border>
                     </Border>
 
-                    <!-- Center: Title & News Broadcast -->
+                    <!-- Center & Right: Title & News Broadcast (Responsive full-width wrapping) -->
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <TextBlock Text="ASTRAL REALM ONLINE" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" />
-                            <Border Background="#101827" BorderBrush="{StaticResource BrushAccentPurple}" BorderThickness="1" CornerRadius="4" Padding="6,1" Margin="10,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="OPTIMIZED BUILD" Foreground="{StaticResource BrushAccentPurple}" FontSize="10" FontWeight="SemiBold" />
+                            <Border Background="#101827" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" CornerRadius="4" Padding="8,2" Margin="0,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Text="PalOdyssey" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" />
                             </Border>
                         </StackPanel>
 
-                        <TextBlock Text="Ready for the Next Expedition" Foreground="{StaticResource BrushTextPrimary}" FontSize="18" FontWeight="Bold" Margin="0,0,0,4" />
-                        <TextBlock Text="{Binding NewsAnnouncement}" Foreground="{StaticResource BrushTextSecondary}" FontSize="12" TextWrapping="Wrap" MaxWidth="500" LineHeight="16" />
+                        <TextBlock Text="A server created with multiple people" Foreground="{StaticResource BrushTextPrimary}" FontSize="19" FontWeight="Bold" Margin="0,3,0,6" />
+                        <TextBlock Text="{Binding NewsAnnouncement}" Foreground="{StaticResource BrushTextSecondary}" FontSize="12.5" TextWrapping="Wrap" LineHeight="18" />
                     </StackPanel>
-
-                    <!-- Right: Minimal Server Endpoint Pill -->
-                    <Border Grid.Column="2" Background="#0A0E18" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="10" Padding="14,10" VerticalAlignment="Center">
-                        <StackPanel>
-                            <TextBlock Text="REALM ENDPOINT" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,4" />
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
-                                <Ellipse Width="7" Height="7" Fill="{StaticResource BrushSuccess}" Margin="0,0,6,0" VerticalAlignment="Center" />
-                                <TextBlock Text="{Binding SettingsVM.ServerIp}" Foreground="{StaticResource BrushTextPrimary}" FontWeight="SemiBold" FontSize="12" />
-                                <TextBlock Text=":" Foreground="{StaticResource BrushTextMuted}" FontSize="12" />
-                                <TextBlock Text="{Binding SettingsVM.ServerPort}" Foreground="{StaticResource BrushTextSecondary}" FontSize="12" />
-                            </StackPanel>
-                            <Button Content="Server Config" Style="{StaticResource StyleGhostButton}" Padding="8,3" FontSize="10" HorizontalAlignment="Left"
-                                    Command="{Binding NavigateCommand}" CommandParameter="Settings" />
-                        </StackPanel>
-                    </Border>
                 </Grid>
             </Border>
 
-            <!-- Futuristic 3-Card Status Matrix -->
-            <Grid Margin="0,0,0,16">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <!-- Card 1: Palworld Client Status -->
-                <Border Grid.Column="0" Style="{StaticResource StyleCardBorder}" Padding="16,14">
-                    <StackPanel>
-                        <TextBlock Text="GAME CLIENT" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,6" />
-                        <TextBlock Text="{Binding SettingsVM.PathStatusText}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" Margin="0,0,0,4" />
-                        <TextBlock Text="{Binding SettingsVM.CurrentPathInfo.DetectedSource, StringFormat='Source: {0}'}" Foreground="{StaticResource BrushTextMuted}" FontSize="11" />
-                    </StackPanel>
-                </Border>
-
-                <!-- Card 2: Palworld Dedicated Server Status -->
-                <Border Grid.Column="2" Style="{StaticResource StyleCardBorder}" Padding="16,14">
-                    <StackPanel>
-                        <TextBlock Text="DEDICATED REALM" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,6" />
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <Ellipse Width="7" Height="7" Fill="{StaticResource BrushSuccess}" Margin="0,0,6,0" VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding SettingsVM.ServerIp}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" />
-                            <TextBlock Text=":" Foreground="{StaticResource BrushTextMuted}" FontSize="12" />
-                            <TextBlock Text="{Binding SettingsVM.ServerPort}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" />
-                        </StackPanel>
-                        <TextBlock Text="{Binding ServerStatusBadgeText}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" TextTrimming="CharacterEllipsis" />
-                    </StackPanel>
-                </Border>
-
-                <!-- Card 3: Launch Profile -->
-                <Border Grid.Column="4" Style="{StaticResource StyleCardBorder}" Padding="16,14">
-                    <StackPanel>
-                        <TextBlock Text="PERFORMANCE MODE" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,6" />
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <Border Background="#101827" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" CornerRadius="4" Padding="6,2" Margin="0,0,6,0">
-                                <TextBlock Text="Raw Input + 1MB/s Net" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" />
-                            </Border>
-                        </StackPanel>
-                        <TextBlock Text="PalOdysseyOptimizer Active" Foreground="{StaticResource BrushTextMuted}" FontSize="11" TextTrimming="CharacterEllipsis" />
-                    </StackPanel>
-                </Border>
-            </Grid>
-
-            <!-- Dedicated Server Remote Liveboard Card -->
-            <Border Style="{StaticResource StyleCardBorder}" Padding="18,14" Margin="0,0,0,16">
+            <!-- 2. Game Client Status Bar -->
+            <Border Background="{StaticResource BrushBgSurface}" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,0,0,14">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="0">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
-                            <Ellipse Width="8" Height="8" Margin="0,0,8,0" VerticalAlignment="Center">
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Path Data="{StaticResource IconCheckCircle}" Fill="{Binding SettingsVM.IsPathValid, Converter={StaticResource PathValidToBrush}}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center" />
+                        <TextBlock Text="GAME CLIENT:" Foreground="{StaticResource BrushTextMuted}" FontSize="11" FontWeight="Bold" Margin="0,0,8,0" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding SettingsVM.PathStatusText}" Foreground="{Binding SettingsVM.IsPathValid, Converter={StaticResource PathValidToBrush}}" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,12,0" />
+                        <TextBlock Text="{Binding SettingsVM.CurrentPathInfo.DetectedSource, StringFormat='({0})'}" Foreground="{StaticResource BrushTextMuted}" FontSize="11" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <Button Grid.Column="1" Content="Installation Settings" Style="{StaticResource StyleGhostButton}" FontSize="11" Padding="10,4"
+                            Command="{Binding NavigateCommand}" CommandParameter="Settings" />
+                </Grid>
+            </Border>
+
+            <!-- 3. Prominent Dedicated Server Liveboard Screen -->
+            <Border Style="{StaticResource StyleCardBorder}" Padding="20,16" Margin="0,0,0,0" Background="{StaticResource BrushBgCard}">
+                <StackPanel>
+                    <!-- Liveboard Header Bar -->
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left: Liveboard Title & Pulse Indicator -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Ellipse Width="10" Height="10" Margin="0,0,10,0" VerticalAlignment="Center">
                                 <Ellipse.Style>
                                     <Style TargetType="Ellipse">
                                         <Setter Property="Fill" Value="{StaticResource BrushSuccess}" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsRemoteServerOnline}" Value="False">
-                                                <Setter Property="Fill" Value="{StaticResource BrushTextMuted}" />
+                                            <DataTrigger Binding="{Binding IsServerOnline}" Value="False">
+                                                <Setter Property="Fill" Value="{StaticResource BrushAccentCyan}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </Ellipse.Style>
+                                <Ellipse.Effect>
+                                    <DropShadowEffect BlurRadius="10" Color="#00F0FF" Opacity="0.8" ShadowDepth="0" />
+                                </Ellipse.Effect>
                             </Ellipse>
-                            <TextBlock Text="LIVEBOARD TELEMETRY" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" />
+
+                            <TextBlock Text="REALM LIVEBOARD &amp; TELEMETRY" Foreground="{StaticResource BrushAccentCyan}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,12,0" />
+                            
+                            <Border Background="#121824" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="4" Padding="6,2" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Liveboard.Version, StringFormat='v{0}', FallbackValue='v1.5.4'}" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" FontWeight="SemiBold" />
+                            </Border>
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding RemoteServerLiveboard.ServerName, FallbackValue='PalOdyssey Realm'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" Margin="0,0,12,0" />
-                            <TextBlock Text="{Binding RemoteServerLiveboard.UptimeFormatted, StringFormat='Uptime: {0}', FallbackValue='Uptime: Online'}" Foreground="{StaticResource BrushTextSecondary}" FontSize="12" VerticalAlignment="Center" Margin="0,0,12,0" />
-                            <TextBlock Text="{Binding RemoteServerLiveboard.PlayerCountFormatted, FallbackValue='Players: 0/32'}" Foreground="{StaticResource BrushTextMuted}" FontSize="12" VerticalAlignment="Center" />
+                        <!-- Right: Real-time Server IP & Port Badge -->
+                        <Border Grid.Column="1" Background="#0A0E18" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" CornerRadius="8" Padding="12,6" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconGlobe}" Fill="{StaticResource BrushAccentCyan}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <TextBlock Text="SERVER ENDPOINT:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Liveboard.ServerAddress, FallbackValue='palodyssey.duckdns.org:57294'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" FontFamily="Consolas" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Telemetry Metrics Grid (3 Stat Cards) -->
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Metric 1: Online Status & Power State -->
+                        <Border Grid.Column="0" Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12">
+                            <StackPanel>
+                                <TextBlock Text="SERVER STATUS" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,4" />
+                                <TextBlock Text="{Binding ServerStatusBadgeText, FallbackValue='Server Sleeping (Auto-Wake Ready)'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="13" FontWeight="Bold" TextTrimming="CharacterEllipsis" Margin="0,0,0,2" />
+                                <TextBlock Text="{Binding Liveboard.AutoShutdownStatusText, FallbackValue='Auto-Wake Enabled on Launch'}" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Metric 2: Active Explorers -->
+                        <Border Grid.Column="2" Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12">
+                            <StackPanel>
+                                <TextBlock Text="ONLINE EXPLORERS" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,4" />
+                                <TextBlock Text="{Binding Liveboard.PlayerCountSummary, FallbackValue='0 / 32 Players Online'}" Foreground="{StaticResource BrushSuccess}" FontSize="13" FontWeight="Bold" Margin="0,0,0,2" />
+                                <TextBlock Text="32 Dedicated Slots Available" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Metric 3: Realm Uptime -->
+                        <Border Grid.Column="4" Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12">
+                            <StackPanel>
+                                <TextBlock Text="SESSION UPTIME" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,4" />
+                                <TextBlock Text="{Binding Liveboard.UptimeFormatted, StringFormat='Uptime: {0}', FallbackValue='Uptime: 00m 00s'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="13" FontWeight="Bold" Margin="0,0,0,2" />
+                                <TextBlock Text="Dedicated Server Instance" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Active Players Presence Roster -->
+                    <Border Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12">
+                        <StackPanel>
+                            <TextBlock Text="ACTIVE PIONEERS IN REALM" Foreground="{StaticResource BrushTextMuted}" FontSize="10.5" FontWeight="Bold" Margin="0,0,0,8" />
+
+                            <!-- Active Player List (Visible when players > 0) -->
+                            <ItemsControl ItemsSource="{Binding Liveboard.Players}" Visibility="{Binding Liveboard.HasActivePlayers, Converter={StaticResource BoolToVis}}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#121824" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" CornerRadius="6" Padding="10,6" Margin="0,0,8,8">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Name}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" Margin="0,0,8,0" />
+                                                <Border Background="#202A3C" CornerRadius="3" Padding="4,1" Margin="0,0,6,0">
+                                                    <TextBlock Text="{Binding LevelBadge}" Foreground="{StaticResource BrushAccentCyan}" FontSize="10" FontWeight="SemiBold" />
+                                                </Border>
+                                                <TextBlock Text="{Binding PingBadge}" Foreground="{StaticResource BrushTextMuted}" FontSize="11" Margin="0,0,6,0" />
+                                                <TextBlock Text="{Binding Location}" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" />
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- Standby Empty State (Visible when 0 players) -->
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding Liveboard.HasNoPlayers, Converter={StaticResource BoolToVis}}" Margin="0,2,0,2">
+                                <Path Data="{StaticResource IconPlay}" Fill="{StaticResource BrushTextMuted}" Width="10" Height="10" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <TextBlock Text="No active pioneers currently in realm. Server is standing by — auto-wake activates on launch." Foreground="{StaticResource BrushTextMuted}" FontSize="11.5" VerticalAlignment="Center" />
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Button Content="Inspect Server" Style="{StaticResource StyleGhostButton}" Padding="10,6" FontSize="11" Margin="0,0,8,0"
-                                Command="{Binding NavigateCommand}" CommandParameter="Settings" />
-                        <Button Content="Wake / Start Server" Style="{StaticResource StyleCyanButton}" Padding="12,6" FontSize="11"
-                                Command="{Binding WakeRemoteServerCommand}" />
-                    </StackPanel>
-                </Grid>
-            </Border>
-
-            <!-- Crash Doctor / Quick Health Action Card -->
-            <Border Style="{StaticResource StyleCardBorder}" Padding="18,14">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Grid.Column="0">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <Path Data="{StaticResource IconBug}" Fill="{StaticResource BrushAccentOrange}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
-                            <TextBlock Text="PALODYSSEY CRASH DOCTOR &amp; LOG ANALYZER" Foreground="{StaticResource BrushAccentOrange}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" />
-                        </StackPanel>
-                        <TextBlock Text="Automated stack trace symbolizer and crash dump inspection utility." Foreground="{StaticResource BrushTextMuted}" FontSize="12" />
-                    </StackPanel>
-
-                    <Button Grid.Column="1" Style="{StaticResource StyleGhostButton}" Padding="12,6" VerticalAlignment="Center"
-                            Command="{Binding OpenCrashDoctorCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Data="{StaticResource IconSearch}" Fill="{StaticResource BrushAccentCyan}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
-                            <TextBlock Text="Inspect Crashes" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-                </Grid>
+                    </Border>
+                </StackPanel>
             </Border>
 
         </StackPanel>
     </ScrollViewer>
 </UserControl>
+

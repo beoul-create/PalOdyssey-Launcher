@@ -369,7 +369,8 @@ namespace PalLauncher.Services
                 {
                     enabled = true,
                     disableSmoothing = true,
-                    disableAcceleration = true
+                    disableAcceleration = true,
+                    highPollingRateSupport = true
                 },
                 network = new
                 {

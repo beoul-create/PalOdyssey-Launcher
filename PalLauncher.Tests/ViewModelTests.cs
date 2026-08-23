@@ -95,6 +95,23 @@ namespace PalLauncher.Tests
         }
 
         [Fact]
+        public void SettingsViewModel_RawInputOptimization_RoundtripsConfig()
+        {
+            var settingsVm = new SettingsViewModel(_configService, _pathDetector, _launchService, _updateService, _logService);
+            
+            var config = new LauncherConfig
+            {
+                EnableRawInputOptimization = true
+            };
+            settingsVm.LoadFromConfig(config);
+            Assert.True(settingsVm.EnableRawInputOptimization);
+
+            settingsVm.EnableRawInputOptimization = false;
+            var savedConfig = settingsVm.CreateConfigFromProperties();
+            Assert.False(savedConfig.EnableRawInputOptimization);
+        }
+
+        [Fact]
         public void LogsViewModel_Filtering_FiltersLogsCorrectly()
         {
             var logService = new LogService();

@@ -88,6 +88,9 @@ namespace PalLauncher.Models
         [JsonPropertyName("windowedMode")]
         public bool WindowedMode { get; set; } = false;
 
+        [JsonPropertyName("enableRawInputOptimization")]
+        public bool EnableRawInputOptimization { get; set; } = true;
+
         [JsonPropertyName("customArguments")]
         public string CustomArguments { get; set; } = "-culture=en";
     }

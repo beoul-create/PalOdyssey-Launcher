@@ -20,7 +20,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Top Summary & Actions Bar -->
@@ -31,7 +30,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Row 0: Summary & Main Action Buttons -->
+                <!-- Row 0: Summary & Action Button -->
                 <Grid Grid.Row="0" Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -40,28 +39,26 @@
 
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <TextBlock Text="PALODYSSEY MODPACK (v1.5.4)" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" />
+                            <TextBlock Text="PALODYSSEY EXPEDITION MODPACK (v1.5.4)" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" />
                             <Border Background="#101827" CornerRadius="4" Padding="6,1" Margin="8,0,0,0" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding UpToDateCount}" Foreground="{StaticResource BrushSuccess}" FontSize="10" FontWeight="Bold" />
-                                    <TextBlock Text="/" Foreground="{StaticResource BrushTextMuted}" FontSize="10" />
-                                    <TextBlock Text="{Binding TotalModsCount}" Foreground="{StaticResource BrushTextPrimary}" FontSize="10" FontWeight="Bold" Margin="0,0,4,0" />
-                                    <TextBlock Text="Active" Foreground="{StaticResource BrushTextSecondary}" FontSize="10" />
+                                    <TextBlock Text="{Binding TotalModsCount}" Foreground="{StaticResource BrushSuccess}" FontSize="10" FontWeight="Bold" Margin="0,0,4,0" />
+                                    <TextBlock Text="Paks &amp; Scripts Loaded" Foreground="{StaticResource BrushTextSecondary}" FontSize="10" />
                                 </StackPanel>
                             </Border>
                         </StackPanel>
-                        <TextBlock Text="{Binding StatusText}" Foreground="{StaticResource BrushTextSecondary}" FontSize="12" />
+                        <TextBlock Text="Curated modification suite and gameplay expansions for the PalOdyssey realm." Foreground="{StaticResource BrushTextSecondary}" FontSize="12" />
                     </StackPanel>
 
-                    <!-- Right Action Buttons -->
+                    <!-- Right Action Button: Open Mods Folder -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Button Content="Open Mods Folder" Style="{StaticResource StyleGhostButton}" FontSize="11" Padding="8,4" Margin="0,0,8,0"
-                                Command="{Binding OpenModsFolderCommand}" />
-                        <Button Content="Check Updates" Style="{StaticResource StyleGhostButton}" FontSize="11" Padding="8,4" Margin="0,0,8,0"
-                                Command="{Binding CheckUpdatesCommand}" />
-                        <Button Content="Update All Mods" Style="{StaticResource StyleCyanButton}" FontSize="11" Padding="10,4"
-                                Command="{Binding UpdateAllCommand}"
-                                IsEnabled="{Binding HasUpdatesPending}" />
+                        <Button Style="{StaticResource StyleGhostButton}" FontSize="11" Padding="12,6"
+                                Command="{Binding OpenModsFolderCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconFolder}" Fill="{StaticResource BrushAccentCyan}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                <TextBlock Text="Open Mods Folder" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </Grid>
 
@@ -71,16 +68,16 @@
                         <TextBlock Text="Filter:" Foreground="{StaticResource BrushTextMuted}" FontSize="11" VerticalAlignment="Center" Margin="4,0,10,0" />
                         <RadioButton Content="All Mods" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="10,4" FontSize="11" IsChecked="True"
                                      Click="OnFilterAllClicked" />
-                        <RadioButton Content="Pending Updates" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="10,4" FontSize="11"
-                                     Click="OnFilterUpdatesClicked" />
                         <RadioButton Content="Required Core" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="10,4" FontSize="11"
                                      Click="OnFilterRequiredClicked" />
+                        <RadioButton Content="Pending Updates" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="10,4" FontSize="11"
+                                     Click="OnFilterUpdatesClicked" />
                     </StackPanel>
                 </Border>
             </Grid>
         </Border>
 
-        <!-- Mod Cards List -->
+        <!-- Responsive Mod Cards List -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,6,0">
             <ItemsControl ItemsSource="{Binding FilteredModsView}">
                 <ItemsControl.ItemTemplate>
@@ -90,7 +87,6 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
 
                                 <!-- Top Row: Header & Status Badge -->
@@ -98,10 +94,9 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <!-- Mod Title & Author -->
+                                    <!-- Mod Title & Badges -->
                                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                                         <Path Data="{StaticResource IconPackage}" Fill="{StaticResource BrushAccentCyan}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center" />
                                         <TextBlock Text="{Binding Name}" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" Margin="0,0,8,0" VerticalAlignment="Center" />
@@ -116,22 +111,17 @@
                                     </StackPanel>
 
                                     <!-- Status Pill Badge -->
-                                    <Border Grid.Column="1" Background="#121824" BorderBrush="{Binding Status, Converter={StaticResource ModStatusToColorConverter}}" BorderThickness="1" CornerRadius="12" Padding="10,3" Margin="8,0" VerticalAlignment="Center">
+                                    <Border Grid.Column="1" Background="#121824" BorderBrush="{Binding Status, Converter={StaticResource ModStatusToColorConverter}}" BorderThickness="1" CornerRadius="12" Padding="10,3" VerticalAlignment="Center">
                                         <StackPanel Orientation="Horizontal">
                                             <Ellipse Width="6" Height="6" Fill="{Binding Status, Converter={StaticResource ModStatusToColorConverter}}" Margin="0,0,6,0" VerticalAlignment="Center" />
                                             <TextBlock Text="{Binding StatusDisplayName}" Foreground="{Binding Status, Converter={StaticResource ModStatusToColorConverter}}" FontSize="11" FontWeight="SemiBold" />
                                         </StackPanel>
                                     </Border>
-
-                                    <!-- Single Mod Action Button -->
-                                    <Button Grid.Column="2" Content="Install / Update" Style="{StaticResource StyleGhostButton}" FontSize="11" Padding="10,4" VerticalAlignment="Center"
-                                            Command="{Binding DataContext.UpdateSingleModCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}" />
                                 </Grid>
 
                                 <!-- Middle Row: Description & Metadata -->
-                                <StackPanel Grid.Row="1" Margin="0,8,0,4">
-                                    <TextBlock Text="{Binding Description}" Foreground="{StaticResource BrushTextSecondary}" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,6" />
+                                <StackPanel Grid.Row="1" Margin="0,8,0,0">
+                                    <TextBlock Text="{Binding Description}" Foreground="{StaticResource BrushTextSecondary}" FontSize="12.5" TextWrapping="Wrap" LineHeight="17" Margin="0,0,0,8" />
                                     
                                     <WrapPanel Orientation="Horizontal">
                                         <TextBlock Text="Install Path: " Foreground="{StaticResource BrushTextMuted}" FontSize="11" />
@@ -141,46 +131,15 @@
                                         <TextBlock Text="{Binding SizeBytes, Converter={StaticResource FileSizeConv}}" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" Margin="0,0,16,0" />
 
                                         <TextBlock Text="SHA-256: " Foreground="{StaticResource BrushTextMuted}" FontSize="11" />
-                                        <TextBlock Text="{Binding Sha256Checksum}" Foreground="{StaticResource BrushTextMuted}" FontSize="11" FontFamily="Consolas" TextTrimming="CharacterEllipsis" MaxWidth="180" />
+                                        <TextBlock Text="{Binding Sha256Checksum}" Foreground="{StaticResource BrushTextMuted}" FontSize="11" FontFamily="Consolas" TextTrimming="CharacterEllipsis" MaxWidth="280" />
                                     </WrapPanel>
                                 </StackPanel>
-
-                                <!-- Bottom Row: Active Download Progress Bar (When Downloading) -->
-                                <Grid Grid.Row="2" Margin="0,8,0,0" Visibility="{Binding DownloadProgress, Converter={StaticResource NullOrEmptyToVis}}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <ProgressBar Grid.Column="0" Value="{Binding DownloadProgress}" Maximum="100" Style="{StaticResource StyleGlowingProgressBar}" VerticalAlignment="Center" Margin="0,0,10,0" />
-                                    <TextBlock Grid.Column="1" Text="{Binding DownloadProgress, Converter={StaticResource ProgressConv}}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" />
-                                </Grid>
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-
-        <!-- Bottom Operation Status Strip -->
-        <Border Grid.Row="2" Background="{StaticResource BrushBgSurface}" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,10,0,0">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding StatusText}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,4" />
-                    <ProgressBar Value="{Binding OverallProgress}" Maximum="100" Style="{StaticResource StyleGlowingProgressBar}" Height="6" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}" />
-                </StackPanel>
-
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
-                    <TextBlock Text="{Binding CurrentSpeedText}" Foreground="{StaticResource BrushAccentCyan}" FontSize="12" FontWeight="Bold" Margin="0,0,12,0" VerticalAlignment="Center" />
-                    <Button Content="Cancel" Style="{StaticResource StyleGhostButton}" FontSize="11" Padding="10,4"
-                            Command="{Binding CancelCommand}"
-                            Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}" />
-                </StackPanel>
-            </Grid>
-        </Border>
     </Grid>
 </UserControl>
+
