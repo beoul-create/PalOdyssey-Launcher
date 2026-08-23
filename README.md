@@ -9,18 +9,20 @@
 
 ---
 
-## ⚡ Quick Start: How to Install & Play
+## ⚡ Quick Start: How to Get & Run
 
 Getting started takes less than 60 seconds:
 
-1. **Download the Launcher**:
-   - Download the latest release from the [Releases](https://github.com/beoul-create/PalOdyssey-Launcher/releases) page (or clone the repository).
-2. **Launch `PalLauncher.exe`**:
-   - The launcher automatically detects your Steam Palworld installation.
+1. **Get the Launcher**:
+   - Click the green **`<> Code`** button above ➔ select **`Download ZIP`** (or clone the repository: `git clone https://github.com/beoul-create/PalOdyssey-Launcher.git`).
+   - Extract the zip folder anywhere on your PC.
+2. **Launch the Application**:
+   - Right-click **`run-dev.ps1`** and select **Run with PowerShell** (or run `& .\run-dev.ps1` from a terminal).
+   - The launcher will start and automatically detect your Steam Palworld installation.
 3. **1-Click Auto-Calibrate**:
-   - Go to **Launch Settings** ➔ Click **`⚡ AUTO-CALIBRATE & OPTIMIZE RIG`** to automatically configure optimal graphics and CPU flags for your PC.
+   - Go to the **Launch Settings** tab ➔ Click **`⚡ AUTO-CALIBRATE & OPTIMIZE RIG`** to configure the best performance settings for your hardware.
 4. **Launch Expedition**:
-   - Click the glowing **`Launch Expedition`** button on the Dashboard. The launcher automatically verifies mod integrity, applies updates, and launches your game!
+   - Click the glowing **`Launch Expedition`** button on the Dashboard. The launcher automatically verifies mod integrity, applies updates, and boots your game!
 
 ---
 
