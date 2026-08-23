@@ -52,6 +52,7 @@ Getting started takes less than 60 seconds:
 
 When you launch through PalOdyssey, you get an out-of-the-box enhanced Palworld experience:
 
+* 🧬 **Azomer's Passive Skill Expansion (APSE)**: Deeply expands passive skills, custom items, Silvegis boss spawns, item drops, and Flames of Palpagos skill matrices loaded through PalSchema.
 * 🐾 **Stuck Pal Rescuer**: Automatically rescues base camp Pals that get stuck in building geometry or pathfinding loops and teleports them back to the Palbox so your base workers never starve or bug out.
 * 🌄 **Visual Clarity Engine**: Removes the washed-out milky grey atmospheric fog layer and disables chromatic aberration blur so distant landscapes and lighting look crisp, clear, and vibrant.
 * 📥 **Quick Deposit (`G` Key)**: Press **`G`** inside your base to automatically deposit all matching items from your inventory into nearby storage containers.
