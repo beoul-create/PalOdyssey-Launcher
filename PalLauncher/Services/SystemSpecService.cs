@@ -249,49 +249,88 @@ namespace PalLauncher.Services
             profile.RecommendAllCores = profile.LogicalCores >= 4;
 
             // Check GPU tier & capabilities
-            bool isHighEndNvidia = profile.GpuName.Contains("4090", StringComparison.OrdinalIgnoreCase) ||
-                                  profile.GpuName.Contains("4080", StringComparison.OrdinalIgnoreCase) ||
-                                  profile.GpuName.Contains("4070", StringComparison.OrdinalIgnoreCase) ||
-                                  profile.GpuName.Contains("4060", StringComparison.OrdinalIgnoreCase) ||
-                                  profile.GpuName.Contains("3080", StringComparison.OrdinalIgnoreCase) ||
-                                  profile.GpuName.Contains("3090", StringComparison.OrdinalIgnoreCase);
+            bool isEnthusiastGpu = profile.GpuName.Contains("4090", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("4080", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("4070", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("3080", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("3090", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("7900", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("7800", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuVramGb >= 12.0;
 
-            bool isMidRange = profile.GpuName.Contains("3060", StringComparison.OrdinalIgnoreCase) ||
-                             profile.GpuName.Contains("2060", StringComparison.OrdinalIgnoreCase) ||
-                             profile.GpuName.Contains("2070", StringComparison.OrdinalIgnoreCase) ||
-                             profile.GpuName.Contains("2080", StringComparison.OrdinalIgnoreCase) ||
-                             profile.GpuName.Contains("1660", StringComparison.OrdinalIgnoreCase) ||
-                             profile.GpuName.Contains("6600", StringComparison.OrdinalIgnoreCase) ||
-                             profile.GpuName.Contains("6700", StringComparison.OrdinalIgnoreCase) ||
-                             profile.GpuName.Contains("7600", StringComparison.OrdinalIgnoreCase);
+            bool isMidRangeGpu = profile.GpuName.Contains("4060", StringComparison.OrdinalIgnoreCase) ||
+                                 profile.GpuName.Contains("3060", StringComparison.OrdinalIgnoreCase) ||
+                                 profile.GpuName.Contains("3070", StringComparison.OrdinalIgnoreCase) ||
+                                 profile.GpuName.Contains("2060", StringComparison.OrdinalIgnoreCase) ||
+                                 profile.GpuName.Contains("2070", StringComparison.OrdinalIgnoreCase) ||
+                                 profile.GpuName.Contains("2080", StringComparison.OrdinalIgnoreCase) ||
+                                 profile.GpuName.Contains("1660", StringComparison.OrdinalIgnoreCase) ||
+                                 profile.GpuName.Contains("6600", StringComparison.OrdinalIgnoreCase) ||
+                                 profile.GpuName.Contains("6700", StringComparison.OrdinalIgnoreCase) ||
+                                 profile.GpuName.Contains("7600", StringComparison.OrdinalIgnoreCase) ||
+                                 (profile.GpuVramGb >= 6.0 && profile.GpuVramGb < 12.0);
 
-            bool isLowEndOrApu = profile.GpuName.Contains("Iris", StringComparison.OrdinalIgnoreCase) ||
-                                 profile.GpuName.Contains("Vega", StringComparison.OrdinalIgnoreCase) ||
-                                 profile.GpuName.Contains("Radeon Graphics", StringComparison.OrdinalIgnoreCase) ||
-                                 profile.GpuName.Contains("Intel", StringComparison.OrdinalIgnoreCase) ||
-                                 profile.GpuVramGb < 4.0;
+            bool isHandheldOrApu = profile.GpuName.Contains("Iris", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("Vega", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("Radeon Graphics", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("Z1", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("Aerith", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("680M", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("780M", StringComparison.OrdinalIgnoreCase) ||
+                                   profile.GpuName.Contains("Intel", StringComparison.OrdinalIgnoreCase);
+
+            bool isLegacyBudget = profile.LogicalCores <= 4 || profile.TotalRamGb <= 8.0 || profile.GpuVramGb <= 3.0;
 
             // High Priority if 6 or more physical cores available
             profile.RecommendHighPriority = profile.PhysicalCores >= 6;
             profile.RecommendNoSplash = true;
             profile.RecommendWindowedMode = false;
 
-            // Accommodate Users with Different Specs
-            if (isHighEndNvidia || (profile.TotalRamGb >= 16.0 && profile.GpuVramGb >= 8.0 && profile.PhysicalCores >= 6))
+            // Multi-Generation Classification
+            if (isLegacyBudget)
+            {
+                profile.RecommendDirectX11 = true;
+                profile.RecommendHighPriority = false;
+                profile.RecommendedCustomArguments = "-lowmemory";
+                profile.PerformanceTier = "Balanced / Efficiency Rig (APU/Mobile)";
+                profile.RecommendedPresetName = "efficiency_max";
+                profile.RecommendedTaskGraphTasks = 32;
+                profile.RecommendedSigScannerThreads = Math.Min(2, profile.LogicalCores);
+                profile.RecommendedMaxBandwidth = 524288; // 512 KB/s
+                profile.RecommendedGcIntervalSeconds = 35;
+                profile.RecommendedTrimIntervalMinutes = 2;
+                profile.EstimatedAvgFps = "35 - 55 FPS (720p/1080p Low/FSR)";
+                profile.RecommendationSummary = "Optimized for minimal RAM overhead, aggressive GC, and low VRAM texture pooling.";
+            }
+            else if (isHandheldOrApu)
+            {
+                profile.RecommendDirectX11 = true;
+                profile.RecommendedCustomArguments = "-malloc=system";
+                profile.PerformanceTier = "Handheld & Mobile APU (Steam Deck / ROG Ally)";
+                profile.RecommendedPresetName = "efficiency_max";
+                profile.RecommendedTaskGraphTasks = 48;
+                profile.RecommendedSigScannerThreads = Math.Clamp(profile.LogicalCores, 2, 6);
+                profile.RecommendedMaxBandwidth = 786432; // 768 KB/s
+                profile.RecommendedGcIntervalSeconds = 45;
+                profile.RecommendedTrimIntervalMinutes = 2;
+                profile.EstimatedAvgFps = "45 - 60 FPS (FSR Balanced / 800p-1080p)";
+                profile.RecommendationSummary = "Tuned for unified memory architectures and power-constrained APU envelopes.";
+            }
+            else if (isEnthusiastGpu && profile.TotalRamGb >= 24.0 && profile.PhysicalCores >= 8)
             {
                 profile.RecommendDirectX11 = false; // DX12 for DLSS / FrameGen / Lumen
-                profile.RecommendedCustomArguments = "-malloc=system -useperfthreads -high -NoAsyncLoadingThread";
+                profile.RecommendedCustomArguments = "-malloc=system -useperfthreads -NoAsyncLoadingThread";
                 profile.PerformanceTier = "Ultra / Enthusiast Rig";
                 profile.RecommendedPresetName = "ultra_optimal";
                 profile.RecommendedTaskGraphTasks = 120;
-                profile.RecommendedSigScannerThreads = Math.Clamp(profile.LogicalCores, 4, 16);
-                profile.RecommendedMaxBandwidth = 2097152; // 2MB/s
+                profile.RecommendedSigScannerThreads = Math.Clamp(profile.LogicalCores, 8, 16);
+                profile.RecommendedMaxBandwidth = 4194304; // 4MB/s
                 profile.RecommendedGcIntervalSeconds = 90;
                 profile.RecommendedTrimIntervalMinutes = 3;
-                profile.EstimatedAvgFps = "90 - 120+ FPS (1440p DLSS Quality / TSR)";
-                profile.RecommendationSummary = $"Tuned for {profile.PhysicalCores}C/{profile.LogicalCores}T CPU & {profile.TotalRamGb:F0}GB RAM with System Low-Fragmentation Heap & Async Compute.";
+                profile.EstimatedAvgFps = "100 - 144+ FPS (1440p/4K DLSS Quality / TSR)";
+                profile.RecommendationSummary = $"Tuned for {profile.PhysicalCores}C/{profile.LogicalCores}T CPU & {profile.TotalRamGb:F0}GB RAM with DX12 Async Compute and high task graph dispatch.";
             }
-            else if (isMidRange || (profile.TotalRamGb >= 12.0 && profile.GpuVramGb >= 4.0))
+            else if (isMidRangeGpu || (profile.TotalRamGb >= 12.0 && profile.GpuVramGb >= 4.0))
             {
                 profile.RecommendDirectX11 = true; // DX11 for ultra stable frametimes on mid GPUs
                 profile.RecommendedCustomArguments = "-malloc=system -useperfthreads";
@@ -304,20 +343,6 @@ namespace PalLauncher.Services
                 profile.RecommendedTrimIntervalMinutes = 4;
                 profile.EstimatedAvgFps = "60 - 85 FPS (1080p/1440p Balanced)";
                 profile.RecommendationSummary = $"Tuned for {profile.LogicalCores} threads & {profile.TotalRamGb:F0}GB RAM with DX11 stability and working set optimization.";
-            }
-            else if (isLowEndOrApu || profile.TotalRamGb <= 8.0)
-            {
-                profile.RecommendDirectX11 = true;
-                profile.RecommendedCustomArguments = "-lowmemory";
-                profile.PerformanceTier = "Balanced / Efficiency Rig (APU/Mobile)";
-                profile.RecommendedPresetName = "efficiency_max";
-                profile.RecommendedTaskGraphTasks = 40;
-                profile.RecommendedSigScannerThreads = Math.Min(4, profile.LogicalCores);
-                profile.RecommendedMaxBandwidth = 524288; // 512KB/s
-                profile.RecommendedGcIntervalSeconds = 45;
-                profile.RecommendedTrimIntervalMinutes = 2;
-                profile.EstimatedAvgFps = "40 - 60 FPS (FSR/DLSS Performance)";
-                profile.RecommendationSummary = "Configured for maximum memory efficiency and lightweight particle budgets.";
             }
             else
             {

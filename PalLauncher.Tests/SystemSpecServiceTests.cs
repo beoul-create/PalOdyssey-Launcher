@@ -77,7 +77,7 @@ namespace PalLauncher.Tests
         }
 
         [Theory]
-        [InlineData("NVIDIA GeForce RTX 4080", 32.0, 16.0, 8, 16, "Ultra / Enthusiast Rig", false, "-malloc=system -useperfthreads -high -NoAsyncLoadingThread")]
+        [InlineData("NVIDIA GeForce RTX 4080", 32.0, 16.0, 8, 16, "Ultra / Enthusiast Rig", false, "-malloc=system -useperfthreads -NoAsyncLoadingThread")]
         [InlineData("NVIDIA GeForce RTX 3060", 16.0, 6.0, 6, 12, "High Performance Gaming Rig", true, "-malloc=system -useperfthreads")]
         [InlineData("Intel Iris Xe Graphics", 8.0, 1.0, 4, 8, "Balanced / Efficiency Rig (APU/Mobile)", true, "-lowmemory")]
         public void SystemSpecService_ComputeOptimalFlags_AccommodatesDifferentSpecs(
