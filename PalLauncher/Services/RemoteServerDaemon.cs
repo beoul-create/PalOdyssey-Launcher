@@ -76,24 +76,18 @@ namespace PalLauncher.Services
             try
             {
                 _httpListener = new HttpListener();
-                bool started = false;
+                _httpListener.Prefixes.Add($"http://localhost:{_port}/");
+                _httpListener.Prefixes.Add($"http://127.0.0.1:{_port}/");
                 
                 try
                 {
-                    _httpListener.Prefixes.Add($"http://*:{_port}/");
                     _httpListener.Start();
-                    started = true;
                 }
                 catch
                 {
-                    try { _httpListener.Close(); } catch { }
-                }
-
-                if (!started)
-                {
+                    _httpListener.Close();
                     _httpListener = new HttpListener();
-                    _httpListener.Prefixes.Add($"http://localhost:{_port}/");
-                    _httpListener.Prefixes.Add($"http://127.0.0.1:{_port}/");
+                    _httpListener.Prefixes.Add($"http://*:{_port}/");
                     _httpListener.Start();
                 }
 

@@ -10,6 +10,7 @@ using Xunit;
 
 namespace PalLauncher.Tests
 {
+    [Collection("DaemonTests")]
     public class ComprehensiveDiagnosticTests
     {
         private readonly LogService _logService = new();
