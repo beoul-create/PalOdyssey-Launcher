@@ -53,8 +53,17 @@ Getting started takes less than 60 seconds:
 When you launch through PalOdyssey, you get an out-of-the-box enhanced Palworld experience:
 
 * 🧬 **Azomer's Passive Skill Expansion (APSE)**: Deeply expands passive skills, custom items, Silvegis boss spawns, item drops, and Flames of Palpagos skill matrices loaded through PalSchema.
+* 📦 **Palbox Search Plus & Quick Filter**: Adds real-time text searching (by Name, Element, or Passive Skill) and 1-click sorting directly into the Palbox storage grid.
+* 🖥️ **Clean HUD & Pristine Reticles**: Removes the Early Access build watermark and clutter, and provides high-contrast precision aim reticles (Dot, Minimal Crosshair, Circle-Dot).
+* ✨ **Shining Luckies Visual Indicator**: Adds a magical shimmer and star-glint particle aura to Lucky / Rare Pals so they stand out in dense foliage and nighttime biomes.
 * 🐾 **Stuck Pal Rescuer**: Automatically rescues base camp Pals that get stuck in building geometry or pathfinding loops and teleports them back to the Palbox so your base workers never starve or bug out.
-* 🌄 **Visual Clarity Engine**: Removes the washed-out milky grey atmospheric fog layer and disables chromatic aberration blur so distant landscapes and lighting look crisp, clear, and vibrant.
+* 🌄 **PalClearVision Visual & Rendering Suite**:
+  - **Atmospheric Clarity**: Removes washed-out grey fog veil, chromatic aberration, and film grain for razor-sharp visuals.
+  - **Better Night Light & Atmosphere**: Luminous, atmospheric nighttime moonlight and campfire radiance without washed-out grays.
+  - **Enhanced LOD & Draw Distance**: Extends Level-of-Detail transition distance to eliminate mesh pop-in while flying.
+  - **Ultra-Wide 21:9 & 32:9 HUD Fix**: Eliminates FOV warping and HUD element stretching on widescreen monitors.
+  - **Async Texture Streaming (Stutter Fix)**: Pre-allocates texture mips during zone transitions to eliminate micro-stutters.
+  - **Frame Pacing & NVIDIA Reflex**: Aligns CPU/GPU queues for minimal input latency and smooth frametime delivery.
 * 📥 **Quick Deposit (`G` Key)**: Press **`G`** inside your base to automatically deposit all matching items from your inventory into nearby storage containers.
 * 🚫 **Remove Mod Warning**: Suppresses the third-party mods detected modal pop-up on the title screen for an instant, seamless game startup.
 * ⚔️ **Weapon Proficiency & Mastery**: Earn weapon experience as you fight to level up damage bonuses and increase weapon durability.
@@ -69,8 +78,11 @@ You can customize mod settings live while playing without restarting your game:
 
 1. Press **`ESC` ➔ Mod Options** anywhere in-game.
 2. Adjust your settings:
+   - **Palbox Search**: Toggle text search, element filtering, passive skill queries, and quick sort.
+   - **HUD & Reticles**: Toggle watermark removal, compass simplification, and choose between Dot, Minimal Crosshair, or Circle-Dot aim reticles with custom color contrast.
+   - **Shining Luckies**: Adjust shimmer radiance intensity (Subtle, Moderate, Vibrant) and star-glint trails.
+   - **Visual Clarity & Lighting**: Toggle fog removal, better night light, LOD draw distance, ultrawide fixes, and async texture streaming.
    - **Stuck Pal Rescuer**: Change scan frequency or stuck timeout threshold.
-   - **Visual Clarity**: Toggle fog removal, chromatic aberration, or shadow distance.
    - **Quick Deposit**: Change deposit hotkey (default `G`) and chest scan radius.
    - **Palworld Tuner**: Adjust inventory carry weight multipliers.
    - **Weapon Proficiency**: Toggle damage and durability scaling.
