@@ -37,3 +37,10 @@ $RECYCLE.BIN/
 *.mdmp
 *.pdb
 
+# Local benchmark output & submodules
+benchmark_*.json
+GitHub-Modpack-Release/
+publish/
+MockGame/
+
+

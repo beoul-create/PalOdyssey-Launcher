@@ -33,6 +33,7 @@ namespace PalLauncher.Tests
                     () => Task.FromResult(true));
 
                 Assert.True(started);
+                await Task.Delay(150);
 
                 // Fetch Liveboard via HTTP API
                 var liveboard = await client.FetchLiveboardAsync("127.0.0.1", testPort, 5000);

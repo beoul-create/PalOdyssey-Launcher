@@ -94,13 +94,14 @@ namespace PalLauncher.Tests
         [Fact]
         public async Task Diagnostic_RemoteDaemonAndClientLiveboardStressTest()
         {
-            int testPort = 18235;
+            int testPort = 18235 + Random.Shared.Next(10, 500);
             var launchService = new LaunchService(_logService);
             var daemon = new RemoteServerDaemon(_logService, launchService);
             var client = new RemoteClientService(_logService);
 
             bool started = await daemon.StartDaemonAsync(testPort, "StressTestKey2026", () => Task.FromResult(true), () => Task.FromResult(true));
             Assert.True(started);
+            await Task.Delay(150);
 
             try
             {
