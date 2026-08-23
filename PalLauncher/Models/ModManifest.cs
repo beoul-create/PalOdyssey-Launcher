@@ -16,10 +16,10 @@ namespace PalLauncher.Models
         public string ServerName { get; set; } = "PalOdyssey Official";
 
         [JsonPropertyName("serverAddress")]
-        public string ServerAddress { get; set; } = "beoul.duckdns.org";
+        public string ServerAddress { get; set; } = "palodyssey.duckdns.org";
 
         [JsonPropertyName("serverPort")]
-        public int ServerPort { get; set; } = 8211;
+        public int ServerPort { get; set; } = 57294;
 
         [JsonPropertyName("lastUpdated")]
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;

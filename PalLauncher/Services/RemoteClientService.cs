@@ -70,7 +70,7 @@ namespace PalLauncher.Services
             Action<HttpRequestMessage>? configure = null)
         {
             method ??= HttpMethod.Get;
-            string cleanHost = string.IsNullOrWhiteSpace(host) ? "beoul.duckdns.org" : host.Trim();
+            string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
             var hostsToTry = new List<string>();
 
             if (cleanHost == "127.0.0.1" || cleanHost.Equals("localhost", StringComparison.OrdinalIgnoreCase))
@@ -159,7 +159,7 @@ namespace PalLauncher.Services
         public async Task<ServerLiveboardInfo> FetchLiveboardAsync(string host, int managementPort, int timeoutMs = 2500)
         {
             int port = managementPort > 0 ? managementPort : 8212;
-            string cleanHost = string.IsNullOrWhiteSpace(host) ? "beoul.duckdns.org" : host.Trim();
+            string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
             using var cts = new CancellationTokenSource(timeoutMs);
 
             try
@@ -203,7 +203,7 @@ namespace PalLauncher.Services
             int timeoutSeconds = 25)
         {
             int port = managementPort > 0 ? managementPort : 8212;
-            string cleanHost = string.IsNullOrWhiteSpace(host) ? "beoul.duckdns.org" : host.Trim();
+            string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
 
             progress?.Report($"Connecting to host at {cleanHost}:{port}...");
             _logService.LogInfo($"Sending remote wake request to host {cleanHost}:{port}...", "RemoteClient");

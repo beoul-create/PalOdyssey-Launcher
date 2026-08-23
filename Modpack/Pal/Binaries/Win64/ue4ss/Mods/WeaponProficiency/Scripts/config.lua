@@ -189,7 +189,7 @@ local Config = {
   --
   -- IT APPLIES TO EVERY WEAPON ON THE SERVER, not just yours -- there is no owner
   -- filter yet. On a shared server every player gets the same bar while this is on.
-  serverDurability = false,
+  serverDurability = true,
 
   -- Flat multiplier for the test. Defaults to durabilityMaxMult (what a max-level
   -- weapon would have earned) so the effect is large enough to be unmistakable in
@@ -214,8 +214,8 @@ local Config = {
   --
   -- A weapon the channel never mentions keeps the flat multiplier, so leaving these
   -- off is exactly the behaviour you have today.
-  rpcApply = false,   -- SERVER: act on reported levels (off = log arrivals only)
-  rpcSend  = false,   -- CLIENT: send this player's levels to the server
+  rpcApply = true,   -- SERVER: act on reported levels (off = log arrivals only)
+  rpcSend  = true,   -- CLIENT: send this player's levels to the server
 
   -- Max level the durability curve ramps to; matches the client's HUD maxLv.
   durabilityMaxLevel = 80,

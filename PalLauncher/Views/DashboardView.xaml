@@ -28,11 +28,13 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Left: Glowing Astralym Emblem -->
-                    <Border Grid.Column="0" Width="68" Height="68" CornerRadius="12" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1.5" Margin="0,0,18,0" VerticalAlignment="Center">
+                    <Border Grid.Column="0" Width="68" Height="68" CornerRadius="14" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1.5" Margin="0,0,18,0" VerticalAlignment="Center" ClipToBounds="True" SnapsToDevicePixels="True" Background="#0C1018">
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="16" Color="#00F0FF" Opacity="0.75" ShadowDepth="0" />
                         </Border.Effect>
-                        <Image Source="pack://application:,,,/Assets/astralym_icon.png" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality" />
+                        <Border CornerRadius="12" ClipToBounds="True">
+                            <Image Source="pack://application:,,,/Assets/emblem_icon.png" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="Fant" SnapsToDevicePixels="True" UseLayoutRounding="True" />
+                        </Border>
                     </Border>
 
                     <!-- Center: Title & News Broadcast -->
@@ -90,7 +92,9 @@
                         <TextBlock Text="DEDICATED REALM" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,6" />
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
                             <Ellipse Width="7" Height="7" Fill="{StaticResource BrushSuccess}" Margin="0,0,6,0" VerticalAlignment="Center" />
-                            <TextBlock Text="beoul.duckdns.org:8211" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" />
+                            <TextBlock Text="{Binding SettingsVM.ServerIp}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" />
+                            <TextBlock Text=":" Foreground="{StaticResource BrushTextMuted}" FontSize="12" />
+                            <TextBlock Text="{Binding SettingsVM.ServerPort}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" />
                         </StackPanel>
                         <TextBlock Text="{Binding ServerStatusBadgeText}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" TextTrimming="CharacterEllipsis" />
                     </StackPanel>

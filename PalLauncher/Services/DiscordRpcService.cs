@@ -13,13 +13,20 @@ namespace PalLauncher.Services
 {
     public class DiscordRpcService : IDiscordRpcService
     {
+        private const string DefaultAppId = "383226320970055681"; // Registered Discord Rich Presence App ID
+
         private readonly ILogService _logService;
         private NamedPipeClientStream? _pipeClient;
         private CancellationTokenSource? _cts;
-        private string _applicationId = "383226320970055681"; // Registered Discord Rich Presence App ID
+        private string _applicationId = DefaultAppId;
         private bool _isConnected;
         private DateTime? _sessionStartTime;
         private readonly SemaphoreSlim _pipeSemaphore = new(1, 1);
+
+        // Cached presence state for automatic re-publishing on connect/reconnect
+        private string _cachedDetails = "Using PalOdyssey Launcher";
+        private string _cachedState = "Preparing Expedition";
+        private bool _cachedIsPlaying;
 
         private static readonly JsonSerializerOptions JsonOpts = new()
         {
@@ -39,6 +46,10 @@ namespace PalLauncher.Services
             {
                 _applicationId = applicationId.Trim();
             }
+            else
+            {
+                _applicationId = DefaultAppId;
+            }
 
             _cts?.Cancel();
             _cts = new CancellationTokenSource();
@@ -56,13 +67,13 @@ namespace PalLauncher.Services
                     bool connected = await TryConnectToDiscordPipeAsync();
                     if (connected)
                     {
-                        await UpdatePresenceAsync("Using PalOdyssey Launcher", "Preparing Expedition", isPlaying: false);
+                        await UpdatePresenceAsync(_cachedDetails, _cachedState, _cachedIsPlaying);
                     }
                 }
 
                 try
                 {
-                    await Task.Delay(10000, ct); // Reconnect / heartbeat check
+                    await Task.Delay(5000, ct); // Reconnect / heartbeat check
                 }
                 catch (OperationCanceledException) { break; }
             }
@@ -93,14 +104,29 @@ namespace PalLauncher.Services
                         var handshake = new { v = 1, client_id = _applicationId };
                         await WriteFrameInternalAsync(0, handshake);
 
-                        // Read Handshake response (Opcode 1 = Frame/Ready)
+                        // Read Handshake response (Opcode 1 = Frame/Ready, Opcode 2 = Close)
                         using var readCts = new CancellationTokenSource(1500);
                         var (op, json) = await ReadFrameInternalAsync(readCts.Token);
-                        if (op == 1 || (!string.IsNullOrEmpty(json) && json.Contains("READY")))
+
+                        if (op == 1 || (!string.IsNullOrEmpty(json) && json.Contains("READY", StringComparison.OrdinalIgnoreCase)))
                         {
                             _isConnected = true;
-                            _logService.LogInfo($"Connected to Discord Rich Presence IPC ({pipeName}).", "DiscordRPC");
+                            _logService.LogInfo($"Connected to Discord Rich Presence IPC ({pipeName}) [AppID: {_applicationId}].", "DiscordRPC");
                             return true;
+                        }
+                        else if (op == 2 && _applicationId != DefaultAppId)
+                        {
+                            // App ID was invalid or rejected by Discord - auto fallback to default registered App ID
+                            _logService.LogWarning($"Custom Discord AppID '{_applicationId}' rejected ({json}). Falling back to default registered AppID.", "DiscordRPC");
+                            _applicationId = DefaultAppId;
+                            try { pipe.Dispose(); } catch { }
+                            _pipeClient = null;
+                            continue;
+                        }
+                        else
+                        {
+                            try { pipe.Dispose(); } catch { }
+                            _pipeClient = null;
                         }
                     }
                     catch
@@ -120,6 +146,10 @@ namespace PalLauncher.Services
 
         public async Task UpdatePresenceAsync(string details, string state, bool isPlaying = false)
         {
+            _cachedDetails = details;
+            _cachedState = state;
+            _cachedIsPlaying = isPlaying;
+
             if (!_isConnected || _pipeClient == null || !_pipeClient.IsConnected)
             {
                 return;
@@ -159,6 +189,13 @@ namespace PalLauncher.Services
                             details = details,
                             state = state,
                             timestamps = timestampsObj,
+                            assets = new
+                            {
+                                large_image = "palworld",
+                                large_text = isPlaying ? "PalOdyssey Expeditions" : "PalOdyssey Custom Launcher",
+                                small_image = isPlaying ? "online" : "ready",
+                                small_text = isPlaying ? "In Realm (Dedicated)" : "Ready to Launch"
+                            },
                             instance = false
                         }
                     },

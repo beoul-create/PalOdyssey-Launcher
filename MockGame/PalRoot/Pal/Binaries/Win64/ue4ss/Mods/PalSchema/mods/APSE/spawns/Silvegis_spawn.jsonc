@@ -1,0 +1,62 @@
+[
+    {
+        "Type": "Sheet",
+        "Location": { "X": -563405.90, "Y": -282670.13, "Z": 0.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 },
+		// This seems to have no impact. Seems to be a setup variable done by the game and the game only. (Default: 10000.0)
+		"ReturnTerritoryRadius": 10000.0,
+		// This seems to have no impact. Seems to be a setup variable done by the game and the game only. (Default: 20000.0)
+		"WanderingRadius": 20000.0,
+		// Size of the radius in which entities spawn in. (Default: 500.0)
+		"SpawnRadius": 500.0,
+		// "ReturnTerritoryRadius" scale for combat purposes. At base 1, entities will disengage if they a further than 10000 units from their spawn. (Default: 1.0)
+		"ReturnRadiusRate_Combat": 0.75,
+		// When should the entities despawn? Real despawn distance calculated as: "ReturnTerritoryRadius" + "DespawnPlusDistance". (Default: 5000.0)
+		"DespawnPlusDistance": 5000.0,
+		// In how large radius shall entities wander in? (Default: 10000.0)
+		"WildLifeWalkingAreaRadius": 2500.0,
+        "SpawnerName": "APSE_Silvegis_Alt_Loc",
+        "SpawnerType": "FieldBoss",
+        "SpawnGroupList": [
+            {
+                "Weight": 100,
+                "PalList": [
+                    {
+                        "PalId": "APSE_WhiteShieldDragon",
+                        "Level": 65,
+                        "Level_Max": 65,
+                        "Num": 1,
+                        "Num_Max": 1
+                    }
+                ]
+            }
+        ]
+    },
+	{
+        "Type": "Sheet",
+        "Location": { "X": -44869.0, "Y": -152193.0, "Z": -2070.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 },
+		"ReturnTerritoryRadius": 10000.0,
+		"WanderingRadius": 20000.0,
+		"SpawnRadius": 1000.0,
+		"ReturnRadiusRate_Combat": 1.0,
+		"DespawnPlusDistance": 5000.0,
+		"WildLifeWalkingAreaRadius": 2500.0,
+        "SpawnerName": "APSE_KnocklemRes_Loc",
+        "SpawnerType": "FieldBoss",
+        "SpawnGroupList": [
+            {
+                "Weight": 100,
+                "PalList": [
+                    {
+                        "PalId": "APSE_WingGolem_Fire",
+                        "Level": 60,
+                        "Level_Max": 60,
+                        "Num": 1,
+                        "Num_Max": 1
+                    }
+                ]
+			}
+		]
+    }
+]

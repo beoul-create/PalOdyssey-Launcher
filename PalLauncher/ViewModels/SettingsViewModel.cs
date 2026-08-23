@@ -20,8 +20,8 @@ namespace PalLauncher.ViewModels
 
         private string _gamePath = string.Empty;
         private string _launchMode = "Client";
-        private string _serverIp = "beoul.duckdns.org";
-        private int _serverPort = 8211;
+        private string _serverIp = "palodyssey.duckdns.org";
+        private int _serverPort = 57294;
         private bool _autoJoinServer;
         private string _remoteManifestUrl = string.Empty;
         private string _paksRelativePath = @"Pal\Content\Paks\~mods";
@@ -154,7 +154,7 @@ namespace PalLauncher.ViewModels
         }
 
         private bool _enableDiscordRpc = true;
-        private string _discordApplicationId = "1215000000000000000";
+        private string _discordApplicationId = "1540924979095408700";
 
         public bool EnableDiscordRpc
         {
@@ -377,12 +377,44 @@ namespace PalLauncher.ViewModels
             catch { }
         }
 
+        private bool _isCalibrating;
+        public bool IsCalibrating
+        {
+            get => _isCalibrating;
+            set => SetProperty(ref _isCalibrating, value);
+        }
+
+        private int _calibrationProgress;
+        public int CalibrationProgress
+        {
+            get => _calibrationProgress;
+            set => SetProperty(ref _calibrationProgress, value);
+        }
+
+        private string _calibrationStageText = string.Empty;
+        public string CalibrationStageText
+        {
+            get => _calibrationStageText;
+            set => SetProperty(ref _calibrationStageText, value);
+        }
+
         public async Task ExecuteAutoOptimizeFlagsAsync()
         {
             try
             {
-                StatusMessage = "Analyzing system hardware specs...";
-                var profile = await _specService.DetectSystemSpecsAsync();
+                IsCalibrating = true;
+                CalibrationProgress = 5;
+                CalibrationStageText = "Initializing hardware & benchmark pipeline...";
+                StatusMessage = "⚡ Auto-calibrating system hardware & benchmark pipeline...";
+
+                var progressHandler = new Progress<CalibrationProgressInfo>(p =>
+                {
+                    CalibrationProgress = p.Percent;
+                    CalibrationStageText = $"{p.Stage} ({p.Percent}%)";
+                    StatusMessage = p.Details;
+                });
+
+                var profile = await _specService.AutoCalibrateAsync(progressHandler, GamePath);
                 HardwareProfile = profile;
 
                 UseAllCores = profile.RecommendAllCores;
@@ -396,13 +428,17 @@ namespace PalLauncher.ViewModels
                     CustomArguments = profile.RecommendedCustomArguments;
                 }
 
-                StatusMessage = $"⚡ Automatically optimized for {profile.CpuName} ({profile.PhysicalCores}C/{profile.LogicalCores}T) & {profile.TotalRamGb:F0}GB RAM!";
-                _logService.LogSuccess($"Auto-tuned startup flags: {profile.RecommendationSummary}", "Optimizer");
+                StatusMessage = $"⚡ Calibrated for {profile.PerformanceTier} • Target: {profile.EstimatedAvgFps}";
+                _logService.LogSuccess($"Auto-calibrated startup flags & modpack: {profile.RecommendationSummary}", "Optimizer");
             }
             catch (Exception ex)
             {
-                StatusMessage = $"Failed to auto-tune: {ex.Message}";
-                _logService.LogError("Auto-tune exception occurred.", "Optimizer", ex);
+                StatusMessage = $"Failed to auto-calibrate: {ex.Message}";
+                _logService.LogError("Auto-calibrate exception occurred.", "Optimizer", ex);
+            }
+            finally
+            {
+                IsCalibrating = false;
             }
         }
 

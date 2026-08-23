@@ -157,7 +157,7 @@ namespace PalLauncher.Services
                     IsOnline = true,
                     IsServerRunning = isServerRunning,
                     ServerName = "PalOdyssey Realm",
-                    ServerAddress = "beoul.duckdns.org:8211",
+                    ServerAddress = "palodyssey.duckdns.org:57294",
                     Version = "1.5.4",
                     UptimeSeconds = uptime,
                     PlayerCount = currentPlayers,

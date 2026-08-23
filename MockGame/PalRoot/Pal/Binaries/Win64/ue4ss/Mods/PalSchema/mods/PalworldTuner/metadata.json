@@ -1,0 +1,6 @@
+{
+  "name": "PalworldTuner",
+  "authors": ["PalworldTuner"],
+  "description": "Palworld Tuner (data half) - enemy difficulty for wild Pals AND human enemies, optional aggression, plus QoL: bigger stacks, versatile workers, faster Pals. Enemy edits never touch your own Pals. Pairs with the PalworldTuner UE4SS Lua mod (carry weight / tech points / base range).",
+  "version": "1.9.0"
+}

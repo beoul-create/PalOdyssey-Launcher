@@ -17,8 +17,8 @@ namespace PalLauncher.Models
         [JsonPropertyName("launchMode")]
         public string LaunchMode { get; set; } = "Client"; // "Client" or "Server"
 
-        public const string OfficialServerHost = "beoul.duckdns.org";
-        public const int OfficialServerPort = 8211;
+        public const string OfficialServerHost = "palodyssey.duckdns.org";
+        public const int OfficialServerPort = 57294;
         public const int OfficialManagementPort = 8215;
         public const string DefaultRealmAccessKey = "PalOdyssey2026Secure";
 
@@ -50,7 +50,7 @@ namespace PalLauncher.Models
         public bool EnableDiscordRpc { get; set; } = true;
 
         [JsonPropertyName("discordApplicationId")]
-        public string DiscordApplicationId { get; set; } = "1200155050516521020";
+        public string DiscordApplicationId { get; set; } = "1540924979095408700";
 
         [JsonPropertyName("autoJoinServer")]
         public bool AutoJoinServer { get; set; } = false;
@@ -59,7 +59,7 @@ namespace PalLauncher.Models
         public bool LaunchServerWithGame { get; set; } = true;
 
         [JsonPropertyName("remoteManifestUrl")]
-        public string RemoteManifestUrl { get; set; } = "https://raw.githubusercontent.com/beoul-create/PalOddyssey-Launcher/main/Modpack/version.json";
+        public string RemoteManifestUrl { get; set; } = "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Modpack/version.json";
 
         [JsonPropertyName("paksRelativePath")]
         public string PaksRelativePath { get; set; } = @"Pal\Content\Paks\~mods";

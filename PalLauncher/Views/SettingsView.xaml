@@ -83,18 +83,32 @@
                                     <TextBlock Text="DETECTED HARDWARE:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" />
                                     <TextBlock Text="{Binding HardwareProfile.SummaryText, FallbackValue='Detecting System Specs...'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="SemiBold" />
                                 </StackPanel>
-                                <TextBlock Text="{Binding HardwareProfile.RecommendationSummary, FallbackValue='Ready to optimize game engine'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" />
+                                <TextBlock Text="{Binding HardwareProfile.RecommendationSummary, FallbackValue='Ready to optimize game engine'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" Margin="0,0,0,4" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="TARGET PERFORMANCE:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" />
+                                    <TextBlock Text="{Binding HardwareProfile.EstimatedAvgFps, FallbackValue='60-80 FPS'}" Foreground="{StaticResource BrushSuccess}" FontSize="11" FontWeight="Bold" />
+                                </StackPanel>
                             </StackPanel>
                         </Grid>
                     </Border>
 
-                    <!-- Primary 1-Click Auto-Optimize Button -->
+                    <!-- Calibration Progress Bar (Visible during calibration) -->
+                    <StackPanel Visibility="{Binding IsCalibrating, Converter={StaticResource BoolToVis}}" Margin="0,0,0,12">
+                        <Grid Margin="0,0,0,4">
+                            <TextBlock Text="{Binding CalibrationStageText, FallbackValue='Benchmarking system throughput...'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Left" />
+                            <TextBlock Text="{Binding CalibrationProgress, StringFormat='{}{0}%'}" Foreground="{StaticResource BrushTextMuted}" FontSize="11" HorizontalAlignment="Right" />
+                        </Grid>
+                        <ProgressBar Value="{Binding CalibrationProgress}" Maximum="100" Height="6" Foreground="{StaticResource BrushAccentCyan}" Background="#0E1422" BorderThickness="0" />
+                    </StackPanel>
+
+                    <!-- Primary 1-Click Auto-Calibrate Button -->
                     <Button Style="{StaticResource StyleLaunchButton}"
                             Command="{Binding AutoOptimizeFlagsCommand}"
+                            IsEnabled="{Binding IsCalibrating, Converter={StaticResource InvertBoolToVis}}"
                             Padding="24,14" HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Path Data="{StaticResource IconRocket}" Fill="#FFFFFF" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center" />
-                            <TextBlock Text="⚡ AUTO-OPTIMIZE GAME &amp; ENGINE" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
+                            <TextBlock Text="⚡ AUTO-CALIBRATE &amp; OPTIMIZE RIG" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </StackPanel>

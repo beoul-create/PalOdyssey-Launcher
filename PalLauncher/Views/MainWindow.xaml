@@ -45,11 +45,13 @@
 
                     <!-- Left: Astralym Brand Emblem & Title -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" MouseLeftButtonDown="OnTitleBarMouseDown" Background="Transparent" Cursor="SizeAll">
-                        <Border Width="36" Height="36" CornerRadius="10" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1.5" Margin="0,0,12,0" Background="#0C1018">
+                        <Border Width="36" Height="36" CornerRadius="10" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1.5" Margin="0,0,12,0" Background="#0C1018" ClipToBounds="True" SnapsToDevicePixels="True">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="12" Color="#00F0FF" Opacity="0.8" ShadowDepth="0" />
                             </Border.Effect>
-                            <Image Source="pack://application:,,,/Assets/astralym_icon.png" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality" Margin="1" />
+                            <Border CornerRadius="8" ClipToBounds="True">
+                                <Image Source="pack://application:,,,/Assets/emblem_icon.png" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="Fant" SnapsToDevicePixels="True" UseLayoutRounding="True" Margin="1" />
+                            </Border>
                         </Border>
 
                         <StackPanel VerticalAlignment="Center">

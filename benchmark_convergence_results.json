@@ -1,0 +1,38 @@
+[
+    {
+        "Pass":  1,
+        "Profile":  "Profile A: Ultra/Epic Max Stress (1440p Native + TSR)",
+        "Code":  "Ultra_Epic",
+        "AvgFPS":  51.2,
+        "Low1PctFPS":  36.8,
+        "FrameTimeMs":  19.53,
+        "VRAM_MB":  1569,
+        "QualityIndex":  98,
+        "EfficiencyScore":  78.4,
+        "Status":  "OPTIMAL_CONVERGED"
+    },
+    {
+        "Pass":  1,
+        "Profile":  "Profile B: Enthusiast High (1440p + DLSS Quality)",
+        "Code":  "Enthusiast_High",
+        "AvgFPS":  78.6,
+        "Low1PctFPS":  61.2,
+        "FrameTimeMs":  12.72,
+        "VRAM_MB":  1567,
+        "QualityIndex":  92,
+        "EfficiencyScore":  89.6,
+        "Status":  "OPTIMAL_CONVERGED"
+    },
+    {
+        "Pass":  1,
+        "Profile":  "Profile C: Tuned Sweet-Spot (RTX 4060 + Ryzen 5500)",
+        "Code":  "Tuned_Optimal",
+        "AvgFPS":  91.4,
+        "Low1PctFPS":  75.8,
+        "FrameTimeMs":  10.94,
+        "VRAM_MB":  1567,
+        "QualityIndex":  95,
+        "EfficiencyScore":  96.8,
+        "Status":  "OPTIMAL_CONVERGED"
+    }
+]

@@ -1,0 +1,32 @@
+{
+  "ModName": "(SERVER) Expedition XP - Pals Level While Away",
+  "PackageName": "ExpeditionXP",
+  "Thumbnail": "thumbnail.png",
+  "Version": "1.6.3",
+  "DebugMode": false,
+  "MinRevision": 82182,
+  "Author": "A New Darn",
+  "Dependencies": [
+    "UE4SSExperimentalPW"
+  ],
+  "Tags": [
+    "UE4SS",
+    "Gameplay",
+    "Utilities"
+  ],
+  "InstallRule": [
+    {
+      "Type": "Lua",
+      "Targets": [
+        "./Scripts"
+      ]
+    },
+    {
+      "Type": "Lua",
+      "IsServer": true,
+      "Targets": [
+        "./Scripts"
+      ]
+    }
+  ]
+}

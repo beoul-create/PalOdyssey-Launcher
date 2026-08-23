@@ -348,6 +348,24 @@ namespace PalLauncher.Services
                             Directory.CreateDirectory(Path.GetDirectoryName(sMirror)!);
                             File.Copy(serverTarget, sMirror, true);
                         }
+
+                        // Ensure WeaponProficiency has .server marker on dedicated server
+                        string serverWpDir = Path.Combine(siblingServer, @"Pal\Binaries\Win64\ue4ss\Mods\WeaponProficiency");
+                        if (Directory.Exists(serverWpDir))
+                        {
+                            File.WriteAllText(Path.Combine(serverWpDir, ".server"), "server\n");
+                        }
+                    }
+
+                    // If gameRootPath itself is a dedicated server, ensure .server marker
+                    if (File.Exists(Path.Combine(gameRootPath, "PalServer.exe")) ||
+                        File.Exists(Path.Combine(gameRootPath, @"Pal\Binaries\Win64\PalServer-Win64-Shipping.exe")))
+                    {
+                        string sWpDir = Path.Combine(gameRootPath, @"Pal\Binaries\Win64\ue4ss\Mods\WeaponProficiency");
+                        if (Directory.Exists(sWpDir))
+                        {
+                            File.WriteAllText(Path.Combine(sWpDir, ".server"), "server\n");
+                        }
                     }
                 }
                 catch { }
@@ -503,8 +521,8 @@ namespace PalLauncher.Services
                 ManifestVersion = "1.2.0",
                 GameVersion = "0.3.x",
                 ServerName = "PalOdyssey Official Expedition Server",
-                ServerAddress = "beoul.duckdns.org",
-                ServerPort = 8211,
+                ServerAddress = "palodyssey.duckdns.org",
+                ServerPort = 57294,
                 LastUpdated = DateTime.UtcNow,
                 NewsAnnouncement = "PalOdyssey Core Updates: Seamless multiplayer sync, fast asset preloading, and enhanced performance pak installed.",
                 Mods = new List<ModInfo>
@@ -516,7 +534,7 @@ namespace PalLauncher.Services
                         Description = "Core network packet optimization and server-client state synchronizer.",
                         Version = "1.2.4",
                         Author = "PalOdyssey Team",
-                        DownloadUrl = "https://raw.githubusercontent.com/beoul-create/PalOddessey-Modpack/main/mods/dwmapi.dll",
+                        DownloadUrl = "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Modpack/mods/dwmapi.dll",
                         RelativeInstallPath = @"Pal\Content\Paks\~mods\PalCoreSync.pak",
                         Sha256Checksum = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
                         SizeBytes = 2450000,

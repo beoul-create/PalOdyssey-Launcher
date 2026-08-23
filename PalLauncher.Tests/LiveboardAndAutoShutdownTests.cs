@@ -40,7 +40,7 @@ namespace PalLauncher.Tests
                 Assert.NotNull(liveboard);
                 Assert.True(liveboard.IsOnline);
                 Assert.Equal("PalOdyssey Realm", liveboard.ServerName);
-                Assert.Equal("beoul.duckdns.org:8211", liveboard.ServerAddress);
+                Assert.Equal("palodyssey.duckdns.org:57294", liveboard.ServerAddress);
                 Assert.Equal(32, liveboard.MaxPlayers);
                 Assert.True(liveboard.IdleShutdownEnabled);
             }

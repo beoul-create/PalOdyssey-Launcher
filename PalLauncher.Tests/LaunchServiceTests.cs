@@ -69,7 +69,7 @@ namespace PalLauncher.Tests
             var config = new LauncherConfig
             {
                 ServerPort = 8211,
-                ServerIp = "beoul.duckdns.org"
+                ServerIp = "palodyssey.duckdns.org"
             };
 
             // Act

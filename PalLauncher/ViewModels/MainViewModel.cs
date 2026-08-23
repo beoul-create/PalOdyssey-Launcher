@@ -297,7 +297,7 @@ namespace PalLauncher.ViewModels
             if (_configService.Config.EnableDiscordRpc)
             {
                 await _discordRpc.InitializeAsync(_configService.Config.DiscordApplicationId);
-                await _discordRpc.UpdatePresenceAsync("Using PalOddyssey Launcher", "Preparing Expedition", isPlaying: false);
+                await _discordRpc.UpdatePresenceAsync("In Launcher", "Preparing Expedition", isPlaying: false);
             }
 
             // Start background status polling loop
@@ -354,13 +354,13 @@ namespace PalLauncher.ViewModels
                 if (state.IsRunning)
                 {
                     StatusText = $"Palworld {state.Mode} is running (PID: {state.ProcessId})";
-                    _ = _discordRpc.UpdatePresenceAsync("Playing ⚡ PalOddyssey Expedition ⚔️", "In Realm (15 Mods Active)", isPlaying: true);
+                    _ = _discordRpc.UpdatePresenceAsync("⚡ PalOdyssey Expedition", "Exploring Realm (15 Mods Active)", isPlaying: true);
                 }
                 else
                 {
                     StatusText = "Palworld session ended. Ready to launch.";
                     ProgressPercentage = 0;
-                    _ = _discordRpc.UpdatePresenceAsync("Using PalOddyssey Launcher", "Preparing Expedition", isPlaying: false);
+                    _ = _discordRpc.UpdatePresenceAsync("In Launcher", "Preparing Expedition", isPlaying: false);
                 }
             });
         }
