@@ -240,10 +240,8 @@ namespace PalLauncher.Services
                                     FileName = serverExe,
                                     Arguments = serverArgs,
                                     WorkingDirectory = serverWorkDir,
-                                    UseShellExecute = false,
-                                    CreateNoWindow = true,
-                                    RedirectStandardOutput = false,
-                                    RedirectStandardError = false
+                                    UseShellExecute = true,
+                                    WindowStyle = ProcessWindowStyle.Minimized
                                 };
 
                                 var sProcess = new Process
