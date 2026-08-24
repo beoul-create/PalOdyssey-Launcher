@@ -298,7 +298,7 @@ namespace PalLauncher.Services
                             var gResp = await _httpClient.PutAsync($"applications/{applicationId}/guilds/{guildId}/commands", gContent);
                             if (gResp.IsSuccessStatusCode)
                             {
-                                _logService.LogSuccess($"Slash Commands (/start, /status, /ip, /stop, /help) active with zero duplicates for server '{guildName}'!", "DiscordBot");
+                                _logService.LogSuccess($"Slash Commands (/start, /status, /ip, /restart, /reboot, /stop, /help) active with zero duplicates for server '{guildName}'!", "DiscordBot");
                             }
                         }
                     }
