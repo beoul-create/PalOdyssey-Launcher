@@ -222,7 +222,11 @@ namespace PalLauncher.Services
                             string rootServerExe = Path.Combine(serverRoot, "PalServer.exe");
 
                             bool isDirectEngineBinary = false;
-                            if (File.Exists(shippingCmd))
+                            if (File.Exists(rootServerExe))
+                            {
+                                serverExe = rootServerExe;
+                            }
+                            else if (File.Exists(shippingCmd))
                             {
                                 serverExe = shippingCmd;
                                 isDirectEngineBinary = true;
@@ -231,10 +235,6 @@ namespace PalLauncher.Services
                             {
                                 serverExe = shippingExe;
                                 isDirectEngineBinary = true;
-                            }
-                            else if (File.Exists(rootServerExe))
-                            {
-                                serverExe = rootServerExe;
                             }
                             else if (File.Exists(pathInfo.ServerExecutablePath))
                             {
@@ -248,7 +248,7 @@ namespace PalLauncher.Services
                                 {
                                     serverArgs = "Pal " + serverArgs;
                                 }
-                                string serverWorkDir = Path.GetDirectoryName(serverExe) ?? serverRoot;
+                                string serverWorkDir = isDirectEngineBinary ? (Path.GetDirectoryName(serverExe) ?? serverRoot) : serverRoot;
 
                                 _logService.LogInfo($"Launching PalServer: {Path.GetFileName(serverExe)} args: '{serverArgs}'", "PalServer");
 
