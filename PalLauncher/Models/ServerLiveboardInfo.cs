@@ -46,7 +46,7 @@ namespace PalLauncher.Models
         public string ServerName { get; set; } = "PalOdyssey Realm";
 
         [JsonPropertyName("serverAddress")]
-        public string ServerAddress { get; set; } = "palodyssey.duckdns.org:8211";
+        public string ServerAddress { get; set; } = "palodyssey.duckdns.org:57294";
 
         [JsonPropertyName("version")]
         public string Version { get; set; } = "1.5.4";
