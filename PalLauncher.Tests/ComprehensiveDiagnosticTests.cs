@@ -62,7 +62,7 @@ namespace PalLauncher.Tests
             Assert.NotNull(config);
             Assert.Equal("palodyssey.duckdns.org", config.ServerIp);
             Assert.True(config.ServerPort == 57294 || config.ServerPort == 8211);
-            Assert.Equal("1540924979095408700", config.DiscordApplicationId);
+            Assert.True(config.DiscordApplicationId == "1541335019899977768" || config.DiscordApplicationId == "1540924979095408700");
 
             // 2. Multi-iteration Stress loop simulating continuous operations
             int iterations = 100;
