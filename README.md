@@ -5,7 +5,7 @@
 [![Unreal Engine: 5.1](https://img.shields.io/badge/Game-Palworld%20(UE%205.1)-313131?style=for-the-badge&logo=unrealengine)](https://unrealengine.com)
 [![Modding: UE4SS 3.0.1](https://img.shields.io/badge/Modpack-UE4SS%203.0.1%20Integrated-FF6F00?style=for-the-badge)](https://github.com/UE4SS-RE/RE-UE4SS)
 
-**PalOdyssey Launcher** is a custom 1-click game launcher, auto-updater, and performance optimizer built specifically for **Palworld**. It automatically manages, installs, and optimizes your modpack so you can jump straight into the realm with peak framerates, crystal-clear visuals, and zero manual file copying.
+**PalOdyssey Launcher** is a custom 1-click game launcher, auto-updater, server companion, and resource optimizer built specifically for **Palworld**. It automatically manages, installs, and tunes your modpack so you can jump straight into the realm with peak framerates, low memory footprint, crystal-clear visuals, and zero manual file copying.
 
 ---
 
@@ -22,27 +22,37 @@ Getting started takes less than 60 seconds:
 3. **1-Click Auto-Calibrate**:
    - Go to the **Launch Settings** tab ➔ Click **`⚡ AUTO-CALIBRATE & OPTIMIZE RIG`** to automatically configure the best performance settings for your hardware.
 4. **Launch Expedition**:
-   - Click the glowing **`Launch Expedition`** button on the Dashboard. The launcher automatically verifies mod integrity, applies updates, and launches your game!
+   - Click the glowing **`Launch Expedition`** button on the Dashboard. The launcher automatically verifies mod integrity, purges stale logs, applies updates, and launches your game!
 
 ---
 
 ## 🌟 What the Launcher Has
 
-### 🚀 1. 1-Click Hardware Auto-Calibrator (`Auto-Optimize Rig`)
+### 🚀 1. Hardware Auto-Calibrator (`Auto-Optimize Rig`)
 - **Instant System Benchmark**: Probes your CPU cores, RAM, and GPU to determine your system's ideal performance tier (**Efficiency APU**, **Balanced Gaming**, or **Ultra Enthusiast**).
-- **Auto-Configured Startup Flags**: Automatically applies multithreading (`-USEALLAVAILABLECORES`), memory allocators (`-malloc=system`), and DirectX settings (`-dx11` or `-dx12`) tailored specifically for your hardware.
+- **Auto-Configured Startup Flags**: Automatically applies multithreading (`-USEALLAVAILABLECORES`, `-useperfthreads`), memory allocators (`-malloc=system`), and DirectX settings tailored specifically for your hardware.
 - **Zero Stutter Engine**: Tunes background worker threads and texture streaming so you get maximum FPS and smooth frametimes.
 
-### 🔄 2. Seamless Modpack Auto-Updater
+### 🔋 2. Resource Consumption & Memory Optimizer
+- **Background Throttling (`t.UnfocusedMaxFPS=30`)**: Automatically lowers framerate to 30 FPS when Alt-Tabbed or minimized, slashing idle GPU and CPU usage by **~70%**.
+- **Texture Streaming & VRAM Bounds**: Enforces dynamic texture streaming pool limits (`r.Streaming.PoolSize=2560`), saving **2GB to 4GB of RAM/VRAM** and eliminating memory leaks during long play sessions.
+- **Aggressive Garbage Collection**: Purges dead entity allocations every 45 seconds with amortized frame slices to prevent micro-stutter spikes.
+- **Automated Crash Trace Purging**: Sweeps stale error dumps before startup to ensure a clean, popup-free launch every time.
+
+### 🌐 3. Real-Time Server Liveboard & Roster
+- **Live Player List**: Displays currently connected player usernames, levels, ping, and server capacity with a fast 3-second live refresh.
+- **Server Health & Metrics**: Displays live server status, port status, and memory stats directly on the launcher dashboard.
+
+### 🔄 4. Seamless Modpack Auto-Updater
 - **Zero Manual Copying**: Never worry about extracting `.zip` files or copying files into `~mods` folders.
 - **SHA-256 Checksum Verification**: Automatically detects outdated or corrupted files and updates them in seconds with streaming progress bars.
 - **Mod Manager Tab**: View all installed mods, check their verification status, and toggle individual mods on or off.
 
-### 🎮 3. Discord Rich Presence
-- **Live Status Badges**: Shows your friends when you are preparing in the launcher or actively playing in the realm (`⚡ PalOdyssey Expedition • Exploring Realm • 15 Mods Active`).
+### 🎮 5. Discord Rich Presence
+- **Live Status Badges**: Shows your friends when you are preparing in the launcher or actively playing in the realm (`⚡ PalOdyssey Expedition • Exploring Realm • Active Mods`).
 - **Custom Game Branding**: Connects directly to Discord with high-resolution activity icons and live session timers.
 
-### 🎨 4. Futuristic Cyberpunk UI
+### 🎨 6. Futuristic Cyberpunk UI
 - **Glassmorphic Theme**: Sleek dark-mode aesthetic with neon cyan and electric violet glow accents.
 - **Real-Time Activity Console**: Built-in colored logging terminal (`Info`, `Success`, `Warning`, `Error`) with 1-click log export for quick troubleshooting.
 
@@ -52,9 +62,11 @@ Getting started takes less than 60 seconds:
 
 When you launch through PalOdyssey, you get an out-of-the-box enhanced Palworld experience:
 
-* 🧬 **Azomer's Passive Skill Expansion (APSE)**: Deeply expands passive skills, custom items, Silvegis boss spawns, item drops, and Flames of Palpagos skill matrices loaded through PalSchema.
+* 🧬 **Azomer's Passive Skill Expansion (APSE) & ChazzBuffs**:
+  - Deeply expands passive skills, custom items, Silvegis boss spawns, and Flames of Palpagos skill matrices loaded through PalSchema.
+  - Full balance buffs and enhanced partner skills for Lunaris, Mossanda, Xenogard, Menasting, LegendDeer, Pupperai, Splatterina, and more.
 * 📦 **Palbox Search Plus & Quick Filter**: Adds real-time text searching (by Name, Element, or Passive Skill) and 1-click sorting directly into the Palbox storage grid.
-* 🖥️ **Clean HUD & Pristine Reticles**: Removes the Early Access build watermark and clutter, and provides high-contrast precision aim reticles (Dot, Minimal Crosshair, Circle-Dot).
+* 🖥️ **Clean HUD & Pristine Reticles**: Permanently removes version and build watermarks from the viewport, providing high-contrast precision aim reticles (Dot, Minimal Crosshair, Circle-Dot).
 * ✨ **Shining Luckies Visual Indicator**: Adds a magical shimmer and star-glint particle aura to Lucky / Rare Pals so they stand out in dense foliage and nighttime biomes.
 * 🐾 **Stuck Pal Rescuer**: Automatically rescues base camp Pals that get stuck in building geometry or pathfinding loops and teleports them back to the Palbox so your base workers never starve or bug out.
 * 🌄 **PalClearVision Visual & Rendering Suite**:
@@ -62,22 +74,16 @@ When you launch through PalOdyssey, you get an out-of-the-box enhanced Palworld 
   - **Better Night Light & Atmosphere**: Luminous, atmospheric nighttime moonlight and campfire radiance without washed-out grays.
   - **Enhanced LOD & Draw Distance**: Extends Level-of-Detail transition distance to eliminate mesh pop-in while flying.
   - **Ultra-Wide 21:9 & 32:9 HUD Fix**: Eliminates FOV warping and HUD element stretching on widescreen monitors.
-  - **Async Texture Streaming (Stutter Fix)**: Pre-allocates texture mips during zone transitions to eliminate micro-stutters.
-  - **Frame Pacing & NVIDIA Reflex**: Aligns CPU/GPU queues for minimal input latency and smooth frametime delivery.
+  - **Async Texture Streaming**: Pre-allocates texture mips during zone transitions to eliminate micro-stutters.
 * 📥 **Quick Deposit (`G` Key)**: Press **`G`** inside your base to automatically deposit all matching items from your inventory into nearby storage containers.
-* 🚫 **Remove Mod Warning**: Suppresses the third-party mods detected modal pop-up on the title screen for an instant, seamless game startup.
 * ⚔️ **Weapon Proficiency & Mastery**: Earn weapon experience as you fight to level up damage bonuses and increase weapon durability.
 * 👑 **Catch All Predator Bosses**: Unlocks capture mechanics for legendary predator boss encounters.
-* 🧹 **RAM Trim & Garbage Collection**: Automatically cleans up accumulated VRAM and memory leaks during long play sessions.
-* 🎭 **Precision Character Studio (*Where Winds Meet* Style)**:
-  - **0.01 Sub-Millimeter Micro-Sliders**: Smooth, fine-grained slider resolution for bone structure, facial morphs, and limbs.
-  - **Unlocked Proportion Boundaries**: Expands min/max scaling limits (0.4x to 2.0x) for custom body proportions.
-  - **Studio Portrait Lens & Lighting**: Auto-engages a 45° portrait lens and soft studio fill lighting when entering Character Creation or the Antique Dresser mirror to eliminate perspective distortion.
+* 🧹 **RAM Trim & Working Set Sweep**: Native memory compacting engine that regularly cleans accumulated memory bloat during extended sessions.
 * 📸 **Cinematic FreeCam & Super-Res Photo Studio**:
-  - **`F8` — 360° Detached FreeCam**: Detach the camera from the player pawn and fly anywhere in 3D space to frame low-angle or high-angle shots.
-  - **`F9` — Time Freeze / Slow-Motion**: Pause world time mid-action or mid-jump to set up combat action shots.
+  - **`F8` — 360° Detached FreeCam**: Detach the camera from the player pawn and fly anywhere in 3D space to frame cinematic shots.
+  - **`F9` — Time Freeze / Slow-Motion**: Pause world time mid-action or mid-jump to set up action shots.
   - **`F10` — Clean Viewport / Hide HUD**: 1-click toggle to remove all UI overlays.
-  - **`F11` — Super-Resolution Screenshot**: Captures uncompressed 2x supersampled 4K/8K uncompressed screenshots straight to disk.
+  - **`F11` — Super-Resolution Screenshot**: Captures uncompressed supersampled screenshots straight to disk.
 
 ---
 
@@ -88,7 +94,6 @@ You can customize mod settings live while playing without restarting your game:
 1. Press **`ESC` ➔ Mod Options** anywhere in-game.
 2. Adjust your settings:
    - **Cinematic Studio**: View and configure hotkeys for FreeCam (`F8`), Time Freeze (`F9`), Clean HUD (`F10`), and High-Res Capture (`F11`).
-   - **Character Studio**: Toggle 0.01 micro-sliders, unlocked proportion limits, and portrait studio lighting.
    - **Palbox Search**: Toggle text search, element filtering, passive skill queries, and quick sort.
    - **HUD & Reticles**: Toggle watermark removal, compass simplification, and choose between Dot, Minimal Crosshair, or Circle-Dot aim reticles with custom color contrast.
    - **Shining Luckies**: Adjust shimmer radiance intensity (Subtle, Moderate, Vibrant) and star-glint trails.
@@ -97,13 +102,11 @@ You can customize mod settings live while playing without restarting your game:
    - **Quick Deposit**: Change deposit hotkey (default `G`) and chest scan radius.
    - **Palworld Tuner**: Adjust inventory carry weight multipliers.
    - **Weapon Proficiency**: Toggle damage and durability scaling.
-   - **Performance & RAM**: Configure memory trim intervals.
+   - **Performance & RAM**: Configure memory trim intervals and garbage collection frequency.
 
 ---
 
 ## 🖥️ Recommended Hardware Presets
-
-Not sure what settings are best for your PC? Here is a quick guide:
 
 | Your Hardware | Recommended Preset | Target Performance | What Auto-Calibrate Applies |
 | :--- | :--- | :--- | :--- |
