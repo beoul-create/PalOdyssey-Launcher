@@ -55,9 +55,21 @@ namespace PalLauncher
                 // Initialize ViewModels & View
                 _mainViewModel = new MainViewModel(_configService, _pathDetector, _updateService, _launchService, _logService, specService, remoteDaemon, remoteClient, discordRpc, crashLogService);
 
-                var mainWindow = new MainWindow(_mainViewModel);
-                MainWindow = mainWindow;
-                mainWindow.Show();
+                bool isHeadlessDaemon = Array.Exists(e.Args, a => a.Equals("--daemon", StringComparison.OrdinalIgnoreCase) ||
+                                                                 a.Equals("--headless", StringComparison.OrdinalIgnoreCase) ||
+                                                                 a.Equals("-silent", StringComparison.OrdinalIgnoreCase) ||
+                                                                 a.Equals("/silent", StringComparison.OrdinalIgnoreCase));
+
+                if (isHeadlessDaemon)
+                {
+                    _logService.LogSuccess("PalLauncher started in Headless Background Host Daemon mode (Armed on port 8211).", "App");
+                }
+                else
+                {
+                    var mainWindow = new MainWindow(_mainViewModel);
+                    MainWindow = mainWindow;
+                    mainWindow.Show();
+                }
             }
             catch (Exception ex)
             {

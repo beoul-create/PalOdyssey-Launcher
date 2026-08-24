@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -18,13 +19,16 @@ namespace PalLauncher.Services
         private readonly ILogService _logService;
         private readonly ILaunchService _launchService;
         private HttpListener? _httpListener;
+        private UdpClient? _udpWakeListener;
+        private Task? _udpWakeTask;
         private CancellationTokenSource? _cts;
         private Task? _listenerTask;
         private Task? _idleMonitorTask;
         private string _accessKey = "PalOdyssey2026Secure";
         private Func<Task<bool>>? _onStartServerRequested;
         private Func<Task<bool>>? _onStopServerRequested;
-        private int _port = 8212;
+        private int _port = 8215;
+        private int _gamePort = 8211;
         private bool _isRunning;
 
         // Auto-Shutdown State
@@ -126,6 +130,12 @@ namespace PalLauncher.Services
 
                 _logService.LogSuccess($"Remote Host Daemon listening on port {_port} with Inactivity Auto-Shutdown ({_idleShutdownMinutes}m).", "RemoteDaemon");
                 
+                // Arm UDP Wake-on-Demand on game port 8211 so single-port-forward wake works immediately
+                if (!_wasServerRunning)
+                {
+                    StartUdpWakeListener(_gamePort);
+                }
+
                 _listenerTask = Task.Run(() => AcceptRequestsLoopAsync(_cts.Token));
                 _idleMonitorTask = Task.Run(() => IdleMonitorLoopAsync(_cts.Token));
                 return Task.FromResult(true);
@@ -136,6 +146,72 @@ namespace PalLauncher.Services
                 _logService.LogError($"Failed to start Remote Host Daemon on port {_port}.", "RemoteDaemon", ex);
                 return Task.FromResult(false);
             }
+        }
+
+        private void StartUdpWakeListener(int gamePort)
+        {
+            StopUdpWakeListener();
+            if (_launchService.IsServerRunning) return;
+
+            try
+            {
+                _gamePort = gamePort > 0 ? gamePort : 8211;
+                _udpWakeListener = new UdpClient(_gamePort);
+                _udpWakeTask = Task.Run(async () =>
+                {
+                    while (_udpWakeListener != null && !_launchService.IsServerRunning)
+                    {
+                        try
+                        {
+                            var result = await _udpWakeListener.ReceiveAsync();
+                            if (result.Buffer != null && result.Buffer.Length > 0)
+                            {
+                                string msg = Encoding.UTF8.GetString(result.Buffer);
+                                if (msg.StartsWith("PALODYSSEY_WAKE:", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    string key = msg["PALODYSSEY_WAKE:".Length..].Trim();
+                                    if (!string.Equals(key, _accessKey, StringComparison.Ordinal))
+                                    {
+                                        _logService.LogWarning($"Rejected unauthorized UDP wake packet from {result.RemoteEndPoint}.", "RemoteDaemon");
+                                        continue;
+                                    }
+                                }
+
+                                _logService.LogSuccess($"[Port 8211 Wake] Received authorized UDP wake signal on port {_gamePort} from {result.RemoteEndPoint}! Booting Palworld Dedicated Server...", "RemoteDaemon");
+                                StopUdpWakeListener();
+                                if (_onStartServerRequested != null)
+                                {
+                                    await _onStartServerRequested();
+                                }
+                                break;
+                            }
+                        }
+                        catch (ObjectDisposedException) { break; }
+                        catch (SocketException) { break; }
+                        catch (Exception ex)
+                        {
+                            _logService.LogWarning($"UDP wake listener exception: {ex.Message}", "RemoteDaemon");
+                            break;
+                        }
+                    }
+                });
+                _logService.LogInfo($"UDP Wake-on-Demand armed on port {_gamePort}. Incoming connection on port {_gamePort} will auto-start server.", "RemoteDaemon");
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Could not bind UDP Wake listener on port {_gamePort}: {ex.Message}", "RemoteDaemon");
+            }
+        }
+
+        private void StopUdpWakeListener()
+        {
+            try
+            {
+                _udpWakeListener?.Close();
+                _udpWakeListener?.Dispose();
+            }
+            catch { }
+            _udpWakeListener = null;
         }
 
         public ServerLiveboardInfo GetCurrentLiveboard()
@@ -211,6 +287,7 @@ namespace PalLauncher.Services
                         _serverStartedTime = DateTime.Now;
                         _lastActivePlayerTime = DateTime.Now;
                         _shutdownTriggered = false;
+                        StopUdpWakeListener();
                         _logService.LogInfo("Dedicated server active detected. Inactivity timer initialized.", "AutoShutdown");
                     }
                     // Detect Server Stop Transition
@@ -221,6 +298,7 @@ namespace PalLauncher.Services
                         _lastActivePlayerTime = DateTime.Now;
                         _shutdownTriggered = false;
                         lock (_lock) { _activePlayers.Clear(); }
+                        StartUdpWakeListener(_gamePort);
                         continue;
                     }
 
@@ -490,6 +568,7 @@ namespace PalLauncher.Services
             _isRunning = false;
             try
             {
+                StopUdpWakeListener();
                 _cts?.Cancel();
                 _httpListener?.Stop();
                 _httpListener?.Close();

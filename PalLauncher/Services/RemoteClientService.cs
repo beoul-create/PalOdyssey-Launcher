@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -348,11 +349,21 @@ namespace PalLauncher.Services
             int port = managementPort > 0 ? managementPort : 8215;
             string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
 
-            progress?.Report($"Connecting to host at {cleanHost}:{port}...");
-            _logService.LogInfo($"Sending remote wake request to host {cleanHost}:{port}...", "RemoteClient");
+            progress?.Report($"Sending wake signal to host at {cleanHost}:8211...");
+            _logService.LogInfo($"Sending remote wake request to host {cleanHost} (UDP 8211 & TCP {port})...", "RemoteClient");
 
             try
             {
+                // 1. Send UDP Wake datagram to game port 8211 (enables 1-port 8211 wake without extra port-forwarding)
+                try
+                {
+                    using var udp = new System.Net.Sockets.UdpClient();
+                    byte[] wakePayload = Encoding.UTF8.GetBytes($"PALODYSSEY_WAKE:{accessKey}");
+                    await udp.SendAsync(wakePayload, wakePayload.Length, cleanHost, 8211);
+                }
+                catch { }
+
+                // 2. Send HTTP POST to management port
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
                 var response = await SendWithLoopbackFallbackAsync(
                     host,
@@ -362,16 +373,21 @@ namespace PalLauncher.Services
                     HttpMethod.Post,
                     req => req.Headers.Add("X-PalOdyssey-Key", accessKey));
 
-                if (response == null || !response.IsSuccessStatusCode)
+                if (response != null && !response.IsSuccessStatusCode)
                 {
-                    string error = response != null ? await response.Content.ReadAsStringAsync() : "No response";
-                    progress?.Report($"Remote wake rejected: {response?.StatusCode}");
-                    _logService.LogWarning($"Remote wake rejected by host ({response?.StatusCode}): {error}", "RemoteClient");
+                    string error = await response.Content.ReadAsStringAsync();
+                    progress?.Report($"Remote wake rejected: {response.StatusCode}");
+                    _logService.LogWarning($"Remote wake rejected by host ({response.StatusCode}): {error}", "RemoteClient");
                     return false;
                 }
 
-                progress?.Report("Wake signal accepted! Waiting for Palworld server initialization...");
-                _logService.LogSuccess("Wake signal accepted by host. Polling server startup heartbeat...", "RemoteClient");
+                if (response != null && response.IsSuccessStatusCode)
+                {
+                    _logService.LogSuccess("HTTP wake signal accepted by host.", "RemoteClient");
+                }
+
+                progress?.Report("Wake signal transmitted! Waiting for Palworld server initialization...");
+                _logService.LogInfo("Polling server startup heartbeat on port 8211...", "RemoteClient");
 
                 // Poll status until server reports active
                 var startTime = DateTime.Now;
