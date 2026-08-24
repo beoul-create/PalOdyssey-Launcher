@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -36,13 +37,15 @@ namespace PalLauncher.Services
 
         private string? _liveboardMessageId;
         private Task? _liveboardTask;
+        private readonly IEconomyService _economyService;
 
         public bool IsRunning { get; private set; }
         public string BotUsername { get; private set; } = "PalOdyssey Bot";
 
-        public DiscordBotService(ILogService logService)
+        public DiscordBotService(ILogService logService, IEconomyService? economyService = null)
         {
             _logService = logService;
+            _economyService = economyService ?? new EconomyService(_logService, new PalSaveService(_logService));
             _httpClient = new HttpClient
             {
                 BaseAddress = new Uri("https://discord.com/api/v10/")
@@ -80,6 +83,7 @@ namespace PalLauncher.Services
             _botCts = new CancellationTokenSource();
 
             IsRunning = true;
+            _ = RegisterGlobalSlashCommandsAsync(_applicationId);
             _gatewayTask = Task.Run(() => RunGatewayLoopAsync(_botCts.Token));
             _liveboardTask = Task.Run(() => RunLiveboardLoopAsync(_botCts.Token));
 
@@ -308,7 +312,46 @@ namespace PalLauncher.Services
 
                 var commands = new object[]
                 {
-                    // Public Commands (Available to @everyone)
+                    // Public Server Commands
+                    new
+                    {
+                        name = "deposit",
+                        description = "Deposit personal Tech Points into your Guild Bank",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "amount",
+                                description = "Quantity of Technology Points to deposit",
+                                type = 4, // INTEGER
+                                required = true
+                            },
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Player UID or Steam ID (optional if linked)",
+                                type = 3, // STRING
+                                required = false
+                            }
+                        }
+                    },
+                    new
+                    {
+                        name = "guild-bank",
+                        description = "View your Guild's Tech Bank balance, infrastructure caps, and contributors",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Player UID or Steam ID (optional if linked)",
+                                type = 3, // STRING
+                                required = false
+                            }
+                        }
+                    },
                     new
                     {
                         name = "start",
@@ -329,8 +372,164 @@ namespace PalLauncher.Services
                     },
                     new
                     {
+                        name = "shop",
+                        description = "Browse the Technology Point Exchange Store and Recycling valuations",
+                        type = 1
+                    },
+                    new
+                    {
+                        name = "exchange",
+                        description = "Exchange unspent Technology Points for rare currencies, items, or summoning slabs",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "item",
+                                description = "Item to buy (e.g. dog_coin, arena_ticket, bounty_token, pal_reverser, reset_drug, raid_boss_slab)",
+                                type = 3, // STRING
+                                required = true
+                            },
+                            new
+                            {
+                                name = "amount",
+                                description = "Quantity to purchase (default: 1)",
+                                type = 4, // INTEGER
+                                required = false
+                            },
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Player UID or Steam ID (optional if linked)",
+                                type = 3, // STRING
+                                required = false
+                            }
+                        }
+                    },
+                    new
+                    {
+                        name = "recycle",
+                        description = "Recycle vendor loot, keys, gems, or blueprints into Technology Points",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "item",
+                                description = "Item to scrap (e.g. ruby, diamond, precious_pelt, gold_key, ancient_parts, schematic)",
+                                type = 3, // STRING
+                                required = true
+                            },
+                            new
+                            {
+                                name = "amount",
+                                description = "Quantity to recycle (default: 1)",
+                                type = 4, // INTEGER
+                                required = false
+                            },
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Player UID or Steam ID (optional if linked)",
+                                type = 3, // STRING
+                                required = false
+                            }
+                        }
+                    },
+                    new
+                    {
+                        name = "scrap",
+                        description = "Alias for /recycle - Scrap loot and blueprints into Technology Points",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "item",
+                                description = "Item to scrap (e.g. ruby, diamond, precious_pelt, gold_key, ancient_parts, schematic)",
+                                type = 3, // STRING
+                                required = true
+                            },
+                            new
+                            {
+                                name = "amount",
+                                description = "Quantity to scrap (default: 1)",
+                                type = 4, // INTEGER
+                                required = false
+                            },
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Player UID or Steam ID (optional if linked)",
+                                type = 3, // STRING
+                                required = false
+                            }
+                        }
+                    },
+                    new
+                    {
+                        name = "inventory",
+                        description = "View your Pioneer Character's Tech Points and Virtual Vault delivery depot",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Player UID or Steam ID (optional if linked)",
+                                type = 3, // STRING
+                                required = false
+                            }
+                        }
+                    },
+                    new
+                    {
+                        name = "link",
+                        description = "Link your Discord user account to your Palworld Player UID or Steam ID",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Your Palworld Player UID or Steam ID",
+                                type = 3, // STRING
+                                required = true
+                            }
+                        }
+                    },
+                    new
+                    {
+                        name = "gacha",
+                        description = "Open Relic Mystery Boxes for rare items, currencies, and legendary drops",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "pulls",
+                                description = "Number of pulls: 1 (3 pts) or 10 (25 pts with pity guarantee)",
+                                type = 4, // INTEGER
+                                required = false,
+                                choices = new object[]
+                                {
+                                    new { name = "1 Pull (3 Tech Points)", value = 1 },
+                                    new { name = "10 Pull (25 Tech Points — Rare+ Pity)", value = 10 }
+                                }
+                            },
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Player UID or Steam ID (optional if linked)",
+                                type = 3, // STRING
+                                required = false
+                            }
+                        }
+                    },
+                    new
+                    {
                         name = "help",
-                        description = "List all available PalOdyssey server commands",
+                        description = "List all available PalOdyssey server and economy commands",
                         type = 1
                     },
 
@@ -358,7 +557,7 @@ namespace PalLauncher.Services
                 var globalResp = await _httpClient.PutAsync($"applications/{appId}/commands", globalContent);
                 if (globalResp.IsSuccessStatusCode)
                 {
-                    _logService.LogSuccess("Discord native Slash Commands (/start, /status, /ip, /restart, /stop, /help) registered globally!", "DiscordBot");
+                    _logService.LogSuccess("Discord native Slash Commands (/start, /status, /ip, /shop, /exchange, /recycle, /gacha, /inventory, /link, /restart, /stop, /help) registered globally!", "DiscordBot");
                 }
                 else
                 {
@@ -510,26 +709,38 @@ namespace PalLauncher.Services
                     }
                 }
                 
+                string authorId = "";
                 string authorName = "Pioneer";
                 if (interaction.TryGetProperty("member", out var member) &&
-                    member.TryGetProperty("user", out var mUser) &&
-                    mUser.TryGetProperty("username", out var muName))
+                    member.TryGetProperty("user", out var mUser))
                 {
-                    authorName = muName.GetString() ?? "Pioneer";
+                    authorId = mUser.TryGetProperty("id", out var mid) ? mid.GetString() ?? "" : "";
+                    authorName = mUser.TryGetProperty("username", out var muName) ? muName.GetString() ?? "Pioneer" : "Pioneer";
                 }
-                else if (interaction.TryGetProperty("user", out var user) &&
-                         user.TryGetProperty("username", out var uName))
+                else if (interaction.TryGetProperty("user", out var user))
                 {
-                    authorName = uName.GetString() ?? "Pioneer";
+                    authorId = user.TryGetProperty("id", out var uid) ? uid.GetString() ?? "" : "";
+                    authorName = user.TryGetProperty("username", out var uName) ? uName.GetString() ?? "Pioneer" : "Pioneer";
                 }
 
                 if (!interaction.TryGetProperty("data", out var data)) return;
                 string command = data.GetProperty("name").GetString()?.ToLowerInvariant() ?? "";
 
-                _logService.LogInfo($"Received Discord slash interaction '/{command}' from '{authorName}' in channel '{channelId}' (ID: {interactionId})", "DiscordBot");
+                _logService.LogInfo($"Received Discord slash interaction '/{command}' from '{authorName}' ({authorId}) in channel '{channelId}' (ID: {interactionId})", "DiscordBot");
+
+                bool isEphemeral = command switch
+                {
+                    "help" => true,
+                    "shop" => true,
+                    "recycle" => true,
+                    "scrap" => true,
+                    "deposit" => true,
+                    "guild-bank" => true,
+                    _ => false
+                };
 
                 // Immediately ACK the interaction with a deferred response (type 5) to prevent the 3-second timeout
-                await DeferInteractionAsync(interactionId, interactionToken);
+                await DeferInteractionAsync(interactionId, interactionToken, isEphemeral);
 
                 switch (command)
                 {
@@ -546,6 +757,44 @@ namespace PalLauncher.Services
                     case "ip":
                     case "connect":
                         await ExecuteIpInteractionAsync(interactionToken);
+                        break;
+
+                    case "shop":
+                    case "store":
+                        await ExecuteShopInteractionAsync(interactionToken);
+                        break;
+
+                    case "deposit":
+                        await ExecuteDepositInteractionAsync(interactionToken, data, authorId, authorName);
+                        break;
+
+                    case "guild-bank":
+                        await ExecuteGuildBankInteractionAsync(interactionToken, data, authorId, authorName);
+                        break;
+
+                    case "exchange":
+                    case "buy":
+                        await ExecuteExchangeInteractionAsync(interactionToken, data, authorId, authorName);
+                        break;
+
+                    case "recycle":
+                    case "scrap":
+                        await ExecuteRecycleInteractionAsync(interactionToken, data, authorId, authorName);
+                        break;
+
+                    case "inventory":
+                    case "vault":
+                        await ExecuteInventoryInteractionAsync(interactionToken, data, authorId, authorName);
+                        break;
+
+                    case "link":
+                        await ExecuteLinkInteractionAsync(interactionToken, data, authorId, authorName);
+                        break;
+
+                    case "gacha":
+                    case "mysterybox":
+                    case "relic":
+                        await ExecuteGachaInteractionAsync(interactionToken, data, authorId, authorName);
                         break;
 
                     case "restart":
@@ -946,20 +1195,6 @@ namespace PalLauncher.Services
             });
         }
 
-        private async Task ExecuteHelpInteractionAsync(string interactionToken)
-        {
-            await EditDeferredResponseEmbedAsync(interactionToken,
-                title: "📜 PalOdyssey Commands Guide",
-                description: "**🌍 Public Commands (@everyone)**\n" +
-                             "• `/start` — Powers up the dedicated server (24/7 auto-wake).\n" +
-                             "• `/status` — Real-time server status, player count, and uptime.\n" +
-                             "• `/ip` — Server endpoint address and connection guide.\n" +
-                             "• `/help` — Lists all available bot commands.\n\n" +
-                             "**🛡️ Administrator Commands (Admin Only)**\n" +
-                             "• `/restart` — Gracefully reboots the dedicated server.\n" +
-                             "• `/stop` — Safely shuts down the dedicated server.",
-                color: 0x9966FF);
-        }
 
         private async Task ExecuteStartCommandAsync(string channelId, string authorName)
         {
@@ -1123,29 +1358,545 @@ namespace PalLauncher.Services
             });
         }
 
+        private async Task ExecuteHelpInteractionAsync(string interactionToken)
+        {
+            await EditDeferredResponseEmbedAsync(interactionToken,
+                title: "📜 PalOdyssey Commands Guide",
+                description: "**🌍 Public Server Commands**\n" +
+                             "• `/start` — Powers up the dedicated server (24/7 auto-wake).\n" +
+                             "• `/status` — Real-time server status, player count, and uptime.\n" +
+                             "• `/ip` — Server endpoint address and connection guide.\n" +
+                             "• `/help` — Lists all available bot commands.\n\n" +
+                             "**🏛️ Technology Point Economy & Exchange**\n" +
+                             "• `/shop` — Browse the Technology Point Exchange Store & Recycling rates.\n" +
+                             "• `/exchange item:<name> amount:<qty>` — Trade unspent Tech Points for Dog Coins, Arena Tickets, Slabs, and Elixirs.\n" +
+                             "• `/recycle item:<name> amount:<qty>` — Scrap vendor junk, gems, keys, and schematics into Tech Points.\n" +
+                             "• `/gacha pulls:<1|10>` — Open Relic Mystery Boxes for random loot (3 pts / 1 pull, 25 pts / 10-pull w/ pity).\n" +
+                             "• `/inventory` — View character Tech Points balance and Virtual Vault.\n" +
+                             "• `/link steam_id:<id>` — Link your Discord account to your Palworld character save.\n\n" +
+                             "**🛡️ Administrator Commands (Admin Only)**\n" +
+                             "• `/restart` — Gracefully reboots the dedicated server.\n" +
+                             "• `/stop` — Safely shuts down the dedicated server.",
+                color: 0x9966FF);
+        }
+
+        private async Task ExecuteShopInteractionAsync(string interactionToken)
+        {
+            var catalog = _economyService.GetShopCatalog();
+            var recyclables = _economyService.GetRecyclables();
+
+            var sb = new StringBuilder();
+            sb.AppendLine("### 🛒 PalOdyssey Technology Exchange");
+            sb.AppendLine("Trade your unspent **Technology Points** for rare currencies, boss slabs, and items!\n");
+
+            sb.AppendLine("### 📦 Available Shop Items (`/exchange`)");
+            foreach (var item in catalog)
+            {
+                sb.AppendLine($"{item.Emoji} **{item.Name}** — `🪙 {item.TechPointCost} Tech Points`");
+                sb.AppendLine($"   *\"{item.Description}\"*");
+                sb.AppendLine($"   👉 `/exchange item:{item.Id} amount:1`\n");
+            }
+
+            sb.AppendLine("### ♻️ Trash-to-Tech Recycling Rates (`/recycle`)");
+            sb.AppendLine("Scrap vendor loot, excess parts, and blueprints into **Tech Points**:");
+            sb.AppendLine("• 🥋 **Precious Pelt / Feather / Claw**: `+1 Tech Point per 2 items`");
+            sb.AppendLine("• 🫀 **Precious Entrails / Dragon Stone**: `+1 Tech Point each`");
+            sb.AppendLine("• 💎 **Ruby / Sapphire / Emerald / Diamond**: `+1 to +2 Tech Points each`");
+            sb.AppendLine("• 🗝️ **Bronze / Silver / Gold Keys**: `+1 per 3 Bronze, +1 Silver, +2 Gold`");
+            sb.AppendLine("• ⚙️ **Ancient Civilization Parts**: `+1 Tech Point per 5 parts`");
+            sb.AppendLine("• 🧩 **Raid Slab Fragments**: `+1 Tech Point each`");
+            sb.AppendLine("• 📚 **Schematics (Tiers 1–3)**: `+1 to +3 Tech Points each`\n");
+
+            sb.AppendLine("### 💉 Modded Passive Skill Implants & Upgrades");
+            sb.AppendLine("• ⛺ **Guild Base Expansion**: `🪙 40 Tech Points` (+1 Guild Base Slot)");
+            sb.AppendLine("• 💉 **Tier 1 Passive (Utility/Starter)**: `🪙 2 Tech Points`");
+            sb.AppendLine("• 💉 **Tier 2/3 Passives**: `🪙 5 to 10 Tech Points`");
+            sb.AppendLine("• 💉 **Tier 4/5 Passives**: `🪙 18 to 30 Tech Points`");
+            sb.AppendLine("• 🧬 **Mutations / Apex Traits**: `🪙 50 Tech Points`\n");
+
+            sb.AppendLine("### 🎰 Relic Mystery Box (`/gacha`)");
+            sb.AppendLine("Gamble your Tech Points for random loot with weighted rarity drops!");
+            sb.AppendLine("• **1 Pull**: `🪙 3 Tech Points` | **10 Pull**: `🪙 25 Tech Points` (Rare+ Pity!)");
+            sb.AppendLine("• ⚪ Common (50%): Spheres, Manuals, Gold, Cake");
+            sb.AppendLine("• 🟢 Uncommon (30%): Dog Coins, Tickets, Tokens, Pal Souls");
+            sb.AppendLine("• 🔵 Rare (15%): Reversers, Reset Drugs, Epic Skill Fruits");
+            sb.AppendLine("• 🟡 Legendary (5%): Legendary Schematics, Raid Slabs, Huge Eggs\n");
+
+            sb.AppendLine("💡 *Commands:* `/exchange` | `/recycle` | `/gacha pulls:10` | `/inventory`");
+
+            await EditDeferredResponseEmbedAsync(interactionToken,
+                title: "🏛️ PalOdyssey Technology Exchange & Recycling",
+                description: sb.ToString(),
+                color: 0x00E5FF);
+        }
+
+        private async Task ExecuteDepositInteractionAsync(string interactionToken, JsonElement data, string authorId, string authorName)
+        {
+            int amount = Math.Max(1, GetIntOption(data, "amount", 1));
+            string? steamIdOption = GetStringOption(data, "steam_id");
+
+            string targetUid = !string.IsNullOrWhiteSpace(steamIdOption)
+                ? steamIdOption.Trim()
+                : _economyService.GetLinkedPlayerUid(authorId);
+
+            if (string.IsNullOrWhiteSpace(targetUid))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Unlinked Account",
+                    description: "You have not linked a Palworld Steam ID. Please provide `steam_id` or link your account in the Launcher.",
+                    color: 0xFFCC00);
+                return;
+            }
+
+            var saveService = new PalSaveService(_logService);
+            var licenseService = new GuildLicenseService(_logService, saveService);
+            
+            targetUid = saveService.ResolvePlayerUid(targetUid);
+            
+            var profile = await saveService.ReadPlayerProfileAsync(targetUid);
+            if (profile == null || profile.TechnologyPoints < amount)
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "❌ Deposit Failed",
+                    description: $"Insufficient personal Technology Points. You need {amount}, but have {profile?.TechnologyPoints ?? 0}.",
+                    color: 0xFF3366);
+                return;
+            }
+
+            string? guildId = await licenseService.ResolveGuildIdAsync(targetUid);
+            if (string.IsNullOrWhiteSpace(guildId))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "❌ Guild Not Found",
+                    description: "Could not locate your Guild in Level.sav. Ensure you are in a guild and the server has saved.",
+                    color: 0xFF3366);
+                return;
+            }
+
+            bool updated = await saveService.UpdateTechnologyPointsAsync(targetUid, -amount);
+            if (updated)
+            {
+                await licenseService.DepositToBankAsync(guildId, targetUid, amount);
+                var guildState = await licenseService.GetGuildStateAsync(guildId);
+
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "🏦 Guild Bank Deposit Successful",
+                    description: $"You deposited **{amount} Tech Points** into the Guild Bank!\n\n**New Guild Bank Balance**: `🪙 {guildState?.GuildBankBalance} Tech Points`",
+                    color: 0x4CAF50);
+            }
+            else
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "❌ Deposit Failed",
+                    description: "Failed to deduct points from your personal wallet.",
+                    color: 0xFF3366);
+            }
+        }
+
+        private async Task ExecuteGuildBankInteractionAsync(string interactionToken, JsonElement data, string authorId, string authorName)
+        {
+            string? steamIdOption = GetStringOption(data, "steam_id");
+            string targetUid = !string.IsNullOrWhiteSpace(steamIdOption)
+                ? steamIdOption.Trim()
+                : _economyService.GetLinkedPlayerUid(authorId);
+
+            if (string.IsNullOrWhiteSpace(targetUid))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Unlinked Account",
+                    description: "You have not linked a Palworld Steam ID. Please provide `steam_id` or link your account in the Launcher.",
+                    color: 0xFFCC00);
+                return;
+            }
+
+            var saveService = new PalSaveService(_logService);
+            var licenseService = new GuildLicenseService(_logService, saveService);
+            targetUid = saveService.ResolvePlayerUid(targetUid);
+            
+            string? guildId = await licenseService.ResolveGuildIdAsync(targetUid);
+            if (string.IsNullOrWhiteSpace(guildId))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "❌ Guild Not Found",
+                    description: "Could not locate your Guild in Level.sav. Ensure you are in a guild and the server has saved.",
+                    color: 0xFF3366);
+                return;
+            }
+
+            var state = await licenseService.GetGuildStateAsync(guildId) ?? new GuildLicenseState();
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"### 🏦 Pooled Balance: `🪙 {state.GuildBankBalance} Tech Points`\n");
+            
+            sb.AppendLine($"**Infrastructure Caps:**");
+            sb.AppendLine($"⛺ **Bases:** {state.MaxBases} / 10");
+            sb.AppendLine($"🥚 **Breeding Pens:** {state.MaxBreedingPens}");
+            sb.AppendLine($"🐑 **Ranches:** {state.MaxRanches}\n");
+
+            sb.AppendLine($"**🏆 Top Contributors:**");
+            if (state.Contributions.Count == 0)
+            {
+                sb.AppendLine("*No contributions yet.*");
+            }
+            else
+            {
+                var sorted = state.Contributions.OrderByDescending(x => x.Value).Take(10);
+                int rank = 1;
+                foreach (var c in sorted)
+                {
+                    sb.AppendLine($"`#{rank}` **{c.Key}**: `🪙 {c.Value}`");
+                    rank++;
+                }
+            }
+
+            await EditDeferredResponseEmbedAsync(interactionToken,
+                title: $"🏦 {(state.GuildName == "Unknown" ? "Guild" : state.GuildName)} - Tech Bank",
+                description: sb.ToString(),
+                color: 0xFFD700);
+        }
+
+        private async Task ExecuteExchangeInteractionAsync(string interactionToken, JsonElement data, string authorId, string authorName)
+        {
+            string itemQuery = GetStringOption(data, "item") ?? "";
+            int amount = Math.Max(1, GetIntOption(data, "amount", 1));
+            string? steamIdOption = GetStringOption(data, "steam_id");
+
+            string targetUid = !string.IsNullOrWhiteSpace(steamIdOption)
+                ? steamIdOption.Trim()
+                : _economyService.GetLinkedPlayerUid(authorId);
+
+            var receipt = await _economyService.ExecuteExchangeAsync(targetUid, itemQuery, amount);
+
+            if (receipt.Success)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"### ✅ Transaction Approved (Receipt `#{receipt.TransactionId}`)");
+                sb.AppendLine($"• **Pioneer Target**: `{targetUid}`");
+                sb.AppendLine($"• **Purchased Item**: **{receipt.Quantity}x {receipt.ItemName}**");
+                sb.AppendLine($"• **Cost Deducted**: `🪙 -{receipt.TotalCost} Technology Points`");
+                sb.AppendLine($"• **Previous Balance**: `{receipt.PreviousTechPoints} Tech Points`");
+                sb.AppendLine($"• **New Balance**: `{receipt.NewTechPoints} Tech Points`\n");
+                sb.AppendLine($"📦 **Delivery Depot**: Items are credited to your Pioneer Virtual Vault.");
+                sb.AppendLine($"👉 Type `/inventory` to inspect your items and balance.");
+
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "🛍️ Exchange Purchase Successful",
+                    description: sb.ToString(),
+                    color: 0x00FF88);
+
+                // Broadcast Guild Base Expansion
+                if (itemQuery.Equals("guild_base_slot", StringComparison.OrdinalIgnoreCase))
+                {
+                    await SendEmbedMessageAsync("1541492780168380446",
+                        title: "⛺ Guild Expansion Announced",
+                        description: $"🎉 **{targetUid}** just expanded their Guild's Base Camp allowance (+1 Slot) via the Technology Exchange!",
+                        color: 0x00FF88);
+                }
+            }
+            else
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "❌ Exchange Transaction Failed",
+                    description: receipt.Message,
+                    color: 0xFF4466);
+            }
+        }
+
+        private async Task ExecuteRecycleInteractionAsync(string interactionToken, JsonElement data, string authorId, string authorName)
+        {
+            string itemQuery = GetStringOption(data, "item") ?? "";
+            int amount = Math.Max(1, GetIntOption(data, "amount", 1));
+            string? steamIdOption = GetStringOption(data, "steam_id");
+
+            string targetUid = !string.IsNullOrWhiteSpace(steamIdOption)
+                ? steamIdOption.Trim()
+                : _economyService.GetLinkedPlayerUid(authorId);
+
+            var receipt = await _economyService.ExecuteRecycleAsync(targetUid, itemQuery, amount);
+
+            if (receipt.Success)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"### ♻️ Recycling Completed (Receipt `#{receipt.TransactionId}`)");
+                sb.AppendLine($"• **Pioneer Target**: `{targetUid}`");
+                sb.AppendLine($"• **Items Scrapped**: **{receipt.Quantity}x {receipt.ItemName}**");
+                sb.AppendLine($"• **Tech Points Awarded**: `🪙 +{receipt.PointsAwarded} Technology Points`");
+                sb.AppendLine($"• **Previous Balance**: `{receipt.PreviousTechPoints} Tech Points`");
+                sb.AppendLine($"• **New Balance**: `{receipt.NewTechPoints} Tech Points`\n");
+                sb.AppendLine($"✨ Your Technology Points have been credited directly to your character save!");
+
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "♻️ Trash-to-Tech Recycling Complete",
+                    description: sb.ToString(),
+                    color: 0x00E5FF);
+            }
+            else
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Recycling Failed",
+                    description: receipt.Message,
+                    color: 0xFFAA00);
+            }
+        }
+
+        private async Task ExecuteInventoryInteractionAsync(string interactionToken, JsonElement data, string authorId, string authorName)
+        {
+            string? steamIdOption = GetStringOption(data, "steam_id");
+            string targetUid = !string.IsNullOrWhiteSpace(steamIdOption)
+                ? steamIdOption.Trim()
+                : _economyService.GetLinkedPlayerUid(authorId);
+
+            var profile = await _economyService.GetPlayerProfileAsync(targetUid);
+            if (profile == null)
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "🎒 Pioneer Profile & Inventory",
+                    description: $"Could not find player save for `{targetUid}`. Run `/link steam_id:<your_id>` or verify server save files.",
+                    color: 0xFF4466);
+                return;
+            }
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"### 👤 Pioneer Character: `{profile.PlayerName}`");
+            sb.AppendLine($"• **Player UID**: `{profile.PlayerUid}`");
+            sb.AppendLine($"• **Character Level**: `Lv. {profile.Level}`");
+            sb.AppendLine($"• **🪙 Technology Points**: `{profile.TechnologyPoints} pts`");
+            sb.AppendLine($"• **🔮 Ancient Boss Points**: `{profile.BossTechnologyPoints} pts`\n");
+
+            sb.AppendLine("### 📦 Virtual Vault & Delivery Depot");
+            if (profile.InventoryItems != null && profile.InventoryItems.Count > 0)
+            {
+                foreach (var kvp in profile.InventoryItems)
+                {
+                    sb.AppendLine($"• **{kvp.Key}**: `x{kvp.Value}`");
+                }
+            }
+            else
+            {
+                sb.AppendLine("*Your Virtual Vault is currently empty. Use `/exchange` to trade points for items!*");
+            }
+            sb.AppendLine();
+            sb.AppendLine("💡 *Commands:* `/shop` | `/exchange` | `/recycle`");
+
+            await EditDeferredResponseEmbedAsync(interactionToken,
+                title: "🎒 Pioneer Character & Vault",
+                description: sb.ToString(),
+                color: 0x9966FF);
+        }
+
+        private async Task ExecuteLinkInteractionAsync(string interactionToken, JsonElement data, string authorId, string authorName)
+        {
+            string steamId = GetStringOption(data, "steam_id") ?? "";
+            if (string.IsNullOrWhiteSpace(steamId))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Link Failed",
+                    description: "Please specify your Palworld Player UID or Steam ID: `/link steam_id:<your_id>`",
+                    color: 0xFFAA00);
+                return;
+            }
+
+            _economyService.LinkDiscordUser(authorId, steamId.Trim());
+
+            await EditDeferredResponseEmbedAsync(interactionToken,
+                title: "🔗 Character Save Linked",
+                description: $"Successfully linked your Discord account (**@{authorName}**) to Palworld Player UID / Steam ID:\n`{steamId.Trim()}`\n\nYou can now run `/exchange`, `/recycle`, and `/inventory` without specifying your ID!",
+                color: 0x00FF88);
+        }
+
+        private async Task ExecuteGachaInteractionAsync(string interactionToken, JsonElement data, string authorId, string authorName)
+        {
+            int pulls = GetIntOption(data, "pulls", 1);
+            if (pulls != 1 && pulls != 10) pulls = 1;
+            string? steamIdOption = GetStringOption(data, "steam_id");
+
+            string targetUid = !string.IsNullOrWhiteSpace(steamIdOption)
+                ? steamIdOption.Trim()
+                : _economyService.GetLinkedPlayerUid(authorId);
+
+            var receipt = await _economyService.ExecuteGachaAsync(targetUid, pulls);
+
+            if (receipt.Success)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"### 🎰 Relic Mystery Box — {pulls}-Pull (Receipt `#{receipt.TransactionId}`)\n");
+                sb.AppendLine($"**Pioneer**: `{targetUid}` | **Cost**: `🪙 {receipt.TotalCost} Tech Points`");
+                sb.AppendLine($"**Balance**: `{receipt.PreviousTechPoints}` → `{receipt.NewTechPoints} pts`\n");
+
+                sb.AppendLine("### 📦 Drop Results");
+                int dropNum = 1;
+                foreach (var drop in receipt.Drops)
+                {
+                    string prefix = drop.Rarity == GachaRarity.Legendary ? "**★** " : "";
+                    string qty = drop.Quantity > 1 ? $" (x{drop.Quantity})" : "";
+                    sb.AppendLine($"`#{dropNum++}` {drop.Emoji} {prefix}**{drop.Name}**{qty} — {drop.RarityLabel}");
+                }
+
+                if (receipt.PityTriggered)
+                {
+                    sb.AppendLine("\n🔔 *Pity Mechanic activated — guaranteed Rare+ on final pull!*");
+                }
+
+                if (receipt.HasLegendary)
+                {
+                    sb.AppendLine("\n# 🌟 JACKPOT! LEGENDARY PULL!");
+                }
+
+                sb.AppendLine($"\n💡 *Use `/inventory` to view items | `/gacha pulls:10` for a 10-pull bundle!*");
+
+                int embedColor = receipt.HasLegendary ? 0xFFD700 : 0x9966FF;
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: receipt.HasLegendary ? "🌟 LEGENDARY JACKPOT! — Relic Mystery Box" : "🎰 Relic Mystery Box Results",
+                    description: sb.ToString(),
+                    color: embedColor);
+
+                // Jackpot Broadcast: If a Legendary was pulled, announce to the liveboard channel
+                if (receipt.HasLegendary)
+                {
+                    var legendaryDrops = receipt.Drops.Where(d => d.Rarity == GachaRarity.Legendary).ToList();
+                    string legendaryNames = string.Join(", ", legendaryDrops.Select(d => $"{d.Emoji} **{d.Name}**"));
+
+                    await SendEmbedMessageAsync("1541492780168380446",
+                        title: "🌟 JACKPOT ALERT — Legendary Drop!",
+                        description: $"🎰 **@{authorName}** just pulled a **LEGENDARY** item from the Relic Mystery Box!\n\n" +
+                                     $"**Legendary Loot**: {legendaryNames}\n\n" +
+                                     $"Try your luck with `/gacha pulls:1` (3 pts) or `/gacha pulls:10` (25 pts)!",
+                        color: 0xFFD700);
+
+                    _logService.LogSuccess($"[JACKPOT BROADCAST] @{authorName} pulled LEGENDARY: {string.Join(", ", legendaryDrops.Select(d => d.Name))}", "DiscordBot");
+                }
+            }
+            else
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "❌ Gacha Transaction Failed",
+                    description: receipt.Message,
+                    color: 0xFF4466);
+            }
+        }
+
+        private static string? GetStringOption(JsonElement data, string optionName)
+        {
+            if (data.TryGetProperty("options", out var options) && options.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var opt in options.EnumerateArray())
+                {
+                    if (opt.TryGetProperty("name", out var n) && n.GetString()?.Equals(optionName, StringComparison.OrdinalIgnoreCase) == true)
+                    {
+                        if (opt.TryGetProperty("value", out var v))
+                        {
+                            return v.GetString();
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        private static int GetIntOption(JsonElement data, string optionName, int defaultValue = 1)
+        {
+            if (data.TryGetProperty("options", out var options) && options.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var opt in options.EnumerateArray())
+                {
+                    if (opt.TryGetProperty("name", out var n) && n.GetString()?.Equals(optionName, StringComparison.OrdinalIgnoreCase) == true)
+                    {
+                        if (opt.TryGetProperty("value", out var v))
+                        {
+                            if (v.ValueKind == JsonValueKind.Number) return v.GetInt32();
+                            if (int.TryParse(v.GetString(), out int parsed)) return parsed;
+                        }
+                    }
+                }
+            }
+            return defaultValue;
+        }
+
         private async Task ExecuteHelpCommandAsync(string channelId)
         {
             await SendEmbedMessageAsync(channelId,
                 title: "📜 PalOdyssey Commands Guide",
-                description: "**🌍 Public Commands (@everyone)**\n" +
+                description: "**🌍 Public Server Commands**\n" +
                              "• `!start` or `/start` — Powers up the dedicated server (24/7 auto-wake).\n" +
                              "• `!status` or `/status` — Real-time server status, player count, and uptime.\n" +
                              "• `!ip` or `/ip` — Server endpoint address and connection guide.\n" +
                              "• `!help` or `/help` — Lists all available bot commands.\n\n" +
+                             "**🏛️ Technology Point Economy & Exchange**\n" +
+                             "• `!shop` or `/shop` — Browse the Technology Point Store & Recycling rates.\n" +
+                             "• `/exchange item:<name> amount:<qty>` — Exchange unspent Tech Points for rare currencies and items.\n" +
+                             "• `/recycle item:<name> amount:<qty>` — Scrap junk and blueprints into Tech Points.\n" +
+                             "• `/inventory` — View character Tech Points balance and Virtual Vault.\n" +
+                             "• `/link steam_id:<id>` — Link your Discord user account to your Palworld character.\n\n" +
                              "**🛡️ Administrator Commands (Admin Only)**\n" +
                              "• `!restart` or `/restart` — Gracefully reboots the dedicated server.\n" +
                              "• `!stop` or `/stop` — Safely shuts down the dedicated server.",
                 color: 0x9966FF);
         }
 
-        private async Task DeferInteractionAsync(string interactionId, string interactionToken)
+        private async Task ExecuteShopCommandAsync(string channelId)
+        {
+            var catalog = _economyService.GetShopCatalog();
+            var sb = new StringBuilder();
+            sb.AppendLine("### 🛒 PalOdyssey Technology Exchange & Store");
+            sb.AppendLine("Trade your unspent **Technology Points** for rare modded currencies, raid items, and utilities!\n");
+
+            sb.AppendLine("### 📦 Available Shop Items (`/exchange`)");
+            foreach (var item in catalog)
+            {
+                sb.AppendLine($"{item.Emoji} **{item.Name}** — `🪙 {item.TechPointCost} Tech Points`");
+            }
+            sb.AppendLine("\n💡 *Use slash command `/shop` for full descriptions or `/exchange` to buy.*");
+
+            await SendEmbedMessageAsync(channelId,
+                title: "🏛️ PalOdyssey Technology Exchange",
+                description: sb.ToString(),
+                color: 0x00E5FF);
+        }
+
+        private async Task ExecuteInventoryCommandAsync(string channelId, string authorId)
+        {
+            string targetUid = _economyService.GetLinkedPlayerUid(authorId);
+            var profile = await _economyService.GetPlayerProfileAsync(targetUid);
+            if (profile == null)
+            {
+                await SendEmbedMessageAsync(channelId,
+                    title: "🎒 Pioneer Profile & Inventory",
+                    description: $"Could not find player save for `{targetUid}`. Run `/link steam_id:<your_id>`.",
+                    color: 0xFF4466);
+                return;
+            }
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"• **Pioneer**: `{profile.PlayerName}` (Lv. {profile.Level})");
+            sb.AppendLine($"• **🪙 Technology Points**: `{profile.TechnologyPoints} pts`");
+            sb.AppendLine($"• **🔮 Ancient Boss Points**: `{profile.BossTechnologyPoints} pts`");
+
+            await SendEmbedMessageAsync(channelId,
+                title: "🎒 Pioneer Character Stats",
+                description: sb.ToString(),
+                color: 0x9966FF);
+        }
+
+        private async Task DeferInteractionAsync(string interactionId, string interactionToken, bool ephemeral = false)
         {
             try
             {
-                var payload = new
+                object payload;
+                if (ephemeral)
                 {
-                    type = 5 // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
-                };
+                    payload = new
+                    {
+                        type = 5, // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
+                        data = new { flags = 64 }
+                    };
+                }
+                else
+                {
+                    payload = new
+                    {
+                        type = 5 // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
+                    };
+                }
 
                 string json = JsonSerializer.Serialize(payload);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");

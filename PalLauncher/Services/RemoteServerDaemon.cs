@@ -227,6 +227,11 @@ namespace PalLauncher.Services
                 {
                     HandleLiveboardRequest(resp);
                 }
+                else if (path.Equals("/api/link-account", StringComparison.OrdinalIgnoreCase) ||
+                         path.Equals("/webhook/link-account", StringComparison.OrdinalIgnoreCase))
+                {
+                    await HandleLinkAccountAsync(req, resp);
+                }
                 else if (path.Equals("/api/health", StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(path))
                 {
                     await SendJsonResponseAsync(resp, HttpStatusCode.OK, new
@@ -385,6 +390,71 @@ namespace PalLauncher.Services
         {
             var liveboard = GetCurrentLiveboard();
             _ = SendJsonResponseAsync(resp, HttpStatusCode.OK, liveboard);
+        }
+
+        private async Task HandleLinkAccountAsync(HttpListenerRequest req, HttpListenerResponse resp)
+        {
+            try
+            {
+                using var reader = new StreamReader(req.InputStream, req.ContentEncoding);
+                string json = await reader.ReadToEndAsync();
+                var linkReq = JsonSerializer.Deserialize<AccountLinkRequest>(json);
+
+                if (linkReq != null && !string.IsNullOrWhiteSpace(linkReq.DiscordId) && !string.IsNullOrWhiteSpace(linkReq.SteamId))
+                {
+                    string dir = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        "PalLauncher");
+                    if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+
+                    string linksFile = Path.Combine(dir, "account-links.json");
+                    Dictionary<string, AccountLinkInfo> links = new();
+
+                    if (File.Exists(linksFile))
+                    {
+                        try
+                        {
+                            string existing = await File.ReadAllTextAsync(linksFile);
+                            links = JsonSerializer.Deserialize<Dictionary<string, AccountLinkInfo>>(existing) ?? new();
+                        }
+                        catch { }
+                    }
+
+                    var info = new AccountLinkInfo
+                    {
+                        DiscordId = linkReq.DiscordId,
+                        DiscordUsername = linkReq.DiscordName,
+                        DiscordGlobalName = linkReq.DiscordName,
+                        SteamId64 = linkReq.SteamId,
+                        SteamPersonaName = linkReq.SteamName,
+                        PlayerUid = !string.IsNullOrWhiteSpace(linkReq.PlayerUid) ? linkReq.PlayerUid : linkReq.SteamId,
+                        LinkedAt = DateTime.UtcNow,
+                        IsLinked = true
+                    };
+
+                    links[linkReq.DiscordId] = info;
+
+                    string updatedJson = JsonSerializer.Serialize(links, new JsonSerializerOptions { WriteIndented = true });
+                    await File.WriteAllTextAsync(linksFile, updatedJson);
+
+                    _logService.LogSuccess($"[ACCOUNT STORE] Persisted account link: Discord @{linkReq.DiscordName} ({linkReq.DiscordId}) ⇄ Steam {linkReq.SteamName} ({linkReq.SteamId})", "RemoteDaemon");
+
+                    await SendJsonResponseAsync(resp, HttpStatusCode.OK, new
+                    {
+                        success = true,
+                        message = "Account link stored successfully",
+                        link = info
+                    });
+                    return;
+                }
+
+                await SendJsonResponseAsync(resp, HttpStatusCode.BadRequest, new { error = "Invalid account link payload" });
+            }
+            catch (Exception ex)
+            {
+                _logService.LogError("Failed to process account link request", "RemoteDaemon", ex);
+                await SendJsonResponseAsync(resp, HttpStatusCode.InternalServerError, new { error = ex.Message });
+            }
         }
 
         private string _serverVersion = "v1.0.3";

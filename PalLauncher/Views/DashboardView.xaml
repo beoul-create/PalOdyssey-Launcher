@@ -51,7 +51,39 @@
                 </Grid>
             </Border>
 
-            <!-- 2. Game Client Status Bar -->
+            <!-- 2. Account & Expedition Identity Bar (Steam Profile & Discord Link) -->
+            <Border Background="{StaticResource BrushBgSurface}" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,0,0,14">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left: Steam Pioneer Profile -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="🎮 PIONEER:" Foreground="{StaticResource BrushTextMuted}" FontSize="11" FontWeight="Bold" Margin="0,0,8,0" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding SteamProfile.PersonaName, FallbackValue='Steam Pioneer'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,6,0" />
+                        <TextBlock Text="{Binding SteamProfile.SteamId64, StringFormat='(ID: {0})', FallbackValue='(Steam Offline)'}" Foreground="{StaticResource BrushTextMuted}" FontSize="11" VerticalAlignment="Center" Margin="0,0,16,0" />
+                        
+                        <!-- Discord Linked Badge -->
+                        <Border Background="#1A1F2E" BorderBrush="{StaticResource BrushAccentPurple}" BorderThickness="1" CornerRadius="4" Padding="8,2" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding DiscordLinkBadge}" Foreground="{StaticResource BrushAccentPurple}" FontSize="11" FontWeight="SemiBold" />
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Right: Connect / Unlink Discord Action Buttons -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="Connect Discord" Style="{StaticResource StyleCyanButton}" FontSize="11" Padding="10,4" Margin="0,0,8,0"
+                                Command="{Binding ConnectDiscordCommand}"
+                                Visibility="{Binding IsDiscordLinked, Converter={StaticResource InvertBoolToVis}}" />
+                        <Button Content="Unlink" Style="{StaticResource StyleGhostButton}" FontSize="11" Padding="8,4"
+                                Command="{Binding UnlinkDiscordCommand}"
+                                Visibility="{Binding IsDiscordLinked, Converter={StaticResource BoolToVis}}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 3. Game Client Status Bar -->
             <Border Background="{StaticResource BrushBgSurface}" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,0,0,14">
                 <Grid>
                     <Grid.ColumnDefinitions>

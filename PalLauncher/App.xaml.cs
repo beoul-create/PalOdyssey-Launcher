@@ -74,9 +74,24 @@ namespace PalLauncher
                 var remoteDaemon = new RemoteServerDaemon(_logService, _launchService);
                 var remoteClient = new RemoteClientService(_logService);
                 var discordRpc = new DiscordRpcService(_logService);
+                var steamDetection = new SteamDetectionService(_logService);
+                var discordAuth = new DiscordAuthService(_logService);
 
                 // Initialize ViewModels & View
-                _mainViewModel = new MainViewModel(_configService, _pathDetector, _updateService, _launchService, _logService, specService, remoteDaemon, remoteClient, discordRpc, crashLogService);
+                _mainViewModel = new MainViewModel(
+                    _configService,
+                    _pathDetector,
+                    _updateService,
+                    _launchService,
+                    _logService,
+                    specService,
+                    remoteDaemon,
+                    remoteClient,
+                    discordRpc,
+                    crashLogService,
+                    discordBot: null,
+                    steamDetection: steamDetection,
+                    discordAuth: discordAuth);
 
                 var mainWindow = new MainWindow(_mainViewModel);
                 MainWindow = mainWindow;

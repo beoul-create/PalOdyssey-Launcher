@@ -169,10 +169,55 @@ namespace PalLauncher.ViewModels
         private readonly IRemoteClientService _remoteClient;
         private readonly IDiscordRpcService _discordRpc;
         private readonly IDiscordBotService _discordBot;
+        private readonly ISteamDetectionService _steamDetection;
+        private readonly IDiscordAuthService _discordAuth;
+
         private RemoteServerStatus _serverStatus = new();
         private ServerLiveboardInfo _liveboard = new();
+        private SteamProfileInfo _steamProfile = new();
+        private AccountLinkInfo _accountLink = new();
+        private bool _isConnectingDiscord;
         private CancellationTokenSource? _pollingCts;
         private System.Windows.Threading.DispatcherTimer? _uptimeTimer;
+
+        public SteamProfileInfo SteamProfile
+        {
+            get => _steamProfile;
+            set
+            {
+                if (SetProperty(ref _steamProfile, value))
+                {
+                    OnPropertyChanged(nameof(SteamBadge));
+                }
+            }
+        }
+
+        public AccountLinkInfo AccountLink
+        {
+            get => _accountLink;
+            set
+            {
+                if (SetProperty(ref _accountLink, value))
+                {
+                    OnPropertyChanged(nameof(IsDiscordLinked));
+                    OnPropertyChanged(nameof(DiscordLinkBadge));
+                }
+            }
+        }
+
+        public bool IsConnectingDiscord
+        {
+            get => _isConnectingDiscord;
+            set => SetProperty(ref _isConnectingDiscord, value);
+        }
+
+        public bool IsDiscordLinked => AccountLink?.IsLinked == true;
+        public string DiscordLinkBadge => IsDiscordLinked ? $"🟢 Discord Linked: @{AccountLink.DiscordUsername}" : "⚪ Connect Discord";
+        public string SteamBadge => SteamProfile?.IsDetected == true ? $"🎮 {SteamProfile.PersonaName} ({SteamProfile.SteamId64})" : "🎮 Steam Offline";
+
+        public AsyncRelayCommand ConnectDiscordCommand { get; }
+        public RelayCommand UnlinkDiscordCommand { get; }
+        public RelayCommand RefreshSteamCommand { get; }
 
         public ServerLiveboardInfo Liveboard
         {
@@ -224,7 +269,9 @@ namespace PalLauncher.ViewModels
             IRemoteClientService? remoteClient = null,
             IDiscordRpcService? discordRpc = null,
             ICrashLogService? crashLogService = null,
-            IDiscordBotService? discordBot = null)
+            IDiscordBotService? discordBot = null,
+            ISteamDetectionService? steamDetection = null,
+            IDiscordAuthService? discordAuth = null)
         {
             _configService = configService;
             _pathDetector = pathDetector;
@@ -236,6 +283,8 @@ namespace PalLauncher.ViewModels
             _remoteClient = remoteClient ?? new RemoteClientService(_logService);
             _discordRpc = discordRpc ?? new DiscordRpcService(_logService);
             _discordBot = discordBot ?? new DiscordBotService(_logService);
+            _steamDetection = steamDetection ?? new SteamDetectionService(_logService);
+            _discordAuth = discordAuth ?? new DiscordAuthService(_logService);
 
             var crashService = crashLogService ?? new Services.CrashLogService(_logService);
 
@@ -279,6 +328,9 @@ namespace PalLauncher.ViewModels
             QuickCheckUpdatesCommand = new AsyncRelayCommand(ExecuteQuickCheckUpdatesAsync);
             RefreshServerStatusCommand = new AsyncRelayCommand(RefreshServerStatusAsync);
             CopyServerIpCommand = new RelayCommand(_ => ExecuteCopyServerIp());
+            ConnectDiscordCommand = new AsyncRelayCommand(ExecuteConnectDiscordAsync);
+            UnlinkDiscordCommand = new RelayCommand(_ => ExecuteUnlinkDiscord());
+            RefreshSteamCommand = new RelayCommand(_ => RefreshSteamProfile());
 
             MinimizeCommand = new RelayCommand(_ =>
             {
@@ -385,6 +437,10 @@ namespace PalLauncher.ViewModels
             }
 
             var pathInfo = _pathDetector.DetectPalworldInstallation(_configService.Config.GamePath);
+
+            // Auto-detect local active Steam profile & load cached Discord link
+            RefreshSteamProfile();
+            AccountLink = _discordAuth.GetCurrentLinkInfo();
 
             // Always start Remote Host Daemon when enabled to support remote webhook start triggers and Discord commands independently of server state
             if (_configService.Config.EnableRemoteHostDaemon)
@@ -812,6 +868,68 @@ namespace PalLauncher.ViewModels
             {
                 _logService.LogError("Failed to restart Discord Bot service", "DiscordBot", ex);
             }
+        }
+
+        public void RefreshSteamProfile()
+        {
+            try
+            {
+                SteamProfile = _steamDetection.DetectActiveSteamUser();
+                _logService.LogInfo($"Steam Profile refreshed: {SteamBadge}", "Steam");
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Steam detection error: {ex.Message}", "Steam");
+            }
+        }
+
+        public async Task ExecuteConnectDiscordAsync()
+        {
+            if (IsConnectingDiscord) return;
+
+            try
+            {
+                IsConnectingDiscord = true;
+                StatusText = "Connecting Discord: Opening authorization page in browser...";
+                _logService.LogInfo("Initiating Discord OAuth2 authorization flow...", "DiscordAuth");
+
+                if (!SteamProfile.IsDetected)
+                {
+                    RefreshSteamProfile();
+                }
+
+                var link = await _discordAuth.InitiateDiscordLinkAsync(SteamProfile, localPort: 8765);
+                AccountLink = link;
+
+                if (link.IsLinked)
+                {
+                    StatusText = $"🎉 Connected Discord @{link.DiscordUsername} ⇄ Steam {link.SteamPersonaName}!";
+                    _logService.LogSuccess($"Account Linked: Discord @{link.DiscordUsername} ({link.DiscordId}) ⇄ Steam {link.SteamPersonaName} ({link.SteamId64})", "DiscordAuth");
+
+                    await _discordAuth.PushAccountLinkToDaemonAsync(link, _configService.Config.RemoteManagementPort);
+                }
+                else
+                {
+                    StatusText = "Discord connection was not completed.";
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusText = $"Discord connection error: {ex.Message}";
+                _logService.LogError("Discord OAuth linking failed", "DiscordAuth", ex);
+            }
+            finally
+            {
+                IsConnectingDiscord = false;
+            }
+        }
+
+        public void ExecuteUnlinkDiscord()
+        {
+            _discordAuth.ClearLinkInfo();
+            AccountLink = new AccountLinkInfo();
+            StatusText = "Discord account unlinked.";
+            _logService.LogInfo("Discord account unlinked from launcher.", "DiscordAuth");
         }
     }
 }
