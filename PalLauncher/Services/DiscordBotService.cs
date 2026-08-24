@@ -567,13 +567,13 @@ namespace PalLauncher.Services
                     _logService.LogWarning($"Global slash command registration returned {globalResp.StatusCode}: {err}", "DiscordBot");
                 }
 
-                // 2. Clear any lingering guild-specific commands from joined guilds to prevent duplicate entries in Discord's slash command picker
+                // 2. Also register commands directly to all joined Discord Servers (Guilds) for INSTANT availability (bypasses Discord's 1-hour global propagation delay!)
                 var guildsResp = await _httpClient.GetAsync("users/@me/guilds");
                 if (guildsResp.IsSuccessStatusCode)
                 {
                     string guildsJson = await guildsResp.Content.ReadAsStringAsync();
                     using var doc = JsonDocument.Parse(guildsJson);
-                    var emptyContent = new StringContent("[]", Encoding.UTF8, "application/json");
+                    var guildContent = new StringContent(json, Encoding.UTF8, "application/json");
 
                     foreach (var guild in doc.RootElement.EnumerateArray())
                     {
@@ -582,10 +582,15 @@ namespace PalLauncher.Services
 
                         if (!string.IsNullOrWhiteSpace(guildId))
                         {
-                            var clearResp = await _httpClient.PutAsync($"applications/{appId}/guilds/{guildId}/commands", emptyContent);
-                            if (clearResp.IsSuccessStatusCode)
+                            var gResp = await _httpClient.PutAsync($"applications/{appId}/guilds/{guildId}/commands", guildContent);
+                            if (gResp.IsSuccessStatusCode)
                             {
-                                _logService.LogInfo($"Cleared redundant guild-level commands for '{guildName}' ({guildId}) to prevent duplicates.", "DiscordBot");
+                                _logService.LogSuccess($"[INSTANT SYNC] Synchronized {commands.Length} slash commands directly to Discord server '{guildName}' ({guildId})!", "DiscordBot");
+                            }
+                            else
+                            {
+                                string gErr = await gResp.Content.ReadAsStringAsync();
+                                _logService.LogWarning($"Guild slash command registration for '{guildName}' ({guildId}) returned {gResp.StatusCode}: {gErr}", "DiscordBot");
                             }
                         }
                     }
@@ -1035,6 +1040,11 @@ namespace PalLauncher.Services
                     case "commands":
                         await ExecuteHelpCommandAsync(channelId);
                         break;
+
+                    case "shop":
+                    case "store":
+                        await ExecuteShopCommandAsync(channelId);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -1358,6 +1368,78 @@ namespace PalLauncher.Services
                     _logService.LogError("Error during server reboot", "DiscordBot", ex);
                 }
             });
+        }
+
+        private async Task ExecuteHelpCommandAsync(string channelId)
+        {
+            await SendEmbedMessageAsync(channelId,
+                title: "📜 PalOdyssey Commands Guide",
+                description: "**🌍 Public Server Commands**\n" +
+                             "• `/start` — Powers up the dedicated server (24/7 auto-wake).\n" +
+                             "• `/status` — Real-time server status, player count, and uptime.\n" +
+                             "• `/ip` — Server endpoint address and connection guide.\n" +
+                             "• `/help` — Lists all available bot commands.\n\n" +
+                             "**🏛️ Technology Point Economy & Exchange**\n" +
+                             "• `/shop` — Browse the Technology Point Exchange Store & Recycling rates.\n" +
+                             "• `/exchange item:<name> amount:<qty>` — Trade unspent Tech Points for Dog Coins, Arena Tickets, Slabs, and Elixirs.\n" +
+                             "• `/recycle item:<name> amount:<qty>` — Scrap vendor junk, gems, keys, and schematics into Tech Points.\n" +
+                             "• `/gacha pulls:<1|10>` — Open Relic Mystery Boxes for random loot (3 pts / 1 pull, 25 pts / 10-pull w/ pity).\n" +
+                             "• `/inventory` — View character Tech Points balance and Virtual Vault.\n" +
+                             "• `/link steam_id:<id>` — Link your Discord account to your Palworld character save.\n\n" +
+                             "**🛡️ Administrator Commands (Admin Only)**\n" +
+                             "• `/restart` — Gracefully reboots the dedicated server.\n" +
+                             "• `/stop` — Safely shuts down the dedicated server.",
+                color: 0x9966FF);
+        }
+
+        private async Task ExecuteShopCommandAsync(string channelId)
+        {
+            var catalog = _economyService.GetShopCatalog();
+            var recyclables = _economyService.GetRecyclables();
+
+            var sb = new StringBuilder();
+            sb.AppendLine("### 🛒 PalOdyssey Technology Exchange");
+            sb.AppendLine("Trade your unspent **Technology Points** for rare currencies, boss slabs, and items!\n");
+
+            sb.AppendLine("### 📦 Available Shop Items (`/exchange`)");
+            foreach (var item in catalog)
+            {
+                sb.AppendLine($"{item.Emoji} **{item.Name}** — `🪙 {item.TechPointCost} Tech Points`");
+                sb.AppendLine($"   *\"{item.Description}\"*");
+                sb.AppendLine($"   👉 `/exchange item:{item.Id} amount:1`\n");
+            }
+
+            sb.AppendLine("### ♻️ Trash-to-Tech Recycling Rates (`/recycle`)");
+            sb.AppendLine("Scrap vendor loot, excess parts, and blueprints into **Tech Points**:");
+            sb.AppendLine("• 🥋 **Precious Pelt / Feather / Claw**: `+1 Tech Point per 2 items`");
+            sb.AppendLine("• 🫀 **Precious Entrails / Dragon Stone**: `+1 Tech Point each`");
+            sb.AppendLine("• 💎 **Ruby / Sapphire / Emerald / Diamond**: `+1 to +2 Tech Points each`");
+            sb.AppendLine("• 🗝️ **Bronze / Silver / Gold Keys**: `+1 per 3 Bronze, +1 Silver, +2 Gold`");
+            sb.AppendLine("• ⚙️ **Ancient Civilization Parts**: `+1 Tech Point per 5 parts`");
+            sb.AppendLine("• 🧩 **Raid Slab Fragments**: `+1 Tech Point each`");
+            sb.AppendLine("• 📚 **Schematics (Tiers 1–3)**: `+1 to +3 Tech Points each`\n");
+
+            sb.AppendLine("### 💉 Modded Passive Skill Implants & Upgrades");
+            sb.AppendLine("• ⛺ **Guild Base Expansion**: `🪙 40 Tech Points` (+1 Guild Base Slot)");
+            sb.AppendLine("• 💉 **Tier 1 Passive (Utility/Starter)**: `🪙 2 Tech Points`");
+            sb.AppendLine("• 💉 **Tier 2/3 Passives**: `🪙 5 to 10 Tech Points`");
+            sb.AppendLine("• 💉 **Tier 4/5 Passives**: `🪙 18 to 30 Tech Points`");
+            sb.AppendLine("• 🧬 **Mutations / Apex Traits**: `🪙 50 Tech Points`\n");
+
+            sb.AppendLine("### 🎰 Relic Mystery Box (`/gacha`)");
+            sb.AppendLine("Gamble your Tech Points for random loot with weighted rarity drops!");
+            sb.AppendLine("• **1 Pull**: `🪙 3 Tech Points` | **10 Pull**: `🪙 25 Tech Points` (Rare+ Pity!)");
+            sb.AppendLine("• ⚪ Common (50%): Spheres, Manuals, Gold, Cake");
+            sb.AppendLine("• 🟢 Uncommon (30%): Dog Coins, Tickets, Tokens, Pal Souls");
+            sb.AppendLine("• 🔵 Rare (15%): Reversers, Reset Drugs, Epic Skill Fruits");
+            sb.AppendLine("• 🟡 Legendary (5%): Legendary Schematics, Raid Slabs, Huge Eggs\n");
+
+            sb.AppendLine("💡 *Commands:* `/exchange` | `/recycle` | `/gacha pulls:10` | `/inventory`");
+
+            await SendEmbedMessageAsync(channelId,
+                title: "🏛️ PalOdyssey Technology Exchange & Recycling",
+                description: sb.ToString(),
+                color: 0x00E5FF);
         }
 
         private async Task ExecuteHelpInteractionAsync(string interactionToken)
