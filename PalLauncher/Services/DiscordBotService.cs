@@ -349,14 +349,14 @@ namespace PalLauncher.Services
             {
                 await SendEmbedMessageAsync(channelId,
                     title: "⚡ PalOdyssey Realm is ALREADY Online!",
-                    description: $"The server is already running and accepting connections.\n\n🎮 **Server Address**: `palodyssey.duckdns.org:57294`\n👥 **Pioneers**: `{liveboard.PlayerCount} / {liveboard.MaxPlayers}`\n⏱️ **Uptime**: `{liveboard.UptimeFormatted}`",
+                    description: $"The server is already running and accepting connections.\n\n🎮 **Server Address**: `palodyssey.duckdns.org:8211`\n👥 **Pioneers**: `{liveboard.PlayerCount} / {liveboard.MaxPlayers}`\n⏱️ **Uptime**: `{liveboard.UptimeFormatted}`",
                     color: 0x00E5FF);
                 return;
             }
 
             await SendEmbedMessageAsync(channelId,
                 title: "🚀 Starting PalOdyssey Dedicated Server...",
-                description: $"Requested by **{authorName}**.\n\nAllocating CPU cores, preparing mods, and spinning up the Playit privacy tunnel...",
+                description: $"Requested by **{authorName}**.\n\nAllocating CPU cores and preparing dedicated world state...",
                 color: 0xFFAA00);
 
             _logService.LogInfo($"Discord user '{authorName}' triggered server start command.", "DiscordBot");
@@ -386,7 +386,7 @@ namespace PalLauncher.Services
                     await SendEmbedMessageAsync(channelId,
                         title: "🟢 PalOdyssey Realm is ONLINE!",
                         description: "The dedicated server is fully loaded and ready for exploration!\n\n" +
-                                     "🔗 **Connection Address**: `palodyssey.duckdns.org:57294`\n" +
+                                     "🔗 **Connection Address**: `palodyssey.duckdns.org:8211`\n" +
                                      "👥 **Max Pioneers**: `32`\n" +
                                      "✨ **1-Click Launch**: Open your PalOdyssey Launcher and click **LAUNCH GAME** to auto-connect with active mods!",
                         color: 0x00FF88);
@@ -396,7 +396,7 @@ namespace PalLauncher.Services
 
             await SendEmbedMessageAsync(channelId,
                 title: "🟢 Server Boot Complete",
-                description: "Palworld server process initialized!\n\n🎮 **Join Address**: `palodyssey.duckdns.org:57294`",
+                description: "Palworld server process initialized!\n\n🎮 **Join Address**: `palodyssey.duckdns.org:8211`",
                 color: 0x00FF88);
         }
 
@@ -409,10 +409,9 @@ namespace PalLauncher.Services
                 await SendEmbedMessageAsync(channelId,
                     title: "🟢 PalOdyssey Realm — Online",
                     description: $"Server is currently active and healthy.\n\n" +
-                                 $"📍 **Direct Address**: `palodyssey.duckdns.org:57294`\n" +
+                                 $"📍 **Direct Address**: `palodyssey.duckdns.org:8211`\n" +
                                  $"👥 **Pioneers in Realm**: `{liveboard.PlayerCount} / {liveboard.MaxPlayers}`\n" +
                                  $"⏱️ **Current Uptime**: `{liveboard.UptimeFormatted}`\n" +
-                                 $"🛡️ **Privacy Shield**: Active (Playit Encrypted Tunnel)\n" +
                                  $"💤 **Idle Auto-Shutdown**: Enabled (15m standby)",
                     color: 0x00FF88);
             }
@@ -431,10 +430,10 @@ namespace PalLauncher.Services
             await SendEmbedMessageAsync(channelId,
                 title: "🌐 PalOdyssey Server Connection Info",
                 description: "### 🎮 Join Address:\n" +
-                             "```\npalodyssey.duckdns.org:57294\n```\n\n" +
+                             "```\npalodyssey.duckdns.org:8211\n```\n\n" +
                              "**How to connect:**\n" +
                              "1. **Launcher (Recommended)**: Open **PalLauncher.exe** and click **LAUNCH GAME**.\n" +
-                             "2. **Manual in Palworld**: Multiplayer -> Join Multiplayer Game -> Enter `palodyssey.duckdns.org:57294`.",
+                             "2. **Manual in Palworld**: Multiplayer -> Join Multiplayer Game -> Enter `palodyssey.duckdns.org:8211`.",
                 color: 0x00E5FF);
         }
 

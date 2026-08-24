@@ -334,7 +334,7 @@ namespace PalLauncher.Services
                 {
                     IsOnline = true,
                     IsServerRunning = true,
-                    ServerAddress = "palodyssey.duckdns.org:57294",
+                    ServerAddress = "palodyssey.duckdns.org:8211",
                     ServerName = "PalOdyssey Realm",
                     UptimeSeconds = localUptime,
                     PlayerCount = 0,
@@ -344,8 +344,7 @@ namespace PalLauncher.Services
 
             string probeTarget = ResolveEffectiveEndpoint(cleanHost);
 
-            bool socketActive = await ProbeUdpAsync(probeTarget, 57294, 1000)
-                             || await ProbeUdpAsync(probeTarget, 8211, 1000)
+            bool socketActive = await ProbeUdpAsync(probeTarget, 8211, 1000)
                              || await ProbeUdpAsync(probeTarget, 27016, 1000)
                              || await ProbeTcpAsync(probeTarget, port, 1000)
                              || await ProbeTcpAsync(probeTarget, 8215, 1000)
@@ -360,7 +359,7 @@ namespace PalLauncher.Services
                 {
                     IsOnline = true,
                     IsServerRunning = true,
-                    ServerAddress = "palodyssey.duckdns.org:57294",
+                    ServerAddress = "palodyssey.duckdns.org:8211",
                     ServerName = "PalOdyssey Realm",
                     UptimeSeconds = Math.Max(1, remoteUptime),
                     PlayerCount = 0,
@@ -373,7 +372,7 @@ namespace PalLauncher.Services
             {
                 IsOnline = false,
                 IsServerRunning = false,
-                ServerAddress = "palodyssey.duckdns.org:57294",
+                ServerAddress = "palodyssey.duckdns.org:8211",
                 PlayerCount = 0,
                 MaxPlayers = 32
             };
