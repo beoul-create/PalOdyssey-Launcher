@@ -7,7 +7,7 @@ namespace PalLauncher.Services.Interfaces
     {
         bool IsConnected { get; }
         Task InitializeAsync(string? applicationId = null);
-        Task UpdatePresenceAsync(string details, string state, bool isPlaying = false);
+        Task UpdatePresenceAsync(string details, string state, bool isPlaying = false, int? targetPid = null);
         Task ClearPresenceAsync();
     }
 }

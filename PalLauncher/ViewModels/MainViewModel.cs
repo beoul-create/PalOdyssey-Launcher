@@ -455,13 +455,13 @@ namespace PalLauncher.ViewModels
                 if (state.IsRunning)
                 {
                     StatusText = $"Palworld {state.Mode} is running (PID: {state.ProcessId})";
-                    _ = _discordRpc.UpdatePresenceAsync("⚡ PalOdyssey Expedition", "Exploring Realm (15 Mods Active)", isPlaying: true);
+                    _ = _discordRpc.UpdatePresenceAsync("⚡ PalOdyssey Expedition", "Exploring Realm (Active Modpack)", isPlaying: true, targetPid: state.ProcessId);
                 }
                 else
                 {
                     StatusText = "Palworld session ended. Ready to launch.";
                     ProgressPercentage = 0;
-                    _ = _discordRpc.UpdatePresenceAsync("In Launcher", "Preparing Expedition", isPlaying: false);
+                    _ = _discordRpc.UpdatePresenceAsync("In Launcher", "Preparing Expedition", isPlaying: false, targetPid: Environment.ProcessId);
                 }
             });
         }

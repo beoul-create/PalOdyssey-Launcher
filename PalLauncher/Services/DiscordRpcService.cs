@@ -23,10 +23,11 @@ namespace PalLauncher.Services
         private DateTime? _sessionStartTime;
         private readonly SemaphoreSlim _pipeSemaphore = new(1, 1);
 
-        // Cached presence state for automatic re-publishing on connect/reconnect
+        // Cached presence state for automatic re-publishing on connect/reconnect and active heartbeat
         private string _cachedDetails = "Using PalOdyssey Launcher";
         private string _cachedState = "Preparing Expedition";
         private bool _cachedIsPlaying;
+        private int? _cachedTargetPid;
 
         private static readonly JsonSerializerOptions JsonOpts = new()
         {
@@ -67,13 +68,18 @@ namespace PalLauncher.Services
                     bool connected = await TryConnectToDiscordPipeAsync();
                     if (connected)
                     {
-                        await UpdatePresenceAsync(_cachedDetails, _cachedState, _cachedIsPlaying);
+                        await UpdatePresenceAsync(_cachedDetails, _cachedState, _cachedIsPlaying, _cachedTargetPid);
                     }
+                }
+                else if (_cachedIsPlaying)
+                {
+                    // Active game heartbeat: keep Rich Presence pinned so Palworld background detection doesn't override it
+                    await SendPresenceFrameAsync(_cachedDetails, _cachedState, true, _cachedTargetPid);
                 }
 
                 try
                 {
-                    await Task.Delay(5000, ct); // Reconnect / heartbeat check
+                    await Task.Delay(3500, ct); // Heartbeat check / re-broadcast every 3.5s
                 }
                 catch (OperationCanceledException) { break; }
             }
@@ -144,17 +150,26 @@ namespace PalLauncher.Services
             }
         }
 
-        public async Task UpdatePresenceAsync(string details, string state, bool isPlaying = false)
+        public async Task UpdatePresenceAsync(string details, string state, bool isPlaying = false, int? targetPid = null)
         {
             _cachedDetails = details;
             _cachedState = state;
             _cachedIsPlaying = isPlaying;
+            if (targetPid.HasValue && targetPid.Value > 0)
+            {
+                _cachedTargetPid = targetPid.Value;
+            }
 
             if (!_isConnected || _pipeClient == null || !_pipeClient.IsConnected)
             {
                 return;
             }
 
+            await SendPresenceFrameAsync(details, state, isPlaying, _cachedTargetPid);
+        }
+
+        private async Task SendPresenceFrameAsync(string details, string state, bool isPlaying, int? targetPid)
+        {
             await _pipeSemaphore.WaitAsync();
             try
             {
@@ -177,13 +192,14 @@ namespace PalLauncher.Services
                     : null;
 
                 object? timestampsObj = startUnix.HasValue ? new { start = startUnix.Value } : null;
+                int activePid = (targetPid.HasValue && targetPid.Value > 0) ? targetPid.Value : Process.GetCurrentProcess().Id;
 
                 var activityPayload = new
                 {
                     cmd = "SET_ACTIVITY",
                     args = new
                     {
-                        pid = Process.GetCurrentProcess().Id,
+                        pid = activePid,
                         activity = new
                         {
                             details = details,
@@ -192,7 +208,7 @@ namespace PalLauncher.Services
                             assets = new
                             {
                                 large_image = "palworld",
-                                large_text = isPlaying ? "PalOdyssey Expeditions" : "PalOdyssey Custom Launcher",
+                                large_text = isPlaying ? "PalOdyssey Expedition" : "PalOdyssey Custom Launcher",
                                 small_image = isPlaying ? "online" : "ready",
                                 small_text = isPlaying ? "In Realm (Dedicated)" : "Ready to Launch"
                             },
