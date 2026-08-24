@@ -247,6 +247,18 @@ namespace PalLauncher.Services
                     },
                     new
                     {
+                        name = "restart",
+                        description = "Gracefully reboot the PalOdyssey Dedicated Server",
+                        type = 1
+                    },
+                    new
+                    {
+                        name = "reboot",
+                        description = "Reboot the PalOdyssey Dedicated Server",
+                        type = 1
+                    },
+                    new
+                    {
                         name = "stop",
                         description = "Gracefully shut down the PalOdyssey dedicated server",
                         type = 1
@@ -398,6 +410,11 @@ namespace PalLauncher.Services
                         await ExecuteIpInteractionAsync(interactionId, interactionToken);
                         break;
 
+                    case "restart":
+                    case "reboot":
+                        await ExecuteRestartInteractionAsync(interactionId, interactionToken, channelId, authorName);
+                        break;
+
                     case "stop":
                     case "shutdown":
                         await ExecuteStopInteractionAsync(interactionId, interactionToken, authorName);
@@ -473,6 +490,11 @@ namespace PalLauncher.Services
                     case "connect":
                     case "address":
                         await ExecuteIpCommandAsync(channelId);
+                        break;
+
+                    case "restart":
+                    case "reboot":
+                        await ExecuteRestartCommandAsync(channelId, authorName);
                         break;
 
                     case "stop":
@@ -591,6 +613,57 @@ namespace PalLauncher.Services
             }
         }
 
+        private async Task ExecuteRestartInteractionAsync(string interactionId, string interactionToken, string channelId, string authorName)
+        {
+            _logService.LogInfo($"Discord user '{authorName}' requested server reboot via /restart or /reboot.", "DiscordBot");
+
+            await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                title: "🔄 Rebooting PalOdyssey Server...",
+                description: $"Reboot requested by **{authorName}**.\n\nGracefully stopping world state, clearing memory caches, and rebooting engine...",
+                color: 0x00E5FF);
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    if (_onStopServer != null)
+                    {
+                        await _onStopServer.Invoke();
+                    }
+
+                    await Task.Delay(3000);
+
+                    if (_onStartServer != null)
+                    {
+                        await _onStartServer.Invoke();
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(channelId))
+                    {
+                        for (int i = 0; i < 20; i++)
+                        {
+                            await Task.Delay(2000);
+                            var current = _getLiveboard?.Invoke();
+                            if (current != null && (current.IsOnline || current.IsServerRunning))
+                            {
+                                await SendEmbedMessageAsync(channelId,
+                                    title: "🟢 PalOdyssey Server Reboot Complete!",
+                                    description: "Dedicated server is fully back online and ready for pioneers!\n\n" +
+                                                 "🔗 **Address**: `palodyssey.duckdns.org:8211`\n" +
+                                                 "✨ 1-Click Launch from PalOdyssey Launcher to join!",
+                                    color: 0x00FF88);
+                                return;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logService.LogError("Error during server reboot", "DiscordBot", ex);
+                }
+            });
+        }
+
         private async Task ExecuteHelpInteractionAsync(string interactionId, string interactionToken)
         {
             await RespondInteractionEmbedAsync(interactionId, interactionToken,
@@ -598,6 +671,7 @@ namespace PalLauncher.Services
                 description: "• `/start` — Powers up the dedicated server.\n" +
                              "• `/status` — Displays live server uptime and player count.\n" +
                              "• `/ip` — Shows server IP and quick connection instructions.\n" +
+                             "• `/restart` (or `/reboot`) — Gracefully reboots the dedicated server.\n" +
                              "• `/stop` — Powers down the server.\n" +
                              "• `/help` — Shows this slash command guide.",
                 color: 0x9966FF);
@@ -714,6 +788,57 @@ namespace PalLauncher.Services
                 color: 0xFF4466);
         }
 
+        private async Task ExecuteRestartCommandAsync(string channelId, string authorName)
+        {
+            _logService.LogInfo($"Discord user '{authorName}' requested server reboot via text command.", "DiscordBot");
+
+            await SendEmbedMessageAsync(channelId,
+                title: "🔄 Rebooting PalOdyssey Server...",
+                description: $"Reboot requested by **{authorName}**.\n\nGracefully restarting server...",
+                color: 0x00E5FF);
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    if (_onStopServer != null)
+                    {
+                        await _onStopServer.Invoke();
+                    }
+
+                    await Task.Delay(3000);
+
+                    if (_onStartServer != null)
+                    {
+                        await _onStartServer.Invoke();
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(channelId))
+                    {
+                        for (int i = 0; i < 20; i++)
+                        {
+                            await Task.Delay(2000);
+                            var current = _getLiveboard?.Invoke();
+                            if (current != null && (current.IsOnline || current.IsServerRunning))
+                            {
+                                await SendEmbedMessageAsync(channelId,
+                                    title: "🟢 PalOdyssey Server Reboot Complete!",
+                                    description: "Dedicated server is fully back online and ready for pioneers!\n\n" +
+                                                 "🔗 **Address**: `palodyssey.duckdns.org:8211`\n" +
+                                                 "✨ 1-Click Launch from PalOdyssey Launcher to join!",
+                                    color: 0x00FF88);
+                                return;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logService.LogError("Error during server reboot", "DiscordBot", ex);
+                }
+            });
+        }
+
         private async Task ExecuteHelpCommandAsync(string channelId)
         {
             await SendEmbedMessageAsync(channelId,
@@ -721,6 +846,7 @@ namespace PalLauncher.Services
                 description: "• `/start` — Powers up the dedicated server.\n" +
                              "• `/status` — Displays live server uptime and player count.\n" +
                              "• `/ip` — Shows server IP and quick connection instructions.\n" +
+                             "• `/restart` (or `/reboot`) — Gracefully reboots the dedicated server.\n" +
                              "• `/stop` — Powers down the server.\n" +
                              "• `/help` — Shows this commands guide.",
                 color: 0x9966FF);
