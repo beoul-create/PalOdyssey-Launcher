@@ -170,12 +170,14 @@ namespace PalLauncher.ViewModels
         private readonly IDiscordRpcService _discordRpc;
         private readonly IDiscordBotService _discordBot;
         private readonly ISteamDetectionService _steamDetection;
+        private readonly ISteamAuthService _steamAuth;
         private readonly IDiscordAuthService _discordAuth;
 
         private RemoteServerStatus _serverStatus = new();
         private ServerLiveboardInfo _liveboard = new();
         private SteamProfileInfo _steamProfile = new();
         private AccountLinkInfo _accountLink = new();
+        private bool _isConnectingSteam;
         private bool _isConnectingDiscord;
         private CancellationTokenSource? _pollingCts;
         private System.Windows.Threading.DispatcherTimer? _uptimeTimer;
@@ -205,6 +207,12 @@ namespace PalLauncher.ViewModels
             }
         }
 
+        public bool IsConnectingSteam
+        {
+            get => _isConnectingSteam;
+            set => SetProperty(ref _isConnectingSteam, value);
+        }
+
         public bool IsConnectingDiscord
         {
             get => _isConnectingDiscord;
@@ -216,6 +224,7 @@ namespace PalLauncher.ViewModels
         public string SteamBadge => SteamProfile?.IsDetected == true ? $"🎮 {SteamProfile.PersonaName} ({SteamProfile.SteamId64})" : "🎮 Steam Offline";
 
         public AsyncRelayCommand ConnectDiscordCommand { get; }
+        public AsyncRelayCommand ConnectSteamCommand { get; }
         public RelayCommand UnlinkDiscordCommand { get; }
         public RelayCommand RefreshSteamCommand { get; }
 
@@ -271,6 +280,7 @@ namespace PalLauncher.ViewModels
             ICrashLogService? crashLogService = null,
             IDiscordBotService? discordBot = null,
             ISteamDetectionService? steamDetection = null,
+            ISteamAuthService? steamAuth = null,
             IDiscordAuthService? discordAuth = null)
         {
             _configService = configService;
@@ -287,6 +297,7 @@ namespace PalLauncher.ViewModels
             _discordBot = discordBot ?? new DiscordBotService(_logService, null, presenceService);
             
             _steamDetection = steamDetection ?? new SteamDetectionService(_logService);
+            _steamAuth = steamAuth ?? new SteamAuthService(_logService);
             _discordAuth = discordAuth ?? new DiscordAuthService(_logService);
 
             var crashService = crashLogService ?? new Services.CrashLogService(_logService);
@@ -332,6 +343,7 @@ namespace PalLauncher.ViewModels
             RefreshServerStatusCommand = new AsyncRelayCommand(RefreshServerStatusAsync);
             CopyServerIpCommand = new RelayCommand(_ => ExecuteCopyServerIp());
             ConnectDiscordCommand = new AsyncRelayCommand(ExecuteConnectDiscordAsync);
+            ConnectSteamCommand = new AsyncRelayCommand(ExecuteConnectSteamAsync);
             UnlinkDiscordCommand = new RelayCommand(_ => ExecuteUnlinkDiscord());
             RefreshSteamCommand = new RelayCommand(_ => RefreshSteamProfile());
 
@@ -883,6 +895,39 @@ namespace PalLauncher.ViewModels
             catch (Exception ex)
             {
                 _logService.LogWarning($"Steam detection error: {ex.Message}", "Steam");
+            }
+        }
+
+        public async Task ExecuteConnectSteamAsync()
+        {
+            if (IsConnectingSteam) return;
+
+            try
+            {
+                IsConnectingSteam = true;
+                StatusText = "Connecting Steam: Opening OpenID authorization page in browser...";
+                _logService.LogInfo("Initiating Steam OpenID authorization flow...", "SteamAuth");
+
+                var steamProfile = await _steamAuth.InitiateSteamLoginAsync(localPort: 8766);
+                
+                if (steamProfile.IsDetected)
+                {
+                    SteamProfile = steamProfile;
+                    StatusText = $"🎉 Connected Steam successfully! Welcome, Pioneer (ID: {steamProfile.SteamId64}).";
+                }
+                else
+                {
+                    StatusText = "Steam connection was not completed.";
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusText = $"Steam connection error: {ex.Message}";
+                _logService.LogError("Steam OpenID linking failed", "SteamAuth", ex);
+            }
+            finally
+            {
+                IsConnectingSteam = false;
             }
         }
 

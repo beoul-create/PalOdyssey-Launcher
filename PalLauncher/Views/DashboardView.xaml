@@ -73,6 +73,9 @@
 
                     <!-- Right: Connect / Unlink Discord Action Buttons -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="Connect Steam" Style="{StaticResource StyleGhostButton}" FontSize="11" Padding="10,4" Margin="0,0,8,0"
+                                Command="{Binding ConnectSteamCommand}"
+                                Visibility="{Binding SteamProfile.IsDetected, Converter={StaticResource InvertBoolToVis}}" />
                         <Button Content="Connect Discord" Style="{StaticResource StyleCyanButton}" FontSize="11" Padding="10,4" Margin="0,0,8,0"
                                 Command="{Binding ConnectDiscordCommand}"
                                 Visibility="{Binding IsDiscordLinked, Converter={StaticResource InvertBoolToVis}}" />
