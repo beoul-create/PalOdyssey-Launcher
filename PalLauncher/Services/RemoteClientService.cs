@@ -243,11 +243,14 @@ namespace PalLauncher.Services
                 };
             }
 
-            bool socketActive = await ProbeUdpAsync(cleanHost, 27016, 1000)
-                             || await ProbeTcpAsync(cleanHost, port, 1000)
-                             || await ProbeTcpAsync(cleanHost, 8215, 1000)
-                             || await ProbeTcpAsync(cleanHost, 8211, 1000)
-                             || await ProbeTcpAsync(cleanHost, 25575, 1000);
+            string targetIp = ResolveEffectiveEndpoint(cleanHost);
+
+            bool socketActive = await ProbeUdpAsync(targetIp, 8211, 1000)
+                             || await ProbeUdpAsync(targetIp, 27016, 1000)
+                             || await ProbeTcpAsync(targetIp, port, 1000)
+                             || await ProbeTcpAsync(targetIp, 8215, 1000)
+                             || await ProbeTcpAsync(targetIp, 8211, 1000)
+                             || await ProbeTcpAsync(targetIp, 25575, 1000);
 
             if (socketActive)
             {
@@ -337,11 +340,14 @@ namespace PalLauncher.Services
                 };
             }
 
-            bool socketActive = await ProbeUdpAsync(cleanHost, 27016, 1000)
-                             || await ProbeTcpAsync(cleanHost, port, 1000)
-                             || await ProbeTcpAsync(cleanHost, 8215, 1000)
-                             || await ProbeTcpAsync(cleanHost, 8211, 1000)
-                             || await ProbeTcpAsync(cleanHost, 25575, 1000);
+            string probeTarget = ResolveEffectiveEndpoint(cleanHost);
+
+            bool socketActive = await ProbeUdpAsync(probeTarget, 8211, 1000)
+                             || await ProbeUdpAsync(probeTarget, 27016, 1000)
+                             || await ProbeTcpAsync(probeTarget, port, 1000)
+                             || await ProbeTcpAsync(probeTarget, 8215, 1000)
+                             || await ProbeTcpAsync(probeTarget, 8211, 1000)
+                             || await ProbeTcpAsync(probeTarget, 25575, 1000);
 
             if (socketActive)
             {
