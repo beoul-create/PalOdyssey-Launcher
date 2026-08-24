@@ -409,11 +409,6 @@ namespace PalLauncher.Services
 
                 if (string.IsNullOrWhiteSpace(content)) return;
 
-                if (!string.IsNullOrWhiteSpace(_channelId) && !string.Equals(channelId, _channelId, StringComparison.OrdinalIgnoreCase))
-                {
-                    return;
-                }
-
                 string trimmed = content.Trim();
                 string command = "";
 
@@ -431,6 +426,8 @@ namespace PalLauncher.Services
                 }
 
                 if (string.IsNullOrWhiteSpace(command)) return;
+
+                _logService.LogInfo($"Received Discord command '{content}' from '{authorName}' in channel {channelId}", "DiscordBot");
 
                 string[] parts = command.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 string mainCmd = parts[0];

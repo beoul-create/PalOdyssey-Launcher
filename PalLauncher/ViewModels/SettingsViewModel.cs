@@ -567,7 +567,7 @@ namespace PalLauncher.ViewModels
                 EnableDiscordRpc = EnableDiscordRpc,
                 DiscordApplicationId = DiscordApplicationId,
                 EnableDiscordBot = EnableDiscordBot,
-                DiscordBotToken = DiscordBotToken,
+                DiscordBotToken = !string.IsNullOrWhiteSpace(DiscordBotToken) ? DiscordBotToken : _configService.Config.DiscordBotToken,
                 DiscordCommandPrefix = string.IsNullOrWhiteSpace(DiscordCommandPrefix) ? "/" : DiscordCommandPrefix,
                 DiscordBotChannelId = string.IsNullOrWhiteSpace(DiscordBotChannelId) ? "1541333590707671160" : DiscordBotChannelId,
                 DiscordAdminRoleId = DiscordAdminRoleId,
