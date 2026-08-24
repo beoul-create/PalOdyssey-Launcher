@@ -379,6 +379,8 @@ namespace PalLauncher.Services
                 if (!interaction.TryGetProperty("data", out var data)) return;
                 string command = data.GetProperty("name").GetString()?.ToLowerInvariant() ?? "";
 
+                _logService.LogInfo($"Received Discord slash interaction '/{command}' from '{authorName}' in channel '{channelId}' (ID: {interactionId})", "DiscordBot");
+
                 switch (command)
                 {
                     case "start":
@@ -753,11 +755,24 @@ namespace PalLauncher.Services
                 string json = JsonSerializer.Serialize(payload);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var resp = await _httpClient.PostAsync($"interactions/{interactionId}/{interactionToken}/callback", content);
+                // Interaction callbacks MUST NOT include the Bot Authorization header (Discord rejects it with 401 Unauthorized)
+                using var request = new HttpRequestMessage(HttpMethod.Post, $"https://discord.com/api/v10/interactions/{interactionId}/{interactionToken}/callback")
+                {
+                    Content = content
+                };
+
+                using var callbackClient = new HttpClient();
+                callbackClient.DefaultRequestHeaders.UserAgent.ParseAdd("DiscordBot (PalOdyssey-Launcher, 2.0.0)");
+
+                var resp = await callbackClient.SendAsync(request);
                 if (!resp.IsSuccessStatusCode)
                 {
                     string err = await resp.Content.ReadAsStringAsync();
                     _logService.LogWarning($"Interaction callback returned {resp.StatusCode}: {err}", "DiscordBot");
+                }
+                else
+                {
+                    _logService.LogSuccess($"Successfully responded to slash interaction ({interactionId})", "DiscordBot");
                 }
             }
             catch (Exception ex)
