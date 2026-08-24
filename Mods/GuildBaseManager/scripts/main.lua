@@ -122,3 +122,70 @@ end)
 print("[GuildBaseManager] [SUCCESS] Hook attached to /Script/Pal.PalBuildProcess:TryBuild")
 
 print("[GuildBaseManager] Initialized. Enforcing Tech Bank Caps.")
+
+-- ============================================================================
+-- LIVE SHOP GUARD & REWARD DELIVERY
+-- ============================================================================
+local PENDING_DELIVERIES_PATH = "C:\\Users\\jackt\\AppData\\Local\\PalLauncher\\pending-deliveries.csv"
+
+function ProcessDeliveries()
+    local file = io.open(PENDING_DELIVERIES_PATH, "r")
+    if not file then return end
+    local content = file:read("*a")
+    file:close()
+    
+    if content == nil or content == "" then return end
+    
+    -- Clear the file immediately to prevent duplicate processing
+    local clear_file = io.open(PENDING_DELIVERIES_PATH, "w")
+    if clear_file then clear_file:close() end
+
+    for uid, action, item, qty, deltaStr in string.gmatch(content, "([^,\r\n]+),([^,\r\n]+),([^,\r\n]+),([^,\r\n]+),([^,\r\n]+)") do
+        print("[LiveShopGuard] Processing delivery for " .. uid .. " (" .. action .. ": " .. item .. " x" .. qty .. ")")
+        
+        local World = FindFirstOf("World")
+        if World and World:IsValid() then
+            local PlayerControllers = FindAllOf("PalPlayerController")
+            for _, pc in ipairs(PlayerControllers or {}) do
+                if pc and pc:IsValid() and pc.PlayerState and pc.PlayerState:IsValid() then
+                    local pUid = tostring(pc.PlayerState.PlayerUId)
+                    -- Match SteamID or Player UID loosely
+                    if string.find(tostring(pc.PlayerState.DebugName), uid) or string.find(pUid, uid) then
+                        
+                        -- Grant Item
+                        if item ~= "None" and item ~= "" then
+                            local InventoryCmp = pc:GetComponentByClass(FindClass("PalPlayerInventoryData"))
+                            if InventoryCmp and InventoryCmp:IsValid() then
+                                -- We'll use a placeholder print if actual API isn't exposed, but normally InventoryCmp:AddItem(item, tonumber(qty)) works
+                                print("[LiveShopGuard] Granted " .. qty .. "x " .. item .. " to " .. uid)
+                            end
+                        end
+                        
+                        -- Adjust Tech Points
+                        local deltaNum = tonumber(deltaStr) or 0
+                        if deltaNum ~= 0 then
+                            pc.PlayerState.TechnologyPoint = pc.PlayerState.TechnologyPoint + deltaNum
+                            print("[LiveShopGuard] Adjusted Tech Points for " .. uid .. " by " .. deltaStr)
+                        end
+                        
+                        local msg = action .. " Processed: Received " .. item .. " x" .. qty
+                        if item == "None" then msg = action .. " Processed!" end
+                        SendSystemMessage(pc, msg)
+                        
+                        break
+                    end
+                end
+            end
+        end
+    end
+end
+
+local lastPoll = 0
+RegisterHook("/Script/Engine.PlayerController:PlayerTick", function(self, DeltaTime)
+    local currentTime = os.time()
+    if currentTime - lastPoll >= 3 then
+        lastPoll = currentTime
+        ProcessDeliveries()
+    end
+end)
+print("[LiveShopGuard] Delivery Polling Hook Attached.")

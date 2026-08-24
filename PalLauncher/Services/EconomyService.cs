@@ -14,9 +14,9 @@ namespace PalLauncher.Services
         IReadOnlyList<ShopItem> GetShopCatalog();
         IReadOnlyList<RecyclableItem> GetRecyclables();
         Task<PlayerEconomyProfile?> GetPlayerProfileAsync(string playerUid);
-        Task<ExchangeReceipt> ExecuteExchangeAsync(string playerUid, string itemQuery, int quantity);
-        Task<RecycleReceipt> ExecuteRecycleAsync(string playerUid, string itemQuery, int quantity);
-        Task<GachaReceipt> ExecuteGachaAsync(string playerUid, int pulls);
+        Task<ExchangeReceipt> ExecuteExchangeAsync(string playerUid, string itemQuery, int quantity, bool isOnlineSession = false);
+        Task<RecycleReceipt> ExecuteRecycleAsync(string playerUid, string itemQuery, int quantity, bool isOnlineSession = false);
+        Task<GachaReceipt> ExecuteGachaAsync(string playerUid, int pulls, bool isOnlineSession = false);
         ShopItem? FindShopItem(string query);
         RecyclableItem? FindRecyclableItem(string query);
         void LinkDiscordUser(string discordUserId, string playerUid);
@@ -457,7 +457,19 @@ namespace PalLauncher.Services
             return profile;
         }
 
-        public async Task<ExchangeReceipt> ExecuteExchangeAsync(string playerUid, string itemQuery, int quantity)
+        private void QueueDelivery(string playerUid, string action, string itemCode, int quantity, int techPointsDelta)
+        {
+            string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PalLauncher");
+            string queueFile = Path.Combine(dir, "pending-deliveries.csv");
+            
+            lock (_lock)
+            {
+                string line = $"{playerUid},{action},{itemCode},{quantity},{techPointsDelta}\n";
+                File.AppendAllText(queueFile, line);
+            }
+        }
+
+        public async Task<ExchangeReceipt> ExecuteExchangeAsync(string playerUid, string itemQuery, int quantity, bool isOnlineSession = false)
         {
             if (quantity <= 0) quantity = 1;
             string uid = _saveService.ResolvePlayerUid(playerUid);
@@ -573,14 +585,21 @@ namespace PalLauncher.Services
             }
 
             // Deduct Technology Points
-            bool updated = await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
-            if (!updated)
+            if (isOnlineSession)
             {
-                return new ExchangeReceipt
+                QueueDelivery(uid, "Exchange", item.ItemCode, quantity, -totalCost);
+            }
+            else
+            {
+                bool updated = await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
+                if (!updated)
                 {
-                    Success = false,
-                    Message = "Failed to update save file. Transaction cancelled safely."
-                };
+                    return new ExchangeReceipt
+                    {
+                        Success = false,
+                        Message = "Failed to update save file. Transaction cancelled safely."
+                    };
+                }
             }
 
             int newPoints = profile.TechnologyPoints - totalCost;
@@ -612,7 +631,7 @@ namespace PalLauncher.Services
             };
         }
 
-        public async Task<RecycleReceipt> ExecuteRecycleAsync(string playerUid, string itemQuery, int quantity)
+        public async Task<RecycleReceipt> ExecuteRecycleAsync(string playerUid, string itemQuery, int quantity, bool isOnlineSession = false)
         {
             if (quantity <= 0) quantity = 1;
             string uid = _saveService.ResolvePlayerUid(playerUid);
@@ -652,14 +671,21 @@ namespace PalLauncher.Services
             }
 
             // Credit Technology Points
-            bool updated = await _saveService.UpdateTechnologyPointsAsync(uid, pointsEarned);
-            if (!updated)
+            if (isOnlineSession)
             {
-                return new RecycleReceipt
+                QueueDelivery(uid, "Recycle", item.Id, quantity, pointsEarned); // In lua we should remove quantity items and add points
+            }
+            else
+            {
+                bool updated = await _saveService.UpdateTechnologyPointsAsync(uid, pointsEarned);
+                if (!updated)
                 {
-                    Success = false,
-                    Message = "Failed to update save file. Recycling transaction cancelled safely."
-                };
+                    return new RecycleReceipt
+                    {
+                        Success = false,
+                        Message = "Failed to update save file. Recycling transaction cancelled safely."
+                    };
+                }
             }
 
             int newPoints = profile.TechnologyPoints + pointsEarned;
@@ -746,7 +772,7 @@ namespace PalLauncher.Services
             };
         }
 
-        public async Task<GachaReceipt> ExecuteGachaAsync(string playerUid, int pulls)
+        public async Task<GachaReceipt> ExecuteGachaAsync(string playerUid, int pulls, bool isOnlineSession = false)
         {
             if (pulls != 1 && pulls != 10) pulls = 1;
             string uid = _saveService.ResolvePlayerUid(playerUid);
@@ -778,14 +804,21 @@ namespace PalLauncher.Services
             }
 
             // Deduct Tech Points
-            bool updated = await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
-            if (!updated)
+            if (isOnlineSession)
             {
-                return new GachaReceipt
+                // Defer deduction to after drops are calculated, we will queue the drops
+            }
+            else
+            {
+                bool updated = await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
+                if (!updated)
                 {
-                    Success = false,
-                    Message = "Failed to update save file. Gacha transaction cancelled safely."
-                };
+                    return new GachaReceipt
+                    {
+                        Success = false,
+                        Message = "Failed to update save file. Gacha transaction cancelled safely."
+                    };
+                }
             }
 
             int newPoints = profile.TechnologyPoints - totalCost;

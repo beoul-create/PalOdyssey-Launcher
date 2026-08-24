@@ -282,7 +282,10 @@ namespace PalLauncher.ViewModels
             _remoteDaemon = remoteDaemon ?? new RemoteServerDaemon(_logService, _launchService);
             _remoteClient = remoteClient ?? new RemoteClientService(_logService);
             _discordRpc = discordRpc ?? new DiscordRpcService(_logService);
-            _discordBot = discordBot ?? new DiscordBotService(_logService);
+            
+            var presenceService = new PlayerPresenceService(_configService, _logService);
+            _discordBot = discordBot ?? new DiscordBotService(_logService, null, presenceService);
+            
             _steamDetection = steamDetection ?? new SteamDetectionService(_logService);
             _discordAuth = discordAuth ?? new DiscordAuthService(_logService);
 

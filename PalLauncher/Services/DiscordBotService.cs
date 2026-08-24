@@ -38,14 +38,16 @@ namespace PalLauncher.Services
         private string? _liveboardMessageId;
         private Task? _liveboardTask;
         private readonly IEconomyService _economyService;
+        private readonly IPlayerPresenceService? _presenceService;
 
         public bool IsRunning { get; private set; }
         public string BotUsername { get; private set; } = "PalOdyssey Bot";
 
-        public DiscordBotService(ILogService logService, IEconomyService? economyService = null)
+        public DiscordBotService(ILogService logService, IEconomyService? economyService = null, IPlayerPresenceService? presenceService = null)
         {
             _logService = logService;
             _economyService = economyService ?? new EconomyService(_logService, new PalSaveService(_logService));
+            _presenceService = presenceService;
             _httpClient = new HttpClient
             {
                 BaseAddress = new Uri("https://discord.com/api/v10/")
@@ -1439,6 +1441,15 @@ namespace PalLauncher.Services
                 ? steamIdOption.Trim()
                 : _economyService.GetLinkedPlayerUid(authorId);
 
+            if (_presenceService != null && !await _presenceService.IsPlayerOnlineAsync(targetUid))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Offline",
+                    description: "You must be logged into the Palworld server to use this command.",
+                    color: 0xFF4466);
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(targetUid))
             {
                 await EditDeferredResponseEmbedAsync(interactionToken,
@@ -1565,7 +1576,16 @@ namespace PalLauncher.Services
                 ? steamIdOption.Trim()
                 : _economyService.GetLinkedPlayerUid(authorId);
 
-            var receipt = await _economyService.ExecuteExchangeAsync(targetUid, itemQuery, amount);
+            if (_presenceService != null && !await _presenceService.IsPlayerOnlineAsync(targetUid))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Offline",
+                    description: "You must be logged into the Palworld server to use this command.",
+                    color: 0xFF4466);
+                return;
+            }
+
+            var receipt = await _economyService.ExecuteExchangeAsync(targetUid, itemQuery, amount, isOnlineSession: true);
 
             if (receipt.Success)
             {
@@ -1612,7 +1632,16 @@ namespace PalLauncher.Services
                 ? steamIdOption.Trim()
                 : _economyService.GetLinkedPlayerUid(authorId);
 
-            var receipt = await _economyService.ExecuteRecycleAsync(targetUid, itemQuery, amount);
+            if (_presenceService != null && !await _presenceService.IsPlayerOnlineAsync(targetUid))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Offline",
+                    description: "You must be logged into the Palworld server to use this command.",
+                    color: 0xFF4466);
+                return;
+            }
+
+            var receipt = await _economyService.ExecuteRecycleAsync(targetUid, itemQuery, amount, isOnlineSession: true);
 
             if (receipt.Success)
             {
@@ -1714,7 +1743,16 @@ namespace PalLauncher.Services
                 ? steamIdOption.Trim()
                 : _economyService.GetLinkedPlayerUid(authorId);
 
-            var receipt = await _economyService.ExecuteGachaAsync(targetUid, pulls);
+            if (_presenceService != null && !await _presenceService.IsPlayerOnlineAsync(targetUid))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Offline",
+                    description: "You must be logged into the Palworld server to use this command.",
+                    color: 0xFF4466);
+                return;
+            }
+
+            var receipt = await _economyService.ExecuteGachaAsync(targetUid, pulls, isOnlineSession: true);
 
             if (receipt.Success)
             {
