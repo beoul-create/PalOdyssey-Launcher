@@ -328,7 +328,7 @@ namespace PalLauncher.ViewModels
                     _configService.Config.RemoteAccessKey,
                     onStartServerRequested: async () =>
                     {
-                        var cfg = SettingsVM.CreateConfigFromProperties();
+                        var cfg = _configService.Config;
                         cfg.LaunchMode = "Server";
                         cfg.LaunchServerWithGame = true;
                         var currentPath = _pathDetector.DetectPalworldInstallation(cfg.GamePath);

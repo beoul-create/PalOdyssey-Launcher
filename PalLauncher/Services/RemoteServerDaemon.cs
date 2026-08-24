@@ -156,7 +156,9 @@ namespace PalLauncher.Services
             try
             {
                 _gamePort = gamePort > 0 ? gamePort : 8211;
-                _udpWakeListener = new UdpClient(_gamePort);
+                var localEp = new IPEndPoint(IPAddress.Any, _gamePort);
+                _udpWakeListener = new UdpClient(localEp);
+                _udpWakeListener.EnableBroadcast = true;
                 _udpWakeTask = Task.Run(async () =>
                 {
                     while (_udpWakeListener != null && !_launchService.IsServerRunning)

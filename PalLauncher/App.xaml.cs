@@ -18,6 +18,7 @@ namespace PalLauncher
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            ShutdownMode = ShutdownMode.OnExplicitShutdown;
             base.OnStartup(e);
 
             // Initialize Logging first
