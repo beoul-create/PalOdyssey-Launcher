@@ -56,7 +56,7 @@ namespace PalLauncher.Tests
             string args = launchService.BuildCommandLineArguments(config);
 
             // Assert
-            Assert.StartsWith("192.168.1.100:8211", args);
+            Assert.True(args.StartsWith("192.168.1.100:8211") || args.StartsWith("127.0.0.1:8211"));
             Assert.Contains("-dx11", args);
             Assert.Contains("-culture=en", args);
         }

@@ -162,10 +162,10 @@ namespace PalLauncher.ViewModels
 
         private bool _enableDiscordRpc = true;
         private string _discordApplicationId = "1540924979095408700";
-        private bool _enableDiscordBot = false;
+        private bool _enableDiscordBot = true;
         private string _discordBotToken = "";
-        private string _discordCommandPrefix = "!";
-        private string _discordBotChannelId = "";
+        private string _discordCommandPrefix = "/";
+        private string _discordBotChannelId = "1541333590707671160";
         private string _discordAdminRoleId = "";
 
         public bool EnableDiscordRpc
@@ -519,8 +519,8 @@ namespace PalLauncher.ViewModels
             _discordApplicationId = config.DiscordApplicationId;
             _enableDiscordBot = config.EnableDiscordBot;
             _discordBotToken = config.DiscordBotToken;
-            _discordCommandPrefix = config.DiscordCommandPrefix;
-            _discordBotChannelId = config.DiscordBotChannelId;
+            _discordCommandPrefix = string.IsNullOrWhiteSpace(config.DiscordCommandPrefix) ? "/" : config.DiscordCommandPrefix;
+            _discordBotChannelId = string.IsNullOrWhiteSpace(config.DiscordBotChannelId) ? "1541333590707671160" : config.DiscordBotChannelId;
             _discordAdminRoleId = config.DiscordAdminRoleId;
             _remoteManifestUrl = config.RemoteManifestUrl;
             _paksRelativePath = config.PaksRelativePath;
@@ -568,8 +568,8 @@ namespace PalLauncher.ViewModels
                 DiscordApplicationId = DiscordApplicationId,
                 EnableDiscordBot = EnableDiscordBot,
                 DiscordBotToken = DiscordBotToken,
-                DiscordCommandPrefix = DiscordCommandPrefix,
-                DiscordBotChannelId = DiscordBotChannelId,
+                DiscordCommandPrefix = string.IsNullOrWhiteSpace(DiscordCommandPrefix) ? "/" : DiscordCommandPrefix,
+                DiscordBotChannelId = string.IsNullOrWhiteSpace(DiscordBotChannelId) ? "1541333590707671160" : DiscordBotChannelId,
                 DiscordAdminRoleId = DiscordAdminRoleId,
                 RemoteManifestUrl = RemoteManifestUrl,
                 PaksRelativePath = PaksRelativePath,

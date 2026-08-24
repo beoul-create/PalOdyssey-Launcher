@@ -33,10 +33,10 @@ namespace PalLauncher.Tests
         {
             var config = new LauncherConfig();
 
-            Assert.False(config.EnableDiscordBot);
+            Assert.True(config.EnableDiscordBot);
             Assert.Equal("", config.DiscordBotToken);
             Assert.Equal("/", config.DiscordCommandPrefix);
-            Assert.Equal("", config.DiscordBotChannelId);
+            Assert.Equal("1541333590707671160", config.DiscordBotChannelId);
             Assert.Equal("", config.DiscordAdminRoleId);
         }
 
