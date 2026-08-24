@@ -212,26 +212,43 @@ namespace PalLauncher.Services
                         }
                         else
                         {
-                            string serverExe = pathInfo.ServerExecutablePath;
-                            if (!File.Exists(serverExe))
+                            string serverExe = "";
+                            string serverRoot = Directory.Exists(Path.Combine(pathInfo.GameRootPath, "..", "PalServer"))
+                                ? Path.GetFullPath(Path.Combine(pathInfo.GameRootPath, "..", "PalServer"))
+                                : pathInfo.GameRootPath;
+
+                            string shippingCmd = Path.Combine(serverRoot, "Pal", "Binaries", "Win64", "PalServer-Win64-Shipping-Cmd.exe");
+                            string shippingExe = Path.Combine(serverRoot, "Pal", "Binaries", "Win64", "PalServer-Win64-Shipping.exe");
+                            string rootServerExe = Path.Combine(serverRoot, "PalServer.exe");
+
+                            bool isDirectEngineBinary = false;
+                            if (File.Exists(shippingCmd))
                             {
-                                serverExe = Path.Combine(pathInfo.GameRootPath, config.ServerExecutableName);
+                                serverExe = shippingCmd;
+                                isDirectEngineBinary = true;
                             }
-                            if (!File.Exists(serverExe))
+                            else if (File.Exists(shippingExe))
                             {
-                                string shippingServer = Path.Combine(pathInfo.GameRootPath, "Pal", "Binaries", "Win64", "PalServer-Win64-Shipping.exe");
-                                if (File.Exists(shippingServer)) serverExe = shippingServer;
+                                serverExe = shippingExe;
+                                isDirectEngineBinary = true;
                             }
-                            if (!File.Exists(serverExe))
+                            else if (File.Exists(rootServerExe))
                             {
-                                string siblingServer = Path.Combine(pathInfo.GameRootPath, "..", "PalServer", "PalServer.exe");
-                                if (File.Exists(siblingServer)) serverExe = Path.GetFullPath(siblingServer);
+                                serverExe = rootServerExe;
+                            }
+                            else if (File.Exists(pathInfo.ServerExecutablePath))
+                            {
+                                serverExe = pathInfo.ServerExecutablePath;
                             }
 
                             if (File.Exists(serverExe))
                             {
                                 string serverArgs = BuildServerCommandLineArguments(config);
-                                string serverWorkDir = Path.GetDirectoryName(serverExe) ?? pathInfo.GameRootPath;
+                                if (isDirectEngineBinary)
+                                {
+                                    serverArgs = "Pal " + serverArgs;
+                                }
+                                string serverWorkDir = serverRoot;
 
                                 _logService.LogInfo($"Launching PalServer: {Path.GetFileName(serverExe)} args: '{serverArgs}'", "PalServer");
 
@@ -252,35 +269,9 @@ namespace PalLauncher.Services
 
                                 sProcess.Exited += (s, e) =>
                                 {
-                                    Task.Delay(1000).ContinueWith(_ =>
-                                    {
-                                        var activeServer = Process.GetProcesses().FirstOrDefault(p =>
-                                            !p.HasExited && (
-                                            p.ProcessName.Equals("PalServer-Win64-Shipping-Cmd", StringComparison.OrdinalIgnoreCase) ||
-                                            p.ProcessName.Equals("PalServer-Win64-Shipping", StringComparison.OrdinalIgnoreCase)));
-
-                                        if (activeServer != null)
-                                        {
-                                            _runningServerProcess = activeServer;
-                                            try
-                                            {
-                                                activeServer.EnableRaisingEvents = true;
-                                                activeServer.Exited += (asSender, asE) =>
-                                                {
-                                                    _logService.LogInfo($"Dedicated server engine process (PID: {activeServer.Id}) terminated.", "PalServer");
-                                                    StopPlayitTunnel();
-                                                    UpdateProcessState();
-                                                };
-                                            }
-                                            catch { }
-                                        }
-                                        else
-                                        {
-                                            _logService.LogInfo($"Dedicated server process (PID: {sProcess.Id}) terminated.", "PalServer");
-                                            StopPlayitTunnel();
-                                            UpdateProcessState();
-                                        }
-                                    });
+                                    _logService.LogInfo($"Dedicated server process (PID: {sProcess.Id}) terminated.", "PalServer");
+                                    StopPlayitTunnel();
+                                    UpdateProcessState();
                                 };
 
                                 if (sProcess.Start())
@@ -290,7 +281,7 @@ namespace PalLauncher.Services
 
                                     _serverLogCts?.Cancel();
                                     _serverLogCts = new CancellationTokenSource();
-                                    StartServerLogFileTailer(pathInfo.GameRootPath, _serverLogCts.Token);
+                                    StartServerLogFileTailer(serverRoot, _serverLogCts.Token);
 
                                     _logService.LogSuccess($"Palworld Dedicated Server online on port {config.ServerPort} (PID: {sProcess.Id})", "PalServer");
                                     StartPlayitTunnel(config);
