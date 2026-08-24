@@ -108,13 +108,23 @@ namespace PalLauncher.Services
             if (config.AutoJoinServer && !string.IsNullOrWhiteSpace(config.ServerIp))
             {
                 string targetHost = config.ServerIp.Trim();
-                if (targetHost.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase) ||
-                    targetHost.Equals("palodyssey.duckdns.org", StringComparison.OrdinalIgnoreCase) ||
-                    targetHost.Equals("palodyssey.realm", StringComparison.OrdinalIgnoreCase))
+                int targetPort = config.ServerPort > 0 ? config.ServerPort : LauncherConfig.OfficialServerPort;
+
+                // If hosting locally on this PC, connect directly to local loopback (bypasses NAT hairpinning)
+                if (IsServerRunning || config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase))
+                {
+                    targetHost = "127.0.0.1";
+                    targetPort = 8211;
+                }
+                else if (targetHost.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase) ||
+                         targetHost.Equals("palodyssey.duckdns.org", StringComparison.OrdinalIgnoreCase) ||
+                         targetHost.Equals("palodyssey.realm", StringComparison.OrdinalIgnoreCase))
                 {
                     targetHost = LauncherConfig.DirectHostEndpoint;
+                    targetPort = LauncherConfig.OfficialServerPort;
                 }
-                string ipArg = $"{targetHost}:{config.ServerPort}";
+
+                string ipArg = $"{targetHost}:{targetPort}";
                 args.Add(ipArg);
             }
 

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -170,8 +171,7 @@ namespace PalLauncher.Services
                         string computedSha = await Task.Run(() => ComputeFileSha256(targetFilePath), cancellationToken);
                         mod.LocalSha256 = computedSha;
 
-                        if (string.IsNullOrWhiteSpace(mod.Sha256Checksum) ||
-                            string.Equals(computedSha, mod.Sha256Checksum, StringComparison.OrdinalIgnoreCase))
+                        if (IsHashMatch(computedSha, mod.Sha256Checksum, targetFilePath))
                         {
                             mod.Status = ModStatus.UpToDate;
                             mod.LocalVersion = mod.Version;
@@ -210,8 +210,7 @@ namespace PalLauncher.Services
             string computedSha = await Task.Run(() => ComputeFileSha256(targetFilePath));
             mod.LocalSha256 = computedSha;
 
-            if (string.IsNullOrWhiteSpace(mod.Sha256Checksum) ||
-                string.Equals(computedSha, mod.Sha256Checksum, StringComparison.OrdinalIgnoreCase))
+            if (IsHashMatch(computedSha, mod.Sha256Checksum, targetFilePath))
             {
                 mod.Status = ModStatus.UpToDate;
                 mod.LocalVersion = mod.Version;
@@ -309,7 +308,7 @@ namespace PalLauncher.Services
                 string downloadedHash = await Task.Run(() => ComputeFileSha256(tempFilePath), cancellationToken);
 
                 if (!string.IsNullOrWhiteSpace(mod.Sha256Checksum) &&
-                    !string.Equals(downloadedHash, mod.Sha256Checksum, StringComparison.OrdinalIgnoreCase))
+                    !IsHashMatch(downloadedHash, mod.Sha256Checksum, tempFilePath))
                 {
                     if (File.Exists(tempFilePath)) File.Delete(tempFilePath);
                     mod.Status = ModStatus.Error;
@@ -480,6 +479,40 @@ namespace PalLauncher.Services
                 _logService.LogWarning($"Failed to calculate SHA256 for '{filePath}'.", "Updater", ex.Message);
                 return string.Empty;
             }
+        }
+
+        public bool IsHashMatch(string computedHash, string expectedHash, string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(expectedHash)) return true;
+            if (string.Equals(computedHash, expectedHash, StringComparison.OrdinalIgnoreCase)) return true;
+
+            // Line-ending normalization fallback for plain-text scripts and config files
+            string ext = Path.GetExtension(filePath).ToLowerInvariant();
+            if (ext is ".lua" or ".json" or ".txt" or ".cfg" or ".ini" or ".md")
+            {
+                try
+                {
+                    if (File.Exists(filePath))
+                    {
+                        string text = File.ReadAllText(filePath);
+                        string normalized = text.Replace("\r\n", "\n").Replace("\r", "\n");
+                        using var sha256 = SHA256.Create();
+                        byte[] normBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(normalized));
+                        string normHash = Convert.ToHexString(normBytes).ToLowerInvariant();
+                        if (string.Equals(normHash, expectedHash, StringComparison.OrdinalIgnoreCase))
+                            return true;
+
+                        string crlfText = normalized.Replace("\n", "\r\n");
+                        byte[] crlfBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(crlfText));
+                        string crlfHash = Convert.ToHexString(crlfBytes).ToLowerInvariant();
+                        if (string.Equals(crlfHash, expectedHash, StringComparison.OrdinalIgnoreCase))
+                            return true;
+                    }
+                }
+                catch { }
+            }
+
+            return false;
         }
 
         private string ResolveModTargetPath(string gameRootPath, string relativePath)

@@ -321,8 +321,12 @@ namespace PalLauncher.ViewModels
 
             var pathInfo = _pathDetector.DetectPalworldInstallation(_configService.Config.GamePath);
 
-            // If remote host daemon is enabled, start the daemon to manage liveboard and inactivity auto-shutdown
-            if (_configService.Config.EnableRemoteHostDaemon)
+            // If remote host daemon is enabled and this machine is acting as the dedicated server host, start daemon
+            bool isHost = _configService.Config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase) ||
+                          _configService.Config.LaunchServerWithGame ||
+                          _launchService.IsServerRunning;
+
+            if (_configService.Config.EnableRemoteHostDaemon && isHost)
             {
                 _remoteDaemon.ConfigureIdleAutoShutdown(_configService.Config.EnableIdleAutoShutdown, _configService.Config.IdleShutdownMinutes);
                 await _remoteDaemon.StartDaemonAsync(
