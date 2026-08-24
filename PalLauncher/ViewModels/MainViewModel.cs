@@ -303,14 +303,29 @@ namespace PalLauncher.ViewModels
             };
             _uptimeTimer.Start();
 
-            CloseCommand = new RelayCommand(_ =>
+            CloseCommand = new RelayCommand(param =>
             {
-                _uptimeTimer?.Stop();
-                _pollingCts?.Cancel();
-                _remoteDaemon.Dispose();
-                _discordRpc.Dispose();
-                _discordBot.Dispose();
-                Application.Current?.Shutdown();
+                bool forceExit = param is string s && s.Equals("force", StringComparison.OrdinalIgnoreCase);
+                bool keepAlive = _configService.Config.RunInBackgroundOnClose &&
+                                 (_configService.Config.EnableDiscordBot || _configService.Config.EnableRemoteHostDaemon || _launchService.IsServerRunning);
+
+                if (keepAlive && !forceExit)
+                {
+                    if (Application.Current?.MainWindow != null)
+                    {
+                        Application.Current.MainWindow.Hide();
+                        _logService.LogInfo("Launcher minimized to background tray. Discord bot and server host daemon remain active.", "App");
+                    }
+                }
+                else
+                {
+                    _uptimeTimer?.Stop();
+                    _pollingCts?.Cancel();
+                    _remoteDaemon.Dispose();
+                    _discordRpc.Dispose();
+                    _discordBot.Dispose();
+                    Application.Current?.Shutdown();
+                }
             });
 
             _launchService.ProcessStateChanged += OnProcessStateChanged;
@@ -318,19 +333,45 @@ namespace PalLauncher.ViewModels
             _ = InitializeAsync();
         }
 
+        public static void ConfigureWindowsStartup(bool enable, ILogService? logService = null)
+        {
+            try
+            {
+                using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+                if (key != null)
+                {
+                    string appExe = System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName ?? @"c:\PalOddessey\PalLauncher.exe";
+                    if (enable)
+                    {
+                        key.SetValue("PalOdysseyHostDaemon", $"\"{appExe}\" --daemon");
+                        logService?.LogSuccess("Configured PalOdyssey Background Host to auto-start with Windows.", "System");
+                    }
+                    else
+                    {
+                        key.DeleteValue("PalOdysseyHostDaemon", false);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logService?.LogWarning($"Could not update Windows startup registry: {ex.Message}", "System");
+            }
+        }
+
         public async Task InitializeAsync()
         {
             await _configService.LoadConfigAsync();
             SettingsVM.LoadFromConfig(_configService.Config);
 
+            if (_configService.Config.AutoStartWithWindows)
+            {
+                ConfigureWindowsStartup(true, _logService);
+            }
+
             var pathInfo = _pathDetector.DetectPalworldInstallation(_configService.Config.GamePath);
 
-            // If remote host daemon is enabled and this machine is acting as the dedicated server host, start daemon
-            bool isHost = _configService.Config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase) ||
-                          _configService.Config.LaunchServerWithGame ||
-                          _launchService.IsServerRunning;
-
-            if (_configService.Config.EnableRemoteHostDaemon && isHost)
+            // Always start Remote Host Daemon when enabled to support UDP wake-on-demand and Discord commands independently of server state
+            if (_configService.Config.EnableRemoteHostDaemon)
             {
                 _remoteDaemon.ConfigureIdleAutoShutdown(_configService.Config.EnableIdleAutoShutdown, _configService.Config.IdleShutdownMinutes);
                 await _remoteDaemon.StartDaemonAsync(
@@ -361,7 +402,7 @@ namespace PalLauncher.ViewModels
                 }
             }
 
-            // Initialize Discord Bot Service if enabled and token is provided
+            // Initialize Discord Bot Service unconditionally if enabled and token is provided
             if (_configService.Config.EnableDiscordBot && !string.IsNullOrWhiteSpace(botToken))
             {
                 await _discordBot.StartAsync(
@@ -383,9 +424,15 @@ namespace PalLauncher.ViewModels
                     },
                     getLiveboard: () =>
                     {
-                        if (_launchService.IsServerRunning && _remoteDaemon.IsRunning)
+                        if (_launchService.IsServerRunning)
                         {
-                            return _remoteDaemon.GetCurrentLiveboard();
+                            var current = _remoteDaemon.IsRunning ? _remoteDaemon.GetCurrentLiveboard() : Liveboard;
+                            if (current != null)
+                            {
+                                current.IsOnline = true;
+                                current.IsServerRunning = true;
+                                return current;
+                            }
                         }
                         return Liveboard ?? new ServerLiveboardInfo();
                     });

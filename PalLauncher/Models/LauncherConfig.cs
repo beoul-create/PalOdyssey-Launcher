@@ -59,6 +59,12 @@ namespace PalLauncher.Models
         [JsonPropertyName("enableDiscordBot")]
         public bool EnableDiscordBot { get; set; } = true;
 
+        [JsonPropertyName("runInBackgroundOnClose")]
+        public bool RunInBackgroundOnClose { get; set; } = true;
+
+        [JsonPropertyName("autoStartWithWindows")]
+        public bool AutoStartWithWindows { get; set; } = true;
+
         [JsonPropertyName("discordBotToken")]
         public string DiscordBotToken { get; set; } = "";
 
