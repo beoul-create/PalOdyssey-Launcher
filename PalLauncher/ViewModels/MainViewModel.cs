@@ -590,11 +590,24 @@ namespace PalLauncher.ViewModels
 
         public async Task ExecuteQuickCheckUpdatesAsync()
         {
-            StatusText = "Checking for updates...";
-            ProgressPercentage = 25;
+            StatusText = "Synchronizing Realm: Checking for updates...";
+            ProgressPercentage = 15;
             await ModsVM.ExecuteCheckUpdatesAsync();
-            ProgressPercentage = 100;
-            StatusText = ModsVM.StatusText;
+
+            if (ModsVM.HasUpdatesPending)
+            {
+                int pendingCount = ModsVM.UpdatesAvailableCount + ModsVM.MissingCount;
+                StatusText = $"Synchronizing Realm: Installing {pendingCount} missing/outdated mod(s)...";
+                ProgressPercentage = 35;
+                await ModsVM.ExecuteUpdateAllAsync();
+                ProgressPercentage = 100;
+                StatusText = $"Realm synchronized! {ModsVM.UpToDateCount} of {ModsVM.TotalModsCount} mods verified & ready.";
+            }
+            else
+            {
+                ProgressPercentage = 100;
+                StatusText = "All realm mods are synchronized & up to date!";
+            }
         }
     }
 }
