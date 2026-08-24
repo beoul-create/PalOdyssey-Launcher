@@ -39,6 +39,7 @@ namespace PalLauncher.Services
         private Task? _liveboardTask;
         private readonly IEconomyService _economyService;
         private readonly IPlayerPresenceService? _presenceService;
+        private readonly HttpClient _interactionClient;
 
         public bool IsRunning { get; private set; }
         public string BotUsername { get; private set; } = "PalOdyssey Bot";
@@ -50,9 +51,17 @@ namespace PalLauncher.Services
             _presenceService = presenceService;
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri("https://discord.com/api/v10/")
+                BaseAddress = new Uri("https://discord.com/api/v10/"),
+                Timeout = TimeSpan.FromSeconds(15)
             };
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("DiscordBot (PalOdyssey-Launcher, 2.0.0)");
+
+            _interactionClient = new HttpClient
+            {
+                BaseAddress = new Uri("https://discord.com/api/v10/"),
+                Timeout = TimeSpan.FromSeconds(10)
+            };
+            _interactionClient.DefaultRequestHeaders.UserAgent.ParseAdd("DiscordBot (PalOdyssey-Launcher, 2.0.0)");
         }
 
         public Task<bool> StartAsync(
@@ -733,12 +742,32 @@ namespace PalLauncher.Services
                 if (!interaction.TryGetProperty("data", out var data)) return;
                 string command = data.GetProperty("name").GetString()?.ToLowerInvariant() ?? "";
 
-                _logService.LogInfo($"Received Discord slash interaction '/{command}' from '{authorName}' ({authorId}) in channel '{channelId}' (ID: {interactionId})", "DiscordBot");
+                // 1. Instant commands: Answer in a single HTTP packet (<50ms) without defer latency
+                switch (command)
+                {
+                    case "shop":
+                    case "store":
+                        await ExecuteShopDirectInteractionAsync(interactionId, interactionToken);
+                        return;
 
+                    case "help":
+                        await ExecuteHelpDirectInteractionAsync(interactionId, interactionToken);
+                        return;
+
+                    case "ip":
+                    case "connect":
+                        await ExecuteIpDirectInteractionAsync(interactionId, interactionToken);
+                        return;
+
+                    case "status":
+                    case "server":
+                        await ExecuteStatusDirectInteractionAsync(interactionId, interactionToken);
+                        return;
+                }
+
+                // 2. Heavy/Async commands: Immediately ACK with deferred response (type 5)
                 bool isEphemeral = command switch
                 {
-                    "help" => true,
-                    "shop" => true,
                     "recycle" => true,
                     "scrap" => true,
                     "deposit" => true,
@@ -746,7 +775,6 @@ namespace PalLauncher.Services
                     _ => false
                 };
 
-                // Immediately ACK the interaction with a deferred response (type 5) to prevent the 3-second timeout
                 await DeferInteractionAsync(interactionId, interactionToken, isEphemeral);
 
                 switch (command)
@@ -754,21 +782,6 @@ namespace PalLauncher.Services
                     case "start":
                     case "boot":
                         await ExecuteStartInteractionAsync(interactionToken, channelId, authorName);
-                        break;
-
-                    case "status":
-                    case "server":
-                        await ExecuteStatusInteractionAsync(interactionToken);
-                        break;
-
-                    case "ip":
-                    case "connect":
-                        await ExecuteIpInteractionAsync(interactionToken);
-                        break;
-
-                    case "shop":
-                    case "store":
-                        await ExecuteShopInteractionAsync(interactionToken);
                         break;
 
                     case "deposit":
@@ -830,10 +843,6 @@ namespace PalLauncher.Services
                             return;
                         }
                         await ExecuteStopInteractionAsync(interactionToken, authorName);
-                        break;
-
-                    case "help":
-                        await ExecuteHelpInteractionAsync(interactionToken);
                         break;
 
                     default:
@@ -1442,6 +1451,122 @@ namespace PalLauncher.Services
                 color: 0x00E5FF);
         }
 
+        private async Task ExecuteHelpDirectInteractionAsync(string interactionId, string interactionToken)
+        {
+            await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                title: "📜 PalOdyssey Commands Guide",
+                description: "**🌍 Public Server Commands**\n" +
+                             "• `/start` — Powers up the dedicated server (24/7 auto-wake).\n" +
+                             "• `/status` — Real-time server status, player count, and uptime.\n" +
+                             "• `/ip` — Server endpoint address and connection guide.\n" +
+                             "• `/help` — Lists all available bot commands.\n\n" +
+                             "**🏛️ Technology Point Economy & Exchange**\n" +
+                             "• `/shop` — Browse the Technology Point Exchange Store & Recycling rates.\n" +
+                             "• `/exchange item:<name> amount:<qty>` — Trade unspent Tech Points for Dog Coins, Arena Tickets, Slabs, and Elixirs.\n" +
+                             "• `/recycle item:<name> amount:<qty>` — Scrap vendor junk, gems, keys, and schematics into Tech Points.\n" +
+                             "• `/gacha pulls:<1|10>` — Open Relic Mystery Boxes for random loot (3 pts / 1 pull, 25 pts / 10-pull w/ pity).\n" +
+                             "• `/inventory` — View character Tech Points balance and Virtual Vault.\n" +
+                             "• `/link steam_id:<id>` — Link your Discord account to your Palworld character save.\n\n" +
+                             "**🛡️ Administrator Commands (Admin Only)**\n" +
+                             "• `/restart` — Gracefully reboots the dedicated server.\n" +
+                             "• `/stop` — Safely shuts down the dedicated server.",
+                color: 0x9966FF,
+                ephemeral: true);
+        }
+
+        private async Task ExecuteShopDirectInteractionAsync(string interactionId, string interactionToken)
+        {
+            var catalog = _economyService.GetShopCatalog();
+            var recyclables = _economyService.GetRecyclables();
+
+            var sb = new StringBuilder();
+            sb.AppendLine("### 🛒 PalOdyssey Technology Exchange");
+            sb.AppendLine("Trade your unspent **Technology Points** for rare currencies, boss slabs, and items!\n");
+
+            sb.AppendLine("### 📦 Available Shop Items (`/exchange`)");
+            foreach (var item in catalog)
+            {
+                sb.AppendLine($"{item.Emoji} **{item.Name}** — `🪙 {item.TechPointCost} Tech Points`");
+                sb.AppendLine($"   *\"{item.Description}\"*");
+                sb.AppendLine($"   👉 `/exchange item:{item.Id} amount:1`\n");
+            }
+
+            sb.AppendLine("### ♻️ Trash-to-Tech Recycling Rates (`/recycle`)");
+            sb.AppendLine("Scrap vendor loot, excess parts, and blueprints into **Tech Points**:");
+            sb.AppendLine("• 🥋 **Precious Pelt / Feather / Claw**: `+1 Tech Point per 2 items`");
+            sb.AppendLine("• 🫀 **Precious Entrails / Dragon Stone**: `+1 Tech Point each`");
+            sb.AppendLine("• 💎 **Ruby / Sapphire / Emerald / Diamond**: `+1 to +2 Tech Points each`");
+            sb.AppendLine("• 🗝️ **Bronze / Silver / Gold Keys**: `+1 per 3 Bronze, +1 Silver, +2 Gold`");
+            sb.AppendLine("• ⚙️ **Ancient Civilization Parts**: `+1 Tech Point per 5 parts`");
+            sb.AppendLine("• 🧩 **Raid Slab Fragments**: `+1 Tech Point each`");
+            sb.AppendLine("• 📚 **Schematics (Tiers 1–3)**: `+1 to +3 Tech Points each`\n");
+
+            sb.AppendLine("### 💉 Modded Passive Skill Implants & Upgrades");
+            sb.AppendLine("• ⛺ **Guild Base Expansion**: `🪙 40 Tech Points` (+1 Guild Base Slot)");
+            sb.AppendLine("• 💉 **Tier 1 Passive (Utility/Starter)**: `🪙 2 Tech Points`");
+            sb.AppendLine("• 💉 **Tier 2/3 Passives**: `🪙 5 to 10 Tech Points`");
+            sb.AppendLine("• 💉 **Tier 4/5 Passives**: `🪙 18 to 30 Tech Points`");
+            sb.AppendLine("• 🧬 **Mutations / Apex Traits**: `🪙 50 Tech Points`\n");
+
+            sb.AppendLine("### 🎰 Relic Mystery Box (`/gacha`)");
+            sb.AppendLine("Gamble your Tech Points for random loot with weighted rarity drops!");
+            sb.AppendLine("• **1 Pull**: `🪙 3 Tech Points` | **10 Pull**: `🪙 25 Tech Points` (Rare+ Pity!)");
+            sb.AppendLine("• ⚪ Common (50%): Spheres, Manuals, Gold, Cake");
+            sb.AppendLine("• 🟢 Uncommon (30%): Dog Coins, Tickets, Tokens, Pal Souls");
+            sb.AppendLine("• 🔵 Rare (15%): Reversers, Reset Drugs, Epic Skill Fruits");
+            sb.AppendLine("• 🟡 Legendary (5%): Legendary Schematics, Raid Slabs, Huge Eggs\n");
+
+            sb.AppendLine("💡 *Commands:* `/exchange` | `/recycle` | `/gacha pulls:10` | `/inventory`");
+
+            await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                title: "🏛️ PalOdyssey Technology Exchange & Recycling",
+                description: sb.ToString(),
+                color: 0x00E5FF,
+                ephemeral: true);
+        }
+
+        private async Task ExecuteIpDirectInteractionAsync(string interactionId, string interactionToken)
+        {
+            await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                title: "🌐 PalOdyssey Server Connection Info",
+                description: "### 🎮 Join Address:\n" +
+                             "```\npalodyssey.duckdns.org:8211\n```\n\n" +
+                             "**How to connect:**\n" +
+                             "1. **Launcher (Recommended)**: Open **PalLauncher.exe** and click **LAUNCH GAME**.\n" +
+                             "2. **Manual in Palworld**: Multiplayer -> Join Multiplayer Game -> Enter `palodyssey.duckdns.org:8211`.",
+                color: 0x00E5FF,
+                ephemeral: false);
+        }
+
+        private async Task ExecuteStatusDirectInteractionAsync(string interactionId, string interactionToken)
+        {
+            ServerLiveboardInfo liveboard;
+            try { liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo(); }
+            catch { liveboard = new ServerLiveboardInfo(); }
+
+            if (liveboard.IsOnline || liveboard.IsServerRunning)
+            {
+                await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                    title: "🟢 PalOdyssey Realm — Online",
+                    description: $"Server is currently active and healthy.\n\n" +
+                                 $"📍 **Direct Address**: `palodyssey.duckdns.org:8211`\n" +
+                                 $"👥 **Pioneers in Realm**: `{liveboard.PlayerCount} / {liveboard.MaxPlayers}`\n" +
+                                 $"⏱️ **Current Uptime**: `{liveboard.UptimeFormatted}`\n" +
+                                 $"💤 **Idle Auto-Shutdown**: Enabled (15m standby)",
+                    color: 0x00FF88,
+                    ephemeral: false);
+            }
+            else
+            {
+                await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                    title: "⚪ PalOdyssey Realm — Standby / Sleeping",
+                    description: "The server is currently powered down in power-saving standby mode.\n\n" +
+                                 $"👉 Type `/start` to boot it up instantly!",
+                    color: 0x8899AA,
+                    ephemeral: false);
+            }
+        }
+
         private async Task ExecuteHelpInteractionAsync(string interactionToken)
         {
             await EditDeferredResponseEmbedAsync(interactionToken,
@@ -2001,44 +2126,18 @@ namespace PalLauncher.Services
         {
             try
             {
-                object payload;
-                if (ephemeral)
-                {
-                    payload = new
-                    {
-                        type = 5, // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
-                        data = new { flags = 64 }
-                    };
-                }
-                else
-                {
-                    payload = new
-                    {
-                        type = 5 // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
-                    };
-                }
+                object payload = ephemeral
+                    ? new { type = 5, data = new { flags = 64 } }
+                    : new { type = 5 };
 
                 string json = JsonSerializer.Serialize(payload);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                // Interaction callbacks MUST NOT include the Bot Authorization header (Discord rejects it with 401 Unauthorized)
-                using var request = new HttpRequestMessage(HttpMethod.Post, $"https://discord.com/api/v10/interactions/{interactionId}/{interactionToken}/callback")
-                {
-                    Content = content
-                };
-
-                using var callbackClient = new HttpClient();
-                callbackClient.DefaultRequestHeaders.UserAgent.ParseAdd("DiscordBot (PalOdyssey-Launcher, 2.0.0)");
-
-                var resp = await callbackClient.SendAsync(request);
+                var resp = await _interactionClient.PostAsync($"interactions/{interactionId}/{interactionToken}/callback", content);
                 if (!resp.IsSuccessStatusCode)
                 {
                     string err = await resp.Content.ReadAsStringAsync();
                     _logService.LogWarning($"Interaction defer callback returned {resp.StatusCode}: {err}", "DiscordBot");
-                }
-                else
-                {
-                    _logService.LogInfo($"Successfully deferred slash interaction ({interactionId})", "DiscordBot");
                 }
             }
             catch (Exception ex)
@@ -2074,23 +2173,11 @@ namespace PalLauncher.Services
                 string json = JsonSerializer.Serialize(payload);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                using var request = new HttpRequestMessage(HttpMethod.Patch, $"https://discord.com/api/v10/webhooks/{appId}/{interactionToken}/messages/@original")
-                {
-                    Content = content
-                };
-
-                using var webhookClient = new HttpClient();
-                webhookClient.DefaultRequestHeaders.UserAgent.ParseAdd("DiscordBot (PalOdyssey-Launcher, 2.0.0)");
-
-                var resp = await webhookClient.SendAsync(request);
+                var resp = await _interactionClient.PatchAsync($"webhooks/{appId}/{interactionToken}/messages/@original", content);
                 if (!resp.IsSuccessStatusCode)
                 {
                     string err = await resp.Content.ReadAsStringAsync();
                     _logService.LogWarning($"Edit deferred response returned {resp.StatusCode}: {err}", "DiscordBot");
-                }
-                else
-                {
-                    _logService.LogSuccess($"Successfully edited deferred interaction response.", "DiscordBot");
                 }
             }
             catch (Exception ex)
@@ -2099,7 +2186,7 @@ namespace PalLauncher.Services
             }
         }
 
-        private async Task RespondInteractionEmbedAsync(string interactionId, string interactionToken, string title, string description, int color)
+        private async Task RespondInteractionEmbedAsync(string interactionId, string interactionToken, string title, string description, int color, bool ephemeral = false)
         {
             try
             {
@@ -2108,6 +2195,7 @@ namespace PalLauncher.Services
                     type = 4, // CHANNEL_MESSAGE_WITH_SOURCE
                     data = new
                     {
+                        flags = ephemeral ? 64 : 0,
                         embeds = new[]
                         {
                             new
@@ -2128,24 +2216,11 @@ namespace PalLauncher.Services
                 string json = JsonSerializer.Serialize(payload);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                // Interaction callbacks MUST NOT include the Bot Authorization header (Discord rejects it with 401 Unauthorized)
-                using var request = new HttpRequestMessage(HttpMethod.Post, $"https://discord.com/api/v10/interactions/{interactionId}/{interactionToken}/callback")
-                {
-                    Content = content
-                };
-
-                using var callbackClient = new HttpClient();
-                callbackClient.DefaultRequestHeaders.UserAgent.ParseAdd("DiscordBot (PalOdyssey-Launcher, 2.0.0)");
-
-                var resp = await callbackClient.SendAsync(request);
+                var resp = await _interactionClient.PostAsync($"interactions/{interactionId}/{interactionToken}/callback", content);
                 if (!resp.IsSuccessStatusCode)
                 {
                     string err = await resp.Content.ReadAsStringAsync();
                     _logService.LogWarning($"Interaction callback returned {resp.StatusCode}: {err}", "DiscordBot");
-                }
-                else
-                {
-                    _logService.LogSuccess($"Successfully responded to slash interaction ({interactionId})", "DiscordBot");
                 }
             }
             catch (Exception ex)
@@ -2465,6 +2540,7 @@ namespace PalLauncher.Services
             _botCts?.Dispose();
             _webSocket?.Dispose();
             _httpClient?.Dispose();
+            _interactionClient?.Dispose();
         }
     }
 }
