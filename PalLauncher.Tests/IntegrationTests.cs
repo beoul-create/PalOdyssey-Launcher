@@ -58,7 +58,7 @@ namespace PalLauncher.Tests
             };
 
             string args = _launchService.BuildCommandLineArguments(config);
-            Assert.Contains("127.0.0.1:8211", args);
+            Assert.DoesNotContain("127.0.0.1", args);
             Assert.Contains("-dx11", args);
             Assert.Contains("-USEALLAVAILABLECORES", args);
         }

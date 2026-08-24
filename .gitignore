@@ -47,6 +47,16 @@ project_test_results*.json
 test_download/
 GitHub-Modpack-Release/
 publish/
-MockGame/
+# Local Secrets & Bot Tokens
+bot_token.txt
+*.token
+liveboard_state.json
+
+# Root build artifacts
+/*.deps.json
+/*.runtimeconfig.json
+/*.dll
+/runtimes/
+SampleData/
 
 

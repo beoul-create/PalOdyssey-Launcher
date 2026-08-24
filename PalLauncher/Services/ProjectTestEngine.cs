@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Net.Sockets;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -220,13 +220,13 @@ namespace PalLauncher.Services
             report.StageResults.Add(p3);
 
             // ----------------------------------------------------------------------------------
-            // PHASE 4: REMOTE HOST DAEMON, REST LIVEBOARD & SOCKET NETWORKING
+            // PHASE 4: REMOTE HOST DAEMON, REST LIVEBOARD & WEBHOOK NETWORKING
             // ----------------------------------------------------------------------------------
-            progress?.Report("[Phase 4/6] Testing Remote Server Daemon, REST Liveboard API & Socket Latencies...");
+            progress?.Report("[Phase 4/6] Testing Remote Server Daemon, REST Liveboard API & Webhook Latencies...");
             var p4Sw = Stopwatch.StartNew();
             var p4 = new ProjectTestStageResult
             {
-                StageName = "Remote Host Daemon & Networking",
+                StageName = "Remote Host Daemon & Webhooks",
                 Category = "Networking"
             };
 
@@ -249,17 +249,14 @@ namespace PalLauncher.Services
                 var liveboard = await client.FetchLiveboardAsync("127.0.0.1", testPort, 3000);
                 p4.ChecksPassed.Add($"REST Liveboard Query: Online={liveboard.IsOnline}, ServerName={liveboard.ServerName}, Endpoint={liveboard.ServerAddress}");
 
-                // Measure Socket Ping
+                // Measure REST / Webhook Health Latency
                 var pingSw = Stopwatch.StartNew();
-                using (var tcp = new TcpClient())
-                {
-                    await tcp.ConnectAsync("127.0.0.1", testPort);
-                }
+                var statusResult = await client.QueryServerStatusAsync("127.0.0.1", testPort, 3000);
                 pingSw.Stop();
-                p4.ChecksPassed.Add($"Loopback Socket Handshake Latency: {pingSw.Elapsed.TotalMilliseconds:F2} ms");
+                p4.ChecksPassed.Add($"HTTP REST Handshake Latency: {pingSw.Elapsed.TotalMilliseconds:F2} ms (Online: {statusResult.IsOnline})");
 
                 p4.Passed = true;
-                p4.Details = "Remote management daemon, REST liveboard, and TCP socket pipelines fully responsive.";
+                p4.Details = "Remote management daemon, REST liveboard, and Webhook start pipelines fully responsive.";
             }
             catch (Exception ex)
             {

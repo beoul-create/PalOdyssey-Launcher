@@ -81,7 +81,7 @@ namespace PalLauncher.Tests
             settingsVm.CustomArguments = "-culture=en";
 
             string preview = settingsVm.GeneratedArgumentsPreview;
-            Assert.Contains("127.0.0.1:8211", preview);
+            Assert.DoesNotContain("127.0.0.1", preview);
             Assert.Contains("-dx11", preview);
             Assert.Contains("-USEALLAVAILABLECORES", preview);
             Assert.Contains("-nosplash", preview);
@@ -91,7 +91,7 @@ namespace PalLauncher.Tests
             settingsVm.IsServerMode = true;
             Assert.True(settingsVm.IsServerMode);
             Assert.False(settingsVm.IsClientMode);
-            Assert.DoesNotContain("127.0.0.1:8211", settingsVm.GeneratedArgumentsPreview);
+            Assert.Contains("-port=8211", settingsVm.GeneratedArgumentsPreview);
         }
 
         [Fact]

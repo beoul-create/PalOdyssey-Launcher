@@ -2,6 +2,8 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
+using Brush = System.Windows.Media.Brush;
+using Color = System.Windows.Media.Color;
 
 namespace PalLauncher.Converters
 {

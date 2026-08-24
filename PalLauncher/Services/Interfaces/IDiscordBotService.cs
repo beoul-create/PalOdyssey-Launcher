@@ -17,5 +17,7 @@ namespace PalLauncher.Services.Interfaces
             Func<Task<bool>> onStopServer,
             Func<ServerLiveboardInfo> getLiveboard);
         Task StopAsync();
+        Task BroadcastServerBootingAsync(string triggeredBy = "Remote Webhook");
+        Task BroadcastServerOnlineAsync();
     }
 }

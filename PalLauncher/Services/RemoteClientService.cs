@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -14,47 +12,9 @@ namespace PalLauncher.Services
     public class RemoteClientService : IRemoteClientService
     {
         private readonly ILogService _logService;
-        private static readonly HttpClient _httpClient = new(new SocketsHttpHandler
+        private static readonly HttpClient _httpClient = new HttpClient
         {
-            ConnectTimeout = TimeSpan.FromSeconds(2),
-            PooledConnectionLifetime = TimeSpan.FromMinutes(1),
-            ConnectCallback = async (context, cancellationToken) =>
-            {
-                var socket = new System.Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp)
-                {
-                    NoDelay = true
-                };
-
-                IPAddress targetIp;
-                if (IPAddress.TryParse(context.DnsEndPoint.Host, out var parsedIp))
-                {
-                    targetIp = parsedIp;
-                }
-                else if (context.DnsEndPoint.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase))
-                {
-                    targetIp = IPAddress.Loopback;
-                }
-                else
-                {
-                    var addresses = await Dns.GetHostAddressesAsync(context.DnsEndPoint.Host, cancellationToken);
-                    targetIp = Array.Find(addresses, a => a.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                               ?? addresses[0];
-                }
-
-                try
-                {
-                    await socket.ConnectAsync(targetIp, context.DnsEndPoint.Port, cancellationToken);
-                    return new System.Net.Sockets.NetworkStream(socket, ownsSocket: true);
-                }
-                catch
-                {
-                    socket.Dispose();
-                    throw;
-                }
-            }
-        })
-        {
-            Timeout = TimeSpan.FromSeconds(5)
+            Timeout = TimeSpan.FromSeconds(6)
         };
 
         public RemoteClientService(ILogService logService)
@@ -62,156 +22,29 @@ namespace PalLauncher.Services
             _logService = logService;
         }
 
-        private static string ResolveEffectiveEndpoint(string host)
+        private static string ResolveBaseUrl(string host, int managementPort)
         {
-            if (string.IsNullOrWhiteSpace(host)) return LauncherConfig.DirectHostEndpoint;
-            string clean = host.Trim();
-            if (clean.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase) ||
-                clean.Equals("palodyssey.duckdns.org", StringComparison.OrdinalIgnoreCase) ||
-                clean.Equals("palodyssey.realm", StringComparison.OrdinalIgnoreCase))
-            {
-                return LauncherConfig.DirectHostEndpoint;
-            }
-            return clean;
-        }
+            int port = managementPort > 0 ? managementPort : LauncherConfig.OfficialManagementPort;
+            string cleanHost = string.IsNullOrWhiteSpace(host) ? LauncherConfig.OfficialServerHost : host.Trim();
 
-        private static string GetMaskedDisplayHost(string host)
-        {
-            if (string.IsNullOrWhiteSpace(host) || 
-                host == LauncherConfig.DirectHostEndpoint ||
-                host.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase) ||
-                host.Equals("palodyssey.duckdns.org", StringComparison.OrdinalIgnoreCase))
+            if (cleanHost.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                cleanHost.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
             {
-                return "PalOdyssey Realm";
-            }
-            return host;
-        }
-
-        private static async Task<HttpResponseMessage?> SendWithLoopbackFallbackAsync(
-            string host,
-            int port,
-            string path,
-            CancellationToken ct,
-            HttpMethod? method = null,
-            Action<HttpRequestMessage>? configure = null)
-        {
-            method ??= HttpMethod.Get;
-            string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
-            var hostsToTry = new List<string>();
-
-            if (cleanHost == "127.0.0.1" || cleanHost.Equals("localhost", StringComparison.OrdinalIgnoreCase))
-            {
-                hostsToTry.Add("localhost");
-                hostsToTry.Add("127.0.0.1");
-            }
-            else if (cleanHost.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase) ||
-                     cleanHost.Equals("palodyssey.duckdns.org", StringComparison.OrdinalIgnoreCase))
-            {
-                hostsToTry.Add(LauncherConfig.DirectHostEndpoint);
-                hostsToTry.Add(cleanHost);
-            }
-            else
-            {
-                hostsToTry.Add(cleanHost);
+                return cleanHost.TrimEnd('/');
             }
 
-            while (!ct.IsCancellationRequested)
-            {
-                foreach (var h in hostsToTry)
-                {
-                    try
-                    {
-                        string url = $"http://{h}:{port}{path}";
-                        var req = new HttpRequestMessage(method, url);
-                        configure?.Invoke(req);
-                        var resp = await _httpClient.SendAsync(req, ct);
-                        if (resp != null && (resp.IsSuccessStatusCode || resp.StatusCode == HttpStatusCode.Forbidden))
-                        {
-                            return resp;
-                        }
-                        req.Dispose();
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        return null;
-                    }
-                    catch { }
-                }
-
-                try
-                {
-                    await Task.Delay(100, ct);
-                }
-                catch (OperationCanceledException)
-                {
-                    return null;
-                }
-            }
-
-            return null;
-        }
-
-        private static bool IsLocalServerRunning()
-        {
-            try
-            {
-                return System.Diagnostics.Process.GetProcessesByName("PalServer").Length > 0
-                    || System.Diagnostics.Process.GetProcessesByName("PalServer-Win64-Shipping-Cmd").Length > 0
-                    || System.Diagnostics.Process.GetProcessesByName("PalServer-Win64-Shipping").Length > 0;
-            }
-            catch { return false; }
-        }
-
-        private static async Task<bool> ProbeUdpAsync(string host, int port, int timeoutMs = 1200)
-        {
-            try
-            {
-                using var udp = new System.Net.Sockets.UdpClient();
-                udp.Client.ReceiveTimeout = timeoutMs;
-                udp.Client.SendTimeout = timeoutMs;
-
-                byte[] request = new byte[] {
-                    0xFF, 0xFF, 0xFF, 0xFF, 0x54, 0x53, 0x6F, 0x75,
-                    0x72, 0x63, 0x65, 0x20, 0x45, 0x6E, 0x67, 0x69,
-                    0x6E, 0x65, 0x20, 0x51, 0x75, 0x65, 0x72, 0x79, 0x00
-                };
-
-                await udp.SendAsync(request, request.Length, host, port);
-                var receiveTask = udp.ReceiveAsync();
-                var timeoutTask = Task.Delay(timeoutMs);
-                if (await Task.WhenAny(receiveTask, timeoutTask) == receiveTask)
-                {
-                    var result = await receiveTask;
-                    return result.Buffer != null && result.Buffer.Length > 0;
-                }
-            }
-            catch { }
-            return false;
-        }
-
-        private static async Task<bool> ProbeTcpAsync(string host, int port, int timeoutMs = 1200)
-        {
-            try
-            {
-                using var tcp = new System.Net.Sockets.TcpClient();
-                using var cts = new CancellationTokenSource(timeoutMs);
-                await tcp.ConnectAsync(host, port, cts.Token);
-                return tcp.Connected;
-            }
-            catch { }
-            return false;
+            return $"http://{cleanHost}:{port}";
         }
 
         public async Task<RemoteServerStatus> QueryServerStatusAsync(string host, int managementPort, int timeoutMs = 2500)
         {
-            int port = managementPort > 0 ? managementPort : 8215;
-            string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
+            string baseUrl = ResolveBaseUrl(host, managementPort);
             using var cts = new CancellationTokenSource(timeoutMs);
 
             try
             {
-                var response = await SendWithLoopbackFallbackAsync(host, port, "/api/status", cts.Token);
-                if (response != null && response.IsSuccessStatusCode)
+                var response = await _httpClient.GetAsync($"{baseUrl}/api/status", cts.Token);
+                if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync(cts.Token);
                     var status = JsonSerializer.Deserialize<RemoteServerStatus>(json, new JsonSerializerOptions
@@ -226,11 +59,12 @@ namespace PalLauncher.Services
                     }
                 }
             }
-            catch (Exception)
+            catch
             {
-                // Host daemon is unreachable or port is sleeping
+                // Host daemon is currently offline or unreachable
             }
 
+            // Check if local dedicated server process is running
             if (IsLocalServerRunning())
             {
                 return new RemoteServerStatus
@@ -243,67 +77,25 @@ namespace PalLauncher.Services
                 };
             }
 
-            string targetIp = ResolveEffectiveEndpoint(cleanHost);
-
-            bool socketActive = await ProbeUdpAsync(targetIp, 57294, 1000)
-                             || await ProbeUdpAsync(targetIp, 8211, 1000)
-                             || await ProbeUdpAsync(targetIp, 27016, 1000)
-                             || await ProbeTcpAsync(targetIp, 57294, 1000)
-                             || await ProbeTcpAsync(targetIp, port, 1000)
-                             || await ProbeTcpAsync(targetIp, 8215, 1000)
-                             || await ProbeTcpAsync(targetIp, 8211, 1000)
-                             || await ProbeTcpAsync(targetIp, 25575, 1000);
-
-            if (socketActive)
-            {
-                return new RemoteServerStatus
-                {
-                    IsOnline = true,
-                    IsServerRunning = true,
-                    ServerPort = 8211,
-                    ServerName = "PalOdyssey Realm",
-                    Message = "Remote Server Online"
-                };
-            }
-
             return new RemoteServerStatus
             {
                 IsOnline = false,
                 IsServerRunning = false,
                 ServerPort = 8211,
-                Message = "Host Daemon Unreachable / Server Sleeping"
+                ServerName = "PalOdyssey Realm",
+                Message = "Server Offline (Standby)"
             };
-        }
-
-        private static DateTime? _remoteOnlineSince;
-
-        private static double GetLocalServerUptimeSeconds()
-        {
-            try
-            {
-                var procs = System.Diagnostics.Process.GetProcessesByName("PalServer");
-                if (procs.Length == 0) procs = System.Diagnostics.Process.GetProcessesByName("PalServer-Win64-Shipping-Cmd");
-                if (procs.Length == 0) procs = System.Diagnostics.Process.GetProcessesByName("PalServer-Win64-Shipping");
-                if (procs.Length > 0 && procs[0] != null && !procs[0].HasExited)
-                {
-                    var uptime = (DateTime.Now - procs[0].StartTime).TotalSeconds;
-                    if (uptime > 0) return uptime;
-                }
-            }
-            catch { }
-            return 0;
         }
 
         public async Task<ServerLiveboardInfo> FetchLiveboardAsync(string host, int managementPort, int timeoutMs = 2500)
         {
-            string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
-            int port = managementPort > 0 ? managementPort : 8215;
+            string baseUrl = ResolveBaseUrl(host, managementPort);
             using var cts = new CancellationTokenSource(timeoutMs);
 
             try
             {
-                var response = await SendWithLoopbackFallbackAsync(host, port, "/api/liveboard", cts.Token);
-                if (response != null && response.IsSuccessStatusCode)
+                var response = await _httpClient.GetAsync($"{baseUrl}/api/liveboard", cts.Token);
+                if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync(cts.Token);
                     var liveboard = JsonSerializer.Deserialize<ServerLiveboardInfo>(json, new JsonSerializerOptions
@@ -313,61 +105,31 @@ namespace PalLauncher.Services
 
                     if (liveboard != null)
                     {
-                        liveboard.IsOnline = true;
-                        if (liveboard.UptimeSeconds <= 0)
-                        {
-                            liveboard.UptimeSeconds = GetLocalServerUptimeSeconds();
-                        }
                         return liveboard;
                     }
                 }
             }
-            catch (Exception)
+            catch
             {
-                // Unreachable or offline
+                // Host daemon offline
             }
 
+            // Local fallback
             if (IsLocalServerRunning())
             {
-                double localUptime = GetLocalServerUptimeSeconds();
                 return new ServerLiveboardInfo
                 {
                     IsOnline = true,
                     IsServerRunning = true,
-                    ServerAddress = "palodyssey.duckdns.org:8211",
+                    ServerAddress = "127.0.0.1:8211",
                     ServerName = "PalOdyssey Realm",
-                    UptimeSeconds = localUptime,
                     PlayerCount = 0,
-                    MaxPlayers = 32
+                    MaxPlayers = 32,
+                    UptimeSeconds = 1,
+                    Version = "1.5.4"
                 };
             }
 
-            string probeTarget = ResolveEffectiveEndpoint(cleanHost);
-
-            bool socketActive = await ProbeUdpAsync(probeTarget, 8211, 1000)
-                             || await ProbeUdpAsync(probeTarget, 27016, 1000)
-                             || await ProbeTcpAsync(probeTarget, port, 1000)
-                             || await ProbeTcpAsync(probeTarget, 8215, 1000)
-                             || await ProbeTcpAsync(probeTarget, 8211, 1000)
-                             || await ProbeTcpAsync(probeTarget, 25575, 1000);
-
-            if (socketActive)
-            {
-                _remoteOnlineSince ??= DateTime.Now;
-                double remoteUptime = (DateTime.Now - _remoteOnlineSince.Value).TotalSeconds;
-                return new ServerLiveboardInfo
-                {
-                    IsOnline = true,
-                    IsServerRunning = true,
-                    ServerAddress = "palodyssey.duckdns.org:8211",
-                    ServerName = "PalOdyssey Realm",
-                    UptimeSeconds = Math.Max(1, remoteUptime),
-                    PlayerCount = 0,
-                    MaxPlayers = 32
-                };
-            }
-
-            _remoteOnlineSince = null;
             return new ServerLiveboardInfo
             {
                 IsOnline = false,
@@ -383,110 +145,112 @@ namespace PalLauncher.Services
             int managementPort,
             string accessKey,
             IProgress<string>? progress = null,
-            int timeoutSeconds = 25)
+            int timeoutSeconds = 30)
         {
-            int port = managementPort > 0 ? managementPort : 8215;
-            string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
-            string targetIp = ResolveEffectiveEndpoint(cleanHost);
-            string displayHost = GetMaskedDisplayHost(cleanHost);
+            string baseUrl = ResolveBaseUrl(host, managementPort);
+            string displayHost = string.IsNullOrWhiteSpace(host) ? "PalOdyssey Realm" : host;
 
-            progress?.Report($"Sending wake signal to {displayHost}...");
-            _logService.LogInfo($"Sending remote wake request to host {displayHost} (Port 8211)...", "RemoteClient");
+            progress?.Report($"Triggering start webhook on {displayHost}...");
+            _logService.LogInfo($"Sending HTTPS/HTTP start webhook to {baseUrl}/webhook/start-server...", "RemoteClient");
 
             try
             {
-                // 1. Send UDP Wake datagram to game port 8211 (enables 1-port 8211 wake without extra port-forwarding)
-                try
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(8));
+                using var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}/webhook/start-server")
                 {
-                    using var udp = new System.Net.Sockets.UdpClient();
-                    byte[] wakePayload = Encoding.UTF8.GetBytes($"PALODYSSEY_WAKE:{accessKey}");
-                    await udp.SendAsync(wakePayload, wakePayload.Length, targetIp, 8211);
-                    if (targetIp != cleanHost && cleanHost != "127.0.0.1" && cleanHost != "localhost")
-                    {
-                        try { await udp.SendAsync(wakePayload, wakePayload.Length, cleanHost, 8211); } catch { }
-                    }
+                    Content = new StringContent(
+                        JsonSerializer.Serialize(new
+                        {
+                            accessKey = accessKey,
+                            source = "PalOdyssey Launcher Client"
+                        }),
+                        Encoding.UTF8,
+                        "application/json")
+                };
+
+                request.Headers.Add("X-PalOdyssey-Key", accessKey);
+
+                var response = await _httpClient.SendAsync(request, cts.Token);
+                if (!response.IsSuccessStatusCode)
+                {
+                    // Fallback to /api/start
+                    using var req2 = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}/api/start");
+                    req2.Headers.Add("X-PalOdyssey-Key", accessKey);
+                    response = await _httpClient.SendAsync(req2, cts.Token);
                 }
-                catch { }
 
-                // 2. Send HTTP POST to management port
-                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                var response = await SendWithLoopbackFallbackAsync(
-                    host,
-                    port,
-                    "/api/start",
-                    cts.Token,
-                    HttpMethod.Post,
-                    req => req.Headers.Add("X-PalOdyssey-Key", accessKey));
-
-                if (response != null && !response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
                 {
                     string error = await response.Content.ReadAsStringAsync();
-                    progress?.Report($"Remote wake rejected: {response.StatusCode}");
-                    _logService.LogWarning($"Remote wake rejected by host ({response.StatusCode}): {error}", "RemoteClient");
+                    progress?.Report($"Server start webhook rejected ({response.StatusCode})");
+                    _logService.LogWarning($"Server start webhook rejected: {response.StatusCode} - {error}", "RemoteClient");
                     return false;
                 }
 
-                if (response != null && response.IsSuccessStatusCode)
-                {
-                    _logService.LogSuccess("HTTP wake signal accepted by host.", "RemoteClient");
-                }
+                string respJson = await response.Content.ReadAsStringAsync();
+                _logService.LogSuccess($"Server start webhook accepted: {respJson}", "RemoteClient");
+                progress?.Report("Start webhook confirmed! Booting dedicated server...");
 
-                progress?.Report("Wake signal transmitted! Waiting for Palworld server initialization...");
-                _logService.LogInfo("Polling server startup heartbeat on port 8211...", "RemoteClient");
-
-                // Poll status until server reports active
+                // Poll status until server is running
                 var startTime = DateTime.Now;
                 while ((DateTime.Now - startTime).TotalSeconds < timeoutSeconds)
                 {
-                    await Task.Delay(1500);
-                    var status = await QueryServerStatusAsync(cleanHost, port, 2000);
+                    await Task.Delay(2000);
+                    var status = await QueryServerStatusAsync(host, managementPort, 2000);
 
                     if (status.IsOnline && status.IsServerRunning)
                     {
                         progress?.Report($"Palworld Server is online (PID: {status.ProcessId}) on port {status.ServerPort}!");
-                        _logService.LogSuccess($"Remote Palworld Server is confirmed ONLINE on port {status.ServerPort} (PID: {status.ProcessId})!", "RemoteClient");
+                        _logService.LogSuccess($"Remote Palworld Server is confirmed ONLINE on port {status.ServerPort}!", "RemoteClient");
                         return true;
                     }
                     else
                     {
                         int elapsed = (int)(DateTime.Now - startTime).TotalSeconds;
-                        progress?.Report($"Starting Palworld server on host... ({elapsed}s)");
+                        progress?.Report($"Starting Palworld dedicated server... ({elapsed}s)");
                     }
                 }
 
-                progress?.Report("Server wake initiated, proceeding with launch.");
+                progress?.Report("Server start triggered, proceeding with launch.");
                 return true;
             }
             catch (Exception ex)
             {
-                progress?.Report($"Failed to communicate with remote host: {ex.Message}");
-                _logService.LogError("Remote wake communication exception.", "RemoteClient", ex);
+                progress?.Report($"Failed to trigger server webhook: {ex.Message}");
+                _logService.LogError("Webhook start communication error.", "RemoteClient", ex);
                 return false;
             }
         }
 
         public async Task<bool> RequestRemoteServerStopAsync(string host, int managementPort, string accessKey)
         {
-            int port = managementPort > 0 ? managementPort : 8215;
+            string baseUrl = ResolveBaseUrl(host, managementPort);
 
             try
             {
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                var response = await SendWithLoopbackFallbackAsync(
-                    host,
-                    port,
-                    "/api/stop",
-                    cts.Token,
-                    HttpMethod.Post,
-                    req => req.Headers.Add("X-PalOdyssey-Key", accessKey));
+                using var request = new HttpRequestMessage(HttpMethod.Post, $"{baseUrl}/api/stop");
+                request.Headers.Add("X-PalOdyssey-Key", accessKey);
 
-                return response != null && response.IsSuccessStatusCode;
+                var response = await _httpClient.SendAsync(request, cts.Token);
+                return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
                 _logService.LogWarning("Remote stop request exception.", "RemoteClient", ex.Message);
                 return false;
             }
+        }
+
+        private static bool IsLocalServerRunning()
+        {
+            try
+            {
+                return System.Diagnostics.Process.GetProcessesByName("PalServer").Length > 0
+                    || System.Diagnostics.Process.GetProcessesByName("PalServer-Win64-Shipping-Cmd").Length > 0
+                    || System.Diagnostics.Process.GetProcessesByName("PalServer-Win64-Shipping").Length > 0;
+            }
+            catch { return false; }
         }
     }
 }

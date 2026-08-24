@@ -104,46 +104,22 @@ namespace PalLauncher.Services
         {
             var args = new List<string>();
 
-            // 1. Client Auto-Join Argument if enabled
-            if (config.AutoJoinServer && !string.IsNullOrWhiteSpace(config.ServerIp))
-            {
-                string targetHost = config.ServerIp.Trim();
-                int targetPort = config.ServerPort > 0 ? config.ServerPort : LauncherConfig.OfficialServerPort;
-
-                // If hosting locally on this PC, connect directly to local loopback (bypasses NAT hairpinning)
-                if (IsServerRunning || config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase))
-                {
-                    targetHost = "127.0.0.1";
-                    targetPort = 8211;
-                }
-                else if (targetHost.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase) ||
-                         targetHost.Equals("palodyssey.duckdns.org", StringComparison.OrdinalIgnoreCase) ||
-                         targetHost.Equals("palodyssey.realm", StringComparison.OrdinalIgnoreCase))
-                {
-                    targetHost = LauncherConfig.DirectHostEndpoint;
-                    targetPort = LauncherConfig.OfficialServerPort;
-                }
-
-                string ipArg = $"{targetHost}:{targetPort}";
-                args.Add(ipArg);
-            }
-
-            // 2. Suppress engine crash popup dialogs & unattended execution
+            // 1. Suppress engine crash popup dialogs & unattended execution
             args.Add("-NoCrashReporter");
 
-            // 3. Resource & Performance Optimization Flags
+            // 2. Resource & Performance Optimization Flags
             args.Add("-USEALLAVAILABLECORES");
             args.Add("-useperfthreads");
             args.Add("-malloc=system");
             args.Add("-NoVerifyGC");
 
-            // 4. Predefined Performance & Engine Flags
+            // 3. Predefined Performance & Engine Flags
             if (config.UseDirectX11) args.Add("-dx11");
             if (config.NoSplash) args.Add("-nosplash");
             if (config.UseHighPriority) args.Add("-high");
             if (config.WindowedMode) args.Add("-windowed");
 
-            // 5. Custom User Startup Flags
+            // 4. Custom User Startup Flags
             if (!string.IsNullOrWhiteSpace(config.CustomArguments))
             {
                 args.Add(config.CustomArguments.Trim());
@@ -357,18 +333,45 @@ namespace PalLauncher.Services
                                 EnsureDirectRawInputConfig(config, pathInfo.GameRootPath);
                             }
 
-                            // Ensure steam_appid.txt exists to bypass Steam argument verification dialog
+                            // 2c. Inject steam_appid.txt (AppId: 1623730) into game root and Win64 binaries directory
                             try
                             {
                                 string appIdContent = "1623730";
                                 string appIdPath1 = Path.Combine(clientWorkDir, "steam_appid.txt");
                                 string appIdPath2 = Path.Combine(pathInfo.GameRootPath, "steam_appid.txt");
+                                string appIdPath3 = Path.Combine(pathInfo.GameRootPath, @"Pal\Binaries\Win64\steam_appid.txt");
+
                                 if (!File.Exists(appIdPath1)) File.WriteAllText(appIdPath1, appIdContent);
                                 if (!File.Exists(appIdPath2)) File.WriteAllText(appIdPath2, appIdContent);
+                                if (Directory.Exists(Path.GetDirectoryName(appIdPath3)) && !File.Exists(appIdPath3))
+                                {
+                                    File.WriteAllText(appIdPath3, appIdContent);
+                                }
                             }
                             catch { }
 
-                            _logService.LogInfo($"Launching Palworld Client: {Path.GetFileName(clientExe)} args: '{clientArgs}'", "Launcher");
+                            // 2d. Ensure Steam client is running beforehand so Steamworks API and EOS auth subsystems bind automatically
+                            bool isSteamRunning = Process.GetProcessesByName("steam").Length > 0;
+                            if (!isSteamRunning)
+                            {
+                                _logService.LogInfo("Steam is not currently running. Starting Steam client to initialize EOS and Online Subsystem auth tokens...", "Launcher");
+                                try
+                                {
+                                    Process.Start(new ProcessStartInfo
+                                    {
+                                        FileName = "steam://open/main",
+                                        UseShellExecute = true
+                                    });
+                                    Thread.Sleep(2000);
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logService.LogWarning($"Could not auto-start Steam: {ex.Message}", "Launcher");
+                                }
+                            }
+
+                            // 2e. Launch Palworld directly with SteamAppId environment variables (Bypasses Steam custom argument prompt while binding full EOS/Steam DRM Auth)
+                            _logService.LogInfo($"Launching Palworld Client directly: {Path.GetFileName(clientExe)} args: '{clientArgs}'", "Launcher");
 
                             var cStartInfo = new ProcessStartInfo
                             {
@@ -377,6 +380,11 @@ namespace PalLauncher.Services
                                 WorkingDirectory = clientWorkDir,
                                 UseShellExecute = false
                             };
+
+                            // Inject Steam App IDs into process environment
+                            cStartInfo.EnvironmentVariables["SteamAppId"] = "1623730";
+                            cStartInfo.EnvironmentVariables["SteamGameId"] = "1623730";
+                            cStartInfo.EnvironmentVariables["SteamOverlayGameId"] = "1623730";
 
                             var cProcess = new Process
                             {
@@ -414,7 +422,7 @@ namespace PalLauncher.Services
                             {
                                 _runningClientProcess = cProcess;
                                 clientLaunched = true;
-                                _logService.LogSuccess($"Palworld Client launched successfully! (PID: {cProcess.Id})", "Launcher");
+                                _logService.LogSuccess($"Palworld Client launched successfully with Steamworks API & EOS Auth bindings! (PID: {cProcess.Id})", "Launcher");
                             }
                         }
                     }

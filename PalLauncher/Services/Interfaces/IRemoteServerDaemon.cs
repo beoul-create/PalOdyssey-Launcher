@@ -20,7 +20,12 @@ namespace PalLauncher.Services.Interfaces
     {
         bool IsRunning { get; }
         int Port { get; }
-        Task<bool> StartDaemonAsync(int port, string accessKey, Func<Task<bool>> onStartServerRequested, Func<Task<bool>> onStopServerRequested);
+        Task<bool> StartDaemonAsync(
+            int port,
+            string accessKey,
+            Func<Task<bool>> onStartServerRequested,
+            Func<Task<bool>> onStopServerRequested,
+            Func<string, Task>? onWebhookServerBooting = null);
         Task StopDaemonAsync();
         ServerLiveboardInfo GetCurrentLiveboard();
         void ConfigureIdleAutoShutdown(bool enabled, int minutes);

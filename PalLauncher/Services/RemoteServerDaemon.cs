@@ -4,7 +4,6 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -19,16 +18,14 @@ namespace PalLauncher.Services
         private readonly ILogService _logService;
         private readonly ILaunchService _launchService;
         private HttpListener? _httpListener;
-        private UdpClient? _udpWakeListener;
-        private Task? _udpWakeTask;
         private CancellationTokenSource? _cts;
         private Task? _listenerTask;
         private Task? _idleMonitorTask;
         private string _accessKey = "PalOdyssey2026Secure";
         private Func<Task<bool>>? _onStartServerRequested;
         private Func<Task<bool>>? _onStopServerRequested;
+        private Func<string, Task>? _onWebhookServerBooting;
         private int _port = 8215;
-        private int _gamePort = 8211;
         private bool _isRunning;
 
         // Auto-Shutdown State
@@ -74,7 +71,8 @@ namespace PalLauncher.Services
             int port,
             string accessKey,
             Func<Task<bool>> onStartServerRequested,
-            Func<Task<bool>> onStopServerRequested)
+            Func<Task<bool>> onStopServerRequested,
+            Func<string, Task>? onWebhookServerBooting = null)
         {
             if (_isRunning) return Task.FromResult(true);
 
@@ -82,11 +80,13 @@ namespace PalLauncher.Services
             _accessKey = string.IsNullOrWhiteSpace(accessKey) ? "PalOdyssey2026Secure" : accessKey;
             _onStartServerRequested = onStartServerRequested;
             _onStopServerRequested = onStopServerRequested;
+            _onWebhookServerBooting = onWebhookServerBooting;
 
             try
             {
-                // Attempt 1: Try Wildcard Listener (accepts external WAN/LAN connections when URL reserved or elevated)
                 bool started = false;
+
+                // Attempt 1: Wildcard listener
                 try
                 {
                     var listener = new HttpListener();
@@ -97,7 +97,7 @@ namespace PalLauncher.Services
                 }
                 catch { }
 
-                // Attempt 2: Try Plus Wildcard Listener
+                // Attempt 2: Plus wildcard listener
                 if (!started)
                 {
                     try
@@ -111,371 +111,69 @@ namespace PalLauncher.Services
                     catch { }
                 }
 
-                // Attempt 3: Standard Loopback Listener (always succeeds without elevation)
+                // Attempt 3: Loopback / localhost fallback
                 if (!started)
                 {
-                    var listener = new HttpListener();
-                    listener.Prefixes.Add($"http://localhost:{_port}/");
-                    listener.Prefixes.Add($"http://127.0.0.1:{_port}/");
-                    listener.Start();
-                    _httpListener = listener;
-                    started = true;
+                    try
+                    {
+                        var listener = new HttpListener();
+                        listener.Prefixes.Add($"http://localhost:{_port}/");
+                        listener.Prefixes.Add($"http://127.0.0.1:{_port}/");
+                        listener.Start();
+                        _httpListener = listener;
+                        started = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logService.LogError($"Failed to start HTTP Webhook listener on port {_port}", "RemoteDaemon", ex);
+                        return Task.FromResult(false);
+                    }
                 }
 
                 _cts = new CancellationTokenSource();
                 _isRunning = true;
-                _lastActivePlayerTime = DateTime.Now;
-                _wasServerRunning = _launchService.IsServerRunning;
-                _shutdownTriggered = false;
 
-                _logService.LogSuccess($"Remote Host Daemon listening on port {_port} with Inactivity Auto-Shutdown ({_idleShutdownMinutes}m).", "RemoteDaemon");
-                
-                // Arm UDP Wake-on-Demand on game port 8211 so single-port-forward wake works immediately
-                if (!_wasServerRunning)
-                {
-                    StartUdpWakeListener(_gamePort);
-                }
+                _listenerTask = Task.Run(() => HandleIncomingRequestsAsync(_cts.Token));
+                _idleMonitorTask = Task.Run(() => IdleAutoShutdownLoopAsync(_cts.Token));
 
-                _listenerTask = Task.Run(() => AcceptRequestsLoopAsync(_cts.Token));
-                _idleMonitorTask = Task.Run(() => IdleMonitorLoopAsync(_cts.Token));
+                _logService.LogSuccess($"Remote Webhook & Host Daemon listening on port {_port} (24/7 armed).", "RemoteDaemon");
                 return Task.FromResult(true);
             }
             catch (Exception ex)
             {
-                _isRunning = false;
-                _logService.LogError($"Failed to start Remote Host Daemon on port {_port}.", "RemoteDaemon", ex);
+                _logService.LogError("Failed to initialize Remote Daemon.", "RemoteDaemon", ex);
                 return Task.FromResult(false);
             }
         }
 
-        private void StartUdpWakeListener(int gamePort)
+        public Task StopDaemonAsync()
         {
-            StopUdpWakeListener();
-            if (_launchService.IsServerRunning) return;
+            _isRunning = false;
+            _cts?.Cancel();
 
-            _gamePort = gamePort > 0 ? gamePort : 8211;
-            var localEp = new IPEndPoint(IPAddress.Any, _gamePort);
-
-            // Robust binding with socket reuse & retry
-            UdpClient? client = null;
-            for (int attempt = 1; attempt <= 5; attempt++)
-            {
-                try
-                {
-                    client = new UdpClient();
-                    client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                    client.Client.Bind(localEp);
-                    client.EnableBroadcast = true;
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    client?.Close();
-                    client = null;
-                    if (attempt == 5)
-                    {
-                        _logService.LogWarning($"Could not bind UDP Wake listener on port {_gamePort}: {ex.Message}", "RemoteDaemon");
-                        return;
-                    }
-                    Thread.Sleep(300);
-                }
-            }
-
-            if (client == null) return;
-
-            _udpWakeListener = client;
-            _udpWakeTask = Task.Run(async () =>
-            {
-                while (_udpWakeListener != null && !_launchService.IsServerRunning)
-                {
-                    try
-                    {
-                        var result = await _udpWakeListener.ReceiveAsync();
-                        if (result.Buffer != null && result.Buffer.Length > 0)
-                        {
-                            string msg = Encoding.UTF8.GetString(result.Buffer);
-                            if (msg.StartsWith("PALODYSSEY_WAKE:", StringComparison.OrdinalIgnoreCase))
-                            {
-                                string key = msg["PALODYSSEY_WAKE:".Length..].Trim();
-                                if (!string.Equals(key, _accessKey, StringComparison.Ordinal))
-                                {
-                                    _logService.LogWarning($"Rejected unauthorized UDP wake packet from {result.RemoteEndPoint}.", "RemoteDaemon");
-                                    continue;
-                                }
-                            }
-
-                            _logService.LogSuccess($"[Port 8211 Wake] Received authorized UDP wake signal on port {_gamePort} from {result.RemoteEndPoint}! Booting Palworld Dedicated Server...", "RemoteDaemon");
-                            StopUdpWakeListener();
-                            if (_onStartServerRequested != null)
-                            {
-                                _ = Task.Run(async () =>
-                                {
-                                    try
-                                    {
-                                        await _onStartServerRequested();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        _logService.LogError("Error executing start server callback", "RemoteDaemon", ex);
-                                    }
-                                });
-                            }
-                            break;
-                        }
-                    }
-                    catch (ObjectDisposedException) { break; }
-                    catch (SocketException) { break; }
-                    catch (Exception ex)
-                    {
-                        _logService.LogWarning($"UDP wake listener exception: {ex.Message}", "RemoteDaemon");
-                        break;
-                    }
-                }
-            });
-            _logService.LogInfo($"UDP Wake-on-Demand armed on port {_gamePort}. Incoming connection on port {_gamePort} will auto-start server.", "RemoteDaemon");
-        }
-
-        private void StopUdpWakeListener()
-        {
             try
             {
-                _udpWakeListener?.Close();
-                _udpWakeListener?.Dispose();
+                _httpListener?.Stop();
+                _httpListener?.Close();
             }
             catch { }
-            _udpWakeListener = null;
+            finally
+            {
+                _httpListener = null;
+            }
+
+            _logService.LogInfo("Remote Webhook & Host Daemon stopped.", "RemoteDaemon");
+            return Task.CompletedTask;
         }
 
-        public ServerLiveboardInfo GetCurrentLiveboard()
-        {
-            bool isServerRunning = _launchService.IsServerRunning;
-            var state = _launchService.CurrentState;
-            
-            double uptime = 0;
-            if (isServerRunning)
-            {
-                if (!_serverStartedTime.HasValue)
-                {
-                    _serverStartedTime = state.StartTime ?? DateTime.Now;
-                }
-                uptime = (DateTime.Now - _serverStartedTime.Value).TotalSeconds;
-            }
-            else
-            {
-                _serverStartedTime = null;
-            }
-
-            int idleRemaining = _idleShutdownMinutes;
-            bool isIdleCountingDown = false;
-
-            lock (_lock)
-            {
-                int currentPlayers = _activePlayers.Count;
-                if (isServerRunning && currentPlayers == 0 && _idleShutdownEnabled)
-                {
-                    isIdleCountingDown = true;
-                    var idleDuration = DateTime.Now - _lastActivePlayerTime;
-                    int minutesPassed = (int)idleDuration.TotalMinutes;
-                    idleRemaining = Math.Max(0, _idleShutdownMinutes - minutesPassed);
-                }
-                else if (currentPlayers > 0)
-                {
-                    _lastActivePlayerTime = DateTime.Now;
-                    _shutdownTriggered = false;
-                }
-
-                return new ServerLiveboardInfo
-                {
-                    IsOnline = true,
-                    IsServerRunning = isServerRunning,
-                    ServerName = "PalOdyssey Realm",
-                    ServerAddress = "palodyssey.duckdns.org:8211",
-                    Version = "1.5.4",
-                    UptimeSeconds = uptime,
-                    PlayerCount = currentPlayers,
-                    MaxPlayers = 32,
-                    Players = new List<PlayerInfo>(_activePlayers),
-                    IsIdleCountingDown = isIdleCountingDown,
-                    IdleMinutesRemaining = idleRemaining,
-                    IdleShutdownEnabled = _idleShutdownEnabled
-                };
-            }
-        }
-
-        private async Task IdleMonitorLoopAsync(CancellationToken ct)
-        {
-            while (!ct.IsCancellationRequested)
-            {
-                try
-                {
-                    await Task.Delay(1500, ct); // Responsive 1.5s lifecycle check
-
-                    bool isServerRunning = _launchService.IsServerRunning;
-
-                    // Detect Server Start Transition
-                    if (!_wasServerRunning && isServerRunning)
-                    {
-                        _wasServerRunning = true;
-                        _serverStartedTime = DateTime.Now;
-                        _lastActivePlayerTime = DateTime.Now;
-                        _shutdownTriggered = false;
-                        StopUdpWakeListener();
-                        _logService.LogInfo("Dedicated server active detected. Inactivity timer initialized.", "AutoShutdown");
-                    }
-                    // Detect Server Stop Transition
-                    else if (_wasServerRunning && !isServerRunning)
-                    {
-                        double uptimeSeconds = _serverStartedTime.HasValue ? (DateTime.Now - _serverStartedTime.Value).TotalSeconds : 999;
-                        if (uptimeSeconds >= 45)
-                        {
-                            _wasServerRunning = false;
-                            _serverStartedTime = null;
-                            _lastActivePlayerTime = DateTime.Now;
-                            _shutdownTriggered = false;
-                            lock (_lock) { _activePlayers.Clear(); }
-                            StartUdpWakeListener(_gamePort);
-                        }
-                        continue;
-                    }
-
-                    if (!isServerRunning)
-                    {
-                        _lastActivePlayerTime = DateTime.Now;
-                        continue;
-                    }
-
-                    // Server is active - query live players from Palworld REST API
-                    await RefreshConnectedPlayersAsync();
-
-                    lock (_lock)
-                    {
-                        if (_activePlayers.Count > 0)
-                        {
-                            _lastActivePlayerTime = DateTime.Now;
-                            _shutdownTriggered = false;
-                        }
-                        else if (_idleShutdownEnabled && !_shutdownTriggered)
-                        {
-                            // Startup grace period: Allow at least 2 minutes for server world initialization & client connections
-                            double uptimeSeconds = _serverStartedTime.HasValue ? (DateTime.Now - _serverStartedTime.Value).TotalSeconds : 0;
-                            if (uptimeSeconds < 90)
-                            {
-                                _lastActivePlayerTime = DateTime.Now;
-                                continue;
-                            }
-
-                            var idleDuration = DateTime.Now - _lastActivePlayerTime;
-                            if (idleDuration.TotalMinutes >= _idleShutdownMinutes)
-                            {
-                                _shutdownTriggered = true;
-                                _logService.LogWarning($"Auto-Shutdown triggered: 0 players online for {_idleShutdownMinutes} minutes. Gracefully stopping dedicated server.", "AutoShutdown");
-                                
-                                _ = Task.Run(async () =>
-                                {
-                                    try
-                                    {
-                                        if (_onStopServerRequested != null)
-                                        {
-                                            await _onStopServerRequested();
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        _logService.LogError("Exception executing auto-shutdown stop callback.", "AutoShutdown", ex);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }
-                catch (OperationCanceledException) { break; }
-                catch (Exception ex)
-                {
-                    if (!ct.IsCancellationRequested)
-                    {
-                        _logService.LogWarning("IdleMonitor loop notice.", "AutoShutdown", ex.Message);
-                    }
-                }
-            }
-        }
-
-        private async Task RefreshConnectedPlayersAsync()
-        {
-            // Query local Palworld server API with HTTP Basic Auth
-            try
-            {
-                var response = await _palServerClient.GetAsync("http://127.0.0.1:8212/v1/api/players");
-                if (response.IsSuccessStatusCode)
-                {
-                    string json = await response.Content.ReadAsStringAsync();
-                    using var doc = JsonDocument.Parse(json);
-                    var playersList = new List<PlayerInfo>();
-
-                    if (doc.RootElement.TryGetProperty("players", out var playersArr))
-                    {
-                        foreach (var elem in playersArr.EnumerateArray())
-                        {
-                            string name = "Pal Trainer";
-                            if (elem.TryGetProperty("name", out var n) && !string.IsNullOrWhiteSpace(n.GetString())) name = n.GetString()!;
-                            else if (elem.TryGetProperty("playerName", out var pn) && !string.IsNullOrWhiteSpace(pn.GetString())) name = pn.GetString()!;
-                            else if (elem.TryGetProperty("accountName", out var an) && !string.IsNullOrWhiteSpace(an.GetString())) name = an.GetString()!;
-                            else if (elem.TryGetProperty("playerId", out var pid) && !string.IsNullOrWhiteSpace(pid.GetString())) name = pid.GetString()!;
-
-                            int level = 1;
-                            if (elem.TryGetProperty("level", out var l))
-                            {
-                                if (l.ValueKind == JsonValueKind.Number) level = l.GetInt32();
-                                else if (int.TryParse(l.GetString(), out int parsedLvl)) level = parsedLvl;
-                            }
-
-                            int ping = 20;
-                            if (elem.TryGetProperty("ping", out var p))
-                            {
-                                if (p.ValueKind == JsonValueKind.Number) ping = p.GetInt32();
-                                else if (int.TryParse(p.GetString(), out int parsedPing)) ping = parsedPing;
-                            }
-
-                            string location = "Palpagos Islands";
-                            if (elem.TryGetProperty("location", out var loc) && !string.IsNullOrWhiteSpace(loc.GetString()))
-                            {
-                                location = loc.GetString()!;
-                            }
-                            else if (elem.TryGetProperty("location_x", out var lx) && elem.TryGetProperty("location_y", out var ly))
-                            {
-                                location = $"X: {lx.ToString()}, Y: {ly.ToString()}";
-                            }
-
-                            playersList.Add(new PlayerInfo
-                            {
-                                Name = name,
-                                Level = level,
-                                PingMs = ping,
-                                Location = location
-                            });
-                        }
-                    }
-
-                    lock (_lock)
-                    {
-                        _activePlayers.Clear();
-                        _activePlayers.AddRange(playersList);
-                    }
-                }
-            }
-            catch
-            {
-                // If local REST API is not responding or no players are currently in socket
-            }
-        }
-
-        private async Task AcceptRequestsLoopAsync(CancellationToken ct)
+        private async Task HandleIncomingRequestsAsync(CancellationToken ct)
         {
             while (!ct.IsCancellationRequested && _httpListener != null && _httpListener.IsListening)
             {
                 try
                 {
                     var context = await _httpListener.GetContextAsync();
-                    _ = Task.Run(() => ProcessHttpRequestAsync(context), ct);
+                    _ = ProcessRequestAsync(context);
                 }
                 catch (HttpListenerException) { break; }
                 catch (ObjectDisposedException) { break; }
@@ -483,146 +181,454 @@ namespace PalLauncher.Services
                 {
                     if (!ct.IsCancellationRequested)
                     {
-                        _logService.LogWarning("RemoteDaemon request loop notice.", "RemoteDaemon", ex.Message);
+                        _logService.LogWarning($"RemoteDaemon request handler exception: {ex.Message}", "RemoteDaemon");
                     }
                 }
             }
         }
 
-        private async Task ProcessHttpRequestAsync(HttpListenerContext context)
+        private async Task ProcessRequestAsync(HttpListenerContext context)
         {
             var req = context.Request;
             var resp = context.Response;
 
+            // CORS headers for browser / external webhooks
+            resp.AddHeader("Access-Control-Allow-Origin", "*");
+            resp.AddHeader("Access-Control-Allow-Headers", "Content-Type, X-PalOdyssey-Key, Authorization");
+            resp.AddHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+
+            if (req.HttpMethod.Equals("OPTIONS", StringComparison.OrdinalIgnoreCase))
+            {
+                resp.StatusCode = (int)HttpStatusCode.OK;
+                resp.Close();
+                return;
+            }
+
+            string path = req.Url?.AbsolutePath.TrimEnd('/') ?? "";
+            _logService.LogInfo($"HTTP Webhook received: {req.HttpMethod} {path}", "RemoteDaemon");
+
             try
             {
-                string path = req.Url?.AbsolutePath ?? "/";
-                string method = req.HttpMethod.ToUpperInvariant();
-                string key = req.Headers["X-PalOdyssey-Key"] ?? req.QueryString["key"] ?? "";
-
-                // CORS headers
-                resp.AddHeader("Access-Control-Allow-Origin", "*");
-                resp.AddHeader("Access-Control-Allow-Headers", "X-PalOdyssey-Key, Content-Type");
-
-                if (method == "OPTIONS")
+                if (path.Equals("/webhook/start-server", StringComparison.OrdinalIgnoreCase) ||
+                    path.Equals("/api/start", StringComparison.OrdinalIgnoreCase))
                 {
-                    resp.StatusCode = 200;
-                    resp.Close();
-                    return;
+                    await HandleStartServerWebhookAsync(req, resp);
                 }
-
-                if (path.Equals("/api/liveboard", StringComparison.OrdinalIgnoreCase))
+                else if (path.Equals("/api/stop", StringComparison.OrdinalIgnoreCase) ||
+                         path.Equals("/webhook/stop-server", StringComparison.OrdinalIgnoreCase))
                 {
-                    var liveboard = GetCurrentLiveboard();
-                    await SendJsonResponseAsync(resp, 200, liveboard);
+                    await HandleStopServerWebhookAsync(req, resp);
                 }
-                else if (path.Equals("/api/status", StringComparison.OrdinalIgnoreCase) || path.Equals("/", StringComparison.OrdinalIgnoreCase))
+                else if (path.Equals("/api/status", StringComparison.OrdinalIgnoreCase))
                 {
-                    var liveboard = GetCurrentLiveboard();
-                    var status = new RemoteServerStatus
-                    {
-                        IsOnline = true,
-                        IsServerRunning = liveboard.IsServerRunning,
-                        ProcessId = _launchService.CurrentState.ProcessId,
-                        ServerPort = 8211,
-                        ServerName = "PalOdyssey Realm",
-                        Version = "1.5.4",
-                        UptimeSeconds = liveboard.UptimeSeconds,
-                        Message = liveboard.IsServerRunning ? $"Dedicated Server Active ({liveboard.PlayerCount} Players)" : "Dedicated Server Sleeping (Wake on Demand Available)"
-                    };
-
-                    await SendJsonResponseAsync(resp, 200, status);
+                    HandleStatusRequest(resp);
                 }
-                else if (path.Equals("/api/start", StringComparison.OrdinalIgnoreCase) && method == "POST")
+                else if (path.Equals("/api/liveboard", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (!string.Equals(key, _accessKey, StringComparison.Ordinal))
-                    {
-                        await SendJsonResponseAsync(resp, 403, new { error = "Invalid Realm Access Key" });
-                        return;
-                    }
-
-                    _logService.LogInfo("Received remote server wake/start command from authorized client.", "RemoteDaemon");
-                    _lastActivePlayerTime = DateTime.Now;
-                    bool triggered = false;
-                    if (_onStartServerRequested != null)
-                    {
-                        triggered = await _onStartServerRequested();
-                    }
-
-                    await SendJsonResponseAsync(resp, 200, new { success = triggered, status = "Server Starting" });
+                    HandleLiveboardRequest(resp);
                 }
-                else if (path.Equals("/api/stop", StringComparison.OrdinalIgnoreCase) && method == "POST")
+                else if (path.Equals("/api/health", StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(path))
                 {
-                    if (!string.Equals(key, _accessKey, StringComparison.Ordinal))
+                    await SendJsonResponseAsync(resp, HttpStatusCode.OK, new
                     {
-                        await SendJsonResponseAsync(resp, 403, new { error = "Invalid Realm Access Key" });
-                        return;
-                    }
-
-                    _logService.LogInfo("Received remote server stop command from authorized client.", "RemoteDaemon");
-                    bool triggered = false;
-                    if (_onStopServerRequested != null)
-                    {
-                        triggered = await _onStopServerRequested();
-                    }
-
-                    await SendJsonResponseAsync(resp, 200, new { success = triggered, status = "Server Stopping" });
+                        status = "healthy",
+                        service = "PalOdyssey Bot & Host Daemon",
+                        port = _port,
+                        serverRunning = _launchService.IsServerRunning
+                    });
                 }
                 else
                 {
-                    await SendJsonResponseAsync(resp, 404, new { error = "Unknown Endpoint" });
+                    await SendJsonResponseAsync(resp, HttpStatusCode.NotFound, new { error = "Endpoint not found" });
                 }
             }
             catch (Exception ex)
             {
-                _logService.LogWarning("Exception processing RemoteDaemon HTTP request.", "RemoteDaemon", ex.Message);
-            }
-            finally
-            {
-                try { resp.Close(); } catch { }
-            }
-        }
-
-        private static async Task SendJsonResponseAsync(HttpListenerResponse resp, int statusCode, object payload)
-        {
-            resp.StatusCode = statusCode;
-            resp.ContentType = "application/json; charset=utf-8";
-            resp.KeepAlive = false;
-
-            string json = JsonSerializer.Serialize(payload, new JsonSerializerOptions { WriteIndented = true });
-            byte[] bytes = Encoding.UTF8.GetBytes(json);
-            resp.ContentLength64 = bytes.Length;
-
-            await resp.OutputStream.WriteAsync(bytes, 0, bytes.Length);
-            await resp.OutputStream.FlushAsync();
-        }
-
-        public async Task StopDaemonAsync()
-        {
-            if (!_isRunning) return;
-
-            _isRunning = false;
-            try
-            {
-                StopUdpWakeListener();
-                _cts?.Cancel();
-                _httpListener?.Stop();
-                _httpListener?.Close();
-                _httpListener = null;
-
-                if (_listenerTask != null)
+                _logService.LogError($"Exception processing {path}", "RemoteDaemon", ex);
+                try
                 {
-                    await Task.WhenAny(_listenerTask, Task.Delay(1000));
+                    await SendJsonResponseAsync(resp, HttpStatusCode.InternalServerError, new { error = ex.Message });
+                }
+                catch { }
+            }
+        }
+
+        private bool IsAuthorized(HttpListenerRequest req, string? bodyKey = null)
+        {
+            string? headerKey = req.Headers["X-PalOdyssey-Key"] ?? req.Headers["Authorization"]?.Replace("Bearer ", "").Trim();
+            if (!string.IsNullOrWhiteSpace(headerKey))
+            {
+                return headerKey == _accessKey;
+            }
+            if (!string.IsNullOrWhiteSpace(bodyKey))
+            {
+                return bodyKey == _accessKey;
+            }
+            return false;
+        }
+
+        private async Task HandleStartServerWebhookAsync(HttpListenerRequest req, HttpListenerResponse resp)
+        {
+            string bodyText = "";
+            string? keyFromBody = null;
+            string source = "Launcher Webhook";
+
+            if (req.HasEntityBody)
+            {
+                using var reader = new StreamReader(req.InputStream, req.ContentEncoding);
+                bodyText = await reader.ReadToEndAsync();
+                try
+                {
+                    using var doc = JsonDocument.Parse(bodyText);
+                    if (doc.RootElement.TryGetProperty("accessKey", out var k)) keyFromBody = k.GetString();
+                    if (doc.RootElement.TryGetProperty("key", out var k2)) keyFromBody = k2.GetString();
+                    if (doc.RootElement.TryGetProperty("source", out var s)) source = s.GetString() ?? "Launcher Webhook";
+                }
+                catch { }
+            }
+
+            if (!IsAuthorized(req, keyFromBody))
+            {
+                _logService.LogWarning("Unauthorized webhook start request received.", "RemoteDaemon");
+                await SendJsonResponseAsync(resp, HttpStatusCode.Unauthorized, new { error = "Invalid or missing access key." });
+                return;
+            }
+
+            // 1. Check if server process is already running and spawn/invoke if requested
+            _logService.LogInfo($"Processing server start trigger from {source}. Spawning PalServer...", "RemoteDaemon");
+            bool started = false;
+            if (_onStartServerRequested != null)
+            {
+                started = await _onStartServerRequested.Invoke();
+            }
+            else
+            {
+                started = true;
+            }
+
+            // 2. Post a status message to Discord letting everyone know the server is booting
+            if (_onWebhookServerBooting != null)
+            {
+                _ = Task.Run(async () =>
+                {
+                    try { await _onWebhookServerBooting.Invoke(source); }
+                    catch (Exception ex) { _logService.LogWarning($"Failed to post Discord boot notification: {ex.Message}", "RemoteDaemon"); }
+                });
+            }
+
+            await SendJsonResponseAsync(resp, HttpStatusCode.OK, new
+            {
+                success = true,
+                status = "booting",
+                message = "Palworld Dedicated Server boot sequence initiated successfully.",
+                serverPort = 8211
+            });
+        }
+
+        private async Task HandleStopServerWebhookAsync(HttpListenerRequest req, HttpListenerResponse resp)
+        {
+            string bodyText = "";
+            string? keyFromBody = null;
+
+            if (req.HasEntityBody)
+            {
+                using var reader = new StreamReader(req.InputStream, req.ContentEncoding);
+                bodyText = await reader.ReadToEndAsync();
+                try
+                {
+                    using var doc = JsonDocument.Parse(bodyText);
+                    if (doc.RootElement.TryGetProperty("accessKey", out var k)) keyFromBody = k.GetString();
+                    if (doc.RootElement.TryGetProperty("key", out var k2)) keyFromBody = k2.GetString();
+                }
+                catch { }
+            }
+
+            if (!IsAuthorized(req, keyFromBody))
+            {
+                await SendJsonResponseAsync(resp, HttpStatusCode.Unauthorized, new { error = "Invalid access key." });
+                return;
+            }
+
+            _logService.LogInfo("Processing remote stop request...", "RemoteDaemon");
+            bool stopped = false;
+            if (_onStopServerRequested != null)
+            {
+                stopped = await _onStopServerRequested.Invoke();
+            }
+
+            await SendJsonResponseAsync(resp, HttpStatusCode.OK, new
+            {
+                success = stopped,
+                message = stopped ? "Palworld Dedicated Server shutdown successfully." : "Failed to stop server."
+            });
+        }
+
+        private void HandleStatusRequest(HttpListenerResponse resp)
+        {
+            var liveboard = GetCurrentLiveboard();
+            var status = new RemoteServerStatus
+            {
+                IsOnline = true,
+                IsServerRunning = liveboard.IsServerRunning,
+                ProcessId = _launchService.CurrentState.ProcessId,
+                ServerPort = 8211,
+                UptimeSeconds = liveboard.UptimeSeconds,
+                ServerName = "PalOdyssey Realm",
+                Version = liveboard.Version,
+                Message = liveboard.IsServerRunning ? "Server is active" : "Server is sleeping (standby)"
+            };
+
+            _ = SendJsonResponseAsync(resp, HttpStatusCode.OK, status);
+        }
+
+        private void HandleLiveboardRequest(HttpListenerResponse resp)
+        {
+            var liveboard = GetCurrentLiveboard();
+            _ = SendJsonResponseAsync(resp, HttpStatusCode.OK, liveboard);
+        }
+
+        private string _serverVersion = "v1.0.3";
+        private string _serverTitle = "PalOdyssey Realm";
+        private int _serverFps = 60;
+
+        public ServerLiveboardInfo GetCurrentLiveboard()
+        {
+            bool isServerActive = _launchService.IsServerRunning || LaunchService.GetActiveServerProcesses().Count > 0;
+
+            lock (_lock)
+            {
+                if (!isServerActive)
+                {
+                    _serverStartedTime = null;
+                    return new ServerLiveboardInfo
+                    {
+                        IsOnline = true,
+                        IsServerRunning = false,
+                        ServerAddress = "palodyssey.duckdns.org:8211",
+                        ServerName = _serverTitle,
+                        PlayerCount = 0,
+                        MaxPlayers = 32,
+                        UptimeSeconds = 0,
+                        Version = _serverVersion,
+                        IsIdleCountingDown = false,
+                        IdleShutdownEnabled = _idleShutdownEnabled,
+                        IdleMinutesRemaining = _idleShutdownMinutes,
+                        IdleSecondsRemaining = _idleShutdownMinutes * 60,
+                        ServerFps = 0
+                    };
                 }
 
-                _logService.LogInfo("Remote Host Daemon stopped.", "RemoteDaemon");
+                _serverStartedTime ??= DateTime.Now;
+                double uptime = (DateTime.Now - _serverStartedTime.Value).TotalSeconds;
+
+                var idleDuration = DateTime.Now - _lastActivePlayerTime;
+                int totalRemainingSec = Math.Max(0, (_idleShutdownMinutes * 60) - (int)idleDuration.TotalSeconds);
+
+                return new ServerLiveboardInfo
+                {
+                    IsOnline = true,
+                    IsServerRunning = true,
+                    ServerAddress = "palodyssey.duckdns.org:8211",
+                    ServerName = _serverTitle,
+                    PlayerCount = _activePlayers.Count,
+                    MaxPlayers = 32,
+                    UptimeSeconds = Math.Max(1, uptime),
+                    Version = _serverVersion,
+                    Players = new List<PlayerInfo>(_activePlayers),
+                    IsIdleCountingDown = _activePlayers.Count == 0 && _idleShutdownEnabled,
+                    IdleShutdownEnabled = _idleShutdownEnabled,
+                    IdleMinutesRemaining = (int)Math.Ceiling(totalRemainingSec / 60.0),
+                    IdleSecondsRemaining = totalRemainingSec,
+                    ServerFps = _serverFps
+                };
             }
-            catch { }
+        }
+
+        private async Task IdleAutoShutdownLoopAsync(CancellationToken ct)
+        {
+            while (!ct.IsCancellationRequested)
+            {
+                try
+                {
+                    await Task.Delay(10000, ct); // Check every 10s for responsive countdown
+                    bool isRunning = _launchService.IsServerRunning || LaunchService.GetActiveServerProcesses().Count > 0;
+
+                    if (isRunning)
+                    {
+                        if (!_wasServerRunning)
+                        {
+                            _wasServerRunning = true;
+                            _serverStartedTime = DateTime.Now;
+                            _lastActivePlayerTime = DateTime.Now;
+                            _shutdownTriggered = false;
+                            _logService.LogSuccess("Server process detected by Watchdog. Connecting to REST API...", "AutoShutdown");
+                        }
+
+                        await QueryPalServerTelemetryAsync();
+
+                        lock (_lock)
+                        {
+                            if (_activePlayers.Count > 0)
+                            {
+                                _lastActivePlayerTime = DateTime.Now;
+                                _shutdownTriggered = false;
+                            }
+                            else if (_idleShutdownEnabled && !_shutdownTriggered)
+                            {
+                                var idleDuration = DateTime.Now - _lastActivePlayerTime;
+                                var totalUptime = DateTime.Now - (_serverStartedTime ?? DateTime.Now);
+                                int totalRemainingSec = (_idleShutdownMinutes * 60) - (int)idleDuration.TotalSeconds;
+
+                                // Grace period: 2.5 minutes after server boot before executing shutdown
+                                if (totalUptime.TotalMinutes >= 2.5 && totalRemainingSec <= 0)
+                                {
+                                    _shutdownTriggered = true;
+                                    _logService.LogWarning($"[IDLE WATCHDOG] Dedicated server has been empty for {_idleShutdownMinutes} minutes. Executing graceful save and shutdown...", "AutoShutdown");
+
+                                    _ = Task.Run(async () =>
+                                    {
+                                        try
+                                        {
+                                            // 1. Issue graceful world save via REST API
+                                            try
+                                            {
+                                                await _palServerClient.PostAsync("http://127.0.0.1:8212/v1/api/save", null);
+                                                _logService.LogSuccess("World save completed prior to shutdown.", "AutoShutdown");
+                                            }
+                                            catch { }
+
+                                            // 2. Issue graceful shutdown command via REST API
+                                            try
+                                            {
+                                                var content = new StringContent("{\"waittime\": 5, \"message\": \"PalOdyssey Server shutting down due to inactivity.\"}", Encoding.UTF8, "application/json");
+                                                await _palServerClient.PostAsync("http://127.0.0.1:8212/v1/api/shutdown", content);
+                                            }
+                                            catch { }
+
+                                            await Task.Delay(4000);
+
+                                            // 3. Ensure server process is fully stopped
+                                            if (_onStopServerRequested != null)
+                                            {
+                                                await _onStopServerRequested.Invoke();
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            _logService.LogError("Exception during idle auto-shutdown sequence", "AutoShutdown", ex);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        _wasServerRunning = false;
+                        _shutdownTriggered = false;
+                    }
+                }
+                catch (OperationCanceledException) { break; }
+                catch (Exception ex)
+                {
+                    _logService.LogWarning($"Idle watchdog error: {ex.Message}", "AutoShutdown");
+                }
+            }
+        }
+
+        private async Task QueryPalServerTelemetryAsync()
+        {
+            try
+            {
+                // 1. Query Active Players
+                var playersResp = await _palServerClient.GetAsync("http://127.0.0.1:8212/v1/api/players");
+                if (playersResp.IsSuccessStatusCode)
+                {
+                    string json = await playersResp.Content.ReadAsStringAsync();
+                    using var doc = JsonDocument.Parse(json);
+                    if (doc.RootElement.TryGetProperty("players", out var playersArray) && playersArray.ValueKind == JsonValueKind.Array)
+                    {
+                        var list = new List<PlayerInfo>();
+                        foreach (var item in playersArray.EnumerateArray())
+                        {
+                            string name = item.TryGetProperty("name", out var n) ? n.GetString() ?? "Pioneer" : "Pioneer";
+                            int ping = item.TryGetProperty("ping", out var p) ? (p.ValueKind == JsonValueKind.Number ? p.GetInt32() : 25) : 25;
+                            string loc = item.TryGetProperty("location", out var l) ? l.GetString() ?? "Palpagos Islands" : "Palpagos Islands";
+                            int level = item.TryGetProperty("level", out var lvl) ? (lvl.ValueKind == JsonValueKind.Number ? lvl.GetInt32() : 1) : 1;
+                            string steamId = item.TryGetProperty("userId", out var uid) ? uid.GetString() ?? "" : "";
+                            list.Add(new PlayerInfo { Name = name, PingMs = ping, Location = loc, Level = level, SteamId = steamId });
+                        }
+
+                        lock (_lock)
+                        {
+                            _activePlayers.Clear();
+                            _activePlayers.AddRange(list);
+                        }
+                    }
+                }
+
+                // 2. Query Server Metrics (FPS)
+                try
+                {
+                    var metricsResp = await _palServerClient.GetAsync("http://127.0.0.1:8212/v1/api/metrics");
+                    if (metricsResp.IsSuccessStatusCode)
+                    {
+                        string mJson = await metricsResp.Content.ReadAsStringAsync();
+                        using var mDoc = JsonDocument.Parse(mJson);
+                        if (mDoc.RootElement.TryGetProperty("serverfps", out var fpsProp) && fpsProp.ValueKind == JsonValueKind.Number)
+                        {
+                            lock (_lock) { _serverFps = fpsProp.GetInt32(); }
+                        }
+                    }
+                }
+                catch { }
+
+                // 3. Query Server Info
+                try
+                {
+                    var infoResp = await _palServerClient.GetAsync("http://127.0.0.1:8212/v1/api/info");
+                    if (infoResp.IsSuccessStatusCode)
+                    {
+                        string iJson = await infoResp.Content.ReadAsStringAsync();
+                        using var iDoc = JsonDocument.Parse(iJson);
+                        if (iDoc.RootElement.TryGetProperty("version", out var vProp))
+                        {
+                            lock (_lock) { _serverVersion = vProp.GetString() ?? "v1.0.3"; }
+                        }
+                        if (iDoc.RootElement.TryGetProperty("servername", out var sProp))
+                        {
+                            lock (_lock) { _serverTitle = sProp.GetString() ?? "PalOdyssey Realm"; }
+                        }
+                    }
+                }
+                catch { }
+            }
+            catch
+            {
+                // PalServer REST API offline or starting up
+            }
+        }
+
+        private static async Task SendJsonResponseAsync(HttpListenerResponse resp, HttpStatusCode statusCode, object data)
+        {
+            resp.StatusCode = (int)statusCode;
+            resp.ContentType = "application/json; charset=utf-8";
+
+            string json = JsonSerializer.Serialize(data, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            });
+
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
+            resp.ContentLength64 = buffer.Length;
+            await resp.OutputStream.WriteAsync(buffer, 0, buffer.Length);
+            resp.OutputStream.Close();
         }
 
         public void Dispose()
         {
-            _ = StopDaemonAsync();
+            StopDaemonAsync().GetAwaiter().GetResult();
         }
     }
 }

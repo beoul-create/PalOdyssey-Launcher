@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using PalLauncher.ViewModels;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace PalLauncher.Views
 {

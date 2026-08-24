@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
     <TieredCompilation>true</TieredCompilation>
     <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
     <ServerGarbageCollection>false</ServerGarbageCollection>
@@ -23,12 +25,21 @@
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
+  <Target Name="KillRunningProcess" BeforeTargets="BeforeBuild">
+    <Exec Command="taskkill /F /IM PalLauncher.exe 2>nul || exit 0" ContinueOnError="true" IgnoreExitCode="true" />
+  </Target>
+
   <ItemGroup>
     <Resource Include="Assets\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Management" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
   </ItemGroup>
 
   <ItemGroup>

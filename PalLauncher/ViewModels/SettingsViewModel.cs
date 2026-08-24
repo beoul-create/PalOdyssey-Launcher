@@ -252,6 +252,27 @@ namespace PalLauncher.ViewModels
             set => SetProperty(ref _closeLauncherOnLaunch, value);
         }
 
+        private bool _autoStartWithWindows = true;
+        public bool AutoStartWithWindows
+        {
+            get => _autoStartWithWindows;
+            set => SetProperty(ref _autoStartWithWindows, value);
+        }
+
+        private bool _runInBackgroundOnClose = true;
+        public bool RunInBackgroundOnClose
+        {
+            get => _runInBackgroundOnClose;
+            set => SetProperty(ref _runInBackgroundOnClose, value);
+        }
+
+        private bool _is24x7TaskRegistered;
+        public bool Is24x7TaskRegistered
+        {
+            get => _is24x7TaskRegistered;
+            set => SetProperty(ref _is24x7TaskRegistered, value);
+        }
+
         public bool UseDirectX11
         {
             get => _useDirectX11;
@@ -377,6 +398,7 @@ namespace PalLauncher.ViewModels
 
         public RelayCommand BrowsePathCommand { get; }
         public RelayCommand AutoDetectPathCommand { get; }
+        public RelayCommand CopyServerIpCommand { get; }
         private readonly ISystemSpecService _specService;
         private SystemHardwareProfile _hardwareProfile = new();
 
@@ -390,6 +412,12 @@ namespace PalLauncher.ViewModels
         public AsyncRelayCommand TestManifestUrlCommand { get; }
         public RelayCommand ResetDefaultsCommand { get; }
         public AsyncRelayCommand AutoOptimizeFlagsCommand { get; }
+        public AsyncRelayCommand Register24x7TaskCommand { get; }
+        public AsyncRelayCommand Unregister24x7TaskCommand { get; }
+        public AsyncRelayCommand RestartDiscordBotCommand { get; }
+
+        public event EventHandler? DiscordBotRestartRequested;
+        private readonly WindowsTaskSchedulerService _taskSchedulerService;
 
         public SettingsViewModel(
             IConfigService configService,
@@ -397,7 +425,8 @@ namespace PalLauncher.ViewModels
             ILaunchService launchService,
             IUpdateService updateService,
             ILogService logService,
-            ISystemSpecService? specService = null)
+            ISystemSpecService? specService = null,
+            WindowsTaskSchedulerService? taskSchedulerService = null)
         {
             _configService = configService;
             _pathDetector = pathDetector;
@@ -405,16 +434,43 @@ namespace PalLauncher.ViewModels
             _updateService = updateService;
             _logService = logService;
             _specService = specService ?? new SystemSpecService(_logService);
+            _taskSchedulerService = taskSchedulerService ?? new WindowsTaskSchedulerService(_logService);
 
             BrowsePathCommand = new RelayCommand(ExecuteBrowsePath);
             AutoDetectPathCommand = new RelayCommand(ExecuteAutoDetectPath);
+            CopyServerIpCommand = new RelayCommand(_ => ExecuteCopyServerIp());
             SaveSettingsCommand = new AsyncRelayCommand(ExecuteSaveSettingsAsync);
             TestManifestUrlCommand = new AsyncRelayCommand(ExecuteTestManifestUrlAsync);
             ResetDefaultsCommand = new RelayCommand(ExecuteResetDefaults);
             AutoOptimizeFlagsCommand = new AsyncRelayCommand(ExecuteAutoOptimizeFlagsAsync);
+            Register24x7TaskCommand = new AsyncRelayCommand(ExecuteRegister24x7TaskAsync);
+            Unregister24x7TaskCommand = new AsyncRelayCommand(ExecuteUnregister24x7TaskAsync);
+            RestartDiscordBotCommand = new AsyncRelayCommand(ExecuteRestartDiscordBotAsync);
 
             LoadFromConfig(_configService.Config);
             _ = InitializeHardwareSpecsAsync();
+        }
+
+        private void ExecuteCopyServerIp()
+        {
+            try
+            {
+                string ip = string.IsNullOrWhiteSpace(ServerIp)
+                    ? "palodyssey.duckdns.org:8211"
+                    : $"{ServerIp}:{ServerPort}";
+
+                Application.Current?.Dispatcher.Invoke(() =>
+                {
+                    Clipboard.SetDataObject(ip, true);
+                });
+
+                StatusMessage = $"📋 Server IP '{ip}' copied to clipboard!";
+                _logService.LogSuccess($"Server IP '{ip}' copied to clipboard.", "Settings");
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Failed to copy: {ex.Message}";
+            }
         }
 
         public async Task InitializeHardwareSpecsAsync()
@@ -500,6 +556,8 @@ namespace PalLauncher.ViewModels
             set => SetProperty(ref _launchServerWithGame, value);
         }
 
+        public event EventHandler? SettingsSaved;
+
         public void LoadFromConfig(LauncherConfig config)
         {
             _gamePath = config.GamePath;
@@ -519,6 +577,26 @@ namespace PalLauncher.ViewModels
             _discordApplicationId = config.DiscordApplicationId;
             _enableDiscordBot = config.EnableDiscordBot;
             _discordBotToken = config.DiscordBotToken;
+
+            // Fallback load token if empty
+            if (string.IsNullOrWhiteSpace(_discordBotToken))
+            {
+                try
+                {
+                    string appDataTokenPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PalLauncher", "bot_token.txt");
+                    string baseDirTokenPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bot_token.txt");
+                    if (File.Exists(appDataTokenPath))
+                    {
+                        _discordBotToken = File.ReadAllText(appDataTokenPath).Trim();
+                    }
+                    else if (File.Exists(baseDirTokenPath))
+                    {
+                        _discordBotToken = File.ReadAllText(baseDirTokenPath).Trim();
+                    }
+                }
+                catch { }
+            }
+
             _discordCommandPrefix = string.IsNullOrWhiteSpace(config.DiscordCommandPrefix) ? "/" : config.DiscordCommandPrefix;
             _discordBotChannelId = string.IsNullOrWhiteSpace(config.DiscordBotChannelId) ? "1541333590707671160" : config.DiscordBotChannelId;
             _discordAdminRoleId = config.DiscordAdminRoleId;
@@ -534,6 +612,10 @@ namespace PalLauncher.ViewModels
             _windowedMode = config.WindowedMode;
             _enableRawInputOptimization = config.EnableRawInputOptimization;
             _customArguments = config.CustomArguments;
+
+            _autoStartWithWindows = config.AutoStartWithWindows;
+            _runInBackgroundOnClose = config.RunInBackgroundOnClose;
+            _is24x7TaskRegistered = _taskSchedulerService.Is24x7TaskRegistered();
 
             OnPropertyChanged(string.Empty);
 
@@ -567,6 +649,8 @@ namespace PalLauncher.ViewModels
                 EnableDiscordRpc = EnableDiscordRpc,
                 DiscordApplicationId = DiscordApplicationId,
                 EnableDiscordBot = EnableDiscordBot,
+                AutoStartWithWindows = AutoStartWithWindows,
+                RunInBackgroundOnClose = RunInBackgroundOnClose,
                 DiscordBotToken = !string.IsNullOrWhiteSpace(DiscordBotToken) ? DiscordBotToken : _configService.Config.DiscordBotToken,
                 DiscordCommandPrefix = string.IsNullOrWhiteSpace(DiscordCommandPrefix) ? "/" : DiscordCommandPrefix,
                 DiscordBotChannelId = string.IsNullOrWhiteSpace(DiscordBotChannelId) ? "1541333590707671160" : DiscordBotChannelId,
@@ -655,6 +739,7 @@ namespace PalLauncher.ViewModels
         {
             var config = CreateConfigFromProperties();
             await _configService.SaveConfigAsync(config);
+            SettingsSaved?.Invoke(this, EventArgs.Empty);
             StatusMessage = "Settings saved successfully!";
         }
 
@@ -696,6 +781,32 @@ namespace PalLauncher.ViewModels
             var defaultConfig = new LauncherConfig();
             LoadFromConfig(defaultConfig);
             StatusMessage = "Settings reset to defaults.";
+        }
+
+        private Task ExecuteRegister24x7TaskAsync()
+        {
+            StatusMessage = "Registering 24/7 background task in Windows Task Scheduler...";
+            var (success, msg) = _taskSchedulerService.Register24x7Task();
+            Is24x7TaskRegistered = _taskSchedulerService.Is24x7TaskRegistered();
+            StatusMessage = success ? $"✓ {msg}" : $"⚠ {msg}";
+            return Task.CompletedTask;
+        }
+
+        private Task ExecuteUnregister24x7TaskAsync()
+        {
+            StatusMessage = "Removing 24/7 background task from Windows Task Scheduler...";
+            var (success, msg) = _taskSchedulerService.Unregister24x7Task();
+            Is24x7TaskRegistered = _taskSchedulerService.Is24x7TaskRegistered();
+            StatusMessage = success ? $"✓ {msg}" : $"⚠ {msg}";
+            return Task.CompletedTask;
+        }
+
+        private async Task ExecuteRestartDiscordBotAsync()
+        {
+            StatusMessage = "Saving settings and restarting Discord Bot...";
+            await ExecuteSaveSettingsAsync();
+            DiscordBotRestartRequested?.Invoke(this, EventArgs.Empty);
+            StatusMessage = "Discord Bot restart signal dispatched.";
         }
     }
 }

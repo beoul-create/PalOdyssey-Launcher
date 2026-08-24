@@ -35,6 +35,9 @@ namespace PalLauncher.Models
         [JsonPropertyName("remoteAccessKey")]
         public string RemoteAccessKey { get; set; } = DefaultRealmAccessKey;
 
+        [JsonPropertyName("serverWebhookUrl")]
+        public string ServerWebhookUrl { get; set; } = "http://palodyssey.duckdns.org:8215/webhook/start-server";
+
         [JsonPropertyName("enableRemoteHostDaemon")]
         public bool EnableRemoteHostDaemon { get; set; } = true;
 
@@ -45,7 +48,13 @@ namespace PalLauncher.Models
         public bool EnableIdleAutoShutdown { get; set; } = true;
 
         [JsonPropertyName("idleShutdownMinutes")]
-        public int IdleShutdownMinutes { get; set; } = 15;
+        public int IdleShutdownMinutes { get; set; } = 20;
+
+        [JsonPropertyName("restApiPort")]
+        public int RestApiPort { get; set; } = 8212;
+
+        [JsonPropertyName("serverAdminPassword")]
+        public string ServerAdminPassword { get; set; } = "0012";
 
         [JsonPropertyName("enablePlayitTunnel")]
         public bool EnablePlayitTunnel { get; set; } = false;
@@ -72,7 +81,10 @@ namespace PalLauncher.Models
         public string DiscordCommandPrefix { get; set; } = "/";
 
         [JsonPropertyName("discordBotChannelId")]
-        public string DiscordBotChannelId { get; set; } = "1541333590707671160";
+        public string DiscordBotChannelId { get; set; } = "1541492780168380446";
+
+        [JsonPropertyName("liveboardMessageId")]
+        public string LiveboardMessageId { get; set; } = "";
 
         [JsonPropertyName("discordAdminRoleId")]
         public string DiscordAdminRoleId { get; set; } = "";

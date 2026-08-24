@@ -24,7 +24,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Left Column: Installation & Hardware Profiler -->
+                <!-- Left Column: Installation & Launch Preferences -->
                 <StackPanel Grid.Column="0">
                     <!-- 1. Game Installation Path Card -->
                     <Border Style="{StaticResource StyleCardBorder}" Margin="0,0,0,14" Padding="18,14">
@@ -54,39 +54,64 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- 2. Detected Rig Specs & Profiling Details -->
-                    <Border Style="{StaticResource StyleCardBorder}" Padding="18,14">
+                    <!-- 2. Launch & Connectivity Preferences Card -->
+                    <Border CornerRadius="10" Background="{StaticResource BrushCardGlowGradient}" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" Margin="0,0,0,14" Padding="18,14">
                         <StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                                <Path Data="{StaticResource IconStats}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
-                                <TextBlock Text="Detected Hardware Specifications" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
-                            </StackPanel>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
-                            <Border Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,0,8">
-                                <StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                                        <TextBlock Text="SYSTEM:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" />
-                                        <TextBlock Text="{Binding HardwareProfile.SummaryText, FallbackValue='Detecting System Specs...'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                <StackPanel Grid.Column="0">
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                                        <Path Data="{StaticResource IconRocket}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                        <TextBlock Text="Launch &amp; Expedition Engine" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
                                     </StackPanel>
-                                    <TextBlock Text="{Binding HardwareProfile.RecommendationSummary, FallbackValue='Ready to optimize game engine'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11.5" Margin="0,0,0,6" TextWrapping="Wrap" />
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="TARGET PERFORMANCE:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" />
-                                        <TextBlock Text="{Binding HardwareProfile.EstimatedAvgFps, FallbackValue='60-80 FPS'}" Foreground="{StaticResource BrushSuccess}" FontSize="11.5" FontWeight="Bold" />
-                                    </StackPanel>
+                                    <TextBlock Text="Client launch settings and automatic server wake triggers." Foreground="{StaticResource BrushTextSecondary}" FontSize="11" TextWrapping="Wrap" />
                                 </StackPanel>
-                            </Border>
 
-                            <Border Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12,8">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Active Features:" Foreground="{StaticResource BrushTextMuted}" FontSize="11" FontWeight="Bold" Margin="0,0,8,0" />
-                                    <TextBlock Text="Discord RPC • Raw Mouse Input • Auto-Sync" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" />
-                                </StackPanel>
-                            </Border>
+                                <!-- Steam Auth Status Badge -->
+                                <Border Grid.Column="1" Background="#0A1828" BorderBrush="{StaticResource BrushSuccess}" BorderThickness="1" CornerRadius="6" Padding="8,3" VerticalAlignment="Center">
+                                    <TextBlock Text="STEAM / EOS AUTH" Foreground="{StaticResource BrushSuccess}" FontSize="10" FontWeight="Bold" />
+                                </Border>
+                            </Grid>
+
+                            <!-- Checkbox Options -->
+                            <CheckBox Content="Auto-Wake Dedicated Server on Launch (Triggers server if offline)"
+                                      Style="{StaticResource StyleDarkCheckBox}"
+                                      IsChecked="{Binding AutoRemoteWakeOnLaunch}"
+                                      Margin="0,0,0,8" />
+
+                            <CheckBox Content="Verify and auto-update core paks prior to launch"
+                                      Style="{StaticResource StyleDarkCheckBox}"
+                                      IsChecked="{Binding AutoUpdateBeforeLaunch}"
+                                      Margin="0,0,0,8" />
+
+                            <CheckBox Content="Close launcher automatically after launching game"
+                                      Style="{StaticResource StyleDarkCheckBox}"
+                                      IsChecked="{Binding CloseLauncherOnLaunch}"
+                                      Margin="0,0,0,8" />
+
+                            <CheckBox Content="Force DirectX 11 Mode (Increases stability &amp; reduces GPU crashes)"
+                                      Style="{StaticResource StyleDarkCheckBox}"
+                                      IsChecked="{Binding UseDirectX11}"
+                                      Margin="0,0,0,8" />
+
+                            <CheckBox Content="Allocate all available CPU logical cores (-USEALLAVAILABLECORES)"
+                                      Style="{StaticResource StyleDarkCheckBox}"
+                                      IsChecked="{Binding UseAllCores}"
+                                      Margin="0,0,0,8" />
+
+                            <CheckBox Content="Skip Unreal Engine startup splash screens for faster boot"
+                                      Style="{StaticResource StyleDarkCheckBox}"
+                                      IsChecked="{Binding NoSplash}"
+                                      Margin="0,0,0,4" />
                         </StackPanel>
                     </Border>
                 </StackPanel>
 
-                <!-- Right Column: Auto-Calibrator & Preferences -->
+                <!-- Right Column: Auto-Calibrator & Public Realm Endpoint -->
                 <StackPanel Grid.Column="2">
                     <!-- 3. 1-Click Game & Engine Performance Suite -->
                     <Border CornerRadius="12" Margin="0,0,0,14" Background="{StaticResource BrushCardGlowGradient}" BorderBrush="{StaticResource BrushCyberBorderGradient}" BorderThickness="1.5" Padding="18,14">
@@ -103,7 +128,7 @@
 
                                 <StackPanel Grid.Column="0">
                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
-                                        <Path Data="{StaticResource IconRocket}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                        <Path Data="{StaticResource IconStats}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
                                         <TextBlock Text="Performance Suite" Foreground="{StaticResource BrushTextPrimary}" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
                                     </StackPanel>
                                     <TextBlock Text="Calibrates CPU threads, shader caches, and network pipeline." Foreground="{StaticResource BrushTextSecondary}" FontSize="11.5" TextWrapping="Wrap" />
@@ -137,15 +162,51 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- 4. Launcher Preferences -->
+                    <!-- 4. Public Realm Endpoint & Community Info Card -->
                     <Border Style="{StaticResource StyleCardBorder}" Padding="18,14">
                         <StackPanel>
-                            <TextBlock Text="Launcher Preferences" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" Margin="0,0,0,10" />
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <Path Data="{StaticResource IconGlobe}" Fill="{StaticResource BrushAccentCyan}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <TextBlock Text="PalOdyssey Dedicated Realm" Foreground="{StaticResource BrushTextPrimary}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" />
+                            </StackPanel>
 
-                            <CheckBox Content="Close launcher automatically after launching game"
-                                      Style="{StaticResource StyleDarkCheckBox}"
-                                      IsChecked="{Binding CloseLauncherOnLaunch}"
-                                      Margin="0,0,0,4" />
+                            <TextBlock Text="Default server connection endpoint configured for all pioneers in the realm." Foreground="{StaticResource BrushTextSecondary}" FontSize="11.5" Margin="0,0,0,10" />
+
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="SERVER DOMAIN / IP:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,4" />
+                                    <TextBox Text="{Binding ServerIp, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource StyleDarkTextBox}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="PORT:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,4" />
+                                    <TextBox Text="{Binding ServerPort, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource StyleDarkTextBox}" TextAlignment="Center" />
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Margin="0,4,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0" Background="#0C121E" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="10,6" Margin="0,0,8,0">
+                                    <TextBlock Text="💡 Server IP is auto-copied to clipboard on launch. Paste in Multiplayer." Foreground="{StaticResource BrushAccentCyan}" FontSize="11" TextWrapping="Wrap" VerticalAlignment="Center" />
+                                </Border>
+
+                                <Button Grid.Column="1" Style="{StaticResource StyleGhostButton}" Command="{Binding CopyServerIpCommand}" Padding="12,6" VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Data="{StaticResource IconCopy}" Fill="{StaticResource BrushAccentCyan}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                        <TextBlock Text="Copy IP" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -171,4 +232,3 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
-

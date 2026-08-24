@@ -67,10 +67,16 @@ namespace PalLauncher.Models
         public bool IsIdleCountingDown { get; set; }
 
         [JsonPropertyName("idleMinutesRemaining")]
-        public int IdleMinutesRemaining { get; set; } = 15;
+        public int IdleMinutesRemaining { get; set; } = 20;
+
+        [JsonPropertyName("idleSecondsRemaining")]
+        public int IdleSecondsRemaining { get; set; } = 1200;
 
         [JsonPropertyName("idleShutdownEnabled")]
         public bool IdleShutdownEnabled { get; set; } = true;
+
+        [JsonPropertyName("serverFps")]
+        public int ServerFps { get; set; } = 60;
 
         [JsonIgnore]
         public bool HasActivePlayers => PlayerCount > 0;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.WebSockets;
@@ -22,6 +23,8 @@ namespace PalLauncher.Services
         private Task? _gatewayTask;
         private int? _lastSequence;
         private string? _sessionId;
+        private DateTime _lastHeartbeatSent = DateTime.UtcNow;
+        private DateTime _lastHeartbeatAck = DateTime.UtcNow;
         private string _token = "";
         private string _prefix = "/";
         private string? _channelId;
@@ -30,6 +33,9 @@ namespace PalLauncher.Services
         private Func<Task<bool>>? _onStartServer;
         private Func<Task<bool>>? _onStopServer;
         private Func<ServerLiveboardInfo>? _getLiveboard;
+
+        private string? _liveboardMessageId;
+        private Task? _liveboardTask;
 
         public bool IsRunning { get; private set; }
         public string BotUsername { get; private set; } = "PalOdyssey Bot";
@@ -61,11 +67,12 @@ namespace PalLauncher.Services
 
             _token = token.Trim();
             _prefix = string.IsNullOrWhiteSpace(prefix) ? "/" : prefix.Trim();
-            _channelId = string.IsNullOrWhiteSpace(channelId) ? null : channelId.Trim();
+            _channelId = string.IsNullOrWhiteSpace(channelId) ? "1541492780168380446" : channelId.Trim();
             _adminRoleId = string.IsNullOrWhiteSpace(adminRoleId) ? null : adminRoleId.Trim();
             _onStartServer = onStartServer;
             _onStopServer = onStopServer;
             _getLiveboard = getLiveboard;
+            _applicationId = GetApplicationId();
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bot", _token);
 
@@ -74,8 +81,9 @@ namespace PalLauncher.Services
 
             IsRunning = true;
             _gatewayTask = Task.Run(() => RunGatewayLoopAsync(_botCts.Token));
+            _liveboardTask = Task.Run(() => RunLiveboardLoopAsync(_botCts.Token));
 
-            _logService.LogInfo($"Discord Bot service initialized (Slash Commands: '/'). Connecting to Discord Gateway...", "DiscordBot");
+            _logService.LogInfo($"Discord Bot service initialized (Slash Commands: '/'). 24/7 Liveboard active on channel {_channelId}. Connecting to Discord Gateway...", "DiscordBot");
             return Task.FromResult(true);
         }
 
@@ -106,6 +114,9 @@ namespace PalLauncher.Services
 
         private async Task RunGatewayLoopAsync(CancellationToken ct)
         {
+            int consecutiveFailures = 0;
+            var rng = new Random();
+
             while (!ct.IsCancellationRequested && IsRunning)
             {
                 try
@@ -113,8 +124,12 @@ namespace PalLauncher.Services
                     _webSocket = new ClientWebSocket();
                     var gatewayUri = new Uri("wss://gateway.discord.gg/?v=10&encoding=json");
 
-                    _logService.LogInfo("Connecting to Discord Gateway...", "DiscordBot");
+                    _logService.LogInfo("Connecting to Discord Gateway (24/7 autonomous watchdog)...", "DiscordBot");
                     await _webSocket.ConnectAsync(gatewayUri, ct);
+
+                    consecutiveFailures = 0;
+                    _lastHeartbeatAck = DateTime.UtcNow;
+                    _lastHeartbeatSent = DateTime.UtcNow;
 
                     await HandleGatewaySessionAsync(_webSocket, ct);
                 }
@@ -126,9 +141,30 @@ namespace PalLauncher.Services
                 {
                     if (IsRunning && !ct.IsCancellationRequested)
                     {
-                        _logService.LogWarning($"Discord Gateway connection lost: {ex.Message}. Reconnecting in 5s...", "DiscordBot");
-                        try { await Task.Delay(5000, ct); } catch { break; }
+                        consecutiveFailures++;
+                        int backoffSec = Math.Min(30, (int)Math.Pow(2, Math.Min(consecutiveFailures, 5)));
+                        int jitterMs = rng.Next(200, 1500);
+                        int totalDelay = (backoffSec * 1000) + jitterMs;
+
+                        _logService.LogWarning($"Discord Gateway connection interrupted: {ex.Message}. Reconnecting in {backoffSec}s (retry #{consecutiveFailures})...", "DiscordBot");
+                        try { await Task.Delay(totalDelay, ct); } catch { break; }
                     }
+                }
+                finally
+                {
+                    try
+                    {
+                        if (_webSocket != null)
+                        {
+                            if (_webSocket.State == WebSocketState.Open)
+                            {
+                                await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Reconnecting", CancellationToken.None);
+                            }
+                            _webSocket.Dispose();
+                            _webSocket = null;
+                        }
+                    }
+                    catch { }
                 }
             }
         }
@@ -173,7 +209,11 @@ namespace PalLauncher.Services
                         heartbeatCts?.Cancel();
                         heartbeatCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
                         _ = StartHeartbeatLoopAsync(ws, heartbeatIntervalMs, heartbeatCts.Token);
-                        await SendIdentifyAsync(ws, ct);
+                        await SendIdentifyOrResumeAsync(ws, ct);
+                        break;
+
+                    case 11: // Heartbeat ACK
+                        _lastHeartbeatAck = DateTime.UtcNow;
                         break;
 
                     case 0: // Dispatch
@@ -195,7 +235,11 @@ namespace PalLauncher.Services
                                 }
                             }
 
-                            _logService.LogSuccess($"Discord Bot logged in successfully as @{BotUsername}!", "DiscordBot");
+                            _logService.LogSuccess($"Discord Bot logged in successfully as @{BotUsername} (24/7 Ready)!", "DiscordBot");
+                        }
+                        else if (eventType == "RESUMED")
+                        {
+                            _logService.LogSuccess($"Discord Gateway session resumed seamlessly as @{BotUsername}!", "DiscordBot");
                         }
                         else if (eventType == "INTERACTION_CREATE")
                         {
@@ -214,19 +258,57 @@ namespace PalLauncher.Services
                         break;
 
                     case 7: // Reconnect
+                        _logService.LogInfo("Discord Gateway requested reconnect (OP 7). Re-establishing session...", "DiscordBot");
+                        return;
+
                     case 9: // Invalid Session
-                        _logService.LogInfo($"Discord Gateway requested session restart (OP {op}).", "DiscordBot");
+                        bool resumable = root.TryGetProperty("d", out var dRes) && dRes.ValueKind == JsonValueKind.True;
+                        if (!resumable)
+                        {
+                            _sessionId = null;
+                            _lastSequence = null;
+                        }
+                        _logService.LogInfo($"Discord Gateway invalid session (resumable: {resumable}). Reconnecting...", "DiscordBot");
                         return;
                 }
             }
         }
 
-        private async Task RegisterGlobalSlashCommandsAsync(string applicationId)
+        private string GetApplicationId()
+        {
+            if (!string.IsNullOrWhiteSpace(_applicationId))
+            {
+                return _applicationId;
+            }
+
+            if (!string.IsNullOrWhiteSpace(_token))
+            {
+                try
+                {
+                    string firstPart = _token.Split('.')[0];
+                    byte[] bytes = Convert.FromBase64String(firstPart.PadRight((firstPart.Length + 3) / 4 * 4, '='));
+                    string decoded = Encoding.UTF8.GetString(bytes);
+                    if (ulong.TryParse(decoded, out _))
+                    {
+                        _applicationId = decoded;
+                        return decoded;
+                    }
+                }
+                catch { }
+            }
+
+            return "1541335019899977768";
+        }
+
+        private async Task RegisterGlobalSlashCommandsAsync(string? applicationId = null)
         {
             try
             {
-                var commands = new[]
+                string appId = !string.IsNullOrWhiteSpace(applicationId) ? applicationId : GetApplicationId();
+
+                var commands = new object[]
                 {
+                    // Public Commands (Available to @everyone)
                     new
                     {
                         name = "start",
@@ -247,46 +329,51 @@ namespace PalLauncher.Services
                     },
                     new
                     {
-                        name = "restart",
-                        description = "Gracefully reboot the PalOdyssey Dedicated Server",
+                        name = "help",
+                        description = "List all available PalOdyssey server commands",
                         type = 1
                     },
+
+                    // Admin-Only Commands (Restricted to Administrators)
                     new
                     {
-                        name = "reboot",
-                        description = "Reboot the PalOdyssey Dedicated Server",
-                        type = 1
+                        name = "restart",
+                        description = "Gracefully reboot the PalOdyssey Dedicated Server (Admin Only)",
+                        type = 1,
+                        default_member_permissions = "8"
                     },
                     new
                     {
                         name = "stop",
-                        description = "Gracefully shut down the PalOdyssey dedicated server",
-                        type = 1
-                    },
-                    new
-                    {
-                        name = "help",
-                        description = "List all available PalOdyssey server commands",
-                        type = 1
+                        description = "Gracefully shut down the PalOdyssey dedicated server (Admin Only)",
+                        type = 1,
+                        default_member_permissions = "8"
                     }
                 };
 
                 string json = JsonSerializer.Serialize(commands);
 
-                // 1. Clear global commands to eliminate duplicate commands in Discord UI
-                var emptyContent = new StringContent("[]", Encoding.UTF8, "application/json");
-                var clearResp = await _httpClient.PutAsync($"applications/{applicationId}/commands", emptyContent);
-                if (clearResp.IsSuccessStatusCode)
+                // 1. Register global slash commands (available across all servers and DMs)
+                var globalContent = new StringContent(json, Encoding.UTF8, "application/json");
+                var globalResp = await _httpClient.PutAsync($"applications/{appId}/commands", globalContent);
+                if (globalResp.IsSuccessStatusCode)
                 {
-                    _logService.LogSuccess("Cleared global slash commands to prevent duplicates in Discord.", "DiscordBot");
+                    _logService.LogSuccess("Discord native Slash Commands (/start, /status, /ip, /restart, /stop, /help) registered globally!", "DiscordBot");
+                }
+                else
+                {
+                    string err = await globalResp.Content.ReadAsStringAsync();
+                    _logService.LogWarning($"Global slash command registration returned {globalResp.StatusCode}: {err}", "DiscordBot");
                 }
 
-                // 2. Fetch all joined guilds and register instantly on each guild (bypasses 1-hour global cache delay)
+                // 2. Clear any lingering guild-specific commands from joined guilds to prevent duplicate entries in Discord's slash command picker
                 var guildsResp = await _httpClient.GetAsync("users/@me/guilds");
                 if (guildsResp.IsSuccessStatusCode)
                 {
                     string guildsJson = await guildsResp.Content.ReadAsStringAsync();
                     using var doc = JsonDocument.Parse(guildsJson);
+                    var emptyContent = new StringContent("[]", Encoding.UTF8, "application/json");
+
                     foreach (var guild in doc.RootElement.EnumerateArray())
                     {
                         string guildId = guild.GetProperty("id").GetString() ?? "";
@@ -294,11 +381,10 @@ namespace PalLauncher.Services
 
                         if (!string.IsNullOrWhiteSpace(guildId))
                         {
-                            var gContent = new StringContent(json, Encoding.UTF8, "application/json");
-                            var gResp = await _httpClient.PutAsync($"applications/{applicationId}/guilds/{guildId}/commands", gContent);
-                            if (gResp.IsSuccessStatusCode)
+                            var clearResp = await _httpClient.PutAsync($"applications/{appId}/guilds/{guildId}/commands", emptyContent);
+                            if (clearResp.IsSuccessStatusCode)
                             {
-                                _logService.LogSuccess($"Slash Commands (/start, /status, /ip, /restart, /reboot, /stop, /help) active with zero duplicates for server '{guildName}'!", "DiscordBot");
+                                _logService.LogInfo($"Cleared redundant guild-level commands for '{guildName}' ({guildId}) to prevent duplicates.", "DiscordBot");
                             }
                         }
                     }
@@ -320,6 +406,15 @@ namespace PalLauncher.Services
 
                 while (!ct.IsCancellationRequested && ws.State == WebSocketState.Open)
                 {
+                    // Watchdog: detect zombie websocket if Heartbeat ACK was missed for > 2.5 intervals
+                    if (_lastHeartbeatSent > _lastHeartbeatAck &&
+                        (DateTime.UtcNow - _lastHeartbeatSent).TotalMilliseconds > (intervalMs * 2.5))
+                    {
+                        _logService.LogWarning("Discord Heartbeat ACK timed out (zombie connection detected). Forcing gateway reconnection...", "DiscordBot");
+                        try { ws.Abort(); } catch { }
+                        break;
+                    }
+
                     await SendHeartbeatAsync(ws, ct);
                     await Task.Delay(intervalMs, ct);
                 }
@@ -331,6 +426,7 @@ namespace PalLauncher.Services
         {
             try
             {
+                _lastHeartbeatSent = DateTime.UtcNow;
                 string payload = JsonSerializer.Serialize(new
                 {
                     op = 1,
@@ -342,38 +438,77 @@ namespace PalLauncher.Services
             catch { }
         }
 
-        private async Task SendIdentifyAsync(ClientWebSocket ws, CancellationToken ct)
+        private async Task SendIdentifyOrResumeAsync(ClientWebSocket ws, CancellationToken ct)
         {
-            int intents = 1 | 512 | 4096 | 32768;
-
-            var identifyPayload = new
+            try
             {
-                op = 2,
-                d = new
+                // If we have an existing session and sequence number, attempt to Resume first
+                if (!string.IsNullOrWhiteSpace(_sessionId) && _lastSequence.HasValue)
                 {
-                    token = _token,
-                    intents = intents,
-                    properties = new Dictionary<string, string>
+                    _logService.LogInfo($"Attempting to resume Discord session '{_sessionId}' at sequence {_lastSequence.Value}...", "DiscordBot");
+                    var resumePayload = new
                     {
-                        { "os", "windows" },
-                        { "browser", "PalOdyssey-Launcher" },
-                        { "device", "PalOdyssey-Launcher" }
-                    }
-                }
-            };
+                        op = 6,
+                        d = new
+                        {
+                            token = _token,
+                            session_id = _sessionId,
+                            seq = _lastSequence.Value
+                        }
+                    };
 
-            string json = JsonSerializer.Serialize(identifyPayload);
-            byte[] bytes = Encoding.UTF8.GetBytes(json);
-            await ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, ct);
+                    string resumeJson = JsonSerializer.Serialize(resumePayload);
+                    byte[] resumeBytes = Encoding.UTF8.GetBytes(resumeJson);
+                    await ws.SendAsync(new ArraySegment<byte>(resumeBytes), WebSocketMessageType.Text, true, ct);
+                    return;
+                }
+
+                // Otherwise, send standard Identify payload
+                int intents = 1 | 512 | 4096 | 32768;
+
+                var identifyPayload = new
+                {
+                    op = 2,
+                    d = new
+                    {
+                        token = _token,
+                        intents = intents,
+                        properties = new Dictionary<string, string>
+                        {
+                            { "os", "windows" },
+                            { "browser", "PalOdyssey-Launcher" },
+                            { "device", "PalOdyssey-Launcher" }
+                        }
+                    }
+                };
+
+                string json = JsonSerializer.Serialize(identifyPayload);
+                byte[] bytes = Encoding.UTF8.GetBytes(json);
+                await ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, ct);
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to send identify/resume payload: {ex.Message}", "DiscordBot");
+            }
         }
 
         private async Task HandleInteractionCreateAsync(JsonElement interaction)
         {
+            string interactionToken = "";
             try
             {
                 string interactionId = interaction.GetProperty("id").GetString() ?? "";
-                string interactionToken = interaction.GetProperty("token").GetString() ?? "";
+                interactionToken = interaction.GetProperty("token").GetString() ?? "";
                 string channelId = interaction.TryGetProperty("channel_id", out var ch) ? ch.GetString() ?? "" : "";
+
+                if (interaction.TryGetProperty("application_id", out var appIdProp))
+                {
+                    string? appId = appIdProp.GetString();
+                    if (!string.IsNullOrWhiteSpace(appId))
+                    {
+                        _applicationId = appId;
+                    }
+                }
                 
                 string authorName = "Pioneer";
                 if (interaction.TryGetProperty("member", out var member) &&
@@ -393,42 +528,167 @@ namespace PalLauncher.Services
 
                 _logService.LogInfo($"Received Discord slash interaction '/{command}' from '{authorName}' in channel '{channelId}' (ID: {interactionId})", "DiscordBot");
 
+                // Immediately ACK the interaction with a deferred response (type 5) to prevent the 3-second timeout
+                await DeferInteractionAsync(interactionId, interactionToken);
+
                 switch (command)
                 {
                     case "start":
                     case "boot":
-                        await ExecuteStartInteractionAsync(interactionId, interactionToken, channelId, authorName);
+                        await ExecuteStartInteractionAsync(interactionToken, channelId, authorName);
                         break;
 
                     case "status":
                     case "server":
-                        await ExecuteStatusInteractionAsync(interactionId, interactionToken);
+                        await ExecuteStatusInteractionAsync(interactionToken);
                         break;
 
                     case "ip":
                     case "connect":
-                        await ExecuteIpInteractionAsync(interactionId, interactionToken);
+                        await ExecuteIpInteractionAsync(interactionToken);
                         break;
 
                     case "restart":
                     case "reboot":
-                        await ExecuteRestartInteractionAsync(interactionId, interactionToken, channelId, authorName);
+                        if (!IsAdminUser(interaction))
+                        {
+                            _logService.LogWarning($"User '{authorName}' attempted admin command '/{command}' without administrator permissions.", "DiscordBot");
+                            await EditDeferredResponseEmbedAsync(interactionToken,
+                                title: "⛔ Administrative Permission Required",
+                                description: "❌ You do not have permission to execute this administrative command.",
+                                color: 0xFF3366);
+                            return;
+                        }
+                        await ExecuteRestartInteractionAsync(interactionToken, channelId, authorName);
                         break;
 
                     case "stop":
                     case "shutdown":
-                        await ExecuteStopInteractionAsync(interactionId, interactionToken, authorName);
+                        if (!IsAdminUser(interaction))
+                        {
+                            _logService.LogWarning($"User '{authorName}' attempted admin command '/{command}' without administrator permissions.", "DiscordBot");
+                            await EditDeferredResponseEmbedAsync(interactionToken,
+                                title: "⛔ Administrative Permission Required",
+                                description: "❌ You do not have permission to execute this administrative command.",
+                                color: 0xFF3366);
+                            return;
+                        }
+                        await ExecuteStopInteractionAsync(interactionToken, authorName);
                         break;
 
                     case "help":
-                        await ExecuteHelpInteractionAsync(interactionId, interactionToken);
+                        await ExecuteHelpInteractionAsync(interactionToken);
+                        break;
+
+                    default:
+                        await EditDeferredResponseEmbedAsync(interactionToken,
+                            title: "❓ Unknown Command",
+                            description: $"The command `/{command}` is not recognized. Use `/help` to see available commands.",
+                            color: 0x8899AA);
                         break;
                 }
             }
             catch (Exception ex)
             {
                 _logService.LogWarning($"Error handling Discord slash interaction: {ex.Message}", "DiscordBot");
+                // Attempt to send an error response so Discord doesn't show "The application did not respond"
+                if (!string.IsNullOrWhiteSpace(interactionToken))
+                {
+                    try
+                    {
+                        await EditDeferredResponseEmbedAsync(interactionToken,
+                            title: "⚠️ Something went wrong",
+                            description: "An internal error occurred while processing this command. Please try again.",
+                            color: 0xFF4466);
+                    }
+                    catch { }
+                }
             }
+        }
+
+        private bool IsAdminUser(JsonElement interaction)
+        {
+            // 1. Check member.permissions bitmask in guild context (ADMINISTRATOR is bit 3 = 8)
+            if (interaction.TryGetProperty("member", out var member))
+            {
+                if (member.TryGetProperty("permissions", out var permsProp))
+                {
+                    string? permStr = permsProp.GetString();
+                    if (ulong.TryParse(permStr, out ulong permBits))
+                    {
+                        const ulong administratorBit = 1UL << 3; // 8 = ADMINISTRATOR
+                        if ((permBits & administratorBit) != 0)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                // 2. Check admin role if configured
+                if (!string.IsNullOrWhiteSpace(_adminRoleId) && member.TryGetProperty("roles", out var rolesProp))
+                {
+                    foreach (var r in rolesProp.EnumerateArray())
+                    {
+                        if (r.GetString() == _adminRoleId)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            // In direct DMs with bot, allow if user ID matches admin role ID (or configured admin)
+            if (interaction.TryGetProperty("user", out var user))
+            {
+                string? uid = user.TryGetProperty("id", out var uidProp) ? uidProp.GetString() : null;
+                if (!string.IsNullOrWhiteSpace(_adminRoleId) && uid == _adminRoleId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool IsAdminMessageAuthor(JsonElement msg)
+        {
+            if (msg.TryGetProperty("member", out var member))
+            {
+                if (member.TryGetProperty("permissions", out var permsProp))
+                {
+                    string? permStr = permsProp.GetString();
+                    if (ulong.TryParse(permStr, out ulong permBits))
+                    {
+                        const ulong administratorBit = 1UL << 3; // 8 = ADMINISTRATOR
+                        if ((permBits & administratorBit) != 0)
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(_adminRoleId) && member.TryGetProperty("roles", out var rolesProp))
+                {
+                    foreach (var r in rolesProp.EnumerateArray())
+                    {
+                        if (r.GetString() == _adminRoleId)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            if (msg.TryGetProperty("author", out var author))
+            {
+                string? uid = author.TryGetProperty("id", out var uidProp) ? uidProp.GetString() : null;
+                if (!string.IsNullOrWhiteSpace(_adminRoleId) && uid == _adminRoleId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private async Task HandleMessageCreateAsync(JsonElement msg)
@@ -494,11 +754,29 @@ namespace PalLauncher.Services
 
                     case "restart":
                     case "reboot":
+                        if (!IsAdminMessageAuthor(msg))
+                        {
+                            _logService.LogWarning($"User '{authorName}' attempted admin message command '{mainCmd}' without administrator permissions.", "DiscordBot");
+                            await SendEmbedMessageAsync(channelId,
+                                title: "⛔ Administrative Permission Required",
+                                description: "❌ You do not have permission to execute this administrative command.",
+                                color: 0xFF3366);
+                            return;
+                        }
                         await ExecuteRestartCommandAsync(channelId, authorName);
                         break;
 
                     case "stop":
                     case "shutdown":
+                        if (!IsAdminMessageAuthor(msg))
+                        {
+                            _logService.LogWarning($"User '{authorName}' attempted admin message command '{mainCmd}' without administrator permissions.", "DiscordBot");
+                            await SendEmbedMessageAsync(channelId,
+                                title: "⛔ Administrative Permission Required",
+                                description: "❌ You do not have permission to execute this administrative command.",
+                                color: 0xFF3366);
+                            return;
+                        }
                         await ExecuteStopCommandAsync(channelId, authorName);
                         break;
 
@@ -514,20 +792,22 @@ namespace PalLauncher.Services
             }
         }
 
-        private async Task ExecuteStartInteractionAsync(string interactionId, string interactionToken, string channelId, string authorName)
+        private async Task ExecuteStartInteractionAsync(string interactionToken, string channelId, string authorName)
         {
-            var liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo();
+            ServerLiveboardInfo liveboard;
+            try { liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo(); }
+            catch { liveboard = new ServerLiveboardInfo(); }
 
             if (liveboard.IsOnline || liveboard.IsServerRunning)
             {
-                await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                await EditDeferredResponseEmbedAsync(interactionToken,
                     title: "⚡ PalOdyssey Realm is ALREADY Online!",
                     description: $"The server is already running and accepting connections.\n\n🎮 **Server Address**: `palodyssey.duckdns.org:8211`\n👥 **Pioneers**: `{liveboard.PlayerCount} / {liveboard.MaxPlayers}`\n⏱️ **Uptime**: `{liveboard.UptimeFormatted}`",
                     color: 0x00E5FF);
                 return;
             }
 
-            await RespondInteractionEmbedAsync(interactionId, interactionToken,
+            await EditDeferredResponseEmbedAsync(interactionToken,
                 title: "🚀 Starting PalOdyssey Dedicated Server...",
                 description: $"Requested by **{authorName}** via `/start`.\n\nAllocating CPU cores and preparing dedicated world state...",
                 color: 0xFFAA00);
@@ -561,13 +841,15 @@ namespace PalLauncher.Services
             }
         }
 
-        private async Task ExecuteStatusInteractionAsync(string interactionId, string interactionToken)
+        private async Task ExecuteStatusInteractionAsync(string interactionToken)
         {
-            var liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo();
+            ServerLiveboardInfo liveboard;
+            try { liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo(); }
+            catch { liveboard = new ServerLiveboardInfo(); }
 
             if (liveboard.IsOnline || liveboard.IsServerRunning)
             {
-                await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                await EditDeferredResponseEmbedAsync(interactionToken,
                     title: "🟢 PalOdyssey Realm — Online",
                     description: $"Server is currently active and healthy.\n\n" +
                                  $"📍 **Direct Address**: `palodyssey.duckdns.org:8211`\n" +
@@ -578,7 +860,7 @@ namespace PalLauncher.Services
             }
             else
             {
-                await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                await EditDeferredResponseEmbedAsync(interactionToken,
                     title: "⚪ PalOdyssey Realm — Standby / Sleeping",
                     description: "The server is currently powered down in power-saving standby mode.\n\n" +
                                  $"👉 Type `/start` to boot it up instantly!",
@@ -586,9 +868,9 @@ namespace PalLauncher.Services
             }
         }
 
-        private async Task ExecuteIpInteractionAsync(string interactionId, string interactionToken)
+        private async Task ExecuteIpInteractionAsync(string interactionToken)
         {
-            await RespondInteractionEmbedAsync(interactionId, interactionToken,
+            await EditDeferredResponseEmbedAsync(interactionToken,
                 title: "🌐 PalOdyssey Server Connection Info",
                 description: "### 🎮 Join Address:\n" +
                              "```\npalodyssey.duckdns.org:8211\n```\n\n" +
@@ -598,11 +880,11 @@ namespace PalLauncher.Services
                 color: 0x00E5FF);
         }
 
-        private async Task ExecuteStopInteractionAsync(string interactionId, string interactionToken, string authorName)
+        private async Task ExecuteStopInteractionAsync(string interactionToken, string authorName)
         {
             _logService.LogInfo($"Discord user '{authorName}' requested server shutdown via /stop.", "DiscordBot");
 
-            await RespondInteractionEmbedAsync(interactionId, interactionToken,
+            await EditDeferredResponseEmbedAsync(interactionToken,
                 title: "🛑 Stopping PalOdyssey Dedicated Server...",
                 description: $"Dedicated server shutdown requested by **{authorName}** via `/stop`.\n\nSaving world state and shutting down processes...",
                 color: 0xFF4466);
@@ -613,11 +895,11 @@ namespace PalLauncher.Services
             }
         }
 
-        private async Task ExecuteRestartInteractionAsync(string interactionId, string interactionToken, string channelId, string authorName)
+        private async Task ExecuteRestartInteractionAsync(string interactionToken, string channelId, string authorName)
         {
             _logService.LogInfo($"Discord user '{authorName}' requested server reboot via /restart or /reboot.", "DiscordBot");
 
-            await RespondInteractionEmbedAsync(interactionId, interactionToken,
+            await EditDeferredResponseEmbedAsync(interactionToken,
                 title: "🔄 Rebooting PalOdyssey Server...",
                 description: $"Reboot requested by **{authorName}**.\n\nGracefully stopping world state, clearing memory caches, and rebooting engine...",
                 color: 0x00E5FF);
@@ -664,16 +946,18 @@ namespace PalLauncher.Services
             });
         }
 
-        private async Task ExecuteHelpInteractionAsync(string interactionId, string interactionToken)
+        private async Task ExecuteHelpInteractionAsync(string interactionToken)
         {
-            await RespondInteractionEmbedAsync(interactionId, interactionToken,
-                title: "📜 PalOdyssey Slash Commands",
-                description: "• `/start` — Powers up the dedicated server.\n" +
-                             "• `/status` — Displays live server uptime and player count.\n" +
-                             "• `/ip` — Shows server IP and quick connection instructions.\n" +
-                             "• `/restart` (or `/reboot`) — Gracefully reboots the dedicated server.\n" +
-                             "• `/stop` — Powers down the server.\n" +
-                             "• `/help` — Shows this slash command guide.",
+            await EditDeferredResponseEmbedAsync(interactionToken,
+                title: "📜 PalOdyssey Commands Guide",
+                description: "**🌍 Public Commands (@everyone)**\n" +
+                             "• `/start` — Powers up the dedicated server (24/7 auto-wake).\n" +
+                             "• `/status` — Real-time server status, player count, and uptime.\n" +
+                             "• `/ip` — Server endpoint address and connection guide.\n" +
+                             "• `/help` — Lists all available bot commands.\n\n" +
+                             "**🛡️ Administrator Commands (Admin Only)**\n" +
+                             "• `/restart` — Gracefully reboots the dedicated server.\n" +
+                             "• `/stop` — Safely shuts down the dedicated server.",
                 color: 0x9966FF);
         }
 
@@ -842,14 +1126,106 @@ namespace PalLauncher.Services
         private async Task ExecuteHelpCommandAsync(string channelId)
         {
             await SendEmbedMessageAsync(channelId,
-                title: "📜 PalOdyssey Slash Commands",
-                description: "• `/start` — Powers up the dedicated server.\n" +
-                             "• `/status` — Displays live server uptime and player count.\n" +
-                             "• `/ip` — Shows server IP and quick connection instructions.\n" +
-                             "• `/restart` (or `/reboot`) — Gracefully reboots the dedicated server.\n" +
-                             "• `/stop` — Powers down the server.\n" +
-                             "• `/help` — Shows this commands guide.",
+                title: "📜 PalOdyssey Commands Guide",
+                description: "**🌍 Public Commands (@everyone)**\n" +
+                             "• `!start` or `/start` — Powers up the dedicated server (24/7 auto-wake).\n" +
+                             "• `!status` or `/status` — Real-time server status, player count, and uptime.\n" +
+                             "• `!ip` or `/ip` — Server endpoint address and connection guide.\n" +
+                             "• `!help` or `/help` — Lists all available bot commands.\n\n" +
+                             "**🛡️ Administrator Commands (Admin Only)**\n" +
+                             "• `!restart` or `/restart` — Gracefully reboots the dedicated server.\n" +
+                             "• `!stop` or `/stop` — Safely shuts down the dedicated server.",
                 color: 0x9966FF);
+        }
+
+        private async Task DeferInteractionAsync(string interactionId, string interactionToken)
+        {
+            try
+            {
+                var payload = new
+                {
+                    type = 5 // DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
+                };
+
+                string json = JsonSerializer.Serialize(payload);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Interaction callbacks MUST NOT include the Bot Authorization header (Discord rejects it with 401 Unauthorized)
+                using var request = new HttpRequestMessage(HttpMethod.Post, $"https://discord.com/api/v10/interactions/{interactionId}/{interactionToken}/callback")
+                {
+                    Content = content
+                };
+
+                using var callbackClient = new HttpClient();
+                callbackClient.DefaultRequestHeaders.UserAgent.ParseAdd("DiscordBot (PalOdyssey-Launcher, 2.0.0)");
+
+                var resp = await callbackClient.SendAsync(request);
+                if (!resp.IsSuccessStatusCode)
+                {
+                    string err = await resp.Content.ReadAsStringAsync();
+                    _logService.LogWarning($"Interaction defer callback returned {resp.StatusCode}: {err}", "DiscordBot");
+                }
+                else
+                {
+                    _logService.LogInfo($"Successfully deferred slash interaction ({interactionId})", "DiscordBot");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to defer Discord interaction: {ex.Message}", "DiscordBot");
+            }
+        }
+
+        private async Task EditDeferredResponseEmbedAsync(string interactionToken, string title, string description, int color)
+        {
+            try
+            {
+                string appId = GetApplicationId();
+
+                var payload = new
+                {
+                    embeds = new[]
+                    {
+                        new
+                        {
+                            title = title,
+                            description = description,
+                            color = color,
+                            footer = new
+                            {
+                                text = "PalOdyssey Autonomous Host • Automated Server Manager"
+                            },
+                            timestamp = DateTime.UtcNow.ToString("o")
+                        }
+                    }
+                };
+
+                string json = JsonSerializer.Serialize(payload);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                using var request = new HttpRequestMessage(HttpMethod.Patch, $"https://discord.com/api/v10/webhooks/{appId}/{interactionToken}/messages/@original")
+                {
+                    Content = content
+                };
+
+                using var webhookClient = new HttpClient();
+                webhookClient.DefaultRequestHeaders.UserAgent.ParseAdd("DiscordBot (PalOdyssey-Launcher, 2.0.0)");
+
+                var resp = await webhookClient.SendAsync(request);
+                if (!resp.IsSuccessStatusCode)
+                {
+                    string err = await resp.Content.ReadAsStringAsync();
+                    _logService.LogWarning($"Edit deferred response returned {resp.StatusCode}: {err}", "DiscordBot");
+                }
+                else
+                {
+                    _logService.LogSuccess($"Successfully edited deferred interaction response.", "DiscordBot");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to edit deferred interaction response: {ex.Message}", "DiscordBot");
+            }
         }
 
         private async Task RespondInteractionEmbedAsync(string interactionId, string interactionToken, string title, string description, int color)
@@ -945,6 +1321,273 @@ namespace PalLauncher.Services
             }
         }
 
+        public async Task BroadcastServerBootingAsync(string triggeredBy = "Remote Webhook")
+        {
+            if (string.IsNullOrWhiteSpace(_channelId) || string.IsNullOrWhiteSpace(_token)) return;
+
+            try
+            {
+                _logService.LogInfo($"Broadcasting server boot notification to Discord channel {_channelId} (Triggered by: {triggeredBy})...", "DiscordBot");
+                await SendEmbedMessageAsync(_channelId,
+                    title: "🚀 PalOdyssey Dedicated Server is BOOTING UP!",
+                    description: $"Server launch triggered via **{triggeredBy}**.\n\n" +
+                                 "⚡ **Status**: Allocating CPU cores, loading world save, and spinning up network sockets on port `8211`...\n\n" +
+                                 "⏱️ Ready in ~15–30 seconds. A notification will post as soon as the realm is joinable!",
+                    color: 0xFFAA00);
+
+                // Spawn background watchdog to announce when online
+                _ = Task.Run(async () =>
+                {
+                    for (int i = 0; i < 30; i++)
+                    {
+                        await Task.Delay(2000);
+                        var current = _getLiveboard?.Invoke();
+                        if (current != null && (current.IsOnline || current.IsServerRunning))
+                        {
+                            await BroadcastServerOnlineAsync();
+                            return;
+                        }
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to broadcast server booting to Discord: {ex.Message}", "DiscordBot");
+            }
+        }
+
+        public async Task BroadcastServerOnlineAsync()
+        {
+            if (string.IsNullOrWhiteSpace(_channelId) || string.IsNullOrWhiteSpace(_token)) return;
+
+            try
+            {
+                await SendEmbedMessageAsync(_channelId,
+                    title: "🟢 PalOdyssey Realm is ONLINE!",
+                    description: "The dedicated server is fully loaded and ready for exploration!\n\n" +
+                                 "🔗 **Connection Address**: `palodyssey.duckdns.org:8211`\n" +
+                                 "👥 **Max Pioneers**: `32`\n" +
+                                 "✨ **1-Click Launch**: Open your PalOdyssey Launcher and click **LAUNCH GAME** to auto-connect with active mods!",
+                    color: 0x00FF88);
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to broadcast server online to Discord: {ex.Message}", "DiscordBot");
+            }
+        }
+
+        private void LoadLiveboardMessageId()
+        {
+            try
+            {
+                string statePath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "PalLauncher",
+                    "liveboard_state.json");
+
+                if (File.Exists(statePath))
+                {
+                    string json = File.ReadAllText(statePath);
+                    using var doc = JsonDocument.Parse(json);
+                    if (doc.RootElement.TryGetProperty("messageId", out var idProp))
+                    {
+                        _liveboardMessageId = idProp.GetString();
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private void SaveLiveboardMessageId(string messageId)
+        {
+            try
+            {
+                _liveboardMessageId = messageId;
+                string dir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "PalLauncher");
+
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                string statePath = Path.Combine(dir, "liveboard_state.json");
+                File.WriteAllText(statePath, JsonSerializer.Serialize(new { messageId }));
+            }
+            catch { }
+        }
+
+        private async Task RunLiveboardLoopAsync(CancellationToken ct)
+        {
+            string targetChannel = !string.IsNullOrWhiteSpace(_channelId) ? _channelId : "1541492780168380446";
+            LoadLiveboardMessageId();
+
+            // Brief initial delay to allow gateway connection
+            try { await Task.Delay(3000, ct); } catch { return; }
+
+            while (!ct.IsCancellationRequested && IsRunning)
+            {
+                try
+                {
+                    await UpdateLiveboardEmbedAsync(targetChannel);
+                }
+                catch (OperationCanceledException) { break; }
+                catch (Exception ex)
+                {
+                    _logService.LogWarning($"Liveboard update loop exception: {ex.Message}", "DiscordBot");
+                }
+
+                try
+                {
+                    await Task.Delay(30000, ct); // Auto-refresh every 30s
+                }
+                catch (OperationCanceledException) { break; }
+            }
+        }
+
+        public async Task UpdateLiveboardEmbedAsync(string channelId)
+        {
+            if (string.IsNullOrWhiteSpace(_token) || string.IsNullOrWhiteSpace(channelId)) return;
+
+            ServerLiveboardInfo liveboard;
+            try { liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo(); }
+            catch { liveboard = new ServerLiveboardInfo(); }
+
+            long unixSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            bool isOnline = liveboard.IsOnline || liveboard.IsServerRunning;
+
+            string statusBadge = isOnline ? "🟢 **ONLINE**" : "🔴 **OFFLINE (Standby)**";
+            int embedColor = isOnline ? 0x00FF88 : 0x8899AA;
+
+            var sb = new StringBuilder();
+            sb.AppendLine("### 🗺️ PalOdyssey Realm Status");
+            sb.AppendLine($"• **Status**: {statusBadge}");
+            sb.AppendLine($"• **Address**: `palodyssey.duckdns.org:8211`");
+            sb.AppendLine($"• **Uptime**: `{(isOnline ? liveboard.UptimeFormatted : "Standby (00m 00s)")}`");
+            sb.AppendLine($"• **Version**: `{liveboard.Version}` *(32 Max Pioneers)*");
+            sb.AppendLine();
+
+            // Player list with Level formatting
+            sb.AppendLine($"### 👥 Pioneers Online ({liveboard.PlayerCount} / {liveboard.MaxPlayers})");
+            if (liveboard.Players != null && liveboard.Players.Count > 0)
+            {
+                foreach (var p in liveboard.Players)
+                {
+                    sb.AppendLine($"• **{p.Name}** (Lv. {p.Level}) — `{p.PingBadge}`");
+                }
+            }
+            else
+            {
+                sb.AppendLine("*No players currently online.*");
+            }
+            sb.AppendLine();
+
+            // Inactivity Watchdog Section
+            sb.AppendLine("### ⏳ Inactivity Auto-Shutdown");
+            if (!isOnline)
+            {
+                sb.AppendLine("💤 **Standby Mode**: Server is sleeping to conserve host resources. Type `/start` or launch game to wake.");
+            }
+            else if (liveboard.PlayerCount > 0)
+            {
+                sb.AppendLine($"🟢 **Active Realm**: Auto-shutdown paused while {liveboard.PlayerCount} pioneer(s) are exploring.");
+            }
+            else if (liveboard.IdleShutdownEnabled)
+            {
+                int remMin = Math.Max(0, liveboard.IdleSecondsRemaining / 60);
+                int remSec = Math.Max(0, liveboard.IdleSecondsRemaining % 60);
+                sb.AppendLine($"⏳ **Countdown Active**: Server will save & shut down in **{remMin}m {remSec:D2}s** if no players join.");
+            }
+            else
+            {
+                sb.AppendLine("🛡️ **24/7 Always On**: Auto-shutdown disabled.");
+            }
+            sb.AppendLine();
+
+            // Connection Guide
+            sb.AppendLine("### 🎮 Join Expedition");
+            sb.AppendLine("1. Open **PalOdyssey Launcher** and click **LAUNCH GAME** (copies server address automatically).");
+            sb.AppendLine("2. In-Game: **Join Multiplayer Game** ➔ Paste `palodyssey.duckdns.org:8211` ➔ Connect.");
+            sb.AppendLine();
+            sb.AppendLine($"🔄 *Last Synchronized:* <t:{unixSeconds}:R>");
+
+            var payload = new
+            {
+                embeds = new[]
+                {
+                    new
+                    {
+                        title = "📡 PalOdyssey Realm — 24/7 Liveboard",
+                        description = sb.ToString(),
+                        color = embedColor,
+                        footer = new
+                        {
+                            text = "PalOdyssey Autonomous Host • Auto-refreshes every 30s"
+                        },
+                        timestamp = DateTime.UtcNow.ToString("o")
+                    }
+                }
+            };
+
+            string json = JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            bool messageUpdated = false;
+
+            // 1. If we have an existing Liveboard message ID, attempt to edit it in place
+            if (!string.IsNullOrWhiteSpace(_liveboardMessageId))
+            {
+                try
+                {
+                    using var editReq = new HttpRequestMessage(HttpMethod.Patch, $"channels/{channelId}/messages/{_liveboardMessageId}")
+                    {
+                        Content = content
+                    };
+
+                    var editResp = await _httpClient.SendAsync(editReq);
+                    if (editResp.IsSuccessStatusCode)
+                    {
+                        messageUpdated = true;
+                    }
+                    else if (editResp.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        _logService.LogInfo("Previous Liveboard message not found on Discord. Creating a fresh Liveboard embed...", "DiscordBot");
+                        _liveboardMessageId = null;
+                    }
+                }
+                catch { }
+            }
+
+            // 2. If message ID was null or edit returned 404, send a new message and save its ID
+            if (!messageUpdated)
+            {
+                try
+                {
+                    var postResp = await _httpClient.PostAsync($"channels/{channelId}/messages", content);
+                    if (postResp.IsSuccessStatusCode)
+                    {
+                        string postJson = await postResp.Content.ReadAsStringAsync();
+                        using var doc = JsonDocument.Parse(postJson);
+                        if (doc.RootElement.TryGetProperty("id", out var idProp))
+                        {
+                            string newMsgId = idProp.GetString() ?? "";
+                            if (!string.IsNullOrWhiteSpace(newMsgId))
+                            {
+                                SaveLiveboardMessageId(newMsgId);
+                                _logService.LogSuccess($"24/7 Liveboard embed created in channel {channelId} (Message ID: {newMsgId})", "DiscordBot");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        string err = await postResp.Content.ReadAsStringAsync();
+                        _logService.LogWarning($"Failed to create Liveboard message: {postResp.StatusCode} - {err}", "DiscordBot");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logService.LogWarning($"Exception posting Liveboard message: {ex.Message}", "DiscordBot");
+                }
+            }
+        }
+
         public void Dispose()
         {
             _botCts?.Cancel();
@@ -954,3 +1597,4 @@ namespace PalLauncher.Services
         }
     }
 }
+

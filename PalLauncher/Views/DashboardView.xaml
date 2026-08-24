@@ -106,14 +106,20 @@
                             </Border>
                         </StackPanel>
 
-                        <!-- Right: Real-time Server IP & Port Badge -->
-                        <Border Grid.Column="1" Background="#0A0E18" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" CornerRadius="8" Padding="12,6" VerticalAlignment="Center">
+                        <!-- Right: Interactive 1-Click Server IP Copy Button Badge -->
+                        <Button Grid.Column="1" Style="{StaticResource StyleGhostButton}"
+                                Command="{Binding CopyServerIpCommand}"
+                                ToolTip="Click to copy server address to clipboard"
+                                Background="#0A0E18" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" Padding="12,6" VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Path Data="{StaticResource IconGlobe}" Fill="{StaticResource BrushAccentCyan}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <Path Data="{StaticResource IconCopy}" Fill="{StaticResource BrushAccentCyan}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
                                 <TextBlock Text="SERVER ENDPOINT:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" VerticalAlignment="Center" />
-                                <TextBlock Text="{Binding Liveboard.ServerAddress, FallbackValue='palodyssey.duckdns.org:8211'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" FontFamily="Consolas" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Liveboard.ServerAddress, FallbackValue='palodyssey.duckdns.org:8211'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" FontFamily="Consolas" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                <Border Background="#16243A" CornerRadius="4" Padding="6,2">
+                                    <TextBlock Text="COPY" Foreground="{StaticResource BrushAccentCyan}" FontSize="9" FontWeight="Bold" VerticalAlignment="Center" />
+                                </Border>
                             </StackPanel>
-                        </Border>
+                        </Button>
                     </Grid>
 
                     <!-- Telemetry Metrics Grid (3 Stat Cards) -->

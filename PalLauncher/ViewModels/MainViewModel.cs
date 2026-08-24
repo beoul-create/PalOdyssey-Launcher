@@ -160,6 +160,7 @@ namespace PalLauncher.ViewModels
         public AsyncRelayCommand LaunchGameCommand { get; }
         public AsyncRelayCommand QuickCheckUpdatesCommand { get; }
         public AsyncRelayCommand RefreshServerStatusCommand { get; }
+        public RelayCommand CopyServerIpCommand { get; }
         public RelayCommand MinimizeCommand { get; }
         public RelayCommand MaximizeCommand { get; }
         public RelayCommand CloseCommand { get; }
@@ -255,6 +256,17 @@ namespace PalLauncher.ViewModels
                 }
             };
 
+            SettingsVM.SettingsSaved += async (s, e) =>
+            {
+                ConfigureWindowsStartup(_configService.Config.AutoStartWithWindows, _logService);
+                await RestartDiscordBotAsync();
+            };
+
+            SettingsVM.DiscordBotRestartRequested += async (s, e) =>
+            {
+                await RestartDiscordBotAsync();
+            };
+
             NavigateCommand = new RelayCommand(param =>
             {
                 if (param is string viewName)
@@ -266,6 +278,7 @@ namespace PalLauncher.ViewModels
             LaunchGameCommand = new AsyncRelayCommand(ExecuteLaunchOrStopAsync);
             QuickCheckUpdatesCommand = new AsyncRelayCommand(ExecuteQuickCheckUpdatesAsync);
             RefreshServerStatusCommand = new AsyncRelayCommand(RefreshServerStatusAsync);
+            CopyServerIpCommand = new RelayCommand(_ => ExecuteCopyServerIp());
 
             MinimizeCommand = new RelayCommand(_ =>
             {
@@ -329,8 +342,6 @@ namespace PalLauncher.ViewModels
             });
 
             _launchService.ProcessStateChanged += OnProcessStateChanged;
-
-            _ = InitializeAsync();
         }
 
         public static void ConfigureWindowsStartup(bool enable, ILogService? logService = null)
@@ -358,8 +369,13 @@ namespace PalLauncher.ViewModels
             }
         }
 
+        private bool _isInitialized;
+
         public async Task InitializeAsync()
         {
+            if (_isInitialized) return;
+            _isInitialized = true;
+
             await _configService.LoadConfigAsync();
             SettingsVM.LoadFromConfig(_configService.Config);
 
@@ -370,7 +386,7 @@ namespace PalLauncher.ViewModels
 
             var pathInfo = _pathDetector.DetectPalworldInstallation(_configService.Config.GamePath);
 
-            // Always start Remote Host Daemon when enabled to support UDP wake-on-demand and Discord commands independently of server state
+            // Always start Remote Host Daemon when enabled to support remote webhook start triggers and Discord commands independently of server state
             if (_configService.Config.EnableRemoteHostDaemon)
             {
                 _remoteDaemon.ConfigureIdleAutoShutdown(_configService.Config.EnableIdleAutoShutdown, _configService.Config.IdleShutdownMinutes);
@@ -388,55 +404,18 @@ namespace PalLauncher.ViewModels
                     onStopServerRequested: async () =>
                     {
                         return await _launchService.StopGameAsync();
-                    });
-            }
-
-            // Resolve Discord Bot Token (from config, or host bot_token.txt)
-            string botToken = _configService.Config.DiscordBotToken;
-            if (string.IsNullOrWhiteSpace(botToken))
-            {
-                string tokenFile = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PalLauncher", "bot_token.txt");
-                if (System.IO.File.Exists(tokenFile))
-                {
-                    try { botToken = System.IO.File.ReadAllText(tokenFile).Trim(); } catch { }
-                }
-            }
-
-            // Initialize Discord Bot Service unconditionally if enabled and token is provided
-            if (_configService.Config.EnableDiscordBot && !string.IsNullOrWhiteSpace(botToken))
-            {
-                await _discordBot.StartAsync(
-                    botToken,
-                    _configService.Config.DiscordCommandPrefix,
-                    _configService.Config.DiscordBotChannelId,
-                    _configService.Config.DiscordAdminRoleId,
-                    onStartServer: async () =>
-                    {
-                        var cfg = _configService.Config;
-                        cfg.LaunchMode = "Server";
-                        cfg.LaunchServerWithGame = true;
-                        var currentPath = _pathDetector.DetectPalworldInstallation(cfg.GamePath);
-                        return await _launchService.LaunchGameAsync(cfg, currentPath);
                     },
-                    onStopServer: async () =>
+                    onWebhookServerBooting: async (source) =>
                     {
-                        return await _launchService.StopGameAsync();
-                    },
-                    getLiveboard: () =>
-                    {
-                        if (_launchService.IsServerRunning)
+                        if (_discordBot.IsRunning)
                         {
-                            var current = _remoteDaemon.IsRunning ? _remoteDaemon.GetCurrentLiveboard() : Liveboard;
-                            if (current != null)
-                            {
-                                current.IsOnline = true;
-                                current.IsServerRunning = true;
-                                return current;
-                            }
+                            await _discordBot.BroadcastServerBootingAsync(source);
                         }
-                        return Liveboard ?? new ServerLiveboardInfo();
                     });
             }
+
+            // Initialize Discord Bot Service unconditionally if enabled
+            await RestartDiscordBotAsync();
 
             // Initialize Discord Rich Presence if enabled (client player mode only - disabled for server host)
             bool isServerHost = _configService.Config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase) ||
@@ -674,14 +653,29 @@ namespace PalLauncher.ViewModels
                     }
                 }
 
+                // Automatically copy server connection endpoint to clipboard for effortless paste in Multiplayer
+                try
+                {
+                    string ipToCopy = string.IsNullOrWhiteSpace(config.ServerIp)
+                        ? "palodyssey.duckdns.org:8211"
+                        : $"{config.ServerIp}:{config.ServerPort}";
+
+                    Application.Current?.Dispatcher.Invoke(() =>
+                    {
+                        Clipboard.SetDataObject(ipToCopy, true);
+                    });
+                    _logService.LogSuccess($"Server connection IP '{ipToCopy}' automatically copied to clipboard for 1-click paste in Multiplayer.", "Launcher");
+                }
+                catch { }
+
                 ProgressPercentage = 90;
-                StatusText = "Launching Palworld Client...";
+                StatusText = "Launching Palworld Client with Steam integration...";
 
                 bool launched = await _launchService.LaunchGameAsync(config, pathInfo);
                 if (launched)
                 {
                     ProgressPercentage = 100;
-                    StatusText = "Game launched successfully! Enjoy your expedition.";
+                    StatusText = "🎮 Palworld launched! Server IP copied to clipboard (Paste into Multiplayer).";
 
                     if (config.CloseLauncherOnLaunch)
                     {
@@ -705,6 +699,28 @@ namespace PalLauncher.ViewModels
             }
         }
 
+        private void ExecuteCopyServerIp()
+        {
+            try
+            {
+                string ip = string.IsNullOrWhiteSpace(_configService.Config.ServerIp)
+                    ? "palodyssey.duckdns.org:8211"
+                    : $"{_configService.Config.ServerIp}:{_configService.Config.ServerPort}";
+
+                Application.Current?.Dispatcher.Invoke(() =>
+                {
+                    Clipboard.SetDataObject(ip, true);
+                });
+
+                StatusText = $"📋 Server IP '{ip}' copied to clipboard! (Paste in Multiplayer)";
+                _logService.LogSuccess($"Server IP '{ip}' copied to clipboard.", "Launcher");
+            }
+            catch (Exception ex)
+            {
+                StatusText = $"Failed to copy server IP: {ex.Message}";
+            }
+        }
+
         public async Task ExecuteQuickCheckUpdatesAsync()
         {
             StatusText = "Synchronizing Realm: Checking for updates...";
@@ -724,6 +740,77 @@ namespace PalLauncher.ViewModels
             {
                 ProgressPercentage = 100;
                 StatusText = "All realm mods are synchronized & up to date!";
+            }
+        }
+
+        public async Task RestartDiscordBotAsync()
+        {
+            try
+            {
+                await _discordBot.StopAsync();
+
+                if (!_configService.Config.EnableDiscordBot)
+                {
+                    _logService.LogInfo("Discord Bot is disabled in configuration.", "DiscordBot");
+                    return;
+                }
+
+                string botToken = _configService.Config.DiscordBotToken;
+                if (string.IsNullOrWhiteSpace(botToken))
+                {
+                    string appDataToken = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PalLauncher", "bot_token.txt");
+                    string baseDirToken = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bot_token.txt");
+                    if (System.IO.File.Exists(appDataToken))
+                    {
+                        try { botToken = System.IO.File.ReadAllText(appDataToken).Trim(); } catch { }
+                    }
+                    else if (System.IO.File.Exists(baseDirToken))
+                    {
+                        try { botToken = System.IO.File.ReadAllText(baseDirToken).Trim(); } catch { }
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(botToken))
+                {
+                    _logService.LogWarning("Discord Bot token is empty. Bot will not start.", "DiscordBot");
+                    return;
+                }
+
+                await _discordBot.StartAsync(
+                    botToken,
+                    _configService.Config.DiscordCommandPrefix,
+                    _configService.Config.DiscordBotChannelId,
+                    _configService.Config.DiscordAdminRoleId,
+                    onStartServer: async () =>
+                    {
+                        var cfg = _configService.Config;
+                        cfg.LaunchMode = "Server";
+                        cfg.LaunchServerWithGame = true;
+                        var currentPath = _pathDetector.DetectPalworldInstallation(cfg.GamePath);
+                        return await _launchService.LaunchGameAsync(cfg, currentPath);
+                    },
+                    onStopServer: async () =>
+                    {
+                        return await _launchService.StopGameAsync();
+                    },
+                    getLiveboard: () =>
+                    {
+                        if (_launchService.IsServerRunning)
+                        {
+                            var current = _remoteDaemon.IsRunning ? _remoteDaemon.GetCurrentLiveboard() : Liveboard;
+                            if (current != null)
+                            {
+                                current.IsOnline = true;
+                                current.IsServerRunning = true;
+                                return current;
+                            }
+                        }
+                        return Liveboard ?? new ServerLiveboardInfo();
+                    });
+            }
+            catch (Exception ex)
+            {
+                _logService.LogError("Failed to restart Discord Bot service", "DiscordBot", ex);
             }
         }
     }

@@ -105,14 +105,14 @@ namespace PalLauncher.Tests
 
             string commandLine = launchService.BuildCommandLineArguments(config);
 
-            Assert.True(commandLine.Contains("127.0.0.1:8211") || commandLine.Contains("palodyssey.duckdns.org:8211") || commandLine.Contains("palodyssey.duckdns.org:57294"));
+            Assert.DoesNotContain("palodyssey.duckdns.org", commandLine);
             Assert.Contains("-dx11", commandLine);
             Assert.Contains("-USEALLAVAILABLECORES", commandLine);
             Assert.Contains("-nosplash", commandLine);
             Assert.Contains("-high", commandLine);
             Assert.Contains("-malloc=system", commandLine);
 
-            _output.WriteLine($"[PASS] Auto-Join Command Line: {commandLine}");
+            _output.WriteLine($"[PASS] Performance Command Line: {commandLine}");
         }
 
         [Fact]

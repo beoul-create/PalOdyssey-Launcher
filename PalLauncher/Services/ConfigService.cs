@@ -64,6 +64,22 @@ namespace PalLauncher.Services
                     if (loadedConfig != null)
                     {
                         _config = loadedConfig;
+
+                        // Fallback check for bot_token.txt if DiscordBotToken in config is empty
+                        if (string.IsNullOrWhiteSpace(_config.DiscordBotToken))
+                        {
+                            string appDataTokenPath = Path.Combine(_configDirectory, "bot_token.txt");
+                            string baseDirTokenPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bot_token.txt");
+                            if (File.Exists(appDataTokenPath))
+                            {
+                                try { _config.DiscordBotToken = (await File.ReadAllTextAsync(appDataTokenPath)).Trim(); } catch { }
+                            }
+                            else if (File.Exists(baseDirTokenPath))
+                            {
+                                try { _config.DiscordBotToken = (await File.ReadAllTextAsync(baseDirTokenPath)).Trim(); } catch { }
+                            }
+                        }
+
                         _logService.LogInfo($"Configuration loaded from {_configFilePath}", "Config");
                         return _config;
                     }
@@ -75,6 +91,23 @@ namespace PalLauncher.Services
             }
 
             _config = new LauncherConfig();
+            
+            // Check fallback bot_token.txt for new default configuration
+            try
+            {
+                string appDataTokenPath = Path.Combine(_configDirectory, "bot_token.txt");
+                string baseDirTokenPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bot_token.txt");
+                if (File.Exists(appDataTokenPath))
+                {
+                    _config.DiscordBotToken = (await File.ReadAllTextAsync(appDataTokenPath)).Trim();
+                }
+                else if (File.Exists(baseDirTokenPath))
+                {
+                    _config.DiscordBotToken = (await File.ReadAllTextAsync(baseDirTokenPath)).Trim();
+                }
+            }
+            catch { }
+
             await SaveConfigAsync(_config);
             return _config;
         }
@@ -90,6 +123,18 @@ namespace PalLauncher.Services
             {
                 string json = JsonSerializer.Serialize(_config, _jsonOptions);
                 await File.WriteAllTextAsync(_configFilePath, json);
+
+                // Keep bot_token.txt synchronized
+                if (!string.IsNullOrWhiteSpace(_config.DiscordBotToken))
+                {
+                    try
+                    {
+                        string appDataTokenPath = Path.Combine(_configDirectory, "bot_token.txt");
+                        await File.WriteAllTextAsync(appDataTokenPath, _config.DiscordBotToken.Trim());
+                    }
+                    catch { }
+                }
+
                 _logService.LogInfo("Configuration saved successfully.", "Config");
             }
             catch (Exception ex)

@@ -36,7 +36,7 @@ namespace PalLauncher.Tests
         }
 
         [Fact]
-        public void BuildCommandLineArguments_WithAutoJoinServer_PrependsServerAddress()
+        public void BuildCommandLineArguments_FocusesPurelyOnPerformanceAndStabilityFlags_DoesNotPrependIpAddress()
         {
             // Arrange
             var launchService = new LaunchService(_logService);
@@ -56,9 +56,10 @@ namespace PalLauncher.Tests
             string args = launchService.BuildCommandLineArguments(config);
 
             // Assert
-            Assert.True(args.StartsWith("192.168.1.100:8211") || args.StartsWith("127.0.0.1:8211"));
+            Assert.DoesNotContain("192.168.1.100", args);
             Assert.Contains("-dx11", args);
             Assert.Contains("-culture=en", args);
+            Assert.Contains("-NoCrashReporter", args);
         }
 
         [Fact]

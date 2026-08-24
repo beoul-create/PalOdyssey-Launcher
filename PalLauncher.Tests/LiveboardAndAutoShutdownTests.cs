@@ -118,5 +118,23 @@ namespace PalLauncher.Tests
                 Assert.False(string.IsNullOrEmpty(info.ServerExecutablePath));
             }
         }
+
+        [Fact]
+        public void ServerLiveboardInfo_IdleCountdown_FormatsAccurately()
+        {
+            var liveboard = new ServerLiveboardInfo
+            {
+                IsOnline = true,
+                IsServerRunning = true,
+                IdleShutdownEnabled = true,
+                IdleSecondsRemaining = 1172,
+                IdleMinutesRemaining = 20,
+                PlayerCount = 0
+            };
+
+            Assert.Equal(1172, liveboard.IdleSecondsRemaining);
+            Assert.Equal(20, liveboard.IdleMinutesRemaining);
+            Assert.True(liveboard.IdleShutdownEnabled);
+        }
     }
 }
