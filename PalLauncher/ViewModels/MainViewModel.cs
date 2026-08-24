@@ -391,8 +391,11 @@ namespace PalLauncher.ViewModels
                     });
             }
 
-            // Initialize Discord Rich Presence if enabled
-            if (_configService.Config.EnableDiscordRpc)
+            // Initialize Discord Rich Presence if enabled (client player mode only - disabled for server host)
+            bool isServerHost = _configService.Config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase) ||
+                                _configService.Config.EnableRemoteHostDaemon;
+
+            if (_configService.Config.EnableDiscordRpc && !isServerHost)
             {
                 await _discordRpc.InitializeAsync(_configService.Config.DiscordApplicationId);
                 await _discordRpc.UpdatePresenceAsync("In Launcher", "Preparing Expedition", isPlaying: false);
