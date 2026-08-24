@@ -221,6 +221,11 @@ namespace PalLauncher.Services
                                 string shippingServer = Path.Combine(pathInfo.GameRootPath, "Pal", "Binaries", "Win64", "PalServer-Win64-Shipping.exe");
                                 if (File.Exists(shippingServer)) serverExe = shippingServer;
                             }
+                            if (!File.Exists(serverExe))
+                            {
+                                string siblingServer = Path.Combine(pathInfo.GameRootPath, "..", "PalServer", "PalServer.exe");
+                                if (File.Exists(siblingServer)) serverExe = Path.GetFullPath(siblingServer);
+                            }
 
                             if (File.Exists(serverExe))
                             {

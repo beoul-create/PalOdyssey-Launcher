@@ -153,56 +153,86 @@ namespace PalLauncher.Services
             StopUdpWakeListener();
             if (_launchService.IsServerRunning) return;
 
-            try
-            {
-                _gamePort = gamePort > 0 ? gamePort : 8211;
-                var localEp = new IPEndPoint(IPAddress.Any, _gamePort);
-                _udpWakeListener = new UdpClient(localEp);
-                _udpWakeListener.EnableBroadcast = true;
-                _udpWakeTask = Task.Run(async () =>
-                {
-                    while (_udpWakeListener != null && !_launchService.IsServerRunning)
-                    {
-                        try
-                        {
-                            var result = await _udpWakeListener.ReceiveAsync();
-                            if (result.Buffer != null && result.Buffer.Length > 0)
-                            {
-                                string msg = Encoding.UTF8.GetString(result.Buffer);
-                                if (msg.StartsWith("PALODYSSEY_WAKE:", StringComparison.OrdinalIgnoreCase))
-                                {
-                                    string key = msg["PALODYSSEY_WAKE:".Length..].Trim();
-                                    if (!string.Equals(key, _accessKey, StringComparison.Ordinal))
-                                    {
-                                        _logService.LogWarning($"Rejected unauthorized UDP wake packet from {result.RemoteEndPoint}.", "RemoteDaemon");
-                                        continue;
-                                    }
-                                }
+            _gamePort = gamePort > 0 ? gamePort : 8211;
+            var localEp = new IPEndPoint(IPAddress.Any, _gamePort);
 
-                                _logService.LogSuccess($"[Port 8211 Wake] Received authorized UDP wake signal on port {_gamePort} from {result.RemoteEndPoint}! Booting Palworld Dedicated Server...", "RemoteDaemon");
-                                StopUdpWakeListener();
-                                if (_onStartServerRequested != null)
-                                {
-                                    await _onStartServerRequested();
-                                }
-                                break;
-                            }
-                        }
-                        catch (ObjectDisposedException) { break; }
-                        catch (SocketException) { break; }
-                        catch (Exception ex)
+            // Robust binding with socket reuse & retry
+            UdpClient? client = null;
+            for (int attempt = 1; attempt <= 5; attempt++)
+            {
+                try
+                {
+                    client = new UdpClient();
+                    client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                    client.Client.Bind(localEp);
+                    client.EnableBroadcast = true;
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    client?.Close();
+                    client = null;
+                    if (attempt == 5)
+                    {
+                        _logService.LogWarning($"Could not bind UDP Wake listener on port {_gamePort}: {ex.Message}", "RemoteDaemon");
+                        return;
+                    }
+                    Thread.Sleep(300);
+                }
+            }
+
+            if (client == null) return;
+
+            _udpWakeListener = client;
+            _udpWakeTask = Task.Run(async () =>
+            {
+                while (_udpWakeListener != null && !_launchService.IsServerRunning)
+                {
+                    try
+                    {
+                        var result = await _udpWakeListener.ReceiveAsync();
+                        if (result.Buffer != null && result.Buffer.Length > 0)
                         {
-                            _logService.LogWarning($"UDP wake listener exception: {ex.Message}", "RemoteDaemon");
+                            string msg = Encoding.UTF8.GetString(result.Buffer);
+                            if (msg.StartsWith("PALODYSSEY_WAKE:", StringComparison.OrdinalIgnoreCase))
+                            {
+                                string key = msg["PALODYSSEY_WAKE:".Length..].Trim();
+                                if (!string.Equals(key, _accessKey, StringComparison.Ordinal))
+                                {
+                                    _logService.LogWarning($"Rejected unauthorized UDP wake packet from {result.RemoteEndPoint}.", "RemoteDaemon");
+                                    continue;
+                                }
+                            }
+
+                            _logService.LogSuccess($"[Port 8211 Wake] Received authorized UDP wake signal on port {_gamePort} from {result.RemoteEndPoint}! Booting Palworld Dedicated Server...", "RemoteDaemon");
+                            StopUdpWakeListener();
+                            if (_onStartServerRequested != null)
+                            {
+                                _ = Task.Run(async () =>
+                                {
+                                    try
+                                    {
+                                        await _onStartServerRequested();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        _logService.LogError("Error executing start server callback", "RemoteDaemon", ex);
+                                    }
+                                });
+                            }
                             break;
                         }
                     }
-                });
-                _logService.LogInfo($"UDP Wake-on-Demand armed on port {_gamePort}. Incoming connection on port {_gamePort} will auto-start server.", "RemoteDaemon");
-            }
-            catch (Exception ex)
-            {
-                _logService.LogWarning($"Could not bind UDP Wake listener on port {_gamePort}: {ex.Message}", "RemoteDaemon");
-            }
+                    catch (ObjectDisposedException) { break; }
+                    catch (SocketException) { break; }
+                    catch (Exception ex)
+                    {
+                        _logService.LogWarning($"UDP wake listener exception: {ex.Message}", "RemoteDaemon");
+                        break;
+                    }
+                }
+            });
+            _logService.LogInfo($"UDP Wake-on-Demand armed on port {_gamePort}. Incoming connection on port {_gamePort} will auto-start server.", "RemoteDaemon");
         }
 
         private void StopUdpWakeListener()
@@ -278,7 +308,7 @@ namespace PalLauncher.Services
             {
                 try
                 {
-                    await Task.Delay(10000, ct); // Check every 10s
+                    await Task.Delay(1500, ct); // Responsive 1.5s lifecycle check
 
                     bool isServerRunning = _launchService.IsServerRunning;
 
