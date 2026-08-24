@@ -350,11 +350,22 @@ namespace PalLauncher.ViewModels
                     });
             }
 
+            // Resolve Discord Bot Token (from config, or host bot_token.txt)
+            string botToken = _configService.Config.DiscordBotToken;
+            if (string.IsNullOrWhiteSpace(botToken))
+            {
+                string tokenFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PalLauncher", "bot_token.txt");
+                if (File.Exists(tokenFile))
+                {
+                    try { botToken = File.ReadAllText(tokenFile).Trim(); } catch { }
+                }
+            }
+
             // Initialize Discord Bot Service if enabled and token is provided
-            if (_configService.Config.EnableDiscordBot && !string.IsNullOrWhiteSpace(_configService.Config.DiscordBotToken))
+            if (_configService.Config.EnableDiscordBot && !string.IsNullOrWhiteSpace(botToken))
             {
                 await _discordBot.StartAsync(
-                    _configService.Config.DiscordBotToken,
+                    botToken,
                     _configService.Config.DiscordCommandPrefix,
                     _configService.Config.DiscordBotChannelId,
                     _configService.Config.DiscordAdminRoleId,
