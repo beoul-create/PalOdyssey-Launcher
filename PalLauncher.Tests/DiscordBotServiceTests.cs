@@ -35,7 +35,7 @@ namespace PalLauncher.Tests
 
             Assert.False(config.EnableDiscordBot);
             Assert.Equal("", config.DiscordBotToken);
-            Assert.Equal("!", config.DiscordCommandPrefix);
+            Assert.Equal("/", config.DiscordCommandPrefix);
             Assert.Equal("", config.DiscordBotChannelId);
             Assert.Equal("", config.DiscordAdminRoleId);
         }

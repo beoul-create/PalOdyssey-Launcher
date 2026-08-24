@@ -63,7 +63,7 @@ namespace PalLauncher.Models
         public string DiscordBotToken { get; set; } = "";
 
         [JsonPropertyName("discordCommandPrefix")]
-        public string DiscordCommandPrefix { get; set; } = "!";
+        public string DiscordCommandPrefix { get; set; } = "/";
 
         [JsonPropertyName("discordBotChannelId")]
         public string DiscordBotChannelId { get; set; } = "";
