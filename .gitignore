@@ -37,6 +37,10 @@ $RECYCLE.BIN/
 *.mdmp
 *.pdb
 
+# Developer local scripts
+run-dev.*
+[Dd]eploy-[Mm]odpack.*
+
 # Local benchmark output & submodules
 benchmark_*.json
 project_test_results*.json
