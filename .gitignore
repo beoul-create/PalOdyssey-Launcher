@@ -64,6 +64,7 @@ Saved/
 /*.deps.json
 /*.runtimeconfig.json
 /*.dll
+/*.exe
 /runtimes/
 SampleData/
 
