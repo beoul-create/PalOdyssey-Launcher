@@ -252,9 +252,35 @@ namespace PalLauncher.Services
 
                                 sProcess.Exited += (s, e) =>
                                 {
-                                    _logService.LogInfo($"Dedicated server process (PID: {sProcess.Id}) terminated.", "PalServer");
-                                    StopPlayitTunnel();
-                                    UpdateProcessState();
+                                    Task.Delay(1000).ContinueWith(_ =>
+                                    {
+                                        var activeServer = Process.GetProcesses().FirstOrDefault(p =>
+                                            !p.HasExited && (
+                                            p.ProcessName.Equals("PalServer-Win64-Shipping-Cmd", StringComparison.OrdinalIgnoreCase) ||
+                                            p.ProcessName.Equals("PalServer-Win64-Shipping", StringComparison.OrdinalIgnoreCase)));
+
+                                        if (activeServer != null)
+                                        {
+                                            _runningServerProcess = activeServer;
+                                            try
+                                            {
+                                                activeServer.EnableRaisingEvents = true;
+                                                activeServer.Exited += (asSender, asE) =>
+                                                {
+                                                    _logService.LogInfo($"Dedicated server engine process (PID: {activeServer.Id}) terminated.", "PalServer");
+                                                    StopPlayitTunnel();
+                                                    UpdateProcessState();
+                                                };
+                                            }
+                                            catch { }
+                                        }
+                                        else
+                                        {
+                                            _logService.LogInfo($"Dedicated server process (PID: {sProcess.Id}) terminated.", "PalServer");
+                                            StopPlayitTunnel();
+                                            UpdateProcessState();
+                                        }
+                                    });
                                 };
 
                                 if (sProcess.Start())
