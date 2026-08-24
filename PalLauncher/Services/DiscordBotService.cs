@@ -199,12 +199,12 @@ namespace PalLauncher.Services
                         }
                         else if (eventType == "INTERACTION_CREATE")
                         {
-                            var interactionData = root.GetProperty("d");
+                            var interactionData = root.GetProperty("d").Clone();
                             _ = HandleInteractionCreateAsync(interactionData);
                         }
                         else if (eventType == "MESSAGE_CREATE")
                         {
-                            var msgData = root.GetProperty("d");
+                            var msgData = root.GetProperty("d").Clone();
                             _ = HandleMessageCreateAsync(msgData);
                         }
                         break;
@@ -260,13 +260,13 @@ namespace PalLauncher.Services
                 };
 
                 string json = JsonSerializer.Serialize(commands);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                // 1. Register globally
-                var resp = await _httpClient.PutAsync($"applications/{applicationId}/commands", content);
-                if (resp.IsSuccessStatusCode)
+                // 1. Clear global commands to eliminate duplicate commands in Discord UI
+                var emptyContent = new StringContent("[]", Encoding.UTF8, "application/json");
+                var clearResp = await _httpClient.PutAsync($"applications/{applicationId}/commands", emptyContent);
+                if (clearResp.IsSuccessStatusCode)
                 {
-                    _logService.LogSuccess("Discord native Slash Commands (/start, /status, /ip, /stop, /help) registered globally!", "DiscordBot");
+                    _logService.LogSuccess("Cleared global slash commands to prevent duplicates in Discord.", "DiscordBot");
                 }
 
                 // 2. Fetch all joined guilds and register instantly on each guild (bypasses 1-hour global cache delay)
@@ -286,7 +286,7 @@ namespace PalLauncher.Services
                             var gResp = await _httpClient.PutAsync($"applications/{applicationId}/guilds/{guildId}/commands", gContent);
                             if (gResp.IsSuccessStatusCode)
                             {
-                                _logService.LogSuccess($"Slash Commands (/start, /status, /ip, /stop, /help) activated instantly for server '{guildName}'!", "DiscordBot");
+                                _logService.LogSuccess($"Slash Commands (/start, /status, /ip, /stop, /help) active with zero duplicates for server '{guildName}'!", "DiscordBot");
                             }
                         }
                     }
@@ -578,16 +578,15 @@ namespace PalLauncher.Services
         {
             _logService.LogInfo($"Discord user '{authorName}' requested server shutdown via /stop.", "DiscordBot");
 
-            bool stopped = false;
+            await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                title: "🛑 Stopping PalOdyssey Dedicated Server...",
+                description: $"Dedicated server shutdown requested by **{authorName}** via `/stop`.\n\nSaving world state and shutting down processes...",
+                color: 0xFF4466);
+
             if (_onStopServer != null)
             {
-                stopped = await _onStopServer.Invoke();
+                await _onStopServer.Invoke();
             }
-
-            await RespondInteractionEmbedAsync(interactionId, interactionToken,
-                title: "🛑 PalOdyssey Server Stopped",
-                description: $"Dedicated server has been stopped by **{authorName}**.\n\nType `/start` when you want to play again.",
-                color: 0xFF4466);
         }
 
         private async Task ExecuteHelpInteractionAsync(string interactionId, string interactionToken)
