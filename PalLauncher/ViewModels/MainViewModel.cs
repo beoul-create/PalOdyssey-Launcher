@@ -354,10 +354,10 @@ namespace PalLauncher.ViewModels
             string botToken = _configService.Config.DiscordBotToken;
             if (string.IsNullOrWhiteSpace(botToken))
             {
-                string tokenFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PalLauncher", "bot_token.txt");
-                if (File.Exists(tokenFile))
+                string tokenFile = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PalLauncher", "bot_token.txt");
+                if (System.IO.File.Exists(tokenFile))
                 {
-                    try { botToken = File.ReadAllText(tokenFile).Trim(); } catch { }
+                    try { botToken = System.IO.File.ReadAllText(tokenFile).Trim(); } catch { }
                 }
             }
 
