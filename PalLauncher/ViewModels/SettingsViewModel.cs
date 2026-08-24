@@ -162,6 +162,11 @@ namespace PalLauncher.ViewModels
 
         private bool _enableDiscordRpc = true;
         private string _discordApplicationId = "1540924979095408700";
+        private bool _enableDiscordBot = false;
+        private string _discordBotToken = "";
+        private string _discordCommandPrefix = "!";
+        private string _discordBotChannelId = "";
+        private string _discordAdminRoleId = "";
 
         public bool EnableDiscordRpc
         {
@@ -173,6 +178,36 @@ namespace PalLauncher.ViewModels
         {
             get => _discordApplicationId;
             set => SetProperty(ref _discordApplicationId, value);
+        }
+
+        public bool EnableDiscordBot
+        {
+            get => _enableDiscordBot;
+            set => SetProperty(ref _enableDiscordBot, value);
+        }
+
+        public string DiscordBotToken
+        {
+            get => _discordBotToken;
+            set => SetProperty(ref _discordBotToken, value);
+        }
+
+        public string DiscordCommandPrefix
+        {
+            get => _discordCommandPrefix;
+            set => SetProperty(ref _discordCommandPrefix, value);
+        }
+
+        public string DiscordBotChannelId
+        {
+            get => _discordBotChannelId;
+            set => SetProperty(ref _discordBotChannelId, value);
+        }
+
+        public string DiscordAdminRoleId
+        {
+            get => _discordAdminRoleId;
+            set => SetProperty(ref _discordAdminRoleId, value);
         }
 
         public bool AutoJoinServer
@@ -482,6 +517,11 @@ namespace PalLauncher.ViewModels
             _enablePlayitTunnel = config.EnablePlayitTunnel;
             _enableDiscordRpc = config.EnableDiscordRpc;
             _discordApplicationId = config.DiscordApplicationId;
+            _enableDiscordBot = config.EnableDiscordBot;
+            _discordBotToken = config.DiscordBotToken;
+            _discordCommandPrefix = config.DiscordCommandPrefix;
+            _discordBotChannelId = config.DiscordBotChannelId;
+            _discordAdminRoleId = config.DiscordAdminRoleId;
             _remoteManifestUrl = config.RemoteManifestUrl;
             _paksRelativePath = config.PaksRelativePath;
             _autoCheckUpdatesOnStartup = config.AutoCheckUpdatesOnStartup;
@@ -526,6 +566,11 @@ namespace PalLauncher.ViewModels
                 EnablePlayitTunnel = EnablePlayitTunnel,
                 EnableDiscordRpc = EnableDiscordRpc,
                 DiscordApplicationId = DiscordApplicationId,
+                EnableDiscordBot = EnableDiscordBot,
+                DiscordBotToken = DiscordBotToken,
+                DiscordCommandPrefix = DiscordCommandPrefix,
+                DiscordBotChannelId = DiscordBotChannelId,
+                DiscordAdminRoleId = DiscordAdminRoleId,
                 RemoteManifestUrl = RemoteManifestUrl,
                 PaksRelativePath = PaksRelativePath,
                 AutoCheckUpdatesOnStartup = AutoCheckUpdatesOnStartup,

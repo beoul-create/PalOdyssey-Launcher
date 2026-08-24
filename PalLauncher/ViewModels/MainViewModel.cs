@@ -167,6 +167,7 @@ namespace PalLauncher.ViewModels
         private readonly IRemoteServerDaemon _remoteDaemon;
         private readonly IRemoteClientService _remoteClient;
         private readonly IDiscordRpcService _discordRpc;
+        private readonly IDiscordBotService _discordBot;
         private RemoteServerStatus _serverStatus = new();
         private ServerLiveboardInfo _liveboard = new();
         private CancellationTokenSource? _pollingCts;
@@ -221,7 +222,8 @@ namespace PalLauncher.ViewModels
             IRemoteServerDaemon? remoteDaemon = null,
             IRemoteClientService? remoteClient = null,
             IDiscordRpcService? discordRpc = null,
-            ICrashLogService? crashLogService = null)
+            ICrashLogService? crashLogService = null,
+            IDiscordBotService? discordBot = null)
         {
             _configService = configService;
             _pathDetector = pathDetector;
@@ -232,6 +234,7 @@ namespace PalLauncher.ViewModels
             _remoteDaemon = remoteDaemon ?? new RemoteServerDaemon(_logService, _launchService);
             _remoteClient = remoteClient ?? new RemoteClientService(_logService);
             _discordRpc = discordRpc ?? new DiscordRpcService(_logService);
+            _discordBot = discordBot ?? new DiscordBotService(_logService);
 
             var crashService = crashLogService ?? new Services.CrashLogService(_logService);
 
@@ -306,6 +309,7 @@ namespace PalLauncher.ViewModels
                 _pollingCts?.Cancel();
                 _remoteDaemon.Dispose();
                 _discordRpc.Dispose();
+                _discordBot.Dispose();
                 Application.Current?.Shutdown();
             });
 
@@ -343,6 +347,36 @@ namespace PalLauncher.ViewModels
                     onStopServerRequested: async () =>
                     {
                         return await _launchService.StopGameAsync();
+                    });
+            }
+
+            // Initialize Discord Bot Service if enabled and token is provided
+            if (_configService.Config.EnableDiscordBot && !string.IsNullOrWhiteSpace(_configService.Config.DiscordBotToken))
+            {
+                await _discordBot.StartAsync(
+                    _configService.Config.DiscordBotToken,
+                    _configService.Config.DiscordCommandPrefix,
+                    _configService.Config.DiscordBotChannelId,
+                    _configService.Config.DiscordAdminRoleId,
+                    onStartServer: async () =>
+                    {
+                        var cfg = _configService.Config;
+                        cfg.LaunchMode = "Server";
+                        cfg.LaunchServerWithGame = true;
+                        var currentPath = _pathDetector.DetectPalworldInstallation(cfg.GamePath);
+                        return await _launchService.LaunchGameAsync(cfg, currentPath);
+                    },
+                    onStopServer: async () =>
+                    {
+                        return await _launchService.StopGameAsync();
+                    },
+                    getLiveboard: () =>
+                    {
+                        if (_launchService.IsServerRunning && _remoteDaemon.IsRunning)
+                        {
+                            return _remoteDaemon.GetCurrentLiveboard();
+                        }
+                        return Liveboard ?? new ServerLiveboardInfo();
                     });
             }
 

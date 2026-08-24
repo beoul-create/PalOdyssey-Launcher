@@ -56,6 +56,21 @@ namespace PalLauncher.Models
         [JsonPropertyName("discordApplicationId")]
         public string DiscordApplicationId { get; set; } = "1540924979095408700";
 
+        [JsonPropertyName("enableDiscordBot")]
+        public bool EnableDiscordBot { get; set; } = false;
+
+        [JsonPropertyName("discordBotToken")]
+        public string DiscordBotToken { get; set; } = "";
+
+        [JsonPropertyName("discordCommandPrefix")]
+        public string DiscordCommandPrefix { get; set; } = "!";
+
+        [JsonPropertyName("discordBotChannelId")]
+        public string DiscordBotChannelId { get; set; } = "";
+
+        [JsonPropertyName("discordAdminRoleId")]
+        public string DiscordAdminRoleId { get; set; } = "";
+
         [JsonPropertyName("autoJoinServer")]
         public bool AutoJoinServer { get; set; } = false;
 

@@ -1,0 +1,21 @@
+using System;
+using System.Threading.Tasks;
+using PalLauncher.Models;
+
+namespace PalLauncher.Services.Interfaces
+{
+    public interface IDiscordBotService : IDisposable
+    {
+        bool IsRunning { get; }
+        string BotUsername { get; }
+        Task<bool> StartAsync(
+            string token,
+            string prefix,
+            string? channelId,
+            string? adminRoleId,
+            Func<Task<bool>> onStartServer,
+            Func<Task<bool>> onStopServer,
+            Func<ServerLiveboardInfo> getLiveboard);
+        Task StopAsync();
+    }
+}
