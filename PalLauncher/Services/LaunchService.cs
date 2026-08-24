@@ -248,7 +248,7 @@ namespace PalLauncher.Services
                                 {
                                     serverArgs = "Pal " + serverArgs;
                                 }
-                                string serverWorkDir = serverRoot;
+                                string serverWorkDir = Path.GetDirectoryName(serverExe) ?? serverRoot;
 
                                 _logService.LogInfo($"Launching PalServer: {Path.GetFileName(serverExe)} args: '{serverArgs}'", "PalServer");
 
