@@ -14,18 +14,18 @@ namespace PalLauncher.Services
         private readonly IConfigService _configService;
         private readonly ILogService _logService;
 
-        public PlayerPresenceService(IConfigService configService, ILogService logService)
+        public PlayerPresenceService(IConfigService configService, ILogService logService, HttpClient? httpClient = null)
         {
             _configService = configService;
             _logService = logService;
-            _httpClient = new HttpClient();
+            _httpClient = httpClient ?? new HttpClient();
         }
 
         public async Task<bool> IsPlayerOnlineAsync(string steamId)
         {
             if (string.IsNullOrWhiteSpace(steamId)) return false;
 
-            var config = _configService.GetConfig();
+            var config = _configService.Config;
             string password = config.ServerAdminPassword ?? "";
             int port = config.RestApiPort > 0 ? config.RestApiPort : 8212;
 
@@ -37,7 +37,7 @@ namespace PalLauncher.Services
                 string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"admin:{password}"));
                 request.Headers.Authorization = new AuthenticationHeaderValue("Basic", credentials);
                 // Also add X-PalOdyssey-Key in case it's going through the launcher daemon proxy instead of direct
-                request.Headers.Add("X-PalOdyssey-Key", config.DefaultRealmAccessKey ?? "");
+                request.Headers.Add("X-PalOdyssey-Key", config.RemoteAccessKey ?? LauncherConfig.DefaultRealmAccessKey);
 
                 using var cts = new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(5));
                 var response = await _httpClient.SendAsync(request, cts.Token);

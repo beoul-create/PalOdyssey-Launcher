@@ -65,8 +65,13 @@ namespace PalLauncher.Services
                     {
                         _config = loadedConfig;
 
-                        // Fallback check for bot_token.txt if DiscordBotToken in config is empty
-                        if (string.IsNullOrWhiteSpace(_config.DiscordBotToken))
+                        // Prioritize Environment Variables & Secure Token File fallbacks
+                        string? envBotToken = Environment.GetEnvironmentVariable("DISCORD_BOT_TOKEN");
+                        if (!string.IsNullOrWhiteSpace(envBotToken))
+                        {
+                            _config.DiscordBotToken = envBotToken.Trim();
+                        }
+                        else if (string.IsNullOrWhiteSpace(_config.DiscordBotToken))
                         {
                             string appDataTokenPath = Path.Combine(_configDirectory, "bot_token.txt");
                             string baseDirTokenPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bot_token.txt");
@@ -78,6 +83,18 @@ namespace PalLauncher.Services
                             {
                                 try { _config.DiscordBotToken = (await File.ReadAllTextAsync(baseDirTokenPath)).Trim(); } catch { }
                             }
+                        }
+
+                        string? envAdminPw = Environment.GetEnvironmentVariable("PALWORLD_ADMIN_PASSWORD");
+                        if (!string.IsNullOrWhiteSpace(envAdminPw))
+                        {
+                            _config.ServerAdminPassword = envAdminPw.Trim();
+                        }
+
+                        string? envAccessKey = Environment.GetEnvironmentVariable("PALODYSSEY_ACCESS_KEY");
+                        if (!string.IsNullOrWhiteSpace(envAccessKey))
+                        {
+                            _config.RemoteAccessKey = envAccessKey.Trim();
                         }
 
                         _logService.LogInfo($"Configuration loaded from {_configFilePath}", "Config");

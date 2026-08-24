@@ -87,6 +87,18 @@ namespace PalLauncher.Tests
             }
         }
 
+        private class MockConfigService : IConfigService
+        {
+            public LauncherConfig Config { get; set; } = new LauncherConfig
+            {
+                ServerAdminPassword = "ServerAdminPassword",
+                RestApiPort = 8212
+            };
+            public Task<LauncherConfig> LoadConfigAsync() => Task.FromResult(Config);
+            public Task SaveConfigAsync(LauncherConfig? config = null) => Task.CompletedTask;
+            public string GetConfigFilePath() => "mock_config.json";
+        }
+
         [Fact]
         public async Task OnlinePresenceCheck_ReturnsTrue_WhenPlayerIsOnline()
         {
@@ -97,7 +109,7 @@ namespace PalLauncher.Tests
                 ResponseContent = @"{"players":[{"accountId":"Steam_76561198012345678","userId":"abcdef"}]}"
             };
             var httpClient = new HttpClient(handler);
-            var presenceService = new PlayerPresenceService(new MockLogService(_output), httpClient, 8212, "ServerAdminPassword");
+            var presenceService = new PlayerPresenceService(new MockConfigService(), new MockLogService(_output), httpClient);
 
             bool isOnline = await presenceService.IsPlayerOnlineAsync("76561198012345678");
 

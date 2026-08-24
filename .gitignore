@@ -47,10 +47,18 @@ project_test_results*.json
 test_download/
 GitHub-Modpack-Release/
 publish/
-# Local Secrets & Bot Tokens
+# Local Secrets, Credentials & Server Runtime Files
 bot_token.txt
 *.token
 liveboard_state.json
+account-links.json
+guild-licenses.json
+pending-deliveries.*
+pending-deliveries.csv
+pending-deliveries.json
+*.sav
+SaveGames/
+Saved/
 
 # Root build artifacts
 /*.deps.json
@@ -58,5 +66,6 @@ liveboard_state.json
 /*.dll
 /runtimes/
 SampleData/
+
 
 
