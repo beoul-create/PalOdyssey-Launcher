@@ -222,7 +222,7 @@
                                 MinWidth="180">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Path Data="{StaticResource IconRocket}" Fill="#FFFFFF" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" VerticalAlignment="Center" />
-                                <TextBlock Text="LAUNCH GAME" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding LaunchButtonText}" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
                             </StackPanel>
                         </Button>
                     </StackPanel>

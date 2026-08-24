@@ -19,7 +19,7 @@ namespace PalLauncher.Services
         private GameProcessState _currentState = new();
 
         public GameProcessState CurrentState => _currentState;
-        public bool IsGameRunning => IsClientRunning || IsServerRunning;
+        public bool IsGameRunning => IsClientRunning;
 
         public bool IsServerRunning => (_runningServerProcess != null && !_runningServerProcess.HasExited) ||
                                        GetActiveServerProcesses().Count > 0;
@@ -128,27 +128,12 @@ namespace PalLauncher.Services
             args.Add("-NoVerifyGC");
 
             // 4. Predefined Performance & Engine Flags
-            if (config.UseDirectX11)
-            {
-                args.Add("-dx11");
-            }
+            if (config.UseDirectX11) args.Add("-dx11");
+            if (config.NoSplash) args.Add("-nosplash");
+            if (config.UseHighPriority) args.Add("-high");
+            if (config.WindowedMode) args.Add("-windowed");
 
-            if (config.NoSplash)
-            {
-                args.Add("-nosplash");
-            }
-
-            if (config.WindowedMode)
-            {
-                args.Add("-windowed");
-            }
-
-            if (config.UseHighPriority)
-            {
-                args.Add("-high");
-            }
-
-            // 4. Custom User Arguments
+            // 5. Custom User Startup Flags
             if (!string.IsNullOrWhiteSpace(config.CustomArguments))
             {
                 args.Add(config.CustomArguments.Trim());
@@ -159,9 +144,18 @@ namespace PalLauncher.Services
 
         public async Task<bool> LaunchGameAsync(LauncherConfig config, GamePathInfo pathInfo)
         {
-            if (IsGameRunning)
+            bool launchServer = config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase) || config.LaunchServerWithGame;
+            bool launchClient = !config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase);
+
+            if (launchClient && IsClientRunning)
             {
-                _logService.LogWarning("Game/Server process is already running.", "Launcher");
+                _logService.LogWarning("Palworld game client is already running.", "Launcher");
+                return false;
+            }
+
+            if (!launchClient && launchServer && IsServerRunning)
+            {
+                _logService.LogWarning("Palworld dedicated server is already running.", "Launcher");
                 return false;
             }
 
@@ -170,9 +164,6 @@ namespace PalLauncher.Services
                 _logService.LogError("Cannot launch: Palworld installation path is invalid or not detected.", "Launcher");
                 return false;
             }
-
-            bool launchServer = config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase) || config.LaunchServerWithGame;
-            bool launchClient = !config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase);
 
             return await Task.Run(() =>
             {

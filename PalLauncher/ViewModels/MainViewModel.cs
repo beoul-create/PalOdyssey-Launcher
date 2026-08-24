@@ -87,7 +87,7 @@ namespace PalLauncher.ViewModels
         }
 
         public string StatusMessage => StatusText;
-        public bool CanLaunch => !IsBusy;
+        public bool CanLaunch => !IsGameRunning && !IsBusy;
         public AsyncRelayCommand CheckForUpdatesCommand => QuickCheckUpdatesCommand;
 
         public double ProgressPercentage
@@ -120,6 +120,8 @@ namespace PalLauncher.ViewModels
                 {
                     OnPropertyChanged(nameof(LaunchButtonText));
                     OnPropertyChanged(nameof(GameStatusBadge));
+                    OnPropertyChanged(nameof(CanLaunch));
+                    LaunchGameCommand.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -128,7 +130,7 @@ namespace PalLauncher.ViewModels
         {
             get
             {
-                if (IsGameRunning) return "Server & Client Active";
+                if (IsGameRunning) return "Game Running";
                 if (IsBusy) return "Starting...";
                 return "Ready";
             }
@@ -144,9 +146,9 @@ namespace PalLauncher.ViewModels
         {
             get
             {
-                if (IsGameRunning) return "STOP EXPEDITION & SERVER";
-                if (IsBusy) return "STARTING EXPEDITION...";
-                return "LAUNCH EXPEDITION";
+                if (IsGameRunning) return "Game is running";
+                if (IsBusy) return "STARTING GAME...";
+                return "LAUNCH GAME";
             }
         }
 
@@ -459,15 +461,21 @@ namespace PalLauncher.ViewModels
         {
             Application.Current?.Dispatcher.Invoke(() =>
             {
-                IsGameRunning = state.IsRunning;
-                if (state.IsRunning)
+                IsGameRunning = state.IsClientRunning; // Button state strictly tracks the game client!
+                if (state.IsClientRunning)
                 {
-                    StatusText = $"Palworld {state.Mode} is running (PID: {state.ProcessId})";
+                    StatusText = $"Palworld Game is running (PID: {state.ProcessId})";
                     _ = _discordRpc.UpdatePresenceAsync("⚡ PalOdyssey Expedition", "Exploring Realm (Active Modpack)", isPlaying: true, targetPid: state.ProcessId);
+                }
+                else if (state.IsServerRunning)
+                {
+                    StatusText = "🟢 PalOdyssey Dedicated Server is active. Ready to launch game!";
+                    ProgressPercentage = 0;
+                    _ = _discordRpc.UpdatePresenceAsync("In Launcher", "Ready to Launch", isPlaying: false, targetPid: Environment.ProcessId);
                 }
                 else
                 {
-                    StatusText = "Palworld session ended. Ready to launch.";
+                    StatusText = "Ready to launch.";
                     ProgressPercentage = 0;
                     _ = _discordRpc.UpdatePresenceAsync("In Launcher", "Preparing Expedition", isPlaying: false, targetPid: Environment.ProcessId);
                 }
@@ -478,8 +486,7 @@ namespace PalLauncher.ViewModels
         {
             if (IsGameRunning)
             {
-                StatusText = "Stopping game process...";
-                await _launchService.StopGameAsync();
+                StatusText = "Palworld game is already running.";
                 return;
             }
 
