@@ -325,12 +325,16 @@ namespace PalLauncher.Services
                     // Detect Server Stop Transition
                     else if (_wasServerRunning && !isServerRunning)
                     {
-                        _wasServerRunning = false;
-                        _serverStartedTime = null;
-                        _lastActivePlayerTime = DateTime.Now;
-                        _shutdownTriggered = false;
-                        lock (_lock) { _activePlayers.Clear(); }
-                        StartUdpWakeListener(_gamePort);
+                        double uptimeSeconds = _serverStartedTime.HasValue ? (DateTime.Now - _serverStartedTime.Value).TotalSeconds : 999;
+                        if (uptimeSeconds >= 45)
+                        {
+                            _wasServerRunning = false;
+                            _serverStartedTime = null;
+                            _lastActivePlayerTime = DateTime.Now;
+                            _shutdownTriggered = false;
+                            lock (_lock) { _activePlayers.Clear(); }
+                            StartUdpWakeListener(_gamePort);
+                        }
                         continue;
                     }
 
