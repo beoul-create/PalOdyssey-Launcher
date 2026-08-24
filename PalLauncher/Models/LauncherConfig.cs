@@ -18,6 +18,7 @@ namespace PalLauncher.Models
         public string LaunchMode { get; set; } = "Client"; // "Client" or "Server"
 
         public const string OfficialServerHost = "palodyssey.duckdns.org";
+        public const string DirectHostEndpoint = "136.35.126.190";
         public const int OfficialServerPort = 8211;
         public const int OfficialManagementPort = 8215;
         public const string DefaultRealmAccessKey = "PalOdyssey2026Secure";

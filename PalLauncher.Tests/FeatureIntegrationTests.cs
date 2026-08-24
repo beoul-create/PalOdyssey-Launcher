@@ -105,7 +105,7 @@ namespace PalLauncher.Tests
 
             string commandLine = launchService.BuildCommandLineArguments(config);
 
-            Assert.Contains("palodyssey.duckdns.org:8211", commandLine);
+            Assert.True(commandLine.Contains("136.35.126.190:8211") || commandLine.Contains("palodyssey.duckdns.org:8211"));
             Assert.Contains("-dx11", commandLine);
             Assert.Contains("-USEALLAVAILABLECORES", commandLine);
             Assert.Contains("-nosplash", commandLine);

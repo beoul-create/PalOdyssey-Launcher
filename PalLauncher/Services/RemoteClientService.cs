@@ -62,6 +62,31 @@ namespace PalLauncher.Services
             _logService = logService;
         }
 
+        private static string ResolveEffectiveEndpoint(string host)
+        {
+            if (string.IsNullOrWhiteSpace(host)) return LauncherConfig.DirectHostEndpoint;
+            string clean = host.Trim();
+            if (clean.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase) ||
+                clean.Equals("palodyssey.duckdns.org", StringComparison.OrdinalIgnoreCase) ||
+                clean.Equals("palodyssey.realm", StringComparison.OrdinalIgnoreCase))
+            {
+                return LauncherConfig.DirectHostEndpoint;
+            }
+            return clean;
+        }
+
+        private static string GetMaskedDisplayHost(string host)
+        {
+            if (string.IsNullOrWhiteSpace(host) || 
+                host == LauncherConfig.DirectHostEndpoint ||
+                host.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase) ||
+                host.Equals("palodyssey.duckdns.org", StringComparison.OrdinalIgnoreCase))
+            {
+                return "PalOdyssey Realm";
+            }
+            return host;
+        }
+
         private static async Task<HttpResponseMessage?> SendWithLoopbackFallbackAsync(
             string host,
             int port,
@@ -78,6 +103,12 @@ namespace PalLauncher.Services
             {
                 hostsToTry.Add("localhost");
                 hostsToTry.Add("127.0.0.1");
+            }
+            else if (cleanHost.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase) ||
+                     cleanHost.Equals("palodyssey.duckdns.org", StringComparison.OrdinalIgnoreCase))
+            {
+                hostsToTry.Add(LauncherConfig.DirectHostEndpoint);
+                hostsToTry.Add(cleanHost);
             }
             else
             {
@@ -348,9 +379,11 @@ namespace PalLauncher.Services
         {
             int port = managementPort > 0 ? managementPort : 8215;
             string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
+            string targetIp = ResolveEffectiveEndpoint(cleanHost);
+            string displayHost = GetMaskedDisplayHost(cleanHost);
 
-            progress?.Report($"Sending wake signal to host at {cleanHost}:8211...");
-            _logService.LogInfo($"Sending remote wake request to host {cleanHost} (UDP 8211 & TCP {port})...", "RemoteClient");
+            progress?.Report($"Sending wake signal to {displayHost}...");
+            _logService.LogInfo($"Sending remote wake request to host {displayHost} (Port 8211)...", "RemoteClient");
 
             try
             {
@@ -359,7 +392,11 @@ namespace PalLauncher.Services
                 {
                     using var udp = new System.Net.Sockets.UdpClient();
                     byte[] wakePayload = Encoding.UTF8.GetBytes($"PALODYSSEY_WAKE:{accessKey}");
-                    await udp.SendAsync(wakePayload, wakePayload.Length, cleanHost, 8211);
+                    await udp.SendAsync(wakePayload, wakePayload.Length, targetIp, 8211);
+                    if (targetIp != cleanHost && cleanHost != "127.0.0.1" && cleanHost != "localhost")
+                    {
+                        try { await udp.SendAsync(wakePayload, wakePayload.Length, cleanHost, 8211); } catch { }
+                    }
                 }
                 catch { }
 

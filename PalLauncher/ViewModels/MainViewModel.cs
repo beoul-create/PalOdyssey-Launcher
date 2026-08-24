@@ -387,15 +387,21 @@ namespace PalLauncher.ViewModels
                     OnPropertyChanged(nameof(IsServerOnline));
                     OnPropertyChanged(nameof(ServerStatusBadgeText));
 
+                    string displayHost = string.IsNullOrWhiteSpace(_configService.Config.ServerIp) ||
+                                         _configService.Config.ServerIp == LauncherConfig.DirectHostEndpoint ||
+                                         _configService.Config.ServerIp.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase)
+                                         ? "PalOdyssey Realm"
+                                         : _configService.Config.ServerIp;
+
                     if (IsServerOnline)
                     {
-                        StatusText = $"🟢 Server ONLINE ({_configService.Config.ServerIp}:8211) — Ready to launch!";
-                        _logService.LogSuccess($"Server status check: ONLINE at {_configService.Config.ServerIp}:8211", "Network");
+                        StatusText = $"🟢 {displayHost} ONLINE — Ready to launch!";
+                        _logService.LogSuccess($"Server status check: ONLINE ({displayHost})", "Network");
                     }
                     else
                     {
-                        StatusText = $"⚪ Server OFFLINE / Sleeping ({_configService.Config.ServerIp}:8211) — Auto-wake ready on launch.";
-                        _logService.LogInfo($"Server status check: OFFLINE/Sleeping ({_configService.Config.ServerIp}:8211). Will start automatically on launch.", "Network");
+                        StatusText = $"⚪ {displayHost} Sleeping — Auto-wake ready on launch.";
+                        _logService.LogInfo($"Server status check: OFFLINE/Sleeping ({displayHost}). Will start automatically on launch.", "Network");
                     }
                 });
             }
@@ -507,7 +513,12 @@ namespace PalLauncher.ViewModels
                     var currentServerStatus = await _remoteClient.QueryServerStatusAsync(config.ServerIp, config.RemoteManagementPort, 2000);
                     if (!currentServerStatus.IsServerRunning)
                     {
-                        StatusText = $"Sending wake signal to PalOdyssey host ({config.ServerIp})...";
+                        string targetDisplay = string.IsNullOrWhiteSpace(config.ServerIp) ||
+                                               config.ServerIp == LauncherConfig.DirectHostEndpoint ||
+                                               config.ServerIp.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase)
+                                               ? "PalOdyssey Realm"
+                                               : config.ServerIp;
+                        StatusText = $"Transmitting wake signal to {targetDisplay}...";
                         ProgressPercentage = 15;
 
                         var wakeProgress = new Progress<string>(msg =>

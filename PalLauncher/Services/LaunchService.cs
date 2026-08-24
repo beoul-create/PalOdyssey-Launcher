@@ -107,7 +107,14 @@ namespace PalLauncher.Services
             // 1. Client Auto-Join Argument if enabled
             if (config.AutoJoinServer && !string.IsNullOrWhiteSpace(config.ServerIp))
             {
-                string ipArg = $"{config.ServerIp}:{config.ServerPort}";
+                string targetHost = config.ServerIp.Trim();
+                if (targetHost.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase) ||
+                    targetHost.Equals("palodyssey.duckdns.org", StringComparison.OrdinalIgnoreCase) ||
+                    targetHost.Equals("palodyssey.realm", StringComparison.OrdinalIgnoreCase))
+                {
+                    targetHost = LauncherConfig.DirectHostEndpoint;
+                }
+                string ipArg = $"{targetHost}:{config.ServerPort}";
                 args.Add(ipArg);
             }
 
