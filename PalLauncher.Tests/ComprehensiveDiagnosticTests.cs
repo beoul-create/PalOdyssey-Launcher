@@ -29,7 +29,6 @@ namespace PalLauncher.Tests
 
             string modsContent = File.ReadAllText(modsTxt);
             Assert.Contains("StuckPalRescuer : 1", modsContent);
-            Assert.Contains("RemoveModWarning : 1", modsContent);
             Assert.Contains("QuickDeposit : 1", modsContent);
             Assert.Contains("PalClearVision : 1", modsContent);
             Assert.Contains("DarnMenu : 1", modsContent);
@@ -62,7 +61,7 @@ namespace PalLauncher.Tests
             var config = configService.Config;
             Assert.NotNull(config);
             Assert.Equal("palodyssey.duckdns.org", config.ServerIp);
-            Assert.Equal(57294, config.ServerPort);
+            Assert.Equal(8211, config.ServerPort);
             Assert.Equal("1540924979095408700", config.DiscordApplicationId);
 
             // 2. Multi-iteration Stress loop simulating continuous operations
@@ -113,7 +112,7 @@ namespace PalLauncher.Tests
                     Assert.NotNull(liveboard);
                     Assert.True(liveboard.IsOnline);
                     Assert.Equal("PalOdyssey Realm", liveboard.ServerName);
-                    Assert.Equal("palodyssey.duckdns.org:57294", liveboard.ServerAddress);
+                    Assert.Equal("palodyssey.duckdns.org:8211", liveboard.ServerAddress);
                 }
             }
             finally

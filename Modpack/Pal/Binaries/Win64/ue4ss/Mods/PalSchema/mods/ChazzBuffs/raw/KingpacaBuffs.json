@@ -1,0 +1,24 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "KingAlpaca": {
+      "Defense": 120,
+      "Friendship_Defense": 1.7
+    },
+    "BOSS_KingAlpaca": {
+      "Defense": 120,
+      "Friendship_Defense": 1.7
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_KingAlpaca_BodyPress": {
+      "WazaType": "EPalWazaID::Unique_KingAlpaca_BodyPress",
+      "Element": "EPalElementType::Normal",
+      "Power": 750,
+      "DisplayPower": 750,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Stun",
+      "EffectValue1": 100
+    }
+  }
+}

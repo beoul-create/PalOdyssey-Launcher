@@ -1,0 +1,74 @@
+{
+	"DT_PassiveSkill_Main": {
+		"ThunderDragonMan_PartnerSkill_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::BulletHit_StackBuff",
+			"EffectValue1": 1,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToActiveOtomo",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"ThunderDragonMan_PartnerSkill_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::BulletHit_StackBuff",
+			"EffectValue1": 1.5,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToActiveOtomo",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"ThunderDragonMan_PartnerSkill_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::BulletHit_StackBuff",
+			"EffectValue1": 2,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToActiveOtomo",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"ThunderDragonMan_PartnerSkill_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::BulletHit_StackBuff",
+			"EffectValue1": 2.5,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToActiveOtomo",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"ThunderDragonMan_PartnerSkill_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::BulletHit_StackBuff",
+			"EffectValue1": 3,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToActiveOtomo",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		}
+	}
+}

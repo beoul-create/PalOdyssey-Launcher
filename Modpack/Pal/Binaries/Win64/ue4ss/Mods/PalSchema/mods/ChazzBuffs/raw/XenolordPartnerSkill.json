@@ -1,0 +1,74 @@
+{
+	"DT_PassiveSkill_Main": {
+		"DamageUpPartnerSkillAttack_DarkMechaDragon_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::DamageUpPartnerSkillAttack",
+			"EffectValue1": 40,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 10,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"DamageUpPartnerSkillAttack_DarkMechaDragon_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::DamageUpPartnerSkillAttack",
+			"EffectValue1": 52,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 12,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"DamageUpPartnerSkillAttack_DarkMechaDragon_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::DamageUpPartnerSkillAttack",
+			"EffectValue1": 64,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 14,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"DamageUpPartnerSkillAttack_DarkMechaDragon_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::DamageUpPartnerSkillAttack",
+			"EffectValue1": 76,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 16,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"DamageUpPartnerSkillAttack_DarkMechaDragon_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::DamageUpPartnerSkillAttack",
+			"EffectValue1": 100,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 20,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		}
+	}
+}

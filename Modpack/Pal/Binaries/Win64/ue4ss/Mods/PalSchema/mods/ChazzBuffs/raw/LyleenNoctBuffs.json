@@ -1,0 +1,17 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "LilyQueen_Dark": {
+      "ShotAttack": 130,
+      "Defense": 120,
+      "Friendship_ShotAttack": 1.3,
+      "Friendship_Defense": 1.7
+    },
+    "BOSS_LilyQueen_Dark": {
+      "ShotAttack": 130,
+      "Defense": 120,
+      "Friendship_ShotAttack": 1.3,
+      "Friendship_Defense": 1.7
+    }
+  }
+}

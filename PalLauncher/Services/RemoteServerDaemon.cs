@@ -32,6 +32,8 @@ namespace PalLauncher.Services
         private int _idleShutdownMinutes = 15;
         private DateTime? _serverStartedTime;
         private DateTime _lastActivePlayerTime = DateTime.Now;
+        private bool _wasServerRunning = false;
+        private bool _shutdownTriggered = false;
         private readonly List<PlayerInfo> _activePlayers = new();
         private readonly object _lock = new();
 
@@ -56,8 +58,12 @@ namespace PalLauncher.Services
 
         public void ConfigureIdleAutoShutdown(bool enabled, int minutes)
         {
-            _idleShutdownEnabled = enabled;
-            _idleShutdownMinutes = Math.Max(1, minutes);
+            lock (_lock)
+            {
+                _idleShutdownEnabled = enabled;
+                _idleShutdownMinutes = Math.Max(1, minutes);
+                _logService.LogInfo($"Inactivity Auto-Shutdown configured: Enabled={enabled}, Timeout={_idleShutdownMinutes}m", "AutoShutdown");
+            }
         }
 
         public Task<bool> StartDaemonAsync(
@@ -94,6 +100,8 @@ namespace PalLauncher.Services
                 _cts = new CancellationTokenSource();
                 _isRunning = true;
                 _lastActivePlayerTime = DateTime.Now;
+                _wasServerRunning = _launchService.IsServerRunning;
+                _shutdownTriggered = false;
 
                 _logService.LogSuccess($"Remote Host Daemon listening on port {_port} with Inactivity Auto-Shutdown ({_idleShutdownMinutes}m).", "RemoteDaemon");
                 
@@ -111,7 +119,7 @@ namespace PalLauncher.Services
 
         public ServerLiveboardInfo GetCurrentLiveboard()
         {
-            bool isServerRunning = _launchService.IsServerRunning || _launchService.IsGameRunning;
+            bool isServerRunning = _launchService.IsServerRunning;
             var state = _launchService.CurrentState;
             
             double uptime = 0;
@@ -134,7 +142,7 @@ namespace PalLauncher.Services
             lock (_lock)
             {
                 int currentPlayers = _activePlayers.Count;
-                if (isServerRunning && currentPlayers == 0)
+                if (isServerRunning && currentPlayers == 0 && _idleShutdownEnabled)
                 {
                     isIdleCountingDown = true;
                     var idleDuration = DateTime.Now - _lastActivePlayerTime;
@@ -144,6 +152,7 @@ namespace PalLauncher.Services
                 else if (currentPlayers > 0)
                 {
                     _lastActivePlayerTime = DateTime.Now;
+                    _shutdownTriggered = false;
                 }
 
                 return new ServerLiveboardInfo
@@ -151,7 +160,7 @@ namespace PalLauncher.Services
                     IsOnline = true,
                     IsServerRunning = isServerRunning,
                     ServerName = "PalOdyssey Realm",
-                    ServerAddress = "palodyssey.duckdns.org:57294",
+                    ServerAddress = "palodyssey.duckdns.org:8211",
                     Version = "1.5.4",
                     UptimeSeconds = uptime,
                     PlayerCount = currentPlayers,
@@ -170,16 +179,37 @@ namespace PalLauncher.Services
             {
                 try
                 {
-                    await Task.Delay(15000, ct); // Check every 15s
+                    await Task.Delay(10000, ct); // Check every 10s
 
-                    bool isServerRunning = _launchService.IsServerRunning || _launchService.IsGameRunning;
+                    bool isServerRunning = _launchService.IsServerRunning;
+
+                    // Detect Server Start Transition
+                    if (!_wasServerRunning && isServerRunning)
+                    {
+                        _wasServerRunning = true;
+                        _serverStartedTime = DateTime.Now;
+                        _lastActivePlayerTime = DateTime.Now;
+                        _shutdownTriggered = false;
+                        _logService.LogInfo("Dedicated server active detected. Inactivity timer initialized.", "AutoShutdown");
+                    }
+                    // Detect Server Stop Transition
+                    else if (_wasServerRunning && !isServerRunning)
+                    {
+                        _wasServerRunning = false;
+                        _serverStartedTime = null;
+                        _lastActivePlayerTime = DateTime.Now;
+                        _shutdownTriggered = false;
+                        lock (_lock) { _activePlayers.Clear(); }
+                        continue;
+                    }
+
                     if (!isServerRunning)
                     {
                         _lastActivePlayerTime = DateTime.Now;
                         continue;
                     }
 
-                    // Query live players from Palworld server
+                    // Server is active - query live players from Palworld REST API
                     await RefreshConnectedPlayersAsync();
 
                     lock (_lock)
@@ -187,18 +217,36 @@ namespace PalLauncher.Services
                         if (_activePlayers.Count > 0)
                         {
                             _lastActivePlayerTime = DateTime.Now;
+                            _shutdownTriggered = false;
                         }
-                        else if (_idleShutdownEnabled)
+                        else if (_idleShutdownEnabled && !_shutdownTriggered)
                         {
+                            // Startup grace period: Allow at least 2 minutes for server world initialization & client connections
+                            double uptimeSeconds = _serverStartedTime.HasValue ? (DateTime.Now - _serverStartedTime.Value).TotalSeconds : 0;
+                            if (uptimeSeconds < 90)
+                            {
+                                _lastActivePlayerTime = DateTime.Now;
+                                continue;
+                            }
+
                             var idleDuration = DateTime.Now - _lastActivePlayerTime;
                             if (idleDuration.TotalMinutes >= _idleShutdownMinutes)
                             {
-                                _logService.LogWarning($"Auto-Shutdown triggered: 0 players online for {_idleShutdownMinutes} minutes. Gracefully sleeping server.", "AutoShutdown");
+                                _shutdownTriggered = true;
+                                _logService.LogWarning($"Auto-Shutdown triggered: 0 players online for {_idleShutdownMinutes} minutes. Gracefully stopping dedicated server.", "AutoShutdown");
+                                
                                 _ = Task.Run(async () =>
                                 {
-                                    if (_onStopServerRequested != null)
+                                    try
                                     {
-                                        await _onStopServerRequested();
+                                        if (_onStopServerRequested != null)
+                                        {
+                                            await _onStopServerRequested();
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        _logService.LogError("Exception executing auto-shutdown stop callback.", "AutoShutdown", ex);
                                     }
                                 });
                             }
@@ -232,10 +280,35 @@ namespace PalLauncher.Services
                     {
                         foreach (var elem in playersArr.EnumerateArray())
                         {
-                            string name = elem.TryGetProperty("name", out var n) ? n.GetString() ?? "Pal Trainer" : "Pal Trainer";
-                            int level = elem.TryGetProperty("level", out var l) ? l.GetInt32() : 1;
-                            int ping = elem.TryGetProperty("ping", out var p) ? p.GetInt32() : 20;
-                            string location = elem.TryGetProperty("location", out var loc) ? loc.GetString() ?? "Palpagos" : "Palpagos Islands";
+                            string name = "Pal Trainer";
+                            if (elem.TryGetProperty("name", out var n) && !string.IsNullOrWhiteSpace(n.GetString())) name = n.GetString()!;
+                            else if (elem.TryGetProperty("playerName", out var pn) && !string.IsNullOrWhiteSpace(pn.GetString())) name = pn.GetString()!;
+                            else if (elem.TryGetProperty("accountName", out var an) && !string.IsNullOrWhiteSpace(an.GetString())) name = an.GetString()!;
+                            else if (elem.TryGetProperty("playerId", out var pid) && !string.IsNullOrWhiteSpace(pid.GetString())) name = pid.GetString()!;
+
+                            int level = 1;
+                            if (elem.TryGetProperty("level", out var l))
+                            {
+                                if (l.ValueKind == JsonValueKind.Number) level = l.GetInt32();
+                                else if (int.TryParse(l.GetString(), out int parsedLvl)) level = parsedLvl;
+                            }
+
+                            int ping = 20;
+                            if (elem.TryGetProperty("ping", out var p))
+                            {
+                                if (p.ValueKind == JsonValueKind.Number) ping = p.GetInt32();
+                                else if (int.TryParse(p.GetString(), out int parsedPing)) ping = parsedPing;
+                            }
+
+                            string location = "Palpagos Islands";
+                            if (elem.TryGetProperty("location", out var loc) && !string.IsNullOrWhiteSpace(loc.GetString()))
+                            {
+                                location = loc.GetString()!;
+                            }
+                            else if (elem.TryGetProperty("location_x", out var lx) && elem.TryGetProperty("location_y", out var ly))
+                            {
+                                location = $"X: {lx.ToString()}, Y: {ly.ToString()}";
+                            }
 
                             playersList.Add(new PlayerInfo
                             {

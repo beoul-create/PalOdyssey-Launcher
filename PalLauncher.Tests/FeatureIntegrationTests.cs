@@ -60,7 +60,7 @@ namespace PalLauncher.Tests
                 Assert.NotNull(liveboard);
                 Assert.True(liveboard.IsOnline, "Liveboard should report server online");
                 Assert.Equal("PalOdyssey Realm", liveboard.ServerName);
-                Assert.Equal("palodyssey.duckdns.org:57294", liveboard.ServerAddress);
+                Assert.Equal("palodyssey.duckdns.org:8211", liveboard.ServerAddress);
 
                 _output.WriteLine($"[PASS] Server Liveboard Query: {liveboard.ServerName} ({liveboard.ServerAddress}) - Online: {liveboard.IsOnline}");
 
@@ -95,7 +95,7 @@ namespace PalLauncher.Tests
                 LaunchMode = "Client",
                 AutoJoinServer = true,
                 ServerIp = "palodyssey.duckdns.org",
-                ServerPort = 57294,
+                ServerPort = 8211,
                 UseDirectX11 = true,
                 UseAllCores = true,
                 NoSplash = true,
@@ -105,7 +105,7 @@ namespace PalLauncher.Tests
 
             string commandLine = launchService.BuildCommandLineArguments(config);
 
-            Assert.Contains("palodyssey.duckdns.org:57294", commandLine);
+            Assert.Contains("palodyssey.duckdns.org:8211", commandLine);
             Assert.Contains("-dx11", commandLine);
             Assert.Contains("-USEALLAVAILABLECORES", commandLine);
             Assert.Contains("-nosplash", commandLine);

@@ -15,14 +15,61 @@ namespace PalLauncher.Services
         private readonly ICrashLogService? _crashLogService;
         private Process? _runningClientProcess;
         private Process? _runningServerProcess;
+        private Process? _runningTunnelProcess;
         private GameProcessState _currentState = new();
 
         public GameProcessState CurrentState => _currentState;
-        public bool IsGameRunning => (_runningClientProcess != null && !_runningClientProcess.HasExited) ||
-                                     (_runningServerProcess != null && !_runningServerProcess.HasExited);
+        public bool IsGameRunning => IsClientRunning || IsServerRunning;
 
-        public bool IsServerRunning => _runningServerProcess != null && !_runningServerProcess.HasExited;
-        public bool IsClientRunning => _runningClientProcess != null && !_runningClientProcess.HasExited;
+        public bool IsServerRunning => (_runningServerProcess != null && !_runningServerProcess.HasExited) ||
+                                       GetActiveServerProcesses().Count > 0;
+
+        public bool IsClientRunning => (_runningClientProcess != null && !_runningClientProcess.HasExited) ||
+                                       GetActiveClientProcesses().Count > 0;
+
+        public static List<Process> GetActiveServerProcesses()
+        {
+            var results = new List<Process>();
+            string[] targetNames = { "PalServer", "PalServer-Win64-Shipping", "PalServer-Win64-Shipping-Cmd" };
+            foreach (var name in targetNames)
+            {
+                try
+                {
+                    var procs = Process.GetProcessesByName(name);
+                    foreach (var p in procs)
+                    {
+                        if (!p.HasExited)
+                        {
+                            results.Add(p);
+                        }
+                    }
+                }
+                catch { }
+            }
+            return results;
+        }
+
+        public static List<Process> GetActiveClientProcesses()
+        {
+            var results = new List<Process>();
+            string[] targetNames = { "Palworld", "Palworld-Win64-Shipping" };
+            foreach (var name in targetNames)
+            {
+                try
+                {
+                    var procs = Process.GetProcessesByName(name);
+                    foreach (var p in procs)
+                    {
+                        if (!p.HasExited)
+                        {
+                            results.Add(p);
+                        }
+                    }
+                }
+                catch { }
+            }
+            return results;
+        }
 
         public event EventHandler<GameProcessState>? ProcessStateChanged;
         public event EventHandler<int>? ProcessExited;
@@ -49,6 +96,7 @@ namespace PalLauncher.Services
             args.Add("-NoAsyncLoadingThread");
             args.Add("-USEALLAVAILABLECORES");
             args.Add("-malloc=system");
+            args.Add("-NoVerifyGC");
             return string.Join(" ", args);
         }
 
@@ -63,15 +111,19 @@ namespace PalLauncher.Services
                 args.Add(ipArg);
             }
 
-            // 2. Predefined Performance & Engine Flags
+            // 2. Suppress engine crash popup dialogs & unattended execution
+            args.Add("-NoCrashReporter");
+
+            // 3. Resource & Performance Optimization Flags
+            args.Add("-USEALLAVAILABLECORES");
+            args.Add("-useperfthreads");
+            args.Add("-malloc=system");
+            args.Add("-NoVerifyGC");
+
+            // 4. Predefined Performance & Engine Flags
             if (config.UseDirectX11)
             {
                 args.Add("-dx11");
-            }
-
-            if (config.UseAllCores)
-            {
-                args.Add("-USEALLAVAILABLECORES");
             }
 
             if (config.NoSplash)
@@ -89,7 +141,7 @@ namespace PalLauncher.Services
                 args.Add("-high");
             }
 
-            // 3. Custom User Arguments
+            // 4. Custom User Arguments
             if (!string.IsNullOrWhiteSpace(config.CustomArguments))
             {
                 args.Add(config.CustomArguments.Trim());
@@ -125,75 +177,105 @@ namespace PalLauncher.Services
                     // 1. Launch Dedicated Server if requested and available
                     if (launchServer)
                     {
-                        string serverExe = pathInfo.ServerExecutablePath;
-                        if (!File.Exists(serverExe))
+                        // Check if an existing PalServer instance is already running
+                        Process? existingServer = null;
+                        if (_runningServerProcess != null && !_runningServerProcess.HasExited)
                         {
-                            serverExe = Path.Combine(pathInfo.GameRootPath, config.ServerExecutableName);
+                            existingServer = _runningServerProcess;
                         }
-                        if (!File.Exists(serverExe))
+                        else
                         {
-                            string shippingServer = Path.Combine(pathInfo.GameRootPath, "Pal", "Binaries", "Win64", "PalServer-Win64-Shipping.exe");
-                            if (File.Exists(shippingServer)) serverExe = shippingServer;
+                            var activeServers = Process.GetProcesses().Where(p =>
+                                p.ProcessName.Equals("PalServer", StringComparison.OrdinalIgnoreCase) ||
+                                p.ProcessName.Equals("PalServer-Win64-Shipping-Cmd", StringComparison.OrdinalIgnoreCase) ||
+                                p.ProcessName.Equals("PalServer-Win64-Shipping", StringComparison.OrdinalIgnoreCase)).ToList();
+                            if (activeServers.Any())
+                            {
+                                existingServer = activeServers.First();
+                            }
                         }
 
-                        if (File.Exists(serverExe))
+                        if (existingServer != null)
                         {
-                            string serverArgs = BuildServerCommandLineArguments(config);
-                            string serverWorkDir = Path.GetDirectoryName(serverExe) ?? pathInfo.GameRootPath;
-
-                            _logService.LogInfo($"Launching PalServer: {Path.GetFileName(serverExe)} args: '{serverArgs}'", "PalServer");
-
-                            var sStartInfo = new ProcessStartInfo
+                            _runningServerProcess = existingServer;
+                            serverLaunched = true;
+                            _logService.LogInfo($"Palworld Dedicated Server is already active (PID: {existingServer.Id}). Skipping duplicate server spawn.", "PalServer");
+                            StartPlayitTunnel(config);
+                        }
+                        else
+                        {
+                            string serverExe = pathInfo.ServerExecutablePath;
+                            if (!File.Exists(serverExe))
                             {
-                                FileName = serverExe,
-                                Arguments = serverArgs,
-                                WorkingDirectory = serverWorkDir,
-                                UseShellExecute = false,
-                                CreateNoWindow = true,
-                                RedirectStandardOutput = true,
-                                RedirectStandardError = true
-                            };
-
-                            var sProcess = new Process
+                                serverExe = Path.Combine(pathInfo.GameRootPath, config.ServerExecutableName);
+                            }
+                            if (!File.Exists(serverExe))
                             {
-                                StartInfo = sStartInfo,
-                                EnableRaisingEvents = true
-                            };
+                                string shippingServer = Path.Combine(pathInfo.GameRootPath, "Pal", "Binaries", "Win64", "PalServer-Win64-Shipping.exe");
+                                if (File.Exists(shippingServer)) serverExe = shippingServer;
+                            }
 
-                            sProcess.OutputDataReceived += (s, e) =>
+                            if (File.Exists(serverExe))
                             {
-                                if (!string.IsNullOrWhiteSpace(e.Data)) ParseAndLogServerOutput(e.Data);
-                            };
+                                string serverArgs = BuildServerCommandLineArguments(config);
+                                string serverWorkDir = Path.GetDirectoryName(serverExe) ?? pathInfo.GameRootPath;
 
-                            sProcess.ErrorDataReceived += (s, e) =>
-                            {
-                                if (!string.IsNullOrWhiteSpace(e.Data))
+                                _logService.LogInfo($"Launching PalServer: {Path.GetFileName(serverExe)} args: '{serverArgs}'", "PalServer");
+
+                                var sStartInfo = new ProcessStartInfo
                                 {
-                                    if (e.Data.Contains("error", StringComparison.OrdinalIgnoreCase) || e.Data.Contains("fatal", StringComparison.OrdinalIgnoreCase))
-                                        _logService.LogError(e.Data, "PalServer");
-                                    else
-                                        _logService.LogWarning(e.Data, "PalServer");
+                                    FileName = serverExe,
+                                    Arguments = serverArgs,
+                                    WorkingDirectory = serverWorkDir,
+                                    UseShellExecute = false,
+                                    CreateNoWindow = true,
+                                    RedirectStandardOutput = true,
+                                    RedirectStandardError = true
+                                };
+
+                                var sProcess = new Process
+                                {
+                                    StartInfo = sStartInfo,
+                                    EnableRaisingEvents = true
+                                };
+
+                                sProcess.OutputDataReceived += (s, e) =>
+                                {
+                                    if (!string.IsNullOrWhiteSpace(e.Data)) ParseAndLogServerOutput(e.Data);
+                                };
+
+                                sProcess.ErrorDataReceived += (s, e) =>
+                                {
+                                    if (!string.IsNullOrWhiteSpace(e.Data))
+                                    {
+                                        if (e.Data.Contains("error", StringComparison.OrdinalIgnoreCase) || e.Data.Contains("fatal", StringComparison.OrdinalIgnoreCase))
+                                            _logService.LogError(e.Data, "PalServer");
+                                        else
+                                            _logService.LogWarning(e.Data, "PalServer");
+                                    }
+                                };
+
+                                sProcess.Exited += (s, e) =>
+                                {
+                                    _logService.LogInfo($"Dedicated server process (PID: {sProcess.Id}) terminated.", "PalServer");
+                                    StopPlayitTunnel();
+                                    UpdateProcessState();
+                                };
+
+                                if (sProcess.Start())
+                                {
+                                    sProcess.BeginOutputReadLine();
+                                    sProcess.BeginErrorReadLine();
+                                    _runningServerProcess = sProcess;
+                                    serverLaunched = true;
+
+                                    _serverLogCts?.Cancel();
+                                    _serverLogCts = new CancellationTokenSource();
+                                    StartServerLogFileTailer(pathInfo.GameRootPath, _serverLogCts.Token);
+
+                                    _logService.LogSuccess($"Palworld Dedicated Server online on port {config.ServerPort} (PID: {sProcess.Id})", "PalServer");
+                                    StartPlayitTunnel(config);
                                 }
-                            };
-
-                            sProcess.Exited += (s, e) =>
-                            {
-                                _logService.LogInfo($"Dedicated server process (PID: {sProcess.Id}) terminated.", "PalServer");
-                                UpdateProcessState();
-                            };
-
-                            if (sProcess.Start())
-                            {
-                                sProcess.BeginOutputReadLine();
-                                sProcess.BeginErrorReadLine();
-                                _runningServerProcess = sProcess;
-                                serverLaunched = true;
-
-                                _serverLogCts?.Cancel();
-                                _serverLogCts = new CancellationTokenSource();
-                                StartServerLogFileTailer(pathInfo.GameRootPath, _serverLogCts.Token);
-
-                                _logService.LogSuccess($"Palworld Dedicated Server online on port {config.ServerPort} (PID: {sProcess.Id})", "PalServer");
                             }
                         }
                     }
@@ -220,7 +302,10 @@ namespace PalLauncher.Services
                             string clientArgs = BuildCommandLineArguments(config);
                             string clientWorkDir = Path.GetDirectoryName(clientExe) ?? pathInfo.GameRootPath;
 
-                            // 2a. Ensure direct raw mouse input (2000Hz-8000Hz) is configured if enabled
+                            // 2a. Purge any stale Unreal Engine crash logs so the game never prompts about previous crashes
+                            PurgeStaleCrashFlags(pathInfo.GameRootPath);
+
+                            // 2b. Ensure direct raw mouse input (2000Hz-8000Hz) is configured if enabled
                             if (config.EnableRawInputOptimization)
                             {
                                 EnsureDirectRawInputConfig(config, pathInfo.GameRootPath);
@@ -301,19 +386,27 @@ namespace PalLauncher.Services
 
         private void UpdateProcessState()
         {
-            bool isRunning = IsGameRunning;
-            int clientPid = (_runningClientProcess != null && !_runningClientProcess.HasExited) ? _runningClientProcess.Id : 0;
-            int serverPid = (_runningServerProcess != null && !_runningServerProcess.HasExited) ? _runningServerProcess.Id : 0;
+            bool serverRunning = IsServerRunning;
+            bool clientRunning = IsClientRunning;
+            bool isRunning = clientRunning || serverRunning;
+
+            int clientPid = (_runningClientProcess != null && !_runningClientProcess.HasExited)
+                ? _runningClientProcess.Id
+                : (GetActiveClientProcesses().Count > 0 ? GetActiveClientProcesses()[0].Id : 0);
+
+            int serverPid = (_runningServerProcess != null && !_runningServerProcess.HasExited)
+                ? _runningServerProcess.Id
+                : (GetActiveServerProcesses().Count > 0 ? GetActiveServerProcesses()[0].Id : 0);
 
             _currentState = new GameProcessState
             {
                 IsRunning = isRunning,
-                IsClientRunning = clientPid > 0,
-                IsServerRunning = serverPid > 0,
+                IsClientRunning = clientRunning,
+                IsServerRunning = serverRunning,
                 ProcessId = clientPid > 0 ? clientPid : serverPid,
                 ServerProcessId = serverPid,
                 StartTime = isRunning ? (_currentState.StartTime ?? DateTime.Now) : null,
-                Mode = (clientPid > 0 && serverPid > 0) ? "Client + Server" : (serverPid > 0 ? "Server" : "Client")
+                Mode = (clientRunning && serverRunning) ? "Client + Server" : (serverRunning ? "Server" : "Client")
             };
 
             ProcessStateChanged?.Invoke(this, _currentState);
@@ -446,6 +539,21 @@ namespace PalLauncher.Services
                         _runningClientProcess = null;
                     }
 
+                    // Sweep any active game client processes
+                    foreach (var cp in GetActiveClientProcesses())
+                    {
+                        try
+                        {
+                            _logService.LogInfo($"Stopping active Palworld client (PID: {cp.Id})...", "Launcher");
+                            cp.CloseMainWindow();
+                            if (!cp.WaitForExit(1500))
+                            {
+                                cp.Kill(true);
+                            }
+                        }
+                        catch { }
+                    }
+
                     // 2. Stop Server Process
                     if (_runningServerProcess != null && !_runningServerProcess.HasExited)
                     {
@@ -458,6 +566,30 @@ namespace PalLauncher.Services
                         _runningServerProcess = null;
                     }
 
+                    // Sweep all active dedicated server processes (including terminal / console instances)
+                    foreach (var sp in GetActiveServerProcesses())
+                    {
+                        try
+                        {
+                            _logService.LogInfo($"Terminating dedicated server process (PID: {sp.Id} - {sp.ProcessName})...", "PalServer");
+                            sp.Kill(true);
+                        }
+                        catch { }
+                    }
+
+                    // 3. Suppress and terminate any Unreal Engine CrashReportClient dialogs
+                    foreach (var crp in Process.GetProcessesByName("CrashReportClient"))
+                    {
+                        try { crp.Kill(true); } catch { }
+                    }
+                    foreach (var crp in Process.GetProcessesByName("CrashReportClient-Win64-Shipping"))
+                    {
+                        try { crp.Kill(true); } catch { }
+                    }
+
+                    // 4. Stop Playit.gg Cloud Tunnel in sync
+                    StopPlayitTunnel();
+
                     UpdateProcessState();
                     _logService.LogSuccess("All processes stopped.", "Launcher");
                     return true;
@@ -468,6 +600,51 @@ namespace PalLauncher.Services
                     return false;
                 }
             });
+        }
+
+        public void PurgeStaleCrashFlags(string? gameRootPath)
+        {
+            try
+            {
+                string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                if (!string.IsNullOrEmpty(localAppData))
+                {
+                    string appDataCrashDir = Path.Combine(localAppData, "Pal", "Saved", "Crashes");
+                    if (Directory.Exists(appDataCrashDir))
+                    {
+                        foreach (var d in Directory.GetDirectories(appDataCrashDir))
+                        {
+                            try { Directory.Delete(d, true); } catch { }
+                        }
+                        foreach (var f in Directory.GetFiles(appDataCrashDir))
+                        {
+                            try { File.Delete(f); } catch { }
+                        }
+                    }
+
+                    string appDataLogsDir = Path.Combine(localAppData, "Pal", "Saved", "Logs");
+                    if (Directory.Exists(appDataLogsDir))
+                    {
+                        foreach (var f in Directory.GetFiles(appDataLogsDir, "*.dmp"))
+                        {
+                            try { File.Delete(f); } catch { }
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(gameRootPath) && Directory.Exists(gameRootPath))
+                {
+                    string ue4ssDir = Path.Combine(gameRootPath, "Pal", "Binaries", "Win64", "ue4ss");
+                    if (Directory.Exists(ue4ssDir))
+                    {
+                        foreach (var f in Directory.GetFiles(ue4ssDir, "*.dmp"))
+                        {
+                            try { File.Delete(f); } catch { }
+                        }
+                    }
+                }
+            }
+            catch { }
         }
 
         public bool EnsureDirectRawInputConfig(LauncherConfig config, string? gameRootPath)
@@ -540,26 +717,63 @@ namespace PalLauncher.Services
 
         public static string InjectRawInputSettingsIntoIni(string iniContent)
         {
-            const string sectionHeader = "[/Script/Engine.InputSettings]";
-            const string rawInputKey = "RawMouseInputEnabled=True";
-            const string smoothingKey = "bEnableMouseSmoothing=False";
-            const string accelKey = "bViewAccelerationEnabled=False";
-            const string disableAccelKey = "bDisableMouseAcceleration=True";
+            var lines = string.IsNullOrWhiteSpace(iniContent)
+                ? new List<string>()
+                : new List<string>(iniContent.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None));
 
-            if (string.IsNullOrWhiteSpace(iniContent))
+            // 1. Raw Input Settings
+            InjectSectionIntoIniLines(lines, "[/Script/Engine.InputSettings]", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                var sb = new StringBuilder();
-                sb.AppendLine(sectionHeader);
-                sb.AppendLine(rawInputKey);
-                sb.AppendLine(smoothingKey);
-                sb.AppendLine(accelKey);
-                sb.AppendLine(disableAccelKey);
-                return sb.ToString().TrimEnd();
-            }
+                { "RawMouseInputEnabled", "RawMouseInputEnabled=True" },
+                { "bEnableMouseSmoothing", "bEnableMouseSmoothing=False" },
+                { "bViewAccelerationEnabled", "bViewAccelerationEnabled=False" },
+                { "bDisableMouseAcceleration", "bDisableMouseAcceleration=True" }
+            });
 
-            var lines = new List<string>(iniContent.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None));
+            // 2. Resource & Render Settings (Low CPU/GPU overhead & background throttling)
+            InjectSectionIntoIniLines(lines, "[SystemSettings]", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "t.MaxFPS", "t.MaxFPS=120" },
+                { "t.UnfocusedMaxFPS", "t.UnfocusedMaxFPS=30" },
+                { "r.TextureStreaming", "r.TextureStreaming=1" },
+                { "r.Streaming.PoolSize", "r.Streaming.PoolSize=2560" },
+                { "r.Streaming.LimitPoolSizeToVRAM", "r.Streaming.LimitPoolSizeToVRAM=1" },
+                { "r.Streaming.DefragDynamicBounds", "r.Streaming.DefragDynamicBounds=1" },
+                { "r.Streaming.AmortizeCPUToGPUCopy", "r.Streaming.AmortizeCPUToGPUCopy=1" },
+                { "r.Streaming.MaxNumTexturesToStreamPerFrame", "r.Streaming.MaxNumTexturesToStreamPerFrame=8" },
+                { "r.Shadow.DistanceScale", "r.Shadow.DistanceScale=0.75" },
+                { "r.VolumetricFog.GridPixelSize", "r.VolumetricFog.GridPixelSize=16" },
+                { "r.VolumetricFog.GridSizeZ", "r.VolumetricFog.GridSizeZ=64" },
+                { "r.DepthOfFieldQuality", "r.DepthOfFieldQuality=0" },
+                { "r.MotionBlurQuality", "r.MotionBlurQuality=0" },
+                { "r.ParticleLODBias", "r.ParticleLODBias=1" },
+                { "r.Emitter.FastPool", "r.Emitter.FastPool=1" },
+                { "r.Shaders.Optimize", "r.Shaders.Optimize=1" },
+                { "r.CreateShadersOnLoad", "r.CreateShadersOnLoad=1" }
+            });
+
+            // 3. Garbage Collection Settings (Fast purging & memory reduction)
+            InjectSectionIntoIniLines(lines, "[/Script/Engine.GarbageCollectionSettings]", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "gc.TimeBetweenPurgingPendingKillObjects", "gc.TimeBetweenPurgingPendingKillObjects=45" },
+                { "gc.IncrementalBeginTimeSlice", "gc.IncrementalBeginTimeSlice=0.002" },
+                { "gc.MinDesiredTimeBetweenGarbageCollections", "gc.MinDesiredTimeBetweenGarbageCollections=20" },
+                { "gc.CreateGCClusters", "gc.CreateGCClusters=True" },
+                { "gc.ActorClusteringEnabled", "gc.ActorClusteringEnabled=True" }
+            });
+
+            // 4. Audio Thread Settings
+            InjectSectionIntoIniLines(lines, "[/Script/Engine.AudioSettings]", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "MaxChannels", "MaxChannels=64" }
+            });
+
+            return string.Join(Environment.NewLine, lines);
+        }
+
+        private static void InjectSectionIntoIniLines(List<string> lines, string sectionHeader, Dictionary<string, string> keysToSet)
+        {
             int sectionIndex = -1;
-
             for (int i = 0; i < lines.Count; i++)
             {
                 if (lines[i].Trim().Equals(sectionHeader, StringComparison.OrdinalIgnoreCase))
@@ -571,20 +785,18 @@ namespace PalLauncher.Services
 
             if (sectionIndex == -1)
             {
-                // Section does not exist - append at the end
                 if (lines.Count > 0 && !string.IsNullOrWhiteSpace(lines[^1]))
                 {
                     lines.Add("");
                 }
                 lines.Add(sectionHeader);
-                lines.Add(rawInputKey);
-                lines.Add(smoothingKey);
-                lines.Add(accelKey);
-                lines.Add(disableAccelKey);
+                foreach (var kvp in keysToSet)
+                {
+                    lines.Add(kvp.Value);
+                }
             }
             else
             {
-                // Section exists - find boundary of this section (until next section or EOF)
                 int nextSectionIndex = lines.Count;
                 for (int i = sectionIndex + 1; i < lines.Count; i++)
                 {
@@ -596,15 +808,7 @@ namespace PalLauncher.Services
                     }
                 }
 
-                // Check and update or insert keys within [sectionIndex + 1 .. nextSectionIndex - 1]
-                var keysToSet = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    { "RawMouseInputEnabled", rawInputKey },
-                    { "bEnableMouseSmoothing", smoothingKey },
-                    { "bViewAccelerationEnabled", accelKey },
-                    { "bDisableMouseAcceleration", disableAccelKey }
-                };
-
+                var remaining = new Dictionary<string, string>(keysToSet, StringComparer.OrdinalIgnoreCase);
                 for (int i = sectionIndex + 1; i < nextSectionIndex; i++)
                 {
                     string line = lines[i].Trim();
@@ -612,23 +816,123 @@ namespace PalLauncher.Services
                     if (eqIndex > 0)
                     {
                         string k = line.Substring(0, eqIndex).Trim();
-                        if (keysToSet.TryGetValue(k, out var targetValue))
+                        if (remaining.TryGetValue(k, out var targetValue))
                         {
                             lines[i] = targetValue;
-                            keysToSet.Remove(k);
+                            remaining.Remove(k);
                         }
                     }
                 }
 
-                // Any remaining keys to insert inside the section
                 int insertPos = nextSectionIndex;
-                foreach (var kvp in keysToSet)
+                foreach (var kvp in remaining)
                 {
                     lines.Insert(insertPos++, kvp.Value);
                 }
             }
+        }
 
-            return string.Join(Environment.NewLine, lines);
+        public string? ResolvePlayitExecutablePath()
+        {
+            var candidates = new List<string>
+            {
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tools", "playit", "playit.exe"),
+                Path.Combine(Directory.GetCurrentDirectory(), "tools", "playit", "playit.exe"),
+                @"C:\PalOddessey\tools\playit\playit.exe"
+            };
+
+            foreach (var c in candidates)
+            {
+                if (!string.IsNullOrWhiteSpace(c) && File.Exists(c))
+                    return Path.GetFullPath(c);
+            }
+            return null;
+        }
+
+        private void StartPlayitTunnel(LauncherConfig config)
+        {
+            if (!config.EnablePlayitTunnel) return;
+
+            try
+            {
+                StopPlayitTunnel();
+
+                string? playitExe = ResolvePlayitExecutablePath();
+                if (playitExe == null)
+                {
+                    _logService.LogWarning("Playit.gg executable not found in tools/playit/. Skipping cloud tunnel start.", "PlayitTunnel");
+                    return;
+                }
+
+                var pStartInfo = new ProcessStartInfo
+                {
+                    FileName = playitExe,
+                    Arguments = "start",
+                    WorkingDirectory = Path.GetDirectoryName(playitExe) ?? Directory.GetCurrentDirectory(),
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+
+                var pProcess = new Process
+                {
+                    StartInfo = pStartInfo,
+                    EnableRaisingEvents = true
+                };
+
+                pProcess.OutputDataReceived += (s, e) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(e.Data))
+                    {
+                        _logService.LogInfo(e.Data.Trim(), "PlayitTunnel");
+                    }
+                };
+
+                pProcess.ErrorDataReceived += (s, e) =>
+                {
+                    if (!string.IsNullOrWhiteSpace(e.Data))
+                    {
+                        _logService.LogWarning(e.Data.Trim(), "PlayitTunnel");
+                    }
+                };
+
+                if (pProcess.Start())
+                {
+                    pProcess.BeginOutputReadLine();
+                    pProcess.BeginErrorReadLine();
+                    _runningTunnelProcess = pProcess;
+                    _logService.LogSuccess($"Playit.gg Cloud Tunnel active in sync with server (PID: {pProcess.Id})", "PlayitTunnel");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogError("Failed to start Playit.gg cloud tunnel.", "PlayitTunnel", ex);
+            }
+        }
+
+        private void StopPlayitTunnel()
+        {
+            try
+            {
+                if (_runningTunnelProcess != null && !_runningTunnelProcess.HasExited)
+                {
+                    _logService.LogInfo($"Stopping Playit.gg Cloud Tunnel (PID: {_runningTunnelProcess.Id})...", "PlayitTunnel");
+                    try
+                    {
+                        _runningTunnelProcess.Kill(true);
+                    }
+                    catch { }
+                    _runningTunnelProcess = null;
+                }
+
+                // Also sweep any orphaned playit processes
+                foreach (var p in Process.GetProcessesByName("playit"))
+                {
+                    try { p.Kill(true); } catch { }
+                }
+            }
+            catch { }
         }
     }
 }

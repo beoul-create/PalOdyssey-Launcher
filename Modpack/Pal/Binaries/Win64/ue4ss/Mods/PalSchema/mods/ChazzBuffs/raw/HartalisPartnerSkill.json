@@ -1,0 +1,53 @@
+{
+	"DT_PassiveSkill_Main": {
+		"KingSalvation": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Leaf",
+			"EffectValue1": 20,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue2": 10,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue3": 20,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+		"LegendDeer": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "KingSalvation"
+							}
+                                                }
+                                             ]
+                                           }
+                                         ]
+                                       },
+		"BOSS_LegendDeer": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "KingSalvation"
+							}
+                                                }
+                                             ]
+                                           }
+                                         ]
+                                       }
+                                   }
+}

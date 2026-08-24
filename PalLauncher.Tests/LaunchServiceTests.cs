@@ -127,5 +127,18 @@ namespace PalLauncher.Tests
             Assert.Contains("CustomKey=123", result);
             Assert.DoesNotContain("bEnableMouseSmoothing=True", result);
         }
+
+        [Fact]
+        public void ResolvePlayitExecutablePath_FindsToolExecutableIfExists()
+        {
+            var launchService = new LaunchService(_logService);
+
+            string? path = launchService.ResolvePlayitExecutablePath();
+            if (System.IO.File.Exists(@"C:\PalOddessey\tools\playit\playit.exe"))
+            {
+                Assert.NotNull(path);
+                Assert.True(System.IO.File.Exists(path));
+            }
+        }
     }
 }

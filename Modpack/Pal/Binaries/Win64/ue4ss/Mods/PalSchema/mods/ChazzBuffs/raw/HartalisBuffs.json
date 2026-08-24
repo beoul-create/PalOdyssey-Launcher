@@ -1,0 +1,37 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "LegendDeer": {
+      "Hp": 135,
+      "MeleeAttack": 145,
+      "ShotAttack": 145,
+      "Defense": 115,
+      "Friendship_ShotAttack": 1,
+      "Friendship_Defense": 1.9,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    },
+    "BOSS_LegendDeer": {
+      "Hp": 162,
+      "MeleeAttack": 145,
+      "ShotAttack": 145,
+      "Defense": 115,
+      "Friendship_ShotAttack": 1,
+      "Friendship_Defense": 1.9,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "NewRow_307": {
+      "Power": 1500,
+      "DisplayPower": 1500,
+      "CoolTime": 60.0,
+      "EffectType1": "EPalAdditionalEffectType::Stun",
+      "EffectValue1": 100
+    }
+  }
+}

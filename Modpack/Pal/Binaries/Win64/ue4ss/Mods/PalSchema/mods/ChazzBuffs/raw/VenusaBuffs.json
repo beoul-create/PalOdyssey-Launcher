@@ -1,0 +1,30 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "SnakeGirl": {
+      "Hp": 90,
+      "ShotAttack": 95,
+      "Friendship_HP": 4.5,
+      "Friendship_ShotAttack": 2.7
+    },
+    "BOSS_SnakeGirl": {
+      "Hp": 108,
+      "ShotAttack": 95,
+      "Friendship_HP": 3.6,
+      "Friendship_ShotAttack": 2.7
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_SnakeGirl_SnakeShot": {
+      "WazaType": "EPalWazaID::Unique_SnakeGirl_SnakeShot",
+      "Element": "EPalElementType::Dark",
+      "Power": 700,
+      "DisplayPower": 700,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Poison",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::Darkness",
+      "EffectValue2": 100
+    }
+  }
+}

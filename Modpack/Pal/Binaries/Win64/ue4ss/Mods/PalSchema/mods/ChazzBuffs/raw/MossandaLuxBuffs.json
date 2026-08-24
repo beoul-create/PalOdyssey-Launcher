@@ -1,0 +1,26 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "GrassPanda_Electric": {
+      "ShotAttack": 140,
+      "Friendship_ShotAttack": 1
+    },
+    "BOSS_GrassPanda_Electric": {
+      "ShotAttack": 140,
+      "Friendship_ShotAttack": 1
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_GrassPanda_Electric_ElectricPunch": {
+      "WazaType": "EPalWazaID::Unique_GrassPanda_Electric_ElectricPunch",
+      "Element": "EPalElementType::Electricity",
+      "Power": 2000,
+      "DisplayPower": 2000,
+      "CoolTime": 80.0,
+      "EffectType1": "EPalAdditionalEffectType::Electrical",
+      "EffectValue1": 100,
+      "EffectType1": "EPalAdditionalEffectType::Stun",
+      "EffectValue1": 100
+    }
+  }
+}

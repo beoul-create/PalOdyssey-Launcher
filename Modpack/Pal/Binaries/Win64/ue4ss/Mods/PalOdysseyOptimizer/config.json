@@ -25,14 +25,14 @@
   },
   "cpu": {
     "enabled": true,
-    "limitBackgroundCpu": false,
+    "limitBackgroundCpu": true,
     "taskGraphTasksPerTick": 120,
-    "gcIntervalSeconds": 90
+    "gcIntervalSeconds": 45
   },
   "memory": {
     "enabled": true,
     "autoTrimWorkingSet": true,
-    "trimIntervalMinutes": 3,
+    "trimIntervalMinutes": 2,
     "defragTexturePool": true
   },
   "server": {

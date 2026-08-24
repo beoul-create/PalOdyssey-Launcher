@@ -1,0 +1,5 @@
+{
+	"DT_PalFirstActivatedInfoText":{
+		"PAL_FIRST_SPAWN_DESC_SnowTigerBeastman":"Can be ridden.\r\nWhile mounted, delivers crushing blows with a hammer forged from <img id=|ElemIcon_Ice|/><uiCommon id=|COMMON_ELEMENT_NAME_Ice| style=|Elem_Ice|/> and enhances <img id=|ElemIcon_Ice|/><uiCommon id=|COMMON_ELEMENT_NAME_Ice| style=|Elem_Ice|/> attacks by <Status_Up>{Passive1_EffectValue1}%</> while mounted."
+	}
+}

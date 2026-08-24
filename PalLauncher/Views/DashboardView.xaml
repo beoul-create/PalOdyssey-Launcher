@@ -111,7 +111,7 @@
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <Path Data="{StaticResource IconGlobe}" Fill="{StaticResource BrushAccentCyan}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
                                 <TextBlock Text="SERVER ENDPOINT:" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,6,0" VerticalAlignment="Center" />
-                                <TextBlock Text="{Binding Liveboard.ServerAddress, FallbackValue='palodyssey.duckdns.org:57294'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" FontFamily="Consolas" VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Liveboard.ServerAddress, FallbackValue='palodyssey.duckdns.org:8211'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" FontFamily="Consolas" VerticalAlignment="Center" />
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -129,8 +129,27 @@
                         <!-- Metric 1: Online Status & Power State -->
                         <Border Grid.Column="0" Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12">
                             <StackPanel>
-                                <TextBlock Text="SERVER STATUS" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,4" />
-                                <TextBlock Text="{Binding ServerStatusBadgeText, FallbackValue='Server Sleeping (Auto-Wake Ready)'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="13" FontWeight="Bold" TextTrimming="CharacterEllipsis" Margin="0,0,0,2" />
+                                <Grid Margin="0,0,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="SERVER STATUS" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" VerticalAlignment="Center" />
+                                    <Button Grid.Column="1" Content="Check Now" Style="{StaticResource StyleGhostButton}" FontSize="10" Padding="6,2"
+                                            Command="{Binding RefreshServerStatusCommand}" VerticalAlignment="Center" />
+                                </Grid>
+                                <TextBlock Text="{Binding ServerStatusBadgeText, FallbackValue='Detecting...'}" FontSize="13" FontWeight="Bold" TextTrimming="CharacterEllipsis" Margin="0,0,0,2">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="{StaticResource BrushAccentCyan}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsServerOnline}" Value="True">
+                                                    <Setter Property="Foreground" Value="{StaticResource BrushSuccess}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                                 <TextBlock Text="{Binding Liveboard.AutoShutdownStatusText, FallbackValue='Auto-Wake Enabled on Launch'}" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" TextTrimming="CharacterEllipsis" />
                             </StackPanel>
                         </Border>

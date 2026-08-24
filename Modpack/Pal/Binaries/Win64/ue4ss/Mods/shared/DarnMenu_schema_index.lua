@@ -5,7 +5,5 @@ return {
   "CleanHUD",
   "ShiningLuckies",
   "QuickDeposit",
-  "PalworldTuner",
-  "WeaponProficiency",
   "PalOdysseyOptimizer"
 }

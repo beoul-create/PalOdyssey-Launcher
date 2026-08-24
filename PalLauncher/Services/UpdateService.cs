@@ -522,7 +522,7 @@ namespace PalLauncher.Services
                 GameVersion = "0.3.x",
                 ServerName = "PalOdyssey Official Expedition Server",
                 ServerAddress = "palodyssey.duckdns.org",
-                ServerPort = 57294,
+                ServerPort = 8211,
                 LastUpdated = DateTime.UtcNow,
                 NewsAnnouncement = "PalOdyssey Core Updates: Seamless multiplayer sync, fast asset preloading, and enhanced performance pak installed.",
                 Mods = new List<ModInfo>

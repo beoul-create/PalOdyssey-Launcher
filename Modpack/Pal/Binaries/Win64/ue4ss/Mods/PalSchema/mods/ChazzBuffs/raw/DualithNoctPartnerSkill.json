@@ -1,0 +1,263 @@
+{
+	"DT_PassiveSkill_Main": {
+		"GolemBoostDarkDark_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue1": 25,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue2": 25,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 5,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"GolemBoostDark_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue1": 30,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue2": 30,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 6,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"GolemBoostDark_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue1": 35,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue2": 35,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 7,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"GolemBoostDark_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue1": 40,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue2": 40,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 8,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"GolemBoostDark_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue1": 50,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue2": 50,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 10,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+		"GrassGolem_Dark": {
+        "RestrictionItems": [
+          {
+            "Key": "SkillUnlock_GrassGolem_Dark"
+          }
+        ],
+        "ActiveSkill": {
+          "SkillName": "UniqueRideShooting_ArmLaser",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [],
+          "ActiveSkill_OverWriteCoolTimeByRank": [
+            60.0,
+            54.0,
+            48.0,
+            42.0,
+            30.0
+          ],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+        "PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GolemBoostDark_1"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GolemBoostDark_2"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GolemBoostDark_3"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GolemBoostDark_4"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GolemBoostDark_5"
+							}
+                                                }
+                                              ]
+                                             }
+
+],
+        "TextReferencePassiveSkills": []
+      },
+		"BOSS_GrassGolem_Dark": {
+        "RestrictionItems": [
+          {
+            "Key": "SkillUnlock_GrassGolem_Dark"
+          }
+        ],
+        "ActiveSkill": {
+          "SkillName": "UniqueRideShooting_ArmLaser",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [],
+          "ActiveSkill_OverWriteCoolTimeByRank": [
+            40.0,
+            35.0,
+            30.0,
+            25.0,
+            20.0
+          ],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+        "PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GolemBoostDark_1"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GolemBoostDark_2"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GolemBoostDark_3"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GolemBoostDark_4"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GolemBoostDark_5"
+							}
+                                                }
+                                              ]
+                                             }
+
+],
+        "TextReferencePassiveSkills": []
+      }
+    }
+}

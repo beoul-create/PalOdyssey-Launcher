@@ -649,7 +649,8 @@ function S.loadAll(sharedDir, log)
     if indexed.key ~= expected then pruned = true end
     local name = indexed.name
     local seenKey = type(name) == "string" and name:lower() or nil
-    if type(name) == "string" and name:match("^[%w_%-]+$") and not seen[seenKey] then
+    local isBlocked = seenKey and (seenKey == "weaponproficiency" or seenKey == "livingarsenal" or seenKey == "palworldtuner" or seenKey == "paltuner")
+    if type(name) == "string" and name:match("^[%w_%-]+$") and not seen[seenKey] and not isBlocked then
       seen[seenKey] = true
       local path = sharedDir .. "DarnMenu_schema_" .. name .. ".lua"
       local schemaState = Writers.readState(path)
@@ -664,6 +665,9 @@ function S.loadAll(sharedDir, log)
         elseif schemaState.primaryStatus == "missing" and schemaState.backupStatus == "ok" then
           t = schemaState.value
           if log then log("schema " .. name .. " primary missing -- using readable backup") end
+        end
+        if t and (t.tab == "Living Arsenal" or t.tab == "Palworld Tuner" or t.tab == "Weapon Proficiency") then
+          t = nil -- Block player editing of locked progression schemas
         end
         local validateCall, schemaOK, schemaErr = pcall(validSchema, t)
         if not validateCall then

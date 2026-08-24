@@ -1,0 +1,27 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "MoonChild": {
+      "ShotAttack": 100,
+      "Defense": 80,
+      "Friendship_ShotAttack": 2.5,
+      "Friendship_Defense": 3.3
+    },
+    "BOSS_MoonChild": {
+      "ShotAttack": 100,
+      "Defense": 80,
+      "Friendship_ShotAttack": 2.5,
+      "Friendship_Defense": 3.3
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "StarMine": {
+      "WazaType": "EPalWazaID::StarMine",
+      "Element": "EPalElementType::Normal",
+      "Power": 500,
+      "DisplayPower": 500,
+      "CoolTime": 20.0
+    }
+  }
+}

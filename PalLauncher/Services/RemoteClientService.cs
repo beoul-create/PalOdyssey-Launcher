@@ -119,9 +119,61 @@ namespace PalLauncher.Services
             return null;
         }
 
+        private static bool IsLocalServerRunning()
+        {
+            try
+            {
+                return System.Diagnostics.Process.GetProcessesByName("PalServer").Length > 0
+                    || System.Diagnostics.Process.GetProcessesByName("PalServer-Win64-Shipping-Cmd").Length > 0
+                    || System.Diagnostics.Process.GetProcessesByName("PalServer-Win64-Shipping").Length > 0;
+            }
+            catch { return false; }
+        }
+
+        private static async Task<bool> ProbeUdpAsync(string host, int port, int timeoutMs = 1200)
+        {
+            try
+            {
+                using var udp = new System.Net.Sockets.UdpClient();
+                udp.Client.ReceiveTimeout = timeoutMs;
+                udp.Client.SendTimeout = timeoutMs;
+
+                byte[] request = new byte[] {
+                    0xFF, 0xFF, 0xFF, 0xFF, 0x54, 0x53, 0x6F, 0x75,
+                    0x72, 0x63, 0x65, 0x20, 0x45, 0x6E, 0x67, 0x69,
+                    0x6E, 0x65, 0x20, 0x51, 0x75, 0x65, 0x72, 0x79, 0x00
+                };
+
+                await udp.SendAsync(request, request.Length, host, port);
+                var receiveTask = udp.ReceiveAsync();
+                var timeoutTask = Task.Delay(timeoutMs);
+                if (await Task.WhenAny(receiveTask, timeoutTask) == receiveTask)
+                {
+                    var result = await receiveTask;
+                    return result.Buffer != null && result.Buffer.Length > 0;
+                }
+            }
+            catch { }
+            return false;
+        }
+
+        private static async Task<bool> ProbeTcpAsync(string host, int port, int timeoutMs = 1200)
+        {
+            try
+            {
+                using var tcp = new System.Net.Sockets.TcpClient();
+                using var cts = new CancellationTokenSource(timeoutMs);
+                await tcp.ConnectAsync(host, port, cts.Token);
+                return tcp.Connected;
+            }
+            catch { }
+            return false;
+        }
+
         public async Task<RemoteServerStatus> QueryServerStatusAsync(string host, int managementPort, int timeoutMs = 2500)
         {
             int port = managementPort > 0 ? managementPort : 8212;
+            string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
             using var cts = new CancellationTokenSource(timeoutMs);
 
             try
@@ -147,6 +199,34 @@ namespace PalLauncher.Services
                 // Host daemon is unreachable or port is sleeping
             }
 
+            if (IsLocalServerRunning())
+            {
+                return new RemoteServerStatus
+                {
+                    IsOnline = true,
+                    IsServerRunning = true,
+                    ServerPort = 8211,
+                    ServerName = "PalOdyssey Realm",
+                    Message = "Local Dedicated Server Active"
+                };
+            }
+
+            bool socketActive = await ProbeUdpAsync(cleanHost, 27016, 1000)
+                             || await ProbeTcpAsync(cleanHost, 8212, 1000)
+                             || await ProbeTcpAsync(cleanHost, 25575, 1000);
+
+            if (socketActive)
+            {
+                return new RemoteServerStatus
+                {
+                    IsOnline = true,
+                    IsServerRunning = true,
+                    ServerPort = 8211,
+                    ServerName = "PalOdyssey Realm",
+                    Message = "Remote Server Online"
+                };
+            }
+
             return new RemoteServerStatus
             {
                 IsOnline = false,
@@ -156,10 +236,29 @@ namespace PalLauncher.Services
             };
         }
 
+        private static DateTime? _remoteOnlineSince;
+
+        private static double GetLocalServerUptimeSeconds()
+        {
+            try
+            {
+                var procs = System.Diagnostics.Process.GetProcessesByName("PalServer");
+                if (procs.Length == 0) procs = System.Diagnostics.Process.GetProcessesByName("PalServer-Win64-Shipping-Cmd");
+                if (procs.Length == 0) procs = System.Diagnostics.Process.GetProcessesByName("PalServer-Win64-Shipping");
+                if (procs.Length > 0 && procs[0] != null && !procs[0].HasExited)
+                {
+                    var uptime = (DateTime.Now - procs[0].StartTime).TotalSeconds;
+                    if (uptime > 0) return uptime;
+                }
+            }
+            catch { }
+            return 0;
+        }
+
         public async Task<ServerLiveboardInfo> FetchLiveboardAsync(string host, int managementPort, int timeoutMs = 2500)
         {
-            int port = managementPort > 0 ? managementPort : 8212;
             string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
+            int port = managementPort > 0 ? managementPort : 8212;
             using var cts = new CancellationTokenSource(timeoutMs);
 
             try
@@ -176,6 +275,10 @@ namespace PalLauncher.Services
                     if (liveboard != null)
                     {
                         liveboard.IsOnline = true;
+                        if (liveboard.UptimeSeconds <= 0)
+                        {
+                            liveboard.UptimeSeconds = GetLocalServerUptimeSeconds();
+                        }
                         return liveboard;
                     }
                 }
@@ -185,11 +288,47 @@ namespace PalLauncher.Services
                 // Unreachable or offline
             }
 
+            if (IsLocalServerRunning())
+            {
+                double localUptime = GetLocalServerUptimeSeconds();
+                return new ServerLiveboardInfo
+                {
+                    IsOnline = true,
+                    IsServerRunning = true,
+                    ServerAddress = "palodyssey.duckdns.org:8211",
+                    ServerName = "PalOdyssey Realm",
+                    UptimeSeconds = localUptime,
+                    PlayerCount = 0,
+                    MaxPlayers = 32
+                };
+            }
+
+            bool socketActive = await ProbeUdpAsync(cleanHost, 27016, 1000)
+                             || await ProbeTcpAsync(cleanHost, 8212, 1000)
+                             || await ProbeTcpAsync(cleanHost, 25575, 1000);
+
+            if (socketActive)
+            {
+                _remoteOnlineSince ??= DateTime.Now;
+                double remoteUptime = (DateTime.Now - _remoteOnlineSince.Value).TotalSeconds;
+                return new ServerLiveboardInfo
+                {
+                    IsOnline = true,
+                    IsServerRunning = true,
+                    ServerAddress = "palodyssey.duckdns.org:8211",
+                    ServerName = "PalOdyssey Realm",
+                    UptimeSeconds = Math.Max(1, remoteUptime),
+                    PlayerCount = 0,
+                    MaxPlayers = 32
+                };
+            }
+
+            _remoteOnlineSince = null;
             return new ServerLiveboardInfo
             {
                 IsOnline = false,
                 IsServerRunning = false,
-                ServerAddress = $"{cleanHost}:8211",
+                ServerAddress = "palodyssey.duckdns.org:8211",
                 PlayerCount = 0,
                 MaxPlayers = 32
             };

@@ -77,8 +77,18 @@ namespace PalLauncher.ViewModels
         public string StatusText
         {
             get => _statusText;
-            set => SetProperty(ref _statusText, value);
+            set
+            {
+                if (SetProperty(ref _statusText, value))
+                {
+                    OnPropertyChanged(nameof(StatusMessage));
+                }
+            }
         }
+
+        public string StatusMessage => StatusText;
+        public bool CanLaunch => !IsBusy;
+        public AsyncRelayCommand CheckForUpdatesCommand => QuickCheckUpdatesCommand;
 
         public double ProgressPercentage
         {
@@ -95,6 +105,8 @@ namespace PalLauncher.ViewModels
                 {
                     LaunchGameCommand.RaiseCanExecuteChanged();
                     OnPropertyChanged(nameof(LaunchButtonText));
+                    OnPropertyChanged(nameof(CanLaunch));
+                    OnPropertyChanged(nameof(GameStatusBadge));
                 }
             }
         }
@@ -145,6 +157,7 @@ namespace PalLauncher.ViewModels
         public RelayCommand NavigateCommand { get; }
         public AsyncRelayCommand LaunchGameCommand { get; }
         public AsyncRelayCommand QuickCheckUpdatesCommand { get; }
+        public AsyncRelayCommand RefreshServerStatusCommand { get; }
         public RelayCommand MinimizeCommand { get; }
         public RelayCommand MaximizeCommand { get; }
         public RelayCommand CloseCommand { get; }
@@ -155,11 +168,19 @@ namespace PalLauncher.ViewModels
         private RemoteServerStatus _serverStatus = new();
         private ServerLiveboardInfo _liveboard = new();
         private CancellationTokenSource? _pollingCts;
+        private System.Windows.Threading.DispatcherTimer? _uptimeTimer;
 
         public ServerLiveboardInfo Liveboard
         {
             get => _liveboard;
-            set => SetProperty(ref _liveboard, value);
+            set
+            {
+                if (SetProperty(ref _liveboard, value))
+                {
+                    OnPropertyChanged(nameof(ServerStatusBadgeText));
+                    OnPropertyChanged(nameof(IsServerOnline));
+                }
+            }
         }
 
         public RemoteServerStatus ServerStatus
@@ -182,7 +203,7 @@ namespace PalLauncher.ViewModels
             get
             {
                 if (_launchService.IsServerRunning) return "Local Server Active";
-                if (_liveboard.IsServerRunning || _serverStatus.IsServerRunning) return "Remote Server Online";
+                if (_liveboard.IsServerRunning || _serverStatus.IsServerRunning) return "Server Online";
                 if (_liveboard.IsOnline || _serverStatus.IsOnline) return "Server Sleeping (Auto-Wake Ready)";
                 return "Server Offline (Auto-Wake Ready)";
             }
@@ -223,6 +244,10 @@ namespace PalLauncher.ViewModels
                     OnPropertyChanged(nameof(LaunchButtonText));
                     OnPropertyChanged(nameof(GameStatusBadge));
                 }
+                else if (e.PropertyName is nameof(SettingsViewModel.EnableIdleAutoShutdown) or nameof(SettingsViewModel.IdleShutdownMinutes))
+                {
+                    _remoteDaemon.ConfigureIdleAutoShutdown(SettingsVM.EnableIdleAutoShutdown, SettingsVM.IdleShutdownMinutes);
+                }
             };
 
             NavigateCommand = new RelayCommand(param =>
@@ -235,6 +260,7 @@ namespace PalLauncher.ViewModels
 
             LaunchGameCommand = new AsyncRelayCommand(ExecuteLaunchOrStopAsync);
             QuickCheckUpdatesCommand = new AsyncRelayCommand(ExecuteQuickCheckUpdatesAsync);
+            RefreshServerStatusCommand = new AsyncRelayCommand(RefreshServerStatusAsync);
 
             MinimizeCommand = new RelayCommand(_ =>
             {
@@ -255,8 +281,26 @@ namespace PalLauncher.ViewModels
                 }
             });
 
+            _uptimeTimer = new System.Windows.Threading.DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            _uptimeTimer.Tick += (s, e) =>
+            {
+                if (IsServerOnline && Liveboard != null)
+                {
+                    if (Liveboard.UptimeSeconds > 0)
+                    {
+                        Liveboard.UptimeSeconds += 1;
+                        OnPropertyChanged(nameof(Liveboard));
+                    }
+                }
+            };
+            _uptimeTimer.Start();
+
             CloseCommand = new RelayCommand(_ =>
             {
+                _uptimeTimer?.Stop();
                 _pollingCts?.Cancel();
                 _remoteDaemon.Dispose();
                 _discordRpc.Dispose();
@@ -275,8 +319,8 @@ namespace PalLauncher.ViewModels
 
             var pathInfo = _pathDetector.DetectPalworldInstallation(_configService.Config.GamePath);
 
-            // If local dedicated server is present on this machine, start the host daemon
-            if (!string.IsNullOrEmpty(pathInfo.ServerExecutablePath) && System.IO.File.Exists(pathInfo.ServerExecutablePath) && _configService.Config.EnableRemoteHostDaemon)
+            // If remote host daemon is enabled, start the daemon to manage liveboard and inactivity auto-shutdown
+            if (_configService.Config.EnableRemoteHostDaemon)
             {
                 _remoteDaemon.ConfigureIdleAutoShutdown(_configService.Config.EnableIdleAutoShutdown, _configService.Config.IdleShutdownMinutes);
                 await _remoteDaemon.StartDaemonAsync(
@@ -285,7 +329,8 @@ namespace PalLauncher.ViewModels
                     onStartServerRequested: async () =>
                     {
                         var cfg = SettingsVM.CreateConfigFromProperties();
-                        return await _launchService.LaunchGameAsync(cfg, pathInfo);
+                        var currentPath = _pathDetector.DetectPalworldInstallation(cfg.GamePath);
+                        return await _launchService.LaunchGameAsync(cfg, currentPath);
                     },
                     onStopServerRequested: async () =>
                     {
@@ -300,6 +345,9 @@ namespace PalLauncher.ViewModels
                 await _discordRpc.UpdatePresenceAsync("In Launcher", "Preparing Expedition", isPlaying: false);
             }
 
+            // Immediately detect and announce server status upon opening the launcher
+            await RefreshServerStatusAsync();
+
             // Start background status polling loop
             _pollingCts?.Cancel();
             _pollingCts = new CancellationTokenSource();
@@ -312,16 +360,67 @@ namespace PalLauncher.ViewModels
             }
         }
 
+        public async Task RefreshServerStatusAsync()
+        {
+            try
+            {
+                StatusText = "Detecting server status...";
+                var liveboard = await _remoteClient.FetchLiveboardAsync(
+                    _configService.Config.ServerIp,
+                    _configService.Config.RemoteManagementPort,
+                    timeoutMs: 1500);
+
+                Application.Current?.Dispatcher.Invoke(() =>
+                {
+                    Liveboard = liveboard;
+                    ServerStatus = new RemoteServerStatus
+                    {
+                        IsOnline = liveboard.IsOnline,
+                        IsServerRunning = liveboard.IsServerRunning,
+                        ServerPort = 8211,
+                        UptimeSeconds = liveboard.UptimeSeconds,
+                        ServerName = liveboard.ServerName
+                    };
+
+                    OnPropertyChanged(nameof(IsServerOnline));
+                    OnPropertyChanged(nameof(ServerStatusBadgeText));
+
+                    if (IsServerOnline)
+                    {
+                        StatusText = $"🟢 Server ONLINE ({_configService.Config.ServerIp}:8211) — Ready to launch!";
+                        _logService.LogSuccess($"Server status check: ONLINE at {_configService.Config.ServerIp}:8211", "Network");
+                    }
+                    else
+                    {
+                        StatusText = $"⚪ Server OFFLINE / Sleeping ({_configService.Config.ServerIp}:8211) — Auto-wake ready on launch.";
+                        _logService.LogInfo($"Server status check: OFFLINE/Sleeping ({_configService.Config.ServerIp}:8211). Will start automatically on launch.", "Network");
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Server status detection encountered: {ex.Message}", "Network");
+            }
+        }
+
         private async Task StartServerStatusPollingLoopAsync(CancellationToken ct)
         {
             while (!ct.IsCancellationRequested)
             {
                 try
                 {
-                    var liveboard = await _remoteClient.FetchLiveboardAsync(
-                        _configService.Config.ServerIp,
-                        _configService.Config.RemoteManagementPort,
-                        timeoutMs: 2000);
+                    ServerLiveboardInfo liveboard;
+                    if (_launchService.IsServerRunning && _remoteDaemon.IsRunning)
+                    {
+                        liveboard = _remoteDaemon.GetCurrentLiveboard();
+                    }
+                    else
+                    {
+                        liveboard = await _remoteClient.FetchLiveboardAsync(
+                            _configService.Config.ServerIp,
+                            _configService.Config.RemoteManagementPort,
+                            timeoutMs: 2000);
+                    }
 
                     Application.Current?.Dispatcher.InvokeAsync(() =>
                     {
@@ -334,13 +433,15 @@ namespace PalLauncher.ViewModels
                             UptimeSeconds = liveboard.UptimeSeconds,
                             ServerName = liveboard.ServerName
                         };
+                        OnPropertyChanged(nameof(IsServerOnline));
+                        OnPropertyChanged(nameof(ServerStatusBadgeText));
                     });
                 }
                 catch { }
 
                 try
                 {
-                    await Task.Delay(5000, ct); // Liveboard refresh every 5s
+                    await Task.Delay(3000, ct); // Liveboard refresh every 3s
                 }
                 catch (OperationCanceledException) { break; }
             }

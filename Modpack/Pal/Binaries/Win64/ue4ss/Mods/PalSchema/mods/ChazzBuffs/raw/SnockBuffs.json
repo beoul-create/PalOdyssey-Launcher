@@ -1,0 +1,29 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "ElecSnail": {
+      "ShotAttack": 100,
+      "Defense": 150,
+      "Friendship_ShotAttack": 2.5,
+      "Friendship_Defense": 1
+    },
+    "BOSS_ElecSnail": {
+      "ShotAttack": 100,
+      "Defense": 150,
+      "Friendship_ShotAttack": 2.5,
+      "Friendship_Defense": 1
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_ElecSnail_ShellCharge": {
+      "WazaType": "EPalWazaID::Unique_ElecSnail_ShellCharge",
+      "Element": "EPalElementType::Electricity",
+      "Power": 550,
+      "DisplayPower": 550,
+      "CoolTime": 24.0,
+      "EffectType1": "EPalAdditionalEffectType::Electrical",
+      "EffectValue1": 100
+    }
+  }
+}

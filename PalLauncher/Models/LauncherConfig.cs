@@ -18,7 +18,7 @@ namespace PalLauncher.Models
         public string LaunchMode { get; set; } = "Client"; // "Client" or "Server"
 
         public const string OfficialServerHost = "palodyssey.duckdns.org";
-        public const int OfficialServerPort = 57294;
+        public const int OfficialServerPort = 8211;
         public const int OfficialManagementPort = 8215;
         public const string DefaultRealmAccessKey = "PalOdyssey2026Secure";
 
@@ -45,6 +45,9 @@ namespace PalLauncher.Models
 
         [JsonPropertyName("idleShutdownMinutes")]
         public int IdleShutdownMinutes { get; set; } = 15;
+
+        [JsonPropertyName("enablePlayitTunnel")]
+        public bool EnablePlayitTunnel { get; set; } = true;
 
         [JsonPropertyName("enableDiscordRpc")]
         public bool EnableDiscordRpc { get; set; } = true;

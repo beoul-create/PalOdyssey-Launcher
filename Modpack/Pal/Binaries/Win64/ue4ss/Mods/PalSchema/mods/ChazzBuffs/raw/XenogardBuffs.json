@@ -1,0 +1,19 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "WhiteAlienDragon": {
+      "Defense": 140,
+      "Friendship_Defense": 1,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    },
+    "BOSS_WhiteAlienDragon": {
+      "Defense": 140,
+      "Friendship_Defense": 1,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    }
+  }
+}

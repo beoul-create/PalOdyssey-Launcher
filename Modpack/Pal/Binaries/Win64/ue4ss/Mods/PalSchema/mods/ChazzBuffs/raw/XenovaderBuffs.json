@@ -1,0 +1,24 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "DarkAlien": {
+      "Hp": 100,
+      "Friendship_HP": 4
+    },
+    "BOSS_DarkAlien": {
+      "Hp": 100,
+      "Friendship_HP": 4
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_DarkAlien_JumpScractch": {
+      "WazaType": "EPalWazaID::Unique_DarkAlien_JumpScractch",
+      "Element": "EPalElementType::Dark",
+      "Power": 450,
+      "DisplayPower": 450,
+      "CoolTime": 20.0,
+      "EffectType1": "EPalAdditionalEffectType::Darkness",
+      "EffectValue1": 100
+    }
+  }
+}

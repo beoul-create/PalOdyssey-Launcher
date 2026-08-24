@@ -41,7 +41,7 @@ namespace PalLauncher.Tests
                 Assert.NotNull(liveboard);
                 Assert.True(liveboard.IsOnline);
                 Assert.Equal("PalOdyssey Realm", liveboard.ServerName);
-                Assert.Equal("palodyssey.duckdns.org:57294", liveboard.ServerAddress);
+                Assert.Equal("palodyssey.duckdns.org:8211", liveboard.ServerAddress);
                 Assert.Equal(32, liveboard.MaxPlayers);
                 Assert.True(liveboard.IdleShutdownEnabled);
             }
@@ -74,6 +74,49 @@ namespace PalLauncher.Tests
             Assert.False(liveboard.HasNoPlayers);
             Assert.Equal("Lv. 50", liveboard.Players[0].LevelBadge);
             Assert.Equal("15ms", liveboard.Players[0].PingBadge);
+        }
+
+        [Fact]
+        public void AutoShutdown_ConfigureIdleAutoShutdown_UpdatesProperties()
+        {
+            var launchService = new LaunchService(_logService);
+            var daemon = new RemoteServerDaemon(_logService, launchService);
+
+            daemon.ConfigureIdleAutoShutdown(true, 5);
+            var liveboard = daemon.GetCurrentLiveboard();
+
+            Assert.True(liveboard.IdleShutdownEnabled);
+            Assert.Equal(5, liveboard.IdleMinutesRemaining);
+
+            daemon.ConfigureIdleAutoShutdown(false, 30);
+            liveboard = daemon.GetCurrentLiveboard();
+
+            Assert.False(liveboard.IdleShutdownEnabled);
+            Assert.Equal(30, liveboard.IdleMinutesRemaining);
+        }
+
+        [Fact]
+        public void LaunchService_ProcessDetection_SafelyQueriesActiveProcesses()
+        {
+            var serverProcs = LaunchService.GetActiveServerProcesses();
+            var clientProcs = LaunchService.GetActiveClientProcesses();
+
+            Assert.NotNull(serverProcs);
+            Assert.NotNull(clientProcs);
+        }
+
+        [Fact]
+        public void GamePathDetector_DedicatedServerPaths_ValidatesProperly()
+        {
+            var detector = new GamePathDetector(_logService);
+            string serverPath = @"C:\SteamLibrary\steamapps\common\PalServer";
+
+            if (System.IO.Directory.Exists(serverPath))
+            {
+                var info = detector.ValidatePath(serverPath);
+                Assert.True(info.IsValid);
+                Assert.False(string.IsNullOrEmpty(info.ServerExecutablePath));
+            }
         }
     }
 }

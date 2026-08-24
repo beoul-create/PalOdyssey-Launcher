@@ -1,0 +1,1145 @@
+// Combined partner skill: Pupperai
+// Passive sources: Pupperai
+{
+	// Effect slots per rank for Pupperai (slot order = 1..4)
+	"DT_PassiveSkill_Main": {
+		// Rank 1: Pupperai: DamageRateByEquippedWeapon 10
+		"SamuraiDog_CombinedPartnerSkill_1": {
+        "Rank": 1,
+        "LotteryWeight": 100,
+        "OverrideDescMsgID": "None",
+        "TargetElementType": "EPalElementType::None",
+        "EffectType1": "EPalPassiveSkillEffectType::DamageRateByEquippedWeapon",
+        "EffectValue1": 100.0,
+        "TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+        "EffectType2": "EPalPassiveSkillEffectType::no",
+        "EffectValue2": 0.0,
+        "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType3": "EPalPassiveSkillEffectType::no",
+        "EffectValue3": 0.0,
+        "TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType4": "EPalPassiveSkillEffectType::no",
+        "EffectValue4": 0.0,
+        "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+        "InvokeActiveOtomo": false,
+        "InvokeWorker": false,
+        "InvokeRiding": false,
+        "InvokeReserve": false,
+        "InvokeInOtomo": true,
+        "InvokeAlways": false,
+        "InvokeInBaseCamp": false,
+        "AddInvokeTriggerType_1": "EPalPassiveAddTriggerType::None",
+        "AddInvokeTriggerType_2": "EPalPassiveAddTriggerType::None",
+        "AddPal": false,
+        "AddRarePal": false,
+        "AddWorldTreePal": false,
+        "AddMutationPal": false,
+        "AddShotWeapon": false,
+        "AddMeleeWeapon": false,
+        "AddArmor": false,
+        "AddAccessory": false,
+        "IsStackablePartnerSkillBySameTribe": false,
+        "OverrideNameTextID": "None",
+        "OverrideSummaryTextId": "None",
+        "Category": "EPalPassiveCategory::SortNotDisplayable",
+        "SortKeyJP": "-"
+		},
+		// Rank 2: Pupperai: DamageRateByEquippedWeapon 15
+		"SamuraiDog_CombinedPartnerSkill_2": {
+        "Rank": 1,
+        "LotteryWeight": 100,
+        "OverrideDescMsgID": "None",
+        "TargetElementType": "EPalElementType::None",
+        "EffectType1": "EPalPassiveSkillEffectType::DamageRateByEquippedWeapon",
+        "EffectValue1": 120.0,
+        "TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+        "EffectType2": "EPalPassiveSkillEffectType::no",
+        "EffectValue2": 0.0,
+        "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType3": "EPalPassiveSkillEffectType::no",
+        "EffectValue3": 0.0,
+        "TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType4": "EPalPassiveSkillEffectType::no",
+        "EffectValue4": 0.0,
+        "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+        "InvokeActiveOtomo": false,
+        "InvokeWorker": false,
+        "InvokeRiding": false,
+        "InvokeReserve": false,
+        "InvokeInOtomo": true,
+        "InvokeAlways": false,
+        "InvokeInBaseCamp": false,
+        "AddInvokeTriggerType_1": "EPalPassiveAddTriggerType::None",
+        "AddInvokeTriggerType_2": "EPalPassiveAddTriggerType::None",
+        "AddPal": false,
+        "AddRarePal": false,
+        "AddWorldTreePal": false,
+        "AddMutationPal": false,
+        "AddShotWeapon": false,
+        "AddMeleeWeapon": false,
+        "AddArmor": false,
+        "AddAccessory": false,
+        "IsStackablePartnerSkillBySameTribe": false,
+        "OverrideNameTextID": "None",
+        "OverrideSummaryTextId": "None",
+        "Category": "EPalPassiveCategory::SortNotDisplayable",
+        "SortKeyJP": "-"
+		},
+		// Rank 3: Pupperai: DamageRateByEquippedWeapon 20
+		"SamuraiDog_CombinedPartnerSkill_3": {
+        "Rank": 1,
+        "LotteryWeight": 100,
+        "OverrideDescMsgID": "None",
+        "TargetElementType": "EPalElementType::None",
+        "EffectType1": "EPalPassiveSkillEffectType::DamageRateByEquippedWeapon",
+        "EffectValue1": 140.0,
+        "TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+        "EffectType2": "EPalPassiveSkillEffectType::no",
+        "EffectValue2": 0.0,
+        "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType3": "EPalPassiveSkillEffectType::no",
+        "EffectValue3": 0.0,
+        "TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType4": "EPalPassiveSkillEffectType::no",
+        "EffectValue4": 0.0,
+        "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+        "InvokeActiveOtomo": false,
+        "InvokeWorker": false,
+        "InvokeRiding": false,
+        "InvokeReserve": false,
+        "InvokeInOtomo": true,
+        "InvokeAlways": false,
+        "InvokeInBaseCamp": false,
+        "AddInvokeTriggerType_1": "EPalPassiveAddTriggerType::None",
+        "AddInvokeTriggerType_2": "EPalPassiveAddTriggerType::None",
+        "AddPal": false,
+        "AddRarePal": false,
+        "AddWorldTreePal": false,
+        "AddMutationPal": false,
+        "AddShotWeapon": false,
+        "AddMeleeWeapon": false,
+        "AddArmor": false,
+        "AddAccessory": false,
+        "IsStackablePartnerSkillBySameTribe": false,
+        "OverrideNameTextID": "None",
+        "OverrideSummaryTextId": "None",
+        "Category": "EPalPassiveCategory::SortNotDisplayable",
+        "SortKeyJP": "-"
+		},
+		// Rank 4: Pupperai: DamageRateByEquippedWeapon 25
+		"SamuraiDog_CombinedPartnerSkill_4": {
+        "Rank": 1,
+        "LotteryWeight": 100,
+        "OverrideDescMsgID": "None",
+        "TargetElementType": "EPalElementType::None",
+        "EffectType1": "EPalPassiveSkillEffectType::DamageRateByEquippedWeapon",
+        "EffectValue1": 160.0,
+        "TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+        "EffectType2": "EPalPassiveSkillEffectType::no",
+        "EffectValue2": 0.0,
+        "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType3": "EPalPassiveSkillEffectType::no",
+        "EffectValue3": 0.0,
+        "TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType4": "EPalPassiveSkillEffectType::no",
+        "EffectValue4": 0.0,
+        "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+        "InvokeActiveOtomo": false,
+        "InvokeWorker": false,
+        "InvokeRiding": false,
+        "InvokeReserve": false,
+        "InvokeInOtomo": true,
+        "InvokeAlways": false,
+        "InvokeInBaseCamp": false,
+        "AddInvokeTriggerType_1": "EPalPassiveAddTriggerType::None",
+        "AddInvokeTriggerType_2": "EPalPassiveAddTriggerType::None",
+        "AddPal": false,
+        "AddRarePal": false,
+        "AddWorldTreePal": false,
+        "AddMutationPal": false,
+        "AddShotWeapon": false,
+        "AddMeleeWeapon": false,
+        "AddArmor": false,
+        "AddAccessory": false,
+        "IsStackablePartnerSkillBySameTribe": false,
+        "OverrideNameTextID": "None",
+        "OverrideSummaryTextId": "None",
+        "Category": "EPalPassiveCategory::SortNotDisplayable",
+        "SortKeyJP": "-"
+		},
+		// Rank 5: Pupperai: DamageRateByEquippedWeapon 35
+		"SamuraiDog_CombinedPartnerSkill_5": {
+        "Rank": 1,
+        "LotteryWeight": 100,
+        "OverrideDescMsgID": "None",
+        "TargetElementType": "EPalElementType::None",
+        "EffectType1": "EPalPassiveSkillEffectType::DamageRateByEquippedWeapon",
+        "EffectValue1": 200.0,
+        "TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+        "EffectType2": "EPalPassiveSkillEffectType::no",
+        "EffectValue2": 0.0,
+        "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType3": "EPalPassiveSkillEffectType::no",
+        "EffectValue3": 0.0,
+        "TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType4": "EPalPassiveSkillEffectType::no",
+        "EffectValue4": 0.0,
+        "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+        "InvokeActiveOtomo": false,
+        "InvokeWorker": false,
+        "InvokeRiding": false,
+        "InvokeReserve": false,
+        "InvokeInOtomo": true,
+        "InvokeAlways": false,
+        "InvokeInBaseCamp": false,
+        "AddInvokeTriggerType_1": "EPalPassiveAddTriggerType::None",
+        "AddInvokeTriggerType_2": "EPalPassiveAddTriggerType::None",
+        "AddPal": false,
+        "AddRarePal": false,
+        "AddWorldTreePal": false,
+        "AddMutationPal": false,
+        "AddShotWeapon": false,
+        "AddMeleeWeapon": false,
+        "AddArmor": false,
+        "AddAccessory": false,
+        "IsStackablePartnerSkillBySameTribe": false,
+        "OverrideNameTextID": "None",
+        "OverrideSummaryTextId": "None",
+        "Category": "EPalPassiveCategory::SortNotDisplayable",
+        "SortKeyJP": "-"
+		}
+	},
+	// Rewires Pupperai's partner skill assignment:
+	//   - PassiveSkills now reference the combined key(s) above
+	//   - Also re-lists 1 of the target's other native skill(s) so they aren't lost
+	"DT_PartnerSkillParameter": {
+		// Pupperai (SamuraiDog)
+		"SamuraiDog": {
+        "RestrictionItems": [],
+        "ActiveSkill": {
+          "SkillName": "Unknown",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [],
+          "ActiveSkill_OverWriteCoolTimeByRank": [],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "SamuraiDog_CombinedPartnerSkill_1"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::WeaponMelee",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [
+                      {
+                        "Key": "YakushimaLantern001"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_2"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_3"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_4"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_5"
+                      },
+                      {
+                        "Key": "YakushimaBlade003"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_2"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_3"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_4"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_5"
+                      },
+                      {
+                        "Key": "DroneLauncher"
+                      },
+                      {
+                        "Key": "DroneLauncher_2"
+                      },
+                      {
+                        "Key": "DroneLauncher_3"
+                      },
+                      {
+                        "Key": "DroneLauncher_4"
+                      },
+                      {
+                        "Key": "DroneLauncher_5"
+                      }
+                    ],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "SamuraiDog_CombinedPartnerSkill_2"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::WeaponMelee",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [
+                      {
+                        "Key": "YakushimaLantern001"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_2"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_3"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_4"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_5"
+                      },
+                      {
+                        "Key": "YakushimaBlade003"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_2"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_3"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_4"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_5"
+                      },
+                      {
+                        "Key": "DroneLauncher"
+                      },
+                      {
+                        "Key": "DroneLauncher_2"
+                      },
+                      {
+                        "Key": "DroneLauncher_3"
+                      },
+                      {
+                        "Key": "DroneLauncher_4"
+                      },
+                      {
+                        "Key": "DroneLauncher_5"
+                      }
+                    ],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "SamuraiDog_CombinedPartnerSkill_3"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::WeaponMelee",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [
+                      {
+                        "Key": "YakushimaLantern001"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_2"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_3"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_4"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_5"
+                      },
+                      {
+                        "Key": "YakushimaBlade003"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_2"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_3"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_4"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_5"
+                      },
+                      {
+                        "Key": "DroneLauncher"
+                      },
+                      {
+                        "Key": "DroneLauncher_2"
+                      },
+                      {
+                        "Key": "DroneLauncher_3"
+                      },
+                      {
+                        "Key": "DroneLauncher_4"
+                      },
+                      {
+                        "Key": "DroneLauncher_5"
+                      }
+                    ],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "SamuraiDog_CombinedPartnerSkill_4"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::WeaponMelee",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [
+                      {
+                        "Key": "YakushimaLantern001"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_2"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_3"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_4"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_5"
+                      },
+                      {
+                        "Key": "YakushimaBlade003"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_2"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_3"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_4"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_5"
+                      },
+                      {
+                        "Key": "DroneLauncher"
+                      },
+                      {
+                        "Key": "DroneLauncher_2"
+                      },
+                      {
+                        "Key": "DroneLauncher_3"
+                      },
+                      {
+                        "Key": "DroneLauncher_4"
+                      },
+                      {
+                        "Key": "DroneLauncher_5"
+                      }
+                    ],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "SamuraiDog_CombinedPartnerSkill_5"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::WeaponMelee",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [
+                      {
+                        "Key": "YakushimaLantern001"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_2"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_3"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_4"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_5"
+                      },
+                      {
+                        "Key": "YakushimaBlade003"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_2"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_3"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_4"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_5"
+                      },
+                      {
+                        "Key": "DroneLauncher"
+                      },
+                      {
+                        "Key": "DroneLauncher_2"
+                      },
+                      {
+                        "Key": "DroneLauncher_3"
+                      },
+                      {
+                        "Key": "DroneLauncher_4"
+                      },
+                      {
+                        "Key": "DroneLauncher_5"
+                      }
+                    ],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          }
+			]
+		},
+		// BOSS_SamuraiDog — variant of Pupperai, same patch mirrored here
+		"BOSS_SamuraiDog": {
+        "RestrictionItems": [],
+        "ActiveSkill": {
+          "SkillName": "Unknown",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [],
+          "ActiveSkill_OverWriteCoolTimeByRank": [],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "SamuraiDog_CombinedPartnerSkill_1"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::WeaponMelee",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [
+                      {
+                        "Key": "YakushimaLantern001"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_2"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_3"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_4"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_5"
+                      },
+                      {
+                        "Key": "YakushimaBlade003"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_2"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_3"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_4"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_5"
+                      },
+                      {
+                        "Key": "DroneLauncher"
+                      },
+                      {
+                        "Key": "DroneLauncher_2"
+                      },
+                      {
+                        "Key": "DroneLauncher_3"
+                      },
+                      {
+                        "Key": "DroneLauncher_4"
+                      },
+                      {
+                        "Key": "DroneLauncher_5"
+                      }
+                    ],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "SamuraiDog_CombinedPartnerSkill_2"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::WeaponMelee",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [
+                      {
+                        "Key": "YakushimaLantern001"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_2"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_3"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_4"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_5"
+                      },
+                      {
+                        "Key": "YakushimaBlade003"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_2"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_3"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_4"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_5"
+                      },
+                      {
+                        "Key": "DroneLauncher"
+                      },
+                      {
+                        "Key": "DroneLauncher_2"
+                      },
+                      {
+                        "Key": "DroneLauncher_3"
+                      },
+                      {
+                        "Key": "DroneLauncher_4"
+                      },
+                      {
+                        "Key": "DroneLauncher_5"
+                      }
+                    ],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "SamuraiDog_CombinedPartnerSkill_3"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::WeaponMelee",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [
+                      {
+                        "Key": "YakushimaLantern001"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_2"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_3"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_4"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_5"
+                      },
+                      {
+                        "Key": "YakushimaBlade003"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_2"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_3"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_4"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_5"
+                      },
+                      {
+                        "Key": "DroneLauncher"
+                      },
+                      {
+                        "Key": "DroneLauncher_2"
+                      },
+                      {
+                        "Key": "DroneLauncher_3"
+                      },
+                      {
+                        "Key": "DroneLauncher_4"
+                      },
+                      {
+                        "Key": "DroneLauncher_5"
+                      }
+                    ],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "SamuraiDog_CombinedPartnerSkill_4"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::WeaponMelee",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [
+                      {
+                        "Key": "YakushimaLantern001"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_2"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_3"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_4"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_5"
+                      },
+                      {
+                        "Key": "YakushimaBlade003"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_2"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_3"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_4"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_5"
+                      },
+                      {
+                        "Key": "DroneLauncher"
+                      },
+                      {
+                        "Key": "DroneLauncher_2"
+                      },
+                      {
+                        "Key": "DroneLauncher_3"
+                      },
+                      {
+                        "Key": "DroneLauncher_4"
+                      },
+                      {
+                        "Key": "DroneLauncher_5"
+                      }
+                    ],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "SamuraiDog_CombinedPartnerSkill_5"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::WeaponMelee",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [
+                      {
+                        "Key": "YakushimaLantern001"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_2"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_3"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_4"
+                      },
+                      {
+                        "Key": "YakushimaLantern001_5"
+                      },
+                      {
+                        "Key": "YakushimaBlade003"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_2"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_3"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_4"
+                      },
+                      {
+                        "Key": "YakushimaBlade003_5"
+                      },
+                      {
+                        "Key": "DroneLauncher"
+                      },
+                      {
+                        "Key": "DroneLauncher_2"
+                      },
+                      {
+                        "Key": "DroneLauncher_3"
+                      },
+                      {
+                        "Key": "DroneLauncher_4"
+                      },
+                      {
+                        "Key": "DroneLauncher_5"
+                      }
+                    ],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          }
+         ]
+        }
+       }
+}

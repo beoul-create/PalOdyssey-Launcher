@@ -21,7 +21,7 @@ namespace PalLauncher.ViewModels
         private string _gamePath = string.Empty;
         private string _launchMode = "Client";
         private string _serverIp = "palodyssey.duckdns.org";
-        private int _serverPort = 57294;
+        private int _serverPort = 8211;
         private bool _autoJoinServer;
         private string _remoteManifestUrl = string.Empty;
         private string _paksRelativePath = @"Pal\Content\Paks\~mods";
@@ -134,6 +134,7 @@ namespace PalLauncher.ViewModels
 
         private bool _enableIdleAutoShutdown = true;
         private int _idleShutdownMinutes = 15;
+        private bool _enablePlayitTunnel = true;
 
         public bool AutoRemoteWakeOnLaunch
         {
@@ -151,6 +152,12 @@ namespace PalLauncher.ViewModels
         {
             get => _idleShutdownMinutes;
             set => SetProperty(ref _idleShutdownMinutes, value);
+        }
+
+        public bool EnablePlayitTunnel
+        {
+            get => _enablePlayitTunnel;
+            set => SetProperty(ref _enablePlayitTunnel, value);
         }
 
         private bool _enableDiscordRpc = true;
@@ -472,6 +479,7 @@ namespace PalLauncher.ViewModels
             _autoRemoteWakeOnLaunch = config.AutoRemoteWakeOnLaunch;
             _enableIdleAutoShutdown = config.EnableIdleAutoShutdown;
             _idleShutdownMinutes = config.IdleShutdownMinutes;
+            _enablePlayitTunnel = config.EnablePlayitTunnel;
             _enableDiscordRpc = config.EnableDiscordRpc;
             _discordApplicationId = config.DiscordApplicationId;
             _remoteManifestUrl = config.RemoteManifestUrl;
@@ -515,6 +523,7 @@ namespace PalLauncher.ViewModels
                 AutoRemoteWakeOnLaunch = AutoRemoteWakeOnLaunch,
                 EnableIdleAutoShutdown = EnableIdleAutoShutdown,
                 IdleShutdownMinutes = IdleShutdownMinutes,
+                EnablePlayitTunnel = EnablePlayitTunnel,
                 EnableDiscordRpc = EnableDiscordRpc,
                 DiscordApplicationId = DiscordApplicationId,
                 RemoteManifestUrl = RemoteManifestUrl,

@@ -90,9 +90,11 @@ LevelLock : 1
 WeaponProficiency : 1
 PalOdysseyOptimizer : 1
 StuckPalRescuer : 1
-RemoveModWarning : 0
-QuickDeposit : 0
 PalClearVision : 0
+PalboxSearchPlus : 0
+CleanHUD : 0
+ShiningLuckies : 0
+PalCinematicStudio : 0
 
 ; Built-in keybinds (disabled on dedicated server)
 Keybinds : 0
@@ -127,12 +129,12 @@ LevelLock : 1
 WeaponProficiency : 1
 PalOdysseyOptimizer : 1
 StuckPalRescuer : 1
-RemoveModWarning : 1
 QuickDeposit : 1
 PalClearVision : 1
 PalboxSearchPlus : 1
 CleanHUD : 1
 ShiningLuckies : 1
+PalCinematicStudio : 1
 
 ; Built-in keybinds, do not move up!
 Keybinds : 1

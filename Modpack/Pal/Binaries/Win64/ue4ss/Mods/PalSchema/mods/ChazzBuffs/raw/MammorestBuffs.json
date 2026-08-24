@@ -1,0 +1,30 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "GrassMammoth": {
+      "ShotAttack": 95,
+      "Defense": 95,
+      "Friendship_ShotAttack": 2.7,
+      "Friendship_Defense": 2.7
+    },
+    "BOSS_GrassMammoth": {
+      "ShotAttack": 95,
+      "Defense": 95,
+      "Friendship_ShotAttack": 2.7,
+      "Friendship_Defense": 2.7
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_Grassmammoth_Earthquake": {
+      "WazaType": "EPalWazaID::Unique_Grassmammoth_Earthquake",
+      "Element": "EPalElementType::Earth",
+      "Power": 999,
+      "DisplayPower": 999,
+      "CoolTime": 40.0,
+      "EffectType1": "EPalAdditionalEffectType::Muddy",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::Stun",
+      "EffectValue2": 100
+    }
+  }
+}

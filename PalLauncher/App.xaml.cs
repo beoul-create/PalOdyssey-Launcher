@@ -31,9 +31,8 @@ namespace PalLauncher
 
             DispatcherUnhandledException += (s, args) =>
             {
-                _logService?.LogError("Unhandled Dispatcher Exception", "System", args.Exception);
+                _logService?.LogError($"Unhandled Dispatcher Exception: {args.Exception.Message}", "System", args.Exception);
                 args.Handled = true;
-                MessageBox.Show($"An unexpected error occurred: {args.Exception.Message}", "PalLauncher Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 if (MainWindow == null || !MainWindow.IsVisible)
                 {
                     Shutdown(1);

@@ -1,0 +1,2495 @@
+
+{
+	"DT_PassiveSkill_Main": {
+		"WhiteAlienDragon_CombinedPartnerSkill_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dragon",
+			"EffectValue1": 25,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"WhiteAlienDragon_CombinedPartnerSkill_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dragon",
+			"EffectValue1": 30,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"WhiteAlienDragon_CombinedPartnerSkill_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dragon",
+			"EffectValue1": 35,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"WhiteAlienDragon_CombinedPartnerSkill_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dragon",
+			"EffectValue1": 40,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"WhiteAlienDragon_CombinedPartnerSkill_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dragon",
+			"EffectValue1": 50,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+		"WhiteAlienDragon": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "WhiteAlienDragon_CombinedPartnerSkill_1"
+							}
+						},
+						{
+                "SkillName": {
+                  "Key": "DamageUpWeapon_Otomo_1"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "LaserRifle"
+                      },
+                      {
+                        "Key": "LaserRifle_2"
+                      },
+                      {
+                        "Key": "LaserRifle_3"
+                      },
+                      {
+                        "Key": "LaserRifle_4"
+                      },
+                      {
+                        "Key": "LaserRifle_5"
+                      },
+                      {
+                        "Key": "BeamSword"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_2"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_3"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_4"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_5"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_2"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_3"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_4"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_5"
+                      },
+                      {
+                        "Key": "SkyBeamSword"
+                      },
+                      {
+                        "Key": "SkyBeamSword_2"
+                      },
+                      {
+                        "Key": "SkyBeamSword_3"
+                      },
+                      {
+                        "Key": "SkyBeamSword_4"
+                      },
+                      {
+                        "Key": "SkyBeamSword_5"
+                      },
+                      {
+                        "Key": "BeamLauncher"
+                      },
+                      {
+                        "Key": "BeamLauncher_2"
+                      },
+                      {
+                        "Key": "BeamLauncher_3"
+                      },
+                      {
+                        "Key": "BeamLauncher_4"
+                      },
+                      {
+                        "Key": "BeamLauncher_5"
+                      },
+                      {
+                        "Key": "BeamSword_2"
+                      },
+                      {
+                        "Key": "BeamSword_3"
+                      },
+                      {
+                        "Key": "BeamSword_4"
+                      },
+                      {
+                        "Key": "BeamSword_5"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_2"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_3"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_4"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_5"
+                      },
+                      {
+                        "Key": "EnergyShotgun"
+                      },
+                      {
+                        "Key": "EnergyShotgun_2"
+                      },
+                      {
+                        "Key": "EnergyShotgun_3"
+                      },
+                      {
+                        "Key": "EnergyShotgun_4"
+                      },
+                      {
+                        "Key": "EnergyShotgun_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "OverheatRifle"
+                      },
+                      {
+                        "Key": "OverheatRifle_2"
+                      },
+                      {
+                        "Key": "OverheatRifle_3"
+                      },
+                      {
+                        "Key": "OverheatRifle_4"
+                      },
+                      {
+                        "Key": "OverheatRifle_5"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_2"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_3"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_4"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "LaserMiningTool"
+                      },
+                      {
+                        "Key": "YakushimaGun001"
+                      },
+                      {
+                        "Key": "YakushimaGun001_2"
+                      },
+                      {
+                        "Key": "YakushimaGun001_3"
+                      },
+                      {
+                        "Key": "YakushimaGun001_4"
+                      },
+                      {
+                        "Key": "YakushimaGun001_5"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  }
+                }
+              }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "WhiteAlienDragon_CombinedPartnerSkill_2"
+							}
+						},
+						{
+                "SkillName": {
+                  "Key": "DamageUpWeapon_Otomo_2"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "LaserRifle"
+                      },
+                      {
+                        "Key": "LaserRifle_2"
+                      },
+                      {
+                        "Key": "LaserRifle_3"
+                      },
+                      {
+                        "Key": "LaserRifle_4"
+                      },
+                      {
+                        "Key": "LaserRifle_5"
+                      },
+                      {
+                        "Key": "BeamSword"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_2"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_3"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_4"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_5"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_2"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_3"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_4"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_5"
+                      },
+                      {
+                        "Key": "SkyBeamSword"
+                      },
+                      {
+                        "Key": "SkyBeamSword_2"
+                      },
+                      {
+                        "Key": "SkyBeamSword_3"
+                      },
+                      {
+                        "Key": "SkyBeamSword_4"
+                      },
+                      {
+                        "Key": "SkyBeamSword_5"
+                      },
+                      {
+                        "Key": "BeamLauncher"
+                      },
+                      {
+                        "Key": "BeamLauncher_2"
+                      },
+                      {
+                        "Key": "BeamLauncher_3"
+                      },
+                      {
+                        "Key": "BeamLauncher_4"
+                      },
+                      {
+                        "Key": "BeamLauncher_5"
+                      },
+                      {
+                        "Key": "BeamSword_2"
+                      },
+                      {
+                        "Key": "BeamSword_3"
+                      },
+                      {
+                        "Key": "BeamSword_4"
+                      },
+                      {
+                        "Key": "BeamSword_5"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_2"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_3"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_4"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_5"
+                      },
+                      {
+                        "Key": "EnergyShotgun"
+                      },
+                      {
+                        "Key": "EnergyShotgun_2"
+                      },
+                      {
+                        "Key": "EnergyShotgun_3"
+                      },
+                      {
+                        "Key": "EnergyShotgun_4"
+                      },
+                      {
+                        "Key": "EnergyShotgun_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "OverheatRifle"
+                      },
+                      {
+                        "Key": "OverheatRifle_2"
+                      },
+                      {
+                        "Key": "OverheatRifle_3"
+                      },
+                      {
+                        "Key": "OverheatRifle_4"
+                      },
+                      {
+                        "Key": "OverheatRifle_5"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_2"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_3"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_4"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "LaserMiningTool"
+                      },
+                      {
+                        "Key": "YakushimaGun001"
+                      },
+                      {
+                        "Key": "YakushimaGun001_2"
+                      },
+                      {
+                        "Key": "YakushimaGun001_3"
+                      },
+                      {
+                        "Key": "YakushimaGun001_4"
+                      },
+                      {
+                        "Key": "YakushimaGun001_5"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  }
+                }
+              }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "WhiteAlienDragon_CombinedPartnerSkill_3"
+							}
+						},
+						{
+                "SkillName": {
+                  "Key": "DamageUpWeapon_Otomo_3"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "LaserRifle"
+                      },
+                      {
+                        "Key": "LaserRifle_2"
+                      },
+                      {
+                        "Key": "LaserRifle_3"
+                      },
+                      {
+                        "Key": "LaserRifle_4"
+                      },
+                      {
+                        "Key": "LaserRifle_5"
+                      },
+                      {
+                        "Key": "BeamSword"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_2"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_3"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_4"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_5"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_2"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_3"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_4"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_5"
+                      },
+                      {
+                        "Key": "SkyBeamSword"
+                      },
+                      {
+                        "Key": "SkyBeamSword_2"
+                      },
+                      {
+                        "Key": "SkyBeamSword_3"
+                      },
+                      {
+                        "Key": "SkyBeamSword_4"
+                      },
+                      {
+                        "Key": "SkyBeamSword_5"
+                      },
+                      {
+                        "Key": "BeamLauncher"
+                      },
+                      {
+                        "Key": "BeamLauncher_2"
+                      },
+                      {
+                        "Key": "BeamLauncher_3"
+                      },
+                      {
+                        "Key": "BeamLauncher_4"
+                      },
+                      {
+                        "Key": "BeamLauncher_5"
+                      },
+                      {
+                        "Key": "BeamSword_2"
+                      },
+                      {
+                        "Key": "BeamSword_3"
+                      },
+                      {
+                        "Key": "BeamSword_4"
+                      },
+                      {
+                        "Key": "BeamSword_5"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_2"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_3"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_4"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_5"
+                      },
+                      {
+                        "Key": "EnergyShotgun"
+                      },
+                      {
+                        "Key": "EnergyShotgun_2"
+                      },
+                      {
+                        "Key": "EnergyShotgun_3"
+                      },
+                      {
+                        "Key": "EnergyShotgun_4"
+                      },
+                      {
+                        "Key": "EnergyShotgun_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "OverheatRifle"
+                      },
+                      {
+                        "Key": "OverheatRifle_2"
+                      },
+                      {
+                        "Key": "OverheatRifle_3"
+                      },
+                      {
+                        "Key": "OverheatRifle_4"
+                      },
+                      {
+                        "Key": "OverheatRifle_5"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_2"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_3"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_4"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "LaserMiningTool"
+                      },
+                      {
+                        "Key": "YakushimaGun001"
+                      },
+                      {
+                        "Key": "YakushimaGun001_2"
+                      },
+                      {
+                        "Key": "YakushimaGun001_3"
+                      },
+                      {
+                        "Key": "YakushimaGun001_4"
+                      },
+                      {
+                        "Key": "YakushimaGun001_5"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  }
+                }
+              }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "WhiteAlienDragon_CombinedPartnerSkill_4"
+							}
+						},
+						{
+                "SkillName": {
+                  "Key": "DamageUpWeapon_Otomo_4"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "LaserRifle"
+                      },
+                      {
+                        "Key": "LaserRifle_2"
+                      },
+                      {
+                        "Key": "LaserRifle_3"
+                      },
+                      {
+                        "Key": "LaserRifle_4"
+                      },
+                      {
+                        "Key": "LaserRifle_5"
+                      },
+                      {
+                        "Key": "BeamSword"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_2"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_3"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_4"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_5"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_2"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_3"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_4"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_5"
+                      },
+                      {
+                        "Key": "SkyBeamSword"
+                      },
+                      {
+                        "Key": "SkyBeamSword_2"
+                      },
+                      {
+                        "Key": "SkyBeamSword_3"
+                      },
+                      {
+                        "Key": "SkyBeamSword_4"
+                      },
+                      {
+                        "Key": "SkyBeamSword_5"
+                      },
+                      {
+                        "Key": "BeamLauncher"
+                      },
+                      {
+                        "Key": "BeamLauncher_2"
+                      },
+                      {
+                        "Key": "BeamLauncher_3"
+                      },
+                      {
+                        "Key": "BeamLauncher_4"
+                      },
+                      {
+                        "Key": "BeamLauncher_5"
+                      },
+                      {
+                        "Key": "BeamSword_2"
+                      },
+                      {
+                        "Key": "BeamSword_3"
+                      },
+                      {
+                        "Key": "BeamSword_4"
+                      },
+                      {
+                        "Key": "BeamSword_5"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_2"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_3"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_4"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_5"
+                      },
+                      {
+                        "Key": "EnergyShotgun"
+                      },
+                      {
+                        "Key": "EnergyShotgun_2"
+                      },
+                      {
+                        "Key": "EnergyShotgun_3"
+                      },
+                      {
+                        "Key": "EnergyShotgun_4"
+                      },
+                      {
+                        "Key": "EnergyShotgun_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "OverheatRifle"
+                      },
+                      {
+                        "Key": "OverheatRifle_2"
+                      },
+                      {
+                        "Key": "OverheatRifle_3"
+                      },
+                      {
+                        "Key": "OverheatRifle_4"
+                      },
+                      {
+                        "Key": "OverheatRifle_5"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_2"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_3"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_4"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "LaserMiningTool"
+                      },
+                      {
+                        "Key": "YakushimaGun001"
+                      },
+                      {
+                        "Key": "YakushimaGun001_2"
+                      },
+                      {
+                        "Key": "YakushimaGun001_3"
+                      },
+                      {
+                        "Key": "YakushimaGun001_4"
+                      },
+                      {
+                        "Key": "YakushimaGun001_5"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  }
+                }
+              }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "WhiteAlienDragon_CombinedPartnerSkill_5"
+							}
+						},
+						{
+                "SkillName": {
+                  "Key": "DamageUpWeapon_Otomo_5"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "LaserRifle"
+                      },
+                      {
+                        "Key": "LaserRifle_2"
+                      },
+                      {
+                        "Key": "LaserRifle_3"
+                      },
+                      {
+                        "Key": "LaserRifle_4"
+                      },
+                      {
+                        "Key": "LaserRifle_5"
+                      },
+                      {
+                        "Key": "BeamSword"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_2"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_3"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_4"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_5"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_2"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_3"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_4"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_5"
+                      },
+                      {
+                        "Key": "SkyBeamSword"
+                      },
+                      {
+                        "Key": "SkyBeamSword_2"
+                      },
+                      {
+                        "Key": "SkyBeamSword_3"
+                      },
+                      {
+                        "Key": "SkyBeamSword_4"
+                      },
+                      {
+                        "Key": "SkyBeamSword_5"
+                      },
+                      {
+                        "Key": "BeamLauncher"
+                      },
+                      {
+                        "Key": "BeamLauncher_2"
+                      },
+                      {
+                        "Key": "BeamLauncher_3"
+                      },
+                      {
+                        "Key": "BeamLauncher_4"
+                      },
+                      {
+                        "Key": "BeamLauncher_5"
+                      },
+                      {
+                        "Key": "BeamSword_2"
+                      },
+                      {
+                        "Key": "BeamSword_3"
+                      },
+                      {
+                        "Key": "BeamSword_4"
+                      },
+                      {
+                        "Key": "BeamSword_5"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_2"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_3"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_4"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_5"
+                      },
+                      {
+                        "Key": "EnergyShotgun"
+                      },
+                      {
+                        "Key": "EnergyShotgun_2"
+                      },
+                      {
+                        "Key": "EnergyShotgun_3"
+                      },
+                      {
+                        "Key": "EnergyShotgun_4"
+                      },
+                      {
+                        "Key": "EnergyShotgun_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "OverheatRifle"
+                      },
+                      {
+                        "Key": "OverheatRifle_2"
+                      },
+                      {
+                        "Key": "OverheatRifle_3"
+                      },
+                      {
+                        "Key": "OverheatRifle_4"
+                      },
+                      {
+                        "Key": "OverheatRifle_5"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_2"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_3"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_4"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "LaserMiningTool"
+                      },
+                      {
+                        "Key": "YakushimaGun001"
+                      },
+                      {
+                        "Key": "YakushimaGun001_2"
+                      },
+                      {
+                        "Key": "YakushimaGun001_3"
+                      },
+                      {
+                        "Key": "YakushimaGun001_4"
+                      },
+                      {
+                        "Key": "YakushimaGun001_5"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  }
+                }
+              }
+            ]
+          }
+			]
+		},
+		"BOSS_WhiteAlienDragon": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "WhiteAlienDragon_CombinedPartnerSkill_1"
+							}
+						},
+						{
+                "SkillName": {
+                  "Key": "DamageUpWeapon_Otomo_1"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "LaserRifle"
+                      },
+                      {
+                        "Key": "LaserRifle_2"
+                      },
+                      {
+                        "Key": "LaserRifle_3"
+                      },
+                      {
+                        "Key": "LaserRifle_4"
+                      },
+                      {
+                        "Key": "LaserRifle_5"
+                      },
+                      {
+                        "Key": "BeamSword"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_2"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_3"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_4"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_5"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_2"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_3"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_4"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_5"
+                      },
+                      {
+                        "Key": "SkyBeamSword"
+                      },
+                      {
+                        "Key": "SkyBeamSword_2"
+                      },
+                      {
+                        "Key": "SkyBeamSword_3"
+                      },
+                      {
+                        "Key": "SkyBeamSword_4"
+                      },
+                      {
+                        "Key": "SkyBeamSword_5"
+                      },
+                      {
+                        "Key": "BeamLauncher"
+                      },
+                      {
+                        "Key": "BeamLauncher_2"
+                      },
+                      {
+                        "Key": "BeamLauncher_3"
+                      },
+                      {
+                        "Key": "BeamLauncher_4"
+                      },
+                      {
+                        "Key": "BeamLauncher_5"
+                      },
+                      {
+                        "Key": "BeamSword_2"
+                      },
+                      {
+                        "Key": "BeamSword_3"
+                      },
+                      {
+                        "Key": "BeamSword_4"
+                      },
+                      {
+                        "Key": "BeamSword_5"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_2"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_3"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_4"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_5"
+                      },
+                      {
+                        "Key": "EnergyShotgun"
+                      },
+                      {
+                        "Key": "EnergyShotgun_2"
+                      },
+                      {
+                        "Key": "EnergyShotgun_3"
+                      },
+                      {
+                        "Key": "EnergyShotgun_4"
+                      },
+                      {
+                        "Key": "EnergyShotgun_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "OverheatRifle"
+                      },
+                      {
+                        "Key": "OverheatRifle_2"
+                      },
+                      {
+                        "Key": "OverheatRifle_3"
+                      },
+                      {
+                        "Key": "OverheatRifle_4"
+                      },
+                      {
+                        "Key": "OverheatRifle_5"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_2"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_3"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_4"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "LaserMiningTool"
+                      },
+                      {
+                        "Key": "YakushimaGun001"
+                      },
+                      {
+                        "Key": "YakushimaGun001_2"
+                      },
+                      {
+                        "Key": "YakushimaGun001_3"
+                      },
+                      {
+                        "Key": "YakushimaGun001_4"
+                      },
+                      {
+                        "Key": "YakushimaGun001_5"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  }
+                }
+              }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "WhiteAlienDragon_CombinedPartnerSkill_2"
+							}
+						},
+						{
+                "SkillName": {
+                  "Key": "DamageUpWeapon_Otomo_2"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "LaserRifle"
+                      },
+                      {
+                        "Key": "LaserRifle_2"
+                      },
+                      {
+                        "Key": "LaserRifle_3"
+                      },
+                      {
+                        "Key": "LaserRifle_4"
+                      },
+                      {
+                        "Key": "LaserRifle_5"
+                      },
+                      {
+                        "Key": "BeamSword"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_2"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_3"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_4"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_5"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_2"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_3"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_4"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_5"
+                      },
+                      {
+                        "Key": "SkyBeamSword"
+                      },
+                      {
+                        "Key": "SkyBeamSword_2"
+                      },
+                      {
+                        "Key": "SkyBeamSword_3"
+                      },
+                      {
+                        "Key": "SkyBeamSword_4"
+                      },
+                      {
+                        "Key": "SkyBeamSword_5"
+                      },
+                      {
+                        "Key": "BeamLauncher"
+                      },
+                      {
+                        "Key": "BeamLauncher_2"
+                      },
+                      {
+                        "Key": "BeamLauncher_3"
+                      },
+                      {
+                        "Key": "BeamLauncher_4"
+                      },
+                      {
+                        "Key": "BeamLauncher_5"
+                      },
+                      {
+                        "Key": "BeamSword_2"
+                      },
+                      {
+                        "Key": "BeamSword_3"
+                      },
+                      {
+                        "Key": "BeamSword_4"
+                      },
+                      {
+                        "Key": "BeamSword_5"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_2"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_3"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_4"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_5"
+                      },
+                      {
+                        "Key": "EnergyShotgun"
+                      },
+                      {
+                        "Key": "EnergyShotgun_2"
+                      },
+                      {
+                        "Key": "EnergyShotgun_3"
+                      },
+                      {
+                        "Key": "EnergyShotgun_4"
+                      },
+                      {
+                        "Key": "EnergyShotgun_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "OverheatRifle"
+                      },
+                      {
+                        "Key": "OverheatRifle_2"
+                      },
+                      {
+                        "Key": "OverheatRifle_3"
+                      },
+                      {
+                        "Key": "OverheatRifle_4"
+                      },
+                      {
+                        "Key": "OverheatRifle_5"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_2"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_3"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_4"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "LaserMiningTool"
+                      },
+                      {
+                        "Key": "YakushimaGun001"
+                      },
+                      {
+                        "Key": "YakushimaGun001_2"
+                      },
+                      {
+                        "Key": "YakushimaGun001_3"
+                      },
+                      {
+                        "Key": "YakushimaGun001_4"
+                      },
+                      {
+                        "Key": "YakushimaGun001_5"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  }
+                }
+              }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "WhiteAlienDragon_CombinedPartnerSkill_3"
+							}
+						},
+						{
+                "SkillName": {
+                  "Key": "DamageUpWeapon_Otomo_3"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "LaserRifle"
+                      },
+                      {
+                        "Key": "LaserRifle_2"
+                      },
+                      {
+                        "Key": "LaserRifle_3"
+                      },
+                      {
+                        "Key": "LaserRifle_4"
+                      },
+                      {
+                        "Key": "LaserRifle_5"
+                      },
+                      {
+                        "Key": "BeamSword"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_2"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_3"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_4"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_5"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_2"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_3"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_4"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_5"
+                      },
+                      {
+                        "Key": "SkyBeamSword"
+                      },
+                      {
+                        "Key": "SkyBeamSword_2"
+                      },
+                      {
+                        "Key": "SkyBeamSword_3"
+                      },
+                      {
+                        "Key": "SkyBeamSword_4"
+                      },
+                      {
+                        "Key": "SkyBeamSword_5"
+                      },
+                      {
+                        "Key": "BeamLauncher"
+                      },
+                      {
+                        "Key": "BeamLauncher_2"
+                      },
+                      {
+                        "Key": "BeamLauncher_3"
+                      },
+                      {
+                        "Key": "BeamLauncher_4"
+                      },
+                      {
+                        "Key": "BeamLauncher_5"
+                      },
+                      {
+                        "Key": "BeamSword_2"
+                      },
+                      {
+                        "Key": "BeamSword_3"
+                      },
+                      {
+                        "Key": "BeamSword_4"
+                      },
+                      {
+                        "Key": "BeamSword_5"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_2"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_3"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_4"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_5"
+                      },
+                      {
+                        "Key": "EnergyShotgun"
+                      },
+                      {
+                        "Key": "EnergyShotgun_2"
+                      },
+                      {
+                        "Key": "EnergyShotgun_3"
+                      },
+                      {
+                        "Key": "EnergyShotgun_4"
+                      },
+                      {
+                        "Key": "EnergyShotgun_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "OverheatRifle"
+                      },
+                      {
+                        "Key": "OverheatRifle_2"
+                      },
+                      {
+                        "Key": "OverheatRifle_3"
+                      },
+                      {
+                        "Key": "OverheatRifle_4"
+                      },
+                      {
+                        "Key": "OverheatRifle_5"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_2"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_3"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_4"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "LaserMiningTool"
+                      },
+                      {
+                        "Key": "YakushimaGun001"
+                      },
+                      {
+                        "Key": "YakushimaGun001_2"
+                      },
+                      {
+                        "Key": "YakushimaGun001_3"
+                      },
+                      {
+                        "Key": "YakushimaGun001_4"
+                      },
+                      {
+                        "Key": "YakushimaGun001_5"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  }
+                }
+              }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "WhiteAlienDragon_CombinedPartnerSkill_4"
+							}
+						},
+						{
+                "SkillName": {
+                  "Key": "DamageUpWeapon_Otomo_4"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "LaserRifle"
+                      },
+                      {
+                        "Key": "LaserRifle_2"
+                      },
+                      {
+                        "Key": "LaserRifle_3"
+                      },
+                      {
+                        "Key": "LaserRifle_4"
+                      },
+                      {
+                        "Key": "LaserRifle_5"
+                      },
+                      {
+                        "Key": "BeamSword"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_2"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_3"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_4"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_5"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_2"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_3"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_4"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_5"
+                      },
+                      {
+                        "Key": "SkyBeamSword"
+                      },
+                      {
+                        "Key": "SkyBeamSword_2"
+                      },
+                      {
+                        "Key": "SkyBeamSword_3"
+                      },
+                      {
+                        "Key": "SkyBeamSword_4"
+                      },
+                      {
+                        "Key": "SkyBeamSword_5"
+                      },
+                      {
+                        "Key": "BeamLauncher"
+                      },
+                      {
+                        "Key": "BeamLauncher_2"
+                      },
+                      {
+                        "Key": "BeamLauncher_3"
+                      },
+                      {
+                        "Key": "BeamLauncher_4"
+                      },
+                      {
+                        "Key": "BeamLauncher_5"
+                      },
+                      {
+                        "Key": "BeamSword_2"
+                      },
+                      {
+                        "Key": "BeamSword_3"
+                      },
+                      {
+                        "Key": "BeamSword_4"
+                      },
+                      {
+                        "Key": "BeamSword_5"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_2"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_3"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_4"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_5"
+                      },
+                      {
+                        "Key": "EnergyShotgun"
+                      },
+                      {
+                        "Key": "EnergyShotgun_2"
+                      },
+                      {
+                        "Key": "EnergyShotgun_3"
+                      },
+                      {
+                        "Key": "EnergyShotgun_4"
+                      },
+                      {
+                        "Key": "EnergyShotgun_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "OverheatRifle"
+                      },
+                      {
+                        "Key": "OverheatRifle_2"
+                      },
+                      {
+                        "Key": "OverheatRifle_3"
+                      },
+                      {
+                        "Key": "OverheatRifle_4"
+                      },
+                      {
+                        "Key": "OverheatRifle_5"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_2"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_3"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_4"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "LaserMiningTool"
+                      },
+                      {
+                        "Key": "YakushimaGun001"
+                      },
+                      {
+                        "Key": "YakushimaGun001_2"
+                      },
+                      {
+                        "Key": "YakushimaGun001_3"
+                      },
+                      {
+                        "Key": "YakushimaGun001_4"
+                      },
+                      {
+                        "Key": "YakushimaGun001_5"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  }
+                }
+              }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "WhiteAlienDragon_CombinedPartnerSkill_5"
+							}
+						},
+						{
+                "SkillName": {
+                  "Key": "DamageUpWeapon_Otomo_5"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "LaserRifle"
+                      },
+                      {
+                        "Key": "LaserRifle_2"
+                      },
+                      {
+                        "Key": "LaserRifle_3"
+                      },
+                      {
+                        "Key": "LaserRifle_4"
+                      },
+                      {
+                        "Key": "LaserRifle_5"
+                      },
+                      {
+                        "Key": "BeamSword"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_2"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_3"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_4"
+                      },
+                      {
+                        "Key": "LaserGatlingGun_5"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_2"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_3"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_4"
+                      },
+                      {
+                        "Key": "ChargeLaserRifle_5"
+                      },
+                      {
+                        "Key": "SkyBeamSword"
+                      },
+                      {
+                        "Key": "SkyBeamSword_2"
+                      },
+                      {
+                        "Key": "SkyBeamSword_3"
+                      },
+                      {
+                        "Key": "SkyBeamSword_4"
+                      },
+                      {
+                        "Key": "SkyBeamSword_5"
+                      },
+                      {
+                        "Key": "BeamLauncher"
+                      },
+                      {
+                        "Key": "BeamLauncher_2"
+                      },
+                      {
+                        "Key": "BeamLauncher_3"
+                      },
+                      {
+                        "Key": "BeamLauncher_4"
+                      },
+                      {
+                        "Key": "BeamLauncher_5"
+                      },
+                      {
+                        "Key": "BeamSword_2"
+                      },
+                      {
+                        "Key": "BeamSword_3"
+                      },
+                      {
+                        "Key": "BeamSword_4"
+                      },
+                      {
+                        "Key": "BeamSword_5"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_2"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_3"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_4"
+                      },
+                      {
+                        "Key": "EnergyRocketLauncher_5"
+                      },
+                      {
+                        "Key": "EnergyShotgun"
+                      },
+                      {
+                        "Key": "EnergyShotgun_2"
+                      },
+                      {
+                        "Key": "EnergyShotgun_3"
+                      },
+                      {
+                        "Key": "EnergyShotgun_4"
+                      },
+                      {
+                        "Key": "EnergyShotgun_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "OverheatRifle"
+                      },
+                      {
+                        "Key": "OverheatRifle_2"
+                      },
+                      {
+                        "Key": "OverheatRifle_3"
+                      },
+                      {
+                        "Key": "OverheatRifle_4"
+                      },
+                      {
+                        "Key": "OverheatRifle_5"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_2"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_3"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_4"
+                      },
+                      {
+                        "Key": "ElectricArcAssaultRifle_5"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_2"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_3"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_4"
+                      },
+                      {
+                        "Key": "WidePenetrateShotgun_5"
+                      },
+                      {
+                        "Key": "LaserMiningTool"
+                      },
+                      {
+                        "Key": "YakushimaGun001"
+                      },
+                      {
+                        "Key": "YakushimaGun001_2"
+                      },
+                      {
+                        "Key": "YakushimaGun001_3"
+                      },
+                      {
+                        "Key": "YakushimaGun001_4"
+                      },
+                      {
+                        "Key": "YakushimaGun001_5"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  }
+                }
+              }
+            ]
+          }
+			]
+		}
+	}
+}

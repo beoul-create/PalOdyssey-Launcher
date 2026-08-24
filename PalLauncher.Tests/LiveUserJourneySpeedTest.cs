@@ -128,7 +128,7 @@ namespace PalLauncher.Tests
                 LaunchMode = "Client",
                 AutoJoinServer = true,
                 ServerIp = "palodyssey.duckdns.org",
-                ServerPort = 57294,
+                ServerPort = 8211,
                 UseDirectX11 = profile.RecommendDirectX11,
                 UseAllCores = profile.RecommendAllCores,
                 NoSplash = profile.RecommendNoSplash,
@@ -142,7 +142,7 @@ namespace PalLauncher.Tests
             _output.WriteLine($"\n[STAGE 5: Client Launch & Auto-Join Dispatch]");
             _output.WriteLine($"  ⏱️ Duration: {stage5Sw.ElapsedMilliseconds} ms");
             _output.WriteLine($"  ✓ Formatted Launch Command: {pathInfo.ClientExecutablePath} {launchArgs}");
-            _output.WriteLine($"  ✓ Auto-Join Parameter: palodyssey.duckdns.org:57294");
+            _output.WriteLine($"  ✓ Auto-Join Parameter: palodyssey.duckdns.org:8211");
 
             // ----------------------------------------------------------------------------------
             // STAGE 6: IN-GAME RESPONSIVENESS & MEMORY LATENCY

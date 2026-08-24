@@ -97,7 +97,7 @@ namespace PalLauncher.Services
                 string manifestPath = @"C:\PalOddessey\Modpack\version.json";
                 if (File.Exists(manifestPath))
                 {
-                    var mods = await _updateService.CheckForUpdatesAsync(manifestPath, customGamePath);
+                    var mods = await _updateService.CheckForUpdatesAsync(manifestPath, customGamePath ?? string.Empty);
                     p2.ChecksPassed.Add($"Manifest version.json verified ({mods.Count} registered mods & paks)");
 
                     foreach (var mod in mods)
@@ -295,7 +295,7 @@ namespace PalLauncher.Services
                     LaunchMode = "Client",
                     AutoJoinServer = true,
                     ServerIp = "palodyssey.duckdns.org",
-                    ServerPort = 57294,
+                    ServerPort = 8211,
                     UseDirectX11 = true,
                     UseAllCores = true,
                     NoSplash = true,

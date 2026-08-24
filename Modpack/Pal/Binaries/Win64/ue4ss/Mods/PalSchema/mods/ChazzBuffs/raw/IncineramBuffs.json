@@ -1,0 +1,28 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "Baphomet": {
+      "ShotAttack": 110,
+      "Friendship_ShotAttack": 2.1,
+      "Defense": 90,
+      "Friendship_Defense": 2.9
+    },
+    "BOSS_Baphomet": {
+      "ShotAttack": 110,
+      "Friendship_ShotAttack": 2.1,
+      "Defense": 90,
+      "Friendship_Defense": 2.9
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_Baphomet_SwallowKite": {
+      "WazaType": "EPalWazaID::Unique_Baphomet_SwallowKite",
+      "Element": "EPalElementType::Fire",
+      "Power": 280,
+      "DisplayPower": 280,
+      "CoolTime": 16.0,
+      "EffectType1": "EPalAdditionalEffectType::Burn",
+      "EffectValue1": 100
+    }
+  }
+}

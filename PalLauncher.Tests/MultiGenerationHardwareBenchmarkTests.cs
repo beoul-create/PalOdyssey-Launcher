@@ -185,7 +185,7 @@ namespace PalLauncher.Tests
                 LaunchMode = "Client",
                 AutoJoinServer = true,
                 ServerIp = "palodyssey.duckdns.org",
-                ServerPort = 57294,
+                ServerPort = 8211,
                 UseDirectX11 = profile.RecommendDirectX11,
                 UseAllCores = profile.RecommendAllCores,
                 NoSplash = profile.RecommendNoSplash,

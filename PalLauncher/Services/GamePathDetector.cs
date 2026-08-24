@@ -11,6 +11,7 @@ namespace PalLauncher.Services
     {
         private readonly ILogService _logService;
         private const string SteamAppId = "1623730";
+        private const string SteamServerAppId = "2394010";
 
         public GamePathDetector(ILogService logService)
         {
@@ -33,7 +34,7 @@ namespace PalLauncher.Services
                 }
             }
 
-            // 2. Check Steam Registry Uninstall key
+            // 2. Check Steam Registry Uninstall key for Client & Dedicated Server
             try
             {
                 string? registryPath = GetPathFromUninstallRegistry();
@@ -59,13 +60,20 @@ namespace PalLauncher.Services
                 var steamLibraries = GetSteamLibraryFolders();
                 foreach (var lib in steamLibraries)
                 {
-                    string candidate = Path.Combine(lib, "steamapps", "common", "Palworld");
-                    var info = ValidatePath(candidate);
-                    if (info.IsValid)
+                    string[] candidates = {
+                        Path.Combine(lib, "steamapps", "common", "Palworld"),
+                        Path.Combine(lib, "steamapps", "common", "PalServer")
+                    };
+
+                    foreach (var candidate in candidates)
                     {
-                        info.DetectedSource = "Steam Library VDF Scan";
-                        _logService.LogSuccess($"Palworld detected in Steam library: {candidate}", "PathDetector");
-                        return info;
+                        var info = ValidatePath(candidate);
+                        if (info.IsValid)
+                        {
+                            info.DetectedSource = "Steam Library VDF Scan";
+                            _logService.LogSuccess($"Palworld detected in Steam library: {candidate}", "PathDetector");
+                            return info;
+                        }
                     }
                 }
             }
@@ -79,10 +87,16 @@ namespace PalLauncher.Services
             {
                 @"C:\Program Files (x86)\Steam\steamapps\common\Palworld",
                 @"C:\Program Files\Steam\steamapps\common\Palworld",
+                @"C:\SteamLibrary\steamapps\common\Palworld",
+                @"C:\SteamLibrary\steamapps\common\PalServer",
                 @"D:\SteamLibrary\steamapps\common\Palworld",
+                @"D:\SteamLibrary\steamapps\common\PalServer",
                 @"E:\SteamLibrary\steamapps\common\Palworld",
+                @"E:\SteamLibrary\steamapps\common\PalServer",
                 @"F:\SteamLibrary\steamapps\common\Palworld",
+                @"F:\SteamLibrary\steamapps\common\PalServer",
                 @"G:\SteamLibrary\steamapps\common\Palworld",
+                @"G:\SteamLibrary\steamapps\common\PalServer",
                 @"C:\XboxGames\Palworld\Content",
                 @"D:\XboxGames\Palworld\Content"
             };
@@ -186,27 +200,32 @@ namespace PalLauncher.Services
         {
             if (!OperatingSystem.IsWindows()) return null;
 
-            string keyName = $@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App {SteamAppId}";
-            using var baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
-            using var subKey = baseKey.OpenSubKey(keyName);
-            if (subKey != null)
-            {
-                var installLoc = subKey.GetValue("InstallLocation") as string;
-                if (!string.IsNullOrEmpty(installLoc) && Directory.Exists(installLoc))
-                {
-                    return installLoc;
-                }
-            }
+            string[] appIds = { SteamAppId, SteamServerAppId };
 
-            // Also check 32-bit hive
-            using var baseKey32 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
-            using var subKey32 = baseKey32.OpenSubKey(keyName);
-            if (subKey32 != null)
+            foreach (var appId in appIds)
             {
-                var installLoc = subKey32.GetValue("InstallLocation") as string;
-                if (!string.IsNullOrEmpty(installLoc) && Directory.Exists(installLoc))
+                string keyName = $@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App {appId}";
+                using var baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+                using var subKey = baseKey.OpenSubKey(keyName);
+                if (subKey != null)
                 {
-                    return installLoc;
+                    var installLoc = subKey.GetValue("InstallLocation") as string;
+                    if (!string.IsNullOrEmpty(installLoc) && Directory.Exists(installLoc))
+                    {
+                        return installLoc;
+                    }
+                }
+
+                // Also check 32-bit hive
+                using var baseKey32 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
+                using var subKey32 = baseKey32.OpenSubKey(keyName);
+                if (subKey32 != null)
+                {
+                    var installLoc = subKey32.GetValue("InstallLocation") as string;
+                    if (!string.IsNullOrEmpty(installLoc) && Directory.Exists(installLoc))
+                    {
+                        return installLoc;
+                    }
                 }
             }
 

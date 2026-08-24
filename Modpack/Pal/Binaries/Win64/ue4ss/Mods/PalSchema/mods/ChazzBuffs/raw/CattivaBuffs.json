@@ -1,0 +1,36 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "PinkCat": {
+      "MeleeAttack": 80,
+      "ShotAttack": 80,
+      "Defense": 80,
+      "Friendship_ShotAttack": 3.3,
+      "Friendship_Defense": 3.3,
+      "WalkSpeed": 80,
+      "RunSpeed": 600,
+      "RideSprintSpeed": 800,
+      "TransportSpeed": 500
+    },
+    "BOSS_PinkCat": {
+      "MeleeAttack": 80,
+      "ShotAttack": 80,
+      "Defense": 80,
+      "Friendship_ShotAttack": 3.3,
+      "Friendship_Defense": 3.3,
+      "WalkSpeed": 80,
+      "RunSpeed": 600,
+      "RideSprintSpeed": 800,
+      "TransportSpeed": 500
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_PinkCat_CatPunch": {
+      "WazaType": "EPalWazaID::Unique_PinkCat_CatPunch",
+      "Element": "EPalElementType::Normal",
+      "Power": 550,
+      "DisplayPower": 550,
+      "CoolTime": 20.0
+    }
+  }
+}

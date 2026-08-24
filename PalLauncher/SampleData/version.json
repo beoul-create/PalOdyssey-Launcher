@@ -84,8 +84,8 @@
             "version": "1.2.0",
             "description": "Search Pals by name, element, or passives with 1-click sorting",
             "relativeInstallPath": "Pal\\Binaries\\Win64\\ue4ss\\Mods\\PalboxSearchPlus\\Scripts\\main.lua",
-            "sizeBytes": 1390,
-            "sha256": "E68586113151D13C57813C95D6C7D2C95956A617B96C828991C3839152A2DC2B",
+            "sizeBytes": 5381,
+            "sha256": "E5093B68A993C80618218560270C1C824E11450D43988F00972D10D40B8823CA",
             "required": false,
             "enabledByDefault": true
         },
@@ -96,8 +96,8 @@
             "version": "1.1.0",
             "description": "Removes screen watermarks and provides crisp aim reticles",
             "relativeInstallPath": "Pal\\Binaries\\Win64\\ue4ss\\Mods\\CleanHUD\\Scripts\\main.lua",
-            "sizeBytes": 565,
-            "sha256": "FA8C23B64C5F797BEC3C78573CA82E4A5CC63357BBBF4E696477A7C23C74C9A4",
+            "sizeBytes": 4277,
+            "sha256": "EF344B02D4600D9B547B17A334FAF57BACF9349790A82A2E60640969F29D354D",
             "required": false,
             "enabledByDefault": true
         },
@@ -108,8 +108,8 @@
             "version": "1.0.0",
             "description": "Magical shimmer and star-glint particle aura for Lucky / Rare Pals",
             "relativeInstallPath": "Pal\\Binaries\\Win64\\ue4ss\\Mods\\ShiningLuckies\\Scripts\\main.lua",
-            "sizeBytes": 487,
-            "sha256": "A2A29D41D2F47F1D182716CA96B7B0C59F6BA6A1A76D0CB648D3F05875BE5C98",
+            "sizeBytes": 4723,
+            "sha256": "8A1EA5C9F3D743003D630D462F193629F5F293579809A2CCFFD6CF673A8C4DE3",
             "required": false,
             "enabledByDefault": true
         },
@@ -122,18 +122,6 @@
             "relativeInstallPath": "Pal\\Binaries\\Win64\\ue4ss\\Mods\\QuickDeposit\\Scripts\\main.lua",
             "sizeBytes": 2780,
             "sha256": "2E424336FF05842C209CD16D63FF6D0634776B634BEA71794D4B6FDAC7510B97",
-            "required": false,
-            "enabledByDefault": true
-        },
-        {
-            "id": "remove-mod-warning",
-            "name": "Remove Mod Warning Popup",
-            "category": "Quality of Life",
-            "version": "1.0.0",
-            "description": "Suppresses third-party mod detected warning dialog on title screen",
-            "relativeInstallPath": "Pal\\Binaries\\Win64\\ue4ss\\Mods\\RemoveModWarning\\Scripts\\main.lua",
-            "sizeBytes": 1449,
-            "sha256": "E42145D6EC893048C135FB720BC5F1FB9D6A317F031C7D3F6AA1EC3487BAA3E8",
             "required": false,
             "enabledByDefault": true
         },
@@ -192,8 +180,8 @@
             "version": "2.1.7",
             "description": "Weapon leveling, durability scaling, and mastery unlocks",
             "relativeInstallPath": "Pal\\Binaries\\Win64\\ue4ss\\Mods\\WeaponProficiency\\Scripts\\main.lua",
-            "sizeBytes": 95213,
-            "sha256": "61686BD98800A79B0C09B506F6B97A9064E0F4650A5F996523E38FF7683282C0",
+            "sizeBytes": 95313,
+            "sha256": "DB7C586446439D02BB8DE248D49D711148A459F81214B68A53E875389B2E8D99",
             "required": false,
             "enabledByDefault": true
         },
@@ -242,6 +230,18 @@
             "relativeInstallPath": "Pal\\Content\\Paks\\~mods\\Catch All PREDATOR Bosses_P.pak",
             "sizeBytes": 643404,
             "sha256": "8387F4641E09038931F8CFF595C23CC3663918707AE509CB16447BC2482BC987",
+            "required": false,
+            "enabledByDefault": true
+        },
+        {
+            "id": "pal-cinematic-studio",
+            "name": "PalOdyssey Cinematic FreeCam & Photo Studio",
+            "category": "Visuals",
+            "version": "1.0.0",
+            "description": "360° FreeCam (F8), Time Freeze (F9), Clean HUD (F10), and Super-Res 4K/8K Screenshot Engine (F11)",
+            "relativeInstallPath": "Pal\\Binaries\\Win64\\ue4ss\\Mods\\PalCinematicStudio\\Scripts\\main.lua",
+            "sizeBytes": 5372,
+            "sha256": "601F8F8D16907FF65493745FDC28E8B1DAD652C4C7402E32C4C86CE479803549",
             "required": false,
             "enabledByDefault": true
         }

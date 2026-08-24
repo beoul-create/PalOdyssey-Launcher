@@ -1,0 +1,53 @@
+{
+	"DT_PassiveSkill_Main": {
+		"Azurhorse": {
+			"EffectType1": "EPalPassiveSkillEffectType::JumpCount_Increase",
+			"EffectValue1": 2,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::MoveSpeed",
+			"EffectValue2": 30,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue3": 30,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+		"BlueThunderHorse": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "Azurhorse"
+							}
+                                                }
+                                             ]
+                                           }
+                                         ]
+                                       },
+		"BOSS_BlueThunderHorse": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "Azurhorse"
+							}
+                                                }
+                                             ]
+                                           }
+                                         ]
+                                       }
+                                   }
+}

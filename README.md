@@ -69,6 +69,15 @@ When you launch through PalOdyssey, you get an out-of-the-box enhanced Palworld 
 * ⚔️ **Weapon Proficiency & Mastery**: Earn weapon experience as you fight to level up damage bonuses and increase weapon durability.
 * 👑 **Catch All Predator Bosses**: Unlocks capture mechanics for legendary predator boss encounters.
 * 🧹 **RAM Trim & Garbage Collection**: Automatically cleans up accumulated VRAM and memory leaks during long play sessions.
+* 🎭 **Precision Character Studio (*Where Winds Meet* Style)**:
+  - **0.01 Sub-Millimeter Micro-Sliders**: Smooth, fine-grained slider resolution for bone structure, facial morphs, and limbs.
+  - **Unlocked Proportion Boundaries**: Expands min/max scaling limits (0.4x to 2.0x) for custom body proportions.
+  - **Studio Portrait Lens & Lighting**: Auto-engages a 45° portrait lens and soft studio fill lighting when entering Character Creation or the Antique Dresser mirror to eliminate perspective distortion.
+* 📸 **Cinematic FreeCam & Super-Res Photo Studio**:
+  - **`F8` — 360° Detached FreeCam**: Detach the camera from the player pawn and fly anywhere in 3D space to frame low-angle or high-angle shots.
+  - **`F9` — Time Freeze / Slow-Motion**: Pause world time mid-action or mid-jump to set up combat action shots.
+  - **`F10` — Clean Viewport / Hide HUD**: 1-click toggle to remove all UI overlays.
+  - **`F11` — Super-Resolution Screenshot**: Captures uncompressed 2x supersampled 4K/8K uncompressed screenshots straight to disk.
 
 ---
 
@@ -78,6 +87,8 @@ You can customize mod settings live while playing without restarting your game:
 
 1. Press **`ESC` ➔ Mod Options** anywhere in-game.
 2. Adjust your settings:
+   - **Cinematic Studio**: View and configure hotkeys for FreeCam (`F8`), Time Freeze (`F9`), Clean HUD (`F10`), and High-Res Capture (`F11`).
+   - **Character Studio**: Toggle 0.01 micro-sliders, unlocked proportion limits, and portrait studio lighting.
    - **Palbox Search**: Toggle text search, element filtering, passive skill queries, and quick sort.
    - **HUD & Reticles**: Toggle watermark removal, compass simplification, and choose between Dot, Minimal Crosshair, or Circle-Dot aim reticles with custom color contrast.
    - **Shining Luckies**: Adjust shimmer radiance intensity (Subtle, Moderate, Vibrant) and star-glint trails.

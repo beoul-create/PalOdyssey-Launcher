@@ -1,8 +1,10 @@
 # Set .NET SDK environment paths
+$dotnetCmd = "dotnet"
 $userDotnet = "$env:USERPROFILE\.dotnet"
-if (Test-Path $userDotnet) {
+if (Test-Path "$userDotnet\dotnet.exe") {
     $env:DOTNET_ROOT = $userDotnet
     $env:PATH = "$userDotnet;$env:PATH"
+    $dotnetCmd = "$userDotnet\dotnet.exe"
 }
 
 Write-Host "==========================================" -ForegroundColor Cyan
@@ -16,4 +18,4 @@ Get-Process -Name "PalLauncher" -ErrorAction SilentlyContinue | ForEach-Object {
 }
 
 Write-Host "Building and launching PalLauncher (Debug mode)..." -ForegroundColor Green
-dotnet run --project "$PSScriptRoot\PalLauncher\PalLauncher.csproj"
+& $dotnetCmd run --project "$PSScriptRoot\PalLauncher\PalLauncher.csproj"

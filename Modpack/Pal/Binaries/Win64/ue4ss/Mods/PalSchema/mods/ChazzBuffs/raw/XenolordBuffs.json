@@ -1,0 +1,13 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "DarkMechaDragon": {
+      "ShotAttack": 125,
+      "Friendship_ShotAttack": 1.5
+    },
+    "BOSS_DarkMechaDragon": {
+      "ShotAttack": 125,
+      "Friendship_ShotAttack": 1.5
+    }
+  }
+}

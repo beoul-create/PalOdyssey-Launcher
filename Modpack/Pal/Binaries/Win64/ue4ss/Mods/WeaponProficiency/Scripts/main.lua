@@ -587,6 +587,8 @@ function HudBar.posModeSync()
     if HudBar.reanchor then HudBar.reanchor() end
   end
 end
+-- Player editing of Living Arsenal in DarnMenu disabled per server configuration
+if false then
 ToastLib.registerMenuSchema("WeaponProficiency", 38, [==[
 -- Weapon Proficiency options page (registered by the mod; regenerated on version bump)
 return {
@@ -791,6 +793,7 @@ return {
   },
 }
 ]==])
+end
 
 -- LIVE SETTINGS: the whitelisted knobs below are read at use time (per tick /
 -- per hit / per draw), so menu edits land without a relaunch. Deliberately NOT
