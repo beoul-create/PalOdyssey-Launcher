@@ -329,6 +329,8 @@ namespace PalLauncher.ViewModels
                     onStartServerRequested: async () =>
                     {
                         var cfg = SettingsVM.CreateConfigFromProperties();
+                        cfg.LaunchMode = "Server";
+                        cfg.LaunchServerWithGame = true;
                         var currentPath = _pathDetector.DetectPalworldInstallation(cfg.GamePath);
                         return await _launchService.LaunchGameAsync(cfg, currentPath);
                     },
@@ -496,9 +498,11 @@ namespace PalLauncher.ViewModels
                     return;
                 }
 
-                // If on client machine (no local server) and auto remote wake is enabled:
-                bool isLocalHost = !string.IsNullOrEmpty(pathInfo.ServerExecutablePath) && System.IO.File.Exists(pathInfo.ServerExecutablePath);
-                if (!isLocalHost && config.AutoRemoteWakeOnLaunch)
+                // If in Client mode and connecting to a remote host, send remote wake signal if server is not running
+                bool isHostingLocally = config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase)
+                    || (config.LaunchServerWithGame && (config.ServerIp == "127.0.0.1" || config.ServerIp.Equals("localhost", StringComparison.OrdinalIgnoreCase)));
+
+                if (!isHostingLocally && config.AutoRemoteWakeOnLaunch && !string.IsNullOrWhiteSpace(config.ServerIp))
                 {
                     var currentServerStatus = await _remoteClient.QueryServerStatusAsync(config.ServerIp, config.RemoteManagementPort, 2000);
                     if (!currentServerStatus.IsServerRunning)
@@ -519,7 +523,7 @@ namespace PalLauncher.ViewModels
                             config.RemoteManagementPort,
                             config.RemoteAccessKey,
                             wakeProgress,
-                            timeoutSeconds: 25);
+                            timeoutSeconds: 30);
                     }
                 }
 

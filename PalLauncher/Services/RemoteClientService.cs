@@ -172,7 +172,7 @@ namespace PalLauncher.Services
 
         public async Task<RemoteServerStatus> QueryServerStatusAsync(string host, int managementPort, int timeoutMs = 2500)
         {
-            int port = managementPort > 0 ? managementPort : 8212;
+            int port = managementPort > 0 ? managementPort : 8215;
             string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
             using var cts = new CancellationTokenSource(timeoutMs);
 
@@ -212,7 +212,9 @@ namespace PalLauncher.Services
             }
 
             bool socketActive = await ProbeUdpAsync(cleanHost, 27016, 1000)
-                             || await ProbeTcpAsync(cleanHost, 8212, 1000)
+                             || await ProbeTcpAsync(cleanHost, port, 1000)
+                             || await ProbeTcpAsync(cleanHost, 8215, 1000)
+                             || await ProbeTcpAsync(cleanHost, 8211, 1000)
                              || await ProbeTcpAsync(cleanHost, 25575, 1000);
 
             if (socketActive)
@@ -258,7 +260,7 @@ namespace PalLauncher.Services
         public async Task<ServerLiveboardInfo> FetchLiveboardAsync(string host, int managementPort, int timeoutMs = 2500)
         {
             string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
-            int port = managementPort > 0 ? managementPort : 8212;
+            int port = managementPort > 0 ? managementPort : 8215;
             using var cts = new CancellationTokenSource(timeoutMs);
 
             try
@@ -304,7 +306,9 @@ namespace PalLauncher.Services
             }
 
             bool socketActive = await ProbeUdpAsync(cleanHost, 27016, 1000)
-                             || await ProbeTcpAsync(cleanHost, 8212, 1000)
+                             || await ProbeTcpAsync(cleanHost, port, 1000)
+                             || await ProbeTcpAsync(cleanHost, 8215, 1000)
+                             || await ProbeTcpAsync(cleanHost, 8211, 1000)
                              || await ProbeTcpAsync(cleanHost, 25575, 1000);
 
             if (socketActive)
@@ -341,7 +345,7 @@ namespace PalLauncher.Services
             IProgress<string>? progress = null,
             int timeoutSeconds = 25)
         {
-            int port = managementPort > 0 ? managementPort : 8212;
+            int port = managementPort > 0 ? managementPort : 8215;
             string cleanHost = string.IsNullOrWhiteSpace(host) ? "palodyssey.duckdns.org" : host.Trim();
 
             progress?.Report($"Connecting to host at {cleanHost}:{port}...");
@@ -402,7 +406,7 @@ namespace PalLauncher.Services
 
         public async Task<bool> RequestRemoteServerStopAsync(string host, int managementPort, string accessKey)
         {
-            int port = managementPort > 0 ? managementPort : 8212;
+            int port = managementPort > 0 ? managementPort : 8215;
 
             try
             {

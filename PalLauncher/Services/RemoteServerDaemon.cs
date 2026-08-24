@@ -74,27 +74,48 @@ namespace PalLauncher.Services
         {
             if (_isRunning) return Task.FromResult(true);
 
-            _port = port > 0 ? port : 8212;
+            _port = port > 0 ? port : 8215;
             _accessKey = string.IsNullOrWhiteSpace(accessKey) ? "PalOdyssey2026Secure" : accessKey;
             _onStartServerRequested = onStartServerRequested;
             _onStopServerRequested = onStopServerRequested;
 
             try
             {
-                _httpListener = new HttpListener();
-                _httpListener.Prefixes.Add($"http://localhost:{_port}/");
-                _httpListener.Prefixes.Add($"http://127.0.0.1:{_port}/");
-                
+                // Attempt 1: Try Wildcard Listener (accepts external WAN/LAN connections when URL reserved or elevated)
+                bool started = false;
                 try
                 {
-                    _httpListener.Start();
+                    var listener = new HttpListener();
+                    listener.Prefixes.Add($"http://*:{_port}/");
+                    listener.Start();
+                    _httpListener = listener;
+                    started = true;
                 }
-                catch
+                catch { }
+
+                // Attempt 2: Try Plus Wildcard Listener
+                if (!started)
                 {
-                    _httpListener.Close();
-                    _httpListener = new HttpListener();
-                    _httpListener.Prefixes.Add($"http://*:{_port}/");
-                    _httpListener.Start();
+                    try
+                    {
+                        var listener = new HttpListener();
+                        listener.Prefixes.Add($"http://+:{_port}/");
+                        listener.Start();
+                        _httpListener = listener;
+                        started = true;
+                    }
+                    catch { }
+                }
+
+                // Attempt 3: Standard Loopback Listener (always succeeds without elevation)
+                if (!started)
+                {
+                    var listener = new HttpListener();
+                    listener.Prefixes.Add($"http://localhost:{_port}/");
+                    listener.Prefixes.Add($"http://127.0.0.1:{_port}/");
+                    listener.Start();
+                    _httpListener = listener;
+                    started = true;
                 }
 
                 _cts = new CancellationTokenSource();
