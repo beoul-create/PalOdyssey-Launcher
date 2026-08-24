@@ -261,16 +261,35 @@ namespace PalLauncher.Services
 
                 string json = JsonSerializer.Serialize(commands);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var resp = await _httpClient.PutAsync($"applications/{applicationId}/commands", content);
 
+                // 1. Register globally
+                var resp = await _httpClient.PutAsync($"applications/{applicationId}/commands", content);
                 if (resp.IsSuccessStatusCode)
                 {
-                    _logService.LogSuccess("Discord native Slash Commands (/start, /status, /ip, /stop, /help) registered successfully!", "DiscordBot");
+                    _logService.LogSuccess("Discord native Slash Commands (/start, /status, /ip, /stop, /help) registered globally!", "DiscordBot");
                 }
-                else
+
+                // 2. Fetch all joined guilds and register instantly on each guild (bypasses 1-hour global cache delay)
+                var guildsResp = await _httpClient.GetAsync("users/@me/guilds");
+                if (guildsResp.IsSuccessStatusCode)
                 {
-                    string err = await resp.Content.ReadAsStringAsync();
-                    _logService.LogWarning($"Slash command registration returned {resp.StatusCode}: {err}", "DiscordBot");
+                    string guildsJson = await guildsResp.Content.ReadAsStringAsync();
+                    using var doc = JsonDocument.Parse(guildsJson);
+                    foreach (var guild in doc.RootElement.EnumerateArray())
+                    {
+                        string guildId = guild.GetProperty("id").GetString() ?? "";
+                        string guildName = guild.TryGetProperty("name", out var n) ? n.GetString() ?? guildId : guildId;
+
+                        if (!string.IsNullOrWhiteSpace(guildId))
+                        {
+                            var gContent = new StringContent(json, Encoding.UTF8, "application/json");
+                            var gResp = await _httpClient.PutAsync($"applications/{applicationId}/guilds/{guildId}/commands", gContent);
+                            if (gResp.IsSuccessStatusCode)
+                            {
+                                _logService.LogSuccess($"Slash Commands (/start, /status, /ip, /stop, /help) activated instantly for server '{guildName}'!", "DiscordBot");
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)
