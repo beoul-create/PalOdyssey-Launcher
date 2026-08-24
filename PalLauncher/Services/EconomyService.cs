@@ -179,8 +179,8 @@ namespace PalLauncher.Services
                 Id = "precious_pelt",
                 Name = "Precious Pelt",
                 Aliases = new[] { "pelt", "precious_pelt", "preciouspelt" },
-                PointsMultiplier = 1.0,
-                MinQuantityForOnePoint = 1,
+                PointsMultiplier = 0.5,
+                MinQuantityForOnePoint = 2,
                 Description = "Pristine monster pelt.",
                 Emoji = "🥋"
             },
@@ -189,8 +189,8 @@ namespace PalLauncher.Services
                 Id = "precious_feather",
                 Name = "Precious Feather",
                 Aliases = new[] { "feather", "precious_feather", "preciousfeather" },
-                PointsMultiplier = 1.0,
-                MinQuantityForOnePoint = 1,
+                PointsMultiplier = 0.5,
+                MinQuantityForOnePoint = 2,
                 Description = "Gleaming avian feather.",
                 Emoji = "🪶"
             },
@@ -199,8 +199,8 @@ namespace PalLauncher.Services
                 Id = "precious_claw",
                 Name = "Precious Claw",
                 Aliases = new[] { "claw", "precious_claw", "preciousclaw" },
-                PointsMultiplier = 1.0,
-                MinQuantityForOnePoint = 1,
+                PointsMultiplier = 0.5,
+                MinQuantityForOnePoint = 2,
                 Description = "Razor-sharp predator claw.",
                 Emoji = "🐾"
             },

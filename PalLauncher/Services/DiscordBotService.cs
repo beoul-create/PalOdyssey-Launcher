@@ -1519,77 +1519,7 @@ namespace PalLauncher.Services
             }
         }
 
-        private async Task ExecuteHelpInteractionAsync(string interactionToken)
-        {
-            await EditDeferredResponseEmbedAsync(interactionToken,
-                title: "📜 PalOdyssey Commands Guide",
-                description: "**🌍 Public Server Commands**\n" +
-                             "• `/start` — Powers up the dedicated server (24/7 auto-wake).\n" +
-                             "• `/status` — Real-time server status, player count, and uptime.\n" +
-                             "• `/ip` — Server endpoint address and connection guide.\n" +
-                             "• `/help` — Lists all available bot commands.\n\n" +
-                             "**🏛️ Technology Point Economy & Exchange**\n" +
-                             "• `/shop` — Browse the Technology Point Exchange Store & Recycling rates.\n" +
-                             "• `/exchange item:<name> amount:<qty>` — Trade unspent Tech Points for Dog Coins, Arena Tickets, Slabs, and Elixirs.\n" +
-                             "• `/recycle item:<name> amount:<qty>` — Scrap vendor junk, gems, keys, and schematics into Tech Points.\n" +
-                             "• `/gacha pulls:<1|10>` — Open Relic Mystery Boxes for random loot (3 pts / 1 pull, 25 pts / 10-pull w/ pity).\n" +
-                             "• `/inventory` — View character Tech Points balance and Virtual Vault.\n" +
-                             "• `/link steam_id:<id>` — Link your Discord account to your Palworld character save.\n\n" +
-                             "**🛡️ Administrator Commands (Admin Only)**\n" +
-                             "• `/restart` — Gracefully reboots the dedicated server.\n" +
-                             "• `/stop` — Safely shuts down the dedicated server.",
-                color: 0x9966FF);
-        }
 
-        private async Task ExecuteShopInteractionAsync(string interactionToken)
-        {
-            var catalog = _economyService.GetShopCatalog();
-            var recyclables = _economyService.GetRecyclables();
-
-            var sb = new StringBuilder();
-            sb.AppendLine("### 🛒 PalOdyssey Technology Exchange");
-            sb.AppendLine("Trade your unspent **Technology Points** for rare currencies, boss slabs, and items!\n");
-
-            sb.AppendLine("### 📦 Available Shop Items (`/exchange`)");
-            foreach (var item in catalog)
-            {
-                sb.AppendLine($"{item.Emoji} **{item.Name}** — `🪙 {item.TechPointCost} Tech Points`");
-                sb.AppendLine($"   *\"{item.Description}\"*");
-                sb.AppendLine($"   👉 `/exchange item:{item.Id} amount:1`\n");
-            }
-
-            sb.AppendLine("### ♻️ Trash-to-Tech Recycling Rates (`/recycle`)");
-            sb.AppendLine("Scrap vendor loot, excess parts, and blueprints into **Tech Points**:");
-            sb.AppendLine("• 🥋 **Precious Pelt / Feather / Claw**: `+1 Tech Point per 2 items`");
-            sb.AppendLine("• 🫀 **Precious Entrails / Dragon Stone**: `+1 Tech Point each`");
-            sb.AppendLine("• 💎 **Ruby / Sapphire / Emerald / Diamond**: `+1 to +2 Tech Points each`");
-            sb.AppendLine("• 🗝️ **Bronze / Silver / Gold Keys**: `+1 per 3 Bronze, +1 Silver, +2 Gold`");
-            sb.AppendLine("• ⚙️ **Ancient Civilization Parts**: `+1 Tech Point per 5 parts`");
-            sb.AppendLine("• 🧩 **Raid Slab Fragments**: `+1 Tech Point each`");
-            sb.AppendLine("• 📚 **Schematics (Tiers 1–3)**: `+1 to +3 Tech Points each`\n");
-
-            sb.AppendLine("### 💉 Modded Passive Skill Implants & Upgrades");
-            sb.AppendLine("• ⛺ **Guild Base Expansion**: `🪙 40 Tech Points` (+1 Guild Base Slot)");
-            sb.AppendLine("• 💉 **Tier 1 Passive (Utility/Starter)**: `🪙 2 Tech Points`");
-            sb.AppendLine("• 💉 **Tier 2/3 Passives**: `🪙 5 to 10 Tech Points`");
-            sb.AppendLine("• 💉 **Tier 4/5 Passives**: `🪙 18 to 30 Tech Points`");
-            sb.AppendLine("• 🧬 **Mutations / Apex Traits**: `🪙 50 Tech Points`\n");
-
-            sb.AppendLine("### 🎰 Relic Mystery Box (`/gacha`)");
-            sb.AppendLine("Gamble your Tech Points for random loot with weighted rarity drops!");
-            sb.AppendLine("• **1 Pull**: `🪙 3 Tech Points` | **10 Pull**: `🪙 25 Tech Points` (Rare+ Pity!)");
-            sb.AppendLine("• ⚪ Common (50%): Spheres, Manuals, Gold, Cake");
-            sb.AppendLine("• 🟢 Uncommon (30%): Dog Coins, Tickets, Tokens, Pal Souls");
-            sb.AppendLine("• 🔵 Rare (15%): Reversers, Reset Drugs, Epic Skill Fruits");
-            sb.AppendLine("• 🟡 Legendary (5%): Legendary Schematics, Raid Slabs, Huge Eggs\n");
-
-            sb.AppendLine("💡 *Commands:* `/exchange` | `/recycle` | `/gacha pulls:10` | `/inventory`");
-
-            await EditDeferredResponseEmbedAsync(interactionToken,
-                title: "🏛️ PalOdyssey Technology Exchange & Recycling",
-                description: sb.ToString(),
-                color: 0x00E5FF);
-        }
 
         private async Task ExecuteDepositInteractionAsync(string interactionToken, JsonElement data, string authorId, string authorName)
         {
@@ -2009,46 +1939,7 @@ namespace PalLauncher.Services
             return defaultValue;
         }
 
-        private async Task ExecuteHelpCommandAsync(string channelId)
-        {
-            await SendEmbedMessageAsync(channelId,
-                title: "📜 PalOdyssey Commands Guide",
-                description: "**🌍 Public Server Commands**\n" +
-                             "• `!start` or `/start` — Powers up the dedicated server (24/7 auto-wake).\n" +
-                             "• `!status` or `/status` — Real-time server status, player count, and uptime.\n" +
-                             "• `!ip` or `/ip` — Server endpoint address and connection guide.\n" +
-                             "• `!help` or `/help` — Lists all available bot commands.\n\n" +
-                             "**🏛️ Technology Point Economy & Exchange**\n" +
-                             "• `!shop` or `/shop` — Browse the Technology Point Store & Recycling rates.\n" +
-                             "• `/exchange item:<name> amount:<qty>` — Exchange unspent Tech Points for rare currencies and items.\n" +
-                             "• `/recycle item:<name> amount:<qty>` — Scrap junk and blueprints into Tech Points.\n" +
-                             "• `/inventory` — View character Tech Points balance and Virtual Vault.\n" +
-                             "• `/link steam_id:<id>` — Link your Discord user account to your Palworld character.\n\n" +
-                             "**🛡️ Administrator Commands (Admin Only)**\n" +
-                             "• `!restart` or `/restart` — Gracefully reboots the dedicated server.\n" +
-                             "• `!stop` or `/stop` — Safely shuts down the dedicated server.",
-                color: 0x9966FF);
-        }
 
-        private async Task ExecuteShopCommandAsync(string channelId)
-        {
-            var catalog = _economyService.GetShopCatalog();
-            var sb = new StringBuilder();
-            sb.AppendLine("### 🛒 PalOdyssey Technology Exchange & Store");
-            sb.AppendLine("Trade your unspent **Technology Points** for rare modded currencies, raid items, and utilities!\n");
-
-            sb.AppendLine("### 📦 Available Shop Items (`/exchange`)");
-            foreach (var item in catalog)
-            {
-                sb.AppendLine($"{item.Emoji} **{item.Name}** — `🪙 {item.TechPointCost} Tech Points`");
-            }
-            sb.AppendLine("\n💡 *Use slash command `/shop` for full descriptions or `/exchange` to buy.*");
-
-            await SendEmbedMessageAsync(channelId,
-                title: "🏛️ PalOdyssey Technology Exchange",
-                description: sb.ToString(),
-                color: 0x00E5FF);
-        }
 
         private async Task ExecuteInventoryCommandAsync(string channelId, string authorId)
         {

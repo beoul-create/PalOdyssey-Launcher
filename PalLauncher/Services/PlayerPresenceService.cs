@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using PalLauncher.Models;
 using PalLauncher.Services.Interfaces;
 
 namespace PalLauncher.Services

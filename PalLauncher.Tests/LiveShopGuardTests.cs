@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -7,6 +9,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 using PalLauncher.Services;
+using PalLauncher.Services.Interfaces;
 using PalLauncher.Models;
 
 namespace PalLauncher.Tests
@@ -40,12 +43,17 @@ namespace PalLauncher.Tests
         private class MockLogService : ILogService
         {
             private readonly ITestOutputHelper _output;
+            public ObservableCollection<LogEntry> LogEntries { get; } = new();
+
             public MockLogService(ITestOutputHelper output) => _output = output;
-            public void Log(string message, string category = "Info") => _output.WriteLine($"[{category}] {message}");
-            public void LogSuccess(string message, string category = "Success") => _output.WriteLine($"[{category}] {message}");
-            public void LogWarning(string message, string category = "Warning") => _output.WriteLine($"[{category}] {message}");
-            public void LogError(string message, string category = "Error") => _output.WriteLine($"[{category}] {message}");
-            public void LogError(string message, Exception ex, string category = "Error") => _output.WriteLine($"[{category}] {message}: {ex.Message}");
+            public void Log(string message, LogLevel level = LogLevel.Info, string source = "Launcher", string? details = null) => _output.WriteLine($"[{level}] [{source}] {message}");
+            public void LogInfo(string message, string source = "Launcher") => _output.WriteLine($"[Info] [{source}] {message}");
+            public void LogSuccess(string message, string source = "Launcher") => _output.WriteLine($"[Success] [{source}] {message}");
+            public void LogWarning(string message, string source = "Launcher", string? details = null) => _output.WriteLine($"[Warning] [{source}] {message}");
+            public void LogError(string message, string source = "Launcher", Exception? ex = null) => _output.WriteLine($"[Error] [{source}] {message}: {ex?.Message}");
+            public void ClearLogs() => LogEntries.Clear();
+            public string ExportLogsAsString() => "";
+            public string GetLogDirectory() => "";
         }
 
         private class MockPalSaveService : IPalSaveService
@@ -53,7 +61,14 @@ namespace PalLauncher.Tests
             public int CurrentTechPoints { get; set; } = 100;
             public bool OfflineBinarySaveEdited { get; private set; } = false;
 
+            public string? FindSaveGamesDirectory() => null;
+            public List<string> GetAvailablePlayerUids() => new() { "Steam_123" };
             public string ResolvePlayerUid(string? targetPlayerId) => targetPlayerId ?? "Steam_123";
+            public Task<bool> CreateBackupAsync(string playerUid) => Task.FromResult(true);
+            public Task<bool> IsPlayerOnlineAsync(string playerUid) => Task.FromResult(false);
+            public Task<bool> RequestWorldSaveAsync() => Task.FromResult(true);
+            public Task<string?> ExtractGuildIdFromLevelSavAsync(string playerUid) => Task.FromResult<string?>("MockGuild_1");
+            public Task<bool> UpdatePalWorldSettingsAsync(int newBaseCap = 10) => Task.FromResult(true);
 
             public Task<PlayerEconomyProfile?> ReadPlayerProfileAsync(string playerUid)
             {
@@ -63,10 +78,17 @@ namespace PalLauncher.Tests
                 });
             }
 
-            public Task<bool> UpdateTechnologyPointsAsync(string playerUid, int pointsDelta)
+            public Task<bool> UpdateTechnologyPointsAsync(string playerUid, int pointsDelta, bool isAbsolute = false)
             {
-                CurrentTechPoints += pointsDelta;
-                OfflineBinarySaveEdited = true; // Mark that binary save was edited
+                if (isAbsolute)
+                {
+                    CurrentTechPoints = pointsDelta;
+                }
+                else
+                {
+                    CurrentTechPoints += pointsDelta;
+                }
+                OfflineBinarySaveEdited = true;
                 return Task.FromResult(true);
             }
         }
@@ -106,7 +128,7 @@ namespace PalLauncher.Tests
             
             var handler = new MockHttpMessageHandler
             {
-                ResponseContent = @"{"players":[{"accountId":"Steam_76561198012345678","userId":"abcdef"}]}"
+                ResponseContent = @"{""players"":[{""accountId"":""Steam_76561198012345678"",""userId"":""abcdef""}]}"
             };
             var httpClient = new HttpClient(handler);
             var presenceService = new PlayerPresenceService(new MockConfigService(), new MockLogService(_output), httpClient);
