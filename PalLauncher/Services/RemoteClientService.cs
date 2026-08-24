@@ -245,8 +245,10 @@ namespace PalLauncher.Services
 
             string targetIp = ResolveEffectiveEndpoint(cleanHost);
 
-            bool socketActive = await ProbeUdpAsync(targetIp, 8211, 1000)
+            bool socketActive = await ProbeUdpAsync(targetIp, 57294, 1000)
+                             || await ProbeUdpAsync(targetIp, 8211, 1000)
                              || await ProbeUdpAsync(targetIp, 27016, 1000)
+                             || await ProbeTcpAsync(targetIp, 57294, 1000)
                              || await ProbeTcpAsync(targetIp, port, 1000)
                              || await ProbeTcpAsync(targetIp, 8215, 1000)
                              || await ProbeTcpAsync(targetIp, 8211, 1000)
