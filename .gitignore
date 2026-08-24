@@ -39,6 +39,8 @@ $RECYCLE.BIN/
 
 # Local benchmark output & submodules
 benchmark_*.json
+project_test_results*.json
+test_download/
 GitHub-Modpack-Release/
 publish/
 MockGame/
