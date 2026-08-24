@@ -78,10 +78,31 @@ namespace PalLauncher.Services
             }
             catch (Exception ex)
             {
-                _logService.LogInfo($"Remote manifest check ({manifestUrl}): {ex.Message}. Checking local cached manifest...", "Updater");
+                _logService.LogInfo($"Remote manifest check ({manifestUrl}): {ex.Message}. Checking official repo...", "Updater");
             }
 
-            // Fallback 1: Local file check in SampleData or Modpack
+            // Fallback 1: Try official repository manifest if custom URL failed
+            if (!string.Equals(manifestUrl, LauncherConfig.OfficialManifestUrl, StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    using var response = await _httpClient.GetAsync(LauncherConfig.OfficialManifestUrl, cancellationToken);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync(cancellationToken);
+                        var manifest = JsonSerializer.Deserialize<ModManifest>(json, _jsonOptions);
+                        if (manifest != null && manifest.Mods.Count > 0)
+                        {
+                            _currentManifest = manifest;
+                            _logService.LogSuccess($"Loaded official manifest v{manifest.ManifestVersion} with {manifest.Mods.Count} mods.", "Updater");
+                            return manifest;
+                        }
+                    }
+                }
+                catch { }
+            }
+
+            // Fallback 2: Local file check in SampleData or Modpack
             string[] localFallbacks = new[]
             {
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SampleData", "version.json"),
@@ -224,7 +245,8 @@ namespace PalLauncher.Services
                 Directory.CreateDirectory(targetDirectory);
 
                 // If URL is a relative path or local mock, resolve it
-                string downloadUrl = ResolveDownloadUrl(mod.DownloadUrl);
+                string downloadUrl = ResolveDownloadUrl(mod.DownloadUrl, mod.RelativeInstallPath);
+                _logService.LogInfo($"Downloading {mod.Name} from {downloadUrl}...", "Updater");
 
                 if (File.Exists(downloadUrl))
                 {
@@ -480,17 +502,29 @@ namespace PalLauncher.Services
             return Path.Combine(gameRootPath, @"Pal\Content\Paks", relativePath);
         }
 
-        private string ResolveDownloadUrl(string rawUrl)
+        private string ResolveDownloadUrl(string rawUrl, string relativeInstallPath)
         {
             if (Uri.TryCreate(rawUrl, UriKind.Absolute, out var uri))
             {
                 return uri.ToString();
             }
 
-            if (_currentManifest?.BaseDownloadUrl != null &&
-                Uri.TryCreate(new Uri(_currentManifest.BaseDownloadUrl), rawUrl, out var combinedUri))
+            string relativePath = string.IsNullOrWhiteSpace(rawUrl) ? relativeInstallPath : rawUrl;
+            relativePath = relativePath.Replace('\\', '/').TrimStart('/');
+
+            if (!string.IsNullOrWhiteSpace(_currentManifest?.BaseDownloadUrl))
             {
-                return combinedUri.ToString();
+                string baseUrl = _currentManifest.BaseDownloadUrl.TrimEnd('/') + "/";
+                if (Uri.TryCreate(new Uri(baseUrl), relativePath, out var combinedUri))
+                {
+                    return combinedUri.ToString();
+                }
+            }
+
+            string defaultBase = "https://raw.githubusercontent.com/beoul-create/PalOdyssey-Launcher/main/Modpack/";
+            if (Uri.TryCreate(new Uri(defaultBase), relativePath, out var fallbackUri))
+            {
+                return fallbackUri.ToString();
             }
 
             return rawUrl;

@@ -1,6 +1,6 @@
 {
     "serverVersion": "0.3.6.0",
-    "baseDownloadUrl": "https://github.com/beoul-create/PalOdessey-Modpack/raw/main/Modpack/",
+    "baseDownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdyssey-Launcher/main/Modpack/",
     "minimumLauncherVersion": "1.0.0",
     "modpackName": "PalOdyssey Base Modpack",
     "manifestVersion": "2.0.0",
@@ -242,6 +242,18 @@
             "relativeInstallPath": "Pal\\Binaries\\Win64\\ue4ss\\Mods\\PalCinematicStudio\\Scripts\\main.lua",
             "sizeBytes": 5372,
             "sha256": "601F8F8D16907FF65493745FDC28E8B1DAD652C4C7402E32C4C86CE479803549",
+            "required": false,
+            "enabledByDefault": true
+        },
+        {
+            "id": "chazz-buffs",
+            "name": "ChazzBuffs Partner Skill & Pal Rebalance",
+            "category": "Gameplay",
+            "version": "1.0.0",
+            "description": "Comprehensive partner skill improvements and balance adjustments for Lunaris, Mossanda, Xenogard, Menasting, and more",
+            "relativeInstallPath": "Pal\\Binaries\\Win64\\ue4ss\\Mods\\PalSchema\\mods\\ChazzBuffs\\metadata.json",
+            "sizeBytes": 193,
+            "sha256": "618041259D4C51D20B8AFF8FA89C0CC03F4F547976310602FA51086F2BFA64FB",
             "required": false,
             "enabledByDefault": true
         }

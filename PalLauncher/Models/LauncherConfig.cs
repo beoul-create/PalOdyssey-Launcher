@@ -61,8 +61,10 @@ namespace PalLauncher.Models
         [JsonPropertyName("launchServerWithGame")]
         public bool LaunchServerWithGame { get; set; } = true;
 
+        public const string OfficialManifestUrl = "https://raw.githubusercontent.com/beoul-create/PalOdyssey-Launcher/main/Modpack/version.json";
+
         [JsonPropertyName("remoteManifestUrl")]
-        public string RemoteManifestUrl { get; set; } = "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Modpack/version.json";
+        public string RemoteManifestUrl { get; set; } = OfficialManifestUrl;
 
         [JsonPropertyName("paksRelativePath")]
         public string PaksRelativePath { get; set; } = @"Pal\Content\Paks\~mods";
