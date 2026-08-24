@@ -54,7 +54,7 @@ namespace PalLauncher.Models
         public bool EnableDiscordRpc { get; set; } = true;
 
         [JsonPropertyName("discordApplicationId")]
-        public string DiscordApplicationId { get; set; } = "1540924979095408700";
+        public string DiscordApplicationId { get; set; } = "1541335019899977768";
 
         [JsonPropertyName("enableDiscordBot")]
         public bool EnableDiscordBot { get; set; } = true;

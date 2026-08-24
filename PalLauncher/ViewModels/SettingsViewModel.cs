@@ -161,7 +161,7 @@ namespace PalLauncher.ViewModels
         }
 
         private bool _enableDiscordRpc = true;
-        private string _discordApplicationId = "1540924979095408700";
+        private string _discordApplicationId = "1541335019899977768";
         private bool _enableDiscordBot = true;
         private string _discordBotToken = "";
         private string _discordCommandPrefix = "/";
