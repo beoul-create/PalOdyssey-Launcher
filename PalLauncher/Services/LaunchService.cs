@@ -242,30 +242,14 @@ namespace PalLauncher.Services
                                     WorkingDirectory = serverWorkDir,
                                     UseShellExecute = false,
                                     CreateNoWindow = true,
-                                    RedirectStandardOutput = true,
-                                    RedirectStandardError = true
+                                    RedirectStandardOutput = false,
+                                    RedirectStandardError = false
                                 };
 
                                 var sProcess = new Process
                                 {
                                     StartInfo = sStartInfo,
                                     EnableRaisingEvents = true
-                                };
-
-                                sProcess.OutputDataReceived += (s, e) =>
-                                {
-                                    if (!string.IsNullOrWhiteSpace(e.Data)) ParseAndLogServerOutput(e.Data);
-                                };
-
-                                sProcess.ErrorDataReceived += (s, e) =>
-                                {
-                                    if (!string.IsNullOrWhiteSpace(e.Data))
-                                    {
-                                        if (e.Data.Contains("error", StringComparison.OrdinalIgnoreCase) || e.Data.Contains("fatal", StringComparison.OrdinalIgnoreCase))
-                                            _logService.LogError(e.Data, "PalServer");
-                                        else
-                                            _logService.LogWarning(e.Data, "PalServer");
-                                    }
                                 };
 
                                 sProcess.Exited += (s, e) =>
@@ -277,8 +261,6 @@ namespace PalLauncher.Services
 
                                 if (sProcess.Start())
                                 {
-                                    sProcess.BeginOutputReadLine();
-                                    sProcess.BeginErrorReadLine();
                                     _runningServerProcess = sProcess;
                                     serverLaunched = true;
 
