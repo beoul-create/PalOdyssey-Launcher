@@ -9,6 +9,7 @@ local NetworkModule = require("network")
 local GraphicsModule = require("graphics")
 local MemoryModule = require("memory")
 local ServerModule = require("server")
+local DeliveryModule = require("delivery")
 
 print("==========================================================")
 print("  PalOdyssey Ultimate Optimization Suite v1.0.0 Starting  ")
@@ -23,6 +24,7 @@ pcall(NetworkModule.apply, cfg.network)
 pcall(GraphicsModule.apply, cfg.graphics)
 pcall(MemoryModule.apply, cfg.memory)
 pcall(ServerModule.apply, cfg.server)
+pcall(DeliveryModule.apply)
 
 -- Optional: Register with DarnMenu for in-game configuration
 local function registerDarnMenuCategory()

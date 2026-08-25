@@ -476,11 +476,23 @@ namespace PalLauncher.Services
             string dir = Path.Combine(localAppData, "PalLauncher");
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             string queueFile = Path.Combine(dir, "pending-deliveries.csv");
-            
+
+            string serverQueuePath = @"C:\SteamLibrary\steamapps\common\PalServer\Pal\Binaries\Win64\ue4ss\Mods\PalOdysseyOptimizer\pending-deliveries.csv";
+            string serverQueueDir = Path.GetDirectoryName(serverQueuePath)!;
+
             lock (_lock)
             {
                 string line = $"{playerUid},{action},{itemCode},{quantity},{techPointsDelta}\n";
                 File.AppendAllText(queueFile, line);
+
+                try
+                {
+                    if (Directory.Exists(serverQueueDir))
+                    {
+                        File.AppendAllText(serverQueuePath, line);
+                    }
+                }
+                catch { }
             }
         }
 
