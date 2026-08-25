@@ -377,6 +377,18 @@ namespace PalLauncher.Services
                     },
                     new
                     {
+                        name = "server-info",
+                        description = "Comprehensive PalOdyssey server summary, telemetry, and connection details",
+                        type = 1
+                    },
+                    new
+                    {
+                        name = "info",
+                        description = "View complete PalOdyssey server information and live telemetry",
+                        type = 1
+                    },
+                    new
+                    {
                         name = "ip",
                         description = "Get the server connection IP and instructions",
                         type = 1
@@ -761,6 +773,9 @@ namespace PalLauncher.Services
 
                     case "status":
                     case "server":
+                    case "server-info":
+                    case "serverinfo":
+                    case "info":
                         await ExecuteStatusDirectInteractionAsync(interactionId, interactionToken);
                         return;
                 }
@@ -1117,25 +1132,14 @@ namespace PalLauncher.Services
             try { liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo(); }
             catch { liveboard = new ServerLiveboardInfo(); }
 
-            if (liveboard.IsOnline || liveboard.IsServerRunning)
-            {
-                await EditDeferredResponseEmbedAsync(interactionToken,
-                    title: "🟢 PalOdyssey Realm — Online",
-                    description: $"Server is currently active and healthy.\n\n" +
-                                 $"📍 **Direct Address**: `palodyssey.duckdns.org:8211`\n" +
-                                 $"👥 **Pioneers in Realm**: `{liveboard.PlayerCount} / {liveboard.MaxPlayers}`\n" +
-                                 $"⏱️ **Current Uptime**: `{liveboard.UptimeFormatted}`\n" +
-                                 $"💤 **Idle Auto-Shutdown**: Enabled (15m standby)",
-                    color: 0x00FF88);
-            }
-            else
-            {
-                await EditDeferredResponseEmbedAsync(interactionToken,
-                    title: "⚪ PalOdyssey Realm — Standby / Sleeping",
-                    description: "The server is currently powered down in power-saving standby mode.\n\n" +
-                                 $"👉 Type `/start` to boot it up instantly!",
-                    color: 0x8899AA);
-            }
+            bool isOnline = liveboard.IsOnline || liveboard.IsServerRunning;
+            int color = isOnline ? 0x00FF88 : 0x8899AA;
+            string title = isOnline ? "📡 PalOdyssey Realm — Server Info & Telemetry" : "💤 PalOdyssey Realm — Standby (Power-Saving)";
+
+            await EditDeferredResponseEmbedAsync(interactionToken,
+                title: title,
+                description: liveboard.BuildDiscordSummaryMarkdown(),
+                color: color);
         }
 
         private async Task ExecuteIpInteractionAsync(string interactionToken)
@@ -1278,26 +1282,14 @@ namespace PalLauncher.Services
         private async Task ExecuteStatusCommandAsync(string channelId)
         {
             var liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo();
+            bool isOnline = liveboard.IsOnline || liveboard.IsServerRunning;
+            int color = isOnline ? 0x00FF88 : 0x8899AA;
+            string title = isOnline ? "📡 PalOdyssey Realm — Server Info & Telemetry" : "💤 PalOdyssey Realm — Standby (Power-Saving)";
 
-            if (liveboard.IsOnline || liveboard.IsServerRunning)
-            {
-                await SendEmbedMessageAsync(channelId,
-                    title: "🟢 PalOdyssey Realm — Online",
-                    description: $"Server is currently active and healthy.\n\n" +
-                                 $"📍 **Direct Address**: `palodyssey.duckdns.org:8211`\n" +
-                                 $"👥 **Pioneers in Realm**: `{liveboard.PlayerCount} / {liveboard.MaxPlayers}`\n" +
-                                 $"⏱️ **Current Uptime**: `{liveboard.UptimeFormatted}`\n" +
-                                 $"💤 **Idle Auto-Shutdown**: Enabled (15m standby)",
-                    color: 0x00FF88);
-            }
-            else
-            {
-                await SendEmbedMessageAsync(channelId,
-                    title: "⚪ PalOdyssey Realm — Standby / Sleeping",
-                    description: "The server is currently powered down in power-saving standby mode.\n\n" +
-                                 $"👉 Type `/start` to boot it up instantly!",
-                    color: 0x8899AA);
-            }
+            await SendEmbedMessageAsync(channelId,
+                title: title,
+                description: liveboard.BuildDiscordSummaryMarkdown(),
+                color: color);
         }
 
         private async Task ExecuteIpCommandAsync(string channelId)
@@ -1496,27 +1488,15 @@ namespace PalLauncher.Services
             try { liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo(); }
             catch { liveboard = new ServerLiveboardInfo(); }
 
-            if (liveboard.IsOnline || liveboard.IsServerRunning)
-            {
-                await RespondInteractionEmbedAsync(interactionId, interactionToken,
-                    title: "🟢 PalOdyssey Realm — Online",
-                    description: $"Server is currently active and healthy.\n\n" +
-                                 $"📍 **Direct Address**: `palodyssey.duckdns.org:8211`\n" +
-                                 $"👥 **Pioneers in Realm**: `{liveboard.PlayerCount} / {liveboard.MaxPlayers}`\n" +
-                                 $"⏱️ **Current Uptime**: `{liveboard.UptimeFormatted}`\n" +
-                                 $"💤 **Idle Auto-Shutdown**: Enabled (15m standby)",
-                    color: 0x00FF88,
-                    ephemeral: false);
-            }
-            else
-            {
-                await RespondInteractionEmbedAsync(interactionId, interactionToken,
-                    title: "⚪ PalOdyssey Realm — Standby / Sleeping",
-                    description: "The server is currently powered down in power-saving standby mode.\n\n" +
-                                 $"👉 Type `/start` to boot it up instantly!",
-                    color: 0x8899AA,
-                    ephemeral: false);
-            }
+            bool isOnline = liveboard.IsOnline || liveboard.IsServerRunning;
+            int color = isOnline ? 0x00FF88 : 0x8899AA;
+            string title = isOnline ? "📡 PalOdyssey Realm — Server Info & Telemetry" : "💤 PalOdyssey Realm — Standby (Power-Saving)";
+
+            await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                title: title,
+                description: liveboard.BuildDiscordSummaryMarkdown(),
+                color: color,
+                ephemeral: false);
         }
 
 
@@ -2254,63 +2234,8 @@ namespace PalLauncher.Services
             try { liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo(); }
             catch { liveboard = new ServerLiveboardInfo(); }
 
-            long unixSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             bool isOnline = liveboard.IsOnline || liveboard.IsServerRunning;
-
-            string statusBadge = isOnline ? "🟢 **ONLINE**" : "🔴 **OFFLINE (Standby)**";
             int embedColor = isOnline ? 0x00FF88 : 0x8899AA;
-
-            var sb = new StringBuilder();
-            sb.AppendLine("### 🗺️ PalOdyssey Realm Status");
-            sb.AppendLine($"• **Status**: {statusBadge}");
-            sb.AppendLine($"• **Address**: `palodyssey.duckdns.org:8211`");
-            sb.AppendLine($"• **Uptime**: `{(isOnline ? liveboard.UptimeFormatted : "Standby (00m 00s)")}`");
-            sb.AppendLine($"• **Version**: `{liveboard.Version}` *(32 Max Pioneers)*");
-            sb.AppendLine();
-
-            // Player list with Level formatting
-            sb.AppendLine($"### 👥 Pioneers Online ({liveboard.PlayerCount} / {liveboard.MaxPlayers})");
-            if (liveboard.Players != null && liveboard.Players.Count > 0)
-            {
-                foreach (var p in liveboard.Players)
-                {
-                    sb.AppendLine($"• **{p.Name}** (Lv. {p.Level}) — `{p.PingBadge}`");
-                }
-            }
-            else
-            {
-                sb.AppendLine("*No players currently online.*");
-            }
-            sb.AppendLine();
-
-            // Inactivity Watchdog Section
-            sb.AppendLine("### ⏳ Inactivity Auto-Shutdown");
-            if (!isOnline)
-            {
-                sb.AppendLine("💤 **Standby Mode**: Server is sleeping to conserve host resources. Type `/start` or launch game to wake.");
-            }
-            else if (liveboard.PlayerCount > 0)
-            {
-                sb.AppendLine($"🟢 **Active Realm**: Auto-shutdown paused while {liveboard.PlayerCount} pioneer(s) are exploring.");
-            }
-            else if (liveboard.IdleShutdownEnabled)
-            {
-                int remMin = Math.Max(0, liveboard.IdleSecondsRemaining / 60);
-                int remSec = Math.Max(0, liveboard.IdleSecondsRemaining % 60);
-                sb.AppendLine($"⏳ **Countdown Active**: Server will save & shut down in **{remMin}m {remSec:D2}s** if no players join.");
-            }
-            else
-            {
-                sb.AppendLine("🛡️ **24/7 Always On**: Auto-shutdown disabled.");
-            }
-            sb.AppendLine();
-
-            // Connection Guide
-            sb.AppendLine("### 🎮 Join Expedition");
-            sb.AppendLine("1. Open **PalOdyssey Launcher** and click **LAUNCH GAME** (copies server address automatically).");
-            sb.AppendLine("2. In-Game: **Join Multiplayer Game** ➔ Paste `palodyssey.duckdns.org:8211` ➔ Connect.");
-            sb.AppendLine();
-            sb.AppendLine($"🔄 *Last Synchronized:* <t:{unixSeconds}:R>");
 
             var payload = new
             {
@@ -2318,12 +2243,12 @@ namespace PalLauncher.Services
                 {
                     new
                     {
-                        title = "📡 PalOdyssey Realm — 24/7 Liveboard",
-                        description = sb.ToString(),
+                        title = "📡 PalOdyssey Realm — 24/7 Liveboard & Server Telemetry",
+                        description = liveboard.BuildDiscordSummaryMarkdown(),
                         color = embedColor,
                         footer = new
                         {
-                            text = "PalOdyssey Autonomous Host • Auto-refreshes every 30s"
+                            text = "PalOdyssey Autonomous Host • Auto-refreshes every 30s • Type /help for commands"
                         },
                         timestamp = DateTime.UtcNow.ToString("o")
                     }

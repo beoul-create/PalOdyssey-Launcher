@@ -136,8 +136,12 @@
 
                             <TextBlock Text="REALM LIVEBOARD &amp; TELEMETRY" Foreground="{StaticResource BrushAccentCyan}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,12,0" />
                             
-                            <Border Background="#121824" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="4" Padding="6,2" VerticalAlignment="Center">
+                            <Border Background="#121824" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="4" Padding="6,2" VerticalAlignment="Center" Margin="0,0,8,0">
                                 <TextBlock Text="{Binding Liveboard.Version, StringFormat='v{0}', FallbackValue='v1.5.4'}" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" FontWeight="SemiBold" />
+                            </Border>
+
+                            <Border Background="#16243A" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="4" Padding="6,2" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Liveboard.FpsBadge, FallbackValue='60 FPS'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" />
                             </Border>
                         </StackPanel>
 
@@ -157,29 +161,31 @@
                         </Button>
                     </Grid>
 
-                    <!-- Telemetry Metrics Grid (3 Stat Cards) -->
+                    <!-- Telemetry Metrics Grid (4 Stat Cards) -->
                     <Grid Margin="0,0,0,16">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="10" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
                         <!-- Metric 1: Online Status & Power State -->
-                        <Border Grid.Column="0" Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12">
+                        <Border Grid.Column="0" Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12,10">
                             <StackPanel>
                                 <Grid Margin="0,0,0,4">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="SERVER STATUS" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" VerticalAlignment="Center" />
-                                    <Button Grid.Column="1" Content="Check Now" Style="{StaticResource StyleGhostButton}" FontSize="10" Padding="6,2"
+                                    <TextBlock Grid.Column="0" Text="SERVER STATUS" Foreground="{StaticResource BrushTextMuted}" FontSize="9.5" FontWeight="Bold" VerticalAlignment="Center" />
+                                    <Button Grid.Column="1" Content="Check" Style="{StaticResource StyleGhostButton}" FontSize="9" Padding="4,1"
                                             Command="{Binding RefreshServerStatusCommand}" VerticalAlignment="Center" />
                                 </Grid>
-                                <TextBlock Text="{Binding ServerStatusBadgeText, FallbackValue='Detecting...'}" FontSize="13" FontWeight="Bold" TextTrimming="CharacterEllipsis" Margin="0,0,0,2">
+                                <TextBlock Text="{Binding ServerStatusBadgeText, FallbackValue='Detecting...'}" FontSize="12.5" FontWeight="Bold" TextTrimming="CharacterEllipsis" Margin="0,0,0,2">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="Foreground" Value="{StaticResource BrushAccentCyan}" />
@@ -191,25 +197,34 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <TextBlock Text="{Binding Liveboard.AutoShutdownStatusText, FallbackValue='Auto-Wake Enabled on Launch'}" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="{Binding Liveboard.AutoShutdownStatusText, FallbackValue='Auto-Wake Enabled on Launch'}" Foreground="{StaticResource BrushTextSecondary}" FontSize="10.5" TextTrimming="CharacterEllipsis" />
                             </StackPanel>
                         </Border>
 
                         <!-- Metric 2: Active Explorers -->
-                        <Border Grid.Column="2" Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12">
+                        <Border Grid.Column="2" Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12,10">
                             <StackPanel>
-                                <TextBlock Text="ONLINE EXPLORERS" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,4" />
-                                <TextBlock Text="{Binding Liveboard.PlayerCountSummary, FallbackValue='0 / 32 Players Online'}" Foreground="{StaticResource BrushSuccess}" FontSize="13" FontWeight="Bold" Margin="0,0,0,2" />
-                                <TextBlock Text="32 Dedicated Slots Available" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" />
+                                <TextBlock Text="ONLINE EXPLORERS" Foreground="{StaticResource BrushTextMuted}" FontSize="9.5" FontWeight="Bold" Margin="0,0,0,4" />
+                                <TextBlock Text="{Binding Liveboard.OccupancySummary, FallbackValue='0 / 32 (0%)'}" Foreground="{StaticResource BrushSuccess}" FontSize="12.5" FontWeight="Bold" Margin="0,0,0,2" />
+                                <TextBlock Text="32 Dedicated Slots" Foreground="{StaticResource BrushTextSecondary}" FontSize="10.5" />
                             </StackPanel>
                         </Border>
 
                         <!-- Metric 3: Realm Uptime -->
-                        <Border Grid.Column="4" Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12">
+                        <Border Grid.Column="4" Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12,10">
                             <StackPanel>
-                                <TextBlock Text="SESSION UPTIME" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,0,4" />
-                                <TextBlock Text="{Binding Liveboard.UptimeFormatted, StringFormat='Uptime: {0}', FallbackValue='Uptime: 00m 00s'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="13" FontWeight="Bold" Margin="0,0,0,2" />
-                                <TextBlock Text="Dedicated Server Instance" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" />
+                                <TextBlock Text="SESSION UPTIME" Foreground="{StaticResource BrushTextMuted}" FontSize="9.5" FontWeight="Bold" Margin="0,0,0,4" />
+                                <TextBlock Text="{Binding Liveboard.UptimeFormatted, StringFormat='Uptime: {0}', FallbackValue='Uptime: 00m 00s'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12.5" FontWeight="Bold" Margin="0,0,0,2" />
+                                <TextBlock Text="Dedicated Instance" Foreground="{StaticResource BrushTextSecondary}" FontSize="10.5" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Metric 4: Server Health & FPS -->
+                        <Border Grid.Column="6" Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="12,10">
+                            <StackPanel>
+                                <TextBlock Text="TICKRATE &amp; HEALTH" Foreground="{StaticResource BrushTextMuted}" FontSize="9.5" FontWeight="Bold" Margin="0,0,0,4" />
+                                <TextBlock Text="{Binding Liveboard.FpsBadge, FallbackValue='60 FPS'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="12.5" FontWeight="Bold" Margin="0,0,0,2" />
+                                <TextBlock Text="{Binding Liveboard.PerformanceHealthText, FallbackValue='🟢 Optimal'}" Foreground="{StaticResource BrushTextSecondary}" FontSize="10.5" TextTrimming="CharacterEllipsis" />
                             </StackPanel>
                         </Border>
                     </Grid>

@@ -38,8 +38,10 @@ $RECYCLE.BIN/
 *.pdb
 
 # Developer local scripts
-run-dev.*
-[Dd]eploy-[Mm]odpack.*
+/run-dev.*
+/[Dd]eploy-[Mm]odpack.*
+/Install-PalOdyssey-*
+server-tools/
 
 # Local benchmark output & submodules
 benchmark_*.json

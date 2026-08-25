@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace PalLauncher.Models
@@ -32,6 +33,9 @@ namespace PalLauncher.Models
 
         [JsonIgnore]
         public string PingBadge => $"{PingMs}ms";
+
+        [JsonIgnore]
+        public string FormattedSummary => $"{Name} (Lv. {Level}) • {PingMs}ms • {Location}";
     }
 
     public class ServerLiveboardInfo
@@ -85,6 +89,15 @@ namespace PalLauncher.Models
         public bool HasNoPlayers => PlayerCount == 0;
 
         [JsonIgnore]
+        public int OccupancyPercentage => Math.Clamp((int)Math.Round((double)PlayerCount / Math.Max(1, MaxPlayers) * 100), 0, 100);
+
+        [JsonIgnore]
+        public string FpsBadge => ServerFps > 0 ? $"{ServerFps} FPS" : "60 FPS";
+
+        [JsonIgnore]
+        public string PerformanceHealthText => ServerFps >= 50 ? "🟢 Optimal (60 FPS)" : (ServerFps >= 30 ? "🟡 Normal" : "🔴 High Load");
+
+        [JsonIgnore]
         public string UptimeFormatted
         {
             get
@@ -103,6 +116,9 @@ namespace PalLauncher.Models
         public string PlayerCountSummary => $"{PlayerCount} / {MaxPlayers} Players Online";
 
         [JsonIgnore]
+        public string OccupancySummary => $"{PlayerCount} / {MaxPlayers} ({OccupancyPercentage}%)";
+
+        [JsonIgnore]
         public string AutoShutdownStatusText
         {
             get
@@ -116,5 +132,71 @@ namespace PalLauncher.Models
                 return "0 Players Online • Server Standing By";
             }
         }
+
+        public string BuildDiscordSummaryMarkdown()
+        {
+            long unixSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            bool active = IsOnline || IsServerRunning;
+            string statusBadge = active ? "🟢 **ONLINE & READY**" : "💤 **STANDBY (Sleeping)**";
+
+            var sb = new StringBuilder();
+            sb.AppendLine("### 🗺️ PalOdyssey Realm Status & Telemetry");
+            sb.AppendLine($"• **Status**: {statusBadge}");
+            sb.AppendLine($"• **Connection Endpoint**: `palodyssey.duckdns.org:8211`");
+            sb.AppendLine($"• **Active Uptime**: `{(active ? UptimeFormatted : "Standby (00m 00s)")}`");
+            sb.AppendLine($"• **Engine Version**: `v{Version}` • **Tickrate**: `{FpsBadge}` *(32 Max Capacity)*");
+            sb.AppendLine();
+
+            // Active Pioneers section
+            sb.AppendLine($"### 👥 Pioneers Online ({PlayerCount} / {MaxPlayers} — {OccupancyPercentage}% Occupied)");
+            if (Players != null && Players.Count > 0)
+            {
+                foreach (var p in Players)
+                {
+                    string steamTag = !string.IsNullOrWhiteSpace(p.SteamId) ? $" | `{p.SteamId}`" : "";
+                    sb.AppendLine($"• 🛡️ **{p.Name}** (`{p.LevelBadge}`) — `{p.PingBadge}` | 📍 *{p.Location}*{steamTag}");
+                }
+            }
+            else
+            {
+                sb.AppendLine(active 
+                    ? "*No pioneers currently in realm. Server standing by for connections.*"
+                    : "*Realm is sleeping to conserve resources. Launch launcher or type `/start` to boot.*");
+            }
+            sb.AppendLine();
+
+            // Autonomous Watchdog section
+            sb.AppendLine("### ⏳ Inactivity Auto-Shutdown");
+            if (!active)
+            {
+                sb.AppendLine("💤 **Standby Mode**: Server is resting. Type `/start` or click **LAUNCH GAME** in the launcher to wake.");
+            }
+            else if (PlayerCount > 0)
+            {
+                sb.AppendLine($"🟢 **Active Session**: Auto-shutdown paused while **{PlayerCount}** pioneer(s) are exploring.");
+            }
+            else if (IdleShutdownEnabled)
+            {
+                int remMin = Math.Max(0, IdleSecondsRemaining / 60);
+                int remSec = Math.Max(0, IdleSecondsRemaining % 60);
+                sb.AppendLine($"⏳ **Countdown Active**: Server will save & sleep in **{remMin}m {remSec:D2}s** if no players join.");
+            }
+            else
+            {
+                sb.AppendLine("🛡️ **24/7 Always-On**: Inactivity auto-shutdown is disabled.");
+            }
+            sb.AppendLine();
+
+            // Connection Guide & Shortcuts
+            sb.AppendLine("### 🎮 Quick Connection Guide");
+            sb.AppendLine("1. Open **PalOdyssey Launcher** ➔ Click **LAUNCH GAME** (copies IP automatically).");
+            sb.AppendLine("2. Or In-Game: **Join Multiplayer Game** ➔ Enter `palodyssey.duckdns.org:8211` ➔ Connect.");
+            sb.AppendLine();
+            sb.AppendLine($"💡 *Shortcuts:* `/start` • `/shop` • `/exchange` • `/inventory` • `/gacha` • `/help`");
+            sb.AppendLine($"🔄 *Last Synchronized:* <t:{unixSeconds}:R>");
+
+            return sb.ToString();
+        }
     }
 }
+

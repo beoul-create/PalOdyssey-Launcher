@@ -328,20 +328,20 @@ namespace PalLauncher.Tests
                 Assert.True(rec1.Success);
                 Assert.Equal(2, rec1.PointsAwarded);
 
-                // 2x Diamond (+2 each = +4 pts)
+                // 2x Diamond (+6 each = +12 pts)
                 var rec2 = await economyService.ExecuteRecycleAsync(playerUid, "diamond", 2);
                 Assert.True(rec2.Success);
-                Assert.Equal(4, rec2.PointsAwarded);
+                Assert.Equal(12, rec2.PointsAwarded);
 
-                // 1x Epic Schematic (+3 pts)
+                // 1x Epic Schematic (+7 pts)
                 var rec3 = await economyService.ExecuteRecycleAsync(playerUid, "schematic_epic", 1);
                 Assert.True(rec3.Success);
-                Assert.Equal(3, rec3.PointsAwarded);
+                Assert.Equal(7, rec3.PointsAwarded);
 
-                // Total earned: 2 + 4 + 3 = 9 points. 68 + 9 = 77 points.
+                // Total earned: 2 + 12 + 7 = 21 points. 68 + 21 = 89 points.
                 var pFinal = await saveService.ReadPlayerProfileAsync(playerUid);
                 Assert.NotNull(pFinal);
-                Assert.Equal(77, pFinal.TechnologyPoints);
+                Assert.Equal(89, pFinal.TechnologyPoints);
             }
             finally
             {

@@ -41,20 +41,14 @@ namespace PalLauncher.Services
         public bool IsRunning => _isRunning;
         public int Port => _port;
 
-        private static readonly HttpClient _palServerClient = CreatePalServerHttpClient();
+        private readonly HttpClient _palServerClient = new HttpClient { Timeout = TimeSpan.FromSeconds(5) };
+        private readonly IConfigService _configService;
 
-        private static HttpClient CreatePalServerHttpClient()
-        {
-            var client = new HttpClient { Timeout = TimeSpan.FromSeconds(2) };
-            var authBytes = Encoding.UTF8.GetBytes("admin:0012");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
-            return client;
-        }
-
-        public RemoteServerDaemon(ILogService logService, ILaunchService launchService)
+        public RemoteServerDaemon(ILogService logService, ILaunchService launchService, IConfigService? configService = null)
         {
             _logService = logService;
             _launchService = launchService;
+            _configService = configService ?? new ConfigService(logService);
         }
 
         public void ConfigureIdleAutoShutdown(bool enabled, int minutes)
@@ -560,9 +554,19 @@ namespace PalLauncher.Services
                                         try
                                         {
                                             // 1. Issue graceful world save via REST API
+                                            var config = _configService?.Config;
+                                            if (config == null) return;
+                                            
+                                            string password = config.ServerAdminPassword ?? "";
+                                            int port = config.RestApiPort > 0 ? config.RestApiPort : 8212;
+                                            string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"admin:{password}"));
+                                            var authHeader = new AuthenticationHeaderValue("Basic", credentials);
+
                                             try
                                             {
-                                                await _palServerClient.PostAsync("http://127.0.0.1:8212/v1/api/save", null);
+                                                var saveReq = new HttpRequestMessage(HttpMethod.Post, $"http://127.0.0.1:{port}/v1/api/save");
+                                                saveReq.Headers.Authorization = authHeader;
+                                                await _palServerClient.SendAsync(saveReq);
                                                 _logService.LogSuccess("World save completed prior to shutdown.", "AutoShutdown");
                                             }
                                             catch { }
@@ -570,8 +574,10 @@ namespace PalLauncher.Services
                                             // 2. Issue graceful shutdown command via REST API
                                             try
                                             {
-                                                var content = new StringContent("{\"waittime\": 5, \"message\": \"PalOdyssey Server shutting down due to inactivity.\"}", Encoding.UTF8, "application/json");
-                                                await _palServerClient.PostAsync("http://127.0.0.1:8212/v1/api/shutdown", content);
+                                                var shutdownReq = new HttpRequestMessage(HttpMethod.Post, $"http://127.0.0.1:{port}/v1/api/shutdown");
+                                                shutdownReq.Headers.Authorization = authHeader;
+                                                shutdownReq.Content = new StringContent("{\"waittime\": 5, \"message\": \"PalOdyssey Server shutting down due to inactivity.\"}", Encoding.UTF8, "application/json");
+                                                await _palServerClient.SendAsync(shutdownReq);
                                             }
                                             catch { }
 
@@ -610,8 +616,22 @@ namespace PalLauncher.Services
         {
             try
             {
+                var config = _configService?.Config;
+                if (config == null)
+                {
+                    _logService.LogWarning("Telemetry skipped: ConfigService or Config is null.", "Telemetry");
+                    return;
+                }
+                
+                string password = config.ServerAdminPassword ?? "";
+                int port = config.RestApiPort > 0 ? config.RestApiPort : 8212;
+                string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"admin:{password}"));
+                var authHeader = new AuthenticationHeaderValue("Basic", credentials);
+
                 // 1. Query Active Players
-                var playersResp = await _palServerClient.GetAsync("http://127.0.0.1:8212/v1/api/players");
+                var playersReq = new HttpRequestMessage(HttpMethod.Get, $"http://127.0.0.1:{port}/v1/api/players");
+                playersReq.Headers.Authorization = authHeader;
+                var playersResp = await _palServerClient.SendAsync(playersReq);
                 if (playersResp.IsSuccessStatusCode)
                 {
                     string json = await playersResp.Content.ReadAsStringAsync();
@@ -626,6 +646,10 @@ namespace PalLauncher.Services
                             string loc = item.TryGetProperty("location", out var l) ? l.GetString() ?? "Palpagos Islands" : "Palpagos Islands";
                             int level = item.TryGetProperty("level", out var lvl) ? (lvl.ValueKind == JsonValueKind.Number ? lvl.GetInt32() : 1) : 1;
                             string steamId = item.TryGetProperty("userId", out var uid) ? uid.GetString() ?? "" : "";
+                            // Also try accountId which is sometimes used
+                            if (string.IsNullOrEmpty(steamId) && item.TryGetProperty("accountId", out var aid)) {
+                                steamId = aid.GetString() ?? "";
+                            }
                             list.Add(new PlayerInfo { Name = name, PingMs = ping, Location = loc, Level = level, SteamId = steamId });
                         }
 
@@ -636,11 +660,19 @@ namespace PalLauncher.Services
                         }
                     }
                 }
+                else
+                {
+                    // API returned a non-success status — clear stale player data
+                    _logService.LogWarning($"Palworld REST API returned {(int)playersResp.StatusCode} ({playersResp.ReasonPhrase}) on /v1/api/players. Password or port mismatch? (port={port})", "Telemetry");
+                    lock (_lock) { _activePlayers.Clear(); }
+                }
 
                 // 2. Query Server Metrics (FPS)
                 try
                 {
-                    var metricsResp = await _palServerClient.GetAsync("http://127.0.0.1:8212/v1/api/metrics");
+                    var metricsReq = new HttpRequestMessage(HttpMethod.Get, $"http://127.0.0.1:{port}/v1/api/metrics");
+                    metricsReq.Headers.Authorization = authHeader;
+                    var metricsResp = await _palServerClient.SendAsync(metricsReq);
                     if (metricsResp.IsSuccessStatusCode)
                     {
                         string mJson = await metricsResp.Content.ReadAsStringAsync();
@@ -656,7 +688,9 @@ namespace PalLauncher.Services
                 // 3. Query Server Info
                 try
                 {
-                    var infoResp = await _palServerClient.GetAsync("http://127.0.0.1:8212/v1/api/info");
+                    var infoReq = new HttpRequestMessage(HttpMethod.Get, $"http://127.0.0.1:{port}/v1/api/info");
+                    infoReq.Headers.Authorization = authHeader;
+                    var infoResp = await _palServerClient.SendAsync(infoReq);
                     if (infoResp.IsSuccessStatusCode)
                     {
                         string iJson = await infoResp.Content.ReadAsStringAsync();
@@ -673,9 +707,21 @@ namespace PalLauncher.Services
                 }
                 catch { }
             }
-            catch
+            catch (TaskCanceledException)
             {
-                // PalServer REST API offline or starting up
+                // HTTP timeout — PalServer REST API likely still starting up; clear stale data
+                lock (_lock) { _activePlayers.Clear(); }
+            }
+            catch (HttpRequestException ex)
+            {
+                // Connection refused / network error — PalServer REST API offline
+                _logService.LogWarning($"Telemetry connection failed (REST API may be starting): {ex.Message}", "Telemetry");
+                lock (_lock) { _activePlayers.Clear(); }
+            }
+            catch (Exception ex)
+            {
+                // Unexpected error — log it instead of swallowing
+                _logService.LogWarning($"Telemetry query error: {ex.Message}", "Telemetry");
             }
         }
 

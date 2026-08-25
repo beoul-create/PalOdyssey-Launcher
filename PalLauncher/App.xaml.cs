@@ -71,7 +71,7 @@ namespace PalLauncher
                 var crashLogService = new CrashLogService(_logService);
                 _launchService = new LaunchService(_logService, crashLogService);
                 var specService = new SystemSpecService(_logService);
-                var remoteDaemon = new RemoteServerDaemon(_logService, _launchService);
+                var remoteDaemon = new RemoteServerDaemon(_logService, _launchService, _configService);
                 var remoteClient = new RemoteClientService(_logService);
                 var discordRpc = new DiscordRpcService(_logService);
                 var steamDetection = new SteamDetectionService(_logService);
@@ -105,6 +105,12 @@ namespace PalLauncher
                         {
                             if (MainWindow != null)
                             {
+                                if (_mainViewModel != null)
+                                {
+                                    _mainViewModel.ActiveView = "Dashboard";
+                                    _mainViewModel.RefreshSteamProfile();
+                                    _mainViewModel.AccountLink = discordAuth.GetCurrentLinkInfo();
+                                }
                                 MainWindow.Show();
                                 MainWindow.WindowState = WindowState.Normal;
                                 MainWindow.ShowInTaskbar = true;
@@ -135,6 +141,12 @@ namespace PalLauncher
                     {
                         if (MainWindow != null)
                         {
+                            if (_mainViewModel != null)
+                            {
+                                _mainViewModel.ActiveView = "Dashboard";
+                                _mainViewModel.RefreshSteamProfile();
+                                _mainViewModel.AccountLink = discordAuth.GetCurrentLinkInfo();
+                            }
                             MainWindow.Show();
                             MainWindow.WindowState = WindowState.Normal;
                             MainWindow.ShowInTaskbar = true;

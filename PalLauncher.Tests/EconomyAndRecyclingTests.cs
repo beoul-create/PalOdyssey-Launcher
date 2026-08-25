@@ -110,48 +110,48 @@ namespace PalLauncher.Tests
             Assert.NotNull(pelt);
             Assert.Equal(0.5, pelt.PointsMultiplier);
 
-            // Ruby: 1 pt each
+            // Ruby: 3 pts each
             var ruby = economyService.FindRecyclableItem("ruby");
             Assert.NotNull(ruby);
-            Assert.Equal(1.0, ruby.PointsMultiplier);
+            Assert.Equal(3.0, ruby.PointsMultiplier);
 
-            // Diamond: 2 pts each
+            // Diamond: 6 pts each
             var diamond = economyService.FindRecyclableItem("diamond");
             Assert.NotNull(diamond);
-            Assert.Equal(2.0, diamond.PointsMultiplier);
+            Assert.Equal(6.0, diamond.PointsMultiplier);
 
-            // Bronze Keys: 1 pt per 3 keys
+            // Bronze Keys: 1 pt per key
             var bronzeKey = economyService.FindRecyclableItem("bronze_key");
             Assert.NotNull(bronzeKey);
-            Assert.Equal(3, bronzeKey.MinQuantityForOnePoint);
+            Assert.Equal(1, bronzeKey.MinQuantityForOnePoint);
 
-            // Silver Key: 1 pt each
+            // Silver Key: 2 pt each
             var silverKey = economyService.FindRecyclableItem("silver_key");
             Assert.NotNull(silverKey);
-            Assert.Equal(1.0, silverKey.PointsMultiplier);
+            Assert.Equal(2.0, silverKey.PointsMultiplier);
 
-            // Gold Key: 2 pts each
+            // Gold Key: 5 pts each
             var goldKey = economyService.FindRecyclableItem("gold_key");
             Assert.NotNull(goldKey);
-            Assert.Equal(2.0, goldKey.PointsMultiplier);
+            Assert.Equal(5.0, goldKey.PointsMultiplier);
 
-            // Ancient Civ Parts: 1 pt per 5 parts
+            // Ancient Civ Parts: 1 pt per 2 parts
             var civParts = economyService.FindRecyclableItem("ancient_parts");
             Assert.NotNull(civParts);
-            Assert.Equal(5, civParts.MinQuantityForOnePoint);
+            Assert.Equal(2, civParts.MinQuantityForOnePoint);
 
             // Schematics T1, T2, T3
             var t1 = economyService.FindRecyclableItem("schematic_uncommon");
             Assert.NotNull(t1);
-            Assert.Equal(1.0, t1.PointsMultiplier);
+            Assert.Equal(2.0, t1.PointsMultiplier);
 
             var t2 = economyService.FindRecyclableItem("schematic_rare");
             Assert.NotNull(t2);
-            Assert.Equal(2.0, t2.PointsMultiplier);
+            Assert.Equal(4.0, t2.PointsMultiplier);
 
             var t3 = economyService.FindRecyclableItem("schematic_epic");
             Assert.NotNull(t3);
-            Assert.Equal(3.0, t3.PointsMultiplier);
+            Assert.Equal(7.0, t3.PointsMultiplier);
         }
 
         [Fact]
@@ -258,24 +258,24 @@ namespace PalLauncher.Tests
                 var saveService = new PalSaveService(_logService, tempDir);
                 var economyService = new EconomyService(_logService, saveService, customStateFilePath: Path.Combine(tempDir, "test_economy_state.json"));
 
-                // 1. Recycle 4x Diamonds (+2 pts each = +8 pts)
+                // 1. Recycle 4x Diamonds (+6 pts each = +24 pts)
                 var receipt = await economyService.ExecuteRecycleAsync(playerUid, "diamond", 4);
                 Assert.True(receipt.Success);
-                Assert.Equal(8, receipt.PointsAwarded);
+                Assert.Equal(24, receipt.PointsAwarded);
                 Assert.Equal(10, receipt.PreviousTechPoints);
-                Assert.Equal(18, receipt.NewTechPoints);
+                Assert.Equal(34, receipt.NewTechPoints);
 
-                // 2. Recycle 10x Ancient Civ Parts (1 pt per 5 = +2 pts)
+                // 2. Recycle 10x Ancient Civ Parts (1 pt per 2 = +5 pts)
                 var receipt2 = await economyService.ExecuteRecycleAsync(playerUid, "civparts", 10);
                 Assert.True(receipt2.Success);
-                Assert.Equal(2, receipt2.PointsAwarded);
-                Assert.Equal(18, receipt2.PreviousTechPoints);
-                Assert.Equal(20, receipt2.NewTechPoints);
+                Assert.Equal(5, receipt2.PointsAwarded);
+                Assert.Equal(34, receipt2.PreviousTechPoints);
+                Assert.Equal(39, receipt2.NewTechPoints);
 
-                // 3. Verify character save has 20 Tech Points
+                // 3. Verify character save has 39 Tech Points
                 var profile = await economyService.GetPlayerProfileAsync(playerUid);
                 Assert.NotNull(profile);
-                Assert.Equal(20, profile.TechnologyPoints);
+                Assert.Equal(39, profile.TechnologyPoints);
             }
             finally
             {

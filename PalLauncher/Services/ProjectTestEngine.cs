@@ -232,7 +232,7 @@ namespace PalLauncher.Services
 
             int testPort = 19800 + Random.Shared.Next(10, 400);
             string secretKey = "ProjectTestSecureKey";
-            var daemon = new RemoteServerDaemon(_logService, _launchService);
+            var daemon = new RemoteServerDaemon(_logService, _launchService, _configService);
             var client = new RemoteClientService(_logService);
 
             try

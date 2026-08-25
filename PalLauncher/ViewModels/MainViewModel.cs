@@ -289,7 +289,7 @@ namespace PalLauncher.ViewModels
             _launchService = launchService;
             _logService = logService;
             _specService = specService ?? new SystemSpecService(_logService);
-            _remoteDaemon = remoteDaemon ?? new RemoteServerDaemon(_logService, _launchService);
+            _remoteDaemon = remoteDaemon ?? new RemoteServerDaemon(_logService, _launchService, _configService);
             _remoteClient = remoteClient ?? new RemoteClientService(_logService);
             _discordRpc = discordRpc ?? new DiscordRpcService(_logService);
             

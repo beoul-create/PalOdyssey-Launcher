@@ -52,16 +52,23 @@ namespace PalLauncher.Services
                     {
                         foreach (var player in playersArray.EnumerateArray())
                         {
-                            if (player.TryGetProperty("userId", out var userIdProp) || player.TryGetProperty("accountId", out userIdProp))
+                            string? onlineUserId = null;
+                            string? onlineAccountId = null;
+                            
+                            if (player.TryGetProperty("userId", out var uProp)) onlineUserId = uProp.GetString();
+                            if (player.TryGetProperty("accountId", out var aProp)) onlineAccountId = aProp.GetString();
+
+                            bool matchUser = !string.IsNullOrWhiteSpace(onlineUserId) && 
+                                (onlineUserId.Equals(steamId, StringComparison.OrdinalIgnoreCase) || 
+                                 onlineUserId.Equals($"Steam_{steamId}", StringComparison.OrdinalIgnoreCase));
+                                 
+                            bool matchAccount = !string.IsNullOrWhiteSpace(onlineAccountId) && 
+                                (onlineAccountId.Equals(steamId, StringComparison.OrdinalIgnoreCase) || 
+                                 onlineAccountId.Equals($"Steam_{steamId}", StringComparison.OrdinalIgnoreCase));
+
+                            if (matchUser || matchAccount)
                             {
-                                string? onlineUserId = userIdProp.GetString();
-                                // The API typically returns Steam IDs as "Steam_76561198..." or just the ID
-                                if (!string.IsNullOrWhiteSpace(onlineUserId) && 
-                                    (onlineUserId.Equals(steamId, StringComparison.OrdinalIgnoreCase) || 
-                                     onlineUserId.Equals($"Steam_{steamId}", StringComparison.OrdinalIgnoreCase)))
-                                {
-                                    return true;
-                                }
+                                return true;
                             }
                         }
                     }

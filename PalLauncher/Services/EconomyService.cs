@@ -459,7 +459,9 @@ namespace PalLauncher.Services
 
         private void QueueDelivery(string playerUid, string action, string itemCode, int quantity, int techPointsDelta)
         {
-            string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PalLauncher");
+            string localAppData = Environment.GetEnvironmentVariable("LOCALAPPDATA") ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string dir = Path.Combine(localAppData, "PalLauncher");
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
             string queueFile = Path.Combine(dir, "pending-deliveries.csv");
             
             lock (_lock)

@@ -14,10 +14,10 @@
 Getting started takes less than 60 seconds:
 
 1. **Download the Launcher**:
-   - Click the green **`<> Code`** button above ➔ select **`Download ZIP`** (or clone the repository: `git clone https://github.com/beoul-create/PalOdyssey-Launcher.git`).
+   - Download **`PalOdyssey-Launcher-v2.0.0.zip`** from this repository (or from [Releases](https://github.com/beoul-create/PalOdyssey-Launcher/releases)).
    - Extract the zip folder anywhere on your PC.
-2. **Double-Click `PalLauncher.exe`**:
-   - Double-click **`PalLauncher.exe`** in the extracted folder.
+2. **Launch `PalLauncher.exe`**:
+   - Double-click **`PalLauncher.exe`** inside the extracted folder.
    - The launcher will start immediately and automatically detect your Steam Palworld installation.
 3. **1-Click Auto-Calibrate**:
    - Go to the **Launch Settings** tab ➔ Click **`⚡ AUTO-CALIBRATE & OPTIMIZE RIG`** to automatically configure the best performance settings for your hardware.
@@ -133,3 +133,5 @@ You can customize mod settings live while playing without restarting your game:
 ---
 
 **Developed with ❤️ for the Palworld & PalOdyssey Community.**
+
+
