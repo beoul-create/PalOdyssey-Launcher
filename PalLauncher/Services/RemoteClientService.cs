@@ -38,6 +38,23 @@ namespace PalLauncher.Services
 
         public async Task<RemoteServerStatus> QueryServerStatusAsync(string host, int managementPort, int timeoutMs = 2500)
         {
+            int port = managementPort > 0 ? managementPort : LauncherConfig.OfficialManagementPort;
+
+            // 1. Try local loopback first for instant response (<5ms) if running on same host
+            try
+            {
+                using var localCts = new CancellationTokenSource(400);
+                var localResp = await _httpClient.GetAsync($"http://127.0.0.1:{port}/api/status", localCts.Token);
+                if (localResp.IsSuccessStatusCode)
+                {
+                    string json = await localResp.Content.ReadAsStringAsync(localCts.Token);
+                    var status = JsonSerializer.Deserialize<RemoteServerStatus>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    if (status != null) { status.IsOnline = true; return status; }
+                }
+            }
+            catch { }
+
+            // 2. Query configured external/remote host
             string baseUrl = ResolveBaseUrl(host, managementPort);
             using var cts = new CancellationTokenSource(timeoutMs);
 
@@ -89,6 +106,26 @@ namespace PalLauncher.Services
 
         public async Task<ServerLiveboardInfo> FetchLiveboardAsync(string host, int managementPort, int timeoutMs = 2500)
         {
+            int port = managementPort > 0 ? managementPort : LauncherConfig.OfficialManagementPort;
+
+            // 1. Try local loopback first for instant response (<5ms) when running alongside daemon
+            try
+            {
+                using var localCts = new CancellationTokenSource(500);
+                var localResp = await _httpClient.GetAsync($"http://127.0.0.1:{port}/api/liveboard", localCts.Token);
+                if (localResp.IsSuccessStatusCode)
+                {
+                    string json = await localResp.Content.ReadAsStringAsync(localCts.Token);
+                    var liveboard = JsonSerializer.Deserialize<ServerLiveboardInfo>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    if (liveboard != null)
+                    {
+                        return liveboard;
+                    }
+                }
+            }
+            catch { }
+
+            // 2. Query configured external/remote host
             string baseUrl = ResolveBaseUrl(host, managementPort);
             using var cts = new CancellationTokenSource(timeoutMs);
 
@@ -121,7 +158,7 @@ namespace PalLauncher.Services
                 {
                     IsOnline = true,
                     IsServerRunning = true,
-                    ServerAddress = "127.0.0.1:8211",
+                    ServerAddress = "palodyssey.duckdns.org:8211",
                     ServerName = "PalOdyssey Realm",
                     PlayerCount = 0,
                     MaxPlayers = 32,

@@ -372,13 +372,18 @@ namespace PalLauncher.ViewModels
             };
             _uptimeTimer.Tick += (s, e) =>
             {
-                if (IsServerOnline && Liveboard != null)
+                if (Liveboard != null && (IsServerOnline || Liveboard.IsServerRunning))
                 {
-                    if (Liveboard.UptimeSeconds > 0)
+                    if (Liveboard.IsServerRunning)
                     {
                         Liveboard.UptimeSeconds += 1;
-                        OnPropertyChanged(nameof(Liveboard));
+                        if (Liveboard.IsIdleCountingDown && Liveboard.IdleSecondsRemaining > 0)
+                        {
+                            Liveboard.IdleSecondsRemaining--;
+                            Liveboard.IdleMinutesRemaining = (int)Math.Ceiling(Liveboard.IdleSecondsRemaining / 60.0);
+                        }
                     }
+                    OnPropertyChanged(nameof(Liveboard));
                 }
             };
             _uptimeTimer.Start();

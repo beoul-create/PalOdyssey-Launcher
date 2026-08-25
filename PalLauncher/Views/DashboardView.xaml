@@ -232,7 +232,19 @@
                     <!-- Active Players Presence Roster -->
                     <Border Background="#090E17" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12">
                         <StackPanel>
-                            <TextBlock Text="ACTIVE PIONEERS IN REALM" Foreground="{StaticResource BrushTextMuted}" FontSize="10.5" FontWeight="Bold" Margin="0,0,0,8" />
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="ACTIVE PIONEERS IN REALM" Foreground="{StaticResource BrushTextMuted}" FontSize="10" FontWeight="Bold" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                    <Border Background="#16243A" CornerRadius="4" Padding="6,2" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Liveboard.PlayerCountSummary, FallbackValue='0 / 32 Online'}" Foreground="{StaticResource BrushAccentCyan}" FontSize="10" FontWeight="Bold" />
+                                    </Border>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1" Text="Live Sync Active" Foreground="{StaticResource BrushSuccess}" FontSize="9.5" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            </Grid>
 
                             <!-- Active Player List (Visible when players > 0) -->
                             <ItemsControl ItemsSource="{Binding Liveboard.Players}" Visibility="{Binding Liveboard.HasActivePlayers, Converter={StaticResource BoolToVis}}">
@@ -243,14 +255,18 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Background="#121824" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" CornerRadius="6" Padding="10,6" Margin="0,0,8,8">
+                                        <Border Background="#101826" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1" CornerRadius="6" Padding="10,6" Margin="0,0,8,8">
                                             <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Name}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" Margin="0,0,8,0" />
-                                                <Border Background="#202A3C" CornerRadius="3" Padding="4,1" Margin="0,0,6,0">
-                                                    <TextBlock Text="{Binding LevelBadge}" Foreground="{StaticResource BrushAccentCyan}" FontSize="10" FontWeight="SemiBold" />
+                                                <TextBlock Text="🛡️" FontSize="11" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                                <TextBlock Text="{Binding Name}" Foreground="{StaticResource BrushTextPrimary}" FontSize="12" FontWeight="Bold" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                                <Border Background="#1E2A3E" CornerRadius="3" Padding="5,1" Margin="0,0,6,0" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding LevelBadge}" Foreground="{StaticResource BrushAccentCyan}" FontSize="10" FontWeight="Bold" />
                                                 </Border>
-                                                <TextBlock Text="{Binding PingBadge}" Foreground="{StaticResource BrushTextMuted}" FontSize="11" Margin="0,0,6,0" />
-                                                <TextBlock Text="{Binding Location}" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" />
+                                                <Border Background="#162030" CornerRadius="3" Padding="4,1" Margin="0,0,6,0" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding PingBadge}" Foreground="{StaticResource BrushSuccess}" FontSize="10" FontWeight="SemiBold" />
+                                                </Border>
+                                                <TextBlock Text="{Binding Location, StringFormat='📍 {0}'}" Foreground="{StaticResource BrushTextSecondary}" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0" />
+                                                <TextBlock Text="{Binding SteamId, StringFormat='({0})'}" Foreground="{StaticResource BrushTextMuted}" FontSize="10" VerticalAlignment="Center" Visibility="{Binding SteamId, Converter={StaticResource NullOrEmptyToVis}}" />
                                             </StackPanel>
                                         </Border>
                                     </DataTemplate>
@@ -258,7 +274,7 @@
                             </ItemsControl>
 
                             <!-- Standby Empty State (Visible when 0 players) -->
-                            <StackPanel Orientation="Horizontal" Visibility="{Binding Liveboard.HasNoPlayers, Converter={StaticResource BoolToVis}}" Margin="0,2,0,2">
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding Liveboard.HasNoPlayers, Converter={StaticResource BoolToVis}}" Margin="0,4,0,2">
                                 <Path Data="{StaticResource IconPlay}" Fill="{StaticResource BrushTextMuted}" Width="10" Height="10" Stretch="Uniform" Margin="0,0,8,0" VerticalAlignment="Center" />
                                 <TextBlock Text="No active pioneers currently in realm. Server is standing by — auto-wake activates on launch." Foreground="{StaticResource BrushTextMuted}" FontSize="11.5" VerticalAlignment="Center" />
                             </StackPanel>
