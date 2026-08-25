@@ -41,7 +41,9 @@ $RECYCLE.BIN/
 /run-dev.*
 /[Dd]eploy-[Mm]odpack.*
 /Install-PalOdyssey-*
+dev-tools/
 server-tools/
+
 
 # Local benchmark output & submodules
 benchmark_*.json

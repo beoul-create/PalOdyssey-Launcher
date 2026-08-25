@@ -14,12 +14,13 @@ This document is a navigation guide for maintaining the **PalOdyssey Launcher**,
 | **`PalOdyssey-Launcher-v2.0.0.zip`** | 🌐 **Release Package** | Pre-packaged executable archive for players to download. | **YES** |
 | **`README.md`** | 🌐 **Documentation** | Player quick-start guide, mod settings, and troubleshooting. | **YES** |
 | **`DEVELOPMENT.md`** | 🌐 **Documentation** | Developer workflow guide (this file). | **YES** |
-| **`dev-tools/`** | 🛠️ **Development** | Developer runners (`run-dev.bat`), test runners (`run-tests.bat`), and packagers. | **YES** |
 | **`PalLauncher.Tests/`** | 🛠️ **Testing** | 89 automated unit, integration, and regression tests. | **YES** |
-| **`server-tools/`** | 🖥️ **Server Hosting** | 24/7 PM2 bot runners, task schedulers, and dedicated server deployers. | **YES** |
 | **`tools/playit/`** | 🖥️ **Network Tools** | Tunneling binary for co-op server hosting. | **YES** |
-| `bot_token.txt` | 🔒 **Local Secret** | Discord bot token for the 24/7 daemon. | ❌ (Ignored in `.gitignore`) |
-| `publish/`, `bin/`, `obj/` | ⚙️ **Build Output** | Intermediate build binaries. | ❌ (Ignored in `.gitignore`) |
+| **`dev-tools/`** | 🛠️ **Local Dev Only** | Developer runners (`run-dev.bat`), test runners (`run-tests.bat`), and release packagers. | ❌ (Local Only - `.gitignore`) |
+| **`server-tools/`** | 🖥️ **Local Host Only** | 24/7 PM2 bot runners, task schedulers, and dedicated server deployers. | ❌ (Local Only - `.gitignore`) |
+| `bot_token.txt` | 🔒 **Local Secret** | Discord bot token for the 24/7 daemon. | ❌ (Local Only - `.gitignore`) |
+| `publish/`, `bin/`, `obj/` | ⚙️ **Build Output** | Intermediate build binaries. | ❌ (Local Only - `.gitignore`) |
+
 
 ---
 
