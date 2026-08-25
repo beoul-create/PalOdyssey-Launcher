@@ -60,8 +60,8 @@
             "version": "1.0.0",
             "description": "Auto-detects and teleports stuck base worker Pals back to the Palbox",
             "relativeInstallPath": "Pal\\Binaries\\Win64\\ue4ss\\Mods\\StuckPalRescuer\\Scripts\\main.lua",
-            "sizeBytes": 5005,
-            "sha256": "ABA8987D9891B1D6E13B68CA98687CF8B118D9C990D64CA1C645A3219DB8EC50",
+            "sizeBytes": 4943,
+            "sha256": "3A384F34468B5FB11223DD58C47F7EAB1EB7887D773EE4AD320F6A8DD72697CA",
             "required": false,
             "enabledByDefault": true
         },
@@ -72,8 +72,8 @@
             "version": "1.2.0",
             "description": "Synthesized rendering: Fog veil removal, night atmosphere, LOD draw distance, ultrawide fixes, and frame pacing",
             "relativeInstallPath": "Pal\\Binaries\\Win64\\ue4ss\\Mods\\PalClearVision\\Scripts\\main.lua",
-            "sizeBytes": 3371,
-            "sha256": "6933EF3D6E6562726A53C839482C363F05C691CF14C9735135672A5B876DEC83",
+            "sizeBytes": 3811,
+            "sha256": "68B189CB21554D7EFE793853C52E27DAD39EFA35D71AAAFF21174CF0082ED250",
             "required": false,
             "enabledByDefault": true
         },
@@ -108,8 +108,8 @@
             "version": "1.0.0",
             "description": "Magical shimmer and star-glint particle aura for Lucky / Rare Pals",
             "relativeInstallPath": "Pal\\Binaries\\Win64\\ue4ss\\Mods\\ShiningLuckies\\Scripts\\main.lua",
-            "sizeBytes": 4723,
-            "sha256": "8A1EA5C9F3D743003D630D462F193629F5F293579809A2CCFFD6CF673A8C4DE3",
+            "sizeBytes": 4392,
+            "sha256": "09B15CEFB9592FA307BAF0B0912EE67938FC1BC28F760AD042CD0D5A662C9DA8",
             "required": false,
             "enabledByDefault": true
         },

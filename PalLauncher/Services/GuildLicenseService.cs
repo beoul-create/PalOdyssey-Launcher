@@ -46,6 +46,7 @@ namespace PalLauncher.Services
         Task<GuildLicenseState?> GetGuildStateAsync(string guildId);
         Task<bool> DepositToBankAsync(string guildId, string playerUid, int amount);
         Task<bool> PurchaseInfrastructureAsync(string guildId, string playerUid, string structureType, int cost);
+        Task<bool> UpdateGuildNameAsync(string guildId, string guildName);
     }
 
     public class GuildLicenseService : IGuildLicenseService
@@ -98,18 +99,40 @@ namespace PalLauncher.Services
 
         private void SaveData()
         {
+            string json;
             lock (_fileLock)
             {
                 try
                 {
-                    string json = JsonSerializer.Serialize(_data, new JsonSerializerOptions { WriteIndented = true });
-                    File.WriteAllText(_licenseFilePath, json);
-                    _logService.LogSuccess($"[SUCCESS] Saved guild licenses to {_licenseFilePath}.", "GuildLicenseService");
+                    json = JsonSerializer.Serialize(_data, new JsonSerializerOptions { WriteIndented = true });
                 }
                 catch (Exception ex)
                 {
-                    _logService.LogError($"[ERROR] Failed to save guild-licenses.json: {ex.Message}", "GuildLicenseService", ex);
+                    _logService.LogError($"[ERROR] Failed to serialize guild-licenses.json: {ex.Message}", "GuildLicenseService", ex);
+                    return;
                 }
+            }
+
+            try
+            {
+                File.WriteAllText(_licenseFilePath, json);
+                _logService.LogSuccess($"[SUCCESS] Saved guild licenses to {_licenseFilePath}.", "GuildLicenseService");
+            }
+            catch (Exception ex)
+            {
+                _logService.LogError($"[ERROR] Failed to save guild-licenses.json: {ex.Message}", "GuildLicenseService", ex);
+            }
+        }
+
+        public Task<bool> UpdateGuildNameAsync(string guildId, string guildName)
+        {
+            if (string.IsNullOrWhiteSpace(guildId) || string.IsNullOrWhiteSpace(guildName)) return Task.FromResult(false);
+            lock (_fileLock)
+            {
+                var state = EnsureGuild(guildId);
+                state.GuildName = guildName;
+                SaveData();
+                return Task.FromResult(true);
             }
         }
 

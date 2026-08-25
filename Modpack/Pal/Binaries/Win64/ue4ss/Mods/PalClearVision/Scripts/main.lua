@@ -52,11 +52,12 @@ local function ApplyVisualTweaks()
             ExecuteConsoleCommand("r.Lumen.DiffuseIndirect.MinRoughness 0.1")
         end
 
-        -- 3. Enhanced LOD & Draw Distance
+        -- 3. Enhanced LOD & Draw Distance (Tuned for Zero Stutter)
         if Config.enhancedLODDistance then
-            ExecuteConsoleCommand("r.ViewDistanceScale 1.5")
-            ExecuteConsoleCommand("foliage.LODDistanceScale 1.5")
-            ExecuteConsoleCommand("r.StaticMeshLODDistanceScale 0.85")
+            ExecuteConsoleCommand("r.ViewDistanceScale 1.15")
+            ExecuteConsoleCommand("foliage.LODDistanceScale 1.05")
+            ExecuteConsoleCommand("r.StaticMeshLODDistanceScale 1.0")
+            ExecuteConsoleCommand("r.MeshLODRange 1.0")
         end
 
         -- 4. Ultra-Wide 21:9 & 32:9 HUD Fix
@@ -64,22 +65,27 @@ local function ApplyVisualTweaks()
             ExecuteConsoleCommand("r.AspectRatioAxisConstraint 1")
         end
 
-        -- 5. Async Texture Streaming & Stutter Fix
+        -- 5. Async Texture Streaming & Stutter Elimination
         if Config.asyncTextureStreaming then
             ExecuteConsoleCommand("r.TextureStreaming 1")
+            ExecuteConsoleCommand("r.Streaming.AmortizeCPUWork 1")
+            ExecuteConsoleCommand("r.Streaming.FramesForFullUpdate 20")
             ExecuteConsoleCommand("r.Streaming.HLODStrategy 1")
             ExecuteConsoleCommand("r.Streaming.DefragDynamicBounds 1")
+            ExecuteConsoleCommand("r.Streaming.LimitPoolSizeToVRAM 1")
         end
 
-        -- 6. Frame Pacing & Latency
+        -- 6. Frame Pacing & Low-Latency Sync
         if Config.framePacingReflex then
+            ExecuteConsoleCommand("r.GTSyncType 1")
             ExecuteConsoleCommand("r.OneFrameThreadLag 1")
             ExecuteConsoleCommand("r.FinishCurrentFrame 0")
         end
 
-        -- 7. Enhanced Upscaling Reconstruction
+        -- 7. Enhanced Upscaling Reconstruction & Anti-Aliasing
         if Config.enhancedUpscaling then
             ExecuteConsoleCommand("r.TSR.ShadingRejection.Flickering 1")
+            ExecuteConsoleCommand("r.TemporalAA.Upsampling 1")
         end
 
         Log("Applied comprehensive visual, lighting, LOD, and upscaling enhancements.")

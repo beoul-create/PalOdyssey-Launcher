@@ -105,30 +105,15 @@ local function CheckIfRarePal(pal)
     return isRare
 end
 
--- 1. Hook Spawn of PalCharacter
+-- 1. Hook Spawn of PalCharacter (Event-Driven, Zero-Stutter)
 pcall(function()
     NotifyOnNewObject("/Script/Pal.PalCharacter", function(pal)
-        ExecuteWithDelay(200, function()
-            if CheckIfRarePal(pal) then
+        ExecuteWithDelay(250, function()
+            if pal and pal:IsValid() and CheckIfRarePal(pal) then
                 EnhanceLuckyPal(pal)
             end
         end)
     end)
 end)
 
--- 2. Periodic Scan for loaded world Pals
-LoopAsync(2000, function()
-    pcall(function()
-        local pals = FindAllOf("PalCharacter")
-        if pals then
-            for _, pal in ipairs(pals) do
-                if CheckIfRarePal(pal) then
-                    EnhanceLuckyPal(pal)
-                end
-            end
-        end
-    end)
-    return false -- Loop continuously throughout gameplay
-end)
-
-Log("ShiningLuckies engine initialized & listening for Rare spawns.")
+Log("ShiningLuckies engine initialized & listening for Rare spawns (Event-Driven Mode).")

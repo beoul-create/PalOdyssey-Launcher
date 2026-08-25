@@ -52,21 +52,39 @@ namespace PalLauncher.Services
                     {
                         foreach (var player in playersArray.EnumerateArray())
                         {
+                            string? onlinePlayerId = null;
                             string? onlineUserId = null;
                             string? onlineAccountId = null;
+                            string? onlineName = null;
                             
+                            if (player.TryGetProperty("playerId", out var pProp)) onlinePlayerId = pProp.GetString();
                             if (player.TryGetProperty("userId", out var uProp)) onlineUserId = uProp.GetString();
                             if (player.TryGetProperty("accountId", out var aProp)) onlineAccountId = aProp.GetString();
+                            if (player.TryGetProperty("name", out var nProp)) onlineName = nProp.GetString();
+
+                            string cleanQuery = steamId.Trim();
+                            string cleanNoPrefix = cleanQuery.StartsWith("steam_", StringComparison.OrdinalIgnoreCase) 
+                                ? cleanQuery.Substring(6) 
+                                : cleanQuery;
+
+                            bool matchPlayerId = !string.IsNullOrWhiteSpace(onlinePlayerId) &&
+                                (onlinePlayerId.Equals(cleanQuery, StringComparison.OrdinalIgnoreCase) ||
+                                 onlinePlayerId.Replace("-", "").Equals(cleanQuery.Replace("-", ""), StringComparison.OrdinalIgnoreCase));
 
                             bool matchUser = !string.IsNullOrWhiteSpace(onlineUserId) && 
-                                (onlineUserId.Equals(steamId, StringComparison.OrdinalIgnoreCase) || 
-                                 onlineUserId.Equals($"Steam_{steamId}", StringComparison.OrdinalIgnoreCase));
+                                (onlineUserId.Equals(cleanQuery, StringComparison.OrdinalIgnoreCase) || 
+                                 onlineUserId.Equals($"steam_{cleanNoPrefix}", StringComparison.OrdinalIgnoreCase) ||
+                                 onlineUserId.Equals(cleanNoPrefix, StringComparison.OrdinalIgnoreCase));
                                  
                             bool matchAccount = !string.IsNullOrWhiteSpace(onlineAccountId) && 
-                                (onlineAccountId.Equals(steamId, StringComparison.OrdinalIgnoreCase) || 
-                                 onlineAccountId.Equals($"Steam_{steamId}", StringComparison.OrdinalIgnoreCase));
+                                (onlineAccountId.Equals(cleanQuery, StringComparison.OrdinalIgnoreCase) || 
+                                 onlineAccountId.Equals($"steam_{cleanNoPrefix}", StringComparison.OrdinalIgnoreCase) ||
+                                 onlineAccountId.Equals(cleanNoPrefix, StringComparison.OrdinalIgnoreCase));
 
-                            if (matchUser || matchAccount)
+                            bool matchName = !string.IsNullOrWhiteSpace(onlineName) &&
+                                onlineName.Equals(cleanQuery, StringComparison.OrdinalIgnoreCase);
+
+                            if (matchPlayerId || matchUser || matchAccount || matchName)
                             {
                                 return true;
                             }

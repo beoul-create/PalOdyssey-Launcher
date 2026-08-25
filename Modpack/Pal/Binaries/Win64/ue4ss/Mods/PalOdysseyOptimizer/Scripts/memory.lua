@@ -11,10 +11,8 @@ function MemoryModule.apply(cfg)
 
     local function performMemoryMaintenance()
         pcall(function()
-            -- Collect Unreal and Lua pending kills
-            collectgarbage("step", 500)
-            collectgarbage("collect")
-            print("[PalOdysseyOptimizer] Executed scheduled Working Set & Lua garbage collection pass.")
+            -- Perform non-intrusive incremental Lua GC step (zero frame hitching)
+            collectgarbage("step", 50)
         end)
 
         -- Re-queue next maintenance pass

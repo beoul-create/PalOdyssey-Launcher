@@ -69,20 +69,33 @@ local function RescuePal(palActor, baseLocation)
     end)
 end
 
+local registeredPals = {}
+
+local function RegisterPal(pal)
+    if not pal or not pal:IsValid() then return end
+    local ptrKey = tostring(pal:GetAddress())
+    registeredPals[ptrKey] = pal
+end
+
+pcall(function()
+    NotifyOnNewObject("/Script/Pal.PalCharacter", function(pal)
+        RegisterPal(pal)
+    end)
+end)
+
 local function ScanAndRescue()
     local now = os.time()
-    if now - lastScanTime < (Config.checkIntervalSeconds or 8) then return end
+    if now - lastScanTime < (Config.checkIntervalSeconds or 10) then return end
     lastScanTime = now
 
     pcall(function()
-        local palCharacters = FindAllOf("PalCharacter")
-        if not palCharacters then return end
-
-        for _, pal in ipairs(palCharacters) do
-            if pal and pal:IsValid() then
+        for ptrKey, pal in pairs(registeredPals) do
+            if not pal or not pal:IsValid() then
+                registeredPals[ptrKey] = nil
+                palTrackMap[ptrKey] = nil
+            else
                 local isBasePal = false
                 pcall(function()
-                    -- Check if Pal is assigned to a base or working
                     local param = pal.CharacterParameterComponent
                     if param and param:IsValid() then
                         local assignedBase = param:GetAssignedBaseCamp()
@@ -93,7 +106,6 @@ local function ScanAndRescue()
                 end)
 
                 local curLoc = pal:K2_GetActorLocation()
-                local ptrKey = tostring(pal:GetAddress())
 
                 if isBasePal and curLoc then
                     local entry = palTrackMap[ptrKey]
@@ -111,13 +123,11 @@ local function ScanAndRescue()
                         if dist < (Config.minMovementDistance or 30.0) then
                             entry.stuckDuration = entry.stuckDuration + dt
                             if entry.stuckDuration >= (Config.stuckThresholdSeconds or 18) then
-                                -- Pal is stuck!
                                 RescuePal(pal, nil)
                                 entry.stuckDuration = 0
                                 entry.lastLoc = { X = curLoc.X, Y = curLoc.Y, Z = curLoc.Z + 120.0 }
                             end
                         else
-                            -- Pal moved normally
                             entry.stuckDuration = 0
                             entry.lastLoc = { X = curLoc.X, Y = curLoc.Y, Z = curLoc.Z }
                         end
@@ -130,15 +140,10 @@ local function ScanAndRescue()
     end)
 end
 
--- Hook into Engine Tick / Game Mode loop for periodic scans
-NotifyOnNewObject("/Script/Pal.PalGameSetting", function(setting)
-    Log("PalGameSetting initialized - Stuck Pal Rescuer active.")
-end)
-
--- Register recurring scan hook on PlayerController or World loop
-LoopAsync(2000, function()
+-- Register recurring lightweight scan hook (Interval: 10s)
+LoopAsync(10000, function()
     ScanAndRescue()
     return false -- Keep repeating
 end)
 
-Log("StuckPalRescuer loaded successfully.")
+Log("StuckPalRescuer loaded successfully (Event-Registered Zero-Stutter Mode).")

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -47,6 +48,8 @@ namespace PalLauncher.Services
         private static readonly object _identityLock = new();
         private static readonly Dictionary<string, PlayerIdentityRecord> _playerIdentities = new(StringComparer.OrdinalIgnoreCase);
         private static bool _identitiesLoaded = false;
+        private static readonly ConcurrentDictionary<string, (string GuildId, string GuildName, DateTime Timestamp)> _guildCache = new(StringComparer.OrdinalIgnoreCase);
+        private static DateTime _lastLevelSavWriteTime = DateTime.MinValue;
         private static readonly string _identitiesFilePath = Path.Combine(
             Environment.GetEnvironmentVariable("LOCALAPPDATA") ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "PalLauncher", "player_identities.json");
@@ -255,8 +258,18 @@ MaxClientRate=100000
 MaxInternetClientRate=100000";
 
                 string gcSection = @"[/Script/Engine.GarbageCollectionSettings]
-gc.TimeBetweenPurgingPendingKillObjects=30
+gc.TimeBetweenPurgingPendingKillObjects=45
+gc.IncrementalBeginTimeSlice=0.002
+gc.MinDesiredTimeBetweenGarbageCollections=20
+gc.CreateGCClusters=True
+gc.ActorClusteringEnabled=True
 gc.NumRetriesBeforeForcingGC=5";
+
+                string sysSection = @"[SystemSettings]
+net.MaxNetTickRate=60
+net.MinNetUpdateFrequency=10
+r.TextureStreaming=0
+r.ShaderPipelineCache.BatchTime=2.0";
 
                 if (!engineContent.Contains("[/Script/OnlineSubsystemUtils.IpNetDriver]"))
                 {
@@ -268,8 +281,13 @@ gc.NumRetriesBeforeForcingGC=5";
                     engineContent = (engineContent.Trim() + Environment.NewLine + Environment.NewLine + gcSection).Trim();
                 }
 
+                if (!engineContent.Contains("[SystemSettings]"))
+                {
+                    engineContent = (engineContent.Trim() + Environment.NewLine + Environment.NewLine + sysSection).Trim();
+                }
+
                 await File.WriteAllTextAsync(engineIni, engineContent);
-                _logService.LogSuccess("Engine.ini optimized: Ghost Session Eviction (30s timeout) & Network Buffer (100kbps) active.", "ServerOptimizer");
+                _logService.LogSuccess("Engine.ini optimized: Ghost Session Eviction, 60Hz Net Tick, and Low-Overhead Server GC active.", "ServerOptimizer");
                 return true;
             }
             catch (Exception ex)
@@ -635,29 +653,58 @@ gc.NumRetriesBeforeForcingGC=5";
 
         public async Task<string?> ExtractGuildIdFromLevelSavAsync(string playerUid)
         {
+            if (string.IsNullOrWhiteSpace(playerUid)) return null;
+
+            string cleanUid = playerUid.Replace("-", "").ToUpperInvariant();
+
+            // 1. Check in-memory cache
+            if (_guildCache.TryGetValue(cleanUid, out var cached) && (DateTime.UtcNow - cached.Timestamp).TotalSeconds < 60)
+            {
+                return cached.GuildId;
+            }
+
             try
             {
                 var worldDir = FindSaveGamesDirectory();
-                if (string.IsNullOrEmpty(worldDir)) return null;
-
-                string levelSave = Path.Combine(worldDir, "Level.sav");
-                if (!File.Exists(levelSave)) return null;
-
-                // 1. Force flush to disk
-                await RequestWorldSaveAsync();
-
-                // 2. Read & Decompress Level.sav
-                byte[] rawBytes = await File.ReadAllBytesAsync(levelSave);
-                byte[] decompressed = DecompressPalSave(rawBytes);
-
-                // 3. Convert UID string to 16-byte FGuid
-                byte[] playerGuidBytes = new byte[16];
-                for (int i = 0; i < 16; i++)
+                if (string.IsNullOrEmpty(worldDir))
                 {
-                    playerGuidBytes[i] = Convert.ToByte(playerUid.Substring(i * 2, 2), 16);
+                    return TryResolveGuildFromLicenses(cleanUid) ?? $"{cleanUid}_guild";
                 }
 
-                // 4. Scan for the player's Guid
+                string levelSave = Path.Combine(worldDir, "Level.sav");
+                if (!File.Exists(levelSave))
+                {
+                    return TryResolveGuildFromLicenses(cleanUid) ?? $"{cleanUid}_guild";
+                }
+
+                var fileInfo = new FileInfo(levelSave);
+                if (fileInfo.LastWriteTimeUtc == _lastLevelSavWriteTime && _guildCache.TryGetValue(cleanUid, out var existing))
+                {
+                    return existing.GuildId;
+                }
+
+                // Request save if running
+                await RequestWorldSaveAsync();
+
+                byte[] rawBytes = await File.ReadAllBytesAsync(levelSave);
+                byte[] decompressed = DecompressPalSave(rawBytes);
+                _lastLevelSavWriteTime = fileInfo.LastWriteTimeUtc;
+
+                // Convert clean UID to 16-byte Guid
+                byte[] playerGuidBytes = new byte[16];
+                if (cleanUid.Length >= 32)
+                {
+                    for (int i = 0; i < 16; i++)
+                    {
+                        playerGuidBytes[i] = Convert.ToByte(cleanUid.Substring(i * 2, 2), 16);
+                    }
+                }
+                else
+                {
+                    Array.Copy(Encoding.ASCII.GetBytes(cleanUid.PadRight(16, '0')), playerGuidBytes, 16);
+                }
+
+                // Scan for the player's Guid
                 int playerIdx = -1;
                 for (int i = 0; i < decompressed.Length - 16; i++)
                 {
@@ -677,51 +724,128 @@ gc.NumRetriesBeforeForcingGC=5";
                     }
                 }
 
-                if (playerIdx == -1)
-                {
-                    _logService.LogWarning($"[GUILD] Could not locate Player UID {playerUid} in Level.sav", "SaveService");
-                    return null;
-                }
+                string resolvedGuildId = string.Empty;
+                string resolvedGuildName = "Guild";
 
-                // 5. Scan backwards to find group_id
-                int searchStart = Math.Max(0, playerIdx - 4000);
-                byte[] groupIDHeader = Encoding.ASCII.GetBytes("group_id");
-                
-                int groupIdIdx = -1;
-                for (int i = playerIdx; i >= searchStart; i--)
+                if (playerIdx != -1)
                 {
-                    bool match = true;
-                    for (int j = 0; j < groupIDHeader.Length; j++)
+                    // Scan backward & forward for group_id (up to 8000 bytes)
+                    int searchStart = Math.Max(0, playerIdx - 8000);
+                    int searchEnd = Math.Min(decompressed.Length - 8, playerIdx + 8000);
+                    byte[] groupIDHeader = Encoding.ASCII.GetBytes("group_id");
+
+                    int groupIdIdx = -1;
+                    for (int i = playerIdx; i >= searchStart; i--)
                     {
-                        if (decompressed[i + j] != groupIDHeader[j])
+                        bool match = true;
+                        for (int j = 0; j < groupIDHeader.Length; j++)
                         {
-                            match = false;
+                            if (decompressed[i + j] != groupIDHeader[j])
+                            {
+                                match = false;
+                                break;
+                            }
+                        }
+                        if (match)
+                        {
+                            groupIdIdx = i;
                             break;
                         }
                     }
-                    if (match)
+
+                    if (groupIdIdx == -1)
                     {
-                        groupIdIdx = i;
-                        break;
+                        for (int i = playerIdx; i <= searchEnd; i++)
+                        {
+                            bool match = true;
+                            for (int j = 0; j < groupIDHeader.Length; j++)
+                            {
+                                if (decompressed[i + j] != groupIDHeader[j])
+                                {
+                                    match = false;
+                                    break;
+                                }
+                            }
+                            if (match)
+                            {
+                                groupIdIdx = i;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (groupIdIdx != -1)
+                    {
+                        int guidOffset = FindAsciiSubstring(decompressed, "Guid", groupIdIdx, 128);
+                        if (guidOffset > 0)
+                        {
+                            int guidValueOffset = guidOffset + 4 + 1 + 16;
+                            if (guidValueOffset + 16 <= decompressed.Length)
+                            {
+                                var sb = new StringBuilder();
+                                for (int b = 0; b < 16; b++)
+                                {
+                                    sb.Append(decompressed[guidValueOffset + b].ToString("X2"));
+                                }
+                                string candidateGuid = sb.ToString();
+                                if (!candidateGuid.Equals("00000000000000000000000000000000", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    resolvedGuildId = candidateGuid;
+                                }
+                            }
+                        }
                     }
                 }
 
-                if (groupIdIdx != -1)
+                if (string.IsNullOrWhiteSpace(resolvedGuildId))
                 {
-                    // The Guid (16 bytes) usually follows the group_id header by ~30 bytes depending on property typing
-                    // Just return the playerUID for now as a fallback hash if we can't cleanly parse the Guid payload, 
-                    // or do a best effort search. Actually, it's safer to just return a stable hash of the player UID for the "Guild" identifier if we can't reliably get the group_id bytes.
-                    // For the sake of this mod, let's just return a valid string identifier.
-                    return playerUid + "_guild"; // Mock resolution for simplicity.
+                    resolvedGuildId = TryResolveGuildFromLicenses(cleanUid) ?? $"{cleanUid}_guild";
                 }
 
-                return null;
+                _guildCache[cleanUid] = (resolvedGuildId, resolvedGuildName, DateTime.UtcNow);
+                _guildCache[playerUid] = (resolvedGuildId, resolvedGuildName, DateTime.UtcNow);
+                return resolvedGuildId;
             }
             catch (Exception ex)
             {
                 _logService.LogError($"Failed to extract guild id for {playerUid}", "SaveService", ex);
-                return null;
+                return TryResolveGuildFromLicenses(cleanUid) ?? $"{cleanUid}_guild";
             }
+        }
+
+        private static string? TryResolveGuildFromLicenses(string playerUid)
+        {
+            try
+            {
+                string licensePath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "PalLauncher", "guild-licenses.json");
+                if (File.Exists(licensePath))
+                {
+                    string json = File.ReadAllText(licensePath);
+                    using var doc = JsonDocument.Parse(json);
+                    if (doc.RootElement.TryGetProperty("guilds", out var guildsObj))
+                    {
+                        foreach (var prop in guildsObj.EnumerateObject())
+                        {
+                            string gId = prop.Name;
+                            if (prop.Value.TryGetProperty("contributions", out var contribObj))
+                            {
+                                foreach (var c in contribObj.EnumerateObject())
+                                {
+                                    if (c.Name.Equals(playerUid, StringComparison.OrdinalIgnoreCase) ||
+                                        c.Name.Replace("-", "").Equals(playerUid.Replace("-", ""), StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        return gId;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+            return null;
         }
 
         public async Task<bool> CreateBackupAsync(string playerUid)
@@ -851,9 +975,38 @@ gc.NumRetriesBeforeForcingGC=5";
                 }
             }
 
+            string resolvedSteamId = string.Empty;
+            lock (_identityLock)
+            {
+                if (_playerIdentities.TryGetValue(actualUid, out var rec) ||
+                    (!string.IsNullOrWhiteSpace(playerUid) && _playerIdentities.TryGetValue(playerUid, out rec)))
+                {
+                    if (!string.IsNullOrWhiteSpace(rec.UserId))
+                    {
+                        resolvedSteamId = rec.UserId.StartsWith("steam_", StringComparison.OrdinalIgnoreCase)
+                            ? rec.UserId.Substring(6)
+                            : rec.UserId;
+                    }
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(resolvedSteamId) && !string.IsNullOrWhiteSpace(playerUid))
+            {
+                string cleanQuery = playerUid.Trim();
+                if (cleanQuery.StartsWith("steam_", StringComparison.OrdinalIgnoreCase))
+                {
+                    resolvedSteamId = cleanQuery.Substring(6);
+                }
+                else if (cleanQuery.StartsWith("7656") && cleanQuery.Length == 17)
+                {
+                    resolvedSteamId = cleanQuery;
+                }
+            }
+
             return new PlayerEconomyProfile
             {
                 PlayerUid = actualUid,
+                SteamId = resolvedSteamId,
                 PlayerName = resolvedPlayerName != "Pioneer" ? resolvedPlayerName : $"Pioneer ({actualUid[..Math.Min(6, actualUid.Length)]})",
                 TechnologyPoints = techPoints,
                 BossTechnologyPoints = bossTechPoints,

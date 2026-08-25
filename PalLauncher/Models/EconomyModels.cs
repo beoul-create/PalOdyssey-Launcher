@@ -60,6 +60,15 @@ namespace PalLauncher.Models
         [JsonPropertyName("playerUid")]
         public string PlayerUid { get; set; } = string.Empty;
 
+        [JsonPropertyName("steamId")]
+        public string SteamId { get; set; } = string.Empty;
+
+        [JsonPropertyName("discordId")]
+        public string DiscordId { get; set; } = string.Empty;
+
+        [JsonPropertyName("discordUsername")]
+        public string DiscordUsername { get; set; } = string.Empty;
+
         [JsonPropertyName("playerName")]
         public string PlayerName { get; set; } = "Pioneer";
 

@@ -577,7 +577,60 @@ namespace PalLauncher.Services
                 {
                     profile.InventoryItems = new Dictionary<string, int>(inv);
                 }
+
+                if (string.IsNullOrWhiteSpace(profile.DiscordId))
+                {
+                    foreach (var kvp in _discordToPlayerMap)
+                    {
+                        if (kvp.Value.Equals(uid, StringComparison.OrdinalIgnoreCase) ||
+                            (!string.IsNullOrWhiteSpace(playerUid) && kvp.Value.Equals(playerUid, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            profile.DiscordId = kvp.Key;
+                            break;
+                        }
+                    }
+                }
             }
+
+            if (string.IsNullOrWhiteSpace(profile.DiscordId) || string.IsNullOrWhiteSpace(profile.SteamId))
+            {
+                try
+                {
+                    string linksDir = Path.GetDirectoryName(_stateFilePath) ?? Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        "PalLauncher");
+                    string accountLinksFile = Path.Combine(linksDir, "account-links.json");
+                    if (File.Exists(accountLinksFile))
+                    {
+                        string json = File.ReadAllText(accountLinksFile);
+                        using var doc = JsonDocument.Parse(json);
+                        foreach (var prop in doc.RootElement.EnumerateObject())
+                        {
+                            string discId = prop.Name;
+                            var userObj = prop.Value;
+                            string? pUid = userObj.TryGetProperty("playerUid", out var pu) ? pu.GetString() : null;
+                            string? sId = userObj.TryGetProperty("steamId64", out var si) ? si.GetString() : null;
+
+                            bool matches = (pUid != null && (pUid.Equals(uid, StringComparison.OrdinalIgnoreCase) || pUid.Equals(playerUid, StringComparison.OrdinalIgnoreCase))) ||
+                                           (sId != null && (sId.Equals(uid, StringComparison.OrdinalIgnoreCase) || sId.Equals(playerUid, StringComparison.OrdinalIgnoreCase)));
+
+                            string? dName = userObj.TryGetProperty("discordGlobalName", out var dgn) && !string.IsNullOrWhiteSpace(dgn.GetString())
+                                ? dgn.GetString()
+                                : (userObj.TryGetProperty("discordUsername", out var dun) ? dun.GetString() : null);
+
+                            if (matches)
+                            {
+                                if (string.IsNullOrWhiteSpace(profile.DiscordId)) profile.DiscordId = discId;
+                                if (string.IsNullOrWhiteSpace(profile.SteamId) && !string.IsNullOrWhiteSpace(sId)) profile.SteamId = sId;
+                                if (string.IsNullOrWhiteSpace(profile.DiscordUsername) && !string.IsNullOrWhiteSpace(dName)) profile.DiscordUsername = dName;
+                                break;
+                            }
+                        }
+                    }
+                }
+                catch { }
+            }
+
             return profile;
         }
 
@@ -591,19 +644,16 @@ namespace PalLauncher.Services
             string serverQueuePath = @"C:\SteamLibrary\steamapps\common\PalServer\Pal\Binaries\Win64\ue4ss\Mods\PalOdysseyOptimizer\pending-deliveries.csv";
             string serverQueueDir = Path.GetDirectoryName(serverQueuePath)!;
 
-            lock (_lock)
+            string line = $"{playerUid},{action},{itemCode},{quantity},{techPointsDelta}\n";
+            try
             {
-                string line = $"{playerUid},{action},{itemCode},{quantity},{techPointsDelta}\n";
                 File.AppendAllText(queueFile, line);
-                try
+                if (Directory.Exists(serverQueueDir))
                 {
-                    if (Directory.Exists(serverQueueDir))
-                    {
-                        File.AppendAllText(serverQueuePath, line);
-                    }
+                    File.AppendAllText(serverQueuePath, line);
                 }
-                catch { }
             }
+            catch { }
         }
 
         public async Task<ExchangeReceipt> ExecuteExchangeAsync(string playerUid, string itemQuery, int quantity, bool isOnlineSession = false)
@@ -1313,7 +1363,7 @@ namespace PalLauncher.Services
             };
         }
 
-        public async Task<WithdrawReceipt> ExecuteWithdrawAsync(string playerUid, string? itemQuery = null, int quantity = 0, bool isOnlineSession = false)
+        public Task<WithdrawReceipt> ExecuteWithdrawAsync(string playerUid, string? itemQuery = null, int quantity = 0, bool isOnlineSession = false)
         {
             string uid = _saveService.ResolvePlayerUid(playerUid);
             var withdrawn = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -1323,11 +1373,11 @@ namespace PalLauncher.Services
             {
                 if (!_playerInventories.TryGetValue(uid, out var inv) || inv.Count == 0)
                 {
-                    return new WithdrawReceipt
+                    return Task.FromResult(new WithdrawReceipt
                     {
                         Success = false,
                         Message = "Your Virtual Vault is currently empty! Use `/shop` or `/gacha` to acquire items first."
-                    };
+                    });
                 }
 
                 if (string.IsNullOrWhiteSpace(itemQuery) || itemQuery.Equals("all", StringComparison.OrdinalIgnoreCase))
@@ -1356,12 +1406,12 @@ namespace PalLauncher.Services
 
                     if (string.IsNullOrEmpty(targetKey))
                     {
-                        return new WithdrawReceipt
+                        return Task.FromResult(new WithdrawReceipt
                         {
                             Success = false,
                             RemainingVaultItems = new Dictionary<string, int>(inv),
                             Message = $"Item `{itemQuery}` was not found in your Virtual Vault."
-                        };
+                        });
                     }
 
                     int available = inv[targetKey];
@@ -1393,13 +1443,13 @@ namespace PalLauncher.Services
 
             _logService.LogSuccess($"[WITHDRAW] {uid} claimed {withdrawn.Count} item types from Virtual Vault.", "Economy");
 
-            return new WithdrawReceipt
+            return Task.FromResult(new WithdrawReceipt
             {
                 Success = true,
                 WithdrawnItems = withdrawn,
                 RemainingVaultItems = remaining,
                 Message = $"Successfully claimed **{withdrawn.Count} item types** from your Virtual Vault into your live character!"
-            };
+            });
         }
 
         private void LoadState()
@@ -1483,24 +1533,37 @@ namespace PalLauncher.Services
 
         private void SaveState()
         {
+            string json;
             lock (_lock)
             {
                 try
                 {
                     var data = new
                     {
-                        links = _discordToPlayerMap,
-                        inventories = _playerInventories,
-                        techPoints = _playerTechPoints,
-                        bossPoints = _playerBossPoints,
-                        guildPerks = _guildPerks
+                        links = new Dictionary<string, string>(_discordToPlayerMap),
+                        inventories = _playerInventories.ToDictionary(k => k.Key, v => new Dictionary<string, int>(v.Value, StringComparer.OrdinalIgnoreCase), StringComparer.OrdinalIgnoreCase),
+                        techPoints = new Dictionary<string, int>(_playerTechPoints, StringComparer.OrdinalIgnoreCase),
+                        bossPoints = new Dictionary<string, int>(_playerBossPoints, StringComparer.OrdinalIgnoreCase),
+                        guildPerks = new GuildPerksState
+                        {
+                            WorkSpeedLevel = _guildPerks.WorkSpeedLevel,
+                            ExpBoostLevel = _guildPerks.ExpBoostLevel
+                        }
                     };
 
-                    string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-                    File.WriteAllText(_stateFilePath, json);
+                    json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
                 }
-                catch { }
+                catch
+                {
+                    return;
+                }
             }
+
+            try
+            {
+                File.WriteAllText(_stateFilePath, json);
+            }
+            catch { }
         }
     }
 }

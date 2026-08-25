@@ -1948,9 +1948,48 @@ namespace PalLauncher.Services
 
             var perks = _economyService.GetGuildPerks();
 
+            string displayDiscord;
+            if (!string.IsNullOrWhiteSpace(profile.DiscordId))
+            {
+                displayDiscord = $"<@{profile.DiscordId}> (`{profile.DiscordId}`)";
+            }
+            else if (string.IsNullOrWhiteSpace(steamIdOption))
+            {
+                displayDiscord = $"<@{authorId}> (`{authorId}`)";
+            }
+            else
+            {
+                displayDiscord = "*Not Linked*";
+            }
+
+            string displaySteam;
+            if (!string.IsNullOrWhiteSpace(profile.SteamId))
+            {
+                displaySteam = $"`{profile.SteamId}`";
+            }
+            else if (!string.IsNullOrWhiteSpace(steamIdOption) && (steamIdOption.StartsWith("7656") || steamIdOption.StartsWith("steam_")))
+            {
+                displaySteam = $"`{steamIdOption.Replace("steam_", "")}`";
+            }
+            else
+            {
+                displaySteam = "*Not Linked*";
+            }
+
+            string inGameName = !string.IsNullOrWhiteSpace(profile.PlayerName) ? profile.PlayerName : "Unknown";
+            string discordName = !string.IsNullOrWhiteSpace(profile.DiscordUsername)
+                ? profile.DiscordUsername
+                : (string.IsNullOrWhiteSpace(steamIdOption) ? authorName : string.Empty);
+
+            string userHeader = !string.IsNullOrWhiteSpace(discordName) && !inGameName.Equals(discordName, StringComparison.OrdinalIgnoreCase)
+                ? $"{inGameName} (@{discordName})"
+                : inGameName;
+
             var sb = new StringBuilder();
-            sb.AppendLine($"### 👤 Pioneer Character: `{profile.PlayerName}`");
+            sb.AppendLine($"### 👤 User: `{userHeader}`");
             sb.AppendLine($"• **Player UID**: `{profile.PlayerUid}`");
+            sb.AppendLine($"• **Steam ID**: {displaySteam}");
+            sb.AppendLine($"• **Discord ID**: {displayDiscord}");
             sb.AppendLine($"• **Character Level**: `Lv. {profile.Level}`");
             sb.AppendLine($"• **🪙 Technology Points**: `{profile.TechnologyPoints} pts`");
             sb.AppendLine($"• **🔮 Ancient Boss Points**: `{profile.BossTechnologyPoints} pts`\n");
@@ -1975,7 +2014,7 @@ namespace PalLauncher.Services
             sb.AppendLine("💡 *Commands:* `/shop` | `/exchange` | `/transmute` | `/perk` | `/gacha` | `/withdraw`");
 
             await EditDeferredResponseEmbedAsync(interactionToken,
-                title: "🎒 Pioneer Character & Vault",
+                title: "🎒 User Profile & Vault",
                 description: sb.ToString(),
                 color: 0x9966FF);
         }
