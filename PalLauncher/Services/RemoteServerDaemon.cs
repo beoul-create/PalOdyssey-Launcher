@@ -37,6 +37,7 @@ namespace PalLauncher.Services
         private bool _shutdownTriggered = false;
         private readonly List<PlayerInfo> _activePlayers = new();
         private readonly object _lock = new();
+        private DateTime _lastTelemetryQueryTime = DateTime.MinValue;
 
         public bool IsRunning => _isRunning;
         public int Port => _port;
@@ -459,6 +460,15 @@ namespace PalLauncher.Services
         {
             bool isServerActive = _launchService.IsServerRunning || LaunchService.GetActiveServerProcesses().Count > 0;
 
+            if (isServerActive && (DateTime.Now - _lastTelemetryQueryTime).TotalSeconds >= 4)
+            {
+                _lastTelemetryQueryTime = DateTime.Now;
+                _ = Task.Run(async () =>
+                {
+                    try { await QueryPalServerTelemetryAsync(); } catch { }
+                });
+            }
+
             lock (_lock)
             {
                 if (!isServerActive)
@@ -612,6 +622,41 @@ namespace PalLauncher.Services
             }
         }
 
+        private static int GetNumberSafe(JsonElement element, int fallback = 0)
+        {
+            if (element.ValueKind == JsonValueKind.Number)
+            {
+                if (element.TryGetInt32(out int iVal)) return iVal;
+                if (element.TryGetInt64(out long lVal)) return (int)lVal;
+                if (element.TryGetDouble(out double dVal)) return (int)Math.Round(dVal);
+            }
+            else if (element.ValueKind == JsonValueKind.String && element.GetString() is string s)
+            {
+                if (int.TryParse(s, out int sVal)) return sVal;
+                if (double.TryParse(s, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double sdVal)) return (int)Math.Round(sdVal);
+            }
+            return fallback;
+        }
+
+        private static string ResolveBiomeLocation(double x, double y)
+        {
+            if (x == 0 && y == 0) return "Palpagos Islands";
+            // Windswept Hills / Plateau of Beginnings / Grassy Behemoth
+            if (x >= -450000 && x <= -200000 && y >= 100000 && y <= 350000) return "Windswept Hills";
+            // Mount Obsidian / Volcano
+            if (x <= -450000 && y >= -550000 && y <= 200000) return "Mount Obsidian";
+            // Astral Mountains / Snow Mountain
+            if (x >= -250000 && x <= 50000 && y <= -100000) return "Astral Mountains";
+            // Dessicated Desert / Dunes
+            if (x >= 150000 && y <= 150000) return "Dessicated Desert";
+            // Bamboo Groves
+            if (x >= -350000 && x <= -100000 && y >= -100000 && y <= 150000) return "Bamboo Groves";
+            // Sea Breeze Archipelago / South Islands
+            if (y >= 300000) return "Sea Breeze Archipelago";
+
+            return "Palpagos Islands";
+        }
+
         private async Task QueryPalServerTelemetryAsync()
         {
             try
@@ -641,16 +686,63 @@ namespace PalLauncher.Services
                         var list = new List<PlayerInfo>();
                         foreach (var item in playersArray.EnumerateArray())
                         {
-                            string name = item.TryGetProperty("name", out var n) ? n.GetString() ?? "Pioneer" : "Pioneer";
-                            int ping = item.TryGetProperty("ping", out var p) ? (p.ValueKind == JsonValueKind.Number ? p.GetInt32() : 25) : 25;
-                            string loc = item.TryGetProperty("location", out var l) ? l.GetString() ?? "Palpagos Islands" : "Palpagos Islands";
-                            int level = item.TryGetProperty("level", out var lvl) ? (lvl.ValueKind == JsonValueKind.Number ? lvl.GetInt32() : 1) : 1;
-                            string steamId = item.TryGetProperty("userId", out var uid) ? uid.GetString() ?? "" : "";
-                            // Also try accountId which is sometimes used
-                            if (string.IsNullOrEmpty(steamId) && item.TryGetProperty("accountId", out var aid)) {
-                                steamId = aid.GetString() ?? "";
+                            try
+                            {
+                                string name = "Pioneer";
+                                if (item.TryGetProperty("name", out var n) && !string.IsNullOrWhiteSpace(n.GetString()))
+                                {
+                                    name = n.GetString()!;
+                                }
+                                else if (item.TryGetProperty("accountName", out var an) && !string.IsNullOrWhiteSpace(an.GetString()))
+                                {
+                                    name = an.GetString()!;
+                                }
+
+                                int ping = 25;
+                                if (item.TryGetProperty("ping", out var p))
+                                {
+                                    ping = GetNumberSafe(p, 25);
+                                }
+
+                                int level = 1;
+                                if (item.TryGetProperty("level", out var lvl))
+                                {
+                                    level = Math.Max(1, GetNumberSafe(lvl, 1));
+                                }
+
+                                string steamId = "";
+                                if (item.TryGetProperty("userId", out var uid) && !string.IsNullOrWhiteSpace(uid.GetString()))
+                                {
+                                    steamId = uid.GetString()!;
+                                }
+                                else if (item.TryGetProperty("accountId", out var aid) && !string.IsNullOrWhiteSpace(aid.GetString()))
+                                {
+                                    steamId = aid.GetString()!;
+                                }
+                                else if (item.TryGetProperty("accountName", out var anProp) && !string.IsNullOrWhiteSpace(anProp.GetString()))
+                                {
+                                    steamId = anProp.GetString()!;
+                                }
+
+                                string loc = "Palpagos Islands";
+                                if (item.TryGetProperty("location", out var l) && !string.IsNullOrWhiteSpace(l.GetString()))
+                                {
+                                    loc = l.GetString()!;
+                                }
+                                else if (item.TryGetProperty("location_x", out var lx) && item.TryGetProperty("location_y", out var ly))
+                                {
+                                    double vx = 0, vy = 0;
+                                    if (lx.ValueKind == JsonValueKind.Number && lx.TryGetDouble(out var dx)) vx = dx;
+                                    if (ly.ValueKind == JsonValueKind.Number && ly.TryGetDouble(out var dy)) vy = dy;
+                                    loc = ResolveBiomeLocation(vx, vy);
+                                }
+
+                                list.Add(new PlayerInfo { Name = name, PingMs = ping, Location = loc, Level = level, SteamId = steamId });
                             }
-                            list.Add(new PlayerInfo { Name = name, PingMs = ping, Location = loc, Level = level, SteamId = steamId });
+                            catch (Exception itemEx)
+                            {
+                                _logService.LogWarning($"Error parsing player item: {itemEx.Message}", "Telemetry");
+                            }
                         }
 
                         lock (_lock)
@@ -677,9 +769,10 @@ namespace PalLauncher.Services
                     {
                         string mJson = await metricsResp.Content.ReadAsStringAsync();
                         using var mDoc = JsonDocument.Parse(mJson);
-                        if (mDoc.RootElement.TryGetProperty("serverfps", out var fpsProp) && fpsProp.ValueKind == JsonValueKind.Number)
+                        if (mDoc.RootElement.TryGetProperty("serverfps", out var fpsProp))
                         {
-                            lock (_lock) { _serverFps = fpsProp.GetInt32(); }
+                            int fps = GetNumberSafe(fpsProp, 60);
+                            lock (_lock) { _serverFps = fps; }
                         }
                     }
                 }

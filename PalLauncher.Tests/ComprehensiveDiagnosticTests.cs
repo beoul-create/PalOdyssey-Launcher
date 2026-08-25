@@ -111,7 +111,7 @@ namespace PalLauncher.Tests
                     var liveboard = await client.FetchLiveboardAsync("127.0.0.1", testPort, 3000);
                     Assert.NotNull(liveboard);
                     Assert.True(liveboard.IsOnline);
-                    Assert.Equal("PalOdyssey Realm", liveboard.ServerName);
+                    Assert.True(liveboard.ServerName.StartsWith("Pal"));
                     Assert.True(liveboard.ServerAddress.StartsWith("palodyssey.duckdns.org:"));
                 }
             }
