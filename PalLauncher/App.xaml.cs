@@ -93,13 +93,56 @@ namespace PalLauncher
                     steamDetection: steamDetection,
                     discordAuth: discordAuth);
 
-                var mainWindow = new MainWindow(_mainViewModel);
-                MainWindow = mainWindow;
+                if (isHeadlessDaemon)
+                {
+                    _logService.LogSuccess("PalLauncher started in Headless Background Host Daemon mode (24/7 Armed on port 8211).", "App");
+                    _ = _mainViewModel.InitializeAsync();
+                }
+                else
+                {
+                    var mainWindow = new MainWindow(_mainViewModel);
+                    MainWindow = mainWindow;
 
-                // Initialize System Tray Icon
-                _trayService = new TrayIconService(_logService);
-                _trayService.Initialize(
-                    onRestoreRequested: () =>
+                    // Initialize System Tray Icon
+                    _trayService = new TrayIconService(_logService);
+                    _trayService.Initialize(
+                        onRestoreRequested: () =>
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                if (MainWindow != null)
+                                {
+                                    if (_mainViewModel != null)
+                                    {
+                                        _mainViewModel.ActiveView = "Dashboard";
+                                        _mainViewModel.RefreshSteamProfile();
+                                        _mainViewModel.AccountLink = discordAuth.GetCurrentLinkInfo();
+                                    }
+                                    MainWindow.Show();
+                                    MainWindow.WindowState = WindowState.Normal;
+                                    MainWindow.ShowInTaskbar = true;
+                                    MainWindow.Visibility = Visibility.Visible;
+                                    MainWindow.Activate();
+                                    MainWindow.Focus();
+                                }
+                            });
+                        },
+                        onRestartBotRequested: () =>
+                        {
+                            _ = _mainViewModel?.RestartDiscordBotAsync();
+                        },
+                        onExitRequested: () =>
+                        {
+                            Dispatcher.Invoke(() =>
+                            {
+                                CleanupResources();
+                                _mainViewModel?.CloseCommand?.Execute("force");
+                                Environment.Exit(0);
+                            });
+                        });
+
+                    // Listen for restore signals from secondary instance launches
+                    _singleInstance.StartListeningForShowSignal(() =>
                     {
                         Dispatcher.Invoke(() =>
                         {
@@ -119,77 +162,28 @@ namespace PalLauncher
                                 MainWindow.Focus();
                             }
                         });
-                    },
-                    onRestartBotRequested: () =>
-                    {
-                        _ = _mainViewModel?.RestartDiscordBotAsync();
-                    },
-                    onExitRequested: () =>
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            CleanupResources();
-                            _mainViewModel?.CloseCommand?.Execute("force");
-                            Environment.Exit(0);
-                        });
                     });
 
-                // Listen for restore signals from secondary instance launches
-                _singleInstance.StartListeningForShowSignal(() =>
-                {
-                    Dispatcher.Invoke(() =>
+                    // Intercept window close to minimize to system tray when background operation is active
+                    mainWindow.Closing += (s, args) =>
                     {
-                        if (MainWindow != null)
+                        if (_configService?.Config.RunInBackgroundOnClose == true)
                         {
-                            if (_mainViewModel != null)
-                            {
-                                _mainViewModel.ActiveView = "Dashboard";
-                                _mainViewModel.RefreshSteamProfile();
-                                _mainViewModel.AccountLink = discordAuth.GetCurrentLinkInfo();
-                            }
-                            MainWindow.Show();
-                            MainWindow.WindowState = WindowState.Normal;
-                            MainWindow.ShowInTaskbar = true;
-                            MainWindow.Visibility = Visibility.Visible;
-                            MainWindow.Activate();
-                            MainWindow.Focus();
+                            args.Cancel = true;
+                            mainWindow.Hide();
+                            _trayService.ShowNotification(
+                                "PalOdyssey Background Host Active",
+                                "PalLauncher is running in the background. The Discord Bot (/start, /status) and Server Auto-Wake remain active 24/7.");
+                            _logService.LogInfo("Launcher window minimized to System Tray. 24/7 Discord bot remains active.", "App");
                         }
-                    });
-                });
+                    };
 
-                // Intercept window close to minimize to system tray when background operation is active
-                mainWindow.Closing += (s, args) =>
-                {
-                    if (_configService?.Config.RunInBackgroundOnClose == true && isHeadlessDaemon)
-                    {
-                        args.Cancel = true;
-                        mainWindow.Hide();
-                        _trayService.ShowNotification(
-                            "PalOdyssey Background Host Active",
-                            "PalLauncher is running in the background. The Discord Bot (/start, /status) and Server Auto-Wake remain active 24/7.");
-                        _logService.LogInfo("Launcher window minimized to System Tray. 24/7 Discord bot remains active.", "App");
-                    }
-                };
-
-                mainWindow.Closed += (s, args) =>
-                {
-                    if (!isHeadlessDaemon)
+                    mainWindow.Closed += (s, args) =>
                     {
                         CleanupResources();
                         Environment.Exit(0);
-                    }
-                };
+                    };
 
-                if (isHeadlessDaemon)
-                {
-                    mainWindow.WindowState = WindowState.Minimized;
-                    mainWindow.ShowInTaskbar = false;
-                    mainWindow.Visibility = Visibility.Hidden;
-                    _logService.LogSuccess("PalLauncher started in Headless Background Host Daemon mode (24/7 Armed on port 8211).", "App");
-                    _ = _mainViewModel.InitializeAsync();
-                }
-                else
-                {
                     mainWindow.Show();
                     mainWindow.Activate();
                     mainWindow.Focus();

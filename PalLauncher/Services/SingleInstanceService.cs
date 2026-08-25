@@ -9,7 +9,7 @@ namespace PalLauncher.Services
     {
         private const string GuiMutexName = @"Local\PalOdysseyLauncher_GUI_Mutex";
         private const string DaemonMutexName = @"Local\PalOdysseyLauncher_Daemon_Mutex";
-        private const string EventName = @"Local\PalOdysseyLauncher_ShowSignal_Event";
+        private const string EventName = @"Local\PalOdysseyLauncher_ShowSignal_GUI_Event";
 
         private readonly ILogService? _logService;
         private Mutex? _mutex;
