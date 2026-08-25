@@ -14,7 +14,6 @@ This document is a navigation guide for maintaining the **PalOdyssey Launcher**,
 | **`README.md`** | 🌐 **Documentation** | Player quick-start guide, mod settings, and troubleshooting. | **YES** |
 | **`DEVELOPMENT.md`** | 🌐 **Documentation** | Developer workflow guide (this file). | **YES** |
 | **`PalLauncher.Tests/`** | 🛠️ **Testing** | 89 automated unit, integration, and regression tests. | **YES** |
-| **`tools/playit/`** | 🖥️ **Network Tools** | Tunneling binary for co-op server hosting. | **YES** |
 | **`PalOdyssey-Launcher-v*.zip`** | 📦 **Release Asset** | Packaged launcher zip (uploaded to GitHub Releases, not committed to Git). | ❌ (Upload to GitHub Releases) |
 | **`dev-tools/`** | 🛠️ **Local Dev Only** | Developer runners (`run-dev.bat`), test runners (`run-tests.bat`), and release packagers. | ❌ (Local Only - `.gitignore`) |
 | **`server-tools/`** | 🖥️ **Local Host Only** | 24/7 PM2 bot runners, task schedulers, and dedicated server deployers. | ❌ (Local Only - `.gitignore`) |

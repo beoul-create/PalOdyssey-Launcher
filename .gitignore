@@ -45,6 +45,8 @@ $RECYCLE.BIN/
 /Install-PalOdyssey-*
 dev-tools/
 server-tools/
+tools/
+
 
 
 # Local benchmark output & submodules
