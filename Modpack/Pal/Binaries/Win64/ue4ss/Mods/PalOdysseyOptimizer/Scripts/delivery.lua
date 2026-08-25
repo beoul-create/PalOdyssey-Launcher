@@ -105,7 +105,6 @@ local function processQueue()
                     elseif pName ~= "" and (pName == targetUid or string.find(targetUid, pName, 1, true)) then
                         isMatch = true
                     elseif #controllers == 1 and (targetUid == "DEFAULT" or string.find(targetUid, "7656", 1, true)) then
-                        -- Single active player on server matching Steam ID pattern
                         isMatch = true
                     end
 
@@ -140,6 +139,8 @@ local function processQueue()
                                     msg = string.format("🎟️ [Shop] Deducted %d Tech Points. Purchased %dx %s. Balance: %d pts", math.abs(techPointsDelta), quantity, itemCode, pts)
                                 elseif action == "Recycle" then
                                     msg = string.format("♻️ [Recycle] Gained +%d Tech Points! Balance: %d pts", techPointsDelta, pts)
+                                elseif action == "Withdraw" or action == "Claim" then
+                                    msg = string.format("📦 [Vault Delivery] Claimed %dx %s into your inventory!", quantity, itemCode)
                                 end
                                 if msg ~= "" then
                                     palUtil:SendSystemToPlayerChat(controller, msg, { controller:GetPlayerUId() })

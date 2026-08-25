@@ -254,6 +254,50 @@ namespace PalLauncher.Tests
 
             try { Directory.Delete(tempDir, true); } catch { }
         }
+
+        [Fact]
+        public async Task Withdraw_ItemsFromVirtualVault_SucceedsAndDispatches()
+        {
+            string tempDir = Path.Combine(Path.GetTempPath(), "PalWithdrawTest_" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempDir);
+            string playersDir = Path.Combine(tempDir, "Players");
+            Directory.CreateDirectory(playersDir);
+
+            string playerUid = "9EDC20A9000000000000000000000000";
+            byte[] saveBytes = CreateMockPalworldSave(15, playerUid);
+            string playerSavePath = Path.Combine(playersDir, $"{playerUid}.sav");
+            await File.WriteAllBytesAsync(playerSavePath, saveBytes);
+
+            var logService = new LogService();
+            var saveService = new PalSaveService(logService, tempDir);
+            string customStateFile = Path.Combine(tempDir, "economy_state.json");
+            var economyService = new EconomyService(logService, saveService, customStateFilePath: customStateFile);
+
+            // 1. Buy items from shop into vault
+            var ex1 = await economyService.ExecuteExchangeAsync(playerUid, "reset_drug", 1, isOnlineSession: true);
+            Assert.True(ex1.Success);
+
+            var ex2 = await economyService.ExecuteExchangeAsync(playerUid, "dog_coin", 2, isOnlineSession: true);
+            Assert.True(ex2.Success);
+
+            // 2. Check profile has items
+            var p1 = await economyService.GetPlayerProfileAsync(playerUid);
+            Assert.NotNull(p1);
+            Assert.True(p1.InventoryItems.Count >= 2);
+
+            // 3. Withdraw all items
+            var withdrawAll = await economyService.ExecuteWithdrawAsync(playerUid, "all", 0, isOnlineSession: true);
+            Assert.True(withdrawAll.Success);
+            Assert.True(withdrawAll.WithdrawnItems.Count >= 2);
+            Assert.Empty(withdrawAll.RemainingVaultItems);
+
+            // 4. Verify vault is now empty
+            var p2 = await economyService.GetPlayerProfileAsync(playerUid);
+            Assert.NotNull(p2);
+            Assert.Empty(p2.InventoryItems);
+
+            try { Directory.Delete(tempDir, true); } catch { }
+        }
     }
 }
 

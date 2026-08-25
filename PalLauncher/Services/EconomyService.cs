@@ -17,6 +17,7 @@ namespace PalLauncher.Services
         Task<ExchangeReceipt> ExecuteExchangeAsync(string playerUid, string itemQuery, int quantity, bool isOnlineSession = false);
         Task<RecycleReceipt> ExecuteRecycleAsync(string playerUid, string itemQuery, int quantity, bool isOnlineSession = false);
         Task<GachaReceipt> ExecuteGachaAsync(string playerUid, int pulls, bool isOnlineSession = false);
+        Task<WithdrawReceipt> ExecuteWithdrawAsync(string playerUid, string? itemQuery = null, int quantity = 0, bool isOnlineSession = false);
         ShopItem? FindShopItem(string query);
         RecyclableItem? FindRecyclableItem(string query);
         void LinkDiscordUser(string discordUserId, string playerUid);
@@ -916,6 +917,92 @@ namespace PalLauncher.Services
                 Message = hasLegendary
                     ? $"🎰 **JACKPOT!** You pulled a **LEGENDARY** item from the Relic Mystery Box!"
                     : $"Opened **{pulls}x Relic Mystery Box** for **{totalCost} Tech Points**!"
+            };
+        }
+
+        public async Task<WithdrawReceipt> ExecuteWithdrawAsync(string playerUid, string? itemQuery = null, int quantity = 0, bool isOnlineSession = false)
+        {
+            string uid = _saveService.ResolvePlayerUid(playerUid);
+            var withdrawn = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            var remaining = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
+            lock (_lock)
+            {
+                Dictionary<string, int>? inv = null;
+                if (!_playerInventories.TryGetValue(uid, out inv) &&
+                    (!string.IsNullOrWhiteSpace(playerUid) && !_playerInventories.TryGetValue(playerUid, out inv)))
+                {
+                    return new WithdrawReceipt
+                    {
+                        Success = false,
+                        Message = "Your Virtual Vault is currently empty. Open `/gacha` or purchase items in `/shop` first!"
+                    };
+                }
+
+                if (inv == null || inv.Count == 0)
+                {
+                    return new WithdrawReceipt
+                    {
+                        Success = false,
+                        Message = "Your Virtual Vault is currently empty. Open `/gacha` or purchase items in `/shop` first!"
+                    };
+                }
+
+                if (string.IsNullOrWhiteSpace(itemQuery) || itemQuery.Trim().Equals("all", StringComparison.OrdinalIgnoreCase))
+                {
+                    foreach (var kvp in inv)
+                    {
+                        if (kvp.Value > 0)
+                        {
+                            withdrawn[kvp.Key] = kvp.Value;
+                        }
+                    }
+                    inv.Clear();
+                }
+                else
+                {
+                    string clean = itemQuery.Trim();
+                    var match = inv.Keys.FirstOrDefault(k => k.Contains(clean, StringComparison.OrdinalIgnoreCase) || clean.Contains(k, StringComparison.OrdinalIgnoreCase));
+                    if (match == null)
+                    {
+                        return new WithdrawReceipt
+                        {
+                            Success = false,
+                            Message = $"Item `{itemQuery}` was not found in your Virtual Vault. Use `/inventory` to check stored items."
+                        };
+                    }
+
+                    int available = inv[match];
+                    int toWithdraw = (quantity <= 0 || quantity > available) ? available : quantity;
+
+                    withdrawn[match] = toWithdraw;
+                    int rem = available - toWithdraw;
+                    if (rem > 0) inv[match] = rem;
+                    else inv.Remove(match);
+                }
+
+                foreach (var kvp in inv)
+                {
+                    remaining[kvp.Key] = kvp.Value;
+                }
+
+                SaveState();
+            }
+
+            // Queue deliveries for each item
+            foreach (var kvp in withdrawn)
+            {
+                QueueDelivery(uid, "Withdraw", kvp.Key, kvp.Value, 0);
+            }
+
+            _logService.LogSuccess($"[WITHDRAW] {uid} withdrew {withdrawn.Count} item types ({string.Join(", ", withdrawn.Select(w => $"{w.Value}x {w.Key}"))}) from Virtual Vault.", "Economy");
+
+            return new WithdrawReceipt
+            {
+                Success = true,
+                WithdrawnItems = withdrawn,
+                RemainingVaultItems = remaining,
+                Message = $"Successfully claimed **{withdrawn.Count} item types** from your Virtual Vault into your live character!"
             };
         }
 

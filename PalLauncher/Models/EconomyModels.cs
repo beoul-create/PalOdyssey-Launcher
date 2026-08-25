@@ -136,6 +136,27 @@ namespace PalLauncher.Models
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
 
+    public class WithdrawReceipt
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("transactionId")]
+        public string TransactionId { get; set; } = Guid.NewGuid().ToString("N")[..8].ToUpperInvariant();
+
+        [JsonPropertyName("withdrawnItems")]
+        public Dictionary<string, int> WithdrawnItems { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
+        [JsonPropertyName("remainingVaultItems")]
+        public Dictionary<string, int> RemainingVaultItems { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
+        [JsonPropertyName("message")]
+        public string Message { get; set; } = string.Empty;
+
+        [JsonPropertyName("timestamp")]
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    }
+
     public enum GachaRarity
     {
         Common,

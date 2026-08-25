@@ -551,6 +551,66 @@ namespace PalLauncher.Services
                     },
                     new
                     {
+                        name = "withdraw",
+                        description = "Withdraw and claim items from your Virtual Vault into your live Palworld character",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "item",
+                                description = "Item name to withdraw (or 'all' for everything)",
+                                type = 3, // STRING
+                                required = false
+                            },
+                            new
+                            {
+                                name = "amount",
+                                description = "Quantity to withdraw (default: all available)",
+                                type = 4, // INTEGER
+                                required = false
+                            },
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Player UID or Steam ID (optional if linked)",
+                                type = 3, // STRING
+                                required = false
+                            }
+                        }
+                    },
+                    new
+                    {
+                        name = "claim",
+                        description = "Alias for /withdraw - Claim stored items into your live Palworld character",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "item",
+                                description = "Item name to claim (or 'all' for everything)",
+                                type = 3, // STRING
+                                required = false
+                            },
+                            new
+                            {
+                                name = "amount",
+                                description = "Quantity to claim (default: all available)",
+                                type = 4, // INTEGER
+                                required = false
+                            },
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Player UID or Steam ID (optional if linked)",
+                                type = 3, // STRING
+                                required = false
+                            }
+                        }
+                    },
+                    new
+                    {
                         name = "help",
                         description = "List all available PalOdyssey server and economy commands",
                         type = 1
@@ -820,6 +880,11 @@ namespace PalLauncher.Services
                     case "inventory":
                     case "vault":
                         await ExecuteInventoryInteractionAsync(interactionToken, data, authorId, authorName);
+                        break;
+
+                    case "withdraw":
+                    case "claim":
+                        await ExecuteWithdrawInteractionAsync(interactionToken, data, authorId, authorName);
                         break;
 
                     case "link":
@@ -1798,8 +1863,68 @@ namespace PalLauncher.Services
 
             await EditDeferredResponseEmbedAsync(interactionToken,
                 title: "🔗 Character Save Linked",
-                description: $"Successfully linked your Discord account (**@{authorName}**) to Palworld Player UID / Steam ID:\n`{steamId.Trim()}`\n\nYou can now run `/exchange`, `/recycle`, and `/inventory` without specifying your ID!",
+                description: $"Successfully linked your Discord account (**@{authorName}**) to Palworld Player UID / Steam ID:\n`{steamId.Trim()}`\n\nYou can now run `/exchange`, `/recycle`, `/withdraw`, and `/inventory` without specifying your ID!",
                 color: 0x00FF88);
+        }
+
+        private async Task ExecuteWithdrawInteractionAsync(string interactionToken, JsonElement data, string authorId, string authorName)
+        {
+            string? itemQuery = GetStringOption(data, "item");
+            int amount = GetIntOption(data, "amount", 0);
+            string? steamIdOption = GetStringOption(data, "steam_id");
+
+            string targetUid = !string.IsNullOrWhiteSpace(steamIdOption)
+                ? steamIdOption.Trim()
+                : _economyService.GetLinkedPlayerUid(authorId);
+
+            if (_presenceService != null && !await _presenceService.IsPlayerOnlineAsync(targetUid))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Offline",
+                    description: "You must be logged into the Palworld server to claim items into your in-game character.",
+                    color: 0xFF4466);
+                return;
+            }
+
+            var receipt = await _economyService.ExecuteWithdrawAsync(targetUid, itemQuery, amount, isOnlineSession: true);
+
+            if (receipt.Success)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"### 📦 Items Claimed to In-Game Character\n");
+                foreach (var item in receipt.WithdrawnItems)
+                {
+                    sb.AppendLine($"• **{item.Key}**: `x{item.Value}`");
+                }
+                sb.AppendLine();
+
+                if (receipt.RemainingVaultItems.Count > 0)
+                {
+                    sb.AppendLine($"**Remaining in Virtual Vault** ({receipt.RemainingVaultItems.Count} item types):");
+                    foreach (var item in receipt.RemainingVaultItems)
+                    {
+                        sb.AppendLine($"• {item.Key}: `x{item.Value}`");
+                    }
+                }
+                else
+                {
+                    sb.AppendLine("✨ *Your Virtual Vault is now empty — all items claimed!*");
+                }
+
+                sb.AppendLine("\n💡 *Items are dispatched directly to your live character inventory!*");
+
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "🎁 Virtual Vault Withdrawal Successful",
+                    description: sb.ToString(),
+                    color: 0x00FF88);
+            }
+            else
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Virtual Vault Notice",
+                    description: receipt.Message,
+                    color: 0xFFAA00);
+            }
         }
 
         private async Task ExecuteGachaInteractionAsync(string interactionToken, JsonElement data, string authorId, string authorName)
