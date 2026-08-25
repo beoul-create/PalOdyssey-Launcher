@@ -31,6 +31,7 @@ namespace PalLauncher.Services
         private readonly string _stateFilePath;
         private readonly Dictionary<string, string> _discordToPlayerMap = new();
         private readonly Dictionary<string, Dictionary<string, int>> _playerInventories = new(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, int> _playerTechPoints = new(StringComparer.OrdinalIgnoreCase);
         private readonly object _lock = new();
 
         private static readonly List<ShopItem> _shopCatalog = new()
@@ -449,7 +450,19 @@ namespace PalLauncher.Services
 
             lock (_lock)
             {
-                if (_playerInventories.TryGetValue(uid, out var inv))
+                if (_playerTechPoints.TryGetValue(uid, out int pts) ||
+                    (!string.IsNullOrWhiteSpace(playerUid) && _playerTechPoints.TryGetValue(playerUid, out pts)))
+                {
+                    profile.TechnologyPoints = pts;
+                }
+                else
+                {
+                    _playerTechPoints[uid] = profile.TechnologyPoints;
+                    if (!string.IsNullOrWhiteSpace(playerUid)) _playerTechPoints[playerUid] = profile.TechnologyPoints;
+                }
+
+                if (_playerInventories.TryGetValue(uid, out var inv) ||
+                    (!string.IsNullOrWhiteSpace(playerUid) && _playerInventories.TryGetValue(playerUid, out inv)))
                 {
                     profile.InventoryItems = new Dictionary<string, int>(inv);
                 }
@@ -572,7 +585,17 @@ namespace PalLauncher.Services
                 };
             }
 
-            if (profile.TechnologyPoints < totalCost)
+            int currentPoints;
+            lock (_lock)
+            {
+                if (!_playerTechPoints.TryGetValue(uid, out currentPoints) &&
+                    (string.IsNullOrWhiteSpace(playerUid) || !_playerTechPoints.TryGetValue(playerUid, out currentPoints)))
+                {
+                    currentPoints = profile.TechnologyPoints;
+                }
+            }
+
+            if (currentPoints < totalCost)
             {
                 return new ExchangeReceipt
                 {
@@ -580,35 +603,20 @@ namespace PalLauncher.Services
                     ItemName = item.Name,
                     Quantity = quantity,
                     TotalCost = totalCost,
-                    PreviousTechPoints = profile.TechnologyPoints,
-                    NewTechPoints = profile.TechnologyPoints,
-                    Message = $"Insufficient Technology Points. You need **{totalCost} pts** ({item.TechPointCost} × {quantity}), but currently have **{profile.TechnologyPoints} pts**."
+                    PreviousTechPoints = currentPoints,
+                    NewTechPoints = currentPoints,
+                    Message = $"Insufficient Technology Points. You need **{totalCost} pts** ({item.TechPointCost} × {quantity}), but currently have **{currentPoints} pts**."
                 };
             }
 
-            // Deduct Technology Points
-            if (isOnlineSession)
-            {
-                QueueDelivery(uid, "Exchange", item.ItemCode, quantity, -totalCost);
-            }
-            else
-            {
-                bool updated = await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
-                if (!updated)
-                {
-                    return new ExchangeReceipt
-                    {
-                        Success = false,
-                        Message = "Failed to update save file. Transaction cancelled safely."
-                    };
-                }
-            }
+            int newPoints = currentPoints - totalCost;
 
-            int newPoints = profile.TechnologyPoints - totalCost;
-
-            // Credit items to Player Virtual Vault / Inventory
+            // Credit items to Player Virtual Vault / Inventory & deduct Tech Points
             lock (_lock)
             {
+                _playerTechPoints[uid] = newPoints;
+                if (!string.IsNullOrWhiteSpace(playerUid)) _playerTechPoints[playerUid] = newPoints;
+
                 if (!_playerInventories.TryGetValue(uid, out var inv))
                 {
                     inv = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -619,6 +627,15 @@ namespace PalLauncher.Services
                 SaveState();
             }
 
+            if (isOnlineSession)
+            {
+                QueueDelivery(uid, "Exchange", item.ItemCode, quantity, -totalCost);
+            }
+            else
+            {
+                await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
+            }
+
             _logService.LogSuccess($"[EXCHANGE] {uid} purchased {quantity}x {item.Name} for {totalCost} Tech Points.", "Economy");
 
             return new ExchangeReceipt
@@ -627,7 +644,7 @@ namespace PalLauncher.Services
                 ItemName = item.Name,
                 Quantity = quantity,
                 TotalCost = totalCost,
-                PreviousTechPoints = profile.TechnologyPoints,
+                PreviousTechPoints = currentPoints,
                 NewTechPoints = newPoints,
                 Message = $"Successfully exchanged **{totalCost} Tech Points** for **{quantity}x {item.Name}** {item.Emoji}!"
             };
@@ -672,38 +689,43 @@ namespace PalLauncher.Services
                 };
             }
 
-            // Credit Technology Points
-            if (isOnlineSession)
+            int currentPoints;
+            lock (_lock)
             {
-                QueueDelivery(uid, "Recycle", item.Id, quantity, pointsEarned); // In lua we should remove quantity items and add points
-            }
-            else
-            {
-                bool updated = await _saveService.UpdateTechnologyPointsAsync(uid, pointsEarned);
-                if (!updated)
+                if (!_playerTechPoints.TryGetValue(uid, out currentPoints) &&
+                    (string.IsNullOrWhiteSpace(playerUid) || !_playerTechPoints.TryGetValue(playerUid, out currentPoints)))
                 {
-                    return new RecycleReceipt
-                    {
-                        Success = false,
-                        Message = "Failed to update save file. Recycling transaction cancelled safely."
-                    };
+                    currentPoints = profile.TechnologyPoints;
                 }
             }
 
-            int newPoints = profile.TechnologyPoints + pointsEarned;
+            int newPoints = currentPoints + pointsEarned;
 
-            // Deduct items from Player Vault if present
+            // Deduct items from Player Vault if present & add Tech Points
             lock (_lock)
             {
-                if (_playerInventories.TryGetValue(uid, out var inv))
+                _playerTechPoints[uid] = newPoints;
+                if (!string.IsNullOrWhiteSpace(playerUid)) _playerTechPoints[playerUid] = newPoints;
+
+                if (_playerInventories.TryGetValue(uid, out var inv) ||
+                    (!string.IsNullOrWhiteSpace(playerUid) && _playerInventories.TryGetValue(playerUid, out inv)))
                 {
                     if (inv.ContainsKey(item.Name))
                     {
                         inv[item.Name] = Math.Max(0, inv[item.Name] - quantity);
                         if (inv[item.Name] == 0) inv.Remove(item.Name);
-                        SaveState();
                     }
                 }
+                SaveState();
+            }
+
+            if (isOnlineSession)
+            {
+                QueueDelivery(uid, "Recycle", item.Id, quantity, pointsEarned);
+            }
+            else
+            {
+                await _saveService.UpdateTechnologyPointsAsync(uid, pointsEarned);
             }
 
             _logService.LogSuccess($"[RECYCLE] {uid} recycled {quantity}x {item.Name} for +{pointsEarned} Tech Points.", "Economy");
@@ -714,7 +736,7 @@ namespace PalLauncher.Services
                 ItemName = item.Name,
                 Quantity = quantity,
                 PointsAwarded = pointsEarned,
-                PreviousTechPoints = profile.TechnologyPoints,
+                PreviousTechPoints = currentPoints,
                 NewTechPoints = newPoints,
                 Message = $"Recycled **{quantity}x {item.Name}** {item.Emoji} into **+{pointsEarned} Technology Points**!"
             };
@@ -728,32 +750,33 @@ namespace PalLauncher.Services
             (GachaRarity.Common, "High-Grade Tech Manual", "📙", 2),
             (GachaRarity.Common, "Gold Coins", "🪙", 10000),
             (GachaRarity.Common, "Cake", "🎂", 5),
+
             // Uncommon (30% total weight = 4 entries)
             (GachaRarity.Uncommon, "Dog Coin", "🪙", 2),
             (GachaRarity.Uncommon, "Arena Ticket", "🎟️", 1),
             (GachaRarity.Uncommon, "Bounty Token", "📜", 1),
             (GachaRarity.Uncommon, "Large Pal Soul", "💜", 2),
+
             // Rare (15% total weight = 3 entries)
             (GachaRarity.Rare, "Pal Reverser / Training Crystal", "🔮", 1),
             (GachaRarity.Rare, "Memory Reset Drug", "🧪", 1),
             (GachaRarity.Rare, "Epic Skill Fruit", "🍎", 1),
+
             // Legendary (5% total weight = 3 entries)
             (GachaRarity.Legendary, "Legendary Schematic IV (Rocket Launcher / Assault Rifle)", "⭐", 1),
             (GachaRarity.Legendary, "Raid Boss Summon Slab (Bellanoir Libero / Blazamut Ryu)", "🗿", 1),
-            (GachaRarity.Legendary, "Huge Dragon/Dark Egg", "🥚", 1),
+            (GachaRarity.Legendary, "Huge Dragon/Dark Egg", "🥚", 1)
         };
 
         private static readonly Random _gachaRng = new();
 
         private GachaDrop RollSingleGachaDrop(bool forceRareOrHigher = false)
         {
-            // Weight bands: Common 50%, Uncommon 30%, Rare 15%, Legendary 5%
             int roll = _gachaRng.Next(100);
             GachaRarity rarity;
 
             if (forceRareOrHigher)
             {
-                // Pity: Rare 75%, Legendary 25%
                 rarity = roll < 75 ? GachaRarity.Rare : GachaRarity.Legendary;
             }
             else if (roll < 50) rarity = GachaRarity.Common;
@@ -761,7 +784,6 @@ namespace PalLauncher.Services
             else if (roll < 95) rarity = GachaRarity.Rare;
             else rarity = GachaRarity.Legendary;
 
-            // Pick a random item within the rarity band
             var candidates = _gachaDropTable.Where(d => d.Rarity == rarity).ToArray();
             var pick = candidates[_gachaRng.Next(candidates.Length)];
 
@@ -792,38 +814,30 @@ namespace PalLauncher.Services
                 };
             }
 
-            if (profile.TechnologyPoints < totalCost)
+            int currentPoints;
+            lock (_lock)
+            {
+                if (!_playerTechPoints.TryGetValue(uid, out currentPoints) &&
+                    (string.IsNullOrWhiteSpace(playerUid) || !_playerTechPoints.TryGetValue(playerUid, out currentPoints)))
+                {
+                    currentPoints = profile.TechnologyPoints;
+                }
+            }
+
+            if (currentPoints < totalCost)
             {
                 return new GachaReceipt
                 {
                     Success = false,
                     Pulls = pulls,
                     TotalCost = totalCost,
-                    PreviousTechPoints = profile.TechnologyPoints,
-                    NewTechPoints = profile.TechnologyPoints,
-                    Message = $"Insufficient Technology Points. You need **{totalCost} pts** for a {pulls}-pull, but currently have **{profile.TechnologyPoints} pts**."
+                    PreviousTechPoints = currentPoints,
+                    NewTechPoints = currentPoints,
+                    Message = $"Insufficient Technology Points. You need **{totalCost} pts** for a {pulls}-pull, but currently have **{currentPoints} pts**."
                 };
             }
 
-            // Deduct Tech Points
-            if (isOnlineSession)
-            {
-                // Defer deduction to after drops are calculated, we will queue the drops
-            }
-            else
-            {
-                bool updated = await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
-                if (!updated)
-                {
-                    return new GachaReceipt
-                    {
-                        Success = false,
-                        Message = "Failed to update save file. Gacha transaction cancelled safely."
-                    };
-                }
-            }
-
-            int newPoints = profile.TechnologyPoints - totalCost;
+            int newPoints = currentPoints - totalCost;
 
             // Roll drops
             var drops = new List<GachaDrop>();
@@ -843,9 +857,12 @@ namespace PalLauncher.Services
 
             bool hasLegendary = drops.Any(d => d.Rarity == GachaRarity.Legendary);
 
-            // Credit items to Player Virtual Vault
+            // Credit items to Player Virtual Vault and deduct Technology Points
             lock (_lock)
             {
+                _playerTechPoints[uid] = newPoints;
+                if (!string.IsNullOrWhiteSpace(playerUid)) _playerTechPoints[playerUid] = newPoints;
+
                 if (!_playerInventories.TryGetValue(uid, out var inv))
                 {
                     inv = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -860,6 +877,15 @@ namespace PalLauncher.Services
                 SaveState();
             }
 
+            if (isOnlineSession)
+            {
+                QueueDelivery(uid, "Gacha", "RelicMysteryBox", pulls, -totalCost);
+            }
+            else
+            {
+                await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
+            }
+
             _logService.LogSuccess($"[GACHA] {uid} performed {pulls}-pull for {totalCost} Tech Points. " +
                                    $"Results: {string.Join(", ", drops.Select(d => $"[{d.Rarity}] {d.Name}"))}" +
                                    (hasLegendary ? " ★ JACKPOT!" : "") +
@@ -870,7 +896,7 @@ namespace PalLauncher.Services
                 Success = true,
                 Pulls = pulls,
                 TotalCost = totalCost,
-                PreviousTechPoints = profile.TechnologyPoints,
+                PreviousTechPoints = currentPoints,
                 NewTechPoints = newPoints,
                 Drops = drops,
                 HasLegendary = hasLegendary,
@@ -910,6 +936,13 @@ namespace PalLauncher.Services
                                 _playerInventories[playerObj.Name] = inv;
                             }
                         }
+                        if (doc.RootElement.TryGetProperty("techPoints", out var techProp))
+                        {
+                            foreach (var prop in techProp.EnumerateObject())
+                            {
+                                _playerTechPoints[prop.Name] = prop.Value.GetInt32();
+                            }
+                        }
                     }
                 }
                 catch { }
@@ -925,7 +958,8 @@ namespace PalLauncher.Services
                     var data = new
                     {
                         links = _discordToPlayerMap,
-                        inventories = _playerInventories
+                        inventories = _playerInventories,
+                        techPoints = _playerTechPoints
                     };
 
                     string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });

@@ -195,8 +195,64 @@ namespace PalLauncher.Tests
             Assert.NotNull(profileEnd);
             _output.WriteLine($"Player 1 profile read back successfully without byte drift. Final Points: {profileEnd.TechnologyPoints}");
 
-            // Note: The build quota enforcement simulation logic (main.lua) is executed separately via test_build_enforcer.lua
             _output.WriteLine("=== [SUCCESS] End-to-End Simulation Passed! ===");
+        }
+
+        [Fact]
+        public async Task Gacha_PointDeductionAndInsufficientFunds_WorksAccurately()
+        {
+            string tempDir = Path.Combine(Path.GetTempPath(), "PalGachaTest_" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempDir);
+            string playersDir = Path.Combine(tempDir, "Players");
+            Directory.CreateDirectory(playersDir);
+
+            string playerUid = "9EDC20A9000000000000000000000000";
+            byte[] saveBytes = CreateMockPalworldSave(12, playerUid);
+            string playerSavePath = Path.Combine(playersDir, $"{playerUid}.sav");
+            await File.WriteAllBytesAsync(playerSavePath, saveBytes);
+
+            var logService = new LogService();
+            var saveService = new PalSaveService(logService, tempDir);
+            string customStateFile = Path.Combine(tempDir, "economy_state.json");
+            var economyService = new EconomyService(logService, saveService, customStateFilePath: customStateFile);
+
+            // Pull 1: 1-pull (3 pts). 12 -> 9
+            var r1 = await economyService.ExecuteGachaAsync(playerUid, 1, isOnlineSession: true);
+            Assert.True(r1.Success);
+            Assert.Equal(12, r1.PreviousTechPoints);
+            Assert.Equal(9, r1.NewTechPoints);
+            Assert.Single(r1.Drops);
+
+            // Pull 2: 1-pull (3 pts). 9 -> 6
+            var r2 = await economyService.ExecuteGachaAsync(playerUid, 1, isOnlineSession: true);
+            Assert.True(r2.Success);
+            Assert.Equal(9, r2.PreviousTechPoints);
+            Assert.Equal(6, r2.NewTechPoints);
+
+            // Pull 3: 1-pull (3 pts). 6 -> 3
+            var r3 = await economyService.ExecuteGachaAsync(playerUid, 1, isOnlineSession: true);
+            Assert.True(r3.Success);
+            Assert.Equal(6, r3.PreviousTechPoints);
+            Assert.Equal(3, r3.NewTechPoints);
+
+            // Pull 4: 1-pull (3 pts). 3 -> 0
+            var r4 = await economyService.ExecuteGachaAsync(playerUid, 1, isOnlineSession: true);
+            Assert.True(r4.Success);
+            Assert.Equal(3, r4.PreviousTechPoints);
+            Assert.Equal(0, r4.NewTechPoints);
+
+            // Pull 5: 1-pull (3 pts) with 0 balance -> Insufficient funds failure
+            var r5 = await economyService.ExecuteGachaAsync(playerUid, 1, isOnlineSession: true);
+            Assert.False(r5.Success);
+            Assert.Contains("Insufficient Technology Points", r5.Message);
+
+            // Verify inventory has 4 drops
+            var profile = await economyService.GetPlayerProfileAsync(playerUid);
+            Assert.NotNull(profile);
+            Assert.Equal(0, profile.TechnologyPoints);
+            Assert.NotEmpty(profile.InventoryItems);
+
+            try { Directory.Delete(tempDir, true); } catch { }
         }
     }
 }
