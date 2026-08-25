@@ -329,25 +329,54 @@ gc.NumRetriesBeforeForcingGC=5";
         public string ResolvePlayerUid(string? userQuery)
         {
             var uids = GetAvailablePlayerUids();
-            if (uids.Count == 0) return "9EDC20A9000000000000000000000000";
 
-            if (string.IsNullOrWhiteSpace(userQuery))
+            if (!string.IsNullOrWhiteSpace(userQuery))
             {
-                return uids[0];
-            }
-
-            string cleanQuery = userQuery.Trim().Replace("-", "").ToUpperInvariant();
-
-            foreach (var uid in uids)
-            {
-                if (uid.Equals(cleanQuery, StringComparison.OrdinalIgnoreCase) ||
-                    uid.StartsWith(cleanQuery, StringComparison.OrdinalIgnoreCase))
+                string q = userQuery.Trim();
+                try
                 {
-                    return uid;
+                    var liveResp = _httpClient.GetAsync("http://127.0.0.1:8212/v1/api/players").GetAwaiter().GetResult();
+                    if (liveResp.IsSuccessStatusCode)
+                    {
+                        string json = liveResp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                        using var doc = JsonDocument.Parse(json);
+                        if (doc.RootElement.TryGetProperty("players", out var arr) && arr.ValueKind == JsonValueKind.Array)
+                        {
+                            foreach (var item in arr.EnumerateArray())
+                            {
+                                string pid = item.TryGetProperty("playerId", out var p) ? p.GetString() ?? "" : "";
+                                string uid = item.TryGetProperty("userId", out var u) ? u.GetString() ?? "" : "";
+                                string name = item.TryGetProperty("name", out var n) ? n.GetString() ?? "" : "";
+                                string acc = item.TryGetProperty("accountName", out var a) ? a.GetString() ?? "" : "";
+
+                                if (pid.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                                    uid.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                                    uid.Contains(q, StringComparison.OrdinalIgnoreCase) ||
+                                    name.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                                    acc.Equals(q, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    if (!string.IsNullOrWhiteSpace(pid)) return pid;
+                                }
+                            }
+                        }
+                    }
                 }
+                catch { }
+
+                string cleanQuery = q.Replace("-", "").ToUpperInvariant();
+                foreach (var uid in uids)
+                {
+                    if (uid.Equals(cleanQuery, StringComparison.OrdinalIgnoreCase) ||
+                        uid.StartsWith(cleanQuery, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return uid;
+                    }
+                }
+
+                if (cleanQuery.Length >= 4) return cleanQuery;
             }
 
-            return cleanQuery.Length >= 4 ? cleanQuery : uids[0];
+            return uids.Count > 0 ? uids[0] : "9EDC20A9000000000000000000000000";
         }
 
         public async Task<bool> IsPlayerOnlineAsync(string playerUid)
@@ -547,20 +576,84 @@ gc.NumRetriesBeforeForcingGC=5";
 
         public async Task<PlayerEconomyProfile?> ReadPlayerProfileAsync(string playerUid)
         {
-            var worldDir = FindSaveGamesDirectory();
-            if (string.IsNullOrEmpty(worldDir)) return null;
+            string resolvedPlayerName = "Pioneer";
+            int liveLevel = 0;
+            string actualUid = playerUid;
 
-            string playerSave = Path.Combine(worldDir, "Players", $"{playerUid}.sav");
-            if (!File.Exists(playerSave))
+            try
             {
-                // Fallback to local profile mock/state if file not found
+                var liveResp = await _httpClient.GetAsync("http://127.0.0.1:8212/v1/api/players");
+                if (liveResp.IsSuccessStatusCode)
+                {
+                    string json = await liveResp.Content.ReadAsStringAsync();
+                    using var doc = JsonDocument.Parse(json);
+                    if (doc.RootElement.TryGetProperty("players", out var arr) && arr.ValueKind == JsonValueKind.Array)
+                    {
+                        string q = playerUid.Trim();
+                        foreach (var item in arr.EnumerateArray())
+                        {
+                            string pid = item.TryGetProperty("playerId", out var p) ? p.GetString() ?? "" : "";
+                            string uid = item.TryGetProperty("userId", out var u) ? u.GetString() ?? "" : "";
+                            string name = item.TryGetProperty("name", out var n) ? n.GetString() ?? "" : "";
+                            string acc = item.TryGetProperty("accountName", out var a) ? a.GetString() ?? "" : "";
+
+                            if (pid.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                                uid.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                                uid.Contains(q, StringComparison.OrdinalIgnoreCase) ||
+                                name.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                                acc.Equals(q, StringComparison.OrdinalIgnoreCase))
+                            {
+                                if (!string.IsNullOrWhiteSpace(name)) resolvedPlayerName = name;
+                                else if (!string.IsNullOrWhiteSpace(acc)) resolvedPlayerName = acc;
+
+                                if (item.TryGetProperty("level", out var lvlProp))
+                                {
+                                    if (lvlProp.ValueKind == JsonValueKind.Number) liveLevel = lvlProp.GetInt32();
+                                    else if (int.TryParse(lvlProp.GetString(), out int parsedLvl)) liveLevel = parsedLvl;
+                                }
+
+                                if (!string.IsNullOrWhiteSpace(pid)) actualUid = pid;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            var worldDir = FindSaveGamesDirectory();
+            if (string.IsNullOrEmpty(worldDir))
+            {
                 return new PlayerEconomyProfile
                 {
-                    PlayerUid = playerUid,
-                    PlayerName = "Pioneer",
+                    PlayerUid = actualUid,
+                    PlayerName = resolvedPlayerName,
                     TechnologyPoints = 12,
                     BossTechnologyPoints = 4,
-                    Level = 25
+                    Level = Math.Max(1, liveLevel > 0 ? liveLevel : 1)
+                };
+            }
+
+            string playerSave = Path.Combine(worldDir, "Players", $"{actualUid}.sav");
+            if (!File.Exists(playerSave))
+            {
+                string directSave = Path.Combine(worldDir, "Players", $"{playerUid}.sav");
+                if (File.Exists(directSave))
+                {
+                    playerSave = directSave;
+                    actualUid = playerUid;
+                }
+            }
+
+            if (!File.Exists(playerSave))
+            {
+                return new PlayerEconomyProfile
+                {
+                    PlayerUid = actualUid,
+                    PlayerName = resolvedPlayerName != "Pioneer" ? resolvedPlayerName : $"Pioneer ({actualUid[..Math.Min(6, actualUid.Length)]})",
+                    TechnologyPoints = 12,
+                    BossTechnologyPoints = 4,
+                    Level = Math.Max(1, liveLevel > 0 ? liveLevel : 1)
                 };
             }
 
@@ -575,17 +668,24 @@ gc.NumRetriesBeforeForcingGC=5";
 
                 return new PlayerEconomyProfile
                 {
-                    PlayerUid = playerUid,
-                    PlayerName = $"Pioneer ({playerUid[..Math.Min(6, playerUid.Length)]})",
+                    PlayerUid = actualUid,
+                    PlayerName = resolvedPlayerName != "Pioneer" ? resolvedPlayerName : $"Pioneer ({actualUid[..Math.Min(6, actualUid.Length)]})",
                     TechnologyPoints = techPoints,
                     BossTechnologyPoints = bossTechPoints,
-                    Level = Math.Max(1, level)
+                    Level = liveLevel > 0 ? liveLevel : Math.Max(1, level)
                 };
             }
             catch (Exception ex)
             {
-                _logService.LogError($"Failed reading player save {playerUid}", "SaveService", ex);
-                return null;
+                _logService.LogError($"Failed reading player save {actualUid}", "SaveService", ex);
+                return new PlayerEconomyProfile
+                {
+                    PlayerUid = actualUid,
+                    PlayerName = resolvedPlayerName,
+                    TechnologyPoints = 12,
+                    BossTechnologyPoints = 4,
+                    Level = Math.Max(1, liveLevel > 0 ? liveLevel : 1)
+                };
             }
         }
 
