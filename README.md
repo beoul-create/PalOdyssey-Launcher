@@ -14,7 +14,7 @@
 Getting started takes less than 60 seconds:
 
 1. **Download the Launcher**:
-   - Download **`PalOdyssey-Launcher-v2.0.0.zip`** from this repository (or from [Releases](https://github.com/beoul-create/PalOdyssey-Launcher/releases)).
+   - Download the latest **[PalOdyssey Launcher Release](https://github.com/beoul-create/PalOdyssey-Launcher/releases)** (`.zip`).
    - Extract the zip folder anywhere on your PC.
 2. **Launch `PalLauncher.exe`**:
    - Double-click **`PalLauncher.exe`** inside the extracted folder.

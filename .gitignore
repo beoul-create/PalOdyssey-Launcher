@@ -31,6 +31,8 @@ $RECYCLE.BIN/
 *.temp
 *.log
 *.benchmark_backup
+*.zip
+
 
 # Breakpad minidumps and crash logs
 *.dmp

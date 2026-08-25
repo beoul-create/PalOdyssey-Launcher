@@ -11,16 +11,15 @@ This document is a navigation guide for maintaining the **PalOdyssey Launcher**,
 | **`Modpack/`** | 🌐 **Distribution** | Mod files, UE4SS, Lua configs, & `version.json`. The launcher downloads mods directly from GitHub using this path. | **YES** (Crucial) |
 | **`PalLauncher/`** | 🌐 **Source Code** | C# .NET 8 WPF application source code. | **YES** |
 | **`PalLauncher.sln`** | 🌐 **Solution** | Visual Studio solution file for building. | **YES** |
-| **`PalOdyssey-Launcher-v2.0.0.zip`** | 🌐 **Release Package** | Pre-packaged executable archive for players to download. | **YES** |
 | **`README.md`** | 🌐 **Documentation** | Player quick-start guide, mod settings, and troubleshooting. | **YES** |
 | **`DEVELOPMENT.md`** | 🌐 **Documentation** | Developer workflow guide (this file). | **YES** |
 | **`PalLauncher.Tests/`** | 🛠️ **Testing** | 89 automated unit, integration, and regression tests. | **YES** |
 | **`tools/playit/`** | 🖥️ **Network Tools** | Tunneling binary for co-op server hosting. | **YES** |
+| **`PalOdyssey-Launcher-v*.zip`** | 📦 **Release Asset** | Packaged launcher zip (uploaded to GitHub Releases, not committed to Git). | ❌ (Upload to GitHub Releases) |
 | **`dev-tools/`** | 🛠️ **Local Dev Only** | Developer runners (`run-dev.bat`), test runners (`run-tests.bat`), and release packagers. | ❌ (Local Only - `.gitignore`) |
 | **`server-tools/`** | 🖥️ **Local Host Only** | 24/7 PM2 bot runners, task schedulers, and dedicated server deployers. | ❌ (Local Only - `.gitignore`) |
 | `bot_token.txt` | 🔒 **Local Secret** | Discord bot token for the 24/7 daemon. | ❌ (Local Only - `.gitignore`) |
 | `publish/`, `bin/`, `obj/` | ⚙️ **Build Output** | Intermediate build binaries. | ❌ (Local Only - `.gitignore`) |
-
 
 ---
 
@@ -67,13 +66,16 @@ When you are ready to distribute a new launcher version:
 
 1. **Build and Zip**:
    - Double-click [`dev-tools/package-release.bat`](file:///c:/PalOddessey/dev-tools/package-release.bat).
-   - This automatically compiles a clean Release build and creates the fresh `PalOdyssey-Launcher-v2.0.0.zip`.
-2. **Commit & Push**:
+   - This automatically compiles a clean Release build and creates the fresh `PalOdyssey-Launcher-v2.0.0.zip` locally on your machine.
+2. **Commit Code & Push to GitHub**:
    ```bash
-   git add PalLauncher/ PalOdyssey-Launcher-v2.0.0.zip
-   git commit -m "Release launcher v2.0.0"
+   git add PalLauncher/
+   git commit -m "Update launcher code to v2.0.0"
    git push origin main
    ```
+3. **Create GitHub Release**:
+   - Go to your GitHub repository -> **Releases** -> **Draft a new release**.
+   - Set tag to `v2.0.0`, attach `PalOdyssey-Launcher-v2.0.0.zip`, and click **Publish release**.
 
 ---
 
