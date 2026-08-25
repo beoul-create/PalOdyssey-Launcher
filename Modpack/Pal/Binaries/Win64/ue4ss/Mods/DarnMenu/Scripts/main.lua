@@ -27,11 +27,20 @@ local Schemas = require("schemas")
 local Writers = require("writers")
 local log  = Darn.logger("[DarnMenu]")
 local safe = Darn.safe
-local alive = UI.alive
-
 local DIR = Darn.dir
 local SHARED = DIR .. "../../shared/"
 local VERSION = Darn.version()
+
+local function safe_loadfile(path)
+  if not path or type(path) ~= "string" then return nil end
+  local f = io.open(path, "rb")
+  if not f then return nil end
+  local content = f:read("*a")
+  f:close()
+  if not content or content == "" then return nil end
+  local chunk, err = load(content, "@" .. path, "t")
+  return chunk, err
+end
 
 -- MAP-BOUNDARY STAND-DOWN (see the block of the same name in DarnUI's ui.lua).
 -- Every timer below skips its body while the engine is swapping maps, because a
@@ -331,7 +340,7 @@ end
 local FOLDS_PATH = SHARED .. "DarnMenu_folds.lua"
 local secFolds = (function()
   local t = {}
-  local chunk = safe(function() return loadfile(FOLDS_PATH) end)
+  local chunk = safe(function() return safe_loadfile(FOLDS_PATH) end)
   if chunk then
     local okc, v = pcall(chunk)
     if okc and type(v) == "table" then
@@ -776,7 +785,7 @@ local stackLift = nil
 local ENTRY_OFFSET = {
   logged = false,
   rows = (function()
-    local chunk = safe(function() return loadfile(SHARED .. "DarnMenu_user.lua") end)
+    local chunk = safe(function() return safe_loadfile(SHARED .. "DarnMenu_user.lua") end)
     if not chunk then return 0 end
     local ok, t = pcall(chunk)
     if not ok or type(t) ~= "table" then return 0 end

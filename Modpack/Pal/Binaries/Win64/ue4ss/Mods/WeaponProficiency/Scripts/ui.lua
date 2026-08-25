@@ -623,7 +623,12 @@ local CONFIG_PATH = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$"
 
 function UI.config(key)
   local fallback = CONFIG_DEFAULTS[key]
-  local chunk = safe(function() return loadfile(CONFIG_PATH) end)
+  local f = io.open(CONFIG_PATH, "r")
+  if not f then return fallback end
+  local content = f:read("*a")
+  f:close()
+  if not content or content == "" then return fallback end
+  local chunk = load(content, "@" .. CONFIG_PATH, "t")
   if not chunk then return fallback end
   local ok, t = pcall(chunk)
   if not ok or type(t) ~= "table" then return fallback end

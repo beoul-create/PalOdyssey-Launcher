@@ -97,6 +97,17 @@ end
 -- remains as a fallback for anyone still running a build that expects the separate DarnUI
 -- item, and (usefully) it is also what makes the leftover pre-1.6.0 ui.lua a non-event: that
 -- file is now simply where the kit is meant to live.
+local function safe_loadfile(path)
+  if not path or type(path) ~= "string" then return nil end
+  local f = io.open(path, "r")
+  if not f then return nil end
+  local content = f:read("*a")
+  f:close()
+  if not content or content == "" then return nil end
+  local chunk, err = load(content, "@" .. path)
+  return chunk, err
+end
+
 function M.requireUI()
   local dir = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", ""))
   -- `package.loaded` is guarded rather than assumed: this function is the FIRST thing
@@ -108,10 +119,10 @@ function M.requireUI()
     return cached
   end
   local from = "vendored"
-  local chunk, loadErr = loadfile(dir .. "ui.lua")
+  local chunk, loadErr = safe_loadfile(dir .. "ui.lua")
   if not chunk then
     from = "DarnUI mod"
-    chunk, loadErr = loadfile(dir .. "../../DarnUI/Scripts/ui.lua")
+    chunk, loadErr = safe_loadfile(dir .. "../../DarnUI/Scripts/ui.lua")
   end
   if not chunk then
     error("could not load the DarnUI kit (no vendored copy, no DarnUI mod): " .. tostring(loadErr))

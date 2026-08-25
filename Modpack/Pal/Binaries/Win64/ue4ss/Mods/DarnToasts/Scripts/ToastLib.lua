@@ -78,6 +78,17 @@ print("[ToastLib] serving from " .. tostring(debug.getinfo(1, "S").source) .. "\
 local SRC_DIR = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", ""))
 local SHARED_DIR = SRC_DIR:match("[/\\]shared[/\\]$") and SRC_DIR or (SRC_DIR .. "../../shared/")
 
+local function safe_loadfile(path)
+  if not path or type(path) ~= "string" then return nil end
+  local f = io.open(path, "r")
+  if not f then return nil end
+  local content = f:read("*a")
+  f:close()
+  if not content or content == "" then return nil end
+  local chunk, err = load(content, "@" .. path)
+  return chunk, err
+end
+
 function M.registerMenuSchema(name, version, sourceText)
   if type(name) ~= "string" or not name:match("^[%w_%-]+$") then return false end
   local ok, err = pcall(function()
@@ -94,7 +105,7 @@ function M.registerMenuSchema(name, version, sourceText)
     f:close()
     local ipath = SHARED_DIR .. "DarnMenu_schema_index.lua"
     local list = {}
-    local chunk = loadfile(ipath)
+    local chunk = safe_loadfile(ipath)
     if chunk then
       local okc, t = pcall(chunk)
       if okc and type(t) == "table" then list = t end
@@ -230,8 +241,8 @@ local function loadConfig()
   local cfg = {}
   for k, v in pairs(DEFAULTS) do cfg[k] = v end
   local user
-  local okL, chunk = pcall(loadfile, SHARED_DIR .. "ToastLib_config.lua")
-  if okL and chunk then
+  local chunk = safe_loadfile(SHARED_DIR .. "ToastLib_config.lua")
+  if chunk then
     local okC, t = pcall(chunk)
     if okC then user = t end
   end
@@ -345,7 +356,7 @@ end
 local CONSUMERS_PATH = SHARED_DIR .. "DarnToasts_consumers.lua"
 local function readConsumers()
   local t = {}
-  local chunk = loadfile(CONSUMERS_PATH)
+  local chunk = safe_loadfile(CONSUMERS_PATH)
   if chunk then
     local ok, v = pcall(chunk)
     if ok and type(v) == "table" then t = v end

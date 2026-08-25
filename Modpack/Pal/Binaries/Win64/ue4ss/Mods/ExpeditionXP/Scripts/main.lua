@@ -332,23 +332,26 @@ end
 local function loadUserConfig()
   local dir = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", ""))
   local candidates = { dir .. "../config.lua", dir .. "config.lua", BASE .. "config.lua" }
-  -- A MALFORMED config.lua MUST NOT LOOK LIKE NO config.lua. loadfile returns nil for both
-  -- "there is no such file" (fine, the overwhelmingly common case) and "your file has a syntax
-  -- error" (very much not fine). Treating them the same is how someone edits a config, gets a
-  -- stray comma, and spends an evening wondering why nothing changed -- the exact silent-no-op
-  -- this whole feature exists to avoid. So: keep the error text and tell them.
+
+  local function safe_loadfile(path)
+    if not path or type(path) ~= "string" then return nil end
+    local f = io.open(path, "r")
+    if not f then return nil end
+    local content = f:read("*a")
+    f:close()
+    if not content or content == "" then return nil end
+    local c, err = load(content, "@" .. path)
+    return c, err
+  end
+
   local chunk, used
   for _, p in ipairs(candidates) do
-    local c, err = loadfile(p)
+    local c, err = safe_loadfile(p)
     if c then chunk, used = c, p; break end
     if type(err) == "string" then
-      local missing = err:find("No such file", 1, true) or err:find("cannot open", 1, true)
-        or err:find("system cannot find", 1, true)
-      if not missing then
-        log("config.lua at " .. p .. " HAS A SYNTAX ERROR and was NOT loaded: " .. err
-          .. " -- running on defaults until it is fixed.")
-        return
-      end
+      log("config.lua at " .. p .. " HAS A SYNTAX ERROR and was NOT loaded: " .. err
+        .. " -- running on defaults until it is fixed.")
+      return
     end
   end
   if not chunk then return end

@@ -288,6 +288,17 @@ function S.new(fileName, version)
       return n
     end
 
+    local function safe_loadfile(path)
+      if not path or type(path) ~= "string" then return nil end
+      local f = io.open(path, "rb")
+      if not f then return nil end
+      local content = f:read("*a")
+      f:close()
+      if not content or content == "" then return nil end
+      local chunk, err = load(content, "@" .. path, "t")
+      return chunk, err
+    end
+
     -- REPAIR A FILE THE OLD SERIALIZER ALREADY DAMAGED (2026-07-28). Before the serializer was
     -- made total, a NaN was written as the bare word `nan` and an infinity as `inf`. Neither is
     -- valid Lua, so the whole file failed to load and read as "no data" -- total loss of every
@@ -296,7 +307,7 @@ function S.new(fileName, version)
     -- swap the bare tokens for nil and re-parse. Purely additive -- if it does not parse after
     -- repair we fall through to the same .recovery/.bak chain as before.
     local function loadMaybeRepairing(p)
-      local chunk = safe(function() return loadfile(p) end)
+      local chunk = safe(function() return safe_loadfile(p) end)
       if chunk then
         local ok, t = pcall(chunk)
         if ok and type(t) == "table" then return t, false end
@@ -337,7 +348,7 @@ function S.new(fileName, version)
     -- primary could not be replaced. Prefer it whenever it holds more than what loaded, then
     -- fold it in so the next successful save consolidates and it stops being consulted.
     do
-      local c = safe(function() return loadfile(self.path .. ".recovery") end)
+      local c = safe(function() return safe_loadfile(self.path .. ".recovery") end)
       if c then
         local ok, t = pcall(c)
         if ok and type(t) == "table" and entries(t) >= entries(self.data) then
@@ -348,7 +359,7 @@ function S.new(fileName, version)
       end
     end
     if (not loaded) or entries(self.data) == 0 then
-      local c = safe(function() return loadfile(self.path .. ".bak") end)
+      local c = safe(function() return safe_loadfile(self.path .. ".bak") end)
       if c then
         local ok, t = pcall(c)
         if ok and type(t) == "table" and entries(t) > entries(self.data) then

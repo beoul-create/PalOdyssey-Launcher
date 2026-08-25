@@ -54,6 +54,17 @@ local safe = Darn.safe
 local alive = Darn.alive
 local log  = Darn.logger("[Arsenal]")
 
+local function safe_loadfile(path)
+  if not path or type(path) ~= "string" then return nil end
+  local f = io.open(path, "rb")
+  if not f then return nil end
+  local content = f:read("*a")
+  f:close()
+  if not content or content == "" then return nil end
+  local chunk, err = load(content, "@" .. path, "t")
+  return chunk, err
+end
+
 local cfg      = require("config")
 -- user overrides (survive updates; the DarnMenu options page writes here):
 -- Mods/shared/WeaponProficiency_user.lua returning a table of keys to change
@@ -392,7 +403,7 @@ local function posWriteBack(xOff, yOff, wOpt)
   -- writes; same path derivation the stores use
   local p = tostring(Darn.dir or "") .. "../../shared/WeaponProficiency_user.lua"
   local t = {}
-  local chunk = loadfile(p)
+  local chunk = safe_loadfile(p)
   if chunk then
     local okc, v = pcall(chunk)
     if okc and type(v) == "table" then t = v end
@@ -1104,7 +1115,7 @@ end
 
 local function readPrestige()
   if not prestigePath then return {} end
-  local chunk = safe(function() return loadfile(prestigePath) end)
+  local chunk = safe(function() return safe_loadfile(prestigePath) end)
   if not chunk then return {} end
   local ok, t = pcall(chunk)
   return (ok and type(t) == "table") and t or {}
