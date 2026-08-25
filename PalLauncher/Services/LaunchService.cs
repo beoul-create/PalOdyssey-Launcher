@@ -219,6 +219,15 @@ namespace PalLauncher.Services
 
                             if (File.Exists(serverExe))
                             {
+                                // Apply automatic server stability optimizations & backup pruning
+                                try
+                                {
+                                    var saveService = new PalSaveService(_logService);
+                                    _ = saveService.ApplyServerStabilityAndNetworkOptimizationsAsync(serverRoot);
+                                    _ = saveService.PruneExcessBackupsAsync(maxBackupsToKeep: 24);
+                                }
+                                catch { }
+
                                 string serverArgs = BuildServerCommandLineArguments(config);
                                 if (isDirectEngineBinary)
                                 {

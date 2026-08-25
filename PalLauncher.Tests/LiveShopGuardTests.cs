@@ -69,6 +69,8 @@ namespace PalLauncher.Tests
             public Task<bool> RequestWorldSaveAsync() => Task.FromResult(true);
             public Task<string?> ExtractGuildIdFromLevelSavAsync(string playerUid) => Task.FromResult<string?>("MockGuild_1");
             public Task<bool> UpdatePalWorldSettingsAsync(int newBaseCap = 10) => Task.FromResult(true);
+            public Task<bool> ApplyServerStabilityAndNetworkOptimizationsAsync(string? serverRootPath = null) => Task.FromResult(true);
+            public Task<int> PruneExcessBackupsAsync(int maxBackupsToKeep = 24) => Task.FromResult(0);
 
             public Task<PlayerEconomyProfile?> ReadPlayerProfileAsync(string playerUid)
             {

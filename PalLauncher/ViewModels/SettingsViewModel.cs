@@ -534,8 +534,17 @@ namespace PalLauncher.ViewModels
                     CustomArguments = profile.RecommendedCustomArguments;
                 }
 
+                // Apply Server Stability (AutoSaveSpan 300s, 30s socket timeout) & Backup Retention
+                try
+                {
+                    var saveService = new PalSaveService(_logService);
+                    await saveService.ApplyServerStabilityAndNetworkOptimizationsAsync(GamePath);
+                    await saveService.PruneExcessBackupsAsync(maxBackupsToKeep: 24);
+                }
+                catch { }
+
                 StatusMessage = $"⚡ Calibrated for {profile.PerformanceTier} • Target: {profile.EstimatedAvgFps}";
-                _logService.LogSuccess($"Auto-calibrated startup flags & modpack: {profile.RecommendationSummary}", "Optimizer");
+                _logService.LogSuccess($"Auto-calibrated startup flags, modpack & server stability: {profile.RecommendationSummary}", "Optimizer");
             }
             catch (Exception ex)
             {

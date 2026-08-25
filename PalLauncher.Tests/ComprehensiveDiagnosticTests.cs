@@ -120,5 +120,74 @@ namespace PalLauncher.Tests
                 await daemon.StopDaemonAsync();
             }
         }
+
+        [Fact]
+        public async Task PalSaveService_ApplyServerStabilityAndNetworkOptimizations_TunesIniFiles()
+        {
+            string tempDir = Path.Combine(Path.GetTempPath(), "PalServerTest_" + Guid.NewGuid());
+            string configDir = Path.Combine(tempDir, "Pal", "Saved", "Config", "WindowsServer");
+            Directory.CreateDirectory(configDir);
+
+            try
+            {
+                string settingsIni = Path.Combine(configDir, "PalWorldSettings.ini");
+                await File.WriteAllTextAsync(settingsIni, "[/Script/Pal.PalGameWorldSettings]\nOptionSettings=(AutoSaveSpan=30.000000,BaseCampMaxNumInGuild=4)");
+
+                var saveService = new PalSaveService(_logService);
+                bool applied = await saveService.ApplyServerStabilityAndNetworkOptimizationsAsync(tempDir);
+
+                Assert.True(applied);
+
+                string updatedSettings = await File.ReadAllTextAsync(settingsIni);
+                Assert.Contains("AutoSaveSpan=300.000000", updatedSettings);
+
+                string engineIni = Path.Combine(configDir, "Engine.ini");
+                Assert.True(File.Exists(engineIni));
+                string engineContent = await File.ReadAllTextAsync(engineIni);
+                Assert.Contains("ConnectionTimeout=30.0", engineContent);
+                Assert.Contains("MaxClientRate=100000", engineContent);
+            }
+            finally
+            {
+                if (Directory.Exists(tempDir))
+                {
+                    try { Directory.Delete(tempDir, recursive: true); } catch { }
+                }
+            }
+        }
+
+        [Fact]
+        public async Task PalSaveService_PruneExcessBackups_CleansOldBackups()
+        {
+            string tempDir = Path.Combine(Path.GetTempPath(), "PalBackupTest_" + Guid.NewGuid());
+            string worldBackupDir = Path.Combine(tempDir, "backup", "world");
+            Directory.CreateDirectory(worldBackupDir);
+
+            try
+            {
+                // Create 10 dummy backup folders
+                for (int i = 0; i < 10; i++)
+                {
+                    string subDir = Path.Combine(worldBackupDir, $"snap_{i:D2}");
+                    Directory.CreateDirectory(subDir);
+                    await File.WriteAllTextAsync(Path.Combine(subDir, "world.sav"), "dummy save data");
+                    Directory.SetCreationTimeUtc(subDir, DateTime.UtcNow.AddMinutes(i - 20));
+                }
+
+                var saveService = new PalSaveService(_logService, tempDir);
+                int pruned = await saveService.PruneExcessBackupsAsync(maxBackupsToKeep: 4);
+
+                Assert.Equal(6, pruned);
+                var remaining = Directory.GetDirectories(worldBackupDir);
+                Assert.Equal(4, remaining.Length);
+            }
+            finally
+            {
+                if (Directory.Exists(tempDir))
+                {
+                    try { Directory.Delete(tempDir, recursive: true); } catch { }
+                }
+            }
+        }
     }
 }

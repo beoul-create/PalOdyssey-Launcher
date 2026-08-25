@@ -24,6 +24,8 @@ namespace PalLauncher.Services
         string ResolvePlayerUid(string? userQuery);
         Task<string?> ExtractGuildIdFromLevelSavAsync(string playerUid);
         Task<bool> UpdatePalWorldSettingsAsync(int newBaseCap = 10);
+        Task<bool> ApplyServerStabilityAndNetworkOptimizationsAsync(string? serverRootPath = null);
+        Task<int> PruneExcessBackupsAsync(int maxBackupsToKeep = 24);
     }
 
     public class PalSaveService : IPalSaveService
@@ -44,6 +46,225 @@ namespace PalLauncher.Services
         {
             _logService = logService;
             _customSaveDirectory = customSaveDirectory;
+        }
+
+        public string? FindServerConfigDirectory(string? serverRootPath = null)
+        {
+            if (!string.IsNullOrWhiteSpace(serverRootPath))
+            {
+                string c1 = Path.Combine(serverRootPath, "Pal", "Saved", "Config", "WindowsServer");
+                if (Directory.Exists(c1)) return c1;
+                string c2 = Path.Combine(serverRootPath, "..", "PalServer", "Pal", "Saved", "Config", "WindowsServer");
+                if (Directory.Exists(c2)) return Path.GetFullPath(c2);
+            }
+
+            var worldDir = FindSaveGamesDirectory();
+            if (!string.IsNullOrEmpty(worldDir))
+            {
+                string candidate = Path.GetFullPath(Path.Combine(worldDir, "..", "..", "..", "Config", "WindowsServer"));
+                if (Directory.Exists(candidate)) return candidate;
+            }
+
+            string[] candidates = {
+                @"C:\SteamLibrary\steamapps\common\PalServer\Pal\Saved\Config\WindowsServer",
+                @"D:\SteamLibrary\steamapps\common\PalServer\Pal\Saved\Config\WindowsServer",
+                @"E:\SteamLibrary\steamapps\common\PalServer\Pal\Saved\Config\WindowsServer",
+                @"C:\Program Files (x86)\Steam\steamapps\common\PalServer\Pal\Saved\Config\WindowsServer",
+                @"C:\Program Files\Steam\steamapps\common\PalServer\Pal\Saved\Config\WindowsServer",
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Pal\Saved\Config\WindowsServer")
+            };
+
+            foreach (var c in candidates)
+            {
+                if (Directory.Exists(c)) return c;
+            }
+
+            return null;
+        }
+
+        public async Task<bool> ApplyServerStabilityAndNetworkOptimizationsAsync(string? serverRootPath = null)
+        {
+            try
+            {
+                string? configDir = FindServerConfigDirectory(serverRootPath);
+                if (string.IsNullOrEmpty(configDir))
+                {
+                    _logService.LogInfo("Server config directory not found. Stability settings will apply when server files are detected.", "ServerOptimizer");
+                    return false;
+                }
+
+                if (!Directory.Exists(configDir)) Directory.CreateDirectory(configDir);
+
+                // 1. Optimize PalWorldSettings.ini (AutoSaveSpan=300s to eliminate save-write hitches/RPC drops)
+                string settingsIni = Path.Combine(configDir, "PalWorldSettings.ini");
+                if (File.Exists(settingsIni))
+                {
+                    string content = await File.ReadAllTextAsync(settingsIni);
+                    string autoSavePattern = @"AutoSaveSpan=[0-9]+(\.[0-9]+)?";
+                    if (System.Text.RegularExpressions.Regex.IsMatch(content, autoSavePattern))
+                    {
+                        content = System.Text.RegularExpressions.Regex.Replace(content, autoSavePattern, "AutoSaveSpan=300.000000");
+                    }
+                    else if (content.Contains("OptionSettings=("))
+                    {
+                        content = content.Replace("OptionSettings=(", "OptionSettings=(AutoSaveSpan=300.000000,");
+                    }
+
+                    string npcInvulPattern = @"bEnableInvulnerableNPC=[A-Za-z]+";
+                    if (System.Text.RegularExpressions.Regex.IsMatch(content, npcInvulPattern))
+                    {
+                        content = System.Text.RegularExpressions.Regex.Replace(content, npcInvulPattern, "bEnableInvulnerableNPC=False");
+                    }
+
+                    await File.WriteAllTextAsync(settingsIni, content);
+                    _logService.LogSuccess("PalWorldSettings.ini tuned: AutoSaveSpan=300s (prevents cutscene/statue save-hitches).", "ServerOptimizer");
+                }
+
+                // 2. Optimize Engine.ini (Socket Timeout & Ghost Session Eviction Rules)
+                string engineIni = Path.Combine(configDir, "Engine.ini");
+                string engineContent = File.Exists(engineIni) ? await File.ReadAllTextAsync(engineIni) : "";
+
+                string netDriverSection = @"[/Script/OnlineSubsystemUtils.IpNetDriver]
+ConnectionTimeout=30.0
+InitialConnectTimeout=45.0
+KeepAliveTime=0.2
+MaxClientRate=100000
+MaxInternetClientRate=100000";
+
+                string gcSection = @"[/Script/Engine.GarbageCollectionSettings]
+gc.TimeBetweenPurgingPendingKillObjects=30
+gc.NumRetriesBeforeForcingGC=5";
+
+                if (!engineContent.Contains("[/Script/OnlineSubsystemUtils.IpNetDriver]"))
+                {
+                    engineContent = (engineContent.Trim() + Environment.NewLine + Environment.NewLine + netDriverSection).Trim();
+                }
+
+                if (!engineContent.Contains("[/Script/Engine.GarbageCollectionSettings]"))
+                {
+                    engineContent = (engineContent.Trim() + Environment.NewLine + Environment.NewLine + gcSection).Trim();
+                }
+
+                await File.WriteAllTextAsync(engineIni, engineContent);
+                _logService.LogSuccess("Engine.ini optimized: Ghost Session Eviction (30s timeout) & Network Buffer (100kbps) active.", "ServerOptimizer");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Could not apply server stability optimizations: {ex.Message}", "ServerOptimizer");
+                return false;
+            }
+        }
+
+        public async Task<int> PruneExcessBackupsAsync(int maxBackupsToKeep = 24)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    var worldDir = FindSaveGamesDirectory();
+                    if (string.IsNullOrEmpty(worldDir)) return 0;
+
+                    string backupRoot = Path.Combine(worldDir, "backup");
+                    if (!Directory.Exists(backupRoot)) return 0;
+
+                    int totalPruned = 0;
+                    long totalBytesFreed = 0;
+
+                    // 1. Prune world backup snapshots
+                    string worldBackupDir = Path.Combine(backupRoot, "world");
+                    if (Directory.Exists(worldBackupDir))
+                    {
+                        var dirList = new DirectoryInfo(worldBackupDir).GetDirectories();
+                        if (dirList.Length > maxBackupsToKeep)
+                        {
+                            var sorted = System.Linq.Enumerable.OrderBy(dirList, d => d.CreationTimeUtc).ToList();
+                            int toDelete = sorted.Count - maxBackupsToKeep;
+
+                            for (int i = 0; i < toDelete; i++)
+                            {
+                                try
+                                {
+                                    long dirSize = 0;
+                                    foreach (var file in sorted[i].GetFiles("*", SearchOption.AllDirectories))
+                                    {
+                                        dirSize += file.Length;
+                                    }
+                                    sorted[i].Delete(recursive: true);
+                                    totalPruned++;
+                                    totalBytesFreed += dirSize;
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+
+                    // 2. Prune player backup snapshots
+                    string playerBackupDir = Path.Combine(backupRoot, "player");
+                    if (Directory.Exists(playerBackupDir))
+                    {
+                        var playerDirs = new DirectoryInfo(playerBackupDir).GetDirectories();
+                        if (playerDirs.Length > maxBackupsToKeep)
+                        {
+                            var sorted = System.Linq.Enumerable.OrderBy(playerDirs, d => d.CreationTimeUtc).ToList();
+                            int toDelete = sorted.Count - maxBackupsToKeep;
+
+                            for (int i = 0; i < toDelete; i++)
+                            {
+                                try
+                                {
+                                    long dirSize = 0;
+                                    foreach (var file in sorted[i].GetFiles("*", SearchOption.AllDirectories))
+                                    {
+                                        dirSize += file.Length;
+                                    }
+                                    sorted[i].Delete(recursive: true);
+                                    totalPruned++;
+                                    totalBytesFreed += dirSize;
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+
+                    // 3. Prune economy backups
+                    string economyBackupDir = Path.Combine(backupRoot, "economy_backups");
+                    if (Directory.Exists(economyBackupDir))
+                    {
+                        var economyFiles = new DirectoryInfo(economyBackupDir).GetFiles("*.sav");
+                        if (economyFiles.Length > maxBackupsToKeep)
+                        {
+                            var sorted = System.Linq.Enumerable.OrderBy(economyFiles, f => f.CreationTimeUtc).ToList();
+                            int toDelete = sorted.Count - maxBackupsToKeep;
+
+                            for (int i = 0; i < toDelete; i++)
+                            {
+                                try
+                                {
+                                    long fSize = sorted[i].Length;
+                                    sorted[i].Delete();
+                                    totalPruned++;
+                                    totalBytesFreed += fSize;
+                                }
+                                catch { }
+                            }
+                        }
+                    }
+
+                    if (totalPruned > 0)
+                    {
+                        double freedMb = totalBytesFreed / (1024.0 * 1024.0);
+                        _logService.LogSuccess($"[STORAGE GUARD] Backup retention enforced: Purged {totalPruned} stale backup snapshots ({freedMb:F1} MB freed, kept {maxBackupsToKeep} recent).", "SaveService");
+                    }
+
+                    return totalPruned;
+                }
+                catch (Exception ex)
+                {
+                    _logService.LogWarning($"Backup pruning encountered: {ex.Message}", "SaveService");
+                    return 0;
+                }
+            });
         }
 
         public string? FindSaveGamesDirectory()
