@@ -298,6 +298,139 @@ namespace PalLauncher.Tests
 
             try { Directory.Delete(tempDir, true); } catch { }
         }
+
+        [Fact]
+        public async Task AncientEconomy_TransmutationAndPerkUpgrades_WorksAccurately()
+        {
+            string tempDir = Path.Combine(Path.GetTempPath(), "PalAncientTest_" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempDir);
+            string playersDir = Path.Combine(tempDir, "Players");
+            Directory.CreateDirectory(playersDir);
+
+            string playerUid = "9EDC20A9000000000000000000000000";
+            byte[] saveBytes = CreateMockPalworldSave(10, playerUid);
+            string playerSavePath = Path.Combine(playersDir, $"{playerUid}.sav");
+            await File.WriteAllBytesAsync(playerSavePath, saveBytes);
+
+            var logService = new LogService();
+            var saveService = new PalSaveService(logService, tempDir);
+            string customStateFile = Path.Combine(tempDir, "economy_state.json");
+
+            // Seed 30 Ancient Technology Points and 10 Tech Points in state file
+            var initialSeed = new
+            {
+                links = new Dictionary<string, string>(),
+                inventories = new Dictionary<string, Dictionary<string, int>>(),
+                techPoints = new Dictionary<string, int> { [playerUid] = 10 },
+                bossPoints = new Dictionary<string, int> { [playerUid] = 30 }
+            };
+            await File.WriteAllTextAsync(customStateFile, System.Text.Json.JsonSerializer.Serialize(initialSeed));
+
+            var economyService = new EconomyService(logService, saveService, customStateFilePath: customStateFile);
+
+            // 1. Test Transmutation: 5 Ancient Points -> +10 Standard Tech Points
+            var trans = await economyService.ExecuteTransmuteAsync(playerUid, 5, isOnlineSession: true);
+            Assert.True(trans.Success);
+            Assert.Equal(5, trans.AncientPointsSpent);
+            Assert.Equal(10, trans.TechPointsGained);
+            Assert.Equal(30, trans.PreviousAncientPoints);
+            Assert.Equal(25, trans.RemainingAncientPoints);
+            Assert.Equal(10, trans.PreviousTechPoints);
+            Assert.Equal(20, trans.NewTechPoints);
+
+            // 2. Test Base Pal Work Speed Perk: 5 Ancient Points -> +1% Work Speed
+            var perk1 = await economyService.ExecuteUpgradePerkAsync(playerUid, "work_speed", isOnlineSession: true);
+            Assert.True(perk1.Success);
+            Assert.Equal(5, perk1.AncientCost);
+            Assert.Equal(1, perk1.NewPerkLevel);
+            Assert.Equal(20, perk1.RemainingAncientPoints);
+            Assert.Contains("+1%", perk1.PerkBonusDescription);
+
+            // 3. Test Global Server EXP Boost Perk: 20 Ancient Points -> +5% EXP Boost
+            var perk2 = await economyService.ExecuteUpgradePerkAsync(playerUid, "exp_boost", isOnlineSession: true);
+            Assert.True(perk2.Success);
+            Assert.Equal(20, perk2.AncientCost);
+            Assert.Equal(1, perk2.NewPerkLevel);
+            Assert.Equal(0, perk2.RemainingAncientPoints);
+            Assert.Contains("+5%", perk2.PerkBonusDescription);
+
+            // 4. Test Insufficient Ancient Points when trying to upgrade with 0 balance
+            var perkFail = await economyService.ExecuteUpgradePerkAsync(playerUid, "work_speed", isOnlineSession: true);
+            Assert.False(perkFail.Success);
+            Assert.Contains("Insufficient Ancient Technology Points", perkFail.Message);
+
+            // 5. Verify GuildPerks state
+            var perks = economyService.GetGuildPerks();
+            Assert.Equal(1, perks.WorkSpeedLevel);
+            Assert.Equal(1, perks.TotalWorkSpeedPercent);
+            Assert.Equal(1, perks.ExpBoostLevel);
+            Assert.Equal(5, perks.TotalExpBoostPercent);
+
+            try { Directory.Delete(tempDir, true); } catch { }
+        }
+
+        [Fact]
+        public async Task AncientGacha_And_ShopItems_WorksAccurately()
+        {
+            string tempDir = Path.Combine(Path.GetTempPath(), "PalAncientGachaTest_" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempDir);
+            string playersDir = Path.Combine(tempDir, "Players");
+            Directory.CreateDirectory(playersDir);
+
+            string playerUid = "9EDC20A9000000000000000000000000";
+            byte[] saveBytes = CreateMockPalworldSave(10, playerUid);
+            string playerSavePath = Path.Combine(playersDir, $"{playerUid}.sav");
+            await File.WriteAllBytesAsync(playerSavePath, saveBytes);
+
+            var logService = new LogService();
+            var saveService = new PalSaveService(logService, tempDir);
+            string customStateFile = Path.Combine(tempDir, "economy_state.json");
+
+            // Seed 20 Ancient Technology Points
+            var initialSeed = new
+            {
+                links = new Dictionary<string, string>(),
+                inventories = new Dictionary<string, Dictionary<string, int>>(),
+                techPoints = new Dictionary<string, int> { [playerUid] = 10 },
+                bossPoints = new Dictionary<string, int> { [playerUid] = 20 }
+            };
+            await File.WriteAllTextAsync(customStateFile, System.Text.Json.JsonSerializer.Serialize(initialSeed));
+
+            var economyService = new EconomyService(logService, saveService, customStateFilePath: customStateFile);
+
+            // 1. Buy Power Fruit (3 Ancient Points). 20 -> 17
+            var ex1 = await economyService.ExecuteExchangeAsync(playerUid, "power_fruit", 1, isOnlineSession: true);
+            Assert.True(ex1.Success);
+            Assert.True(ex1.IsAncientCurrency);
+            Assert.Equal(3, ex1.TotalCost);
+            Assert.Equal(20, ex1.PreviousAncientPoints);
+            Assert.Equal(17, ex1.NewAncientPoints);
+
+            // 2. Buy Skill Fruit Chest (4 Ancient Points). 17 -> 13
+            var ex2 = await economyService.ExecuteExchangeAsync(playerUid, "skill_fruit_chest", 1, isOnlineSession: true);
+            Assert.True(ex2.Success);
+            Assert.True(ex2.IsAncientCurrency);
+            Assert.Equal(4, ex2.TotalCost);
+            Assert.Equal(17, ex2.PreviousAncientPoints);
+            Assert.Equal(13, ex2.NewAncientPoints);
+
+            // 3. Ancient Gacha 1-pull (2 Ancient Points). 13 -> 11
+            var g1 = await economyService.ExecuteGachaAsync(playerUid, 1, "ancient_points", isOnlineSession: true);
+            Assert.True(g1.Success);
+            Assert.Equal("ancient_points", g1.CurrencyUsed);
+            Assert.Equal(2, g1.TotalCost);
+            Assert.Equal(13, g1.PreviousAncientPoints);
+            Assert.Equal(11, g1.NewAncientPoints);
+            Assert.Single(g1.Drops);
+
+            // 4. Verify Vault has the bought items
+            var profile = await economyService.GetPlayerProfileAsync(playerUid);
+            Assert.NotNull(profile);
+            Assert.Equal(11, profile.BossTechnologyPoints);
+            Assert.NotEmpty(profile.InventoryItems);
+
+            try { Directory.Delete(tempDir, true); } catch { }
+        }
     }
 }
 

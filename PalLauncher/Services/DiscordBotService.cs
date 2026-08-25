@@ -524,20 +524,32 @@ namespace PalLauncher.Services
                     new
                     {
                         name = "gacha",
-                        description = "Open Relic Mystery Boxes for rare items, currencies, and legendary drops",
+                        description = "Open Mystery Boxes or Ancient Relic Boxes for rare loot, lotus fruits, and legendary schematics",
                         type = 1,
                         options = new object[]
                         {
                             new
                             {
                                 name = "pulls",
-                                description = "Number of pulls: 1 (3 pts) or 10 (25 pts with pity guarantee)",
+                                description = "Number of pulls (1 or 10)",
                                 type = 4, // INTEGER
                                 required = false,
                                 choices = new object[]
                                 {
-                                    new { name = "1 Pull (3 Tech Points)", value = 1 },
-                                    new { name = "10 Pull (25 Tech Points — Rare+ Pity)", value = 10 }
+                                    new { name = "1 Pull", value = 1 },
+                                    new { name = "10 Pulls (Discount + Pity Guarantee)", value = 10 }
+                                }
+                            },
+                            new
+                            {
+                                name = "tier",
+                                description = "Gacha Tier: Standard (3 Tech Pts) or Ancient (2 Ancient Pts for Sacred Lotus/Cores)",
+                                type = 3, // STRING
+                                required = false,
+                                choices = new object[]
+                                {
+                                    new { name = "🪙 Standard Mystery Box (3 Tech Points)", value = "standard" },
+                                    new { name = "🔮 Ancient Relic Box (2 Ancient Points)", value = "ancient" }
                                 }
                             },
                             new
@@ -548,6 +560,86 @@ namespace PalLauncher.Services
                                 required = false
                             }
                         }
+                    },
+                    new
+                    {
+                        name = "transmute",
+                        description = "Transmute Ancient Technology Points into Standard Technology Points (1 Ancient = 2 Normal)",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "ancient_points",
+                                description = "Amount of Ancient Technology Points to convert (1 Ancient = 2 Normal Tech Points)",
+                                type = 4, // INTEGER
+                                required = true
+                            },
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Player UID or Steam ID (optional if linked)",
+                                type = 3, // STRING
+                                required = false
+                            }
+                        }
+                    },
+                    new
+                    {
+                        name = "convert",
+                        description = "Alias for /transmute - Convert Ancient Technology Points into Standard Tech Points",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "ancient_points",
+                                description = "Amount of Ancient Technology Points to convert",
+                                type = 4, // INTEGER
+                                required = true
+                            },
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Player UID or Steam ID (optional if linked)",
+                                type = 3, // STRING
+                                required = false
+                            }
+                        }
+                    },
+                    new
+                    {
+                        name = "perk",
+                        description = "Upgrade Guild & Server Perks using Ancient Technology Points",
+                        type = 1,
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "upgrade",
+                                description = "Perk to upgrade: Work Speed (5 Ancient Pts = +1%) or EXP Boost (20 Ancient Pts = +5%)",
+                                type = 3, // STRING
+                                required = true,
+                                choices = new object[]
+                                {
+                                    new { name = "⚡ Base Pal Work & Movement Speed (5 Ancient Pts = +1%)", value = "work_speed" },
+                                    new { name = "🌟 Global Server EXP Boost (20 Ancient Pts = +5%)", value = "exp_boost" }
+                                }
+                            },
+                            new
+                            {
+                                name = "steam_id",
+                                description = "Player UID or Steam ID (optional if linked)",
+                                type = 3, // STRING
+                                required = false
+                            }
+                        }
+                    },
+                    new
+                    {
+                        name = "perks",
+                        description = "View active Guild & Server Perks, total Base Pal speed boosts, and EXP modifiers",
+                        type = 1
                     },
                     new
                     {
@@ -895,6 +987,16 @@ namespace PalLauncher.Services
                     case "mysterybox":
                     case "relic":
                         await ExecuteGachaInteractionAsync(interactionToken, data, authorId, authorName);
+                        break;
+
+                    case "transmute":
+                    case "convert":
+                        await ExecuteTransmuteInteractionAsync(interactionToken, data, authorId, authorName);
+                        break;
+
+                    case "perk":
+                    case "perks":
+                        await ExecutePerkInteractionAsync(interactionToken, data, authorId, authorName);
                         break;
 
                     case "restart":
@@ -1461,16 +1563,35 @@ namespace PalLauncher.Services
         private string BuildShopCatalogDescription()
         {
             var catalog = _economyService.GetShopCatalog();
+            var perks = _economyService.GetGuildPerks();
 
             var sb = new StringBuilder();
-            sb.AppendLine("Trade unspent **Technology Points** for rare currencies, boss slabs, passives, and items!\n");
+            sb.AppendLine("Trade unspent **Standard & Ancient Technology Points** for sacred lotus fruits, skill chests, currencies, passives, and guild upgrades!\n");
 
-            sb.AppendLine("### 📦 Available Shop Items (`/exchange`)");
-            foreach (var item in catalog)
+            sb.AppendLine("### 🔮 Ancient Relics & Sacred Lotus Fruits (`/exchange`)");
+            foreach (var item in catalog.Where(i => i.Category.Equals("Ancient", StringComparison.OrdinalIgnoreCase)))
             {
-                sb.AppendLine($"{item.Emoji} **{item.Name}** (`{item.Id}`) — `🪙 {item.TechPointCost} pts`");
+                sb.AppendLine($"{item.Emoji} **{item.Name}** (`{item.Id}`) — `🔮 {item.AncientPointCost} Ancient pts`\n  ↳ *{item.Description}*");
             }
             sb.AppendLine();
+
+            sb.AppendLine("### 🪙 Standard Technology Items (`/exchange`)");
+            foreach (var item in catalog.Where(i => !i.Category.Equals("Ancient", StringComparison.OrdinalIgnoreCase)))
+            {
+                sb.AppendLine($"{item.Emoji} **{item.Name}** (`{item.Id}`) — `🪙 {item.TechPointCost} Tech pts`");
+            }
+            sb.AppendLine();
+
+            sb.AppendLine("### ⚗️ Ancient Transmutation & Conversion (`/transmute`)");
+            sb.AppendLine("• 🔮 **1 Ancient Technology Point** ➔ `🪙 +2 Standard Technology Points`\n");
+
+            sb.AppendLine("### 🏰 Guild & Server Perks (`/perk` | `/perks`)");
+            sb.AppendLine($"• ⚡ **Base Pal Work & Movement Speed**: `5 Ancient Pts` = `+1% Speed` (Active: **+{perks.TotalWorkSpeedPercent}%**)");
+            sb.AppendLine($"• 🌟 **Global Server EXP Boost**: `20 Ancient Pts` = `+5% EXP` (Active: **+{perks.TotalExpBoostPercent}%**)\n");
+
+            sb.AppendLine("### 🎰 Mystery & Ancient Gacha Tiers (`/gacha`)");
+            sb.AppendLine("• 🪙 **Standard Mystery Box**: `3 Tech Pts` (1 pull) | `25 Tech Pts` (10 pulls)");
+            sb.AppendLine("• 🔮 **Ancient Relic Box**: `2 Ancient Pts` (1 pull) | `18 Ancient Pts` (10 pulls)\n");
 
             sb.AppendLine("### ♻️ Trash-to-Tech Recycling Rates (`/recycle`)");
             sb.AppendLine("• 🥋 **Precious Pelts / Feathers / Claws**: `+1 pt per 2 items`");
@@ -1479,10 +1600,7 @@ namespace PalLauncher.Services
             sb.AppendLine("• 🗝️ **Bronze / Silver / Gold Keys**: `+1 per 3 Bronze, +1 Silver, +2 Gold`");
             sb.AppendLine("• ⚙️ **Ancient Civ Parts**: `+1 pt per 5` | 🧩 **Raid Slabs**: `+1 pt each`\n");
 
-            sb.AppendLine("### 🎰 Relic Mystery Box (`/gacha`)");
-            sb.AppendLine("• **1 Pull**: `🪙 3 pts` | **10 Pull (Guaranteed Rare+)**: `🪙 25 pts`\n");
-
-            sb.AppendLine("💡 *Commands:* `/exchange` | `/recycle` | `/gacha pulls:10` | `/inventory`");
+            sb.AppendLine("💡 *Commands:* `/exchange` | `/transmute` | `/perk` | `/gacha` | `/withdraw` | `/inventory`");
             return sb.ToString();
         }
 
@@ -1727,16 +1845,25 @@ namespace PalLauncher.Services
                 sb.AppendLine($"### ✅ Transaction Approved (Receipt `#{receipt.TransactionId}`)");
                 sb.AppendLine($"• **Pioneer Target**: `{targetUid}`");
                 sb.AppendLine($"• **Purchased Item**: **{receipt.Quantity}x {receipt.ItemName}**");
-                sb.AppendLine($"• **Cost Deducted**: `🪙 -{receipt.TotalCost} Technology Points`");
-                sb.AppendLine($"• **Previous Balance**: `{receipt.PreviousTechPoints} Tech Points`");
-                sb.AppendLine($"• **New Balance**: `{receipt.NewTechPoints} Tech Points`\n");
+                if (receipt.IsAncientCurrency)
+                {
+                    sb.AppendLine($"• **Cost Deducted**: `🔮 -{receipt.TotalCost} Ancient Technology Points`");
+                    sb.AppendLine($"• **Previous Balance**: `{receipt.PreviousAncientPoints} Ancient Points`");
+                    sb.AppendLine($"• **New Balance**: `{receipt.NewAncientPoints} Ancient Points`\n");
+                }
+                else
+                {
+                    sb.AppendLine($"• **Cost Deducted**: `🪙 -{receipt.TotalCost} Technology Points`");
+                    sb.AppendLine($"• **Previous Balance**: `{receipt.PreviousTechPoints} Tech Points`");
+                    sb.AppendLine($"• **New Balance**: `{receipt.NewTechPoints} Tech Points`\n");
+                }
                 sb.AppendLine($"📦 **Delivery Depot**: Items are credited to your Pioneer Virtual Vault.");
-                sb.AppendLine($"👉 Type `/inventory` to inspect your items and balance.");
+                sb.AppendLine($"👉 Type `/inventory` to inspect your items and balance | `/withdraw` to claim.");
 
                 await EditDeferredResponseEmbedAsync(interactionToken,
                     title: "🛍️ Exchange Purchase Successful",
                     description: sb.ToString(),
-                    color: 0x00FF88);
+                    color: receipt.IsAncientCurrency ? 0x9966FF : 0x00FF88);
 
                 // Broadcast Guild Base Expansion
                 if (itemQuery.Equals("guild_base_slot", StringComparison.OrdinalIgnoreCase))
@@ -1819,12 +1946,18 @@ namespace PalLauncher.Services
                 return;
             }
 
+            var perks = _economyService.GetGuildPerks();
+
             var sb = new StringBuilder();
             sb.AppendLine($"### 👤 Pioneer Character: `{profile.PlayerName}`");
             sb.AppendLine($"• **Player UID**: `{profile.PlayerUid}`");
             sb.AppendLine($"• **Character Level**: `Lv. {profile.Level}`");
             sb.AppendLine($"• **🪙 Technology Points**: `{profile.TechnologyPoints} pts`");
             sb.AppendLine($"• **🔮 Ancient Boss Points**: `{profile.BossTechnologyPoints} pts`\n");
+
+            sb.AppendLine("### 🏰 Active Server Perks");
+            sb.AppendLine($"• ⚡ **Base Pal Speed & Work**: `+{perks.TotalWorkSpeedPercent}%`");
+            sb.AppendLine($"• 🌟 **Server EXP Boost**: `+{perks.TotalExpBoostPercent}%`\n");
 
             sb.AppendLine("### 📦 Virtual Vault & Delivery Depot");
             if (profile.InventoryItems != null && profile.InventoryItems.Count > 0)
@@ -1836,10 +1969,10 @@ namespace PalLauncher.Services
             }
             else
             {
-                sb.AppendLine("*Your Virtual Vault is currently empty. Use `/exchange` to trade points for items!*");
+                sb.AppendLine("*Your Virtual Vault is currently empty. Use `/exchange` or `/gacha` to trade points for items!*");
             }
             sb.AppendLine();
-            sb.AppendLine("💡 *Commands:* `/shop` | `/exchange` | `/recycle`");
+            sb.AppendLine("💡 *Commands:* `/shop` | `/exchange` | `/transmute` | `/perk` | `/gacha` | `/withdraw`");
 
             await EditDeferredResponseEmbedAsync(interactionToken,
                 title: "🎒 Pioneer Character & Vault",
@@ -1863,7 +1996,7 @@ namespace PalLauncher.Services
 
             await EditDeferredResponseEmbedAsync(interactionToken,
                 title: "🔗 Character Save Linked",
-                description: $"Successfully linked your Discord account (**@{authorName}**) to Palworld Player UID / Steam ID:\n`{steamId.Trim()}`\n\nYou can now run `/exchange`, `/recycle`, `/withdraw`, and `/inventory` without specifying your ID!",
+                description: $"Successfully linked your Discord account (**@{authorName}**) to Palworld Player UID / Steam ID:\n`{steamId.Trim()}`\n\nYou can now run `/exchange`, `/transmute`, `/perk`, `/gacha`, `/withdraw`, and `/inventory` without specifying your ID!",
                 color: 0x00FF88);
         }
 
@@ -1931,6 +2064,8 @@ namespace PalLauncher.Services
         {
             int pulls = GetIntOption(data, "pulls", 1);
             if (pulls != 1 && pulls != 10) pulls = 1;
+            string tierOption = GetStringOption(data, "tier") ?? "standard";
+            string currency = tierOption.Equals("ancient", StringComparison.OrdinalIgnoreCase) ? "ancient_points" : "tech_points";
             string? steamIdOption = GetStringOption(data, "steam_id");
 
             string targetUid = !string.IsNullOrWhiteSpace(steamIdOption)
@@ -1946,14 +2081,26 @@ namespace PalLauncher.Services
                 return;
             }
 
-            var receipt = await _economyService.ExecuteGachaAsync(targetUid, pulls, isOnlineSession: true);
+            var receipt = await _economyService.ExecuteGachaAsync(targetUid, pulls, currency, isOnlineSession: true);
 
             if (receipt.Success)
             {
+                bool isAncient = receipt.CurrencyUsed == "ancient_points";
+                string boxName = isAncient ? "Ancient Relic Box" : "Mystery Box";
+                string currencyLabel = isAncient ? "Ancient Points" : "Tech Points";
+                string currencyEmoji = isAncient ? "🔮" : "🪙";
+
                 var sb = new StringBuilder();
-                sb.AppendLine($"### 🎰 Relic Mystery Box — {pulls}-Pull (Receipt `#{receipt.TransactionId}`)\n");
-                sb.AppendLine($"**Pioneer**: `{targetUid}` | **Cost**: `🪙 {receipt.TotalCost} Tech Points`");
-                sb.AppendLine($"**Balance**: `{receipt.PreviousTechPoints}` → `{receipt.NewTechPoints} pts`\n");
+                sb.AppendLine($"### 🎰 {boxName} — {pulls}-Pull (Receipt `#{receipt.TransactionId}`)\n");
+                sb.AppendLine($"**Pioneer**: `{targetUid}` | **Cost**: `{currencyEmoji} {receipt.TotalCost} {currencyLabel}`");
+                if (isAncient)
+                {
+                    sb.AppendLine($"**Ancient Balance**: `{receipt.PreviousAncientPoints}` → `{receipt.NewAncientPoints} pts`\n");
+                }
+                else
+                {
+                    sb.AppendLine($"**Tech Balance**: `{receipt.PreviousTechPoints}` → `{receipt.NewTechPoints} pts`\n");
+                }
 
                 sb.AppendLine("### 📦 Drop Results");
                 int dropNum = 1;
@@ -1974,15 +2121,14 @@ namespace PalLauncher.Services
                     sb.AppendLine("\n# 🌟 JACKPOT! LEGENDARY PULL!");
                 }
 
-                sb.AppendLine($"\n💡 *Use `/inventory` to view items | `/gacha pulls:10` for a 10-pull bundle!*");
+                sb.AppendLine($"\n💡 *Use `/inventory` to view items | `/withdraw` to claim into character!*");
 
-                int embedColor = receipt.HasLegendary ? 0xFFD700 : 0x9966FF;
+                int embedColor = receipt.HasLegendary ? 0xFFD700 : (isAncient ? 0x9966FF : 0x00E5FF);
                 await EditDeferredResponseEmbedAsync(interactionToken,
-                    title: receipt.HasLegendary ? "🌟 LEGENDARY JACKPOT! — Relic Mystery Box" : "🎰 Relic Mystery Box Results",
+                    title: receipt.HasLegendary ? $"🌟 LEGENDARY JACKPOT! — {boxName}" : $"🎰 {boxName} Results",
                     description: sb.ToString(),
                     color: embedColor);
 
-                // Jackpot Broadcast: If a Legendary was pulled, announce to the liveboard channel
                 if (receipt.HasLegendary)
                 {
                     var legendaryDrops = receipt.Drops.Where(d => d.Rarity == GachaRarity.Legendary).ToList();
@@ -1990,9 +2136,9 @@ namespace PalLauncher.Services
 
                     await SendEmbedMessageAsync("1541492780168380446",
                         title: "🌟 JACKPOT ALERT — Legendary Drop!",
-                        description: $"🎰 **@{authorName}** just pulled a **LEGENDARY** item from the Relic Mystery Box!\n\n" +
+                        description: $"🎰 **@{authorName}** just pulled a **LEGENDARY** item from the {boxName}!\n\n" +
                                      $"**Legendary Loot**: {legendaryNames}\n\n" +
-                                     $"Try your luck with `/gacha pulls:1` (3 pts) or `/gacha pulls:10` (25 pts)!",
+                                     $"Try your luck with `/gacha tier:standard` or `/gacha tier:ancient`!",
                         color: 0xFFD700);
 
                     _logService.LogSuccess($"[JACKPOT BROADCAST] @{authorName} pulled LEGENDARY: {string.Join(", ", legendaryDrops.Select(d => d.Name))}", "DiscordBot");
@@ -2004,6 +2150,122 @@ namespace PalLauncher.Services
                     title: "❌ Gacha Transaction Failed",
                     description: receipt.Message,
                     color: 0xFF4466);
+            }
+        }
+
+        private async Task ExecuteTransmuteInteractionAsync(string interactionToken, JsonElement data, string authorId, string authorName)
+        {
+            int ancientPoints = Math.Max(1, GetIntOption(data, "ancient_points", 1));
+            string? steamIdOption = GetStringOption(data, "steam_id");
+
+            string targetUid = !string.IsNullOrWhiteSpace(steamIdOption)
+                ? steamIdOption.Trim()
+                : _economyService.GetLinkedPlayerUid(authorId);
+
+            if (_presenceService != null && !await _presenceService.IsPlayerOnlineAsync(targetUid))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Offline",
+                    description: "You must be logged into the Palworld server to use this command.",
+                    color: 0xFF4466);
+                return;
+            }
+
+            var receipt = await _economyService.ExecuteTransmuteAsync(targetUid, ancientPoints, isOnlineSession: true);
+
+            if (receipt.Success)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"### ⚗️ Transmutation Completed (Receipt `#{receipt.TransactionId}`)");
+                sb.AppendLine($"• **Pioneer Target**: `{targetUid}`");
+                sb.AppendLine($"• **Ancient Points Converted**: `🔮 -{receipt.AncientPointsSpent} Ancient Points`");
+                sb.AppendLine($"• **Standard Tech Points Gained**: `🪙 +{receipt.TechPointsGained} Tech Points` (1:2 Conversion)");
+                sb.AppendLine($"• **Ancient Balance**: `{receipt.PreviousAncientPoints}` → `{receipt.RemainingAncientPoints} pts`");
+                sb.AppendLine($"• **Tech Points Balance**: `{receipt.PreviousTechPoints}` → `{receipt.NewTechPoints} pts`\n");
+                sb.AppendLine("✨ *Points have been synced to your live player character in-game!*");
+
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚗️ Ancient Point Transmutation Successful",
+                    description: sb.ToString(),
+                    color: 0x9966FF);
+            }
+            else
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Transmutation Failed",
+                    description: receipt.Message,
+                    color: 0xFFAA00);
+            }
+        }
+
+        private async Task ExecutePerkInteractionAsync(string interactionToken, JsonElement data, string authorId, string authorName)
+        {
+            string? perkOption = GetStringOption(data, "upgrade");
+            string? steamIdOption = GetStringOption(data, "steam_id");
+
+            if (string.IsNullOrWhiteSpace(perkOption))
+            {
+                // Just display current perk status
+                var perks = _economyService.GetGuildPerks();
+                var sb = new StringBuilder();
+                sb.AppendLine("### 🏰 Active Guild & Server Perks\n");
+                sb.AppendLine($"• ⚡ **Base Pal Work & Movement Speed**: **Tier {perks.WorkSpeedLevel}** (`+{perks.TotalWorkSpeedPercent}% Speed Boost`)");
+                sb.AppendLine($"  ↳ *Upgrade Cost: `🔮 5 Ancient Tech Points` (Adds +1% Work & Movement Speed)*\n");
+                sb.AppendLine($"• 🌟 **Global Server EXP Boost**: **Tier {perks.ExpBoostLevel}** (`+{perks.TotalExpBoostPercent}% EXP Boost`)");
+                sb.AppendLine($"  ↳ *Upgrade Cost: `🔮 20 Ancient Tech Points` (Adds +5% Server EXP)*\n");
+                sb.AppendLine("💡 *Run `/perk upgrade:work_speed` or `/perk upgrade:exp_boost` to contribute!*");
+
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "🏰 PalOdyssey Guild & Server Perks",
+                    description: sb.ToString(),
+                    color: 0xFFD700);
+                return;
+            }
+
+            string targetUid = !string.IsNullOrWhiteSpace(steamIdOption)
+                ? steamIdOption.Trim()
+                : _economyService.GetLinkedPlayerUid(authorId);
+
+            if (_presenceService != null && !await _presenceService.IsPlayerOnlineAsync(targetUid))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Offline",
+                    description: "You must be logged into the Palworld server to use this command.",
+                    color: 0xFF4466);
+                return;
+            }
+
+            var receipt = await _economyService.ExecuteUpgradePerkAsync(targetUid, perkOption, isOnlineSession: true);
+
+            if (receipt.Success)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"### 🏰 Server Perk Upgraded! (Receipt `#{receipt.TransactionId}`)");
+                sb.AppendLine($"• **Pioneer Contributor**: `{targetUid}`");
+                sb.AppendLine($"• **Perk Upgraded**: **{receipt.PerkName}** (Tier {receipt.NewPerkLevel})");
+                sb.AppendLine($"• **Ancient Cost**: `🔮 -{receipt.AncientCost} Ancient Points`");
+                sb.AppendLine($"• **New Active Buff**: `{receipt.PerkBonusDescription}`");
+                sb.AppendLine($"• **Remaining Ancient Balance**: `{receipt.RemainingAncientPoints} pts`\n");
+                sb.AppendLine("🎉 *Thank you for contributing your Ancient Technology Points to power up the realm!*");
+
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "🌟 Guild & Server Perk Upgraded",
+                    description: sb.ToString(),
+                    color: 0xFFD700);
+
+                // Broadcast to liveboard channel
+                await SendEmbedMessageAsync("1541492780168380446",
+                    title: "🌟 Server Perk Upgraded!",
+                    description: $"🎉 **@{authorName}** upgraded **{receipt.PerkName}** to **Tier {receipt.NewPerkLevel}**!\n\n" +
+                                 $"✨ **Active Global Buff**: `{receipt.PerkBonusDescription}`",
+                    color: 0xFFD700);
+            }
+            else
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Perk Upgrade Failed",
+                    description: receipt.Message,
+                    color: 0xFFAA00);
             }
         }
 

@@ -449,6 +449,9 @@ gc.NumRetriesBeforeForcingGC=5";
             return result;
         }
 
+        private static DateTime _lastRestCheckTime = DateTime.MinValue;
+        private static string? _lastRestPlayersJson = null;
+
         public string ResolvePlayerUid(string? userQuery)
         {
             EnsurePlayerIdentitiesLoaded();
@@ -458,47 +461,65 @@ gc.NumRetriesBeforeForcingGC=5";
             {
                 string q = userQuery.Trim();
 
-                // 1. Live REST API Check
-                try
+                // 1. Live REST API Check (skip during tests or if cached recently)
+                if (string.IsNullOrEmpty(_customSaveDirectory))
                 {
-                    var liveResp = _httpClient.GetAsync("http://127.0.0.1:8212/v1/api/players").GetAwaiter().GetResult();
-                    if (liveResp.IsSuccessStatusCode)
+                    try
                     {
-                        string json = liveResp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                        using var doc = JsonDocument.Parse(json);
-                        if (doc.RootElement.TryGetProperty("players", out var arr) && arr.ValueKind == JsonValueKind.Array)
+                        string? json = null;
+                        if ((DateTime.UtcNow - _lastRestCheckTime).TotalSeconds < 3 && _lastRestPlayersJson != null)
                         {
-                            foreach (var item in arr.EnumerateArray())
+                            json = _lastRestPlayersJson;
+                        }
+                        else
+                        {
+                            using var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(300));
+                            var liveResp = _httpClient.GetAsync("http://127.0.0.1:8212/v1/api/players", cts.Token).GetAwaiter().GetResult();
+                            if (liveResp.IsSuccessStatusCode)
                             {
-                                string pid = item.TryGetProperty("playerId", out var p) ? p.GetString() ?? "" : "";
-                                string uid = item.TryGetProperty("userId", out var u) ? u.GetString() ?? "" : "";
-                                string name = item.TryGetProperty("name", out var n) ? n.GetString() ?? "" : "";
-                                string acc = item.TryGetProperty("accountName", out var a) ? a.GetString() ?? "" : "";
-                                int lvl = 1;
-                                if (item.TryGetProperty("level", out var lvlProp))
-                                {
-                                    if (lvlProp.ValueKind == JsonValueKind.Number) lvl = lvlProp.GetInt32();
-                                    else if (int.TryParse(lvlProp.GetString(), out int pl)) lvl = pl;
-                                }
+                                json = liveResp.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                                _lastRestPlayersJson = json;
+                                _lastRestCheckTime = DateTime.UtcNow;
+                            }
+                        }
 
-                                if (!string.IsNullOrWhiteSpace(pid))
+                        if (!string.IsNullOrWhiteSpace(json))
+                        {
+                            using var doc = JsonDocument.Parse(json);
+                            if (doc.RootElement.TryGetProperty("players", out var arr) && arr.ValueKind == JsonValueKind.Array)
+                            {
+                                foreach (var item in arr.EnumerateArray())
                                 {
-                                    RegisterPlayerIdentity(pid, uid, name, acc, lvl);
-                                }
+                                    string pid = item.TryGetProperty("playerId", out var p) ? p.GetString() ?? "" : "";
+                                    string uid = item.TryGetProperty("userId", out var u) ? u.GetString() ?? "" : "";
+                                    string name = item.TryGetProperty("name", out var n) ? n.GetString() ?? "" : "";
+                                    string acc = item.TryGetProperty("accountName", out var a) ? a.GetString() ?? "" : "";
+                                    int lvl = 1;
+                                    if (item.TryGetProperty("level", out var lvlProp))
+                                    {
+                                        if (lvlProp.ValueKind == JsonValueKind.Number) lvl = lvlProp.GetInt32();
+                                        else if (int.TryParse(lvlProp.GetString(), out int pl)) lvl = pl;
+                                    }
 
-                                if (pid.Equals(q, StringComparison.OrdinalIgnoreCase) ||
-                                    uid.Equals(q, StringComparison.OrdinalIgnoreCase) ||
-                                    uid.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                                    name.Equals(q, StringComparison.OrdinalIgnoreCase) ||
-                                    acc.Equals(q, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    if (!string.IsNullOrWhiteSpace(pid)) return pid;
+                                    if (!string.IsNullOrWhiteSpace(pid))
+                                    {
+                                        RegisterPlayerIdentity(pid, uid, name, acc, lvl);
+                                    }
+
+                                    if (pid.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                                        uid.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                                        uid.Contains(q, StringComparison.OrdinalIgnoreCase) ||
+                                        name.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                                        acc.Equals(q, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        if (!string.IsNullOrWhiteSpace(pid)) return pid;
+                                    }
                                 }
                             }
                         }
                     }
+                    catch { }
                 }
-                catch { }
 
                 // 2. Check persistent Player Identities Registry (for offline lookups)
                 lock (_identityLock)

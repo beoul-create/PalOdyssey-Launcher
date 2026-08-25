@@ -134,9 +134,21 @@ local function processQueue()
                                 local msg = ""
                                 local pts = ps.UnusedTechnologyPoint or 0
                                 if action == "Gacha" then
-                                    msg = string.format("🎰 [Gacha] Deducted %d Tech Points. Balance: %d pts", math.abs(techPointsDelta), pts)
+                                    if itemCode == "AncientRelicBox" then
+                                        msg = string.format("🔮 [Ancient Gacha] Opened %dx Ancient Relic Box! Rewards credited to Virtual Vault.", quantity)
+                                    else
+                                        msg = string.format("🎰 [Gacha] Opened %dx Mystery Box (Deducted %d Tech Pts). Balance: %d pts", quantity, math.abs(techPointsDelta), pts)
+                                    end
+                                elseif action == "Transmute" then
+                                    msg = string.format("⚗️ [Transmute] Converted Ancient Points ➔ +%d Standard Tech Points! New Balance: %d pts", techPointsDelta, pts)
+                                elseif action == "Perk" then
+                                    msg = string.format("🏰 [Perk] Server Perk upgraded! Active bonuses increased.")
                                 elseif action == "Exchange" then
-                                    msg = string.format("🎟️ [Shop] Deducted %d Tech Points. Purchased %dx %s. Balance: %d pts", math.abs(techPointsDelta), quantity, itemCode, pts)
+                                    if techPointsDelta < 0 then
+                                        msg = string.format("🎟️ [Shop] Deducted %d Tech Points. Purchased %dx %s. Balance: %d pts", math.abs(techPointsDelta), quantity, itemCode, pts)
+                                    else
+                                        msg = string.format("🔮 [Ancient Shop] Purchased %dx %s with Ancient Points! Items credited to Virtual Vault.", quantity, itemCode)
+                                    end
                                 elseif action == "Recycle" then
                                     msg = string.format("♻️ [Recycle] Gained +%d Tech Points! Balance: %d pts", techPointsDelta, pts)
                                 elseif action == "Withdraw" or action == "Claim" then
