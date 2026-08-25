@@ -1027,19 +1027,38 @@ namespace PalLauncher.Services
                         {
                             foreach (var playerObj in invProp.EnumerateObject())
                             {
-                                var inv = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                                string rawKey = playerObj.Name;
+                                string resolvedKey = _saveService.ResolvePlayerUid(rawKey);
+
+                                if (!_playerInventories.TryGetValue(resolvedKey, out var inv))
+                                {
+                                    inv = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                                    _playerInventories[resolvedKey] = inv;
+                                }
+
                                 foreach (var itemProp in playerObj.Value.EnumerateObject())
                                 {
-                                    inv[itemProp.Name] = itemProp.Value.GetInt32();
+                                    inv[itemProp.Name] = inv.GetValueOrDefault(itemProp.Name, 0) + itemProp.Value.GetInt32();
                                 }
-                                _playerInventories[playerObj.Name] = inv;
+
+                                if (!resolvedKey.Equals(rawKey, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    _playerInventories[rawKey] = inv;
+                                }
                             }
                         }
                         if (doc.RootElement.TryGetProperty("techPoints", out var techProp))
                         {
                             foreach (var prop in techProp.EnumerateObject())
                             {
-                                _playerTechPoints[prop.Name] = prop.Value.GetInt32();
+                                string rawKey = prop.Name;
+                                string resolvedKey = _saveService.ResolvePlayerUid(rawKey);
+                                int pts = prop.Value.GetInt32();
+                                _playerTechPoints[resolvedKey] = pts;
+                                if (!resolvedKey.Equals(rawKey, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    _playerTechPoints[rawKey] = pts;
+                                }
                             }
                         }
                     }

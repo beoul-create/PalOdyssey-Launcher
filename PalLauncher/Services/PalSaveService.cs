@@ -28,11 +28,134 @@ namespace PalLauncher.Services
         Task<int> PruneExcessBackupsAsync(int maxBackupsToKeep = 24);
     }
 
+    public class PlayerIdentityRecord
+    {
+        public string PlayerId { get; set; } = string.Empty;
+        public string UserId { get; set; } = string.Empty;
+        public string PlayerName { get; set; } = string.Empty;
+        public string AccountName { get; set; } = string.Empty;
+        public int Level { get; set; } = 1;
+        public DateTime LastSeen { get; set; } = DateTime.UtcNow;
+    }
+
     public class PalSaveService : IPalSaveService
     {
         private readonly ILogService _logService;
         private readonly string? _customSaveDirectory;
         private static readonly HttpClient _httpClient = CreateRestClient();
+
+        private static readonly object _identityLock = new();
+        private static readonly Dictionary<string, PlayerIdentityRecord> _playerIdentities = new(StringComparer.OrdinalIgnoreCase);
+        private static bool _identitiesLoaded = false;
+        private static readonly string _identitiesFilePath = Path.Combine(
+            Environment.GetEnvironmentVariable("LOCALAPPDATA") ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "PalLauncher", "player_identities.json");
+
+        private static void EnsurePlayerIdentitiesLoaded()
+        {
+            lock (_identityLock)
+            {
+                if (_identitiesLoaded) return;
+                _identitiesLoaded = true;
+
+                // Pre-seed known mappings
+                _playerIdentities["9EDC20A9000000000000000000000000"] = new PlayerIdentityRecord
+                {
+                    PlayerId = "9EDC20A9000000000000000000000000",
+                    UserId = "steam_76561198095071863",
+                    PlayerName = "Beoul",
+                    AccountName = "Beoul",
+                    Level = 5
+                };
+                _playerIdentities["76561198095071863"] = _playerIdentities["9EDC20A9000000000000000000000000"];
+                _playerIdentities["steam_76561198095071863"] = _playerIdentities["9EDC20A9000000000000000000000000"];
+                _playerIdentities["Beoul"] = _playerIdentities["9EDC20A9000000000000000000000000"];
+
+                _playerIdentities["BBC87443000000000000000000000000"] = new PlayerIdentityRecord
+                {
+                    PlayerId = "BBC87443000000000000000000000000",
+                    UserId = "steam_76561198098116882",
+                    PlayerName = "Chazz",
+                    AccountName = "Chuck e Cheese",
+                    Level = 7
+                };
+                _playerIdentities["76561198098116882"] = _playerIdentities["BBC87443000000000000000000000000"];
+                _playerIdentities["steam_76561198098116882"] = _playerIdentities["BBC87443000000000000000000000000"];
+                _playerIdentities["Chazz"] = _playerIdentities["BBC87443000000000000000000000000"];
+
+                try
+                {
+                    if (File.Exists(_identitiesFilePath))
+                    {
+                        string json = File.ReadAllText(_identitiesFilePath);
+                        var loaded = JsonSerializer.Deserialize<Dictionary<string, PlayerIdentityRecord>>(json);
+                        if (loaded != null)
+                        {
+                            foreach (var kvp in loaded)
+                            {
+                                _playerIdentities[kvp.Key] = kvp.Value;
+                                if (!string.IsNullOrWhiteSpace(kvp.Value.UserId))
+                                {
+                                    _playerIdentities[kvp.Value.UserId] = kvp.Value;
+                                    string cleanSteam = kvp.Value.UserId.Replace("steam_", "");
+                                    _playerIdentities[cleanSteam] = kvp.Value;
+                                }
+                                if (!string.IsNullOrWhiteSpace(kvp.Value.PlayerName))
+                                {
+                                    _playerIdentities[kvp.Value.PlayerName] = kvp.Value;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch { }
+            }
+        }
+
+        public static void RegisterPlayerIdentity(string playerId, string userId, string playerName, string accountName, int level)
+        {
+            if (string.IsNullOrWhiteSpace(playerId)) return;
+            EnsurePlayerIdentitiesLoaded();
+
+            lock (_identityLock)
+            {
+                var rec = new PlayerIdentityRecord
+                {
+                    PlayerId = playerId,
+                    UserId = userId,
+                    PlayerName = playerName,
+                    AccountName = accountName,
+                    Level = Math.Max(1, level),
+                    LastSeen = DateTime.UtcNow
+                };
+
+                _playerIdentities[playerId] = rec;
+                if (!string.IsNullOrWhiteSpace(userId))
+                {
+                    _playerIdentities[userId] = rec;
+                    string cleanSteam = userId.Replace("steam_", "");
+                    _playerIdentities[cleanSteam] = rec;
+                }
+                if (!string.IsNullOrWhiteSpace(playerName))
+                {
+                    _playerIdentities[playerName] = rec;
+                }
+
+                try
+                {
+                    string dir = Path.GetDirectoryName(_identitiesFilePath)!;
+                    if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                    var dictToSave = new Dictionary<string, PlayerIdentityRecord>();
+                    foreach (var r in _playerIdentities.Values)
+                    {
+                        dictToSave[r.PlayerId] = r;
+                    }
+                    string json = JsonSerializer.Serialize(dictToSave, new JsonSerializerOptions { WriteIndented = true });
+                    File.WriteAllText(_identitiesFilePath, json);
+                }
+                catch { }
+            }
+        }
 
         private static HttpClient CreateRestClient()
         {
@@ -328,11 +451,14 @@ gc.NumRetriesBeforeForcingGC=5";
 
         public string ResolvePlayerUid(string? userQuery)
         {
+            EnsurePlayerIdentitiesLoaded();
             var uids = GetAvailablePlayerUids();
 
             if (!string.IsNullOrWhiteSpace(userQuery))
             {
                 string q = userQuery.Trim();
+
+                // 1. Live REST API Check
                 try
                 {
                     var liveResp = _httpClient.GetAsync("http://127.0.0.1:8212/v1/api/players").GetAwaiter().GetResult();
@@ -348,6 +474,17 @@ gc.NumRetriesBeforeForcingGC=5";
                                 string uid = item.TryGetProperty("userId", out var u) ? u.GetString() ?? "" : "";
                                 string name = item.TryGetProperty("name", out var n) ? n.GetString() ?? "" : "";
                                 string acc = item.TryGetProperty("accountName", out var a) ? a.GetString() ?? "" : "";
+                                int lvl = 1;
+                                if (item.TryGetProperty("level", out var lvlProp))
+                                {
+                                    if (lvlProp.ValueKind == JsonValueKind.Number) lvl = lvlProp.GetInt32();
+                                    else if (int.TryParse(lvlProp.GetString(), out int pl)) lvl = pl;
+                                }
+
+                                if (!string.IsNullOrWhiteSpace(pid))
+                                {
+                                    RegisterPlayerIdentity(pid, uid, name, acc, lvl);
+                                }
 
                                 if (pid.Equals(q, StringComparison.OrdinalIgnoreCase) ||
                                     uid.Equals(q, StringComparison.OrdinalIgnoreCase) ||
@@ -363,6 +500,24 @@ gc.NumRetriesBeforeForcingGC=5";
                 }
                 catch { }
 
+                // 2. Check persistent Player Identities Registry (for offline lookups)
+                lock (_identityLock)
+                {
+                    foreach (var rec in _playerIdentities.Values)
+                    {
+                        if (rec.PlayerId.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                            rec.UserId.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                            rec.UserId.Contains(q, StringComparison.OrdinalIgnoreCase) ||
+                            rec.PlayerName.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                            rec.AccountName.Equals(q, StringComparison.OrdinalIgnoreCase) ||
+                            (!string.IsNullOrWhiteSpace(rec.UserId) && q.Contains(rec.UserId, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            return rec.PlayerId;
+                        }
+                    }
+                }
+
+                // 3. Match against available .sav filenames
                 string cleanQuery = q.Replace("-", "").ToUpperInvariant();
                 foreach (var uid in uids)
                 {
@@ -373,6 +528,7 @@ gc.NumRetriesBeforeForcingGC=5";
                     }
                 }
 
+                if (uids.Count == 1) return uids[0];
                 if (cleanQuery.Length >= 4) return cleanQuery;
             }
 
@@ -576,9 +732,20 @@ gc.NumRetriesBeforeForcingGC=5";
 
         public async Task<PlayerEconomyProfile?> ReadPlayerProfileAsync(string playerUid)
         {
+            EnsurePlayerIdentitiesLoaded();
+            string actualUid = ResolvePlayerUid(playerUid);
             string resolvedPlayerName = "Pioneer";
-            int liveLevel = 0;
-            string actualUid = playerUid;
+            int resolvedLevel = 1;
+
+            lock (_identityLock)
+            {
+                if (_playerIdentities.TryGetValue(actualUid, out var rec) ||
+                    (!string.IsNullOrWhiteSpace(playerUid) && _playerIdentities.TryGetValue(playerUid, out rec)))
+                {
+                    if (!string.IsNullOrWhiteSpace(rec.PlayerName)) resolvedPlayerName = rec.PlayerName;
+                    if (rec.Level > 0) resolvedLevel = rec.Level;
+                }
+            }
 
             try
             {
@@ -589,7 +756,6 @@ gc.NumRetriesBeforeForcingGC=5";
                     using var doc = JsonDocument.Parse(json);
                     if (doc.RootElement.TryGetProperty("players", out var arr) && arr.ValueKind == JsonValueKind.Array)
                     {
-                        string q = playerUid.Trim();
                         foreach (var item in arr.EnumerateArray())
                         {
                             string pid = item.TryGetProperty("playerId", out var p) ? p.GetString() ?? "" : "";
@@ -597,22 +763,26 @@ gc.NumRetriesBeforeForcingGC=5";
                             string name = item.TryGetProperty("name", out var n) ? n.GetString() ?? "" : "";
                             string acc = item.TryGetProperty("accountName", out var a) ? a.GetString() ?? "" : "";
 
-                            if (pid.Equals(q, StringComparison.OrdinalIgnoreCase) ||
-                                uid.Equals(q, StringComparison.OrdinalIgnoreCase) ||
-                                uid.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                                name.Equals(q, StringComparison.OrdinalIgnoreCase) ||
-                                acc.Equals(q, StringComparison.OrdinalIgnoreCase))
+                            if (pid.Equals(actualUid, StringComparison.OrdinalIgnoreCase) ||
+                                uid.Equals(actualUid, StringComparison.OrdinalIgnoreCase) ||
+                                uid.Contains(playerUid, StringComparison.OrdinalIgnoreCase) ||
+                                name.Equals(playerUid, StringComparison.OrdinalIgnoreCase) ||
+                                pid.Equals(playerUid, StringComparison.OrdinalIgnoreCase))
                             {
                                 if (!string.IsNullOrWhiteSpace(name)) resolvedPlayerName = name;
                                 else if (!string.IsNullOrWhiteSpace(acc)) resolvedPlayerName = acc;
 
                                 if (item.TryGetProperty("level", out var lvlProp))
                                 {
-                                    if (lvlProp.ValueKind == JsonValueKind.Number) liveLevel = lvlProp.GetInt32();
-                                    else if (int.TryParse(lvlProp.GetString(), out int parsedLvl)) liveLevel = parsedLvl;
+                                    if (lvlProp.ValueKind == JsonValueKind.Number) resolvedLevel = lvlProp.GetInt32();
+                                    else if (int.TryParse(lvlProp.GetString(), out int parsedLvl)) resolvedLevel = parsedLvl;
                                 }
 
-                                if (!string.IsNullOrWhiteSpace(pid)) actualUid = pid;
+                                if (!string.IsNullOrWhiteSpace(pid))
+                                {
+                                    actualUid = pid;
+                                    RegisterPlayerIdentity(pid, uid, resolvedPlayerName, acc, resolvedLevel);
+                                }
                                 break;
                             }
                         }
@@ -622,71 +792,52 @@ gc.NumRetriesBeforeForcingGC=5";
             catch { }
 
             var worldDir = FindSaveGamesDirectory();
-            if (string.IsNullOrEmpty(worldDir))
-            {
-                return new PlayerEconomyProfile
-                {
-                    PlayerUid = actualUid,
-                    PlayerName = resolvedPlayerName,
-                    TechnologyPoints = 12,
-                    BossTechnologyPoints = 4,
-                    Level = Math.Max(1, liveLevel > 0 ? liveLevel : 1)
-                };
-            }
+            int techPoints = 12;
+            int bossTechPoints = 4;
 
-            string playerSave = Path.Combine(worldDir, "Players", $"{actualUid}.sav");
-            if (!File.Exists(playerSave))
+            if (!string.IsNullOrEmpty(worldDir))
             {
-                string directSave = Path.Combine(worldDir, "Players", $"{playerUid}.sav");
-                if (File.Exists(directSave))
+                string playerSave = Path.Combine(worldDir, "Players", $"{actualUid}.sav");
+                if (!File.Exists(playerSave))
                 {
-                    playerSave = directSave;
-                    actualUid = playerUid;
+                    string directSave = Path.Combine(worldDir, "Players", $"{playerUid}.sav");
+                    if (File.Exists(directSave))
+                    {
+                        playerSave = directSave;
+                        actualUid = playerUid;
+                    }
+                }
+
+                if (File.Exists(playerSave))
+                {
+                    try
+                    {
+                        byte[] rawBytes = await File.ReadAllBytesAsync(playerSave);
+                        byte[] decompressed = DecompressPalSave(rawBytes);
+
+                        int extractedTech = ExtractIntProperty(decompressed, "UnusedTechnologyPoint", defaultValue: -1);
+                        int extractedBoss = ExtractIntProperty(decompressed, "UnusedBossTechnologyPoint", defaultValue: -1);
+                        int extractedLevel = ExtractIntProperty(decompressed, "Level", defaultValue: -1);
+
+                        if (extractedTech >= 0) techPoints = extractedTech;
+                        if (extractedBoss >= 0) bossTechPoints = extractedBoss;
+                        if (extractedLevel > 0 && resolvedLevel <= 1) resolvedLevel = extractedLevel;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logService.LogError($"Failed reading player save {actualUid}", "SaveService", ex);
+                    }
                 }
             }
 
-            if (!File.Exists(playerSave))
+            return new PlayerEconomyProfile
             {
-                return new PlayerEconomyProfile
-                {
-                    PlayerUid = actualUid,
-                    PlayerName = resolvedPlayerName != "Pioneer" ? resolvedPlayerName : $"Pioneer ({actualUid[..Math.Min(6, actualUid.Length)]})",
-                    TechnologyPoints = 12,
-                    BossTechnologyPoints = 4,
-                    Level = Math.Max(1, liveLevel > 0 ? liveLevel : 1)
-                };
-            }
-
-            try
-            {
-                byte[] rawBytes = await File.ReadAllBytesAsync(playerSave);
-                byte[] decompressed = DecompressPalSave(rawBytes);
-
-                int techPoints = ExtractIntProperty(decompressed, "UnusedTechnologyPoint", defaultValue: 0);
-                int bossTechPoints = ExtractIntProperty(decompressed, "UnusedBossTechnologyPoint", defaultValue: 0);
-                int level = ExtractIntProperty(decompressed, "Level", defaultValue: 1);
-
-                return new PlayerEconomyProfile
-                {
-                    PlayerUid = actualUid,
-                    PlayerName = resolvedPlayerName != "Pioneer" ? resolvedPlayerName : $"Pioneer ({actualUid[..Math.Min(6, actualUid.Length)]})",
-                    TechnologyPoints = techPoints,
-                    BossTechnologyPoints = bossTechPoints,
-                    Level = liveLevel > 0 ? liveLevel : Math.Max(1, level)
-                };
-            }
-            catch (Exception ex)
-            {
-                _logService.LogError($"Failed reading player save {actualUid}", "SaveService", ex);
-                return new PlayerEconomyProfile
-                {
-                    PlayerUid = actualUid,
-                    PlayerName = resolvedPlayerName,
-                    TechnologyPoints = 12,
-                    BossTechnologyPoints = 4,
-                    Level = Math.Max(1, liveLevel > 0 ? liveLevel : 1)
-                };
-            }
+                PlayerUid = actualUid,
+                PlayerName = resolvedPlayerName != "Pioneer" ? resolvedPlayerName : $"Pioneer ({actualUid[..Math.Min(6, actualUid.Length)]})",
+                TechnologyPoints = techPoints,
+                BossTechnologyPoints = bossTechPoints,
+                Level = Math.Max(1, resolvedLevel)
+            };
         }
 
         public async Task<bool> UpdateTechnologyPointsAsync(string playerUid, int pointDelta, bool isAbsolute = false)
@@ -694,11 +845,17 @@ gc.NumRetriesBeforeForcingGC=5";
             var worldDir = FindSaveGamesDirectory();
             if (string.IsNullOrEmpty(worldDir)) return false;
 
-            string playerSave = Path.Combine(worldDir, "Players", $"{playerUid}.sav");
-            if (!File.Exists(playerSave)) return false;
+            string actualUid = ResolvePlayerUid(playerUid);
+            string playerSave = Path.Combine(worldDir, "Players", $"{actualUid}.sav");
+            if (!File.Exists(playerSave))
+            {
+                string direct = Path.Combine(worldDir, "Players", $"{playerUid}.sav");
+                if (File.Exists(direct)) playerSave = direct;
+                else return false;
+            }
 
             // 1. Safety Protocol: Backup first
-            await CreateBackupAsync(playerUid);
+            await CreateBackupAsync(actualUid);
 
             try
             {
@@ -715,27 +872,40 @@ gc.NumRetriesBeforeForcingGC=5";
                 await File.WriteAllBytesAsync(tmpFile, recompressed);
                 File.Move(tmpFile, playerSave, overwrite: true);
 
-                _logService.LogSuccess($"[ECONOMY] Updated Technology Points for {playerUid}: {currentPoints} -> {newPoints}", "SaveService");
+                _logService.LogSuccess($"[ECONOMY] Updated Technology Points for {actualUid}: {currentPoints} -> {newPoints}", "SaveService");
                 return true;
             }
             catch (Exception ex)
             {
-                _logService.LogError($"Failed to update Tech Points for {playerUid}", "SaveService", ex);
+                _logService.LogError($"Failed to update Tech Points for {actualUid}", "SaveService", ex);
                 return false;
             }
         }
 
         public static byte[] DecompressPalSave(byte[] data)
         {
-            if (data.Length < 12) return data;
+            if (data == null || data.Length < 12) return data ?? Array.Empty<byte>();
 
-            // Check if standard Palworld Compressed Save (12-byte header)
-            int uncompressedLen = BitConverter.ToInt32(data, 0);
-            int compressedLen = BitConverter.ToInt32(data, 4);
+            if (data.Length >= 4 && data[0] == (byte)'G' && data[1] == (byte)'V' && data[2] == (byte)'A' && data[3] == (byte)'S')
+            {
+                return data;
+            }
 
-            // Read magic string (bytes 8..11)
-            string magic = Encoding.ASCII.GetString(data, 8, 4);
-            if (magic.StartsWith("Pl", StringComparison.OrdinalIgnoreCase) || magic.StartsWith("GVAS", StringComparison.OrdinalIgnoreCase))
+            if (data.Length >= 24 && data[20] == (byte)'G' && data[21] == (byte)'V' && data[22] == (byte)'A' && data[23] == (byte)'S')
+            {
+                byte[] gvas = new byte[data.Length - 20];
+                Buffer.BlockCopy(data, 20, gvas, 0, gvas.Length);
+                return gvas;
+            }
+
+            if (data.Length >= 16 && data[12] == (byte)'G' && data[13] == (byte)'V' && data[14] == (byte)'A' && data[15] == (byte)'S')
+            {
+                byte[] gvas = new byte[data.Length - 12];
+                Buffer.BlockCopy(data, 12, gvas, 0, gvas.Length);
+                return gvas;
+            }
+
+            try
             {
                 using var inMs = new MemoryStream(data, 12, data.Length - 12);
                 using var zlib = new ZLibStream(inMs, CompressionMode.Decompress);
@@ -743,8 +913,19 @@ gc.NumRetriesBeforeForcingGC=5";
                 zlib.CopyTo(outMs);
                 return outMs.ToArray();
             }
+            catch
+            {
+                try
+                {
+                    using var inMs = new MemoryStream(data, 12, data.Length - 12);
+                    using var deflate = new DeflateStream(inMs, CompressionMode.Decompress);
+                    using var outMs = new MemoryStream();
+                    deflate.CopyTo(outMs);
+                    return outMs.ToArray();
+                }
+                catch { }
+            }
 
-            // If already GVAS raw binary
             return data;
         }
 
