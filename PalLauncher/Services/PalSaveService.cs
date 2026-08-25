@@ -792,8 +792,8 @@ gc.NumRetriesBeforeForcingGC=5";
             catch { }
 
             var worldDir = FindSaveGamesDirectory();
-            int techPoints = 12;
-            int bossTechPoints = 4;
+            int techPoints = 0;
+            int bossTechPoints = 0;
 
             if (!string.IsNullOrEmpty(worldDir))
             {

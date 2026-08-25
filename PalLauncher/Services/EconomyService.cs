@@ -33,6 +33,7 @@ namespace PalLauncher.Services
         private readonly Dictionary<string, string> _discordToPlayerMap = new();
         private readonly Dictionary<string, Dictionary<string, int>> _playerInventories = new(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, int> _playerTechPoints = new(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, int> _playerBossPoints = new(StringComparer.OrdinalIgnoreCase);
         private readonly object _lock = new();
 
         private static readonly List<ShopItem> _shopCatalog = new()
@@ -460,6 +461,17 @@ namespace PalLauncher.Services
                 {
                     _playerTechPoints[uid] = profile.TechnologyPoints;
                     if (!string.IsNullOrWhiteSpace(playerUid)) _playerTechPoints[playerUid] = profile.TechnologyPoints;
+                }
+
+                if (_playerBossPoints.TryGetValue(uid, out int bossPts) ||
+                    (!string.IsNullOrWhiteSpace(playerUid) && _playerBossPoints.TryGetValue(playerUid, out bossPts)))
+                {
+                    profile.BossTechnologyPoints = bossPts;
+                }
+                else
+                {
+                    _playerBossPoints[uid] = profile.BossTechnologyPoints;
+                    if (!string.IsNullOrWhiteSpace(playerUid)) _playerBossPoints[playerUid] = profile.BossTechnologyPoints;
                 }
 
                 if (_playerInventories.TryGetValue(uid, out var inv) ||
@@ -1061,6 +1073,20 @@ namespace PalLauncher.Services
                                 }
                             }
                         }
+                        if (doc.RootElement.TryGetProperty("bossPoints", out var bossProp))
+                        {
+                            foreach (var prop in bossProp.EnumerateObject())
+                            {
+                                string rawKey = prop.Name;
+                                string resolvedKey = _saveService.ResolvePlayerUid(rawKey);
+                                int pts = prop.Value.GetInt32();
+                                _playerBossPoints[resolvedKey] = pts;
+                                if (!resolvedKey.Equals(rawKey, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    _playerBossPoints[rawKey] = pts;
+                                }
+                            }
+                        }
                     }
                 }
                 catch { }
@@ -1077,7 +1103,8 @@ namespace PalLauncher.Services
                     {
                         links = _discordToPlayerMap,
                         inventories = _playerInventories,
-                        techPoints = _playerTechPoints
+                        techPoints = _playerTechPoints,
+                        bossPoints = _playerBossPoints
                     };
 
                     string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
