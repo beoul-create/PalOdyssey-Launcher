@@ -2220,7 +2220,7 @@ namespace PalLauncher.Services
 
                 try
                 {
-                    await Task.Delay(30000, ct); // Auto-refresh every 30s
+                    await Task.Delay(15000, ct); // Auto-refresh every 15s
                 }
                 catch (OperationCanceledException) { break; }
             }
@@ -2248,7 +2248,7 @@ namespace PalLauncher.Services
                         color = embedColor,
                         footer = new
                         {
-                            text = "PalOdyssey Autonomous Host • Auto-refreshes every 30s • Type /help for commands"
+                            text = "PalOdyssey Autonomous Host • Auto-refreshes every 15s • Type /help for commands"
                         },
                         timestamp = DateTime.UtcNow.ToString("o")
                     }
