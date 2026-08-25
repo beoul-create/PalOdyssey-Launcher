@@ -4,7 +4,9 @@
     "enabled": true,
     "disableSmoothing": true,
     "disableAcceleration": true,
-    "highPollingRateSupport": true
+    "highPollingRateSupport": true,
+    "hardwareMenuCursor": true,
+    "zeroLatencyMenuCursor": true
   },
   "network": {
     "enabled": true,

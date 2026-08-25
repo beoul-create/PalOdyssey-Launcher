@@ -790,12 +790,37 @@ namespace PalLauncher.Services
                 { "RawMouseInputEnabled", "RawMouseInputEnabled=True" },
                 { "bEnableMouseSmoothing", "bEnableMouseSmoothing=False" },
                 { "bViewAccelerationEnabled", "bViewAccelerationEnabled=False" },
-                { "bDisableMouseAcceleration", "bDisableMouseAcceleration=True" }
+                { "bDisableMouseAcceleration", "bDisableMouseAcceleration=True" },
+                { "bUseMousePositionLocking", "bUseMousePositionLocking=True" }
             });
 
-            // 2. Resource & Render Settings (Low CPU/GPU overhead & background throttling)
+            // 2. Engine & Slate Hardware Cursor Fluidity (Zero-Lag UI & Menu Cursor)
+            InjectSectionIntoIniLines(lines, "[/Script/Engine.Engine]", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "bEnableMouseSmoothing", "bEnableMouseSmoothing=False" },
+                { "bUseRawMouseInput", "bUseRawMouseInput=True" }
+            });
+
+            InjectSectionIntoIniLines(lines, "[/Script/Slate.SlateSettings]", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "bUseHardwareCursor", "bUseHardwareCursor=True" },
+                { "bEnableHardwareCursor", "bEnableHardwareCursor=True" },
+                { "bVirtualCursor", "bVirtualCursor=False" },
+                { "bAllowHardwareCursor", "bAllowHardwareCursor=True" }
+            });
+
+            // 3. Resource, Render & Zero-Latency Slate Settings
             InjectSectionIntoIniLines(lines, "[SystemSettings]", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
+                { "Slate.EnableMouseSmoother", "Slate.EnableMouseSmoother=0" },
+                { "Slate.EnableRenderHardwareCursor", "Slate.EnableRenderHardwareCursor=1" },
+                { "Slate.UseHardwareCursor", "Slate.UseHardwareCursor=1" },
+                { "Slate.AllowHardwareCursor", "Slate.AllowHardwareCursor=1" },
+                { "Slate.CursorRenderRate", "Slate.CursorRenderRate=0" },
+                { "Slate.SleepInterval", "Slate.SleepInterval=0" },
+                { "Slate.SleepIntervalWithUserInteraction", "Slate.SleepIntervalWithUserInteraction=0" },
+                { "r.Slate.EnableMouseCapture", "r.Slate.EnableMouseCapture=0" },
+                { "r.OneFrameThreadLag", "r.OneFrameThreadLag=0" },
                 { "t.MaxFPS", "t.MaxFPS=120" },
                 { "t.UnfocusedMaxFPS", "t.UnfocusedMaxFPS=30" },
                 { "r.TextureStreaming", "r.TextureStreaming=1" },
@@ -815,7 +840,7 @@ namespace PalLauncher.Services
                 { "r.CreateShadersOnLoad", "r.CreateShadersOnLoad=1" }
             });
 
-            // 3. Garbage Collection Settings (Fast purging & memory reduction)
+            // 4. Garbage Collection Settings (Fast purging & memory reduction)
             InjectSectionIntoIniLines(lines, "[/Script/Engine.GarbageCollectionSettings]", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 { "gc.TimeBetweenPurgingPendingKillObjects", "gc.TimeBetweenPurgingPendingKillObjects=45" },
@@ -825,7 +850,7 @@ namespace PalLauncher.Services
                 { "gc.ActorClusteringEnabled", "gc.ActorClusteringEnabled=True" }
             });
 
-            // 4. Audio Thread Settings
+            // 5. Audio Thread Settings
             InjectSectionIntoIniLines(lines, "[/Script/Engine.AudioSettings]", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
                 { "MaxChannels", "MaxChannels=64" }
