@@ -847,6 +847,10 @@ namespace PalLauncher.Services
             {
                 await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
             }
+            else
+            {
+                await _saveService.UpdateBossTechnologyPointsAsync(uid, -totalCost);
+            }
 
             _logService.LogSuccess($"[EXCHANGE] {uid} purchased {quantity}x {item.Name} for {totalCost} {(isAncient ? "Ancient Points" : "Tech Points")}.", "Economy");
 

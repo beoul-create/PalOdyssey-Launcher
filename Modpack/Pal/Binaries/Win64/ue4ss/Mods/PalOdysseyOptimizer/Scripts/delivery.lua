@@ -448,12 +448,14 @@ local function processQueue()
     end
 
     if processedAny then
-        local okWrite, fOut = pcall(io.open, qPath, "w")
-        if okWrite and fOut then
-            for _, rem in ipairs(remainingLines) do
-                fOut:write(rem .. "\n")
+        for _, path in ipairs(getQueueFilePaths()) do
+            local okWrite, fOut = pcall(io.open, path, "w")
+            if okWrite and fOut then
+                for _, rem in ipairs(remainingLines) do
+                    fOut:write(rem .. "\n")
+                end
+                fOut:close()
             end
-            fOut:close()
         end
     end
 end

@@ -1310,6 +1310,16 @@ r.ShaderPipelineCache.BatchTime=2.0";
         private static byte[] SetIntProperty(byte[] buffer, string propertyName, int newValue)
         {
             int index = FindPropertyIndex(buffer, propertyName);
+            if (index < 0 && propertyName.StartsWith("Technology", StringComparison.OrdinalIgnoreCase))
+            {
+                index = FindPropertyIndex(buffer, "TechnologyP");
+                if (index < 0) index = FindPropertyIndex(buffer, "Technology");
+            }
+            if (index < 0 && propertyName.StartsWith("BossTechnology", StringComparison.OrdinalIgnoreCase))
+            {
+                index = FindPropertyIndex(buffer, "BossTechnology");
+                if (index < 0) index = FindPropertyIndex(buffer, "BossTech");
+            }
             if (index < 0)
             {
                 // Property not present; return existing buffer
@@ -1321,6 +1331,21 @@ r.ShaderPipelineCache.BatchTime=2.0";
             {
                 byte[] copy = (byte[])buffer.Clone();
                 BitConverter.GetBytes(newValue).CopyTo(copy, valOffset);
+                return copy;
+            }
+
+            // Direct compact layout fallback: skip ASCII identifier characters
+            int p = index;
+            while (p < buffer.Length && ((buffer[p] >= 65 && buffer[p] <= 90) || (buffer[p] >= 97 && buffer[p] <= 122) || buffer[p] == 95))
+            {
+                p++;
+            }
+            while (p < buffer.Length && buffer[p] == 0) p++;
+
+            if (p < buffer.Length)
+            {
+                byte[] copy = (byte[])buffer.Clone();
+                copy[p] = (byte)Math.Clamp(newValue, 0, 255);
                 return copy;
             }
 
