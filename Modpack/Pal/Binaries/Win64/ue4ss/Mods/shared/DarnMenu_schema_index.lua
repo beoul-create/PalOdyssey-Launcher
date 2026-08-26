@@ -1,9 +1,10 @@
 return {
-  "StuckPalRescuer",
   "PalClearVision",
-  "PalboxSearchPlus",
+  "PalOdysseyOptimizer",
   "CleanHUD",
+  "DarnToasts",
   "ShiningLuckies",
   "QuickDeposit",
-  "PalOdysseyOptimizer"
+  "PalboxSearchPlus",
+  "StuckPalRescuer"
 }
