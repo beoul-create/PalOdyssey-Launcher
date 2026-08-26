@@ -192,9 +192,16 @@ local function grantPlayerItem(controller, ps, rawItemName, qty)
     local amount = math.max(1, tonumber(qty) or 1)
     local granted = false
 
-    -- 1. Try PalPlayerInventoryData
+    -- 1. Try PalPlayerInventoryData directly on Controller or PlayerState
     pcall(function()
-        local inv = controller.InventoryData or (ps and ps.InventoryData)
+        local inv = nil
+        if controller.GetPalPlayerInventoryData then
+            inv = controller:GetPalPlayerInventoryData()
+        end
+        if not inv then
+            inv = controller.InventoryData or (ps and ps.InventoryData)
+        end
+
         if inv and inv:IsValid() then
             if inv.AddItem then
                 inv:AddItem(FName(itemId), amount, true)
@@ -202,11 +209,30 @@ local function grantPlayerItem(controller, ps, rawItemName, qty)
             elseif inv.TryAddItem then
                 inv:TryAddItem(FName(itemId), amount)
                 granted = true
+            elseif inv.RequestAddItem then
+                inv:RequestAddItem(FName(itemId), amount)
+                granted = true
+            end
+
+            -- Try specific sub-containers (Normal, Common, Essential)
+            if not granted then
+                pcall(function()
+                    if inv.NormalInventory and inv.NormalInventory:IsValid() and inv.NormalInventory.AddItem then
+                        inv.NormalInventory:AddItem(FName(itemId), amount)
+                        granted = true
+                    elseif inv.CommonContainer and inv.CommonContainer:IsValid() and inv.CommonContainer.AddItem then
+                        inv.CommonContainer:AddItem(FName(itemId), amount)
+                        granted = true
+                    elseif inv.EssentialInventory and inv.EssentialInventory:IsValid() and inv.EssentialInventory.AddItem then
+                        inv.EssentialInventory:AddItem(FName(itemId), amount)
+                        granted = true
+                    end
+                end)
             end
         end
     end)
 
-    -- 2. Try PalUtility
+    -- 2. Try PalUtility engine functions
     if not granted then
         pcall(function()
             local palUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
@@ -229,9 +255,14 @@ local function grantPlayerItem(controller, ps, rawItemName, qty)
     if not granted then
         pcall(function()
             local pawn = controller:GetPawn()
-            if pawn and pawn:IsValid() and pawn.AddItem then
-                pawn:AddItem(FName(itemId), amount)
-                granted = true
+            if pawn and pawn:IsValid() then
+                if pawn.AddItem then
+                    pawn:AddItem(FName(itemId), amount)
+                    granted = true
+                elseif pawn.InventoryComponent and pawn.InventoryComponent:IsValid() and pawn.InventoryComponent.AddItem then
+                    pawn.InventoryComponent:AddItem(FName(itemId), amount)
+                    granted = true
+                end
             end
         end)
     end
