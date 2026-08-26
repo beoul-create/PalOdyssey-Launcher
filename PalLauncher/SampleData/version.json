@@ -72,8 +72,8 @@
                      "version":  "1.2.0",
                      "description":  "Synthesized rendering: Fog veil removal, night atmosphere, LOD draw distance, ultrawide fixes, and frame pacing",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\PalClearVision\\Scripts\\main.lua",
-                     "sizeBytes":  4012,
-                     "sha256":  "739EA3B70074112FBB47002A559DB6BAAE8B673D8AC99F962DE98B001B6F7B8B",
+                     "sizeBytes":  4577,
+                     "sha256":  "5B47BA3F77A1D9D150E589559BE0847CA4998C62C43830CE1E89DF690B2FE2C8",
                      "required":  false,
                      "enabledByDefault":  true
                  },
