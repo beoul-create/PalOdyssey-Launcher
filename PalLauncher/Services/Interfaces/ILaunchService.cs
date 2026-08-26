@@ -29,6 +29,9 @@ namespace PalLauncher.Services.Interfaces
 
         Task<bool> LaunchGameAsync(LauncherConfig config, GamePathInfo pathInfo);
         Task<bool> StopGameAsync();
+        Task<bool> StartServerOnlyAsync(LauncherConfig config, GamePathInfo pathInfo);
+        Task<bool> StopServerOnlyAsync();
+        Task<bool> RestartServerOnlyAsync(LauncherConfig config, GamePathInfo pathInfo);
         bool EnsureDirectRawInputConfig(LauncherConfig config, string? gameRootPath);
         string BuildCommandLineArguments(LauncherConfig config);
         string BuildServerCommandLineArguments(LauncherConfig config);

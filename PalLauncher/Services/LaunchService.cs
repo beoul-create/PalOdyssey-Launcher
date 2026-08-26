@@ -665,6 +665,185 @@ namespace PalLauncher.Services
             });
         }
 
+        public async Task<bool> StartServerOnlyAsync(LauncherConfig config, GamePathInfo pathInfo)
+        {
+            if (IsServerRunning)
+            {
+                _logService.LogInfo("Palworld dedicated server is already running.", "PalServer");
+                return true;
+            }
+
+            if (!pathInfo.IsValid)
+            {
+                _logService.LogError("Cannot launch dedicated server: Path is invalid.", "PalServer");
+                return false;
+            }
+
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    string serverExe = "";
+                    string serverRoot = Directory.Exists(Path.Combine(pathInfo.GameRootPath, "..", "PalServer"))
+                        ? Path.GetFullPath(Path.Combine(pathInfo.GameRootPath, "..", "PalServer"))
+                        : pathInfo.GameRootPath;
+
+                    string shippingCmd = Path.Combine(serverRoot, "Pal", "Binaries", "Win64", "PalServer-Win64-Shipping-Cmd.exe");
+                    string shippingExe = Path.Combine(serverRoot, "Pal", "Binaries", "Win64", "PalServer-Win64-Shipping.exe");
+                    string rootServerExe = Path.Combine(serverRoot, "PalServer.exe");
+
+                    bool isDirectEngineBinary = false;
+                    if (File.Exists(rootServerExe))
+                    {
+                        serverExe = rootServerExe;
+                    }
+                    else if (File.Exists(shippingCmd))
+                    {
+                        serverExe = shippingCmd;
+                        isDirectEngineBinary = true;
+                    }
+                    else if (File.Exists(shippingExe))
+                    {
+                        serverExe = shippingExe;
+                        isDirectEngineBinary = true;
+                    }
+                    else if (File.Exists(pathInfo.ServerExecutablePath))
+                    {
+                        serverExe = pathInfo.ServerExecutablePath;
+                    }
+
+                    if (!File.Exists(serverExe))
+                    {
+                        _logService.LogError($"Dedicated server binary not found in '{serverRoot}'.", "PalServer");
+                        return false;
+                    }
+
+                    // Apply stability optimizations
+                    try
+                    {
+                        var saveService = new PalSaveService(_logService);
+                        _ = saveService.ApplyServerStabilityAndNetworkOptimizationsAsync(serverRoot);
+                        _ = saveService.PruneExcessBackupsAsync(maxBackupsToKeep: 24);
+                    }
+                    catch { }
+
+                    string serverArgs = BuildServerCommandLineArguments(config);
+                    if (isDirectEngineBinary)
+                    {
+                        serverArgs = "Pal " + serverArgs;
+                    }
+                    string serverWorkDir = isDirectEngineBinary ? (Path.GetDirectoryName(serverExe) ?? serverRoot) : serverRoot;
+
+                    _logService.LogInfo($"Starting dedicated server: {Path.GetFileName(serverExe)} args: '{serverArgs}'", "PalServer");
+
+                    var sStartInfo = new ProcessStartInfo
+                    {
+                        FileName = serverExe,
+                        Arguments = serverArgs,
+                        WorkingDirectory = serverWorkDir,
+                        UseShellExecute = true,
+                        WindowStyle = ProcessWindowStyle.Minimized
+                    };
+
+                    var sProcess = new Process
+                    {
+                        StartInfo = sStartInfo,
+                        EnableRaisingEvents = true
+                    };
+
+                    if (sProcess.Start())
+                    {
+                        _runningServerProcess = sProcess;
+
+                        Task.Run(async () =>
+                        {
+                            for (int i = 0; i < 10; i++)
+                            {
+                                await Task.Delay(1000);
+                                var procs = GetActiveServerProcesses();
+                                var actualServer = procs.FirstOrDefault(p => p.ProcessName.Contains("Shipping", StringComparison.OrdinalIgnoreCase));
+                                if (actualServer != null)
+                                {
+                                    _runningServerProcess = actualServer;
+                                    break;
+                                }
+                            }
+                        });
+
+                        StartPlayitTunnel(config);
+                        _serverLogCts?.Cancel();
+                        _serverLogCts = new CancellationTokenSource();
+                        StartServerLogFileTailer(serverRoot, _serverLogCts.Token);
+                        UpdateProcessState();
+                        _logService.LogSuccess($"Dedicated server launched successfully (PID: {sProcess.Id}).", "PalServer");
+                        return true;
+                    }
+
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    _logService.LogError("Failed to start dedicated server process.", "PalServer", ex);
+                    return false;
+                }
+            });
+        }
+
+        public async Task<bool> StopServerOnlyAsync()
+        {
+            _serverLogCts?.Cancel();
+            _serverLogCts = null;
+
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    // 1. Stop Server Process only (Do NOT touch client process or launcher)
+                    if (_runningServerProcess != null && !_runningServerProcess.HasExited)
+                    {
+                        _logService.LogInfo($"Stopping dedicated server process (PID: {_runningServerProcess.Id})...", "PalServer");
+                        try
+                        {
+                            _runningServerProcess.Kill(true);
+                        }
+                        catch { }
+                        _runningServerProcess = null;
+                    }
+
+                    // Sweep all active dedicated server processes
+                    foreach (var sp in GetActiveServerProcesses())
+                    {
+                        try
+                        {
+                            _logService.LogInfo($"Terminating dedicated server process (PID: {sp.Id} - {sp.ProcessName})...", "PalServer");
+                            sp.Kill(true);
+                        }
+                        catch { }
+                    }
+
+                    // Stop tunnel in sync
+                    StopPlayitTunnel();
+
+                    UpdateProcessState();
+                    _logService.LogSuccess("Dedicated server process stopped.", "PalServer");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _logService.LogError("Failed to stop dedicated server process.", "PalServer", ex);
+                    return false;
+                }
+            });
+        }
+
+        public async Task<bool> RestartServerOnlyAsync(LauncherConfig config, GamePathInfo pathInfo)
+        {
+            _logService.LogInfo("Initiating clean dedicated server reboot...", "PalServer");
+            await StopServerOnlyAsync();
+            await Task.Delay(3000);
+            return await StartServerOnlyAsync(config, pathInfo);
+        }
+
         public void PurgeStaleCrashFlags(string? gameRootPath)
         {
             try

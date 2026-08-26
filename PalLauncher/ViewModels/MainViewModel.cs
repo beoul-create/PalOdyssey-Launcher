@@ -474,14 +474,12 @@ namespace PalLauncher.ViewModels
                     onStartServerRequested: async () =>
                     {
                         var cfg = _configService.Config;
-                        cfg.LaunchMode = "Server";
-                        cfg.LaunchServerWithGame = true;
                         var currentPath = _pathDetector.DetectPalworldInstallation(cfg.GamePath);
-                        return await _launchService.LaunchGameAsync(cfg, currentPath);
+                        return await _launchService.StartServerOnlyAsync(cfg, currentPath);
                     },
                     onStopServerRequested: async () =>
                     {
-                        return await _launchService.StopGameAsync();
+                        return await _launchService.StopServerOnlyAsync();
                     },
                     onWebhookServerBooting: async (source) =>
                     {
@@ -855,14 +853,12 @@ namespace PalLauncher.ViewModels
                     onStartServer: async () =>
                     {
                         var cfg = _configService.Config;
-                        cfg.LaunchMode = "Server";
-                        cfg.LaunchServerWithGame = true;
                         var currentPath = _pathDetector.DetectPalworldInstallation(cfg.GamePath);
-                        return await _launchService.LaunchGameAsync(cfg, currentPath);
+                        return await _launchService.StartServerOnlyAsync(cfg, currentPath);
                     },
                     onStopServer: async () =>
                     {
-                        return await _launchService.StopGameAsync();
+                        return await _launchService.StopServerOnlyAsync();
                     },
                     getLiveboard: () =>
                     {
