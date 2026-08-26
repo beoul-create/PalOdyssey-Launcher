@@ -691,7 +691,7 @@ namespace PalLauncher.Services
             int unitCost = isAncient ? item.AncientPointCost : item.TechPointCost;
             int totalCost = unitCost * quantity;
 
-            var profile = await _saveService.ReadPlayerProfileAsync(uid);
+            var profile = await GetPlayerProfileAsync(uid);
             if (profile == null)
             {
                 return new ExchangeReceipt
@@ -903,7 +903,7 @@ namespace PalLauncher.Services
                 };
             }
 
-            var profile = await _saveService.ReadPlayerProfileAsync(uid);
+            var profile = await GetPlayerProfileAsync(uid);
             if (profile == null)
             {
                 return new RecycleReceipt
@@ -1072,7 +1072,7 @@ namespace PalLauncher.Services
 
             int totalCost = isAncient ? (pulls == 10 ? 18 : 2) : (pulls == 10 ? 25 : 3);
 
-            var profile = await _saveService.ReadPlayerProfileAsync(uid);
+            var profile = await GetPlayerProfileAsync(uid);
             if (profile == null)
             {
                 return new GachaReceipt
@@ -1206,7 +1206,7 @@ namespace PalLauncher.Services
             if (ancientPointsToConvert <= 0) ancientPointsToConvert = 1;
             string uid = _saveService.ResolvePlayerUid(playerUid);
 
-            var profile = await _saveService.ReadPlayerProfileAsync(uid);
+            var profile = await GetPlayerProfileAsync(uid);
             if (profile == null)
             {
                 return new TransmuteReceipt
@@ -1290,7 +1290,7 @@ namespace PalLauncher.Services
         public async Task<BasePerkReceipt> ExecuteUpgradePerkAsync(string playerUid, string perkType, bool isOnlineSession = false)
         {
             string uid = _saveService.ResolvePlayerUid(playerUid);
-            var profile = await _saveService.ReadPlayerProfileAsync(uid);
+            var profile = await GetPlayerProfileAsync(uid);
             if (profile == null)
             {
                 return new BasePerkReceipt
@@ -1475,7 +1475,7 @@ namespace PalLauncher.Services
         public async Task<SetPointsReceipt> SetPlayerTechnologyPointsAsync(string playerUid, int points, string currency = "tech_points", bool isOnlineSession = false)
         {
             string uid = _saveService.ResolvePlayerUid(playerUid);
-            var profile = await _saveService.ReadPlayerProfileAsync(uid);
+            var profile = await GetPlayerProfileAsync(uid);
             if (profile == null)
             {
                 return new SetPointsReceipt
@@ -1559,7 +1559,7 @@ namespace PalLauncher.Services
         public async Task<SetPointsReceipt> GrantPlayerTechnologyPointsAsync(string playerUid, int pointDelta, string currency = "tech_points", bool isOnlineSession = false)
         {
             string uid = _saveService.ResolvePlayerUid(playerUid);
-            var profile = await _saveService.ReadPlayerProfileAsync(uid);
+            var profile = await GetPlayerProfileAsync(uid);
             if (profile == null)
             {
                 return new SetPointsReceipt
