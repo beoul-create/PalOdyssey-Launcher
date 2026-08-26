@@ -189,5 +189,18 @@ namespace PalLauncher.Tests
                 }
             }
         }
+        [Fact]
+        public async Task Diagnostic_InspectDecompressedPlayerSaveFileProperties()
+        {
+            var saveService = new PalSaveService(_logService);
+            string playerSave = @"C:\SteamLibrary\steamapps\common\PalServer\Pal\Saved\SaveGames\0\CAF1FFD4723E4AA79BEC247C36B01C64\Players\9EDC20A9000000000000000000000000.sav";
+            if (File.Exists(playerSave))
+            {
+                var profile = await saveService.ReadPlayerProfileAsync("9EDC20A9000000000000000000000000");
+                Assert.NotNull(profile);
+                Assert.True(profile.Level > 0, $"Expected Level > 0 but was {profile.Level}");
+                Assert.True(profile.TechnologyPoints > 0, $"Expected TechnologyPoints > 0 but was {profile.TechnologyPoints}");
+            }
+        }
     }
 }

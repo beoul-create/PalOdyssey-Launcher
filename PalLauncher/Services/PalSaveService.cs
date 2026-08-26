@@ -1265,6 +1265,16 @@ r.ShaderPipelineCache.BatchTime=2.0";
         private static int ExtractIntProperty(byte[] buffer, string propertyName, int defaultValue = 0)
         {
             int index = FindPropertyIndex(buffer, propertyName);
+            if (index < 0 && propertyName.StartsWith("Technology", StringComparison.OrdinalIgnoreCase))
+            {
+                index = FindPropertyIndex(buffer, "TechnologyP");
+                if (index < 0) index = FindPropertyIndex(buffer, "Technology");
+            }
+            if (index < 0 && propertyName.StartsWith("BossTechnology", StringComparison.OrdinalIgnoreCase))
+            {
+                index = FindPropertyIndex(buffer, "BossTechnology");
+                if (index < 0) index = FindPropertyIndex(buffer, "BossTech");
+            }
             if (index < 0) return defaultValue;
 
             int valOffset = LocatePropertyValueOffset(buffer, index, propertyName);
@@ -1272,6 +1282,28 @@ r.ShaderPipelineCache.BatchTime=2.0";
             {
                 return BitConverter.ToInt32(buffer, valOffset);
             }
+
+            // Direct compact layout fallback: skip ASCII identifier characters
+            int p = index;
+            while (p < buffer.Length && ((buffer[p] >= 65 && buffer[p] <= 90) || (buffer[p] >= 97 && buffer[p] <= 122) || buffer[p] == 95))
+            {
+                p++;
+            }
+            while (p < buffer.Length && buffer[p] == 0) p++;
+
+            if (p < buffer.Length)
+            {
+                if (p + 4 <= buffer.Length)
+                {
+                    int int32 = BitConverter.ToInt32(buffer, p);
+                    if (int32 >= 0 && int32 < 100000)
+                    {
+                        return int32;
+                    }
+                }
+                return buffer[p];
+            }
+
             return defaultValue;
         }
 
