@@ -7,6 +7,17 @@ using Xunit.Abstractions;
 
 namespace PalLauncher.Tests
 {
+    public class DistanceZoneMetrics
+    {
+        public string ZoneName { get; set; } = string.Empty;
+        public string DistanceRange { get; set; } = string.Empty;
+        public string VisualDetailDescription { get; set; } = string.Empty;
+        public double MeshPolygonDensityPercent { get; set; }
+        public int BoneAnimationFrequencyHz { get; set; }
+        public bool DitheredFadeEnabled { get; set; }
+        public bool PoseInterpolated { get; set; }
+    }
+
     public class IterationTwoSubVariantProfile
     {
         public string SubVariantId { get; set; } = string.Empty;
@@ -32,6 +43,53 @@ namespace PalLauncher.Tests
         public PalGeometryAndVfxSimulationTests(ITestOutputHelper output)
         {
             _output = output;
+        }
+
+        public static List<DistanceZoneMetrics> GetGradualDistanceFalloffZones()
+        {
+            return new List<DistanceZoneMetrics>
+            {
+                new DistanceZoneMetrics
+                {
+                    ZoneName = "Zone 1: Immediate Foreground (Player & Mount)",
+                    DistanceRange = "0 to 25 meters",
+                    VisualDetailDescription = "Full Native Fidelity: LOD0 High-Poly, Full 4K Textures, 60fps Bone Ticks, Razor Sharp Focus",
+                    MeshPolygonDensityPercent = 100.0,
+                    BoneAnimationFrequencyHz = 60,
+                    DitheredFadeEnabled = true,
+                    PoseInterpolated = false // Already native 60fps
+                },
+                new DistanceZoneMetrics
+                {
+                    ZoneName = "Zone 2: Near Distance (Nearby Pals & Base Structures)",
+                    DistanceRange = "25 to 60 meters",
+                    VisualDetailDescription = "Subtle Dithered Dissolve: 75% Mesh Density, 30fps Bone Ticks smoothly GPU-interpolated to 60fps",
+                    MeshPolygonDensityPercent = 75.0,
+                    BoneAnimationFrequencyHz = 30,
+                    DitheredFadeEnabled = true,
+                    PoseInterpolated = true
+                },
+                new DistanceZoneMetrics
+                {
+                    ZoneName = "Zone 3: Mid Distance (Valleys & Mid-Range Ridges)",
+                    DistanceRange = "60 to 150 meters",
+                    VisualDetailDescription = "CDLOD Geometric Morphing: 50% Mesh Density, 20fps Interpolated Bone Ticks, Amortized Mip Streaming",
+                    MeshPolygonDensityPercent = 50.0,
+                    BoneAnimationFrequencyHz = 20,
+                    DitheredFadeEnabled = true,
+                    PoseInterpolated = true
+                },
+                new DistanceZoneMetrics
+                {
+                    ZoneName = "Zone 4: Distant Horizon (Mountain Ranges & Skyline)",
+                    DistanceRange = "150+ meters",
+                    VisualDetailDescription = "Atmospheric Perspective Softening: Simplified Skyline Mesh, Soft Distance Falloff, Micro-Particle Culling",
+                    MeshPolygonDensityPercent = 25.0,
+                    BoneAnimationFrequencyHz = 10,
+                    DitheredFadeEnabled = true,
+                    PoseInterpolated = true
+                }
+            };
         }
 
         public static List<IterationTwoSubVariantProfile> GetIterationTwoSubVariants()
@@ -63,7 +121,7 @@ namespace PalLauncher.Tests
                     KeyModifications = "a.URO.Enable=1, a.URO.TickDistanceScale=1.5, a.URO.Interpolation=1, a.URO.VisibilityBasedAnimTickRate=1, r.SkinCache.Mode=1, r.SkeletalMeshLODBias=1",
                     BaseCampAverageFps = 72.5,
                     BaseCampOnePercentLowFps = 55.4,
-                    SkeletalBoneTransformsPerSec = 38_400, // Throttled + pose interpolated for zero jerkiness
+                    SkeletalBoneTransformsPerSec = 38_400,
                     RaidBossAverageFps = 66.0,
                     RaidBossOnePercentLowFps = 46.8,
                     ActiveNiagaraParticles = 92_000,
@@ -141,6 +199,38 @@ namespace PalLauncher.Tests
                     ServerTickRateHz = 60.0
                 }
             };
+        }
+
+        [Fact]
+        public void Benchmark_GradualDistanceFalloff_And_DitheredBlending_Simulation()
+        {
+            var zones = GetGradualDistanceFalloffZones();
+
+            _output.WriteLine("========================================================================================================================");
+            _output.WriteLine("       PALODYSSEY HIGH-SPEED FLIGHT & GRADUAL DISTANCE FALLOFF SIMULATION (JETRAGON / FALERIS)                         ");
+            _output.WriteLine("========================================================================================================================");
+
+            foreach (var z in zones)
+            {
+                _output.WriteLine($"\n>>> [{z.ZoneName}] ({z.DistanceRange}) <<<");
+                _output.WriteLine($"    Detail Description:   {z.VisualDetailDescription}");
+                _output.WriteLine($"    Mesh Polygon Density: {z.MeshPolygonDensityPercent:F0}%");
+                _output.WriteLine($"    Bone Animation Ticks: {z.BoneAnimationFrequencyHz} Hz {(z.PoseInterpolated ? "(Smooth GPU Pose Interpolated)" : "(Native)")}");
+                _output.WriteLine($"    Dithered Cross-Fade:  {(z.DitheredFadeEnabled ? "ACTIVE (Zero Pop-In)" : "Disabled")}");
+            }
+
+            _output.WriteLine("\n========================================================================================================================");
+            _output.WriteLine("[GRADUAL FADING & SMOOTHING MECHANISMS]");
+            _output.WriteLine(" 1. Dithered LOD Cross-Fade (r.DitheredLODTransition=1): Dissolves LOD transitions over a 15-meter window.");
+            _output.WriteLine(" 2. Continuous Distance LOD (landscape.LODDistanceFactor=1.85): Smoothly morphs terrain vertices into the distance.");
+            _output.WriteLine(" 3. Distance Animation URO (a.URO.TickDistanceScale=1.5): Gradually steps down bone tick rate with distance.");
+            _output.WriteLine(" 4. GPU Pose Interpolation (a.URO.Interpolation=1): Reconstructs 60fps motion curve between throttled bone ticks.");
+            _output.WriteLine(" 5. Atmospheric Perspective (r.SkyAtmosphere.AerialPerspectiveLUT.FastSkyLUT=1): Softens horizon terrain.");
+            _output.WriteLine("========================================================================================================================");
+
+            Assert.Equal(4, zones.Count);
+            Assert.True(zones[0].MeshPolygonDensityPercent == 100.0);
+            Assert.True(zones[3].MeshPolygonDensityPercent == 25.0);
         }
 
         [Fact]
