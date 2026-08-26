@@ -983,7 +983,7 @@ namespace PalLauncher.Services
                 {
                     case "shop":
                     case "store":
-                        await ExecuteShopDirectInteractionAsync(interactionId, interactionToken);
+                        await ExecuteShopDirectInteractionAsync(interactionId, interactionToken, authorId);
                         return;
 
                     case "help":
@@ -1686,12 +1686,20 @@ namespace PalLauncher.Services
                 color: 0x9966FF);
         }
 
-        private string BuildShopCatalogDescription()
+        private string BuildShopCatalogDescription(PlayerEconomyProfile? profile = null)
         {
             var catalog = _economyService.GetShopCatalog();
             var perks = _economyService.GetGuildPerks();
 
             var sb = new StringBuilder();
+            if (profile != null)
+            {
+                string pName = !string.IsNullOrWhiteSpace(profile.PlayerName) ? profile.PlayerName : "Pioneer";
+                sb.AppendLine($"### 👤 Pioneer: `{pName}`");
+                sb.AppendLine($"• **🪙 Technology Points**: `{profile.TechnologyPoints} pts`");
+                sb.AppendLine($"• **🔮 Ancient Boss Points**: `{profile.BossTechnologyPoints} pts`\n");
+            }
+
             sb.AppendLine("Trade unspent **Standard & Ancient Technology Points** for sacred lotus fruits, skill chests, currencies, passives, and guild upgrades!\n");
 
             sb.AppendLine("### 🔮 Ancient Relics & Sacred Lotus Fruits (`/exchange`)");
@@ -1761,20 +1769,48 @@ namespace PalLauncher.Services
                 ephemeral: true);
         }
 
-        private async Task ExecuteShopDirectInteractionAsync(string interactionId, string interactionToken)
+        private async Task ExecuteShopDirectInteractionAsync(string interactionId, string interactionToken, string authorId)
         {
+            PlayerEconomyProfile? profile = null;
+            if (!string.IsNullOrWhiteSpace(authorId))
+            {
+                string linkedUid = _economyService.GetLinkedPlayerUid(authorId);
+                if (!string.IsNullOrWhiteSpace(linkedUid))
+                {
+                    try
+                    {
+                        profile = await _economyService.GetPlayerProfileAsync(linkedUid, forceLiveRefresh: true);
+                    }
+                    catch { }
+                }
+            }
+
             await RespondInteractionEmbedAsync(interactionId, interactionToken,
                 title: "🏛️ PalOdyssey Technology Exchange & Recycling",
-                description: BuildShopCatalogDescription(),
+                description: BuildShopCatalogDescription(profile),
                 color: 0x00E5FF,
                 ephemeral: true);
         }
 
-        private async Task ExecuteShopInteractionAsync(string interactionToken)
+        private async Task ExecuteShopInteractionAsync(string interactionToken, string authorId)
         {
+            PlayerEconomyProfile? profile = null;
+            if (!string.IsNullOrWhiteSpace(authorId))
+            {
+                string linkedUid = _economyService.GetLinkedPlayerUid(authorId);
+                if (!string.IsNullOrWhiteSpace(linkedUid))
+                {
+                    try
+                    {
+                        profile = await _economyService.GetPlayerProfileAsync(linkedUid, forceLiveRefresh: true);
+                    }
+                    catch { }
+                }
+            }
+
             await EditDeferredResponseEmbedAsync(interactionToken,
                 title: "🏛️ PalOdyssey Technology Exchange & Recycling",
-                description: BuildShopCatalogDescription(),
+                description: BuildShopCatalogDescription(profile),
                 color: 0x00E5FF);
         }
 
