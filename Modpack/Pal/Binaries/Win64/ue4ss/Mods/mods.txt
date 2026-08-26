@@ -11,7 +11,7 @@ BPModLoaderMod : 1
 jsbLuaProfilerMod : 0
 
 PalSchema : 1
-RamTrimMod : 0
+RamTrimMod : 1
 PalworldTuner : 1
 ExpeditionXP : 1
 DarnMenu : 1

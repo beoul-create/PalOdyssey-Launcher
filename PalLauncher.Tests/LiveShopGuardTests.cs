@@ -93,6 +93,12 @@ namespace PalLauncher.Tests
                 OfflineBinarySaveEdited = true;
                 return Task.FromResult(true);
             }
+
+            public Task<bool> UpdateBossTechnologyPointsAsync(string playerUid, int pointsDelta, bool isAbsolute = false)
+            {
+                OfflineBinarySaveEdited = true;
+                return Task.FromResult(true);
+            }
         }
 
         private class MockHttpMessageHandler : HttpMessageHandler

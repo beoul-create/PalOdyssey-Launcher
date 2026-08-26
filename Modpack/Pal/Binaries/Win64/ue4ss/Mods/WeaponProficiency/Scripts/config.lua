@@ -418,7 +418,7 @@ local Config = {
   -- so turning this on behaves sensibly -- it is off by default, not unimplemented.
   applyUnsupported   = false,
   unsupportedAllow   = {},         -- enable specific modded models: { ["YakushimaBlade005"] = true }
-  skipUntestedWeapons = true,      -- master safety. Set to FALSE to apply to EVERY weapon in the library (old behavior).
+  skipUntestedWeapons = false,     -- master safety. Set to FALSE to apply to EVERY weapon in the library (old behavior).
   untestedAllow      = {},         -- enable specific models: { ["Musket_3"] = true, ["Musket_4"] = true }
   untestedAllowTypes = {},         -- enable a whole type:    { Musket = true }
 

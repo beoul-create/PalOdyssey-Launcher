@@ -30,9 +30,11 @@ local function ApplyVisualTweaks()
         local player = GetPlayerController()
         if not player or not player:IsValid() then return end
 
-        -- 1. Atmospheric Clarity
+        -- 1. Atmospheric Clarity & Cloud Raymarching Trimming
         if Config.removeFogHaze then
             ExecuteConsoleCommand("r.VolumetricFog 0")
+            ExecuteConsoleCommand("r.VolumetricCloud 0")
+            ExecuteConsoleCommand("r.ContactShadows 0")
         end
         if Config.disableChromaticAberration then
             ExecuteConsoleCommand("r.SceneColorFringeQuality 0")
@@ -54,8 +56,9 @@ local function ApplyVisualTweaks()
 
         -- 3. Enhanced LOD & Draw Distance (Tuned for Zero Stutter)
         if Config.enhancedLODDistance then
-            ExecuteConsoleCommand("r.ViewDistanceScale 1.15")
-            ExecuteConsoleCommand("foliage.LODDistanceScale 1.05")
+            ExecuteConsoleCommand("r.ViewDistanceScale 1.0")
+            ExecuteConsoleCommand("foliage.LODDistanceScale 0.85")
+            ExecuteConsoleCommand("grass.DensityScale 0.8")
             ExecuteConsoleCommand("r.StaticMeshLODDistanceScale 1.0")
             ExecuteConsoleCommand("r.MeshLODRange 1.0")
         end

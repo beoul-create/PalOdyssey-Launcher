@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
@@ -13,21 +14,28 @@ namespace PalLauncher.Services
 {
     public class DiscordRpcService : IDiscordRpcService
     {
-        private const string DefaultAppId = "383226320970055681"; // Registered Discord Rich Presence App ID
+        private const string PrimaryDefaultAppId = "1541335019899977768";
+        private const string SecondaryDefaultAppId = "1540924979095408700";
+        private const string FallbackAppId = "383226320970055681";
 
         private readonly ILogService _logService;
         private NamedPipeClientStream? _pipeClient;
         private CancellationTokenSource? _cts;
-        private string _applicationId = DefaultAppId;
+        private string _applicationId = PrimaryDefaultAppId;
         private bool _isConnected;
         private DateTime? _sessionStartTime;
         private readonly SemaphoreSlim _pipeSemaphore = new(1, 1);
 
         // Cached presence state for automatic re-publishing on connect/reconnect and active heartbeat
-        private string _cachedDetails = "Using PalOdyssey Launcher";
+        private string _cachedDetails = "In Launcher";
         private string _cachedState = "Preparing Expedition";
         private bool _cachedIsPlaying;
         private int? _cachedTargetPid;
+        private string? _cachedLargeImageKey;
+        private string? _cachedLargeImageText;
+        private string? _cachedSmallImageKey;
+        private string? _cachedSmallImageText;
+        private (string label, string url)[]? _cachedButtons;
 
         private static readonly JsonSerializerOptions JsonOpts = new()
         {
@@ -49,7 +57,7 @@ namespace PalLauncher.Services
             }
             else
             {
-                _applicationId = DefaultAppId;
+                _applicationId = PrimaryDefaultAppId;
             }
 
             _cts?.Cancel();
@@ -68,13 +76,31 @@ namespace PalLauncher.Services
                     bool connected = await TryConnectToDiscordPipeAsync();
                     if (connected)
                     {
-                        await UpdatePresenceAsync(_cachedDetails, _cachedState, _cachedIsPlaying, _cachedTargetPid);
+                        await UpdatePresenceAsync(
+                            _cachedDetails,
+                            _cachedState,
+                            _cachedIsPlaying,
+                            _cachedTargetPid,
+                            _cachedLargeImageKey,
+                            _cachedLargeImageText,
+                            _cachedSmallImageKey,
+                            _cachedSmallImageText,
+                            _cachedButtons);
                     }
                 }
                 else if (_cachedIsPlaying)
                 {
                     // Active game heartbeat: keep Rich Presence pinned so Palworld background detection doesn't override it
-                    await SendPresenceFrameAsync(_cachedDetails, _cachedState, true, _cachedTargetPid);
+                    await SendPresenceFrameAsync(
+                        _cachedDetails,
+                        _cachedState,
+                        true,
+                        _cachedTargetPid,
+                        _cachedLargeImageKey,
+                        _cachedLargeImageText,
+                        _cachedSmallImageKey,
+                        _cachedSmallImageText,
+                        _cachedButtons);
                 }
 
                 try
@@ -120,14 +146,24 @@ namespace PalLauncher.Services
                             _logService.LogInfo($"Connected to Discord Rich Presence IPC ({pipeName}) [AppID: {_applicationId}].", "DiscordRPC");
                             return true;
                         }
-                        else if (op == 2 && _applicationId != DefaultAppId)
+                        else if (op == 2)
                         {
-                            // App ID was invalid or rejected by Discord - auto fallback to default registered App ID
-                            _logService.LogWarning($"Custom Discord AppID '{_applicationId}' rejected ({json}). Falling back to default registered AppID.", "DiscordRPC");
-                            _applicationId = DefaultAppId;
-                            try { pipe.Dispose(); } catch { }
-                            _pipeClient = null;
-                            continue;
+                            // App ID was invalid or rejected by Discord - fallback to alternate registered App ID
+                            string fallback = _applicationId == PrimaryDefaultAppId ? SecondaryDefaultAppId : FallbackAppId;
+                            if (_applicationId != fallback)
+                            {
+                                _logService.LogWarning($"Custom Discord AppID '{_applicationId}' rejected ({json}). Retrying with fallback AppID '{fallback}'.", "DiscordRPC");
+                                _applicationId = fallback;
+                                try { pipe.Dispose(); } catch { }
+                                _pipeClient = null;
+                                i--; // Immediately retry current pipe index
+                                continue;
+                            }
+                            else
+                            {
+                                try { pipe.Dispose(); } catch { }
+                                _pipeClient = null;
+                            }
                         }
                         else
                         {
@@ -150,7 +186,16 @@ namespace PalLauncher.Services
             }
         }
 
-        public async Task UpdatePresenceAsync(string details, string state, bool isPlaying = false, int? targetPid = null)
+        public async Task UpdatePresenceAsync(
+            string details,
+            string state,
+            bool isPlaying = false,
+            int? targetPid = null,
+            string? largeImageKey = null,
+            string? largeImageText = null,
+            string? smallImageKey = null,
+            string? smallImageText = null,
+            (string label, string url)[]? buttons = null)
         {
             _cachedDetails = details;
             _cachedState = state;
@@ -159,16 +204,39 @@ namespace PalLauncher.Services
             {
                 _cachedTargetPid = targetPid.Value;
             }
+            _cachedLargeImageKey = largeImageKey;
+            _cachedLargeImageText = largeImageText;
+            _cachedSmallImageKey = smallImageKey;
+            _cachedSmallImageText = smallImageText;
+            _cachedButtons = buttons;
 
             if (!_isConnected || _pipeClient == null || !_pipeClient.IsConnected)
             {
                 return;
             }
 
-            await SendPresenceFrameAsync(details, state, isPlaying, _cachedTargetPid);
+            await SendPresenceFrameAsync(
+                details,
+                state,
+                isPlaying,
+                _cachedTargetPid,
+                largeImageKey,
+                largeImageText,
+                smallImageKey,
+                smallImageText,
+                buttons);
         }
 
-        private async Task SendPresenceFrameAsync(string details, string state, bool isPlaying, int? targetPid)
+        private async Task SendPresenceFrameAsync(
+            string details,
+            string state,
+            bool isPlaying,
+            int? targetPid,
+            string? largeImageKey,
+            string? largeImageText,
+            string? smallImageKey,
+            string? smallImageText,
+            (string label, string url)[]? buttons)
         {
             await _pipeSemaphore.WaitAsync();
             try
@@ -194,44 +262,88 @@ namespace PalLauncher.Services
                 object? timestampsObj = startUnix.HasValue ? new { start = startUnix.Value } : null;
                 int activePid = (targetPid.HasValue && targetPid.Value > 0) ? targetPid.Value : Process.GetCurrentProcess().Id;
 
+                var activityDict = new Dictionary<string, object?>
+                {
+                    ["details"] = details,
+                    ["state"] = state,
+                    ["instance"] = false,
+                    ["assets"] = new
+                    {
+                        large_image = string.IsNullOrWhiteSpace(largeImageKey) ? "palworld" : largeImageKey,
+                        large_text = string.IsNullOrWhiteSpace(largeImageText) ? (isPlaying ? "PalOdyssey Expedition" : "PalOdyssey Custom Launcher") : largeImageText,
+                        small_image = string.IsNullOrWhiteSpace(smallImageKey) ? (isPlaying ? "online" : "ready") : smallImageKey,
+                        small_text = string.IsNullOrWhiteSpace(smallImageText) ? (isPlaying ? "In Realm (Dedicated)" : "Ready to Launch") : smallImageText
+                    }
+                };
+
+                if (timestampsObj != null)
+                {
+                    activityDict["timestamps"] = timestampsObj;
+                }
+
+                if (buttons != null && buttons.Length > 0)
+                {
+                    var buttonList = new List<object>();
+                    foreach (var (label, url) in buttons)
+                    {
+                        if (!string.IsNullOrWhiteSpace(label) && !string.IsNullOrWhiteSpace(url) && Uri.TryCreate(url, UriKind.Absolute, out _))
+                        {
+                            buttonList.Add(new { label = label.Trim(), url = url.Trim() });
+                            if (buttonList.Count >= 2) break; // Discord allows maximum 2 action buttons
+                        }
+                    }
+                    if (buttonList.Count > 0)
+                    {
+                        activityDict["buttons"] = buttonList;
+                    }
+                }
+
                 var activityPayload = new
                 {
                     cmd = "SET_ACTIVITY",
                     args = new
                     {
                         pid = activePid,
-                        activity = new
-                        {
-                            details = details,
-                            state = state,
-                            timestamps = timestampsObj,
-                            assets = new
-                            {
-                                large_image = "palworld",
-                                large_text = isPlaying ? "PalOdyssey Expedition" : "PalOdyssey Custom Launcher",
-                                small_image = isPlaying ? "online" : "ready",
-                                small_text = isPlaying ? "In Realm (Dedicated)" : "Ready to Launch"
-                            },
-                            instance = false
-                        }
+                        activity = activityDict
                     },
                     nonce = Guid.NewGuid().ToString("N")
                 };
 
                 await WriteFrameInternalAsync(1, activityPayload);
 
-                // Drain response frame from Discord so pipe stays clear
-                using var readCts = new CancellationTokenSource(1000);
-                await ReadFrameInternalAsync(readCts.Token);
+                // Drain response non-fatally so pipe stays clean
+                await TryDrainResponseAsync(timeoutMs: 300);
             }
             catch (Exception ex)
             {
                 _isConnected = false;
                 _logService.LogWarning("Discord presence update notice: " + ex.Message, "DiscordRPC");
+                try { _pipeClient?.Dispose(); } catch { }
+                _pipeClient = null;
             }
             finally
             {
                 _pipeSemaphore.Release();
+            }
+        }
+
+        private async Task TryDrainResponseAsync(int timeoutMs = 300)
+        {
+            try
+            {
+                using var readCts = new CancellationTokenSource(timeoutMs);
+                await ReadFrameInternalAsync(readCts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // Benign timeout: Discord may not respond immediately or has no event to push
+            }
+            catch (Exception)
+            {
+                // Stream error indicates connection lost
+                _isConnected = false;
+                try { _pipeClient?.Dispose(); } catch { }
+                _pipeClient = null;
             }
         }
 
@@ -256,9 +368,7 @@ namespace PalLauncher.Services
                 };
 
                 await WriteFrameInternalAsync(1, clearPayload);
-
-                using var readCts = new CancellationTokenSource(1000);
-                await ReadFrameInternalAsync(readCts.Token);
+                await TryDrainResponseAsync(timeoutMs: 300);
             }
             catch { }
             finally
@@ -289,8 +399,13 @@ namespace PalLauncher.Services
             if (_pipeClient == null || !_pipeClient.IsConnected) return (-1, string.Empty);
 
             byte[] header = new byte[8];
-            int read = await _pipeClient.ReadAsync(header, 0, 8, ct);
-            if (read < 8) return (-1, string.Empty);
+            int headerRead = 0;
+            while (headerRead < 8)
+            {
+                int r = await _pipeClient.ReadAsync(header.AsMemory(headerRead, 8 - headerRead), ct);
+                if (r <= 0) return (-1, string.Empty);
+                headerRead += r;
+            }
 
             int opcode = BitConverter.ToInt32(header, 0);
             int length = BitConverter.ToInt32(header, 4);
@@ -298,15 +413,17 @@ namespace PalLauncher.Services
             if (length <= 0 || length > 65536) return (opcode, string.Empty);
 
             byte[] body = new byte[length];
-            int totalRead = 0;
-            while (totalRead < length)
+            int bodyRead = 0;
+            while (bodyRead < length)
             {
-                int r = await _pipeClient.ReadAsync(body, totalRead, length - totalRead, ct);
+                int r = await _pipeClient.ReadAsync(body.AsMemory(bodyRead, length - bodyRead), ct);
                 if (r <= 0) break;
-                totalRead += r;
+                bodyRead += r;
             }
 
-            string json = Encoding.UTF8.GetString(body, 0, totalRead);
+            if (bodyRead < length) return (opcode, string.Empty);
+
+            string json = Encoding.UTF8.GetString(body, 0, bodyRead);
             return (opcode, json);
         }
 

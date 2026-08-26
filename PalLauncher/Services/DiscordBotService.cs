@@ -711,6 +711,78 @@ namespace PalLauncher.Services
                     // Admin-Only Commands (Restricted to Administrators)
                     new
                     {
+                        name = "setpoints",
+                        description = "Directly set a player's Technology or Boss Points balance (Admin Only)",
+                        type = 1,
+                        default_member_permissions = "8",
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "user",
+                                description = "Discord @user, SteamID64, or Player UID",
+                                type = 3,
+                                required = true
+                            },
+                            new
+                            {
+                                name = "points",
+                                description = "Exact point balance to set (e.g. 50)",
+                                type = 4,
+                                required = true
+                            },
+                            new
+                            {
+                                name = "currency",
+                                description = "Currency type: tech_points (Standard) or boss_points (Ancient)",
+                                type = 3,
+                                required = false,
+                                choices = new object[]
+                                {
+                                    new { name = "Technology Points (Standard)", value = "tech_points" },
+                                    new { name = "Ancient Boss Points (Boss)", value = "boss_points" }
+                                }
+                            }
+                        }
+                    },
+                    new
+                    {
+                        name = "grantpoints",
+                        description = "Grant or deduct Technology or Boss Points for a player (Admin Only)",
+                        type = 1,
+                        default_member_permissions = "8",
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "user",
+                                description = "Discord @user, SteamID64, or Player UID",
+                                type = 3,
+                                required = true
+                            },
+                            new
+                            {
+                                name = "points",
+                                description = "Number of points to grant (e.g. 10 or -5)",
+                                type = 4,
+                                required = true
+                            },
+                            new
+                            {
+                                name = "currency",
+                                description = "Currency type: tech_points (Standard) or boss_points (Ancient)",
+                                type = 3,
+                                required = false,
+                                choices = new object[]
+                                {
+                                    new { name = "Technology Points (Standard)", value = "tech_points" },
+                                    new { name = "Ancient Boss Points (Boss)", value = "boss_points" }
+                                }
+                            }
+                        }
+                    },
+                    new
+                    {
                         name = "restart",
                         description = "Gracefully reboot the PalOdyssey Dedicated Server (Admin Only)",
                         type = 1,
@@ -999,6 +1071,33 @@ namespace PalLauncher.Services
                         await ExecutePerkInteractionAsync(interactionToken, data, authorId, authorName);
                         break;
 
+                    case "setpoints":
+                        if (!IsAdminUser(interaction))
+                        {
+                            _logService.LogWarning($"User '{authorName}' attempted admin command '/{command}' without administrator permissions.", "DiscordBot");
+                            await EditDeferredResponseEmbedAsync(interactionToken,
+                                title: "⛔ Administrative Permission Required",
+                                description: "❌ You do not have permission to execute this administrative command.",
+                                color: 0xFF3366);
+                            return;
+                        }
+                        await ExecuteSetPointsInteractionAsync(interactionToken, data, authorName);
+                        break;
+
+                    case "grantpoints":
+                    case "addpoints":
+                        if (!IsAdminUser(interaction))
+                        {
+                            _logService.LogWarning($"User '{authorName}' attempted admin command '/{command}' without administrator permissions.", "DiscordBot");
+                            await EditDeferredResponseEmbedAsync(interactionToken,
+                                title: "⛔ Administrative Permission Required",
+                                description: "❌ You do not have permission to execute this administrative command.",
+                                color: 0xFF3366);
+                            return;
+                        }
+                        await ExecuteGrantPointsInteractionAsync(interactionToken, data, authorName);
+                        break;
+
                     case "restart":
                     case "reboot":
                         if (!IsAdminUser(interaction))
@@ -1235,6 +1334,33 @@ namespace PalLauncher.Services
                     case "shop":
                     case "store":
                         await ExecuteShopCommandAsync(channelId);
+                        break;
+
+                    case "setpoints":
+                        if (!IsAdminMessageAuthor(msg))
+                        {
+                            _logService.LogWarning($"User '{authorName}' attempted admin message command '{mainCmd}' without administrator permissions.", "DiscordBot");
+                            await SendEmbedMessageAsync(channelId,
+                                title: "⛔ Administrative Permission Required",
+                                description: "❌ You do not have permission to execute this administrative command.",
+                                color: 0xFF3366);
+                            return;
+                        }
+                        await ExecuteSetPointsCommandAsync(channelId, trimmed, authorName);
+                        break;
+
+                    case "grantpoints":
+                    case "addpoints":
+                        if (!IsAdminMessageAuthor(msg))
+                        {
+                            _logService.LogWarning($"User '{authorName}' attempted admin message command '{mainCmd}' without administrator permissions.", "DiscordBot");
+                            await SendEmbedMessageAsync(channelId,
+                                title: "⛔ Administrative Permission Required",
+                                description: "❌ You do not have permission to execute this administrative command.",
+                                color: 0xFF3366);
+                            return;
+                        }
+                        await ExecuteGrantPointsCommandAsync(channelId, trimmed, authorName);
                         break;
                 }
             }
@@ -1936,7 +2062,7 @@ namespace PalLauncher.Services
                 ? steamIdOption.Trim()
                 : _economyService.GetLinkedPlayerUid(authorId);
 
-            var profile = await _economyService.GetPlayerProfileAsync(targetUid);
+            var profile = await _economyService.GetPlayerProfileAsync(targetUid, forceLiveRefresh: true);
             if (profile == null)
             {
                 await EditDeferredResponseEmbedAsync(interactionToken,
@@ -2308,6 +2434,109 @@ namespace PalLauncher.Services
             }
         }
 
+        private async Task ExecuteSetPointsInteractionAsync(string interactionToken, JsonElement data, string authorName)
+        {
+            string userQuery = GetStringOption(data, "user") ?? "";
+            int points = GetIntOption(data, "points", 0);
+            string currency = GetStringOption(data, "currency") ?? "tech_points";
+
+            if (string.IsNullOrWhiteSpace(userQuery))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Invalid Player",
+                    description: "Please specify a valid Discord User ID, Steam ID, or Player UID.",
+                    color: 0xFFAA00);
+                return;
+            }
+
+            string targetUid = ResolveUserQueryToPlayerUid(userQuery);
+            bool isOnline = _presenceService != null && await _presenceService.IsPlayerOnlineAsync(targetUid);
+            var receipt = await _economyService.SetPlayerTechnologyPointsAsync(targetUid, points, currency, isOnline);
+
+            if (receipt.Success)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"### ⚡ Technology Points Set by Admin `@{authorName}`");
+                sb.AppendLine($"• **Pioneer**: `{receipt.PlayerName}` (`{receipt.PlayerUid}`)");
+                sb.AppendLine($"• **Currency**: `{(receipt.Currency == "boss_points" ? "🔮 Ancient Boss Points" : "🪙 Technology Points")}`");
+                sb.AppendLine($"• **Previous Balance**: `{receipt.PreviousPoints} pts`");
+                sb.AppendLine($"• **New Balance**: `{receipt.NewPoints} pts`");
+                sb.AppendLine($"• **Session Mode**: `{(isOnline ? "Live In-Game Sync (Instant)" : "Offline World Save")}`\n");
+                sb.AppendLine($"💡 *{receipt.Message}*");
+
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "✅ Player Balance Updated",
+                    description: sb.ToString(),
+                    color: 0x00FF88);
+            }
+            else
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "❌ Point Adjustment Failed",
+                    description: receipt.Message,
+                    color: 0xFF4466);
+            }
+        }
+
+        private async Task ExecuteGrantPointsInteractionAsync(string interactionToken, JsonElement data, string authorName)
+        {
+            string userQuery = GetStringOption(data, "user") ?? "";
+            int pointDelta = GetIntOption(data, "points", 0);
+            string currency = GetStringOption(data, "currency") ?? "tech_points";
+
+            if (string.IsNullOrWhiteSpace(userQuery))
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "⚠️ Invalid Player",
+                    description: "Please specify a valid Discord User ID, Steam ID, or Player UID.",
+                    color: 0xFFAA00);
+                return;
+            }
+
+            string targetUid = ResolveUserQueryToPlayerUid(userQuery);
+            bool isOnline = _presenceService != null && await _presenceService.IsPlayerOnlineAsync(targetUid);
+            var receipt = await _economyService.GrantPlayerTechnologyPointsAsync(targetUid, pointDelta, currency, isOnline);
+
+            if (receipt.Success)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"### 🪙 Technology Points Granted by Admin `@{authorName}`");
+                sb.AppendLine($"• **Pioneer**: `{receipt.PlayerName}` (`{receipt.PlayerUid}`)");
+                sb.AppendLine($"• **Currency**: `{(receipt.Currency == "boss_points" ? "🔮 Ancient Boss Points" : "🪙 Technology Points")}`");
+                sb.AppendLine($"• **Delta**: `{(receipt.Delta >= 0 ? "+" : "")}{receipt.Delta} pts`");
+                sb.AppendLine($"• **New Balance**: `{receipt.NewPoints} pts`");
+                sb.AppendLine($"• **Session Mode**: `{(isOnline ? "Live In-Game Sync (Instant)" : "Offline World Save")}`\n");
+                sb.AppendLine($"💡 *{receipt.Message}*");
+
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "✅ Player Points Granted",
+                    description: sb.ToString(),
+                    color: 0x00FF88);
+            }
+            else
+            {
+                await EditDeferredResponseEmbedAsync(interactionToken,
+                    title: "❌ Point Grant Failed",
+                    description: receipt.Message,
+                    color: 0xFF4466);
+            }
+        }
+
+        private string ResolveUserQueryToPlayerUid(string userQuery)
+        {
+            string clean = userQuery.Trim();
+            if (clean.StartsWith("<@") && clean.EndsWith(">"))
+            {
+                clean = clean.Trim('<', '>', '@', '!');
+                return _economyService.GetLinkedPlayerUid(clean);
+            }
+            if (ulong.TryParse(clean, out _) && clean.Length >= 17 && clean.Length <= 19 && !clean.StartsWith("7656"))
+            {
+                return _economyService.GetLinkedPlayerUid(clean);
+            }
+            return clean;
+        }
+
         private static string? GetStringOption(JsonElement data, string optionName)
         {
             if (data.TryGetProperty("options", out var options) && options.ValueKind == JsonValueKind.Array)
@@ -2350,7 +2579,7 @@ namespace PalLauncher.Services
         private async Task ExecuteInventoryCommandAsync(string channelId, string authorId)
         {
             string targetUid = _economyService.GetLinkedPlayerUid(authorId);
-            var profile = await _economyService.GetPlayerProfileAsync(targetUid);
+            var profile = await _economyService.GetPlayerProfileAsync(targetUid, forceLiveRefresh: true);
             if (profile == null)
             {
                 await SendEmbedMessageAsync(channelId,
@@ -2740,6 +2969,112 @@ namespace PalLauncher.Services
                 {
                     _logService.LogWarning($"Exception posting Liveboard message: {ex.Message}", "DiscordBot");
                 }
+            }
+        }
+
+        private async Task ExecuteSetPointsCommandAsync(string channelId, string fullCommand, string authorName)
+        {
+            var parts = fullCommand.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            if (parts.Length < 3)
+            {
+                await SendEmbedMessageAsync(channelId,
+                    title: "⚠️ Usage: Set Points",
+                    description: "**Usage**: `!setpoints <@user|steam_id|player_uid> <amount> [tech_points|boss_points]`\n\nExample: `!setpoints @Jack 50` or `!setpoints 76561198000000000 10 boss_points`",
+                    color: 0xFFAA00);
+                return;
+            }
+
+            string userQuery = parts[1];
+            if (!int.TryParse(parts[2], out int points))
+            {
+                await SendEmbedMessageAsync(channelId,
+                    title: "⚠️ Invalid Amount",
+                    description: $"Could not parse `{parts[2]}` as a valid integer amount.",
+                    color: 0xFFAA00);
+                return;
+            }
+
+            string currency = parts.Length >= 4 ? parts[3] : "tech_points";
+            string targetUid = ResolveUserQueryToPlayerUid(userQuery);
+
+            bool isOnline = _presenceService != null && await _presenceService.IsPlayerOnlineAsync(targetUid);
+            var receipt = await _economyService.SetPlayerTechnologyPointsAsync(targetUid, points, currency, isOnline);
+
+            if (receipt.Success)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"### ⚡ Technology Points Set by Admin `@{authorName}`");
+                sb.AppendLine($"• **Pioneer**: `{receipt.PlayerName}` (`{receipt.PlayerUid}`)");
+                sb.AppendLine($"• **Currency**: `{(receipt.Currency == "boss_points" ? "🔮 Ancient Boss Points" : "🪙 Technology Points")}`");
+                sb.AppendLine($"• **Previous Balance**: `{receipt.PreviousPoints} pts`");
+                sb.AppendLine($"• **New Balance**: `{receipt.NewPoints} pts`");
+                sb.AppendLine($"• **Session Mode**: `{(isOnline ? "Live In-Game Sync (Instant)" : "Offline World Save")}`\n");
+                sb.AppendLine($"💡 *{receipt.Message}*");
+
+                await SendEmbedMessageAsync(channelId,
+                    title: "✅ Player Balance Updated",
+                    description: sb.ToString(),
+                    color: 0x00FF88);
+            }
+            else
+            {
+                await SendEmbedMessageAsync(channelId,
+                    title: "❌ Point Adjustment Failed",
+                    description: receipt.Message,
+                    color: 0xFF4466);
+            }
+        }
+
+        private async Task ExecuteGrantPointsCommandAsync(string channelId, string fullCommand, string authorName)
+        {
+            var parts = fullCommand.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            if (parts.Length < 3)
+            {
+                await SendEmbedMessageAsync(channelId,
+                    title: "⚠️ Usage: Grant Points",
+                    description: "**Usage**: `!grantpoints <@user|steam_id|player_uid> <amount> [tech_points|boss_points]`\n\nExample: `!grantpoints @Jack 10` or `!grantpoints 76561198000000000 5 boss_points`",
+                    color: 0xFFAA00);
+                return;
+            }
+
+            string userQuery = parts[1];
+            if (!int.TryParse(parts[2], out int pointDelta))
+            {
+                await SendEmbedMessageAsync(channelId,
+                    title: "⚠️ Invalid Amount",
+                    description: $"Could not parse `{parts[2]}` as a valid integer amount.",
+                    color: 0xFFAA00);
+                return;
+            }
+
+            string currency = parts.Length >= 4 ? parts[3] : "tech_points";
+            string targetUid = ResolveUserQueryToPlayerUid(userQuery);
+
+            bool isOnline = _presenceService != null && await _presenceService.IsPlayerOnlineAsync(targetUid);
+            var receipt = await _economyService.GrantPlayerTechnologyPointsAsync(targetUid, pointDelta, currency, isOnline);
+
+            if (receipt.Success)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine($"### 🪙 Technology Points Granted by Admin `@{authorName}`");
+                sb.AppendLine($"• **Pioneer**: `{receipt.PlayerName}` (`{receipt.PlayerUid}`)");
+                sb.AppendLine($"• **Currency**: `{(receipt.Currency == "boss_points" ? "🔮 Ancient Boss Points" : "🪙 Technology Points")}`");
+                sb.AppendLine($"• **Delta**: `{(receipt.Delta >= 0 ? "+" : "")}{receipt.Delta} pts`");
+                sb.AppendLine($"• **New Balance**: `{receipt.NewPoints} pts`");
+                sb.AppendLine($"• **Session Mode**: `{(isOnline ? "Live In-Game Sync (Instant)" : "Offline World Save")}`\n");
+                sb.AppendLine($"💡 *{receipt.Message}*");
+
+                await SendEmbedMessageAsync(channelId,
+                    title: "✅ Player Points Granted",
+                    description: sb.ToString(),
+                    color: 0x00FF88);
+            }
+            else
+            {
+                await SendEmbedMessageAsync(channelId,
+                    title: "❌ Point Grant Failed",
+                    description: receipt.Message,
+                    color: 0xFF4466);
             }
         }
 

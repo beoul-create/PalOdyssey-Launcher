@@ -352,4 +352,37 @@ namespace PalLauncher.Models
         [JsonPropertyName("timestamp")]
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     }
+
+    public class SetPointsReceipt
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; set; }
+
+        [JsonPropertyName("playerUid")]
+        public string PlayerUid { get; set; } = string.Empty;
+
+        [JsonPropertyName("playerName")]
+        public string PlayerName { get; set; } = string.Empty;
+
+        [JsonPropertyName("currency")]
+        public string Currency { get; set; } = "tech_points";
+
+        [JsonPropertyName("previousPoints")]
+        public int PreviousPoints { get; set; }
+
+        [JsonPropertyName("newPoints")]
+        public int NewPoints { get; set; }
+
+        [JsonPropertyName("delta")]
+        public int Delta { get; set; }
+
+        [JsonPropertyName("isAbsoluteSet")]
+        public bool IsAbsoluteSet { get; set; }
+
+        [JsonPropertyName("message")]
+        public string Message { get; set; } = string.Empty;
+
+        [JsonPropertyName("timestamp")]
+        public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    }
 }

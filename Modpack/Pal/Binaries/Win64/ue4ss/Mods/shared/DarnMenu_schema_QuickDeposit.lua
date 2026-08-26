@@ -8,7 +8,7 @@ return {
   defaults = {
     enabled = true,
     depositKey = "G",
-    depositRadius = 1500.0,
+    depositRadius = 2500.0,
     notifyOnDeposit = true
   },
   sections = {

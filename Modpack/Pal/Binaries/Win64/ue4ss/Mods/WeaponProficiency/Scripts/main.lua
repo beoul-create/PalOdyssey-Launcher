@@ -616,7 +616,7 @@ return {
                restoreToStock = false, bootReport = true,
                panelAutoHide = true, panelIdleSec = 2, nameplateInfo = true, barColor = "gold",
                panelOnAim = true,
-               panelOpacity = 100, gradeEdge = 0, tierEdge = 0.05, skipUntestedWeapons = true,
+               panelOpacity = 100, gradeEdge = 0, tierEdge = 0.05, skipUntestedWeapons = false,
                applyUnsupported = false,
                untestedToast = true, sanityHps = true,
                panelAnchor = "right", panelXOffset = 16, panelYFrac = 0.78,

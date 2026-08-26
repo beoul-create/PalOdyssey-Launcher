@@ -809,9 +809,10 @@ namespace PalLauncher.Services
                 { "bAllowHardwareCursor", "bAllowHardwareCursor=True" }
             });
 
-            // 3. Resource, Render & Zero-Latency Slate Settings
+            // 3. Resource, Render & Zero-Latency Slate Settings (Epic Performance Standard)
             InjectSectionIntoIniLines(lines, "[SystemSettings]", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
+                // Zero-Latency Slate UI & Direct Hardware Cursor
                 { "Slate.EnableMouseSmoother", "Slate.EnableMouseSmoother=0" },
                 { "Slate.EnableRenderHardwareCursor", "Slate.EnableRenderHardwareCursor=1" },
                 { "Slate.UseHardwareCursor", "Slate.UseHardwareCursor=1" },
@@ -820,11 +821,15 @@ namespace PalLauncher.Services
                 { "Slate.SleepInterval", "Slate.SleepInterval=0" },
                 { "Slate.SleepIntervalWithUserInteraction", "Slate.SleepIntervalWithUserInteraction=0" },
                 { "r.Slate.EnableMouseCapture", "r.Slate.EnableMouseCapture=0" },
+                
+                // Frame Pacing & Pipeline Latency
                 { "r.OneFrameThreadLag", "r.OneFrameThreadLag=1" },
                 { "r.FinishCurrentFrame", "r.FinishCurrentFrame=0" },
                 { "r.GTSyncType", "r.GTSyncType=1" },
-                { "t.MaxFPS", "t.MaxFPS=120" },
+                { "t.MaxFPS", "t.MaxFPS=144" },
                 { "t.UnfocusedMaxFPS", "t.UnfocusedMaxFPS=30" },
+
+                // Asynchronous Texture Streaming & CPU Amortization
                 { "r.TextureStreaming", "r.TextureStreaming=1" },
                 { "r.Streaming.PoolSize", "r.Streaming.PoolSize=3072" },
                 { "r.Streaming.LimitPoolSizeToVRAM", "r.Streaming.LimitPoolSizeToVRAM=1" },
@@ -834,24 +839,45 @@ namespace PalLauncher.Services
                 { "r.Streaming.FramesForFullUpdate", "r.Streaming.FramesForFullUpdate=20" },
                 { "r.Streaming.MaxNumTexturesToStreamPerFrame", "r.Streaming.MaxNumTexturesToStreamPerFrame=8" },
                 { "r.Streaming.HLODStrategy", "r.Streaming.HLODStrategy=1" },
-                { "r.Shadow.Virtual.Enable", "r.Shadow.Virtual.Enable=0" },
-                { "r.Shadow.CSM.MaxCascades", "r.Shadow.CSM.MaxCascades=2" },
-                { "r.Shadow.DistanceScale", "r.Shadow.DistanceScale=0.85" },
+
+                // GPU Pass Trimming (Volumetrics, Shadows & Global Illumination)
+                { "r.VolumetricCloud", "r.VolumetricCloud=0" },
                 { "r.VolumetricFog", "r.VolumetricFog=0" },
                 { "r.VolumetricFog.GridPixelSize", "r.VolumetricFog.GridPixelSize=16" },
                 { "r.VolumetricFog.GridSizeZ", "r.VolumetricFog.GridSizeZ=64" },
+                { "r.ContactShadows", "r.ContactShadows=0" },
+                { "r.DistanceFieldShadowing", "r.DistanceFieldShadowing=0" },
+                { "r.DFShadowQuality", "r.DFShadowQuality=0" },
+                { "r.Shadow.Virtual.Enable", "r.Shadow.Virtual.Enable=0" },
+                { "r.Shadow.CSM.MaxCascades", "r.Shadow.CSM.MaxCascades=2" },
+                { "r.Shadow.MaxCSMResolution", "r.Shadow.MaxCSMResolution=1024" },
+                { "r.Shadow.DistanceScale", "r.Shadow.DistanceScale=0.80" },
                 { "r.Lumen.Reflections.Allow", "r.Lumen.Reflections.Allow=0" },
                 { "r.Lumen.ScreenProbeGather.DownsampleFactor", "r.Lumen.ScreenProbeGather.DownsampleFactor=16" },
+                { "r.DynamicGlobalIlluminationMethod", "r.DynamicGlobalIlluminationMethod=0" },
+
+                // Foliage, LOD & Dynamic Light Batching
+                { "grass.DensityScale", "grass.DensityScale=0.8" },
+                { "foliage.LODDistanceScale", "foliage.LODDistanceScale=0.85" },
+                { "r.LightMaxDrawDistanceScale", "r.LightMaxDrawDistanceScale=0.8" },
+                { "r.ParticleLODBias", "r.ParticleLODBias=1" },
+                { "r.Emitter.FastPool", "r.Emitter.FastPool=1" },
+
+                // Post-Processing & Upscaling Optimization
                 { "r.DepthOfFieldQuality", "r.DepthOfFieldQuality=0" },
                 { "r.MotionBlurQuality", "r.MotionBlurQuality=0" },
                 { "r.SceneColorFringeQuality", "r.SceneColorFringeQuality=0" },
                 { "r.Tonemapper.GrainQuantization", "r.Tonemapper.GrainQuantization=0" },
-                { "r.ParticleLODBias", "r.ParticleLODBias=1" },
-                { "r.Emitter.FastPool", "r.Emitter.FastPool=1" },
-                { "r.Shaders.Optimize", "r.Shaders.Optimize=1" },
+                { "r.BloomQuality", "r.BloomQuality=1" },
+                { "r.TemporalAA.Upsampling", "r.TemporalAA.Upsampling=1" },
+                { "r.TSR.ShadingRejection.Flickering", "r.TSR.ShadingRejection.Flickering=1" },
+
+                // Pipeline State Object (PSO) & Shader Caching (Stutter Elimination)
                 { "r.CreateShadersOnLoad", "r.CreateShadersOnLoad=1" },
-                { "r.ShaderPipelineCache.BatchTime", "r.ShaderPipelineCache.BatchTime=2.0" },
-                { "r.TSR.ShadingRejection.Flickering", "r.TSR.ShadingRejection.Flickering=1" }
+                { "r.Shaders.Optimize", "r.Shaders.Optimize=1" },
+                { "r.ShaderPipelineCache.Enabled", "r.ShaderPipelineCache.Enabled=1" },
+                { "r.ShaderPipelineCache.StartupMode", "r.ShaderPipelineCache.StartupMode=1" },
+                { "r.ShaderPipelineCache.BatchTime", "r.ShaderPipelineCache.BatchTime=2.0" }
             });
 
             // 4. Garbage Collection Settings (Fast purging & memory reduction)

@@ -13,13 +13,15 @@ namespace PalLauncher.Services
     {
         IReadOnlyList<ShopItem> GetShopCatalog();
         IReadOnlyList<RecyclableItem> GetRecyclables();
-        Task<PlayerEconomyProfile?> GetPlayerProfileAsync(string playerUid);
+        Task<PlayerEconomyProfile?> GetPlayerProfileAsync(string playerUid, bool forceLiveRefresh = false);
         Task<ExchangeReceipt> ExecuteExchangeAsync(string playerUid, string itemQuery, int quantity, bool isOnlineSession = false);
         Task<RecycleReceipt> ExecuteRecycleAsync(string playerUid, string itemQuery, int quantity, bool isOnlineSession = false);
         Task<GachaReceipt> ExecuteGachaAsync(string playerUid, int pulls, string currency = "tech_points", bool isOnlineSession = false);
         Task<WithdrawReceipt> ExecuteWithdrawAsync(string playerUid, string? itemQuery = null, int quantity = 0, bool isOnlineSession = false);
         Task<TransmuteReceipt> ExecuteTransmuteAsync(string playerUid, int ancientPointsToConvert, bool isOnlineSession = false);
         Task<BasePerkReceipt> ExecuteUpgradePerkAsync(string playerUid, string perkType, bool isOnlineSession = false);
+        Task<SetPointsReceipt> SetPlayerTechnologyPointsAsync(string playerUid, int points, string currency = "tech_points", bool isOnlineSession = false);
+        Task<SetPointsReceipt> GrantPlayerTechnologyPointsAsync(string playerUid, int pointDelta, string currency = "tech_points", bool isOnlineSession = false);
         GuildPerksState GetGuildPerks();
         ShopItem? FindShopItem(string query);
         RecyclableItem? FindRecyclableItem(string query);
@@ -542,7 +544,7 @@ namespace PalLauncher.Services
             return _saveService.ResolvePlayerUid(null);
         }
 
-        public async Task<PlayerEconomyProfile?> GetPlayerProfileAsync(string playerUid)
+        public async Task<PlayerEconomyProfile?> GetPlayerProfileAsync(string playerUid, bool forceLiveRefresh = false)
         {
             string uid = _saveService.ResolvePlayerUid(playerUid);
             var profile = await _saveService.ReadPlayerProfileAsync(uid);
@@ -550,26 +552,40 @@ namespace PalLauncher.Services
 
             lock (_lock)
             {
-                if (_playerTechPoints.TryGetValue(uid, out int pts) ||
-                    (!string.IsNullOrWhiteSpace(playerUid) && _playerTechPoints.TryGetValue(playerUid, out pts)))
+                if (forceLiveRefresh)
                 {
-                    profile.TechnologyPoints = pts;
-                }
-                else
-                {
+                    // Freshly sync in-memory tech points and boss points cache with live game/save data
                     _playerTechPoints[uid] = profile.TechnologyPoints;
                     if (!string.IsNullOrWhiteSpace(playerUid)) _playerTechPoints[playerUid] = profile.TechnologyPoints;
-                }
 
-                if (_playerBossPoints.TryGetValue(uid, out int bossPts) ||
-                    (!string.IsNullOrWhiteSpace(playerUid) && _playerBossPoints.TryGetValue(playerUid, out bossPts)))
-                {
-                    profile.BossTechnologyPoints = bossPts;
+                    _playerBossPoints[uid] = profile.BossTechnologyPoints;
+                    if (!string.IsNullOrWhiteSpace(playerUid)) _playerBossPoints[playerUid] = profile.BossTechnologyPoints;
+
+                    SaveState();
                 }
                 else
                 {
-                    _playerBossPoints[uid] = profile.BossTechnologyPoints;
-                    if (!string.IsNullOrWhiteSpace(playerUid)) _playerBossPoints[playerUid] = profile.BossTechnologyPoints;
+                    if (_playerTechPoints.TryGetValue(uid, out int pts) ||
+                        (!string.IsNullOrWhiteSpace(playerUid) && _playerTechPoints.TryGetValue(playerUid, out pts)))
+                    {
+                        profile.TechnologyPoints = pts;
+                    }
+                    else
+                    {
+                        _playerTechPoints[uid] = profile.TechnologyPoints;
+                        if (!string.IsNullOrWhiteSpace(playerUid)) _playerTechPoints[playerUid] = profile.TechnologyPoints;
+                    }
+
+                    if (_playerBossPoints.TryGetValue(uid, out int bossPts) ||
+                        (!string.IsNullOrWhiteSpace(playerUid) && _playerBossPoints.TryGetValue(playerUid, out bossPts)))
+                    {
+                        profile.BossTechnologyPoints = bossPts;
+                    }
+                    else
+                    {
+                        _playerBossPoints[uid] = profile.BossTechnologyPoints;
+                        if (!string.IsNullOrWhiteSpace(playerUid)) _playerBossPoints[playerUid] = profile.BossTechnologyPoints;
+                    }
                 }
 
                 if (_playerInventories.TryGetValue(uid, out var inv) ||
@@ -1450,6 +1466,173 @@ namespace PalLauncher.Services
                 RemainingVaultItems = remaining,
                 Message = $"Successfully claimed **{withdrawn.Count} item types** from your Virtual Vault into your live character!"
             });
+        }
+
+        public async Task<SetPointsReceipt> SetPlayerTechnologyPointsAsync(string playerUid, int points, string currency = "tech_points", bool isOnlineSession = false)
+        {
+            string uid = _saveService.ResolvePlayerUid(playerUid);
+            var profile = await _saveService.ReadPlayerProfileAsync(uid);
+            if (profile == null)
+            {
+                return new SetPointsReceipt
+                {
+                    Success = false,
+                    Message = $"Could not find player save for `{playerUid}`."
+                };
+            }
+
+            bool isBossPoints = currency.Equals("boss_points", StringComparison.OrdinalIgnoreCase) ||
+                                currency.Equals("ancient_points", StringComparison.OrdinalIgnoreCase) ||
+                                currency.Equals("ancient", StringComparison.OrdinalIgnoreCase);
+
+            int targetPoints = Math.Max(0, points);
+            int previousPoints;
+            int delta;
+
+            lock (_lock)
+            {
+                if (isBossPoints)
+                {
+                    if (!_playerBossPoints.TryGetValue(uid, out previousPoints) &&
+                        (string.IsNullOrWhiteSpace(playerUid) || !_playerBossPoints.TryGetValue(playerUid, out previousPoints)))
+                    {
+                        previousPoints = profile.BossTechnologyPoints;
+                    }
+
+                    delta = targetPoints - previousPoints;
+                    _playerBossPoints[uid] = targetPoints;
+                    if (!string.IsNullOrWhiteSpace(playerUid)) _playerBossPoints[playerUid] = targetPoints;
+                }
+                else
+                {
+                    if (!_playerTechPoints.TryGetValue(uid, out previousPoints) &&
+                        (string.IsNullOrWhiteSpace(playerUid) || !_playerTechPoints.TryGetValue(playerUid, out previousPoints)))
+                    {
+                        previousPoints = profile.TechnologyPoints;
+                    }
+
+                    delta = targetPoints - previousPoints;
+                    _playerTechPoints[uid] = targetPoints;
+                    if (!string.IsNullOrWhiteSpace(playerUid)) _playerTechPoints[playerUid] = targetPoints;
+                }
+                SaveState();
+            }
+
+            if (isOnlineSession)
+            {
+                string action = isBossPoints ? "SetBossPoints" : "SetTechPoints";
+                QueueDelivery(uid, action, isBossPoints ? "AncientBossPoints" : "TechnologyPoints", targetPoints, targetPoints);
+            }
+            else
+            {
+                if (isBossPoints)
+                {
+                    await _saveService.UpdateBossTechnologyPointsAsync(uid, targetPoints, isAbsolute: true);
+                }
+                else
+                {
+                    await _saveService.UpdateTechnologyPointsAsync(uid, targetPoints, isAbsolute: true);
+                }
+            }
+
+            string currName = isBossPoints ? "Ancient Boss Points" : "Technology Points";
+            _logService.LogSuccess($"[ADMIN-ECONOMY] Set {currName} for {uid} ({profile.PlayerName}): {previousPoints} -> {targetPoints}", "Economy");
+
+            return new SetPointsReceipt
+            {
+                Success = true,
+                PlayerUid = uid,
+                PlayerName = profile.PlayerName,
+                Currency = isBossPoints ? "boss_points" : "tech_points",
+                PreviousPoints = previousPoints,
+                NewPoints = targetPoints,
+                Delta = delta,
+                IsAbsoluteSet = true,
+                Message = $"Successfully set **{profile.PlayerName}**'s {currName} to **{targetPoints} pts** (Previous: {previousPoints} pts)."
+            };
+        }
+
+        public async Task<SetPointsReceipt> GrantPlayerTechnologyPointsAsync(string playerUid, int pointDelta, string currency = "tech_points", bool isOnlineSession = false)
+        {
+            string uid = _saveService.ResolvePlayerUid(playerUid);
+            var profile = await _saveService.ReadPlayerProfileAsync(uid);
+            if (profile == null)
+            {
+                return new SetPointsReceipt
+                {
+                    Success = false,
+                    Message = $"Could not find player save for `{playerUid}`."
+                };
+            }
+
+            bool isBossPoints = currency.Equals("boss_points", StringComparison.OrdinalIgnoreCase) ||
+                                currency.Equals("ancient_points", StringComparison.OrdinalIgnoreCase) ||
+                                currency.Equals("ancient", StringComparison.OrdinalIgnoreCase);
+
+            int previousPoints;
+            int newPoints;
+
+            lock (_lock)
+            {
+                if (isBossPoints)
+                {
+                    if (!_playerBossPoints.TryGetValue(uid, out previousPoints) &&
+                        (string.IsNullOrWhiteSpace(playerUid) || !_playerBossPoints.TryGetValue(playerUid, out previousPoints)))
+                    {
+                        previousPoints = profile.BossTechnologyPoints;
+                    }
+
+                    newPoints = Math.Max(0, previousPoints + pointDelta);
+                    _playerBossPoints[uid] = newPoints;
+                    if (!string.IsNullOrWhiteSpace(playerUid)) _playerBossPoints[playerUid] = newPoints;
+                }
+                else
+                {
+                    if (!_playerTechPoints.TryGetValue(uid, out previousPoints) &&
+                        (string.IsNullOrWhiteSpace(playerUid) || !_playerTechPoints.TryGetValue(playerUid, out previousPoints)))
+                    {
+                        previousPoints = profile.TechnologyPoints;
+                    }
+
+                    newPoints = Math.Max(0, previousPoints + pointDelta);
+                    _playerTechPoints[uid] = newPoints;
+                    if (!string.IsNullOrWhiteSpace(playerUid)) _playerTechPoints[playerUid] = newPoints;
+                }
+                SaveState();
+            }
+
+            if (isOnlineSession)
+            {
+                string action = isBossPoints ? "GrantBossPoints" : "GrantTechPoints";
+                QueueDelivery(uid, action, isBossPoints ? "AncientBossPoints" : "TechnologyPoints", Math.Abs(pointDelta), pointDelta);
+            }
+            else
+            {
+                if (isBossPoints)
+                {
+                    await _saveService.UpdateBossTechnologyPointsAsync(uid, pointDelta, isAbsolute: false);
+                }
+                else
+                {
+                    await _saveService.UpdateTechnologyPointsAsync(uid, pointDelta, isAbsolute: false);
+                }
+            }
+
+            string currName = isBossPoints ? "Ancient Boss Points" : "Technology Points";
+            _logService.LogSuccess($"[ADMIN-ECONOMY] Granted {pointDelta:+0;-0;0} {currName} to {uid} ({profile.PlayerName}): {previousPoints} -> {newPoints}", "Economy");
+
+            return new SetPointsReceipt
+            {
+                Success = true,
+                PlayerUid = uid,
+                PlayerName = profile.PlayerName,
+                Currency = isBossPoints ? "boss_points" : "tech_points",
+                PreviousPoints = previousPoints,
+                NewPoints = newPoints,
+                Delta = pointDelta,
+                IsAbsoluteSet = false,
+                Message = $"Successfully granted **{(pointDelta >= 0 ? "+" : "")}{pointDelta} {currName}** to **{profile.PlayerName}**! New Balance: **{newPoints} pts**."
+            };
         }
 
         private void LoadState()

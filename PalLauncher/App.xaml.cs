@@ -38,6 +38,13 @@ namespace PalLauncher
 
             try
             {
+                // 0. Handle Direct Terminal CLI Commands (e.g. PalLauncher.exe --set-points <uid> <amount>)
+                if (HandleTerminalCliCommands(e.Args))
+                {
+                    Environment.Exit(0);
+                    return;
+                }
+
                 bool isHeadlessDaemon = Array.Exists(e.Args, a => a.Equals("--daemon", StringComparison.OrdinalIgnoreCase) ||
                                                                  a.Equals("--headless", StringComparison.OrdinalIgnoreCase) ||
                                                                  a.Equals("-silent", StringComparison.OrdinalIgnoreCase) ||
@@ -262,6 +269,105 @@ namespace PalLauncher
                 catch { }
             }
             catch { }
+        }
+
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        private static extern bool AttachConsole(int dwProcessId);
+
+        private bool HandleTerminalCliCommands(string[] args)
+        {
+            if (args == null || args.Length == 0) return false;
+
+            string first = args[0].ToLowerInvariant().Trim();
+            if (first == "--set-points" || first == "-set-points" || first == "setpoints" || first == "set-points" ||
+                first == "--grant-points" || first == "-grant-points" || first == "grantpoints" || first == "grant-points" || first == "addpoints" ||
+                first == "--get-points" || first == "-get-points" || first == "getpoints" || first == "get-points")
+            {
+                AttachConsole(-1);
+            }
+
+            if (first == "--set-points" || first == "-set-points" || first == "setpoints" || first == "set-points")
+            {
+                if (args.Length < 3)
+                {
+                    Console.WriteLine("Usage: PalLauncher.exe --set-points <player_uid_or_steamid> <points> [currency]");
+                    return true;
+                }
+                string uid = args[1];
+                if (!int.TryParse(args[2], out int pts))
+                {
+                    Console.WriteLine($"Error: '{args[2]}' is not a valid integer amount.");
+                    return true;
+                }
+                string currency = args.Length >= 4 ? args[3] : "tech_points";
+
+                var saveService = new PalSaveService(_logService!);
+                var economy = new EconomyService(_logService!, saveService);
+                var presence = new PlayerPresenceService(new ConfigService(_logService!), _logService!);
+
+                bool isOnline = presence.IsPlayerOnlineAsync(uid).GetAwaiter().GetResult();
+                var receipt = economy.SetPlayerTechnologyPointsAsync(uid, pts, currency, isOnline).GetAwaiter().GetResult();
+
+                Console.WriteLine(receipt.Success
+                    ? $"[SUCCESS] Set {receipt.Currency} for {receipt.PlayerName} ({receipt.PlayerUid}) to {receipt.NewPoints} pts."
+                    : $"[ERROR] {receipt.Message}");
+                return true;
+            }
+
+            if (first == "--grant-points" || first == "-grant-points" || first == "grantpoints" || first == "grant-points" || first == "addpoints")
+            {
+                if (args.Length < 3)
+                {
+                    Console.WriteLine("Usage: PalLauncher.exe --grant-points <player_uid_or_steamid> <points> [currency]");
+                    return true;
+                }
+                string uid = args[1];
+                if (!int.TryParse(args[2], out int pts))
+                {
+                    Console.WriteLine($"Error: '{args[2]}' is not a valid integer amount.");
+                    return true;
+                }
+                string currency = args.Length >= 4 ? args[3] : "tech_points";
+
+                var saveService = new PalSaveService(_logService!);
+                var economy = new EconomyService(_logService!, saveService);
+                var presence = new PlayerPresenceService(new ConfigService(_logService!), _logService!);
+
+                bool isOnline = presence.IsPlayerOnlineAsync(uid).GetAwaiter().GetResult();
+                var receipt = economy.GrantPlayerTechnologyPointsAsync(uid, pts, currency, isOnline).GetAwaiter().GetResult();
+
+                Console.WriteLine(receipt.Success
+                    ? $"[SUCCESS] Granted {pts:+0;-0;0} {receipt.Currency} to {receipt.PlayerName} ({receipt.PlayerUid}). New Balance: {receipt.NewPoints} pts."
+                    : $"[ERROR] {receipt.Message}");
+                return true;
+            }
+
+            if (first == "--get-points" || first == "-get-points" || first == "getpoints" || first == "get-points")
+            {
+                if (args.Length < 2)
+                {
+                    Console.WriteLine("Usage: PalLauncher.exe --get-points <player_uid_or_steamid>");
+                    return true;
+                }
+                string uid = args[1];
+                var saveService = new PalSaveService(_logService!);
+                var economy = new EconomyService(_logService!, saveService);
+
+                var profile = economy.GetPlayerProfileAsync(uid, forceLiveRefresh: true).GetAwaiter().GetResult();
+                if (profile != null)
+                {
+                    Console.WriteLine($"Pioneer: {profile.PlayerName} (Lv. {profile.Level}) | UID: {profile.PlayerUid}");
+                    Console.WriteLine($"Technology Points: {profile.TechnologyPoints} pts");
+                    Console.WriteLine($"Ancient Boss Points: {profile.BossTechnologyPoints} pts");
+                }
+                else
+                {
+                    Console.WriteLine($"[ERROR] Could not find player save for '{uid}'.");
+                }
+                return true;
+            }
+
+            return false;
         }
 
         private void CleanupResources()

@@ -19,6 +19,7 @@ namespace PalLauncher.Services
         List<string> GetAvailablePlayerUids();
         Task<PlayerEconomyProfile?> ReadPlayerProfileAsync(string playerUid);
         Task<bool> UpdateTechnologyPointsAsync(string playerUid, int pointDelta, bool isAbsolute = false);
+        Task<bool> UpdateBossTechnologyPointsAsync(string playerUid, int pointDelta, bool isAbsolute = false);
         Task<bool> CreateBackupAsync(string playerUid);
         Task<bool> IsPlayerOnlineAsync(string playerUid);
         Task<bool> RequestWorldSaveAsync();
@@ -940,6 +941,61 @@ r.ShaderPipelineCache.BatchTime=2.0";
             int techPoints = 0;
             int bossTechPoints = 0;
 
+            // Check for live-players.json written by live in-game UE4SS optimizer
+            try
+            {
+                string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                string[] liveSyncCandidates = {
+                    Path.Combine(localAppData, "PalLauncher", "live-players.json"),
+                    Path.Combine(localAppData, "Pal", "Saved", "Config", "Windows", "live-players.json"),
+                    @"C:\SteamLibrary\steamapps\common\PalServer\Pal\Binaries\Win64\ue4ss\Mods\PalOdysseyOptimizer\live-players.json",
+                    @"Pal\Binaries\Win64\ue4ss\Mods\PalOdysseyOptimizer\live-players.json",
+                    @"ue4ss\Mods\PalOdysseyOptimizer\live-players.json",
+                    "live-players.json"
+                };
+
+                foreach (var liveFile in liveSyncCandidates)
+                {
+                    if (File.Exists(liveFile))
+                    {
+                        string liveJson = await File.ReadAllTextAsync(liveFile);
+                        using var doc = JsonDocument.Parse(liveJson);
+                        if (doc.RootElement.TryGetProperty("players", out var playersObj))
+                        {
+                            foreach (var pProp in playersObj.EnumerateObject())
+                            {
+                                string pKey = pProp.Name.Replace("-", "").ToUpperInvariant();
+                                string cleanActual = actualUid.Replace("-", "").ToUpperInvariant();
+                                string cleanPlayer = (playerUid ?? "").Replace("-", "").ToUpperInvariant();
+
+                                if (pKey == cleanActual || pKey == cleanPlayer || (!string.IsNullOrEmpty(cleanPlayer) && pKey.Contains(cleanPlayer)))
+                                {
+                                    var pVal = pProp.Value;
+                                    if (pVal.TryGetProperty("unusedTechnologyPoints", out var techVal) && techVal.TryGetInt32(out int liveTech))
+                                    {
+                                        techPoints = liveTech;
+                                    }
+                                    if (pVal.TryGetProperty("unusedBossTechnologyPoints", out var bossVal) && bossVal.TryGetInt32(out int liveBoss))
+                                    {
+                                        bossTechPoints = liveBoss;
+                                    }
+                                    if (pVal.TryGetProperty("playerName", out var nameVal) && !string.IsNullOrWhiteSpace(nameVal.GetString()))
+                                    {
+                                        resolvedPlayerName = nameVal.GetString()!;
+                                    }
+                                    if (pVal.TryGetProperty("level", out var lvlVal) && lvlVal.TryGetInt32(out int liveLvl) && liveLvl > 0)
+                                    {
+                                        resolvedLevel = liveLvl;
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+
             if (!string.IsNullOrEmpty(worldDir))
             {
                 string playerSave = Path.Combine(worldDir, "Players", $"{actualUid}.sav");
@@ -961,7 +1017,11 @@ r.ShaderPipelineCache.BatchTime=2.0";
                         byte[] decompressed = DecompressPalSave(rawBytes);
 
                         int extractedTech = ExtractIntProperty(decompressed, "UnusedTechnologyPoint", defaultValue: -1);
+                        if (extractedTech < 0) extractedTech = ExtractIntProperty(decompressed, "TechnologyPoint", defaultValue: -1);
+
                         int extractedBoss = ExtractIntProperty(decompressed, "UnusedBossTechnologyPoint", defaultValue: -1);
+                        if (extractedBoss < 0) extractedBoss = ExtractIntProperty(decompressed, "BossTechnologyPoint", defaultValue: -1);
+
                         int extractedLevel = ExtractIntProperty(decompressed, "Level", defaultValue: -1);
 
                         if (extractedTech >= 0) techPoints = extractedTech;
@@ -1052,6 +1112,48 @@ r.ShaderPipelineCache.BatchTime=2.0";
             catch (Exception ex)
             {
                 _logService.LogError($"Failed to update Tech Points for {actualUid}", "SaveService", ex);
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateBossTechnologyPointsAsync(string playerUid, int pointDelta, bool isAbsolute = false)
+        {
+            var worldDir = FindSaveGamesDirectory();
+            if (string.IsNullOrEmpty(worldDir)) return false;
+
+            string actualUid = ResolvePlayerUid(playerUid);
+            string playerSave = Path.Combine(worldDir, "Players", $"{actualUid}.sav");
+            if (!File.Exists(playerSave))
+            {
+                string direct = Path.Combine(worldDir, "Players", $"{playerUid}.sav");
+                if (File.Exists(direct)) playerSave = direct;
+                else return false;
+            }
+
+            // 1. Safety Protocol: Backup first
+            await CreateBackupAsync(actualUid);
+
+            try
+            {
+                byte[] rawBytes = await File.ReadAllBytesAsync(playerSave);
+                byte[] decompressed = DecompressPalSave(rawBytes);
+
+                int currentPoints = ExtractIntProperty(decompressed, "UnusedBossTechnologyPoint", defaultValue: 0);
+                int newPoints = isAbsolute ? pointDelta : Math.Max(0, currentPoints + pointDelta);
+
+                byte[] modified = SetIntProperty(decompressed, "UnusedBossTechnologyPoint", newPoints);
+                byte[] recompressed = CompressPalSave(modified);
+
+                string tmpFile = playerSave + ".tmp";
+                await File.WriteAllBytesAsync(tmpFile, recompressed);
+                File.Move(tmpFile, playerSave, overwrite: true);
+
+                _logService.LogSuccess($"[ECONOMY] Updated Boss Technology Points for {actualUid}: {currentPoints} -> {newPoints}", "SaveService");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logService.LogError($"Failed to update Boss Tech Points for {actualUid}", "SaveService", ex);
                 return false;
             }
         }

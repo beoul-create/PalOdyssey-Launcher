@@ -323,11 +323,13 @@ namespace PalLauncher.ViewModels
             {
                 ConfigureWindowsStartup(_configService.Config.AutoStartWithWindows, _logService);
                 await RestartDiscordBotAsync();
+                await RestartDiscordRpcAsync();
             };
 
             SettingsVM.DiscordBotRestartRequested += async (s, e) =>
             {
                 await RestartDiscordBotAsync();
+                await RestartDiscordRpcAsync();
             };
 
             NavigateCommand = new RelayCommand(param =>
@@ -493,15 +495,8 @@ namespace PalLauncher.ViewModels
             // Initialize Discord Bot Service unconditionally if enabled
             await RestartDiscordBotAsync();
 
-            // Initialize Discord Rich Presence if enabled (client player mode only - disabled for server host)
-            bool isServerHost = _configService.Config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase) ||
-                                _configService.Config.EnableRemoteHostDaemon;
-
-            if (_configService.Config.EnableDiscordRpc && !isServerHost)
-            {
-                await _discordRpc.InitializeAsync(_configService.Config.DiscordApplicationId);
-                await _discordRpc.UpdatePresenceAsync("In Launcher", "Preparing Expedition", isPlaying: false);
-            }
+            // Initialize Discord Rich Presence if enabled
+            await RestartDiscordRpcAsync();
 
             // Immediately detect and announce server status upon opening the launcher
             await RefreshServerStatusAsync();
@@ -887,6 +882,50 @@ namespace PalLauncher.ViewModels
             catch (Exception ex)
             {
                 _logService.LogError("Failed to restart Discord Bot service", "DiscordBot", ex);
+            }
+        }
+
+        public async Task RestartDiscordRpcAsync()
+        {
+            try
+            {
+                if (_configService.Config.EnableDiscordRpc)
+                {
+                    await _discordRpc.InitializeAsync(_configService.Config.DiscordApplicationId);
+
+                    bool isDedicatedServerMode = _configService.Config.LaunchMode.Equals("Server", StringComparison.OrdinalIgnoreCase);
+                    if (isDedicatedServerMode)
+                    {
+                        await _discordRpc.UpdatePresenceAsync(
+                            "PalOdyssey Dedicated Server",
+                            "Hosting Realm (Port 8211)",
+                            isPlaying: true,
+                            targetPid: Environment.ProcessId);
+                    }
+                    else if (IsGameRunning)
+                    {
+                        await _discordRpc.UpdatePresenceAsync(
+                            "⚡ PalOdyssey Expedition",
+                            "Exploring Realm (Active Modpack)",
+                            isPlaying: true);
+                    }
+                    else
+                    {
+                        await _discordRpc.UpdatePresenceAsync(
+                            "In Launcher",
+                            "Preparing Expedition",
+                            isPlaying: false,
+                            targetPid: Environment.ProcessId);
+                    }
+                }
+                else
+                {
+                    await _discordRpc.ClearPresenceAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to restart Discord RPC service: {ex.Message}", "DiscordRPC");
             }
         }
 

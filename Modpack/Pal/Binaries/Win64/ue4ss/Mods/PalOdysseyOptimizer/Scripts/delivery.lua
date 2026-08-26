@@ -41,7 +41,74 @@ local function findQueueFile()
     return "Mods/PalOdysseyOptimizer/pending-deliveries.csv"
 end
 
+local function exportLivePlayerData(controllers)
+    if not controllers or #controllers == 0 then return end
+    local players = {}
+    for _, controller in ipairs(controllers) do
+        if controller and controller:IsValid() then
+            local pGuid = ""
+            pcall(function()
+                pGuid = fmtGuid(controller:GetPlayerUId()) or ""
+            end)
+            local cleanPGuid = cleanStr(pGuid)
+            local ps = nil
+            pcall(function() ps = controller.PlayerState end)
+            if cleanPGuid ~= "" and ps and ps:IsValid() then
+                local pName = ""
+                pcall(function()
+                    if ps.PlayerName then pName = ps.PlayerName:ToString() end
+                end)
+                local techPts = 0
+                local bossPts = 0
+                local lvl = 1
+                pcall(function()
+                    if ps.UnusedTechnologyPoint ~= nil then techPts = ps.UnusedTechnologyPoint end
+                end)
+                pcall(function()
+                    if ps.UnusedBossTechnologyPoint ~= nil then bossPts = ps.UnusedBossTechnologyPoint end
+                end)
+                pcall(function()
+                    if ps.GetLevel then lvl = ps:GetLevel() end
+                end)
+                players[cleanPGuid] = {
+                    playerUid = cleanPGuid,
+                    playerName = pName,
+                    unusedTechnologyPoints = techPts,
+                    unusedBossTechnologyPoints = bossPts,
+                    level = lvl
+                }
+            end
+        end
+    end
+
+    local candidatePaths = {
+        "ue4ss/Mods/PalOdysseyOptimizer/live-players.json",
+        "Mods/PalOdysseyOptimizer/live-players.json",
+        "live-players.json",
+        "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/live-players.json"
+    }
+    for _, path in ipairs(candidatePaths) do
+        local okW, fW = pcall(io.open, path, "w")
+        if okW and fW then
+            local entries = {}
+            for k, v in pairs(players) do
+                table.insert(entries, string.format('"%s":{"playerUid":"%s","playerName":"%s","unusedTechnologyPoints":%d,"unusedBossTechnologyPoints":%d,"level":%d}',
+                    k, v.playerUid, v.playerName:gsub('"', '\\"'), v.unusedTechnologyPoints, v.unusedBossTechnologyPoints, v.level))
+            end
+            local jsonStr = string.format('{"timestamp":%d,"players":{%s}}', os.time(), table.concat(entries, ","))
+            fW:write(jsonStr)
+            fW:close()
+            break
+        end
+    end
+end
+
 local function processQueue()
+    local okFind, controllers = pcall(FindAllOf, "PalPlayerController")
+    if okFind and controllers and #controllers > 0 then
+        pcall(exportLivePlayerData, controllers)
+    end
+
     local qPath = findQueueFile()
     local okOpen, f = pcall(io.open, qPath, "r")
     if not okOpen or not f then return end
@@ -55,8 +122,6 @@ local function processQueue()
     f:close()
 
     if #lines == 0 then return end
-
-    local okFind, controllers = pcall(FindAllOf, "PalPlayerController")
     if not okFind or not controllers or #controllers == 0 then return end
 
     local palUtil = nil
@@ -109,8 +174,44 @@ local function processQueue()
                     end
 
                     if isMatch and ps and ps:IsValid() then
-                        -- 1. Apply Technology Points Delta
-                        if techPointsDelta ~= 0 then
+                        -- 1. Apply Technology Points / Boss Points Modifications
+                        if action == "SetTechPoints" or action == "SetPoints" then
+                            local newPoints = math.max(0, techPointsDelta)
+                            pcall(function()
+                                ps.UnusedTechnologyPoint = newPoints
+                            end)
+                            pcall(function()
+                                if ps.RecordData and ps.RecordData:IsValid() then
+                                    ps.RecordData.UnusedTechnologyPoint = newPoints
+                                end
+                            end)
+                            log(string.format("Directly set Technology Points for player %s to %d", targetUid, newPoints))
+                        elseif action == "SetBossPoints" then
+                            local newPoints = math.max(0, techPointsDelta)
+                            pcall(function()
+                                ps.UnusedBossTechnologyPoint = newPoints
+                            end)
+                            pcall(function()
+                                if ps.RecordData and ps.RecordData:IsValid() then
+                                    ps.RecordData.UnusedBossTechnologyPoint = newPoints
+                                end
+                            end)
+                            log(string.format("Directly set Boss Technology Points for player %s to %d", targetUid, newPoints))
+                        elseif action == "GrantBossPoints" or action == "AddBossPoints" then
+                            pcall(function()
+                                local cur = ps.UnusedBossTechnologyPoint or 0
+                                local updated = math.max(0, cur + techPointsDelta)
+                                ps.UnusedBossTechnologyPoint = updated
+                            end)
+                            pcall(function()
+                                if ps.RecordData and ps.RecordData:IsValid() then
+                                    local cur = ps.RecordData.UnusedBossTechnologyPoint or 0
+                                    local updated = math.max(0, cur + techPointsDelta)
+                                    ps.RecordData.UnusedBossTechnologyPoint = updated
+                                end
+                            end)
+                            log(string.format("Granted Boss Points to player %s: %+d", targetUid, techPointsDelta))
+                        elseif techPointsDelta ~= 0 then
                             pcall(function()
                                 if ps.UnusedTechnologyPoint ~= nil then
                                     local cur = ps.UnusedTechnologyPoint
@@ -133,7 +234,16 @@ local function processQueue()
                             pcall(function()
                                 local msg = ""
                                 local pts = ps.UnusedTechnologyPoint or 0
-                                if action == "Gacha" then
+                                local bossPts = ps.UnusedBossTechnologyPoint or 0
+                                if action == "SetTechPoints" or action == "SetPoints" then
+                                    msg = string.format("⚡ [Admin] Your Technology Points balance has been set to: %d pts", pts)
+                                elseif action == "SetBossPoints" then
+                                    msg = string.format("🔮 [Admin] Your Ancient Boss Points balance has been set to: %d pts", bossPts)
+                                elseif action == "GrantTechPoints" or action == "AddTechPoints" then
+                                    msg = string.format("🪙 [Admin] Received %+d Technology Points! New balance: %d pts", techPointsDelta, pts)
+                                elseif action == "GrantBossPoints" or action == "AddBossPoints" then
+                                    msg = string.format("🔮 [Admin] Received %+d Ancient Boss Points! New balance: %d pts", techPointsDelta, bossPts)
+                                elseif action == "Gacha" then
                                     if itemCode == "AncientRelicBox" then
                                         msg = string.format("🔮 [Ancient Gacha] Opened %dx Ancient Relic Box! Rewards credited to Virtual Vault.", quantity)
                                     else

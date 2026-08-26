@@ -431,6 +431,120 @@ namespace PalLauncher.Tests
 
             try { Directory.Delete(tempDir, true); } catch { }
         }
+
+        [Fact]
+        public async Task InventoryCommand_RefreshesLiveUnspentTechnologyPoints_FromUpdatedGameSave()
+        {
+            string tempDir = Path.Combine(Path.GetTempPath(), "PalInventoryRefreshTest_" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempDir);
+            string playersDir = Path.Combine(tempDir, "Players");
+            Directory.CreateDirectory(playersDir);
+
+            string playerUid = "9EDC20A9000000000000000000000000";
+            // Player starts with 10 unspent points in initial save
+            byte[] initialSaveBytes = CreateMockPalworldSave(10, playerUid);
+            string playerSavePath = Path.Combine(playersDir, $"{playerUid}.sav");
+            await File.WriteAllBytesAsync(playerSavePath, initialSaveBytes);
+
+            var logService = new LogService();
+            var saveService = new PalSaveService(logService, tempDir);
+            string customStateFile = Path.Combine(tempDir, "economy_state.json");
+            var economyService = new EconomyService(logService, saveService, customStateFilePath: customStateFile);
+
+            // Initial fetch caches 10 points
+            var initialProfile = await economyService.GetPlayerProfileAsync(playerUid);
+            Assert.NotNull(initialProfile);
+            Assert.Equal(10, initialProfile.TechnologyPoints);
+
+            // Player levels up in-game: new save has 25 unspent Tech Points
+            byte[] updatedSaveBytes = CreateMockPalworldSave(25, playerUid);
+            await File.WriteAllBytesAsync(playerSavePath, updatedSaveBytes);
+
+            // Discord /inventory triggers forceLiveRefresh = true
+            var refreshedProfile = await economyService.GetPlayerProfileAsync(playerUid, forceLiveRefresh: true);
+            Assert.NotNull(refreshedProfile);
+            Assert.Equal(25, refreshedProfile.TechnologyPoints);
+
+            // Subsequent standard queries also reflect the refreshed 25 points
+            var subsequentProfile = await economyService.GetPlayerProfileAsync(playerUid);
+            Assert.NotNull(subsequentProfile);
+            Assert.Equal(25, subsequentProfile.TechnologyPoints);
+
+            try { Directory.Delete(tempDir, true); } catch { }
+        }
+
+        [Fact]
+        public async Task AdminSetPoints_ModifiesTechnologyPointsAndBossPoints_BothOnlineAndOffline()
+        {
+            string tempDir = Path.Combine(Path.GetTempPath(), "PalAdminSetPointsTest_" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempDir);
+            string playersDir = Path.Combine(tempDir, "Players");
+            Directory.CreateDirectory(playersDir);
+
+            string playerUid = "9EDC20A9000000000000000000000000";
+            byte[] saveBytes = CreateMockPalworldSave(10, playerUid);
+            string playerSavePath = Path.Combine(playersDir, $"{playerUid}.sav");
+            await File.WriteAllBytesAsync(playerSavePath, saveBytes);
+
+            var logService = new LogService();
+            var saveService = new PalSaveService(logService, tempDir);
+            string customStateFile = Path.Combine(tempDir, "economy_state.json");
+            var economyService = new EconomyService(logService, saveService, customStateFilePath: customStateFile);
+
+            // 1. Set Tech Points to 75 (Offline direct save modification)
+            var receipt1 = await economyService.SetPlayerTechnologyPointsAsync(playerUid, 75, "tech_points", isOnlineSession: false);
+            Assert.True(receipt1.Success);
+            Assert.Equal(10, receipt1.PreviousPoints);
+            Assert.Equal(75, receipt1.NewPoints);
+            Assert.True(receipt1.IsAbsoluteSet);
+
+            var profile1 = await economyService.GetPlayerProfileAsync(playerUid, forceLiveRefresh: true);
+            Assert.NotNull(profile1);
+            Assert.Equal(75, profile1.TechnologyPoints);
+
+            // 2. Set Boss Points to 30 (Online queue modification)
+            var receipt2 = await economyService.SetPlayerTechnologyPointsAsync(playerUid, 30, "boss_points", isOnlineSession: true);
+            Assert.True(receipt2.Success);
+            Assert.Equal("boss_points", receipt2.Currency);
+            Assert.Equal(30, receipt2.NewPoints);
+
+            try { Directory.Delete(tempDir, true); } catch { }
+        }
+
+        [Fact]
+        public async Task AdminGrantPoints_AppliesDeltaAndDispatchesDeliveryQueue()
+        {
+            string tempDir = Path.Combine(Path.GetTempPath(), "PalAdminGrantPointsTest_" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempDir);
+            string playersDir = Path.Combine(tempDir, "Players");
+            Directory.CreateDirectory(playersDir);
+
+            string playerUid = "9EDC20A9000000000000000000000000";
+            byte[] saveBytes = CreateMockPalworldSave(20, playerUid);
+            string playerSavePath = Path.Combine(playersDir, $"{playerUid}.sav");
+            await File.WriteAllBytesAsync(playerSavePath, saveBytes);
+
+            var logService = new LogService();
+            var saveService = new PalSaveService(logService, tempDir);
+            string customStateFile = Path.Combine(tempDir, "economy_state.json");
+            var economyService = new EconomyService(logService, saveService, customStateFilePath: customStateFile);
+
+            // 1. Grant +15 Tech Points
+            var grant1 = await economyService.GrantPlayerTechnologyPointsAsync(playerUid, 15, "tech_points", isOnlineSession: true);
+            Assert.True(grant1.Success);
+            Assert.Equal(20, grant1.PreviousPoints);
+            Assert.Equal(35, grant1.NewPoints);
+            Assert.Equal(15, grant1.Delta);
+
+            // 2. Deduct -10 Tech Points
+            var grant2 = await economyService.GrantPlayerTechnologyPointsAsync(playerUid, -10, "tech_points", isOnlineSession: true);
+            Assert.True(grant2.Success);
+            Assert.Equal(35, grant2.PreviousPoints);
+            Assert.Equal(25, grant2.NewPoints);
+            Assert.Equal(-10, grant2.Delta);
+
+            try { Directory.Delete(tempDir, true); } catch { }
+        }
     }
 }
 
