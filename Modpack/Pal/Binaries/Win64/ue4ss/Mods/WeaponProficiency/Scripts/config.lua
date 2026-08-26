@@ -15,8 +15,8 @@ local Config = {
                          -- 2 = double, 0 = flat damage forever. Editable in-game (Mod Options).
   xpMult        = 1.0,   -- weapon XP gain multiplier: 2 = level twice as fast. In-game too.
   applyDurability = true, -- weapons last longer as they level (cap = durabilityMaxMult)
-  progressScope = "instance", -- "instance" = each physical weapon its own career (GUID);
-                              -- "model" = all copies of a weapon share one career
+  progressScope = "family", -- "family" = all copies & rarities share career (fully compatible with dedicated servers);
+                              -- "model" = all copies share career; "instance" = each physical weapon its own career (GUID)
 
   -- Keep a weapon boosted after you put it away, instead of restoring vanilla on swap.
   -- AttackValue is a per-MODEL asset shared by every copy of a weapon, so this is what

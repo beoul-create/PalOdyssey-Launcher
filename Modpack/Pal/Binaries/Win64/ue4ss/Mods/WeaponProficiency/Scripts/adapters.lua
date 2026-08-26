@@ -423,27 +423,24 @@ end
 
 function A.instanceKey(weapon, staticId)
   if not staticId then return nil end
-  -- "family": one career across every rarity of the weapon. The level you ground on a Common is
-  -- the level a looted Legendary arrives at -- and the Legendary's own base damage is what that
-  -- level then scales, because the SPEC is still looked up from the equipped model.
-  -- PREFIXED so the family keyspace cannot collide with a model key of the same name. staticOf()
-  -- strips it again on the way back to a spec lookup, so nothing downstream sees the prefix.
+  -- "family": one career across every rarity of the weapon.
   if cfg.progressScope == "family" then
     local fk = "fam:" .. A.familyOf(staticId)
-    A.noteModel(fk, staticId)   -- the career is the family; the stats are THIS weapon
+    A.noteModel(fk, staticId)
     return fk
   end
-  -- PROGRESSION SCOPE (cfg.progressScope): "instance" keys on StaticId@GUID
-  -- (each physical weapon its own career); "model" keys on StaticId alone
-  -- (every copy of a weapon shares one career). Scope-switching is
-  -- non-destructive: each scope has its own store rows.
+  -- "model": every copy of a weapon shares one career
   if cfg.progressScope == "model" then return staticId end
-  -- CRASH GUARD: callers may pass a stale weapon actor; a freed one makes the
-  -- ownItemID read a native AV that pcall cannot catch.
-  if not alive(weapon) then warnNoGuid(staticId); return nil end
+  
+  -- "instance": physical weapon with its own GUID
+  if not alive(weapon) then return staticId end
   local dyn = safe(function() return weapon.ownItemID.DynamicId end)
   local g = dyn and guidStr(safe(function() return dyn.LocalIdInCreatedWorld end))
-  if not g then warnNoGuid(staticId); return nil end
+  -- DEDICATED SERVER ROBUSTNESS: If GUID replication is absent/empty on the server,
+  -- fall back gracefully to model career rather than discarding all hits and breaking the mod.
+  if not g or g == "00000000000000000000000000000000" then
+    return staticId
+  end
   return staticId .. "@" .. g
 end
 
@@ -527,7 +524,14 @@ function A.sameActor(a, b)
   if a == b then return true end
   local an = safe(function() return a:GetFullName() end)
   local bn = safe(function() return b:GetFullName() end)
-  return an ~= nil and an == bn
+  if an ~= nil and an == bn then return true end
+  
+  -- Cross-check Controller vs Pawn equivalence on multiplayer servers
+  local aPawn = safe(function() return a:GetPawn() end) or safe(function() return a.Pawn end)
+  local bPawn = safe(function() return b:GetPawn() end) or safe(function() return b.Pawn end)
+  if alive(aPawn) and (aPawn == b or (bn and safe(function() return aPawn:GetFullName() end) == bn)) then return true end
+  if alive(bPawn) and (bPawn == a or (an and safe(function() return bPawn:GetFullName() end) == an)) then return true end
+  return false
 end
 
 -- CLIENT COUNTING HOOK (2026-07-20 repoint). UPalUtility:MakeDamageInfo is where
