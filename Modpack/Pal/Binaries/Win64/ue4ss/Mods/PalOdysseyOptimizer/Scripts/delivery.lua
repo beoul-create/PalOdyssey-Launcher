@@ -11,9 +11,14 @@ end
 local function fmtGuid(g)
     if g == nil then return nil end
     local ok, str = pcall(function()
-        return string.format("%08X%08X%08X%08X", g.A, g.B, g.C, g.D)
+        local a = (g.A or 0) & 0xFFFFFFFF
+        local b = (g.B or 0) & 0xFFFFFFFF
+        local c = (g.C or 0) & 0xFFFFFFFF
+        local d = (g.D or 0) & 0xFFFFFFFF
+        return string.format("%08X%08X%08X%08X", a, b, c, d)
     end)
-    return ok and str or nil
+    if not ok or str == "00000000000000000000000000000000" then return nil end
+    return str
 end
 
 local function cleanStr(s)
@@ -41,42 +46,94 @@ local function findQueueFile()
     return "Mods/PalOdysseyOptimizer/pending-deliveries.csv"
 end
 
-local function exportLivePlayerData(controllers)
-    if not controllers or #controllers == 0 then return end
+local function exportLivePlayerData()
     local players = {}
-    for _, controller in ipairs(controllers) do
-        if controller and controller:IsValid() then
-            local pGuid = ""
+
+    local function processPlayerState(ps, controller)
+        if not ps or not ps:IsValid() then return end
+
+        local pGuid = nil
+        pcall(function()
+            if controller and controller:IsValid() then
+                pGuid = fmtGuid(controller:GetPlayerUId())
+            end
+        end)
+        if not pGuid then
+            pcall(function() pGuid = fmtGuid(ps.PlayerUId) end)
+        end
+        if not pGuid then
+            pcall(function() pGuid = fmtGuid(ps:GetPlayerUId()) end)
+        end
+        if not pGuid then
             pcall(function()
-                pGuid = fmtGuid(controller:GetPlayerUId()) or ""
+                if ps.IndividualHandleId and ps.IndividualHandleId.PlayerUId then
+                    pGuid = fmtGuid(ps.IndividualHandleId.PlayerUId)
+                end
             end)
-            local cleanPGuid = cleanStr(pGuid)
-            local ps = nil
-            pcall(function() ps = controller.PlayerState end)
-            if cleanPGuid ~= "" and ps and ps:IsValid() then
-                local pName = ""
-                pcall(function()
-                    if ps.PlayerName then pName = ps.PlayerName:ToString() end
-                end)
-                local techPts = 0
-                local bossPts = 0
-                local lvl = 1
-                pcall(function()
-                    if ps.UnusedTechnologyPoint ~= nil then techPts = ps.UnusedTechnologyPoint end
-                end)
-                pcall(function()
-                    if ps.UnusedBossTechnologyPoint ~= nil then bossPts = ps.UnusedBossTechnologyPoint end
-                end)
-                pcall(function()
-                    if ps.GetLevel then lvl = ps:GetLevel() end
-                end)
-                players[cleanPGuid] = {
-                    playerUid = cleanPGuid,
-                    playerName = pName,
-                    unusedTechnologyPoints = techPts,
-                    unusedBossTechnologyPoints = bossPts,
-                    level = lvl
-                }
+        end
+
+        local cleanPGuid = cleanStr(pGuid)
+        if cleanPGuid == "" or cleanPGuid == "00000000000000000000000000000000" then return end
+
+        local pName = ""
+        pcall(function()
+            if ps.PlayerName then pName = ps.PlayerName:ToString() end
+            if pName == "" and ps.GetPlayerName then pName = ps:GetPlayerName():ToString() end
+        end)
+
+        local techPts = 0
+        local bossPts = 0
+        local lvl = 1
+
+        pcall(function()
+            if ps.UnusedTechnologyPoint ~= nil then techPts = ps.UnusedTechnologyPoint end
+        end)
+        pcall(function()
+            if techPts == 0 and ps.RecordData and ps.RecordData:IsValid() and ps.RecordData.UnusedTechnologyPoint ~= nil then
+                techPts = ps.RecordData.UnusedTechnologyPoint
+            end
+        end)
+
+        pcall(function()
+            if ps.UnusedBossTechnologyPoint ~= nil then bossPts = ps.UnusedBossTechnologyPoint end
+        end)
+        pcall(function()
+            if bossPts == 0 and ps.RecordData and ps.RecordData:IsValid() and ps.RecordData.UnusedBossTechnologyPoint ~= nil then
+                bossPts = ps.RecordData.UnusedBossTechnologyPoint
+            end
+        end)
+
+        pcall(function()
+            if ps.GetLevel then lvl = ps:GetLevel() end
+        end)
+
+        players[cleanPGuid] = {
+            playerUid = cleanPGuid,
+            playerName = pName,
+            unusedTechnologyPoints = techPts,
+            unusedBossTechnologyPoints = bossPts,
+            level = lvl
+        }
+    end
+
+    -- Check Player Controllers
+    local okFindC, controllers = pcall(FindAllOf, "PalPlayerController")
+    if okFindC and controllers then
+        for _, c in ipairs(controllers) do
+            if c and c:IsValid() then
+                local ps = nil
+                pcall(function() ps = c.PlayerState end)
+                if ps then processPlayerState(ps, c) end
+            end
+        end
+    end
+
+    -- Check Player States directly
+    local okFindS, states = pcall(FindAllOf, "PalPlayerState")
+    if okFindS and states then
+        for _, s in ipairs(states) do
+            if s and s:IsValid() then
+                processPlayerState(s, nil)
             end
         end
     end
@@ -87,27 +144,25 @@ local function exportLivePlayerData(controllers)
         "live-players.json",
         "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/live-players.json"
     }
+
+    local entries = {}
+    for k, v in pairs(players) do
+        table.insert(entries, string.format('"%s":{"playerUid":"%s","playerName":"%s","unusedTechnologyPoints":%d,"unusedBossTechnologyPoints":%d,"level":%d}',
+            k, v.playerUid, v.playerName:gsub('"', '\\"'), v.unusedTechnologyPoints, v.unusedBossTechnologyPoints, v.level))
+    end
+    local jsonStr = string.format('{"timestamp":%d,"players":{%s}}', os.time(), table.concat(entries, ","))
+
     for _, path in ipairs(candidatePaths) do
         local okW, fW = pcall(io.open, path, "w")
         if okW and fW then
-            local entries = {}
-            for k, v in pairs(players) do
-                table.insert(entries, string.format('"%s":{"playerUid":"%s","playerName":"%s","unusedTechnologyPoints":%d,"unusedBossTechnologyPoints":%d,"level":%d}',
-                    k, v.playerUid, v.playerName:gsub('"', '\\"'), v.unusedTechnologyPoints, v.unusedBossTechnologyPoints, v.level))
-            end
-            local jsonStr = string.format('{"timestamp":%d,"players":{%s}}', os.time(), table.concat(entries, ","))
             fW:write(jsonStr)
             fW:close()
-            break
         end
     end
 end
 
 local function processQueue()
-    local okFind, controllers = pcall(FindAllOf, "PalPlayerController")
-    if okFind and controllers and #controllers > 0 then
-        pcall(exportLivePlayerData, controllers)
-    end
+    pcall(exportLivePlayerData)
 
     local qPath = findQueueFile()
     local okOpen, f = pcall(io.open, qPath, "r")

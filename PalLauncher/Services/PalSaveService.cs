@@ -958,39 +958,77 @@ r.ShaderPipelineCache.BatchTime=2.0";
                 {
                     if (File.Exists(liveFile))
                     {
-                        string liveJson = await File.ReadAllTextAsync(liveFile);
-                        using var doc = JsonDocument.Parse(liveJson);
-                        if (doc.RootElement.TryGetProperty("players", out var playersObj))
+                        try
                         {
-                            foreach (var pProp in playersObj.EnumerateObject())
+                            string liveJson = await File.ReadAllTextAsync(liveFile);
+                            if (!string.IsNullOrWhiteSpace(liveJson))
                             {
-                                string pKey = pProp.Name.Replace("-", "").ToUpperInvariant();
-                                string cleanActual = actualUid.Replace("-", "").ToUpperInvariant();
-                                string cleanPlayer = (playerUid ?? "").Replace("-", "").ToUpperInvariant();
-
-                                if (pKey == cleanActual || pKey == cleanPlayer || (!string.IsNullOrEmpty(cleanPlayer) && pKey.Contains(cleanPlayer)))
+                                using var doc = JsonDocument.Parse(liveJson);
+                                if (doc.RootElement.TryGetProperty("players", out var playersObj))
                                 {
-                                    var pVal = pProp.Value;
-                                    if (pVal.TryGetProperty("unusedTechnologyPoints", out var techVal) && techVal.TryGetInt32(out int liveTech))
+                                    var props = playersObj.EnumerateObject().ToList();
+                                    bool matched = false;
+
+                                    foreach (var pProp in props)
                                     {
-                                        techPoints = liveTech;
+                                        string pKey = pProp.Name.Replace("-", "").ToUpperInvariant();
+                                        string cleanActual = actualUid.Replace("-", "").ToUpperInvariant();
+                                        string cleanPlayer = (playerUid ?? "").Replace("-", "").ToUpperInvariant();
+
+                                        bool isMatch = pKey == cleanActual ||
+                                                       pKey == cleanPlayer ||
+                                                       (!string.IsNullOrEmpty(cleanPlayer) && (pKey.Contains(cleanPlayer) || cleanPlayer.Contains(pKey))) ||
+                                                       (!string.IsNullOrEmpty(cleanActual) && (pKey.Contains(cleanActual) || cleanActual.Contains(pKey)));
+
+                                        if (isMatch)
+                                        {
+                                            var pVal = pProp.Value;
+                                            if (pVal.TryGetProperty("unusedTechnologyPoints", out var techVal) && techVal.TryGetInt32(out int liveTech))
+                                            {
+                                                techPoints = liveTech;
+                                            }
+                                            if (pVal.TryGetProperty("unusedBossTechnologyPoints", out var bossVal) && bossVal.TryGetInt32(out int liveBoss))
+                                            {
+                                                bossTechPoints = liveBoss;
+                                            }
+                                            if (pVal.TryGetProperty("playerName", out var nameVal) && !string.IsNullOrWhiteSpace(nameVal.GetString()))
+                                            {
+                                                resolvedPlayerName = nameVal.GetString()!;
+                                            }
+                                            if (pVal.TryGetProperty("level", out var lvlVal) && lvlVal.TryGetInt32(out int liveLvl) && liveLvl > 0)
+                                            {
+                                                resolvedLevel = liveLvl;
+                                            }
+                                            matched = true;
+                                            break;
+                                        }
                                     }
-                                    if (pVal.TryGetProperty("unusedBossTechnologyPoints", out var bossVal) && bossVal.TryGetInt32(out int liveBoss))
+
+                                    // Fallback for single connected player if UID format varies
+                                    if (!matched && props.Count == 1)
                                     {
-                                        bossTechPoints = liveBoss;
+                                        var pVal = props[0].Value;
+                                        if (pVal.TryGetProperty("unusedTechnologyPoints", out var techVal) && techVal.TryGetInt32(out int liveTech))
+                                        {
+                                            techPoints = liveTech;
+                                        }
+                                        if (pVal.TryGetProperty("unusedBossTechnologyPoints", out var bossVal) && bossVal.TryGetInt32(out int liveBoss))
+                                        {
+                                            bossTechPoints = liveBoss;
+                                        }
+                                        if (pVal.TryGetProperty("playerName", out var nameVal) && !string.IsNullOrWhiteSpace(nameVal.GetString()))
+                                        {
+                                            resolvedPlayerName = nameVal.GetString()!;
+                                        }
+                                        if (pVal.TryGetProperty("level", out var lvlVal) && lvlVal.TryGetInt32(out int liveLvl) && liveLvl > 0)
+                                        {
+                                            resolvedLevel = liveLvl;
+                                        }
                                     }
-                                    if (pVal.TryGetProperty("playerName", out var nameVal) && !string.IsNullOrWhiteSpace(nameVal.GetString()))
-                                    {
-                                        resolvedPlayerName = nameVal.GetString()!;
-                                    }
-                                    if (pVal.TryGetProperty("level", out var lvlVal) && lvlVal.TryGetInt32(out int liveLvl) && liveLvl > 0)
-                                    {
-                                        resolvedLevel = liveLvl;
-                                    }
-                                    break;
                                 }
                             }
                         }
+                        catch { }
                     }
                 }
             }
