@@ -1,0 +1,5 @@
+{
+	"DT_PalFirstActivatedInfoText":{
+		"PAL_FIRST_SPAWN_DESC_LilyQueen":"When activated, the queen's soothing graces restore the Health of the player and Party Pals and revives any fainted pals.\r\nConverts own attacks to grass damage, increases grass damage by <Status_Up>{Passive1_EffectValue1}%</>, and reduces own active skill cooldowns by <Status_Up>{Passive1_EffectValue3}%</>."
+	}
+}

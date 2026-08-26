@@ -7,7 +7,7 @@
       "Friendship_ShotAttack": 1.7,
       "WalkSpeed": 200,
       "RunSpeed": 650,
-      "RideSprintSpeed": 100,
+      "RideSprintSpeed": 1000,
       "TransportSpeed": 350
     },
     "BOSS_Boar": {

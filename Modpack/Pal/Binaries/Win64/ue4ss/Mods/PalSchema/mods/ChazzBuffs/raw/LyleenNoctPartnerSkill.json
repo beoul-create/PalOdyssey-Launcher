@@ -1,18 +1,18 @@
 {
 	"DT_PassiveSkill_Main": {
-		"MutantPower_1": {
-			"EffectType1": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
-			"EffectValue1": 20,
+		"GoddessDark_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 15,
 			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType2": "EPalPassiveSkillEffectType::ElementBoost_Ice",
-			"EffectValue2": 10,
+			"EffectType2": "EPalPassiveSkillEffectType::ElementDark",
+			"EffectValue2": 1.0,
 			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType3": "EPalPassiveSkillEffectType::ElementBoost_Electricity",
-			"EffectValue3": 10,
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 1,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType4": "EPalPassiveSkillEffectType::no",
 			"EffectValue4": 0,
-			"TargetType4": "EPalPassiveSkillEffectTargetType::Nono",
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
                         "InvokeActiveOtomo": false,
                         "InvokeWorker": false,
                         "InvokeRiding": false,
@@ -21,19 +21,19 @@
                         "InvokeAlways": true,
                         "InvokeInBaseCamp": false
 		},
-		"MutantPower_2": {
-			"EffectType1": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
-			"EffectValue1": 25,
+		"GoddessDark_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 18,
 			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType2": "EPalPassiveSkillEffectType::ElementBoost_Ice",
-			"EffectValue2": 12,
+			"EffectType2": "EPalPassiveSkillEffectType::ElementDark",
+			"EffectValue2": 1.0,
 			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType3": "EPalPassiveSkillEffectType::ElementBoost_Electricity",
-			"EffectValue3": 12,
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 2,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType4": "EPalPassiveSkillEffectType::no",
 			"EffectValue4": 0,
-			"TargetType4": "EPalPassiveSkillEffectTargetType::Nono",
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
                         "InvokeActiveOtomo": false,
                         "InvokeWorker": false,
                         "InvokeRiding": false,
@@ -42,61 +42,61 @@
                         "InvokeAlways": true,
                         "InvokeInBaseCamp": false
 		},
-		"MutantPower_3": {
-			"EffectType1": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+		"GoddessDark_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 21,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementDark",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 3,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"GoddessDark_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 24,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementDark",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 4,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"GoddessDark_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
 			"EffectValue1": 30,
 			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType2": "EPalPassiveSkillEffectType::ElementBoost_Ice",
-			"EffectValue2": 14,
+			"EffectType2": "EPalPassiveSkillEffectType::ElementDark",
+			"EffectValue2": 1.0,
 			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType3": "EPalPassiveSkillEffectType::ElementBoost_Electricity",
-			"EffectValue3": 14,
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 5,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType4": "EPalPassiveSkillEffectType::no",
 			"EffectValue4": 0,
-			"TargetType4": "EPalPassiveSkillEffectTargetType::Nono",
-                        "InvokeActiveOtomo": false,
-                        "InvokeWorker": false,
-                        "InvokeRiding": false,
-                        "InvokeReserve": false,
-                        "InvokeInOtomo": false,
-                        "InvokeAlways": true,
-                        "InvokeInBaseCamp": false
-		},
-		"MutantPower_4": {
-			"EffectType1": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
-			"EffectValue1": 35,
-			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType2": "EPalPassiveSkillEffectType::ElementBoost_Ice",
-			"EffectValue2": 16,
-			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType3": "EPalPassiveSkillEffectType::ElementBoost_Electricity",
-			"EffectValue3": 16,
-			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType4": "EPalPassiveSkillEffectType::no",
-			"EffectValue4": 0,
-			"TargetType4": "EPalPassiveSkillEffectTargetType::Nono",
-                        "InvokeActiveOtomo": false,
-                        "InvokeWorker": false,
-                        "InvokeRiding": false,
-                        "InvokeReserve": false,
-                        "InvokeInOtomo": false,
-                        "InvokeAlways": true,
-                        "InvokeInBaseCamp": false
-		},
-		"MutantPower_5": {
-			"EffectType1": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
-			"EffectValue1": 40,
-			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType2": "EPalPassiveSkillEffectType::ElementBoost_Ice",
-			"EffectValue2": 20,
-			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType3": "EPalPassiveSkillEffectType::ElementBoost_Electricity",
-			"EffectValue3": 20,
-			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType4": "EPalPassiveSkillEffectType::no",
-			"EffectValue4": 0,
-			"TargetType4": "EPalPassiveSkillEffectTargetType::Nono",
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
                         "InvokeActiveOtomo": false,
                         "InvokeWorker": false,
                         "InvokeRiding": false,
@@ -107,200 +107,100 @@
 		}
 	},
 	"DT_PartnerSkillParameter": {
-		"Mutant": {
+		"LilyQueen_Dark": {
 			"PassiveSkills": [
 				{
 					"SkillAndParametersArray": [
 						{
 							"SkillName": {
-								"Key": "MaxInventoryWeight_PartnerSkill_Mutant_1"
+								"Key": "GoddessDark_1"
 							}
-                                                },
-                                                {
-							"SkillName": {
-								"Key": "Homing_PartnerSkill_Mutant"
-							}
-						},
-						{
-							"SkillName": {
-								"Key": "MutantPower_1"
-							}
-						}
+                                                }
                                               ]
                                              },
 				{
 					"SkillAndParametersArray": [
 						{
 							"SkillName": {
-								"Key": "MaxInventoryWeight_PartnerSkill_Mutant_2"
+								"Key": "GoddessDark_2"
 							}
-                                                },
-                                                {
-							"SkillName": {
-								"Key": "Homing_PartnerSkill_Mutant"
-							}
-						},
-						{
-							"SkillName": {
-								"Key": "MutantPower_2"
-							}
-						}
+                                                }
                                               ]
                                              },
 				{
 					"SkillAndParametersArray": [
 						{
 							"SkillName": {
-								"Key": "MaxInventoryWeight_PartnerSkill_Mutant_3"
+								"Key": "GoddessDark_3"
 							}
-                                                },
-                                                {
-							"SkillName": {
-								"Key": "Homing_PartnerSkill_Mutant"
-							}
-						},
-						{
-							"SkillName": {
-								"Key": "MutantPower_3"
-							}
-						}
+                                                }
                                               ]
                                              },
 				{
 					"SkillAndParametersArray": [
 						{
 							"SkillName": {
-								"Key": "MaxInventoryWeight_PartnerSkill_Mutant_4"
+								"Key": "GoddessDark_4"
 							}
-                                                },
-                                                {
-							"SkillName": {
-								"Key": "Homing_PartnerSkill_Mutant"
-							}
-						},
-						{
-							"SkillName": {
-								"Key": "MutantPower_4"
-							}
-						}
+                                                }
                                               ]
                                              },
 				{
 					"SkillAndParametersArray": [
 						{
 							"SkillName": {
-								"Key": "MaxInventoryWeight_PartnerSkill_Mutant_5"
+								"Key": "GoddessDark_5"
 							}
-                                                },
-                                                {
-							"SkillName": {
-								"Key": "Homing_PartnerSkill_Mutant"
-							}
-						},
-						{
-							"SkillName": {
-								"Key": "MutantPower_5"
-							}
-						}
+                                                }
                                               ]
                                              }
                                              ]
                                            },
-		"BOSS_Mutant": {
+		"BOSS_LilyQueen_Dark": {
 			"PassiveSkills": [
 				{
 					"SkillAndParametersArray": [
 						{
 							"SkillName": {
-								"Key": "MaxInventoryWeight_PartnerSkill_Mutant_1"
+								"Key": "GoddessDark_1"
 							}
-                                                },
-                                                {
-							"SkillName": {
-								"Key": "Homing_PartnerSkill_Mutant"
-							}
-						},
-						{
-							"SkillName": {
-								"Key": "MutantPower_1"
-							}
-						}
+                                                }
                                               ]
                                              },
 				{
 					"SkillAndParametersArray": [
 						{
 							"SkillName": {
-								"Key": "MaxInventoryWeight_PartnerSkill_Mutant_2"
+								"Key": "GoddessDark_2"
 							}
-                                                },
-                                                {
-							"SkillName": {
-								"Key": "Homing_PartnerSkill_Mutant"
-							}
-						},
-						{
-							"SkillName": {
-								"Key": "MutantPower_2"
-							}
-						}
+                                                }
                                               ]
                                              },
 				{
 					"SkillAndParametersArray": [
 						{
 							"SkillName": {
-								"Key": "MaxInventoryWeight_PartnerSkill_Mutant_3"
+								"Key": "GoddessDark_3"
 							}
-                                                },
-                                                {
-							"SkillName": {
-								"Key": "Homing_PartnerSkill_Mutant"
-							}
-						},
-						{
-							"SkillName": {
-								"Key": "MutantPower_3"
-							}
-						}
+                                                }
                                               ]
                                              },
 				{
 					"SkillAndParametersArray": [
 						{
 							"SkillName": {
-								"Key": "MaxInventoryWeight_PartnerSkill_Mutant_4"
+								"Key": "GoddessDark_4"
 							}
-                                                },
-                                                {
-							"SkillName": {
-								"Key": "Homing_PartnerSkill_Mutant"
-							}
-						},
-						{
-							"SkillName": {
-								"Key": "MutantPower_4"
-							}
-						}
+                                                }
                                               ]
                                              },
 				{
 					"SkillAndParametersArray": [
 						{
 							"SkillName": {
-								"Key": "MaxInventoryWeight_PartnerSkill_Mutant_5"
+								"Key": "GoddessDark_5"
 							}
-                                                },
-                                                {
-							"SkillName": {
-								"Key": "Homing_PartnerSkill_Mutant"
-							}
-						},
-						{
-							"SkillName": {
-								"Key": "MutantPower_5"
-							}
-						}
+                                                }
                                               ]
                                              }
                                              ]

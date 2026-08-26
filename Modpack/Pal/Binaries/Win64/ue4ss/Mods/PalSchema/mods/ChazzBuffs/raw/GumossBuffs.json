@@ -1,0 +1,13 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "PlantSlime": {
+      "HP": 85,
+      "Friendship_HP": 4.8
+    },
+    "BOSS_PlantSlime": {
+      "HP": 102,
+      "Friendship_HP": 3.9
+    }
+  }
+}

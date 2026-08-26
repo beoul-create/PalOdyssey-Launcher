@@ -229,45 +229,67 @@ local function processQueue()
                             end)
                         end
 
-                        -- 2. Send In-Game System Notification / Chat
-                        if palUtil and palUtil:IsValid() then
-                            pcall(function()
-                                local msg = ""
-                                local pts = ps.UnusedTechnologyPoint or 0
-                                local bossPts = ps.UnusedBossTechnologyPoint or 0
-                                if action == "SetTechPoints" or action == "SetPoints" then
-                                    msg = string.format("⚡ [Admin] Your Technology Points balance has been set to: %d pts", pts)
-                                elseif action == "SetBossPoints" then
-                                    msg = string.format("🔮 [Admin] Your Ancient Boss Points balance has been set to: %d pts", bossPts)
-                                elseif action == "GrantTechPoints" or action == "AddTechPoints" then
-                                    msg = string.format("🪙 [Admin] Received %+d Technology Points! New balance: %d pts", techPointsDelta, pts)
-                                elseif action == "GrantBossPoints" or action == "AddBossPoints" then
-                                    msg = string.format("🔮 [Admin] Received %+d Ancient Boss Points! New balance: %d pts", techPointsDelta, bossPts)
-                                elseif action == "Gacha" then
-                                    if itemCode == "AncientRelicBox" then
-                                        msg = string.format("🔮 [Ancient Gacha] Opened %dx Ancient Relic Box! Rewards credited to Virtual Vault.", quantity)
-                                    else
-                                        msg = string.format("🎰 [Gacha] Opened %dx Mystery Box (Deducted %d Tech Pts). Balance: %d pts", quantity, math.abs(techPointsDelta), pts)
+                        -- 2. Send In-Game System Notification / Chat safely deferred onto GameThread
+                        local msg = ""
+                        local pts = (ps and ps.UnusedTechnologyPoint) or 0
+                        local bossPts = (ps and ps.UnusedBossTechnologyPoint) or 0
+                        if action == "SetTechPoints" or action == "SetPoints" then
+                            msg = string.format("⚡ [Admin] Your Technology Points balance has been set to: %d pts", pts)
+                        elseif action == "SetBossPoints" then
+                            msg = string.format("🔮 [Admin] Your Ancient Boss Points balance has been set to: %d pts", bossPts)
+                        elseif action == "GrantTechPoints" or action == "AddTechPoints" then
+                            msg = string.format("🪙 [Admin] Received %+d Technology Points! New balance: %d pts", techPointsDelta, pts)
+                        elseif action == "GrantBossPoints" or action == "AddBossPoints" then
+                            msg = string.format("🔮 [Admin] Received %+d Ancient Boss Points! New balance: %d pts", techPointsDelta, bossPts)
+                        elseif action == "Gacha" then
+                            if itemCode == "AncientRelicBox" then
+                                msg = string.format("🔮 [Ancient Gacha] Opened %dx Ancient Relic Box! Rewards credited to Virtual Vault.", quantity)
+                            else
+                                msg = string.format("🎰 [Gacha] Opened %dx Mystery Box (Deducted %d Tech Pts). Balance: %d pts", quantity, math.abs(techPointsDelta), pts)
+                            end
+                        elseif action == "Transmute" then
+                            msg = string.format("⚗️ [Transmute] Converted Ancient Points ➔ +%d Standard Tech Points! New Balance: %d pts", techPointsDelta, pts)
+                        elseif action == "Perk" then
+                            msg = string.format("🏰 [Perk] Server Perk upgraded! Active bonuses increased.")
+                        elseif action == "Exchange" then
+                            if techPointsDelta < 0 then
+                                msg = string.format("🎟️ [Shop] Deducted %d Tech Points. Purchased %dx %s. Balance: %d pts", math.abs(techPointsDelta), quantity, itemCode, pts)
+                            else
+                                msg = string.format("🔮 [Ancient Shop] Purchased %dx %s with Ancient Points! Items credited to Virtual Vault.", quantity, itemCode)
+                            end
+                        elseif action == "Recycle" then
+                            msg = string.format("♻️ [Recycle] Gained +%d Tech Points! Balance: %d pts", techPointsDelta, pts)
+                        elseif action == "Withdraw" or action == "Claim" then
+                            msg = string.format("📦 [Vault Delivery] Claimed %dx %s into your inventory!", quantity, itemCode)
+                        end
+
+                        if msg ~= "" and palUtil and palUtil:IsValid() and controller and controller:IsValid() then
+                            local cRef = controller
+                            local uRef = palUtil
+                            local sendAction = function()
+                                pcall(function()
+                                    if cRef and cRef:IsValid() and uRef and uRef:IsValid() then
+                                        local uid = nil
+                                        pcall(function() uid = cRef:GetPlayerUId() end)
+                                        if uid then
+                                            local ok = pcall(function() uRef:SendSystemToPlayerChat(cRef, msg, { uid }) end)
+                                            if not ok then
+                                                pcall(function() uRef:SendSystemAnnounce(cRef, msg) end)
+                                            end
+                                        else
+                                            pcall(function() uRef:SendSystemAnnounce(cRef, msg) end)
+                                        end
                                     end
-                                elseif action == "Transmute" then
-                                    msg = string.format("⚗️ [Transmute] Converted Ancient Points ➔ +%d Standard Tech Points! New Balance: %d pts", techPointsDelta, pts)
-                                elseif action == "Perk" then
-                                    msg = string.format("🏰 [Perk] Server Perk upgraded! Active bonuses increased.")
-                                elseif action == "Exchange" then
-                                    if techPointsDelta < 0 then
-                                        msg = string.format("🎟️ [Shop] Deducted %d Tech Points. Purchased %dx %s. Balance: %d pts", math.abs(techPointsDelta), quantity, itemCode, pts)
-                                    else
-                                        msg = string.format("🔮 [Ancient Shop] Purchased %dx %s with Ancient Points! Items credited to Virtual Vault.", quantity, itemCode)
-                                    end
-                                elseif action == "Recycle" then
-                                    msg = string.format("♻️ [Recycle] Gained +%d Tech Points! Balance: %d pts", techPointsDelta, pts)
-                                elseif action == "Withdraw" or action == "Claim" then
-                                    msg = string.format("📦 [Vault Delivery] Claimed %dx %s into your inventory!", quantity, itemCode)
-                                end
-                                if msg ~= "" then
-                                    palUtil:SendSystemToPlayerChat(controller, msg, { controller:GetPlayerUId() })
-                                end
-                            end)
+                                end)
+                            end
+
+                            if type(_G.ExecuteInGameThreadWithDelay) == "function" then
+                                pcall(_G.ExecuteInGameThreadWithDelay, 100, sendAction)
+                            elseif type(_G.ExecuteWithDelay) == "function" then
+                                pcall(_G.ExecuteWithDelay, 100, sendAction)
+                            else
+                                sendAction()
+                            end
                         end
 
                         delivered = true
