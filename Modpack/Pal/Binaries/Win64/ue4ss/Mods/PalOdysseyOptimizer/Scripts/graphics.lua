@@ -1,4 +1,4 @@
--- PalOdysseyOptimizer - FPS Boost & GPU Assist Subsystem
+-- PalOdysseyOptimizer - FPS Boost & GPU Assist Subsystem (Ultra-Performance Option B Profile)
 local GraphicsModule = {}
 
 local function ExecuteConsole(cmd)
@@ -13,7 +13,7 @@ end
 function GraphicsModule.apply(cfg)
     if not cfg or not cfg.enabled then return end
 
-    print("[PalOdysseyOptimizer] Initializing GPU Assist & Frame Pacing Engine...")
+    print("[PalOdysseyOptimizer] Initializing Ultra-Performance Option B GPU Pipeline (Mesh Shaders + SkinCache + URO + 512p CSM)...")
 
     local function optimizeRenderSettings()
         pcall(function()
@@ -24,25 +24,50 @@ function GraphicsModule.apply(cfg)
                 end
             end
 
-            -- 1. Asynchronous Texture Streaming & CPU Amortization
+            -- 1. Nvidium-Style GPU Task/Mesh Shaders, GPUScene Occlusion & VRAM SkinCache
+            ExecuteConsole("r.MeshShaders 1")
+            ExecuteConsole("r.MeshShaders.Enable 1")
+            ExecuteConsole("r.GPUScene.InstanceCulling 1")
+            ExecuteConsole("r.EarlyZPass 2")
+            ExecuteConsole("r.EarlyZPassMovable 1")
+            ExecuteConsole("r.SkinCache.Mode 1")
+            ExecuteConsole("r.SkinCache.CompileShaders 1")
+            ExecuteConsole("r.SkinCache.RecomputeTangents 1")
+
+            -- 2. Skeletal URO + Pose Interpolation + LOD2 Mesh Optimization (Option B)
+            ExecuteConsole("a.URO.Enable 1")
+            ExecuteConsole("a.URO.TickDistanceScale 1.0")
+            ExecuteConsole("a.URO.Interpolation 1")
+            ExecuteConsole("a.URO.VisibilityBasedAnimTickRate 1")
+            ExecuteConsole("r.SkeletalMeshLODBias 2")
+
+            -- 3. Seamless Distance Falloff & Continuous Landscape CDLOD
+            ExecuteConsole("r.DitheredLODTransition 1")
+            ExecuteConsole("landscape.LODDistanceFactor 2.50")
+            ExecuteConsole("landscape.LOD0DistributionScale 0.50")
+            ExecuteConsole("r.StaticMeshLODDistanceScale 0.75")
+            ExecuteConsole("r.MeshLODRange 0.85")
+            ExecuteConsole("r.SkyAtmosphere.AerialPerspectiveLUT.FastSkyLUT 1")
+
+            -- 4. Asynchronous Texture Streaming & CPU Amortization (Sodium Equivalent)
             ExecuteConsole("r.TextureStreaming 1")
             ExecuteConsole("r.Streaming.AmortizeCPUWork 1")
             ExecuteConsole("r.Streaming.AmortizeCPUToGPUCopy 1")
-            ExecuteConsole("r.Streaming.FramesForFullUpdate 20")
-            ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 8")
+            ExecuteConsole("r.Streaming.FramesForFullUpdate 25")
+            ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 6")
             ExecuteConsole("r.Streaming.DefragDynamicBounds 1")
             ExecuteConsole("r.Streaming.LimitPoolSizeToVRAM 1")
             ExecuteConsole("r.Streaming.HLODStrategy 1")
-            ExecuteConsole("r.Streaming.PoolSize 3072")
+            ExecuteConsole("r.Streaming.PoolSize 2048")
 
-            -- 2. Asynchronous Shader Compilation, PSO Caching & Stutter Elimination
+            -- 5. Asynchronous Shader Compilation, PSO Caching & Stutter Elimination
             ExecuteConsole("r.CreateShadersOnLoad 1")
             ExecuteConsole("r.Shaders.Optimize 1")
             ExecuteConsole("r.ShaderPipelineCache.Enabled 1")
             ExecuteConsole("r.ShaderPipelineCache.StartupMode 1")
             ExecuteConsole("r.ShaderPipelineCache.BatchTime 2.0")
 
-            -- 3. Shadows & Lighting (Pass Trimming, Zero-Stutter CSM)
+            -- 6. Shadows & Lighting (Option B: 512p CSM Shadows, 1 Cascade)
             ExecuteConsole("r.VolumetricCloud 0")
             ExecuteConsole("r.VolumetricFog 0")
             ExecuteConsole("r.VolumetricFog.GridPixelSize 16")
@@ -51,36 +76,47 @@ function GraphicsModule.apply(cfg)
             ExecuteConsole("r.DistanceFieldShadowing 0")
             ExecuteConsole("r.DFShadowQuality 0")
             ExecuteConsole("r.Shadow.Virtual.Enable 0")
-            ExecuteConsole("r.Shadow.CSM.MaxCascades 2")
-            ExecuteConsole("r.Shadow.MaxCSMResolution 1024")
-            ExecuteConsole("r.Shadow.DistanceScale 0.80")
+            ExecuteConsole("r.Shadow.CSM.MaxCascades 1")
+            ExecuteConsole("r.Shadow.MaxCSMResolution 512")
+            ExecuteConsole("r.Shadow.DistanceScale 0.50")
             ExecuteConsole("r.Lumen.Reflections.Allow 0")
             ExecuteConsole("r.Lumen.ScreenProbeGather.DownsampleFactor 16")
             ExecuteConsole("r.DynamicGlobalIlluminationMethod 0")
+            ExecuteConsole("r.AmbientOcclusionLevels 0")
+            ExecuteConsole("r.SSR.Quality 0")
 
-            -- 4. Foliage, World Partition & Light Culling
-            ExecuteConsole("grass.DensityScale 0.8")
-            ExecuteConsole("foliage.LODDistanceScale 0.85")
-            ExecuteConsole("r.LightMaxDrawDistanceScale 0.8")
+            -- 7. Foliage & Particle VFX (Option B: 40% Grass, Capped Emitters)
+            ExecuteConsole("grass.DensityScale 0.40")
+            ExecuteConsole("foliage.LODDistanceScale 0.60")
+            ExecuteConsole("r.LightMaxDrawDistanceScale 0.70")
+            ExecuteConsole("fx.Niagara.QualityLevel 0")
+            ExecuteConsole("r.EmitterSpawnRateScale 0.50")
+            ExecuteConsole("fx.Niagara.Cull.MaxDistance 6000")
+            ExecuteConsole("r.TranslucencyLightingVolumeDim 16")
             ExecuteConsole("r.ParticleLODBias 1")
             ExecuteConsole("r.Emitter.FastPool 1")
 
-            -- 5. Frame Pacing & Low-Latency Sync
+            -- 8. UI & Slate Batching (ImmediatelyFast Equivalent)
+            ExecuteConsole("Slate.CacheRenderData 1")
+            ExecuteConsole("Slate.EnableAsyncDraw 1")
+
+            -- 9. Frame Pacing, Low-Latency Sync & Dynamic Upscaling (Option B: 85% TSR)
             ExecuteConsole("r.GTSyncType 1")
             ExecuteConsole("r.OneFrameThreadLag 1")
             ExecuteConsole("r.FinishCurrentFrame 0")
-            ExecuteConsole("t.MaxFPS 144")
+            ExecuteConsole("t.MaxFPS 165")
             ExecuteConsole("t.UnfocusedMaxFPS 30")
+            ExecuteConsole("r.ScreenPercentage 85")
+            ExecuteConsole("r.TemporalAA.Upsampling 1")
+            ExecuteConsole("r.TSR.ShadingRejection.Flickering 1")
 
-            -- 6. Visual Post-Processing & Temporal Upscaling
+            -- 10. Memory & Garbage Collection (FerriteCore Equivalent)
             ExecuteConsole("r.DepthOfFieldQuality 0")
             ExecuteConsole("r.MotionBlurQuality 0")
             ExecuteConsole("r.SceneColorFringeQuality 0")
             ExecuteConsole("r.Tonemapper.GrainQuantization 0")
             ExecuteConsole("r.BloomQuality 1")
-            ExecuteConsole("r.TemporalAA.Upsampling 1")
-            ExecuteConsole("r.TSR.ShadingRejection.Flickering 1")
-            ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 45")
+            ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 20")
         end)
     end
 
@@ -94,7 +130,7 @@ function GraphicsModule.apply(cfg)
     ExecuteWithDelay(2500, optimizeRenderSettings)
     ExecuteWithDelay(7000, optimizeRenderSettings)
 
-    print("[PalOdysseyOptimizer] GPU Assist & Graphics Pipeline loaded successfully.")
+    print("[PalOdysseyOptimizer] Ultra-Performance Option B GPU Pipeline loaded successfully.")
 end
 
 return GraphicsModule

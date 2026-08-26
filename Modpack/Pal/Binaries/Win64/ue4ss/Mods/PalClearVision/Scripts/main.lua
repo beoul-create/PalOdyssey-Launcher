@@ -54,13 +54,17 @@ local function ApplyVisualTweaks()
             ExecuteConsoleCommand("r.Lumen.DiffuseIndirect.MinRoughness 0.1")
         end
 
-        -- 3. Enhanced LOD & Draw Distance (Tuned for Zero Stutter)
+        -- 3. Seamless Distance Falloff & Dithered Blending (Zero Pop-In)
         if Config.enhancedLODDistance then
+            ExecuteConsoleCommand("r.DitheredLODTransition 1")
+            ExecuteConsoleCommand("landscape.LODDistanceFactor 2.50")
+            ExecuteConsoleCommand("landscape.LOD0DistributionScale 0.50")
             ExecuteConsoleCommand("r.ViewDistanceScale 1.0")
-            ExecuteConsoleCommand("foliage.LODDistanceScale 0.85")
-            ExecuteConsoleCommand("grass.DensityScale 0.8")
-            ExecuteConsoleCommand("r.StaticMeshLODDistanceScale 1.0")
-            ExecuteConsoleCommand("r.MeshLODRange 1.0")
+            ExecuteConsoleCommand("foliage.LODDistanceScale 0.60")
+            ExecuteConsoleCommand("grass.DensityScale 0.40")
+            ExecuteConsoleCommand("r.StaticMeshLODDistanceScale 0.75")
+            ExecuteConsoleCommand("r.MeshLODRange 0.85")
+            ExecuteConsoleCommand("r.SkyAtmosphere.AerialPerspectiveLUT.FastSkyLUT 1")
         end
 
         -- 4. Ultra-Wide 21:9 & 32:9 HUD Fix
@@ -68,11 +72,13 @@ local function ApplyVisualTweaks()
             ExecuteConsoleCommand("r.AspectRatioAxisConstraint 1")
         end
 
-        -- 5. Async Texture Streaming & Stutter Elimination
+        -- 5. Async Texture Streaming & Stutter Elimination (Sodium Equivalent)
         if Config.asyncTextureStreaming then
             ExecuteConsoleCommand("r.TextureStreaming 1")
             ExecuteConsoleCommand("r.Streaming.AmortizeCPUWork 1")
-            ExecuteConsoleCommand("r.Streaming.FramesForFullUpdate 20")
+            ExecuteConsoleCommand("r.Streaming.AmortizeCPUToGPUCopy 1")
+            ExecuteConsoleCommand("r.Streaming.FramesForFullUpdate 25")
+            ExecuteConsoleCommand("r.Streaming.MaxNumTexturesToStreamPerFrame 6")
             ExecuteConsoleCommand("r.Streaming.HLODStrategy 1")
             ExecuteConsoleCommand("r.Streaming.DefragDynamicBounds 1")
             ExecuteConsoleCommand("r.Streaming.LimitPoolSizeToVRAM 1")
@@ -85,13 +91,14 @@ local function ApplyVisualTweaks()
             ExecuteConsoleCommand("r.FinishCurrentFrame 0")
         end
 
-        -- 7. Enhanced Upscaling Reconstruction & Anti-Aliasing
+        -- 7. Enhanced Upscaling Reconstruction & Anti-Aliasing (Option B: 85% TSR)
         if Config.enhancedUpscaling then
+            ExecuteConsoleCommand("r.ScreenPercentage 85")
             ExecuteConsoleCommand("r.TSR.ShadingRejection.Flickering 1")
             ExecuteConsoleCommand("r.TemporalAA.Upsampling 1")
         end
 
-        Log("Applied comprehensive visual, lighting, LOD, and upscaling enhancements.")
+        Log("Applied comprehensive Option B visual, lighting, LOD, and upscaling enhancements.")
     end)
 end
 
