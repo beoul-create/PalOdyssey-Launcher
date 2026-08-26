@@ -120,8 +120,8 @@
                      "version":  "1.0.0",
                      "description":  "Press G near base chests to auto-deposit matching inventory items",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\QuickDeposit\\Scripts\\main.lua",
-                     "sizeBytes":  8687,
-                     "sha256":  "FD770F06E22C5D0E5E76B2E97351D9AAB9CEFA0BC09D2E63EDC3A15856D07A3D",
+                     "sizeBytes":  13349,
+                     "sha256":  "ffbf23fc0df29d7a2b3994057f541070f4ebad9af6be7d1e901f835fea4c13b2",
                      "required":  false,
                      "enabledByDefault":  true
                  },
@@ -156,8 +156,8 @@
                      "version":  "1.8.11",
                      "description":  "ESC Mod Options and Configuration Interface",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\DarnMenu\\Scripts\\main.lua",
-                     "sizeBytes":  176309,
-                     "sha256":  "71A91B0A5E69C0878665CBFAF93376FED3DAF0DBFB3F7F6482B93ED858010477",
+                     "sizeBytes":  176312,
+                     "sha256":  "803d80ba0585c9f47571f17a49dfc064de2e110579f17d1542e1a96144527e96",
                      "required":  true,
                      "enabledByDefault":  true
                  },

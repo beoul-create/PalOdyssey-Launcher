@@ -3155,7 +3155,7 @@ local function tryInject(menu, attempt, waitedS)
   ExecuteWithDelay(attempt == 1 and 50 or 250, function()
     if serverDisabled then return end
     if (gens[a] or 0) ~= gen then return end
-    if not alive(menu) then return end
+    if not UI.alive(menu) then return end
     -- SUPERSEDED: the game has built a NEWER ESC menu since this one was scheduled. Injecting
     -- now would sweep the live instance and hang our widgets on a menu the player has already
     -- moved past -- the exact sweep+inject pair that ends all three 2026-07-31 crash logs. The
