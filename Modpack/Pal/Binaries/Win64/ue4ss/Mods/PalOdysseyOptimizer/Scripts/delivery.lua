@@ -161,6 +161,85 @@ local function exportLivePlayerData()
     end
 end
 
+local function resolveStaticItemId(name)
+    if not name then return "DogCoin" end
+    local clean = string.upper(string.gsub(string.gsub(tostring(name), "-", ""), " ", ""))
+    
+    local map = {
+        ["DOGCOIN"] = "DogCoin",
+        ["DOGCOIN(X2)"] = "DogCoin",
+        ["DOGCOINX2"] = "DogCoin",
+        ["MEMORYRESETDRUG"] = "Drug_ResetStatusPoint",
+        ["MEMORYRESETDRUG/STATELIXIR"] = "Drug_ResetStatusPoint",
+        ["STATELIXIR"] = "Drug_ResetStatusPoint",
+        ["POWERFRUIT"] = "Fruit_Attack",
+        ["HEALTHFRUIT"] = "Fruit_HP",
+        ["STAMINAFRUIT"] = "Fruit_SP",
+        ["SKILLFRUITCHESTT3"] = "SkillUnlock_Fire_03",
+        ["SKILLFRUITCHEST"] = "SkillUnlock_Fire_03",
+        ["ANCIENTRELICBOX"] = "AncientParts",
+        ["ANCIENTCIVPARTS"] = "AncientParts",
+        ["RAIDSLAB"] = "BossSpecialDrop",
+        ["RELICMYSTERYBOX"] = "AncientParts"
+    }
+
+    if map[clean] then return map[clean] end
+    return name
+end
+
+local function grantPlayerItem(controller, ps, rawItemName, qty)
+    local itemId = resolveStaticItemId(rawItemName)
+    local amount = math.max(1, tonumber(qty) or 1)
+    local granted = false
+
+    -- 1. Try PalPlayerInventoryData
+    pcall(function()
+        local inv = controller.InventoryData or (ps and ps.InventoryData)
+        if inv and inv:IsValid() then
+            if inv.AddItem then
+                inv:AddItem(FName(itemId), amount, true)
+                granted = true
+            elseif inv.TryAddItem then
+                inv:TryAddItem(FName(itemId), amount)
+                granted = true
+            end
+        end
+    end)
+
+    -- 2. Try PalUtility
+    if not granted then
+        pcall(function()
+            local palUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+            if palUtil and palUtil:IsValid() then
+                if palUtil.GrantItem then
+                    palUtil:GrantItem(controller, FName(itemId), amount)
+                    granted = true
+                elseif palUtil.AddPlayerItem then
+                    palUtil:AddPlayerItem(controller, FName(itemId), amount)
+                    granted = true
+                elseif palUtil.GrantPlayerItem then
+                    palUtil:GrantPlayerItem(controller, FName(itemId), amount)
+                    granted = true
+                end
+            end
+        end)
+    end
+
+    -- 3. Try Character Pawn
+    if not granted then
+        pcall(function()
+            local pawn = controller:GetPawn()
+            if pawn and pawn:IsValid() and pawn.AddItem then
+                pawn:AddItem(FName(itemId), amount)
+                granted = true
+            end
+        end)
+    end
+
+    log(string.format("Item delivery attempt for '%s' (StaticId: '%s', Qty: %d) -> Result: %s", tostring(rawItemName), itemId, amount, tostring(granted)))
+    return granted
+end
+
 local function processQueue()
     pcall(exportLivePlayerData)
 
@@ -177,6 +256,8 @@ local function processQueue()
     f:close()
 
     if #lines == 0 then return end
+
+    local okFind, controllers = pcall(FindAllOf, "PalPlayerController")
     if not okFind or not controllers or #controllers == 0 then return end
 
     local palUtil = nil
@@ -229,6 +310,12 @@ local function processQueue()
                     end
 
                     if isMatch and ps and ps:IsValid() then
+                        -- 1. Grant items if applicable
+                        if action == "Withdraw" or action == "Claim" or action == "Exchange" or action == "Gacha" then
+                            if itemCode and itemCode ~= "None" and itemCode ~= "TechnologyPoints" and itemCode ~= "AncientBossPoints" and itemCode ~= "TechPointConversion" then
+                                grantPlayerItem(controller, ps, itemCode, quantity)
+                            end
+                        end
                         -- 1. Apply Technology Points / Boss Points Modifications
                         if action == "SetTechPoints" or action == "SetPoints" then
                             local newPoints = math.max(0, techPointsDelta)
