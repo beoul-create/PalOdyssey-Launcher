@@ -45,7 +45,6 @@ local function IsDedicatedServer()
     pcall(function()
         local player = GetPlayerController()
         if not player or not player:IsValid() then
-            -- Check if running headless
             local engine = UEHelpers.GetEngine()
             if engine and engine:IsValid() and engine:GetFullName():find("Server") then
                 isServer = true
@@ -55,21 +54,57 @@ local function IsDedicatedServer()
     return isServer
 end
 
+local function LoadOrFindObject(path, className)
+    local obj = nil
+    pcall(function()
+        obj = StaticFindObject(path)
+        if (not obj or not obj:IsValid()) and StaticLoadObject then
+            local uclass = className and StaticFindObject(className) or StaticFindObject("/Script/CoreUObject.Class")
+            obj = StaticLoadObject(uclass, nil, path, nil, 0, nil, false)
+        end
+    end)
+    return obj
+end
+
 local function ResolveAssets()
     pcall(function()
         NiagaraFunctionLibrary = StaticFindObject("/Script/Niagara.Default__NiagaraFunctionLibrary")
         GameplayStatics = StaticFindObject("/Script/Engine.Default__GameplayStatics")
         
-        -- Primary SAO Cooked Package Assets
-        SAONiagaraSystem = StaticFindObject("/Game/Mods/SAODeath/NS_SAODeath.NS_SAODeath")
-        SAOSoundCue = StaticFindObject("/Game/Mods/SAODeath/A_SAODeathShatter.A_SAODeathShatter")
+        -- 1. Primary SAO Cooked Package Assets
+        SAONiagaraSystem = LoadOrFindObject("/Game/Mods/SAODeath/NS_SAODeath.NS_SAODeath", "/Script/Niagara.NiagaraSystem")
+        SAOSoundCue = LoadOrFindObject("/Game/Mods/SAODeath/A_SAODeathShatter.A_SAODeathShatter", "/Script/Engine.SoundCue")
 
-        -- Fallbacks if cooked pak is loaded dynamically or in dev
+        -- 2. Fallbacks to native high-visibility crystal/burst systems if cooked pak is mounting
         if not SAONiagaraSystem or not SAONiagaraSystem:IsValid() then
-            SAONiagaraSystem = StaticFindObject("/Game/Pal/FX/Common/Death/NS_PalDeath_Default.NS_PalDeath_Default")
+            local fallbacks = {
+                "/Game/Pal/Effect/Common/Niagara/NS_Common_Hit_01.NS_Common_Hit_01",
+                "/Game/Pal/Effect/Skill/Unique/NS_Burst_Cyan.NS_Burst_Cyan",
+                "/Game/Pal/FX/Common/Death/NS_PalDeath_Default.NS_PalDeath_Default",
+                "/Game/Pal/Effect/Common/Niagara/NS_Item_Drop_Rare.NS_Item_Drop_Rare"
+            }
+            for _, fb in ipairs(fallbacks) do
+                local candidate = LoadOrFindObject(fb, "/Script/Niagara.NiagaraSystem")
+                if candidate and candidate:IsValid() then
+                    SAONiagaraSystem = candidate
+                    break
+                end
+            end
         end
+
         if not SAOSoundCue or not SAOSoundCue:IsValid() then
-            SAOSoundCue = StaticFindObject("/Game/Pal/Sound/Common/Cue/SE_Pal_Common_Death.SE_Pal_Common_Death")
+            local soundFallbacks = {
+                "/Game/Pal/Sound/Common/Cue/SE_Pal_Common_Death.SE_Pal_Common_Death",
+                "/Game/Pal/Sound/Common/Cue/SE_Pal_Capture_Success.SE_Pal_Capture_Success",
+                "/Game/Pal/Sound/Common/Cue/SE_Common_Hit_Critical.SE_Common_Hit_Critical"
+            }
+            for _, fb in ipairs(soundFallbacks) do
+                local candidate = LoadOrFindObject(fb, "/Script/Engine.SoundBase")
+                if candidate and candidate:IsValid() then
+                    SAOSoundCue = candidate
+                    break
+                end
+            end
         end
     end)
 end
@@ -89,7 +124,7 @@ local function SpawnShatterVFX(world, location, rotation)
         local scale = { X = Config.particleScale or 1.0, Y = Config.particleScale or 1.0, Z = Config.particleScale or 1.0 }
 
         if NiagaraFunctionLibrary and NiagaraFunctionLibrary:IsValid() and SAONiagaraSystem and SAONiagaraSystem:IsValid() then
-            NiagaraFunctionLibrary:SpawnSystemAtLocation(
+            local comp = NiagaraFunctionLibrary:SpawnSystemAtLocation(
                 world,
                 SAONiagaraSystem,
                 location,
@@ -100,6 +135,29 @@ local function SpawnShatterVFX(world, location, rotation)
                 0,      -- PoolingMethod: None
                 true    -- bPreCullCheck
             )
+
+            -- Inject Vibrant SAO Cyan Emissive Parameters (#00F0FF / RGB: 0, 240, 255)
+            if comp and comp:IsValid() then
+                pcall(function()
+                    local cyanColor = { R = 0.0, G = 0.94, B = 1.0, A = 1.0 }
+                    local emissiveColor = { R = 0.0, G = 3.5, B = 4.0, A = 1.0 }
+                    
+                    if comp.SetColorParameter then
+                        comp:SetColorParameter("Color", cyanColor)
+                        comp:SetColorParameter("User.Color", cyanColor)
+                        comp:SetColorParameter("User.EmissiveColor", emissiveColor)
+                    end
+                    if comp.SetVectorParameter then
+                        comp:SetVectorParameter("User.Scale", scale)
+                    end
+                    if comp.SetFloatParameter then
+                        comp:SetFloatParameter("User.SpawnRate", Config.particleCount or 80.0)
+                        comp:SetFloatParameter("User.Lifetime", 1.4)
+                        comp:SetFloatParameter("User.Velocity", 300.0)
+                    end
+                end)
+            end
+
             Log(string.format("Spawned SAO Polygon Shatter Niagara burst at (X:%.1f, Y:%.1f, Z:%.1f)", location.X or 0, location.Y or 0, location.Z or 0))
         end
 
@@ -154,7 +212,7 @@ local function HandleCharacterDeath(character)
                 mesh:SetEnableGravity(false)
                 mesh:SetCollisionProfileName("NoCollision", false)
 
-                -- 2. Instant Mesh Visibility Cull
+                -- 2. Instant Mesh Visibility Cull (with fallback shimmer)
                 if Config.instantMeshHide then
                     mesh:SetVisibility(false, true)
                 end

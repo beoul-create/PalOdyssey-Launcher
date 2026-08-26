@@ -264,8 +264,8 @@
                      "version":  "1.0.0",
                      "description":  "Replaces vanilla ragdoll physics with instant crystalline polygon-shatter burst across all characters and Pals",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\SAODeath\\Scripts\\main.lua",
-                     "sizeBytes":  8640,
-                     "sha256":  "878AB39C38B60CCFD5028F49673BD900B10E33AAE99FE47A0BA1FD3DA556EFA5",
+                     "sizeBytes":  11366,
+                     "sha256":  "93182CB40C050635E7B15CEDE655994DE462D2993B1C4A3545E1187573621704",
                      "required":  false,
                      "enabledByDefault":  true
                  }
