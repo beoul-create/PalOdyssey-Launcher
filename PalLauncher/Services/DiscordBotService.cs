@@ -251,7 +251,6 @@ namespace PalLauncher.Services
                             }
 
                             _logService.LogSuccess($"Discord Bot logged in successfully as @{BotUsername} (24/7 Ready)!", "DiscordBot");
-                            _ = SetupChangelogRoleMessageAsync("1534308427080273990");
                         }
                         else if (eventType == "RESUMED")
                         {
@@ -3126,6 +3125,40 @@ namespace PalLauncher.Services
 
             try
             {
+                // Check if a prompt already exists in this channel to guarantee zero duplicate posts
+                try
+                {
+                    var existingResp = await _httpClient.GetAsync($"channels/{channelId}/messages?limit=25");
+                    if (existingResp.IsSuccessStatusCode)
+                    {
+                        string msgListJson = await existingResp.Content.ReadAsStringAsync();
+                        using var listDoc = JsonDocument.Parse(msgListJson);
+                        if (listDoc.RootElement.ValueKind == JsonValueKind.Array)
+                        {
+                            foreach (var m in listDoc.RootElement.EnumerateArray())
+                            {
+                                if (m.TryGetProperty("embeds", out var embArray) && embArray.ValueKind == JsonValueKind.Array)
+                                {
+                                    foreach (var emb in embArray.EnumerateArray())
+                                    {
+                                        string title = emb.TryGetProperty("title", out var tProp) ? tProp.GetString() ?? "" : "";
+                                        if (title.Contains("Changelog & Update Notifications", StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            string existingId = m.TryGetProperty("id", out var idProp) ? idProp.GetString() ?? "" : "";
+                                            _logService.LogInfo($"Changelog Notification Role prompt already exists in channel {channelId} (Message ID: {existingId}). Skipping creation.", "DiscordBot");
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logService.LogWarning($"Could not inspect existing channel messages: {ex.Message}", "DiscordBot");
+                }
+
                 _logService.LogInfo($"Deploying Changelog Reaction/Button Role prompt to channel {channelId}...", "DiscordBot");
 
                 var payload = new
