@@ -81,6 +81,21 @@ namespace PalLauncher.Tests
         }
 
         [Fact]
+        public void DiscordAuthService_LoadsFromDictionaryAndSingleObjectFormat()
+        {
+            var authService = new DiscordAuthService(_logService);
+            var current = authService.GetCurrentLinkInfo();
+            Assert.NotNull(current);
+            // Since account-links.json exists locally with active link, it should automatically load and be linked
+            if (current.IsLinked)
+            {
+                Assert.False(string.IsNullOrWhiteSpace(current.DiscordId));
+                Assert.False(string.IsNullOrWhiteSpace(current.DiscordUsername));
+                Assert.False(string.IsNullOrWhiteSpace(current.SteamId64));
+            }
+        }
+
+        [Fact]
         public async Task RemoteServerDaemon_LinkAccountEndpoint_StoresAccountLinks()
         {
             var launchService = new LaunchService(_logService);

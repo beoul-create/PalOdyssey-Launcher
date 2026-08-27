@@ -47,6 +47,10 @@ namespace PalLauncher.Services
         {
             lock (_lock)
             {
+                if (!_currentLink.IsLinked)
+                {
+                    LoadCachedLink();
+                }
                 return _currentLink;
             }
         }
@@ -55,8 +59,26 @@ namespace PalLauncher.Services
         {
             lock (_lock)
             {
+                string oldId = _currentLink.DiscordId;
                 _currentLink = new AccountLinkInfo();
-                SaveCachedLink();
+                
+                try
+                {
+                    string localDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PalLauncher");
+                    string roamingDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PalLauncher");
+
+                    string authLocal = Path.Combine(localDir, "discord-auth.json");
+                    string authRoaming = Path.Combine(roamingDir, "discord-auth.json");
+                    if (File.Exists(authLocal)) File.Delete(authLocal);
+                    if (File.Exists(authRoaming)) File.Delete(authRoaming);
+
+                    if (!string.IsNullOrWhiteSpace(oldId))
+                    {
+                        RemoveFromAccountLinksFile(Path.Combine(localDir, "account-links.json"), oldId);
+                        RemoveFromAccountLinksFile(Path.Combine(roamingDir, "account-links.json"), oldId);
+                    }
+                }
+                catch { }
             }
             _logService.LogInfo("Account link cleared.", "DiscordAuth");
         }
@@ -230,35 +252,124 @@ namespace PalLauncher.Services
 
         private void LoadCachedLink()
         {
-            lock (_lock)
+            try
             {
-                try
+                string localApp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PalLauncher");
+                string roamingApp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PalLauncher");
+
+                string[] candidateFiles = new[]
                 {
-                    if (File.Exists(_cacheFilePath))
+                    Path.Combine(localApp, "discord-auth.json"),
+                    Path.Combine(roamingApp, "discord-auth.json"),
+                    Path.Combine(localApp, "account-links.json"),
+                    Path.Combine(roamingApp, "account-links.json")
+                };
+
+                foreach (var path in candidateFiles)
+                {
+                    if (!File.Exists(path)) continue;
+                    string json = File.ReadAllText(path);
+                    if (string.IsNullOrWhiteSpace(json)) continue;
+
+                    // 1. Try single AccountLinkInfo object format
+                    try
                     {
-                        string json = File.ReadAllText(_cacheFilePath);
-                        var info = JsonSerializer.Deserialize<AccountLinkInfo>(json);
-                        if (info != null && info.IsLinked)
+                        var single = JsonSerializer.Deserialize<AccountLinkInfo>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                        if (single != null && single.IsLinked && !string.IsNullOrWhiteSpace(single.DiscordId))
                         {
-                            _currentLink = info;
+                            _currentLink = single;
+                            return;
                         }
                     }
+                    catch { }
+
+                    // 2. Try Dictionary<string, AccountLinkInfo> format (used by RemoteDaemon & EconomyService)
+                    try
+                    {
+                        var dict = JsonSerializer.Deserialize<Dictionary<string, AccountLinkInfo>>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                        if (dict != null && dict.Count > 0)
+                        {
+                            foreach (var item in dict.Values)
+                            {
+                                if (item != null && item.IsLinked && !string.IsNullOrWhiteSpace(item.DiscordId))
+                                {
+                                    _currentLink = item;
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    catch { }
                 }
-                catch { }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to load cached Discord link: {ex.Message}", "DiscordAuth");
             }
         }
 
         private void SaveCachedLink()
         {
-            lock (_lock)
+            try
             {
-                try
+                string localDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PalLauncher");
+                string roamingDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PalLauncher");
+                Directory.CreateDirectory(localDir);
+                Directory.CreateDirectory(roamingDir);
+
+                string singleJson = JsonSerializer.Serialize(_currentLink, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(Path.Combine(localDir, "discord-auth.json"), singleJson);
+                File.WriteAllText(Path.Combine(roamingDir, "discord-auth.json"), singleJson);
+
+                // Maintain Dictionary in account-links.json for Economy & RemoteDaemon compatibility
+                if (_currentLink.IsLinked && !string.IsNullOrWhiteSpace(_currentLink.DiscordId))
                 {
-                    string json = JsonSerializer.Serialize(_currentLink, new JsonSerializerOptions { WriteIndented = true });
-                    File.WriteAllText(_cacheFilePath, json);
+                    UpdateAccountLinksFile(Path.Combine(localDir, "account-links.json"));
+                    UpdateAccountLinksFile(Path.Combine(roamingDir, "account-links.json"));
                 }
-                catch { }
             }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to persist Discord link: {ex.Message}", "DiscordAuth");
+            }
+        }
+
+        private void UpdateAccountLinksFile(string filePath)
+        {
+            try
+            {
+                var dict = new Dictionary<string, AccountLinkInfo>();
+                if (File.Exists(filePath))
+                {
+                    try
+                    {
+                        string existing = File.ReadAllText(filePath);
+                        dict = JsonSerializer.Deserialize<Dictionary<string, AccountLinkInfo>>(existing, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
+                    }
+                    catch { }
+                }
+
+                dict[_currentLink.DiscordId] = _currentLink;
+                string updatedJson = JsonSerializer.Serialize(dict, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(filePath, updatedJson);
+            }
+            catch { }
+        }
+
+        private void RemoveFromAccountLinksFile(string filePath, string discordId)
+        {
+            try
+            {
+                if (!File.Exists(filePath)) return;
+                string existing = File.ReadAllText(filePath);
+                var dict = JsonSerializer.Deserialize<Dictionary<string, AccountLinkInfo>>(existing, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                if (dict != null && dict.Remove(discordId))
+                {
+                    string updatedJson = JsonSerializer.Serialize(dict, new JsonSerializerOptions { WriteIndented = true });
+                    File.WriteAllText(filePath, updatedJson);
+                }
+            }
+            catch { }
         }
     }
 }
