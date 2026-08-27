@@ -1,8 +1,10 @@
 ---@diagnostic disable: undefined-global
 -- ============================================================================
--- WorldBossAuraSystem: Periodic Raid Boss Spawner with Aura VFX & Discord
--- Spawns 3x scale, 100x HP, 2x stat bosses at random map coordinates.
--- Downsizes to 2x scale with permanent 2x talents on capture.
+-- WorldBossAuraSystem: World Boss & Wild Aura Engine for PalOdyssey
+-- 1. Periodic World Bosses: 1-hour interval, strictly "World Boss" Neon Red aura,
+--    3x scale, 100x HP, 2x ATK/DEF, 10m despawn, on-capture 2x scale + 2x stats.
+-- 2. Wild Auras (Corrupted & Celestial): 0.01% chance on normal wild Pal spawns,
+--    2x Move Speed + 2x Work Speed (retained on capture).
 -- 100% Original Custom Script for PalOdyssey
 -- ============================================================================
 
@@ -12,11 +14,12 @@ if not ok or type(Config) ~= "table" then
         enabled = true,
         log = true,
 
-        -- Spawn Timing
-        SpawnIntervalSeconds = 3600,    -- 1 hour between spawns (Periodic Raid Event)
+        -- ====================================================================
+        -- 1. WORLD BOSS RAID CONFIGURATION
+        -- ====================================================================
+        SpawnIntervalSeconds = 3600,    -- 1 hour between raid boss spawns
         DespawnSeconds       = 600,     -- 10 minutes despawn window if uncaptured
 
-        -- Boss Roster (base Pal character IDs)
         BossPals = {
             "Foxparks",
             "Orserk",
@@ -25,7 +28,6 @@ if not ok or type(Config) ~= "table" then
             "Anubis"
         },
 
-        -- Randomized Spawn Coordinates
         SpawnPoints = {
             { Name = "Grassy Behemoth Hills",   X = 172000.0,  Y = -420000.0, Z = 3500.0  },
             { Name = "Desolate Dunes",          X = -120000.0, Y = -180000.0, Z = 4200.0  },
@@ -34,14 +36,8 @@ if not ok or type(Config) ~= "table" then
             { Name = "Frozen Ravine",           X = -250000.0, Y = 100000.0,  Z = 8500.0  }
         },
 
-        -- Aura Types & Stencil Values (Custom Depth Stencil for vivid neon visual outlines)
-        Auras = {
-            { Name = "World Boss", StencilValue = 252, GlowColor = "NeonRed" },
-            { Name = "Corrupted",  StencilValue = 253, GlowColor = "NeonPurple" },
-            { Name = "Celestial",  StencilValue = 254, GlowColor = "NeonGold" }
-        },
+        BossAura = { Name = "World Boss", StencilValue = 252, GlowColor = "NeonRed" },
 
-        -- Boss Stat Multipliers
         BossScale      = 3.0,    -- Actor scale for spawned boss
         CapturedScale  = 2.0,    -- Actor scale after capture
         HpMultiplier   = 100,    -- HP multiplier (100x base)
@@ -49,9 +45,21 @@ if not ok or type(Config) ~= "table" then
         DefMultiplier  = 2,      -- Defense multiplier
         CapturedTalent = 200,    -- Talent IV value for captured boss (200 = 2x permanent)
 
-        -- Integration
-        DaemonPort   = 8215,     -- RemoteServerDaemon port for Discord announcements
-        NotifyToast  = true      -- In-game DarnToasts notifications
+        -- ====================================================================
+        -- 2. WILD AURA CONFIGURATION (Corrupted & Celestial)
+        -- ====================================================================
+        WildAuraChance = 0.0001, -- 0.01% (1 in 10,000) chance on normal wild Pal spawns
+
+        WildAuras = {
+            { Name = "Corrupted", StencilValue = 253, GlowColor = "NeonPurple", SpeedMult = 2.0, WorkMult = 2.0 },
+            { Name = "Celestial", StencilValue = 254, GlowColor = "NeonGold",   SpeedMult = 2.0, WorkMult = 2.0 }
+        },
+
+        -- ====================================================================
+        -- 3. INTEGRATION
+        -- ====================================================================
+        DaemonPort  = 8215,     -- RemoteServerDaemon port for Discord announcements
+        NotifyToast = true      -- In-game DarnToasts notifications
     }
 end
 
@@ -71,17 +79,18 @@ if not Config.enabled then
 end
 
 print("==========================================================")
-print("  WorldBossAuraSystem: Periodic Raid Boss Engine Active")
+print("  WorldBossAuraSystem: Raid & Wild Aura Engine Active")
 print("==========================================================")
 
 -- ============================================================================
--- State
+-- State Tracking
 -- ============================================================================
 
-local ActiveBosses = {}  -- [ptrKey] = { PalName, Aura, SpawnTime, ActorRef }
+local ActiveBosses    = {}  -- [ptrKey] = { PalName, Aura, SpawnTime, ActorRef }
+local ActiveWildAuras = {}  -- [ptrKey] = { PalName, Aura, SpeedMult, WorkMult, ActorRef }
 
 -- ============================================================================
--- 1. DARNTOAST IN-GAME NOTIFICATION
+-- 1. DARNTOAST IN-GAME NOTIFICATIONS
 -- ============================================================================
 
 local function SendBossToast(palName, auraName, locationName)
@@ -91,34 +100,49 @@ local function SendBossToast(palName, auraName, locationName)
         package.path = SDIR .. "../../DarnToasts/Scripts/?.lua;" .. package.path
         local Toast = require("ToastLib").new("WorldBossAura")
         if Toast and Toast.notify then
-            local r, g, b = 1.0, 0.05, 0.1 -- Glowing Neon Red outline for World Boss
-            if auraName == "Corrupted" then r, g, b = 0.6, 0.0, 1.0 end
-            if auraName == "Celestial" then r, g, b = 1.0, 0.84, 0.0 end
             Toast.notify(
                 string.format("⚠️ RAID BOSS: %s (%s Aura) at %s!", palName, auraName, locationName),
-                r, g, b
+                1.0, 0.05, 0.1 -- Glowing Neon Red outline
             )
         end
     end)
 end
 
-local function SendCaptureToast(palName)
+local function SendWildAuraToast(palName, auraName)
     if not Config.NotifyToast then return end
     pcall(function()
         local SDIR = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", ""))
         package.path = SDIR .. "../../DarnToasts/Scripts/?.lua;" .. package.path
         local Toast = require("ToastLib").new("WorldBossAura")
         if Toast and Toast.notify then
+            local r, g, b = 0.6, 0.0, 1.0 -- Neon Purple for Corrupted
+            if auraName == "Celestial" then r, g, b = 1.0, 0.84, 0.0 end -- Radiant Gold for Celestial
             Toast.notify(
-                string.format("🏆 BOSS CAPTURED: %s has been tamed!", palName),
-                0.0, 1.0, 0.5
+                string.format("✨ RARE WILD PAL: %s with %s Aura (2x Move & Work Speed)!", palName or "Pal", auraName),
+                r, g, b
             )
         end
     end)
 end
 
+local function SendCaptureToast(palName, isBoss, auraName)
+    if not Config.NotifyToast then return end
+    pcall(function()
+        local SDIR = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", ""))
+        package.path = SDIR .. "../../DarnToasts/Scripts/?.lua;" .. package.path
+        local Toast = require("ToastLib").new("WorldBossAura")
+        if Toast and Toast.notify then
+            if isBoss then
+                Toast.notify(string.format("🏆 RAID BOSS CAPTURED: %s has been tamed (2x Scale & Stats)!", palName), 0.0, 1.0, 0.5)
+            else
+                Toast.notify(string.format("✨ %s PAL TAMED: %s retains permanent 2x Move & Work Speed!", auraName or "Aura", palName), 0.0, 0.8, 1.0)
+            end
+        end
+    end)
+end
+
 -- ============================================================================
--- 2. DISCORD ANNOUNCEMENT VIA REMOTE DAEMON HTTP API
+-- 2. DISCORD ANNOUNCEMENTS VIA REMOTE DAEMON HTTP API
 -- ============================================================================
 
 local function NotifyDaemonSpawn(palName, locationName, auraName, x, y)
@@ -129,8 +153,6 @@ local function NotifyDaemonSpawn(palName, locationName, auraName, x, y)
         )
         local url = string.format("http://127.0.0.1:%d/api/world-boss", Config.DaemonPort)
 
-        -- Use UE4SS HTTP or console bridge
-        -- Primary: Try engine HTTP module if available
         local httpOk, http = pcall(require, "socket.http")
         if httpOk and http then
             pcall(function()
@@ -145,18 +167,12 @@ local function NotifyDaemonSpawn(palName, locationName, auraName, x, y)
                 }
             end)
         else
-            -- Fallback: Fire-and-forget via console cURL command
             local cmd = string.format(
                 'curl -s -X POST -H "Content-Type: application/json" -d "%s" %s',
                 payload:gsub('"', '\\"'), url
             )
-            pcall(function()
-                ExecuteConsoleCommand(nil, cmd, nil)
-            end)
-            -- Additional fallback: os.execute
-            pcall(function()
-                os.execute('start /B ' .. cmd .. ' >nul 2>&1')
-            end)
+            pcall(function() ExecuteConsoleCommand(nil, cmd, nil) end)
+            pcall(function() os.execute('start /B ' .. cmd .. ' >nul 2>&1') end)
         end
 
         Log(string.format("Notified daemon: %s spawn at %s (%s aura)", palName, locationName, auraName))
@@ -197,98 +213,141 @@ local function NotifyDaemonCapture(palName, capturedBy)
 end
 
 -- ============================================================================
--- 3. AURA & VISUAL ENHANCEMENT SYSTEM (Custom Depth Stencil)
+-- 3. AURA ATTACHMENT SYSTEM (Custom Depth Stencil Outline)
 -- ============================================================================
 
-local function AttachBossAura(pal, auraConfig)
+local function AttachAuraStencil(pal, stencilValue)
     if not pal or not pal:IsValid() then return end
-
     pcall(function()
-        -- Apply Custom Depth Stencil rendering for glowing outline effect
         local meshComp = pal.Mesh
         if meshComp and meshComp:IsValid() then
             meshComp.bRenderCustomDepth = true
-            meshComp.CustomDepthStencilValue = auraConfig.StencilValue or 252
-            Log(string.format("Applied %s aura (Stencil=%d) to boss mesh.", auraConfig.Name, auraConfig.StencilValue))
+            meshComp.CustomDepthStencilValue = stencilValue or 252
         end
     end)
 end
 
 -- ============================================================================
--- 4. BOSS STAT SCALING (100x HP, 2x Attack/Defense)
+-- 4. SPEED & WORK STAT BUFFS (2x Move Speed, 2x Work Speed)
+-- ============================================================================
+
+local function ApplySpeedAndWorkBuffs(pal, speedMult, workMult)
+    if not pal or not pal:IsValid() then return end
+    pcall(function()
+        -- 1. Scale Movement Speeds
+        local moveComp = pal.CharacterMovement
+        if moveComp and moveComp:IsValid() then
+            if moveComp.MaxWalkSpeed then
+                moveComp.MaxWalkSpeed = moveComp.MaxWalkSpeed * speedMult
+            end
+            if moveComp.MaxCustomMovementSpeed then
+                moveComp.MaxCustomMovementSpeed = moveComp.MaxCustomMovementSpeed * speedMult
+            end
+        end
+
+        -- 2. Scale Work / Crafting Speeds
+        local paramComp = pal.CharacterParameterComponent
+        if paramComp and paramComp:IsValid() then
+            if paramComp.SetCraftSpeed then
+                local curCraft = paramComp:GetCraftSpeed() or 100
+                paramComp:SetCraftSpeed(math.floor(curCraft * workMult))
+            end
+            if paramComp.SetWorkSpeed then
+                local curWork = paramComp:GetWorkSpeed() or 100
+                paramComp:SetWorkSpeed(math.floor(curWork * workMult))
+            end
+        end
+    end)
+end
+
+-- ============================================================================
+-- 5. WILD AURA PAL ENHANCEMENT (0.01% Spawn Chance: Corrupted / Celestial)
+-- ============================================================================
+
+local function EnhanceWildPal(pal, auraConfig)
+    if not pal or not pal:IsValid() then return end
+    local ptrKey = tostring(pal:GetAddress())
+    if ActiveWildAuras[ptrKey] or ActiveBosses[ptrKey] then return end
+
+    pcall(function()
+        local palName = "Wild Pal"
+        local charParam = pal.CharacterParameterComponent
+        if charParam and charParam:IsValid() and charParam.GetCharacterID then
+            local id = charParam:GetCharacterID()
+            if id and id ~= "" then palName = tostring(id) end
+        end
+
+        -- Apply Stencil VFX (Neon Purple 253 or Radiant Gold 254)
+        AttachAuraStencil(pal, auraConfig.StencilValue)
+
+        -- Apply 2x Move Speed and 2x Work Speed
+        ApplySpeedAndWorkBuffs(pal, auraConfig.SpeedMult or 2.0, auraConfig.WorkMult or 2.0)
+
+        -- Track as active wild aura Pal
+        ActiveWildAuras[ptrKey] = {
+            PalName   = palName,
+            Aura      = auraConfig,
+            SpeedMult = auraConfig.SpeedMult or 2.0,
+            WorkMult  = auraConfig.WorkMult or 2.0,
+            ActorRef  = pal
+        }
+
+        Log(string.format("✨ [WILD AURA] Generated %s (%s Aura) -> 2x Move Speed, 2x Work Speed (Ptr: %s)",
+            palName, auraConfig.Name, ptrKey))
+
+        SendWildAuraToast(palName, auraConfig.Name)
+    end)
+end
+
+-- ============================================================================
+-- 6. PERIODIC WORLD BOSS SPAWNER (Strictly "World Boss" Neon Red Aura)
 -- ============================================================================
 
 local function ScaleBossStats(pal)
     if not pal or not pal:IsValid() then return end
-
     pcall(function()
         local paramComp = pal.CharacterParameterComponent
         if paramComp and paramComp:IsValid() then
-            -- Scale HP
             if paramComp.GetMaxHP and paramComp.SetMaxHP and paramComp.SetHP then
                 local baseMaxHP = paramComp:GetMaxHP()
                 if baseMaxHP and baseMaxHP > 0 then
                     local bossHP = baseMaxHP * Config.HpMultiplier
                     paramComp:SetMaxHP(bossHP)
                     paramComp:SetHP(bossHP)
-                    Log(string.format("  HP: %d -> %d (x%d)", baseMaxHP, bossHP, Config.HpMultiplier))
                 end
             end
-
-            -- Scale Attack
             if paramComp.GetAttack and paramComp.SetAttack then
                 local baseAtk = paramComp:GetAttack()
                 if baseAtk and baseAtk > 0 then
-                    local bossAtk = baseAtk * Config.AtkMultiplier
-                    paramComp:SetAttack(bossAtk)
-                    Log(string.format("  ATK: %d -> %d (x%d)", baseAtk, bossAtk, Config.AtkMultiplier))
+                    paramComp:SetAttack(baseAtk * Config.AtkMultiplier)
                 end
             end
-
-            -- Scale Defense
             if paramComp.GetDefense and paramComp.SetDefense then
                 local baseDef = paramComp:GetDefense()
                 if baseDef and baseDef > 0 then
-                    local bossDef = baseDef * Config.DefMultiplier
-                    paramComp:SetDefense(bossDef)
-                    Log(string.format("  DEF: %d -> %d (x%d)", baseDef, bossDef, Config.DefMultiplier))
+                    paramComp:SetDefense(baseDef * Config.DefMultiplier)
                 end
             end
         end
     end)
 end
 
--- ============================================================================
--- 5. PERIODIC WORLD BOSS SPAWNER
--- ============================================================================
-
 local function SpawnWorldBoss()
     pcall(function()
-        -- Select random spawn point
         local spawnIndex = math.random(#Config.SpawnPoints)
         local targetLocation = Config.SpawnPoints[spawnIndex]
-
-        -- Select random boss Pal
         local selectedPal = Config.BossPals[math.random(#Config.BossPals)]
-
-        -- Select random aura
-        local selectedAura = Config.Auras[math.random(#Config.Auras)]
+        local bossAura = Config.BossAura -- Strictly "World Boss" Neon Red
 
         Log(string.format("=== SPAWNING WORLD BOSS: %s (%s Aura) at %s ===",
-            selectedPal, selectedAura.Name, targetLocation.Name))
+            selectedPal, bossAura.Name, targetLocation.Name))
 
-        -- Attempt to spawn Pal character using UE4SS spawning APIs
         local spawnedPal = nil
 
-        -- Method 1: SpawnPalCharacter (if available via game API)
         pcall(function()
             if SpawnPalCharacter then
                 local spawnTransform = {
-                    Translation = {
-                        X = targetLocation.X,
-                        Y = targetLocation.Y,
-                        Z = targetLocation.Z
-                    },
+                    Translation = { X = targetLocation.X, Y = targetLocation.Y, Z = targetLocation.Z },
                     Rotation = { Pitch = 0, Yaw = math.random(0, 360), Roll = 0, W = 1 },
                     Scale3D = { X = Config.BossScale, Y = Config.BossScale, Z = Config.BossScale }
                 }
@@ -296,146 +355,72 @@ local function SpawnWorldBoss()
             end
         end)
 
-        -- Method 2: FindFirstOf + World context spawning
         if not spawnedPal or (spawnedPal and not spawnedPal:IsValid()) then
             pcall(function()
                 local gameMode = FindFirstOf("PalGameMode")
-                if gameMode and gameMode:IsValid() then
-                    local spawner = gameMode.PalSpawner
-                    if spawner and spawner:IsValid() and spawner.SpawnPalByName then
-                        spawnedPal = spawner:SpawnPalByName(
-                            selectedPal,
-                            targetLocation.X, targetLocation.Y, targetLocation.Z,
-                            0, -- Level (0 = use default scaling)
-                            false -- Not owned by player
-                        )
-                    end
+                if gameMode and gameMode:IsValid() and gameMode.PalSpawner then
+                    spawnedPal = gameMode.PalSpawner:SpawnPalByName(
+                        selectedPal,
+                        targetLocation.X, targetLocation.Y, targetLocation.Z,
+                        0, false
+                    )
                 end
             end)
         end
 
-        -- Method 3: Console command spawning as fallback
         if not spawnedPal or (type(spawnedPal) == "userdata" and not spawnedPal:IsValid()) then
             pcall(function()
-                local spawnCmd = string.format(
-                    "SpawnPal %s %f %f %f",
-                    selectedPal, targetLocation.X, targetLocation.Y, targetLocation.Z
-                )
+                local spawnCmd = string.format("SpawnPal %s %f %f %f", selectedPal, targetLocation.X, targetLocation.Y, targetLocation.Z)
                 local KismetSystemLibrary = StaticFindObject("/Script/Engine.Default__KismetSystemLibrary")
                 local pc = GetPlayerController()
                 if KismetSystemLibrary and KismetSystemLibrary:IsValid() and pc and pc:IsValid() then
                     KismetSystemLibrary:ExecuteConsoleCommand(pc, spawnCmd, nil)
-                    Log("Spawned boss via console command fallback.")
                 end
             end)
         end
 
-        -- Post-spawn enhancement: Hook into newly spawned PalCharacter
-        -- Use NotifyOnNewObject with a short-lived capture window
-        local captureWindow = true
-        local captureTimer = 0
-
-        -- Register a temporary listener for the next PalCharacter spawns
-        -- to identify and enhance our boss
-        local function TryEnhanceBoss(pal)
-            if not captureWindow then return end
+        local function EnhanceBossInstance(pal)
             if not pal or not pal:IsValid() then return end
-
             pcall(function()
-                local palName = ""
-                local charParam = pal.CharacterParameterComponent
-                if charParam and charParam:IsValid() and charParam.GetCharacterID then
-                    palName = tostring(charParam:GetCharacterID() or "")
+                if pal.SetActorScale3D then
+                    pal:SetActorScale3D({ X = Config.BossScale, Y = Config.BossScale, Z = Config.BossScale })
                 end
+                ScaleBossStats(pal)
+                AttachAuraStencil(pal, bossAura.StencilValue)
 
-                -- Check if this matches our selected boss (by proximity to spawn point)
-                local palLoc = pal:K2_GetActorLocation()
-                if palLoc then
-                    local dx = palLoc.X - targetLocation.X
-                    local dy = palLoc.Y - targetLocation.Y
-                    local dz = palLoc.Z - targetLocation.Z
-                    local dist = math.sqrt(dx*dx + dy*dy + dz*dz)
+                local ptrKey = tostring(pal:GetAddress())
+                ActiveBosses[ptrKey] = {
+                    PalName   = selectedPal,
+                    Aura      = bossAura,
+                    Location  = targetLocation,
+                    SpawnTime = os.time(),
+                    ActorRef  = pal
+                }
 
-                    -- If spawned within 500 units of target, this is our boss
-                    if dist < 500.0 then
-                        captureWindow = false -- Only enhance one
-
-                        -- Set actor scale
-                        if pal.SetActorScale3D then
-                            pal:SetActorScale3D({
-                                X = Config.BossScale,
-                                Y = Config.BossScale,
-                                Z = Config.BossScale
-                            })
-                        end
-
-                        -- Apply stat scaling
-                        ScaleBossStats(pal)
-
-                        -- Apply aura VFX
-                        AttachBossAura(pal, selectedAura)
-
-                        -- Track as active boss
-                        local ptrKey = tostring(pal:GetAddress())
-                        ActiveBosses[ptrKey] = {
-                            PalName   = selectedPal,
-                            Aura      = selectedAura,
-                            Location  = targetLocation,
-                            SpawnTime = os.time(),
-                            ActorRef  = pal
-                        }
-
-                        Log(string.format("Boss enhanced: %s (Aura: %s, Scale: %.1fx, HP: x%d)",
-                            selectedPal, selectedAura.Name, Config.BossScale, Config.HpMultiplier))
-
-                        -- Send in-game toast
-                        SendBossToast(selectedPal, selectedAura.Name, targetLocation.Name)
-
-                        -- Notify C# daemon for Discord announcement
-                        NotifyDaemonSpawn(selectedPal, targetLocation.Name, selectedAura.Name,
-                            targetLocation.X, targetLocation.Y)
-                    end
-                end
+                Log(string.format("World Boss active: %s (Scale: %.1fx, HP: x%d)", selectedPal, Config.BossScale, Config.HpMultiplier))
+                SendBossToast(selectedPal, bossAura.Name, targetLocation.Name)
+                NotifyDaemonSpawn(selectedPal, targetLocation.Name, bossAura.Name, targetLocation.X, targetLocation.Y)
             end)
         end
 
-        -- If we got a direct reference, enhance immediately
         if spawnedPal and type(spawnedPal) == "userdata" and spawnedPal:IsValid() then
-            captureWindow = false
-
-            if spawnedPal.SetActorScale3D then
-                spawnedPal:SetActorScale3D({
-                    X = Config.BossScale,
-                    Y = Config.BossScale,
-                    Z = Config.BossScale
-                })
-            end
-
-            ScaleBossStats(spawnedPal)
-            AttachBossAura(spawnedPal, selectedAura)
-
-            local ptrKey = tostring(spawnedPal:GetAddress())
-            ActiveBosses[ptrKey] = {
-                PalName   = selectedPal,
-                Aura      = selectedAura,
-                Location  = targetLocation,
-                SpawnTime = os.time(),
-                ActorRef  = spawnedPal
-            }
-
-            Log(string.format("Boss enhanced (direct ref): %s (Aura: %s)", selectedPal, selectedAura.Name))
-            SendBossToast(selectedPal, selectedAura.Name, targetLocation.Name)
-            NotifyDaemonSpawn(selectedPal, targetLocation.Name, selectedAura.Name,
-                targetLocation.X, targetLocation.Y)
+            EnhanceBossInstance(spawnedPal)
         else
-            -- Fallback: Listen for new PalCharacter objects in the next 5 seconds
             ExecuteWithDelay(500, function()
                 pcall(function()
                     local allPals = FindAllOf("PalCharacter")
                     if allPals then
                         for _, pal in ipairs(allPals) do
-                            TryEnhanceBoss(pal)
-                            if not captureWindow then break end
+                            if pal and pal:IsValid() then
+                                local loc = pal:K2_GetActorLocation()
+                                if loc then
+                                    local dx, dy, dz = loc.X - targetLocation.X, loc.Y - targetLocation.Y, loc.Z - targetLocation.Z
+                                    if math.sqrt(dx*dx + dy*dy + dz*dz) < 600.0 then
+                                        EnhanceBossInstance(pal)
+                                        break
+                                    end
+                                end
+                            end
                         end
                     end
                 end)
@@ -445,95 +430,101 @@ local function SpawnWorldBoss()
 end
 
 -- ============================================================================
--- 6. CAPTURE HOOK (Downsize to 2x Scale, Permanent 2x Talent IVs)
+-- 7. DYNAMIC WILD PAL SPAWN LISTENER (0.01% Corrupted / Celestial Aura Roll)
 -- ============================================================================
 
-local function OnBossCaptured(pal, playerActor)
-    if not pal or not pal:IsValid() then return end
+pcall(function()
+    NotifyOnNewObject("/Script/Pal.PalCharacter", function(pal)
+        ExecuteWithDelay(350, function()
+            if not pal or not pal:IsValid() then return end
+            local ptrKey = tostring(pal:GetAddress())
+            if ActiveBosses[ptrKey] or ActiveWildAuras[ptrKey] then return end
 
-    local ptrKey = tostring(pal:GetAddress())
-    local bossInfo = ActiveBosses[ptrKey]
-    if not bossInfo then return end -- Not a tracked boss
-
-    pcall(function()
-        Log(string.format("=== BOSS CAPTURED: %s (%s Aura) ===", bossInfo.PalName, bossInfo.Aura.Name))
-
-        -- 1. Downsize to captured scale (2x)
-        if pal.SetActorScale3D then
-            pal:SetActorScale3D({
-                X = Config.CapturedScale,
-                Y = Config.CapturedScale,
-                Z = Config.CapturedScale
-            })
-            Log(string.format("  Scale: %.1fx -> %.1fx", Config.BossScale, Config.CapturedScale))
-        end
-
-        -- 2. Normalize HP and apply permanent 2x talent IVs
-        local individualParam = nil
-        pcall(function()
-            if pal.GetIndividualParameter then
-                individualParam = pal:GetIndividualParameter()
+            -- Roll 0.01% chance (1 in 10,000)
+            if math.random() <= (Config.WildAuraChance or 0.0001) then
+                local selectedWildAura = Config.WildAuras[math.random(#Config.WildAuras)]
+                EnhanceWildPal(pal, selectedWildAura)
             end
         end)
+    end)
+    Log("Wild Aura spawn listener initialized (0.01% chance for Corrupted/Celestial).")
+end)
 
-        if individualParam and individualParam:IsValid() then
-            pcall(function()
-                if individualParam.SetTalentHP then
-                    individualParam:SetTalentHP(Config.CapturedTalent)
-                end
-                if individualParam.SetTalentShotAttack then
-                    individualParam:SetTalentShotAttack(Config.CapturedTalent)
-                end
-                if individualParam.SetTalentDefense then
-                    individualParam:SetTalentDefense(Config.CapturedTalent)
-                end
-                Log(string.format("  Talents set to: HP=%d, ATK=%d, DEF=%d",
-                    Config.CapturedTalent, Config.CapturedTalent, Config.CapturedTalent))
-            end)
-        end
+-- ============================================================================
+-- 8. CAPTURE HOOK (Boss Downsizing & Wild Aura Permanent Retention)
+-- ============================================================================
 
-        -- 3. Reset HP to proper 2x base (not 100x)
+local function HandlePalCaptured(pal, playerActor)
+    if not pal or not pal:IsValid() then return end
+    local ptrKey = tostring(pal:GetAddress())
+
+    -- A. Check if it's a World Boss
+    local bossInfo = ActiveBosses[ptrKey]
+    if bossInfo then
         pcall(function()
+            Log(string.format("=== RAID BOSS CAPTURED: %s ===", bossInfo.PalName))
+
+            -- 1. Downsize to 2x scale
+            if pal.SetActorScale3D then
+                pal:SetActorScale3D({ X = Config.CapturedScale, Y = Config.CapturedScale, Z = Config.CapturedScale })
+            end
+
+            -- 2. Permanent 2x IV Talents
+            local indParam = pal.GetIndividualParameter and pal:GetIndividualParameter() or nil
+            if indParam and indParam:IsValid() then
+                pcall(function()
+                    if indParam.SetTalentHP then indParam:SetTalentHP(Config.CapturedTalent) end
+                    if indParam.SetTalentShotAttack then indParam:SetTalentShotAttack(Config.CapturedTalent) end
+                    if indParam.SetTalentDefense then indParam:SetTalentDefense(Config.CapturedTalent) end
+                end)
+            end
+
+            -- 3. Normalize HP
             local paramComp = pal.CharacterParameterComponent
             if paramComp and paramComp:IsValid() then
-                if paramComp.GetMaxHP and paramComp.SetMaxHP and paramComp.SetHP then
+                pcall(function()
                     local currentMax = paramComp:GetMaxHP()
                     if currentMax and currentMax > 0 then
-                        -- Divide by HP multiplier, multiply by ATK multiplier to get 2x base
-                        local normalizedHP = math.floor(currentMax / Config.HpMultiplier * Config.AtkMultiplier)
-                        paramComp:SetMaxHP(normalizedHP)
-                        paramComp:SetHP(normalizedHP)
-                        Log(string.format("  HP normalized: %d -> %d", currentMax, normalizedHP))
+                        local normHP = math.floor(currentMax / Config.HpMultiplier * Config.AtkMultiplier)
+                        paramComp:SetMaxHP(normHP)
+                        paramComp:SetHP(normHP)
                     end
-                end
+                end)
             end
-        end)
 
-        -- 4. Determine capturer name
-        local capturerName = "Unknown Pioneer"
+            -- 4. Player name & announcements
+            local capturerName = "Unknown Pioneer"
+            if playerActor and playerActor:IsValid() and playerActor.PlayerState then
+                pcall(function()
+                    local name = playerActor.PlayerState:GetPlayerName()
+                    if name and name ~= "" then capturerName = tostring(name) end
+                end)
+            end
+
+            SendCaptureToast(bossInfo.PalName, true, "World Boss")
+            NotifyDaemonCapture(bossInfo.PalName, capturerName)
+            ActiveBosses[ptrKey] = nil
+        end)
+        return
+    end
+
+    -- B. Check if it's a Wild Aura Pal (Corrupted / Celestial)
+    local wildInfo = ActiveWildAuras[ptrKey]
+    if wildInfo then
         pcall(function()
-            if playerActor and playerActor:IsValid() then
-                local playerState = playerActor.PlayerState
-                if playerState and playerState:IsValid() and playerState.GetPlayerName then
-                    local name = playerState:GetPlayerName()
-                    if name and name ~= "" then
-                        capturerName = tostring(name)
-                    end
-                end
-            end
+            Log(string.format("=== WILD AURA PAL CAPTURED: %s (%s Aura) ===", wildInfo.PalName, wildInfo.Aura.Name))
+
+            -- Re-affirm 2x Move Speed and 2x Work Speed on captured instance
+            ApplySpeedAndWorkBuffs(pal, wildInfo.SpeedMult or 2.0, wildInfo.WorkMult or 2.0)
+            AttachAuraStencil(pal, wildInfo.Aura.StencilValue)
+
+            SendCaptureToast(wildInfo.PalName, false, wildInfo.Aura.Name)
+            -- Keep in ActiveWildAuras to track persistent buffs across sessions
         end)
-
-        -- 5. Announce
-        SendCaptureToast(bossInfo.PalName)
-        NotifyDaemonCapture(bossInfo.PalName, capturerName)
-
-        -- 6. Remove from active tracking
-        ActiveBosses[ptrKey] = nil
-        Log(string.format("Boss '%s' removed from active tracking. Captured by: %s", bossInfo.PalName, capturerName))
-    end)
+        return
+    end
 end
 
--- Register capture hook (with pcall guard for version compatibility)
 pcall(function()
     RegisterHook("/Script/Pal.PalCaptureSubsystem:OnCaptureSuccess", function(Context, TargetPal, PlayerActor)
         ExecuteInGameThread(function()
@@ -541,13 +532,11 @@ pcall(function()
             local player = nil
             pcall(function() pal = TargetPal:get() end)
             pcall(function() player = PlayerActor:get() end)
-            OnBossCaptured(pal, player)
+            HandlePalCaptured(pal, player)
         end)
     end)
-    Log("Capture hook registered: /Script/Pal.PalCaptureSubsystem:OnCaptureSuccess")
 end)
 
--- Fallback capture hook via alternative path
 pcall(function()
     RegisterHook("/Script/Pal.PalCharacter:OnCaptured", function(Context, CapturedBy)
         ExecuteInGameThread(function()
@@ -555,45 +544,37 @@ pcall(function()
             local player = nil
             pcall(function() pal = Context:get() end)
             pcall(function() player = CapturedBy:get() end)
-            OnBossCaptured(pal, player)
+            HandlePalCaptured(pal, player)
         end)
     end)
-    Log("Fallback capture hook registered: /Script/Pal.PalCharacter:OnCaptured")
 end)
 
 -- ============================================================================
--- 7. PERIODIC TIMER (LoopAsync pattern matching existing mods)
+-- 9. PERIODIC TIMERS & DESPAWN CLEANUP
 -- ============================================================================
 
 local spawnIntervalMs = (Config.SpawnIntervalSeconds or 3600) * 1000
 
 LoopAsync(spawnIntervalMs, function()
     pcall(function()
-        Log(string.format("Periodic boss timer fired (interval: %ds). Spawning world boss...",
-            Config.SpawnIntervalSeconds))
+        Log("Periodic boss timer triggered. Spawning World Boss...")
         SpawnWorldBoss()
     end)
-    return false -- Keep repeating
+    return false
 end)
-
--- ============================================================================
--- 8. ACTIVE BOSS CLEANUP (Despawn after 10 minutes if uncaptured)
--- ============================================================================
 
 LoopAsync(15000, function()
     pcall(function()
         local now = os.time()
-        local despawnAge = Config.DespawnSeconds or 600 -- Despawn after 10 minutes if uncaptured
+        local despawnAge = Config.DespawnSeconds or 600 -- 10 minutes
 
         for ptrKey, info in pairs(ActiveBosses) do
             if now - info.SpawnTime >= despawnAge then
-                Log(string.format("Boss '%s' despawned (timed out after %ds).", info.PalName, despawnAge))
-                -- Cleanly destroy the world actor if it exists
+                Log(string.format("World Boss '%s' timed out after %ds. Cleaning up actor.", info.PalName, despawnAge))
                 pcall(function()
                     local pal = info.ActorRef
                     if pal and pal:IsValid() and pal.K2_DestroyActor then
                         pal:K2_DestroyActor()
-                        Log(string.format("Boss actor '%s' destroyed from world.", info.PalName))
                     end
                 end)
                 ActiveBosses[ptrKey] = nil
@@ -603,6 +584,4 @@ LoopAsync(15000, function()
     return false
 end)
 
-Log(string.format("WorldBossAuraSystem initialized. Boss spawns every %d seconds (%d hour), despawns in %d seconds (%d minutes).",
-    Config.SpawnIntervalSeconds, Config.SpawnIntervalSeconds / 3600,
-    Config.DespawnSeconds or 600, (Config.DespawnSeconds or 600) / 60))
+Log("WorldBossAuraSystem v2.0 fully initialized.")
