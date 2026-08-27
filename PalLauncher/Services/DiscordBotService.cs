@@ -1377,7 +1377,7 @@ namespace PalLauncher.Services
             try { liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo(); }
             catch { liveboard = new ServerLiveboardInfo(); }
 
-            if (liveboard.IsOnline || liveboard.IsServerRunning)
+            if (liveboard.IsServerRunning)
             {
                 await EditDeferredResponseEmbedAsync(interactionToken,
                     title: "⚡ PalOdyssey Realm is ALREADY Online!",
@@ -1405,7 +1405,7 @@ namespace PalLauncher.Services
                 {
                     await Task.Delay(2000);
                     var current = _getLiveboard?.Invoke();
-                    if (current != null && (current.IsOnline || current.IsServerRunning))
+                    if (current != null && current.IsServerRunning)
                     {
                         await SendEmbedMessageAsync(channelId,
                             title: "🟢 PalOdyssey Realm is ONLINE!",
@@ -1426,7 +1426,7 @@ namespace PalLauncher.Services
             try { liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo(); }
             catch { liveboard = new ServerLiveboardInfo(); }
 
-            bool isOnline = liveboard.IsOnline || liveboard.IsServerRunning;
+            bool isOnline = liveboard.IsServerRunning;
             int color = isOnline ? 0x00FF88 : 0x8899AA;
             string title = isOnline ? "📡 PalOdyssey Realm — Server Info & Telemetry" : "💤 PalOdyssey Realm — Standby (Power-Saving)";
 
@@ -1494,7 +1494,7 @@ namespace PalLauncher.Services
                         {
                             await Task.Delay(2000);
                             var current = _getLiveboard?.Invoke();
-                            if (current != null && (current.IsOnline || current.IsServerRunning))
+                            if (current != null && current.IsServerRunning)
                             {
                                 await SendEmbedMessageAsync(channelId,
                                     title: "🟢 PalOdyssey Server Reboot Complete!",
@@ -1519,7 +1519,7 @@ namespace PalLauncher.Services
         {
             var liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo();
 
-            if (liveboard.IsOnline || liveboard.IsServerRunning)
+            if (liveboard.IsServerRunning)
             {
                 await SendEmbedMessageAsync(channelId,
                     title: "⚡ PalOdyssey Realm is ALREADY Online!",
@@ -1554,7 +1554,7 @@ namespace PalLauncher.Services
             {
                 await Task.Delay(2000);
                 var current = _getLiveboard?.Invoke();
-                if (current != null && (current.IsOnline || current.IsServerRunning))
+                if (current != null && current.IsServerRunning)
                 {
                     await SendEmbedMessageAsync(channelId,
                         title: "🟢 PalOdyssey Realm is ONLINE!",
@@ -1576,7 +1576,7 @@ namespace PalLauncher.Services
         private async Task ExecuteStatusCommandAsync(string channelId)
         {
             var liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo();
-            bool isOnline = liveboard.IsOnline || liveboard.IsServerRunning;
+            bool isOnline = liveboard.IsServerRunning;
             int color = isOnline ? 0x00FF88 : 0x8899AA;
             string title = isOnline ? "📡 PalOdyssey Realm — Server Info & Telemetry" : "💤 PalOdyssey Realm — Standby (Power-Saving)";
 
@@ -1645,7 +1645,7 @@ namespace PalLauncher.Services
                         {
                             await Task.Delay(2000);
                             var current = _getLiveboard?.Invoke();
-                            if (current != null && (current.IsOnline || current.IsServerRunning))
+                            if (current != null && current.IsServerRunning)
                             {
                                 await SendEmbedMessageAsync(channelId,
                                     title: "🟢 PalOdyssey Server Reboot Complete!",
@@ -1835,7 +1835,7 @@ namespace PalLauncher.Services
             try { liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo(); }
             catch { liveboard = new ServerLiveboardInfo(); }
 
-            bool isOnline = liveboard.IsOnline || liveboard.IsServerRunning;
+            bool isOnline = liveboard.IsServerRunning;
             int color = isOnline ? 0x00FF88 : 0x8899AA;
             string title = isOnline ? "📡 PalOdyssey Realm — Server Info & Telemetry" : "💤 PalOdyssey Realm — Standby (Power-Saving)";
 
@@ -2821,7 +2821,7 @@ namespace PalLauncher.Services
                     {
                         await Task.Delay(2000);
                         var current = _getLiveboard?.Invoke();
-                        if (current != null && (current.IsOnline || current.IsServerRunning))
+                        if (current != null && current.IsServerRunning)
                         {
                             await BroadcastServerOnlineAsync();
                             return;
@@ -2929,7 +2929,7 @@ namespace PalLauncher.Services
             try { liveboard = _getLiveboard?.Invoke() ?? new ServerLiveboardInfo(); }
             catch { liveboard = new ServerLiveboardInfo(); }
 
-            bool isOnline = liveboard.IsOnline || liveboard.IsServerRunning;
+            bool isOnline = liveboard.IsServerRunning;
             int embedColor = isOnline ? 0x00FF88 : 0x8899AA;
 
             var payload = new

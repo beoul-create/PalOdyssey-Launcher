@@ -136,7 +136,7 @@ namespace PalLauncher.Models
         public string BuildDiscordSummaryMarkdown()
         {
             long unixSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            bool active = IsOnline || IsServerRunning;
+            bool active = IsServerRunning;
             string statusBadge = active ? "🟢 **ONLINE & READY**" : "💤 **STANDBY (Sleeping)**";
 
             var sb = new StringBuilder();

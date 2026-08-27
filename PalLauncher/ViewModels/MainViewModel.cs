@@ -862,9 +862,10 @@ namespace PalLauncher.ViewModels
                     },
                     getLiveboard: () =>
                     {
-                        if (_launchService.IsServerRunning)
+                        bool isRunning = _launchService.IsServerRunning || LaunchService.GetActiveServerProcesses().Count > 0;
+                        if (isRunning)
                         {
-                            var current = _remoteDaemon.IsRunning ? _remoteDaemon.GetCurrentLiveboard() : Liveboard;
+                            var current = _remoteDaemon.IsRunning ? _remoteDaemon.GetCurrentLiveboard() : (Liveboard ?? new ServerLiveboardInfo());
                             if (current != null)
                             {
                                 current.IsOnline = true;
@@ -872,7 +873,15 @@ namespace PalLauncher.ViewModels
                                 return current;
                             }
                         }
-                        return Liveboard ?? new ServerLiveboardInfo();
+
+                        var sleeping = _remoteDaemon.IsRunning ? _remoteDaemon.GetCurrentLiveboard() : (Liveboard ?? new ServerLiveboardInfo());
+                        if (sleeping != null)
+                        {
+                            sleeping.IsOnline = false;
+                            sleeping.IsServerRunning = false;
+                            return sleeping;
+                        }
+                        return new ServerLiveboardInfo { IsOnline = false, IsServerRunning = false };
                     });
             }
             catch (Exception ex)
