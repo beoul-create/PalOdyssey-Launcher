@@ -1,19 +1,28 @@
 ---@diagnostic disable: undefined-global
 -- ============================================================================
--- WorldBossAuraSystem: World Boss & Multi-Tier Aura Engine for PalOdyssey
--- 1. Periodic World Bosses: 1-hour interval, strictly "World Boss" Neon Red aura,
---    3x scale, 100x HP, 2x ATK/DEF, 10m despawn, on-capture 2x scale + 2x stats.
--- 2. Wild Auras (0.1% chance on normal wild Pal spawns):
---    - Corrupted (Neon Purple): 2x Move Speed, 2x Work Speed
---    - Celestial (Radiant Gold): 2x Move Speed, 2x Work Speed
---    - Overcharged (Neon Cyan): 2x Move Speed, 1.5x Jump, Swift + Runner
---    - Colossus (Neon Emerald): 1.5x Scale, 4x Defense, 2x HP, BurlyBody
---    - Berserker (Blood Crimson): 2.5x Attack, 0.5x Defense, 1.5x Move Speed, Ferocious + Musclehead
---    - Master Artisan (Amber Orange): 4x Work Speed, Max Sanity lock, Artisan + WorkSlave
--- 3. Mythic Auras (0.0001% chance / 1 in 1,000,000 on wild Pal spawns):
---    - Regressor (Chrono Platinum): 2x Combat Stats, 2x Partner Skill, 100% Active Skill Cooldown (0 CD)
---    - Transmigrator (Cosmic Prismatic): Unlimited Level Cap (Bypasses Lv 80 cap), Lv 5 in ALL Work Suitabilities,
---      and Ranch Dog Coin drops if no pre-existing native drop exists.
+-- WorldBossAuraSystem: World Boss, Multi-Aura & Mythic Overlap Engine for PalOdyssey
+--
+-- 1. Periodic World Bosses:
+--    - Extended to ALL official vanilla Pals in Paldeck roster.
+--    - 1-hour interval, 10-minute despawn, 3x scale, 100x HP, 2x ATK/DEF.
+--    - On-capture: 2x scale, 2x base HP, 200 IV talents.
+--
+-- 2. Standard Wild Auras (0.1% spawn chance / 1 in 1,000):
+--    - Cannot overlap with each other or World Boss base aura.
+--    - Corrupted (Neon Purple 253): 2x Move Speed, 2x Work Speed
+--    - Celestial (Radiant Gold 254): 2x Move Speed, 2x Work Speed
+--    - Overcharged (Neon Cyan 248): 2x Move Speed, 1.5x Jump, Swift + Runner
+--    - Colossus (Neon Emerald 247): 1.5x Scale, 4x Defense, 2x HP, BurlyBody
+--    - Berserker (Blood Crimson 246): 2.5x Attack, 0.5x Defense, 1.5x Move Speed, Ferocious + Musclehead
+--    - Master Artisan (Amber Orange 245): 4x Work Speed, Max Sanity lock, Artisan + WorkSlave
+--
+-- 3. Mythic Auras (0.0001% spawn chance / 1 in 1,000,000):
+--    - Regressor (Chrono Platinum 244): 2x Combat Stats, 2x Partner Skill, 100% Active Skill Cooldown (0 CD)
+--    - Transmigrator (Cosmic Prismatic 243): Unlimited Level Cap, Lv 5 in ALL Work Suitabilities, Ranch Dog Coins
+--    - OVERLAP RULES: Exclusive permission to overlap with ANY standard aura or World Boss!
+--    - Regressor and Transmigrator cannot overlap with each other.
+--    - When overlapped, Regressor or Transmigrator OVERTAKES the visual stencil outline.
+--
 -- 100% Original Custom Script for PalOdyssey
 -- ============================================================================
 
@@ -24,17 +33,33 @@ if not ok or type(Config) ~= "table" then
         log = true,
 
         -- ====================================================================
-        -- 1. WORLD BOSS RAID CONFIGURATION
+        -- 1. WORLD BOSS RAID CONFIGURATION (Extended to ALL Official Vanilla Pals)
         -- ====================================================================
         SpawnIntervalSeconds = 3600,    -- 1 hour between raid boss spawns
         DespawnSeconds       = 600,     -- 10 minutes despawn window if uncaptured
 
         BossPals = {
-            "Foxparks",
-            "Orserk",
-            "Mammorest",
-            "Chillet",
-            "Anubis"
+            "Anubis", "Astegon", "Bastet", "Beakon", "Beegarde", "Blazamut", "Blazamut_Ryu",
+            "Blazehowl", "Blazehowl_Dark", "Bristla", "Broncherry", "Broncherry_Water", "Caprity",
+            "Cattiva", "Celeray", "Chikipi", "ChickenPal", "Chillet", "Chillet_Dark", "Cremis",
+            "Daedream", "DarkMutant", "DarkScorpion", "Dazzi", "Depresso", "Digtoise", "Dinossom",
+            "Dinossom_Electric", "Direhowl", "Dumud", "Eikthyrdeer", "Eikthyrdeer_Ground", "Elizabee",
+            "Elphidran", "Elphidran_Water", "Felbat", "Fenglope", "Flambelle", "Floppie", "Foxcicle",
+            "Foxparks", "Frostallion", "Frostallion_Dark", "Fuddler", "Galeclaw", "Gikyou", "Gobfin",
+            "Gobfin_Fire", "Gorirat", "Gorirat_Ground", "Grintale", "Grizzbolt", "Gumoss", "Hangyu",
+            "Hangyu_Ground", "Helzephyr", "Hoocrates", "Incineram", "Incineram_Dark", "Jetragon",
+            "Jolthog", "Jolthog_Ice", "Jormuntide", "Jormuntide_Fire", "Katress", "Katress_Fire",
+            "Kelpsea", "Kelpsea_Fire", "Killamari", "Kingpaca", "Kingpaca_Ice", "Lamball", "Leezphaer",
+            "Leezphaer_Fire", "Lethaur", "Lifmunk", "Loupmoon", "Lovander", "Lunaris", "Lyleen",
+            "Lyleen_Dark", "Mammorest", "Mammorest_Ice", "Maraith", "Mau", "Mau_Ice", "Melpaca",
+            "Menasting", "Menasting_Ground", "Mossanda", "Mossanda_Electric", "Mozzarina", "Nightingale",
+            "Nitewing", "Nox", "Orserk", "Paladius", "Pengullet", "Penking", "Petallia", "Pirate",
+            "Poltergeist", "Pterodactyl", "Pyrin", "Pyrin_Dark", "Quivern", "Quivern_Dark", "Ragnahawk",
+            "Rayhound", "Reafy", "Reer", "Relaxaurus", "Relaxaurus_Electric", "Reptyro", "Reptyro_Ice",
+            "Ribbuny", "Robinquill", "Robinquill_Ground", "Rooby", "Rushoar", "Shadowbeak", "Sibelyx",
+            "SinisterGryphon", "Sparkit", "SpookyBeast", "Suzaku", "Suzaku_Water", "Swee", "Sweepa",
+            "Tanzee", "Teafant", "Tocotoco", "Tombat", "Univolt", "Univolt_Ground", "Vaelet", "Vanwyrm",
+            "Vanwyrm_Ice", "Verdash", "Vixy", "Warsect", "WaterLizard", "WoolFox", "Wumpo", "Wumpo_Grass"
         },
 
         SpawnPoints = {
@@ -45,7 +70,7 @@ if not ok or type(Config) ~= "table" then
             { Name = "Frozen Ravine",           X = -250000.0, Y = 100000.0,  Z = 8500.0  }
         },
 
-        BossAura = { Name = "World Boss", StencilValue = 252, GlowColor = "NeonRed" },
+        BossAura = { Name = "World Boss", StencilValue = 252, GlowColor = "NeonRed", IsBoss = true },
 
         BossScale      = 3.0,    -- Actor scale for spawned boss
         CapturedScale  = 2.0,    -- Actor scale after capture
@@ -123,9 +148,9 @@ if not ok or type(Config) ~= "table" then
         },
 
         -- ====================================================================
-        -- 3. MYTHIC AURA CONFIGURATION (0.0001% Ultra-Rare Spawn Chance: 1 in 1,000,000)
+        -- 3. MYTHIC AURA CONFIGURATION (0.0001% Ultra-Rare: 1 in 1,000,000)
         -- ====================================================================
-        MythicAuraChance = 0.000001, -- 0.0001% chance (1 in 1,000,000) for Regressor & Transmigrator
+        MythicAuraChance = 0.000001, -- 0.0001% chance (1 in 1,000,000)
 
         MythicAuras = {
             {
@@ -139,6 +164,7 @@ if not ok or type(Config) ~= "table" then
                 HpMult = 2.0,
                 PartnerSkillMult = 2.0,
                 ZeroCooldown = true,
+                IsMythic = true,
                 Passives = { "Legend", "Vanguard", "StrongConstitution" }
             },
             {
@@ -150,6 +176,7 @@ if not ok or type(Config) ~= "table" then
                 AllWorkSuitabilities = 5,
                 UnlimitedLevelGrowth = true,
                 RanchDogCoinDrop = true,
+                IsMythic = true,
                 Passives = { "Legend", "Artisan", "Swift", "BurlyBody" }
             }
         },
@@ -162,7 +189,7 @@ if not ok or type(Config) ~= "table" then
     }
 end
 
--- Native Ranch Farm Pal Roster (Pals that ALREADY have pre-existing native ranch drops)
+-- Native Ranch Farm Pal Roster (Pals with vanilla ranch drops)
 local NativeRanchPals = {
     ChickenPal   = true,   -- Chikipi (Eggs)
     SheepBall    = true,   -- Lamball (Wool)
@@ -197,38 +224,46 @@ if not Config.enabled then
 end
 
 print("==========================================================")
-print("  WorldBossAuraSystem: Raid, Wild & Mythic Engine Active")
+print("  WorldBossAuraSystem: Multi-Tier Overlap Engine Active")
 print("==========================================================")
 
 -- ============================================================================
 -- State Tracking
+-- PalRecords[ptrKey] = {
+--     BaseAura   = auraConfig (World Boss or 1 of 6 Wild Auras, or nil),
+--     MythicAura = auraConfig (Regressor or Transmigrator, or nil),
+--     PalName    = string,
+--     Location   = table (if boss),
+--     SpawnTime  = integer,
+--     ActorRef   = palActor
+-- }
 -- ============================================================================
 
-local ActiveBosses      = {}  -- [ptrKey] = { PalName, Aura, SpawnTime, ActorRef }
-local ActiveWildAuras   = {}  -- [ptrKey] = { PalName, AuraConfig, ActorRef }
-local ZeroCooldownPals  = {}  -- [ptrKey] = palActor (Regressor zero cooldown loop)
-local TransmigratorPals = {}  -- [ptrKey] = palActor (Transmigrator uncapped level & ranch loop)
+local PalRecords       = {}
+local ZeroCooldownPals = {}  -- [ptrKey] = palActor (Regressor zero cooldown engine)
+local TransmigratorPals = {} -- [ptrKey] = palActor (Transmigrator level uncap & ranch engine)
 
 -- ============================================================================
 -- 1. DARNTOAST IN-GAME NOTIFICATIONS
 -- ============================================================================
 
-local function SendBossToast(palName, auraName, locationName)
+local function SendBossToast(palName, auraName, locationName, mythicAuraName)
     if not Config.NotifyToast then return end
     pcall(function()
         local SDIR = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", ""))
         package.path = SDIR .. "../../DarnToasts/Scripts/?.lua;" .. package.path
         local Toast = require("ToastLib").new("WorldBossAura")
         if Toast and Toast.notify then
-            Toast.notify(
-                string.format("⚠️ RAID BOSS: %s (%s Aura) at %s!", palName, auraName, locationName),
-                1.0, 0.05, 0.1 -- Glowing Neon Red
-            )
+            local title = string.format("⚠️ RAID BOSS: %s (%s Aura) at %s!", palName, auraName, locationName)
+            if mythicAuraName then
+                title = string.format("🌌 MYTHIC RAID BOSS: %s (%s + %s) at %s!", palName, auraName, mythicAuraName, locationName)
+            end
+            Toast.notify(title, 1.0, 0.05, 0.1)
         end
     end)
 end
 
-local function SendWildAuraToast(palName, auraConfig, isMythic)
+local function SendWildAuraToast(palName, auraConfig, isMythic, overlappedBaseName)
     if not Config.NotifyToast then return end
     pcall(function()
         local SDIR = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", ""))
@@ -236,28 +271,36 @@ local function SendWildAuraToast(palName, auraConfig, isMythic)
         local Toast = require("ToastLib").new("WorldBossAura")
         if Toast and Toast.notify then
             local rgb = auraConfig.RGB or { 1.0, 1.0, 1.0 }
-            local prefix = isMythic and "🌌 ULTRA-MYTHIC PAL (1 in 1,000,000)" or "✨ RARE WILD PAL"
-            Toast.notify(
-                string.format("%s: %s with %s Aura!", prefix, palName or "Pal", auraConfig.Name),
-                rgb[1], rgb[2], rgb[3]
-            )
+            local msg = string.format("✨ RARE PAL: %s with %s Aura!", palName or "Pal", auraConfig.Name)
+            if isMythic then
+                if overlappedBaseName then
+                    msg = string.format("👑 OVERLAPPED MYTHIC: %s with %s OVERTAKING %s Aura!", palName or "Pal", auraConfig.Name, overlappedBaseName)
+                else
+                    msg = string.format("🌌 ULTRA-MYTHIC PAL: %s with %s Aura!", palName or "Pal", auraConfig.Name)
+                end
+            end
+            Toast.notify(msg, rgb[1], rgb[2], rgb[3])
         end
     end)
 end
 
-local function SendCaptureToast(palName, isBoss, auraName, isMythic)
-    if not Config.NotifyToast then return end
+local function SendCaptureToast(palName, record)
+    if not Config.NotifyToast or not record then return end
     pcall(function()
         local SDIR = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", ""))
         package.path = SDIR .. "../../DarnToasts/Scripts/?.lua;" .. package.path
         local Toast = require("ToastLib").new("WorldBossAura")
         if Toast and Toast.notify then
-            if isBoss then
-                Toast.notify(string.format("🏆 RAID BOSS CAPTURED: %s has been tamed (2x Scale & Stats)!", palName), 0.0, 1.0, 0.5)
-            elseif isMythic then
-                Toast.notify(string.format("👑 MYTHIC SOVEREIGN TAMED: %s with %s Aura permanently bound!", palName, auraName), 1.0, 0.84, 0.0)
-            else
-                Toast.notify(string.format("✨ %s TAMED: %s retains permanent aura & stat buffs!", auraName or "Aura", palName), 0.0, 0.85, 1.0)
+            if record.BaseAura and record.BaseAura.IsBoss then
+                if record.MythicAura then
+                    Toast.notify(string.format("👑 MYTHIC RAID BOSS TAMED: %s (%s + %s)!", palName, record.BaseAura.Name, record.MythicAura.Name), 1.0, 0.84, 0.0)
+                else
+                    Toast.notify(string.format("🏆 RAID BOSS CAPTURED: %s tamed (2x Scale & Stats)!", palName), 0.0, 1.0, 0.5)
+                end
+            elseif record.MythicAura then
+                Toast.notify(string.format("👑 MYTHIC SOVEREIGN TAMED: %s with %s Aura permanently bound!", palName, record.MythicAura.Name), 1.0, 0.84, 0.0)
+            elseif record.BaseAura then
+                Toast.notify(string.format("✨ %s TAMED: %s retains permanent aura & stat buffs!", record.BaseAura.Name, palName), 0.0, 0.85, 1.0)
             end
         end
     end)
@@ -335,7 +378,7 @@ local function NotifyDaemonCapture(palName, capturedBy)
 end
 
 -- ============================================================================
--- 3. AURA ATTACHMENT SYSTEM (Custom Depth Stencil Outline)
+-- 3. AURA VISUAL & STENCIL MANAGER (With Mythic Overtake Priority)
 -- ============================================================================
 
 local function AttachAuraStencil(pal, stencilValue)
@@ -349,19 +392,26 @@ local function AttachAuraStencil(pal, stencilValue)
     end)
 end
 
--- ============================================================================
--- 4. DYNAMIC WILD & MYTHIC AURA BUFF APPLICATION
--- ============================================================================
-
-local function ApplyWildAuraBuffs(pal, auraConfig)
-    if not pal or not pal:IsValid() or not auraConfig then return end
-    local ptrKey = tostring(pal:GetAddress())
-
+local function UpdatePalVisualOutline(pal, record)
+    if not pal or not pal:IsValid() or not record then return end
     pcall(function()
-        -- A. Visual Stencil Outline
-        AttachAuraStencil(pal, auraConfig.StencilValue)
+        -- Mythic Auras (Regressor / Transmigrator) take HIGHEST visual priority
+        if record.MythicAura then
+            AttachAuraStencil(pal, record.MythicAura.StencilValue)
+        elseif record.BaseAura then
+            AttachAuraStencil(pal, record.BaseAura.StencilValue)
+        end
+    end)
+end
 
-        -- B. Actor Scaling
+-- ============================================================================
+-- 4. STAT & PHYSICS MODIFIER ENGINE (Safe Native Engine Compliance)
+-- ============================================================================
+
+local function ApplySingleAuraStats(pal, auraConfig)
+    if not pal or not pal:IsValid() or not auraConfig then return end
+    pcall(function()
+        -- 1. Actor Scaling
         if auraConfig.ScaleMult and pal.SetActorScale3D then
             pal:SetActorScale3D({
                 X = auraConfig.ScaleMult,
@@ -370,7 +420,7 @@ local function ApplyWildAuraBuffs(pal, auraConfig)
             })
         end
 
-        -- C. Movement & Jump Physics
+        -- 2. Movement & Jump Physics
         local moveComp = pal.CharacterMovement
         if moveComp and moveComp:IsValid() then
             if auraConfig.SpeedMult and moveComp.MaxWalkSpeed then
@@ -384,22 +434,22 @@ local function ApplyWildAuraBuffs(pal, auraConfig)
             end
         end
 
-        -- D. Parameter Component (Work, HP, ATK, DEF, Sanity, Support)
+        -- 3. Parameter Component (Work, HP, ATK, DEF, Sanity, Support)
         local paramComp = pal.CharacterParameterComponent
         if paramComp and paramComp:IsValid() then
-            -- Work Speed Multipliers
+            -- Work Speed
             if auraConfig.WorkMult then
-                if paramComp.SetCraftSpeed then
+                if paramComp.SetCraftSpeed and paramComp.GetCraftSpeed then
                     local curCraft = paramComp:GetCraftSpeed() or 100
                     paramComp:SetCraftSpeed(math.floor(curCraft * auraConfig.WorkMult))
                 end
-                if paramComp.SetWorkSpeed then
+                if paramComp.SetWorkSpeed and paramComp.GetWorkSpeed then
                     local curWork = paramComp:GetWorkSpeed() or 100
                     paramComp:SetWorkSpeed(math.floor(curWork * auraConfig.WorkMult))
                 end
             end
 
-            -- Combat Stats
+            -- Combat HP
             if auraConfig.HpMult and paramComp.GetMaxHP and paramComp.SetMaxHP and paramComp.SetHP then
                 local curHP = paramComp:GetMaxHP()
                 if curHP and curHP > 0 then
@@ -409,6 +459,7 @@ local function ApplyWildAuraBuffs(pal, auraConfig)
                 end
             end
 
+            -- Combat ATK
             if auraConfig.AtkMult and paramComp.GetAttack and paramComp.SetAttack then
                 local curAtk = paramComp:GetAttack()
                 if curAtk and curAtk > 0 then
@@ -416,6 +467,7 @@ local function ApplyWildAuraBuffs(pal, auraConfig)
                 end
             end
 
+            -- Combat DEF
             if auraConfig.DefMult and paramComp.GetDefense and paramComp.SetDefense then
                 local curDef = paramComp:GetDefense()
                 if curDef and curDef > 0 then
@@ -455,12 +507,11 @@ local function ApplyWildAuraBuffs(pal, auraConfig)
             if auraConfig.UnlimitedLevelGrowth then
                 pcall(function()
                     if paramComp.SetMaxLevel then paramComp:SetMaxLevel(999) end
-                    TransmigratorPals[ptrKey] = pal
                 end)
             end
         end
 
-        -- E. Passives Injection (Individual Parameter)
+        -- 4. Passives Injection
         local indParam = pal.GetIndividualParameter and pal:GetIndividualParameter() or nil
         if indParam and indParam:IsValid() then
             if auraConfig.Passives and #auraConfig.Passives > 0 and indParam.AddPassiveSkill then
@@ -472,12 +523,32 @@ local function ApplyWildAuraBuffs(pal, auraConfig)
                 pcall(function() indParam:SetPartnerSkillRank(4) end)
             end
         end
+    end)
+end
 
-        -- F. Regressor Zero Cooldown Registration
-        if auraConfig.ZeroCooldown then
+local function ApplyAllPalAuras(pal, record)
+    if not pal or not pal:IsValid() or not record then return end
+    local ptrKey = tostring(pal:GetAddress())
+
+    -- 1. Apply Base Aura (if present)
+    if record.BaseAura then
+        ApplySingleAuraStats(pal, record.BaseAura)
+    end
+
+    -- 2. Apply Mythic Aura (if present) - stacks harmoniously
+    if record.MythicAura then
+        ApplySingleAuraStats(pal, record.MythicAura)
+
+        if record.MythicAura.ZeroCooldown then
             ZeroCooldownPals[ptrKey] = pal
         end
-    end)
+        if record.MythicAura.UnlimitedLevelGrowth then
+            TransmigratorPals[ptrKey] = pal
+        end
+    end
+
+    -- 3. Visual Stencil: Mythic overtakes Base Aura
+    UpdatePalVisualOutline(pal, record)
 end
 
 -- ============================================================================
@@ -547,43 +618,10 @@ LoopAsync(25000, function()
 end)
 
 -- ============================================================================
--- 6. WILD & MYTHIC AURA PAL ENHANCEMENT
+-- 6. PERIODIC WORLD BOSS SPAWNER (All Official Vanilla Pals)
 -- ============================================================================
 
-local function EnhanceWildPal(pal, auraConfig, isMythic)
-    if not pal or not pal:IsValid() or not auraConfig then return end
-    local ptrKey = tostring(pal:GetAddress())
-    if ActiveWildAuras[ptrKey] or ActiveBosses[ptrKey] then return end
-
-    pcall(function()
-        local palName = "Wild Pal"
-        local charParam = pal.CharacterParameterComponent
-        if charParam and charParam:IsValid() and charParam.GetCharacterID then
-            local id = charParam:GetCharacterID()
-            if id and id ~= "" then palName = tostring(id) end
-        end
-
-        ApplyWildAuraBuffs(pal, auraConfig)
-
-        ActiveWildAuras[ptrKey] = {
-            PalName    = palName,
-            AuraConfig = auraConfig,
-            IsMythic   = isMythic or false,
-            ActorRef   = pal
-        }
-
-        Log(string.format("✨ [%s AURA] Generated %s (%s Aura, Stencil %d) (Ptr: %s)",
-            isMythic and "MYTHIC" or "WILD", palName, auraConfig.Name, auraConfig.StencilValue, ptrKey))
-
-        SendWildAuraToast(palName, auraConfig, isMythic)
-    end)
-end
-
--- ============================================================================
--- 7. PERIODIC WORLD BOSS SPAWNER (Strictly "World Boss" Neon Red Aura)
--- ============================================================================
-
-local function ScaleBossStats(pal)
+local function ScaleWorldBossStats(pal)
     if not pal or not pal:IsValid() then return end
     pcall(function()
         local paramComp = pal.CharacterParameterComponent
@@ -619,8 +657,7 @@ local function SpawnWorldBoss()
         local selectedPal = Config.BossPals[math.random(#Config.BossPals)]
         local bossAura = Config.BossAura
 
-        Log(string.format("=== SPAWNING WORLD BOSS: %s (%s Aura) at %s ===",
-            selectedPal, bossAura.Name, targetLocation.Name))
+        Log(string.format("=== SPAWNING WORLD BOSS: %s at %s ===", selectedPal, targetLocation.Name))
 
         local spawnedPal = nil
 
@@ -665,21 +702,31 @@ local function SpawnWorldBoss()
                 if pal.SetActorScale3D then
                     pal:SetActorScale3D({ X = Config.BossScale, Y = Config.BossScale, Z = Config.BossScale })
                 end
-                ScaleBossStats(pal)
-                AttachAuraStencil(pal, bossAura.StencilValue)
+                ScaleWorldBossStats(pal)
 
                 local ptrKey = tostring(pal:GetAddress())
-                ActiveBosses[ptrKey] = {
+                local record = PalRecords[ptrKey] or {
                     PalName   = selectedPal,
-                    Aura      = bossAura,
                     Location  = targetLocation,
                     SpawnTime = os.time(),
                     ActorRef  = pal
                 }
 
+                record.BaseAura = bossAura
+                PalRecords[ptrKey] = record
+
+                -- Roll Mythic Overlap check on World Boss spawn (0.0001% chance)
+                if math.random() <= (Config.MythicAuraChance or 0.000001) then
+                    local selectedMythic = Config.MythicAuras[math.random(#Config.MythicAuras)]
+                    record.MythicAura = selectedMythic
+                    Log(string.format("🌟 [MYTHIC OVERLAP] World Boss %s rolled %s Mythic Aura!", selectedPal, selectedMythic.Name))
+                end
+
+                ApplyAllPalAuras(pal, record)
+
                 Log(string.format("World Boss active: %s (Scale: %.1fx, HP: x%d)", selectedPal, Config.BossScale, Config.HpMultiplier))
-                SendBossToast(selectedPal, bossAura.Name, targetLocation.Name)
-                NotifyDaemonSpawn(selectedPal, targetLocation.Name, bossAura.Name, targetLocation.X, targetLocation.Y)
+                SendBossToast(selectedPal, bossAura.Name, targetLocation.Name, record.MythicAura and record.MythicAura.Name or nil)
+                NotifyDaemonSpawn(selectedPal, targetLocation.Name, record.MythicAura and (bossAura.Name .. " + " .. record.MythicAura.Name) or bossAura.Name, targetLocation.X, targetLocation.Y)
             end)
         end
 
@@ -710,7 +757,7 @@ local function SpawnWorldBoss()
 end
 
 -- ============================================================================
--- 8. DYNAMIC WILD PAL SPAWN LISTENER (Multi-Tier Probability Rolls)
+-- 7. DYNAMIC WILD SPAWN LISTENER (Standard vs Mythic Overlap Engine)
 -- ============================================================================
 
 pcall(function()
@@ -718,48 +765,64 @@ pcall(function()
         ExecuteWithDelay(350, function()
             if not pal or not pal:IsValid() then return end
             local ptrKey = tostring(pal:GetAddress())
-            if ActiveBosses[ptrKey] or ActiveWildAuras[ptrKey] then return end
+            local record = PalRecords[ptrKey]
 
-            local roll = math.random()
-
-            -- Tier 1: Mythic Aura Roll (0.0001% chance / 1 in 1,000,000 for Regressor & Transmigrator)
-            if roll <= (Config.MythicAuraChance or 0.000001) then
-                local selectedMythic = Config.MythicAuras[math.random(#Config.MythicAuras)]
-                EnhanceWildPal(pal, selectedMythic, true)
-                return
+            -- Extract Pal name
+            local palName = "Wild Pal"
+            local charParam = pal.CharacterParameterComponent
+            if charParam and charParam:IsValid() and charParam.GetCharacterID then
+                local id = charParam:GetCharacterID()
+                if id and id ~= "" then palName = tostring(id) end
             end
 
-            -- Tier 2: Standard Wild Aura Roll (0.1% chance / 1 in 1,000 for Standard Wild Auras)
-            if roll <= (Config.WildAuraChance or 0.001) then
-                local selectedWildAura = Config.WildAuras[math.random(#Config.WildAuras)]
-                EnhanceWildPal(pal, selectedWildAura, false)
-                return
+            -- 1. Roll Standard Wild Aura (0.1% chance) - ONLY if no BaseAura already assigned
+            if not record or not record.BaseAura then
+                if math.random() <= (Config.WildAuraChance or 0.001) then
+                    local selectedWildAura = Config.WildAuras[math.random(#Config.WildAuras)]
+                    record = record or { PalName = palName, ActorRef = pal }
+                    record.BaseAura = selectedWildAura
+                    PalRecords[ptrKey] = record
+                    ApplyAllPalAuras(pal, record)
+                    SendWildAuraToast(palName, selectedWildAura, false, nil)
+                end
+            end
+
+            -- 2. Roll Mythic Aura (0.0001% chance) - CAN overlap with BaseAura, CANNOT overlap with other Mythic
+            if not record or not record.MythicAura then
+                if math.random() <= (Config.MythicAuraChance or 0.000001) then
+                    local selectedMythic = Config.MythicAuras[math.random(#Config.MythicAuras)]
+                    record = record or { PalName = palName, ActorRef = pal }
+                    local prevBaseName = record.BaseAura and record.BaseAura.Name or nil
+                    record.MythicAura = selectedMythic
+                    PalRecords[ptrKey] = record
+                    ApplyAllPalAuras(pal, record)
+                    SendWildAuraToast(palName, selectedMythic, true, prevBaseName)
+                end
             end
         end)
     end)
-    Log("Aura spawn listener armed: 0.0001% for Mythic (Regressor/Transmigrator), 0.1% for Wild Auras.")
+    Log("Dynamic Aura Spawn Listener armed (Standard 0.1% non-overlapping, Mythic 0.0001% overlapping).")
 end)
 
 -- ============================================================================
--- 9. CAPTURE HOOK (Boss Downsizing & Wild/Mythic Aura Permanent Retention)
+-- 8. CAPTURE HOOK (Boss Normalization & Overlapped Aura Permanent Retention)
 -- ============================================================================
 
 local function HandlePalCaptured(pal, playerActor)
     if not pal or not pal:IsValid() then return end
     local ptrKey = tostring(pal:GetAddress())
+    local record = PalRecords[ptrKey]
+    if not record then return end
 
-    -- A. Check if it's a World Boss
-    local bossInfo = ActiveBosses[ptrKey]
-    if bossInfo then
-        pcall(function()
-            Log(string.format("=== RAID BOSS CAPTURED: %s ===", bossInfo.PalName))
+    pcall(function()
+        Log(string.format("=== PAL CAPTURED: %s ===", record.PalName))
 
-            -- 1. Downsize to 2x scale
+        -- A. If it was a World Boss: Downsize & Normalize HP & Talents
+        if record.BaseAura and record.BaseAura.IsBoss then
             if pal.SetActorScale3D then
                 pal:SetActorScale3D({ X = Config.CapturedScale, Y = Config.CapturedScale, Z = Config.CapturedScale })
             end
 
-            -- 2. Permanent 2x IV Talents
             local indParam = pal.GetIndividualParameter and pal:GetIndividualParameter() or nil
             if indParam and indParam:IsValid() then
                 pcall(function()
@@ -769,7 +832,6 @@ local function HandlePalCaptured(pal, playerActor)
                 end)
             end
 
-            -- 3. Normalize HP
             local paramComp = pal.CharacterParameterComponent
             if paramComp and paramComp:IsValid() then
                 pcall(function()
@@ -782,7 +844,6 @@ local function HandlePalCaptured(pal, playerActor)
                 end)
             end
 
-            -- 4. Player name & announcements
             local capturerName = "Unknown Pioneer"
             if playerActor and playerActor:IsValid() and playerActor.PlayerState then
                 pcall(function()
@@ -791,27 +852,14 @@ local function HandlePalCaptured(pal, playerActor)
                 end)
             end
 
-            SendCaptureToast(bossInfo.PalName, true, "World Boss", false)
-            NotifyDaemonCapture(bossInfo.PalName, capturerName)
-            ActiveBosses[ptrKey] = nil
-        end)
-        return
-    end
+            NotifyDaemonCapture(record.PalName, capturerName)
+        end
 
-    -- B. Check if it's a Wild or Mythic Aura Pal
-    local wildInfo = ActiveWildAuras[ptrKey]
-    if wildInfo then
-        pcall(function()
-            Log(string.format("=== %s PAL CAPTURED: %s (%s Aura) ===",
-                wildInfo.IsMythic and "MYTHIC" or "WILD", wildInfo.PalName, wildInfo.AuraConfig.Name))
+        -- B. Permanently re-affirm all active aura modifiers (Base + Mythic) on captured instance
+        ApplyAllPalAuras(pal, record)
 
-            -- Permanently re-apply all aura buffs on captured instance
-            ApplyWildAuraBuffs(pal, wildInfo.AuraConfig)
-
-            SendCaptureToast(wildInfo.PalName, false, wildInfo.AuraConfig.Name, wildInfo.IsMythic)
-        end)
-        return
-    end
+        SendCaptureToast(record.PalName, record)
+    end)
 end
 
 pcall(function()
@@ -839,7 +887,7 @@ pcall(function()
 end)
 
 -- ============================================================================
--- 10. PERIODIC TIMERS & DESPAWN CLEANUP
+-- 9. PERIODIC WORLD BOSS TIMERS & DESPAWN CLEANUP
 -- ============================================================================
 
 local spawnIntervalMs = (Config.SpawnIntervalSeconds or 3600) * 1000
@@ -857,20 +905,20 @@ LoopAsync(15000, function()
         local now = os.time()
         local despawnAge = Config.DespawnSeconds or 600 -- 10 minutes
 
-        for ptrKey, info in pairs(ActiveBosses) do
-            if now - info.SpawnTime >= despawnAge then
-                Log(string.format("World Boss '%s' timed out after %ds. Cleaning up actor.", info.PalName, despawnAge))
+        for ptrKey, record in pairs(PalRecords) do
+            if record.BaseAura and record.BaseAura.IsBoss and (now - (record.SpawnTime or now) >= despawnAge) then
+                Log(string.format("World Boss '%s' timed out after %ds. Cleaning up actor.", record.PalName, despawnAge))
                 pcall(function()
-                    local pal = info.ActorRef
+                    local pal = record.ActorRef
                     if pal and pal:IsValid() and pal.K2_DestroyActor then
                         pal:K2_DestroyActor()
                     end
                 end)
-                ActiveBosses[ptrKey] = nil
+                PalRecords[ptrKey] = nil
             end
         end
     end)
     return false
 end)
 
-Log("WorldBossAuraSystem v3.5 fully initialized with Multi-Tier Odds & Ranch Dog Coin Engines.")
+Log("WorldBossAuraSystem v4.0 fully initialized.")
