@@ -861,6 +861,30 @@ namespace PalLauncher.Services
                                 required = false
                             }
                         }
+                    },
+                    new
+                    {
+                        name = "publish-changelog",
+                        description = "1-Click publish the latest PalOdyssey Major Update Changelog to #change-logs (Admin Only)",
+                        type = 1,
+                        default_member_permissions = "8",
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "channel_id",
+                                description = "Target channel ID (defaults to 1542544366176968714)",
+                                type = 3,
+                                required = false
+                            },
+                            new
+                            {
+                                name = "ping_role",
+                                description = "Whether to ping @Changelog Notifications (default: true)",
+                                type = 5,
+                                required = false
+                            }
+                        }
                     }
                 };
 
@@ -1119,6 +1143,17 @@ namespace PalLauncher.Services
                         await EditDeferredResponseEmbedAsync(interactionToken,
                             title: "✅ Changelog Published!",
                             description: $"Successfully posted update **{clTitle}** to <#{clChannel}> with @Changelog Notifications ping: `{clPing}`.",
+                            color: 0x00FF88);
+                        break;
+
+                    case "publish-changelog":
+                    case "publish-update":
+                        string pubChannel = GetStringOption(data, "channel_id") ?? "1542544366176968714";
+                        bool pubPing = GetBoolOption(data, "ping_role", true);
+                        await PublishLatestUpdateChangelogAsync(pubChannel, pubPing);
+                        await EditDeferredResponseEmbedAsync(interactionToken,
+                            title: "✅ Major Update Changelog Published!",
+                            description: $"Successfully posted the official PalOdyssey World Boss & Custom Subspecies Changelog to <#{pubChannel}> with @Changelog Notifications ping: `{pubPing}`.",
                             color: 0x00FF88);
                         break;
 
@@ -1400,6 +1435,25 @@ namespace PalLauncher.Services
                     case "connect":
                     case "address":
                         await ExecuteIpCommandAsync(channelId);
+                        break;
+
+                    case "publishchangelog":
+                    case "postchangelog":
+                    case "publishupdate":
+                        if (!IsAdminMessageAuthor(msg))
+                        {
+                            _logService.LogWarning($"User '{authorName}' attempted admin message command '{mainCmd}' without administrator permissions.", "DiscordBot");
+                            await SendEmbedMessageAsync(channelId,
+                                title: "⛔ Administrative Permission Required",
+                                description: "❌ You do not have permission to execute this administrative command.",
+                                color: 0xFF3366);
+                            return;
+                        }
+                        await PublishLatestUpdateChangelogAsync("1542544366176968714", true);
+                        await SendEmbedMessageAsync(channelId,
+                            title: "✅ Major Update Changelog Published!",
+                            description: "Official PalOdyssey update published to <#1542544366176968714> with `@Changelog Notifications` mention!",
+                            color: 0x00FF88);
                         break;
 
                     case "restart":
@@ -3207,6 +3261,33 @@ namespace PalLauncher.Services
             {
                 _logService.LogWarning($"Exception broadcasting changelog: {ex.Message}", "DiscordBot");
             }
+        }
+
+        public async Task PublishLatestUpdateChangelogAsync(string channelId = "1542544366176968714", bool pingRole = true)
+        {
+            string changelogBody =
+                "### 🔴 1. Periodic World Boss Raids\n" +
+                "• **Frequency & Duration**: Every **1 hour**, a colossal World Raid Boss emerges (10-minute despawn window if uncaptured).\n" +
+                "• **Roster**: Extended to **ALL 140+ official vanilla Pals** in the Paldeck!\n" +
+                "• **Boss Multipliers**: **3.0× World Scale**, **100× Max HP**, **2.0× Attack & Defense**, **Glowing Neon Red Outline**.\n" +
+                "• **Trophy Reward**: Capture to earn a permanent **2.0× Scale Giant Pal**, **2.0× Base HP**, and **200 IV Talents**.\n" +
+                "• **Radar Alerts**: Real-time spawn alerts and capture celebrations broadcast to <#1542531746937966592>!\n\n" +
+                "### ✨ 2. Multi-Tier Wild Aura System\n" +
+                "**🌟 Standard Wild Auras (0.1% / 1 in 1,000 Chance)**:\n" +
+                "• ⚡ **Overcharged (Cyan)**: 2× Move Speed, 1.5× Jump, `Swift` + `Runner`\n" +
+                "• 🛡️ **Colossus (Emerald)**: 1.5× Scale, 4× Defense, 2× HP, `BurlyBody`\n" +
+                "• ⚔️ **Berserker (Crimson)**: 2.5× Attack, 0.5× Defense, 1.5× Move Speed, `Ferocious` + `Musclehead`\n" +
+                "• ⚙️ **Master Artisan (Amber)**: 4× Work Speed, 100% Locked Sanity, `Artisan` + `WorkSlave`\n" +
+                "• 🌑 **Corrupted (Purple)** / ✨ **Celestial (Gold)**: 2× Move Speed & 2× Work Speed\n\n" +
+                "**👑 Ultra-Mythic Sovereign Auras (0.0001% / 1 in 1,000,000 Chance)**:\n" +
+                "• ⏳ **Regressor (Platinum)**: 2× Combat Stats, 2× Partner Skill, **100% Active Skill Cooldown (0 CD)**, `Legend`, `Vanguard`, `StrongConstitution`.\n" +
+                "• 🌌 **Transmigrator (Cosmic Violet)**: **Unlimited Level Cap (Bypasses Lv 80)**, **Lv 5 in ALL Work Suitabilities**, **Ranch Dog Coin Drops**, `Legend`, `Artisan`, `Swift`, `BurlyBody`.\n" +
+                "• **Aura Overlap**: Regressor & Transmigrator can overlap with any standard or World Boss aura and overtake the visual outline!\n\n" +
+                "### 🔥 3. 38+ Custom Elemental Subspecies\n" +
+                "Alternative elemental archetypes registered across vanilla Pals (*Relaxaurus Ignis/Cryst, Pyrin Aqua/Volt, Dinossom Ignis/Cryst, Jormuntide Cryst/Volt, Anubis Cryst, Orserk Terra, Foxparks Aqua, Depresso Aqua, etc.*).\n\n" +
+                "*🔔 React in <#1534308427080273990> to receive the @Changelog Notifications role!*";
+
+            await BroadcastChangelogAsync("PalOdyssey Major Update: World Boss Raids, Multi-Tier Auras & Custom Subspecies!", changelogBody, channelId, pingRole);
         }
 
         private async Task<string?> GetOrCreateChangelogRoleAsync(string guildId)
