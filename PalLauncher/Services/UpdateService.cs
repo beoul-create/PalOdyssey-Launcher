@@ -486,9 +486,19 @@ namespace PalLauncher.Services
             if (string.IsNullOrWhiteSpace(expectedHash)) return true;
             if (string.Equals(computedHash, expectedHash, StringComparison.OrdinalIgnoreCase)) return true;
 
+            // Handle temporary download file paths (e.g. ".../main.lua.tmp_a1b2c3") by stripping .tmp_ suffix
+            string checkPath = filePath;
+            if (checkPath.Contains(".tmp_", StringComparison.OrdinalIgnoreCase))
+            {
+                int tmpIdx = checkPath.IndexOf(".tmp_", StringComparison.OrdinalIgnoreCase);
+                checkPath = checkPath[..tmpIdx];
+            }
+
             // Line-ending normalization fallback for plain-text scripts and config files
-            string ext = Path.GetExtension(filePath).ToLowerInvariant();
-            if (ext is ".lua" or ".json" or ".txt" or ".cfg" or ".ini" or ".md")
+            string ext = Path.GetExtension(checkPath).ToLowerInvariant();
+            if (ext is ".lua" or ".json" or ".txt" or ".cfg" or ".ini" or ".md" ||
+                checkPath.EndsWith(".lua", StringComparison.OrdinalIgnoreCase) ||
+                checkPath.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
             {
                 try
                 {
@@ -497,11 +507,14 @@ namespace PalLauncher.Services
                         string text = File.ReadAllText(filePath);
                         string normalized = text.Replace("\r\n", "\n").Replace("\r", "\n");
                         using var sha256 = SHA256.Create();
+
+                        // Check LF normalized hash
                         byte[] normBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(normalized));
                         string normHash = Convert.ToHexString(normBytes).ToLowerInvariant();
                         if (string.Equals(normHash, expectedHash, StringComparison.OrdinalIgnoreCase))
                             return true;
 
+                        // Check CRLF normalized hash
                         string crlfText = normalized.Replace("\n", "\r\n");
                         byte[] crlfBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(crlfText));
                         string crlfHash = Convert.ToHexString(crlfBytes).ToLowerInvariant();
