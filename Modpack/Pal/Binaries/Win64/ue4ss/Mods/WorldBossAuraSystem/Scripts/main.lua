@@ -13,7 +13,8 @@ if not ok or type(Config) ~= "table" then
         log = true,
 
         -- Spawn Timing
-        SpawnIntervalSeconds = 1800,    -- 30 minutes between spawns
+        SpawnIntervalSeconds = 3600,    -- 1 hour between spawns (Periodic Raid Event)
+        DespawnSeconds       = 600,     -- 10 minutes despawn window if uncaptured
 
         -- Boss Roster (base Pal character IDs)
         BossPals = {
@@ -33,11 +34,11 @@ if not ok or type(Config) ~= "table" then
             { Name = "Frozen Ravine",           X = -250000.0, Y = 100000.0,  Z = 8500.0  }
         },
 
-        -- Aura Types & Stencil Values (Custom Depth Stencil for visual outlines)
+        -- Aura Types & Stencil Values (Custom Depth Stencil for vivid neon visual outlines)
         Auras = {
-            { Name = "Fiery",     StencilValue = 252 },
-            { Name = "Corrupted", StencilValue = 253 },
-            { Name = "Celestial", StencilValue = 254 }
+            { Name = "World Boss", StencilValue = 252, GlowColor = "NeonRed" },
+            { Name = "Corrupted",  StencilValue = 253, GlowColor = "NeonPurple" },
+            { Name = "Celestial",  StencilValue = 254, GlowColor = "NeonGold" }
         },
 
         -- Boss Stat Multipliers
@@ -77,7 +78,7 @@ print("==========================================================")
 -- State
 -- ============================================================================
 
-local ActiveBosses = {}  -- [ptrKey] = { PalName, Aura, SpawnTime }
+local ActiveBosses = {}  -- [ptrKey] = { PalName, Aura, SpawnTime, ActorRef }
 
 -- ============================================================================
 -- 1. DARNTOAST IN-GAME NOTIFICATION
@@ -90,11 +91,11 @@ local function SendBossToast(palName, auraName, locationName)
         package.path = SDIR .. "../../DarnToasts/Scripts/?.lua;" .. package.path
         local Toast = require("ToastLib").new("WorldBossAura")
         if Toast and Toast.notify then
-            local r, g, b = 1.0, 0.2, 0.0
+            local r, g, b = 1.0, 0.05, 0.1 -- Glowing Neon Red outline for World Boss
             if auraName == "Corrupted" then r, g, b = 0.6, 0.0, 1.0 end
             if auraName == "Celestial" then r, g, b = 1.0, 0.84, 0.0 end
             Toast.notify(
-                string.format("⚠️ RAID BOSS: %s (%s) at %s!", palName, auraName, locationName),
+                string.format("⚠️ RAID BOSS: %s (%s Aura) at %s!", palName, auraName, locationName),
                 r, g, b
             )
         end
@@ -377,10 +378,11 @@ local function SpawnWorldBoss()
                         -- Track as active boss
                         local ptrKey = tostring(pal:GetAddress())
                         ActiveBosses[ptrKey] = {
-                            PalName  = selectedPal,
-                            Aura     = selectedAura,
-                            Location = targetLocation,
-                            SpawnTime = os.time()
+                            PalName   = selectedPal,
+                            Aura      = selectedAura,
+                            Location  = targetLocation,
+                            SpawnTime = os.time(),
+                            ActorRef  = pal
                         }
 
                         Log(string.format("Boss enhanced: %s (Aura: %s, Scale: %.1fx, HP: x%d)",
@@ -414,10 +416,11 @@ local function SpawnWorldBoss()
 
             local ptrKey = tostring(spawnedPal:GetAddress())
             ActiveBosses[ptrKey] = {
-                PalName  = selectedPal,
-                Aura     = selectedAura,
-                Location = targetLocation,
-                SpawnTime = os.time()
+                PalName   = selectedPal,
+                Aura      = selectedAura,
+                Location  = targetLocation,
+                SpawnTime = os.time(),
+                ActorRef  = spawnedPal
             }
 
             Log(string.format("Boss enhanced (direct ref): %s (Aura: %s)", selectedPal, selectedAura.Name))
@@ -562,7 +565,7 @@ end)
 -- 7. PERIODIC TIMER (LoopAsync pattern matching existing mods)
 -- ============================================================================
 
-local spawnIntervalMs = (Config.SpawnIntervalSeconds or 1800) * 1000
+local spawnIntervalMs = (Config.SpawnIntervalSeconds or 3600) * 1000
 
 LoopAsync(spawnIntervalMs, function()
     pcall(function()
@@ -574,17 +577,25 @@ LoopAsync(spawnIntervalMs, function()
 end)
 
 -- ============================================================================
--- 8. ACTIVE BOSS CLEANUP (Despawn after 30 minutes if uncaptured)
+-- 8. ACTIVE BOSS CLEANUP (Despawn after 10 minutes if uncaptured)
 -- ============================================================================
 
-LoopAsync(60000, function()
+LoopAsync(15000, function()
     pcall(function()
         local now = os.time()
-        local despawnAge = Config.SpawnIntervalSeconds or 1800 -- Despawn when next boss would spawn
+        local despawnAge = Config.DespawnSeconds or 600 -- Despawn after 10 minutes if uncaptured
 
         for ptrKey, info in pairs(ActiveBosses) do
             if now - info.SpawnTime >= despawnAge then
                 Log(string.format("Boss '%s' despawned (timed out after %ds).", info.PalName, despawnAge))
+                -- Cleanly destroy the world actor if it exists
+                pcall(function()
+                    local pal = info.ActorRef
+                    if pal and pal:IsValid() and pal.K2_DestroyActor then
+                        pal:K2_DestroyActor()
+                        Log(string.format("Boss actor '%s' destroyed from world.", info.PalName))
+                    end
+                end)
                 ActiveBosses[ptrKey] = nil
             end
         end
@@ -592,5 +603,6 @@ LoopAsync(60000, function()
     return false
 end)
 
-Log(string.format("WorldBossAuraSystem initialized. Boss spawns every %d seconds (%d minutes).",
-    Config.SpawnIntervalSeconds, Config.SpawnIntervalSeconds / 60))
+Log(string.format("WorldBossAuraSystem initialized. Boss spawns every %d seconds (%d hour), despawns in %d seconds (%d minutes).",
+    Config.SpawnIntervalSeconds, Config.SpawnIntervalSeconds / 3600,
+    Config.DespawnSeconds or 600, (Config.DespawnSeconds or 600) / 60))
