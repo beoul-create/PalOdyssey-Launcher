@@ -823,6 +823,44 @@ namespace PalLauncher.Services
                                 required = false
                             }
                         }
+                    },
+                    new
+                    {
+                        name = "post-changelog",
+                        description = "Publish an official update/changelog with @Changelog Notifications ping (Admin Only)",
+                        type = 1,
+                        default_member_permissions = "8",
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "title",
+                                description = "Update / Changelog Title",
+                                type = 3,
+                                required = true
+                            },
+                            new
+                            {
+                                name = "content",
+                                description = "Changelog description / patch notes",
+                                type = 3,
+                                required = true
+                            },
+                            new
+                            {
+                                name = "channel_id",
+                                description = "Target channel ID (defaults to 1542544366176968714)",
+                                type = 3,
+                                required = false
+                            },
+                            new
+                            {
+                                name = "ping_role",
+                                description = "Whether to ping @Changelog Notifications (default: true)",
+                                type = 5, // BOOLEAN
+                                required = false
+                            }
+                        }
                     }
                 };
 
@@ -1067,6 +1105,20 @@ namespace PalLauncher.Services
                         await EditDeferredResponseEmbedAsync(interactionToken,
                             title: "📢 Changelog Reaction Roles Deployed",
                             description: $"Interactive notification button & reaction prompt successfully deployed to channel <#{targetCh}>!",
+                            color: 0x00FF88);
+                        break;
+
+                    case "post-changelog":
+                    case "changelog":
+                        string clTitle = GetStringOption(data, "title") ?? "🌟 PalOdyssey Update";
+                        string clContent = GetStringOption(data, "content") ?? "";
+                        string clChannel = GetStringOption(data, "channel_id") ?? "1542544366176968714";
+                        bool clPing = GetBoolOption(data, "ping_role", true);
+
+                        await BroadcastChangelogAsync(clTitle, clContent, clChannel, clPing);
+                        await EditDeferredResponseEmbedAsync(interactionToken,
+                            title: "✅ Changelog Published!",
+                            description: $"Successfully posted update **{clTitle}** to <#{clChannel}> with @Changelog Notifications ping: `{clPing}`.",
                             color: 0x00FF88);
                         break;
 
@@ -2665,6 +2717,26 @@ namespace PalLauncher.Services
             return defaultValue;
         }
 
+        private static bool GetBoolOption(JsonElement data, string optionName, bool defaultValue = true)
+        {
+            if (data.TryGetProperty("options", out var options) && options.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var opt in options.EnumerateArray())
+                {
+                    if (opt.TryGetProperty("name", out var n) && n.GetString()?.Equals(optionName, StringComparison.OrdinalIgnoreCase) == true)
+                    {
+                        if (opt.TryGetProperty("value", out var v))
+                        {
+                            if (v.ValueKind == JsonValueKind.True) return true;
+                            if (v.ValueKind == JsonValueKind.False) return false;
+                            if (bool.TryParse(v.GetString(), out bool parsed)) return parsed;
+                        }
+                    }
+                }
+            }
+            return defaultValue;
+        }
+
 
 
         private async Task ExecuteInventoryCommandAsync(string channelId, string authorId)
@@ -3063,6 +3135,77 @@ namespace PalLauncher.Services
             catch (Exception ex)
             {
                 _logService.LogWarning($"Exception setting up Changelog Role message: {ex.Message}", "DiscordBot");
+            }
+        }
+
+        public async Task BroadcastChangelogAsync(string title, string description, string channelId = "1542544366176968714", bool pingRole = true)
+        {
+            if (string.IsNullOrWhiteSpace(_token) || string.IsNullOrWhiteSpace(channelId)) return;
+
+            try
+            {
+                _logService.LogInfo($"Publishing official changelog '{title}' to channel {channelId} (Ping role: {pingRole})...", "DiscordBot");
+
+                string? rolePing = null;
+                if (pingRole)
+                {
+                    try
+                    {
+                        var chResp = await _httpClient.GetAsync($"channels/{channelId}");
+                        if (chResp.IsSuccessStatusCode)
+                        {
+                            string chJson = await chResp.Content.ReadAsStringAsync();
+                            using var doc = JsonDocument.Parse(chJson);
+                            if (doc.RootElement.TryGetProperty("guild_id", out var gIdProp))
+                            {
+                                string guildId = gIdProp.GetString() ?? "";
+                                string? roleId = await GetOrCreateChangelogRoleAsync(guildId);
+                                if (!string.IsNullOrWhiteSpace(roleId))
+                                {
+                                    rolePing = $"<@&{roleId}>";
+                                }
+                            }
+                        }
+                    }
+                    catch { }
+                }
+
+                var payload = new
+                {
+                    content = rolePing,
+                    embeds = new[]
+                    {
+                        new
+                        {
+                            title = $"📢 {title}",
+                            description = description,
+                            color = 0x00E5FF, // Radiant Cyan / Discord Accent
+                            footer = new
+                            {
+                                text = "PalOdyssey Official Changelog • Update Notification"
+                            },
+                            timestamp = DateTime.UtcNow.ToString("o")
+                        }
+                    }
+                };
+
+                string json = JsonSerializer.Serialize(payload);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var resp = await _httpClient.PostAsync($"channels/{channelId}/messages", content);
+                if (resp.IsSuccessStatusCode)
+                {
+                    _logService.LogSuccess($"Changelog '{title}' successfully published to channel {channelId}!", "DiscordBot");
+                }
+                else
+                {
+                    string err = await resp.Content.ReadAsStringAsync();
+                    _logService.LogWarning($"Failed to post changelog: {resp.StatusCode} - {err}", "DiscordBot");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Exception broadcasting changelog: {ex.Message}", "DiscordBot");
             }
         }
 
