@@ -251,6 +251,7 @@ namespace PalLauncher.Services
                             }
 
                             _logService.LogSuccess($"Discord Bot logged in successfully as @{BotUsername} (24/7 Ready)!", "DiscordBot");
+                            _ = SetupChangelogRoleMessageAsync("1534308427080273990");
                         }
                         else if (eventType == "RESUMED")
                         {
@@ -265,6 +266,16 @@ namespace PalLauncher.Services
                         {
                             var msgData = root.GetProperty("d").Clone();
                             _ = HandleMessageCreateAsync(msgData);
+                        }
+                        else if (eventType == "MESSAGE_REACTION_ADD")
+                        {
+                            var reactionData = root.GetProperty("d").Clone();
+                            _ = HandleReactionAddAsync(reactionData);
+                        }
+                        else if (eventType == "MESSAGE_REACTION_REMOVE")
+                        {
+                            var reactionData = root.GetProperty("d").Clone();
+                            _ = HandleReactionRemoveAsync(reactionData);
                         }
                         break;
 
@@ -795,6 +806,23 @@ namespace PalLauncher.Services
                         description = "Gracefully shut down the PalOdyssey dedicated server (Admin Only)",
                         type = 1,
                         default_member_permissions = "8"
+                    },
+                    new
+                    {
+                        name = "setup-changelog-roles",
+                        description = "Deploy the interactive Changelog Notification role reaction & button prompt (Admin Only)",
+                        type = 1,
+                        default_member_permissions = "8",
+                        options = new object[]
+                        {
+                            new
+                            {
+                                name = "channel_id",
+                                description = "Target channel ID (defaults to 1534308427080273990)",
+                                type = 3,
+                                required = false
+                            }
+                        }
                     }
                 };
 
@@ -915,8 +943,8 @@ namespace PalLauncher.Services
                     return;
                 }
 
-                // Otherwise, send standard Identify payload
-                int intents = 1 | 512 | 4096 | 32768;
+                // Otherwise, send standard Identify payload (1: GUILDS, 512: GUILD_MESSAGES, 1024: GUILD_MESSAGE_REACTIONS, 4096: DIRECT_MESSAGES, 32768: MESSAGE_CONTENT)
+                int intents = 1 | 512 | 1024 | 4096 | 32768;
 
                 var identifyPayload = new
                 {
@@ -977,7 +1005,20 @@ namespace PalLauncher.Services
                 }
 
                 if (!interaction.TryGetProperty("data", out var data)) return;
-                string command = data.GetProperty("name").GetString()?.ToLowerInvariant() ?? "";
+
+                int interactionType = interaction.TryGetProperty("type", out var typeProp) ? typeProp.GetInt32() : 2;
+                if (interactionType == 3) // MESSAGE_COMPONENT (Button Click)
+                {
+                    string customId = data.TryGetProperty("custom_id", out var cid) ? cid.GetString() ?? "" : "";
+                    if (customId == "toggle_changelog_role" || customId == "get_changelog_role")
+                    {
+                        string guildId = interaction.TryGetProperty("guild_id", out var g) ? g.GetString() ?? "" : "";
+                        await HandleChangelogRoleButtonClickAsync(interactionId, interactionToken, guildId, authorId, authorName);
+                        return;
+                    }
+                }
+
+                string command = data.TryGetProperty("name", out var nProp) ? nProp.GetString()?.ToLowerInvariant() ?? "" : "";
 
                 // 1. Instant commands: Answer in a single HTTP packet (<50ms) without defer latency
                 switch (command)
@@ -1019,6 +1060,16 @@ namespace PalLauncher.Services
 
                 switch (command)
                 {
+                    case "setup-changelog-roles":
+                    case "changelog-roles":
+                        string targetCh = GetStringOption(data, "channel_id") ?? (!string.IsNullOrWhiteSpace(channelId) ? channelId : "1534308427080273990");
+                        await SetupChangelogRoleMessageAsync(targetCh);
+                        await EditDeferredResponseEmbedAsync(interactionToken,
+                            title: "📢 Changelog Reaction Roles Deployed",
+                            description: $"Interactive notification button & reaction prompt successfully deployed to channel <#{targetCh}>!",
+                            color: 0x00FF88);
+                        break;
+
                     case "start":
                     case "boot":
                         await ExecuteStartInteractionAsync(interactionToken, channelId, authorName);
@@ -2918,6 +2969,342 @@ namespace PalLauncher.Services
             catch (Exception ex)
             {
                 _logService.LogWarning($"Failed to broadcast World Boss capture to Discord: {ex.Message}", "DiscordBot");
+            }
+        }
+
+        public async Task SetupChangelogRoleMessageAsync(string channelId = "1534308427080273990")
+        {
+            if (string.IsNullOrWhiteSpace(_token) || string.IsNullOrWhiteSpace(channelId)) return;
+
+            try
+            {
+                _logService.LogInfo($"Deploying Changelog Reaction/Button Role prompt to channel {channelId}...", "DiscordBot");
+
+                var payload = new
+                {
+                    embeds = new[]
+                    {
+                        new
+                        {
+                            title = "📢 PalOdyssey Changelog & Update Notifications",
+                            description = "Click the button below or react with 🔔 to automatically receive the **Changelog Notifications** role!\n\n" +
+                                         "**What You'll Be Notified About:**\n" +
+                                         "• ⚔️ **Major Balance Updates & Patch Notes**\n" +
+                                         "• 🔴 **World Raid Boss Spawn Announcements**\n" +
+                                         "• ✨ **New Custom Auras & Mechanics**\n" +
+                                         "• 🧬 **Custom Elemental Subspecies Releases**\n" +
+                                         "• 🎁 **Community Events & Server Perks**\n\n" +
+                                         "*Click again at any time to toggle notifications off.*",
+                            color = 0x3498DB,
+                            footer = new
+                            {
+                                text = "PalOdyssey Autonomous Host • Click button or react below"
+                            },
+                            timestamp = DateTime.UtcNow.ToString("o")
+                        }
+                    },
+                    components = new object[]
+                    {
+                        new
+                        {
+                            type = 1, // Action Row
+                            components = new object[]
+                            {
+                                new
+                                {
+                                    type = 2, // Button
+                                    style = 1, // Primary Blurple
+                                    label = "Get Changelog Notifications",
+                                    emoji = new
+                                    {
+                                        name = "🔔"
+                                    },
+                                    custom_id = "toggle_changelog_role"
+                                }
+                            }
+                        }
+                    }
+                };
+
+                string json = JsonSerializer.Serialize(payload);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var resp = await _httpClient.PostAsync($"channels/{channelId}/messages", content);
+                if (resp.IsSuccessStatusCode)
+                {
+                    string respJson = await resp.Content.ReadAsStringAsync();
+                    using var doc = JsonDocument.Parse(respJson);
+                    if (doc.RootElement.TryGetProperty("id", out var idProp))
+                    {
+                        string msgId = idProp.GetString() ?? "";
+                        _logService.LogSuccess($"Changelog Notification Role prompt posted to channel {channelId} (Message ID: {msgId})!", "DiscordBot");
+
+                        // Add default 🔔 reaction to message for traditional reaction-role support
+                        if (!string.IsNullOrWhiteSpace(msgId))
+                        {
+                            try
+                            {
+                                var reactResp = await _httpClient.PutAsync($"channels/{channelId}/messages/{msgId}/reactions/%F0%9F%94%94/@me", null);
+                                if (reactResp.IsSuccessStatusCode)
+                                {
+                                    _logService.LogSuccess($"Added 🔔 reaction to Changelog Role message {msgId} in channel {channelId}!", "DiscordBot");
+                                }
+                            }
+                            catch { }
+                        }
+                    }
+                }
+                else
+                {
+                    string err = await resp.Content.ReadAsStringAsync();
+                    _logService.LogWarning($"Failed to post Changelog Role message: {resp.StatusCode} - {err}", "DiscordBot");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Exception setting up Changelog Role message: {ex.Message}", "DiscordBot");
+            }
+        }
+
+        private async Task<string?> GetOrCreateChangelogRoleAsync(string guildId)
+        {
+            if (string.IsNullOrWhiteSpace(guildId)) return null;
+
+            try
+            {
+                // 1. Fetch existing guild roles
+                var resp = await _httpClient.GetAsync($"guilds/{guildId}/roles");
+                if (resp.IsSuccessStatusCode)
+                {
+                    string json = await resp.Content.ReadAsStringAsync();
+                    using var doc = JsonDocument.Parse(json);
+                    foreach (var role in doc.RootElement.EnumerateArray())
+                    {
+                        string name = role.TryGetProperty("name", out var n) ? n.GetString() ?? "" : "";
+                        if (name.Equals("Changelog Notifications", StringComparison.OrdinalIgnoreCase) ||
+                            name.Equals("Changelog Alert", StringComparison.OrdinalIgnoreCase) ||
+                            name.Equals("Updates", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return role.GetProperty("id").GetString();
+                        }
+                    }
+                }
+
+                // 2. Create role if not found
+                var createPayload = new
+                {
+                    name = "Changelog Notifications",
+                    color = 3447003, // Sleek Cyan / Blurple
+                    hoist = false,
+                    mentionable = true,
+                    permissions = "0"
+                };
+
+                var content = new StringContent(JsonSerializer.Serialize(createPayload), Encoding.UTF8, "application/json");
+                var createResp = await _httpClient.PostAsync($"guilds/{guildId}/roles", content);
+                if (createResp.IsSuccessStatusCode)
+                {
+                    string createJson = await createResp.Content.ReadAsStringAsync();
+                    using var doc = JsonDocument.Parse(createJson);
+                    if (doc.RootElement.TryGetProperty("id", out var idProp))
+                    {
+                        string newRoleId = idProp.GetString() ?? "";
+                        _logService.LogSuccess($"Created new Discord role 'Changelog Notifications' (ID: {newRoleId}) in guild {guildId}!", "DiscordBot");
+                        return newRoleId;
+                    }
+                }
+                else
+                {
+                    string err = await createResp.Content.ReadAsStringAsync();
+                    _logService.LogWarning($"Failed to create 'Changelog Notifications' role: {createResp.StatusCode} - {err}", "DiscordBot");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Error finding/creating Changelog Notifications role: {ex.Message}", "DiscordBot");
+            }
+
+            return null;
+        }
+
+        private async Task<bool> ToggleMemberRoleAsync(string guildId, string userId, string roleId, bool? forceAdd = null)
+        {
+            if (string.IsNullOrWhiteSpace(guildId) || string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(roleId))
+                return false;
+
+            try
+            {
+                // Check if member already has the role
+                var memberResp = await _httpClient.GetAsync($"guilds/{guildId}/members/{userId}");
+                bool hasRole = false;
+                if (memberResp.IsSuccessStatusCode)
+                {
+                    string mJson = await memberResp.Content.ReadAsStringAsync();
+                    using var doc = JsonDocument.Parse(mJson);
+                    if (doc.RootElement.TryGetProperty("roles", out var rolesArr) && rolesArr.ValueKind == JsonValueKind.Array)
+                    {
+                        foreach (var r in rolesArr.EnumerateArray())
+                        {
+                            if (r.GetString() == roleId)
+                            {
+                                hasRole = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                bool shouldAdd = forceAdd ?? !hasRole;
+
+                if (shouldAdd)
+                {
+                    var addResp = await _httpClient.PutAsync($"guilds/{guildId}/members/{userId}/roles/{roleId}", null);
+                    if (addResp.IsSuccessStatusCode)
+                    {
+                        _logService.LogSuccess($"Granted 'Changelog Notifications' role to member {userId} in guild {guildId}", "DiscordBot");
+                        return true;
+                    }
+                    else
+                    {
+                        string err = await addResp.Content.ReadAsStringAsync();
+                        _logService.LogWarning($"Failed to add role {roleId} to {userId}: {addResp.StatusCode} - {err}", "DiscordBot");
+                    }
+                }
+                else
+                {
+                    var delResp = await _httpClient.DeleteAsync($"guilds/{guildId}/members/{userId}/roles/{roleId}");
+                    if (delResp.IsSuccessStatusCode)
+                    {
+                        _logService.LogSuccess($"Removed 'Changelog Notifications' role from member {userId} in guild {guildId}", "DiscordBot");
+                        return false;
+                    }
+                    else
+                    {
+                        string err = await delResp.Content.ReadAsStringAsync();
+                        _logService.LogWarning($"Failed to remove role {roleId} from {userId}: {delResp.StatusCode} - {err}", "DiscordBot");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Exception updating member role: {ex.Message}", "DiscordBot");
+            }
+
+            return false;
+        }
+
+        private async Task HandleChangelogRoleButtonClickAsync(string interactionId, string interactionToken, string guildId, string userId, string authorName)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(guildId))
+                {
+                    await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                        title: "⚠️ Server Only",
+                        description: "This button must be used within a Discord server.",
+                        color: 0xFFAA00,
+                        ephemeral: true);
+                    return;
+                }
+
+                string? roleId = await GetOrCreateChangelogRoleAsync(guildId);
+                if (string.IsNullOrWhiteSpace(roleId))
+                {
+                    await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                        title: "⚠️ Role Setup Error",
+                        description: "Could not create or find the **Changelog Notifications** role. Please ensure the bot has 'Manage Roles' permission.",
+                        color: 0xFF4466,
+                        ephemeral: true);
+                    return;
+                }
+
+                bool roleAdded = await ToggleMemberRoleAsync(guildId, userId, roleId);
+                if (roleAdded)
+                {
+                    await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                        title: "🔔 Notifications Enabled!",
+                        description: $"🎉 You have been given the **<@&{roleId}>** role!\n\nYou will now receive Discord notifications whenever new patch notes, balance changes, world boss raids, and changelogs are published.",
+                        color: 0x00FF88,
+                        ephemeral: true);
+                }
+                else
+                {
+                    await RespondInteractionEmbedAsync(interactionId, interactionToken,
+                        title: "🔕 Notifications Disabled",
+                        description: $"Removed the **<@&{roleId}>** role.\n\nYou will no longer be notified when changelogs are published. Click the button again at any time to re-enable!",
+                        color: 0xFFAA00,
+                        ephemeral: true);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Exception handling changelog role button click: {ex.Message}", "DiscordBot");
+            }
+        }
+
+        private async Task HandleReactionAddAsync(JsonElement reaction)
+        {
+            try
+            {
+                string channelId = reaction.TryGetProperty("channel_id", out var ch) ? ch.GetString() ?? "" : "";
+                string userId = reaction.TryGetProperty("user_id", out var u) ? u.GetString() ?? "" : "";
+                string guildId = reaction.TryGetProperty("guild_id", out var g) ? g.GetString() ?? "" : "";
+
+                if (string.IsNullOrWhiteSpace(userId) || userId == _applicationId) return;
+                if (channelId != "1534308427080273990" && channelId != _channelId) return;
+
+                string emojiName = "";
+                if (reaction.TryGetProperty("emoji", out var emoji))
+                {
+                    emojiName = emoji.TryGetProperty("name", out var en) ? en.GetString() ?? "" : "";
+                }
+
+                if (emojiName == "🔔" || emojiName == "📢" || emojiName.Contains("bell", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (string.IsNullOrWhiteSpace(guildId)) return;
+                    string? roleId = await GetOrCreateChangelogRoleAsync(guildId);
+                    if (!string.IsNullOrWhiteSpace(roleId))
+                    {
+                        await ToggleMemberRoleAsync(guildId, userId, roleId, forceAdd: true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Exception handling reaction add: {ex.Message}", "DiscordBot");
+            }
+        }
+
+        private async Task HandleReactionRemoveAsync(JsonElement reaction)
+        {
+            try
+            {
+                string channelId = reaction.TryGetProperty("channel_id", out var ch) ? ch.GetString() ?? "" : "";
+                string userId = reaction.TryGetProperty("user_id", out var u) ? u.GetString() ?? "" : "";
+                string guildId = reaction.TryGetProperty("guild_id", out var g) ? g.GetString() ?? "" : "";
+
+                if (string.IsNullOrWhiteSpace(userId) || userId == _applicationId) return;
+                if (channelId != "1534308427080273990" && channelId != _channelId) return;
+
+                string emojiName = "";
+                if (reaction.TryGetProperty("emoji", out var emoji))
+                {
+                    emojiName = emoji.TryGetProperty("name", out var en) ? en.GetString() ?? "" : "";
+                }
+
+                if (emojiName == "🔔" || emojiName == "📢" || emojiName.Contains("bell", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (string.IsNullOrWhiteSpace(guildId)) return;
+                    string? roleId = await GetOrCreateChangelogRoleAsync(guildId);
+                    if (!string.IsNullOrWhiteSpace(roleId))
+                    {
+                        await ToggleMemberRoleAsync(guildId, userId, roleId, forceAdd: false);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Exception handling reaction remove: {ex.Message}", "DiscordBot");
             }
         }
 
