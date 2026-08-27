@@ -1,4 +1,4 @@
-{
+﻿{
     "serverVersion":  "0.3.6.0",
     "baseDownloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOdyssey-Launcher/main/Modpack/",
     "minimumLauncherVersion":  "1.0.0",
@@ -216,8 +216,8 @@
                      "version":  "1.2.0",
                      "description":  "Progressive level caps tied to boss milestones",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\LevelLock\\Scripts\\main.lua",
-                     "sizeBytes":  98696,
-                     "sha256":  "DE5404EEAEFFDA583854D60B6A3683F2F080541F1556B231932ADF0422469EB4",
+                     "sizeBytes":  98888,
+                     "sha256":  "678D50867DC0C23A41458265AB348A53B53DE9F20378F16FEA7F1B70C74B0F45",
                      "required":  false,
                      "enabledByDefault":  true
                  },
@@ -238,7 +238,7 @@
                      "name":  "PalOdyssey Cinematic FreeCam \u0026 Photo Studio",
                      "category":  "Visuals",
                      "version":  "1.0.0",
-                     "description":  "360ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â° FreeCam (F8), Time Freeze (F9), Clean HUD (F10), and Super-Res 4K/8K Screenshot Engine (F11)",
+                     "description":  "360ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â° FreeCam (F8), Time Freeze (F9), Clean HUD (F10), and Super-Res 4K/8K Screenshot Engine (F11)",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\PalCinematicStudio\\Scripts\\main.lua",
                      "sizeBytes":  5372,
                      "sha256":  "601F8F8D16907FF65493745FDC28E8B1DAD652C4C7402E32C4C86CE479803549",

@@ -479,11 +479,12 @@ end
 
 -- players have an empty or "None" CharacterID, pals have a real one
 local function isPlayerCharacter(individualParam)
+    if not individualParam or not individualParam:IsValid() then return false end
     local ok, charID = pcall(function()
         return individualParam:GetCharacterID():ToString()
     end)
-    if not ok then return false end
-    return charID == "" or charID == "None"
+    if not ok or not charID then return false end
+    return charID == "" or charID == "None" or charID == "Player" or string.find(charID, "Player", 1, true) ~= nil
 end
 
 ------- world identity -------
@@ -1135,23 +1136,31 @@ local function clampToCap(selfObj, cap, isPlayer, source)
 
     if not sp then return level end
 
-    if level == cap then
-        local entry = entryExpForLevel(cap, isPlayer)
-        if entry then
-            frozenExp[key] = nil
-            if sp.Exp > entry then
-                -- the discard point: this is the only place the destroyed
-                -- amount is known, so it is the only place it can be banked
-                if isPlayer then restBank(selfObj, sp.Exp - entry) end
-                sp.Exp = entry
-            end
-            lastExp[key] = sp.Exp
-            return level
+    -- AT OR OVER CAP: enforce cap strictly!
+    local entry = entryExpForLevel(cap, isPlayer)
+    if entry then
+        frozenExp[key] = nil
+        if sp.Exp > entry then
+            -- bank excess EXP
+            if isPlayer then restBank(selfObj, sp.Exp - entry) end
+            sp.Exp = entry
         end
-        -- exp table unavailable: fall through to capture-based freeze
+        if level > cap then
+            pcall(function()
+                if sp.Level ~= nil and sp.Level > cap then
+                    sp.Level = cap
+                end
+                if selfObj.SetLevel then
+                    selfObj:SetLevel(cap)
+                end
+            end)
+            level = cap
+        end
+        lastExp[key] = sp.Exp
+        return level
     end
 
-    -- over cap (level > cap), or table unavailable: freeze in place, never reduce
+    -- exp table unavailable fallback: freeze in place
     if frozenExp[key] == nil then
         frozenExp[key] = sp.Exp
         dbg(string.format("[%s] froze in place at %d (level %d, cap %d)", source, frozenExp[key], level, cap))
@@ -1180,14 +1189,20 @@ local function ppEnforce(selfObj, source)
             if ok then uid = canonUid(realUid(fmtGuid(owner))) end
         end
         if not uid then return end
-        -- No loaded record = we don't KNOW this identity's progress. Skip
-        -- rather than assume 0 towers and clamp to the tower-1 cap (v2.1.4
-        -- bug: a level-30 player frozen at "cap 10" because their record
-        -- loaded under a different identity). ppLoadPlayer's retry loop
-        -- resumes enforcement once the record lands under the right uid.
-        if not playerDefeated[uid] then return end
-        n = playerCount(uid)
-        if n < #LADDER then cap = LADDER[n + 1].cap end
+
+        -- Attempt immediate load if unseeded
+        if not playerDefeated[uid] then
+            pcall(function() ppEnsureLoaded(uid) end)
+        end
+
+        if playerDefeated[uid] then
+            n = playerCount(uid)
+            if n < #LADDER then cap = LADDER[n + 1].cap end
+        else
+            -- Safety baseline: enforce first tower cap while record initializes
+            cap = LADDER[1].cap
+            n = 0
+        end
     end
     if not cap then return end  -- all cleared / policy "off" / unresolved
 
