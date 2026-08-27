@@ -907,11 +907,54 @@ LoopAsync(15000, function()
 
         for ptrKey, record in pairs(PalRecords) do
             if record.BaseAura and record.BaseAura.IsBoss and (now - (record.SpawnTime or now) >= despawnAge) then
-                Log(string.format("World Boss '%s' timed out after %ds. Cleaning up actor.", record.PalName, despawnAge))
+                Log(string.format("World Boss '%s' timed out after %ds. Triggering SAO polygon shatter dissolve effect.", record.PalName, despawnAge))
+                
                 pcall(function()
                     local pal = record.ActorRef
-                    if pal and pal:IsValid() and pal.K2_DestroyActor then
-                        pal:K2_DestroyActor()
+                    if pal and pal:IsValid() then
+                        -- 1. In-game toast announcement that the boss shattered/dissipated
+                        pcall(function()
+                            local SDIR = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", ""))
+                            package.path = SDIR .. "../../DarnToasts/Scripts/?.lua;" .. package.path
+                            local Toast = require("ToastLib").new("WorldBossAura")
+                            if Toast and Toast.notify then
+                                local locName = record.Location and record.Location.Name or "the battlefield"
+                                Toast.notify(string.format("💨 BOSS DISSIPATED: %s shattered into polygon shards at %s!", record.PalName, locName), 0.7, 0.7, 0.8)
+                            end
+                        end)
+
+                        -- 2. Trigger native Palworld death dissolve & SAO polygon shatter effect
+                        pcall(function()
+                            if pal.PlayDead then
+                                pal:PlayDead()
+                            elseif pal.CharacterParameterComponent and pal.CharacterParameterComponent:IsValid() then
+                                pal.CharacterParameterComponent:SetHP(0)
+                            end
+                        end)
+
+                        -- 3. Spawn crystalline Niagara/Emitter burst at boss location
+                        pcall(function()
+                            local loc = pal:K2_GetActorLocation()
+                            if loc then
+                                local niagara = StaticFindObject("/Script/Niagara.Default__NiagaraFunctionLibrary")
+                                if niagara and niagara:IsValid() then
+                                    local deathSys = StaticFindObject("/Game/Pal/Effect/Niagara/Dead/NS_PalDead.NS_PalDead") or
+                                                     StaticFindObject("/Game/Pal/Effect/Niagara/Common/NS_Disappear.NS_Disappear")
+                                    if deathSys and deathSys:IsValid() then
+                                        niagara:SpawnSystemAtLocation(pal, deathSys, loc, { Pitch = 0, Yaw = 0, Roll = 0 }, { X = Config.BossScale, Y = Config.BossScale, Z = Config.BossScale }, true, true, 0, true)
+                                    end
+                                end
+                            end
+                        end)
+
+                        -- 4. Delay actor cleanup by 3.5s to let the SAO shatter animation play out fully
+                        ExecuteWithDelay(3500, function()
+                            pcall(function()
+                                if pal and pal:IsValid() and pal.K2_DestroyActor then
+                                    pal:K2_DestroyActor()
+                                end
+                            end)
+                        end)
                     end
                 end)
                 PalRecords[ptrKey] = nil
