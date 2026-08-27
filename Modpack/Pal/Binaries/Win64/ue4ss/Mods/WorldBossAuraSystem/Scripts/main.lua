@@ -6,10 +6,12 @@
 -- 2. Wild Auras (0.1% chance on normal wild Pal spawns):
 --    - Corrupted (Neon Purple): 2x Move Speed, 2x Work Speed
 --    - Celestial (Radiant Gold): 2x Move Speed, 2x Work Speed
---    - Overcharged (Neon Cyan): 2x Move Speed, 1.5x Jump, Swift + Runner passives
---    - Colossus (Neon Emerald): 1.5x Scale, 4x Defense, 2x HP, BurlyBody passive
+--    - Overcharged (Neon Cyan): 2x Move Speed, 1.5x Jump, Swift + Runner
+--    - Colossus (Neon Emerald): 1.5x Scale, 4x Defense, 2x HP, BurlyBody
 --    - Berserker (Blood Crimson): 2.5x Attack, 0.5x Defense, 1.5x Move Speed, Ferocious + Musclehead
 --    - Master Artisan (Amber Orange): 4x Work Speed, Max Sanity lock, Artisan + WorkSlave
+--    - Regressor (Chrono Platinum): 2x Combat Stats, 2x Partner Skill, 100% Active Skill Cooldown (0 CD)
+--    - Transmigrator (Cosmic Prismatic): Unlimited Level Cap (Bypasses Lv 80 cap), Lv 5 in ALL Work Suitabilities
 -- 100% Original Custom Script for PalOdyssey
 -- ============================================================================
 
@@ -115,6 +117,29 @@ if not ok or type(Config) ~= "table" then
                 WorkMult = 4.0,
                 LockSanity = true,
                 Passives = { "Artisan", "WorkSlave" }
+            },
+            {
+                Name = "Regressor",
+                Title = "Regressor Chrono Pal",
+                StencilValue = 244,
+                GlowColor = "PlatinumSilver",
+                RGB = { 0.75, 0.85, 1.0 },
+                AtkMult = 2.0,
+                DefMult = 2.0,
+                HpMult = 2.0,
+                PartnerSkillMult = 2.0,
+                ZeroCooldown = true,
+                Passives = { "Legend", "Vanguard", "StrongConstitution" }
+            },
+            {
+                Name = "Transmigrator",
+                Title = "Transmigrator Sovereign Pal",
+                StencilValue = 243,
+                GlowColor = "PrismaticCosmic",
+                RGB = { 1.0, 0.3, 0.85 },
+                AllWorkSuitabilities = 5,
+                UnlimitedLevelGrowth = true,
+                Passives = { "Legend", "Artisan", "Swift", "BurlyBody" }
             }
         },
 
@@ -149,8 +174,10 @@ print("==========================================================")
 -- State Tracking
 -- ============================================================================
 
-local ActiveBosses    = {}  -- [ptrKey] = { PalName, Aura, SpawnTime, ActorRef }
-local ActiveWildAuras = {}  -- [ptrKey] = { PalName, AuraConfig, ActorRef }
+local ActiveBosses     = {}  -- [ptrKey] = { PalName, Aura, SpawnTime, ActorRef }
+local ActiveWildAuras  = {}  -- [ptrKey] = { PalName, AuraConfig, ActorRef }
+local ZeroCooldownPals = {}  -- [ptrKey] = palActor (Regressor zero cooldown loop)
+local TransmigratorPals = {} -- [ptrKey] = palActor (Transmigrator uncapped level loop)
 
 -- ============================================================================
 -- 1. DARNTOAST IN-GAME NOTIFICATIONS
@@ -295,6 +322,8 @@ end
 
 local function ApplyWildAuraBuffs(pal, auraConfig)
     if not pal or not pal:IsValid() or not auraConfig then return end
+    local ptrKey = tostring(pal:GetAddress())
+
     pcall(function()
         -- A. Visual Stencil Outline
         AttachAuraStencil(pal, auraConfig.StencilValue)
@@ -322,9 +351,10 @@ local function ApplyWildAuraBuffs(pal, auraConfig)
             end
         end
 
-        -- D. Parameter Component (Work, HP, ATK, DEF, Sanity)
+        -- D. Parameter Component (Work, HP, ATK, DEF, Sanity, Support)
         local paramComp = pal.CharacterParameterComponent
         if paramComp and paramComp:IsValid() then
+            -- Work Speed Multipliers
             if auraConfig.WorkMult then
                 if paramComp.SetCraftSpeed then
                     local curCraft = paramComp:GetCraftSpeed() or 100
@@ -336,6 +366,7 @@ local function ApplyWildAuraBuffs(pal, auraConfig)
                 end
             end
 
+            -- Combat Stats
             if auraConfig.HpMult and paramComp.GetMaxHP and paramComp.SetMaxHP and paramComp.SetHP then
                 local curHP = paramComp:GetMaxHP()
                 if curHP and curHP > 0 then
@@ -359,26 +390,112 @@ local function ApplyWildAuraBuffs(pal, auraConfig)
                 end
             end
 
+            -- Partner Skill Support Boost
+            if auraConfig.PartnerSkillMult and paramComp.GetSupport and paramComp.SetSupport then
+                local curSup = paramComp:GetSupport() or 100
+                paramComp:SetSupport(math.floor(curSup * auraConfig.PartnerSkillMult))
+            end
+
+            -- Sanity Lock
             if auraConfig.LockSanity and paramComp.SetSanity and paramComp.SetMaxSanity then
                 paramComp:SetMaxSanity(100)
                 paramComp:SetSanity(100)
             end
+
+            -- Transmigrator: All Work Suitabilities to Lv 5
+            if auraConfig.AllWorkSuitabilities then
+                local suitLvl = auraConfig.AllWorkSuitabilities
+                local suits = {
+                    "EmitFlame", "Watering", "Planting", "GenerateElectricity",
+                    "Handcraft", "Gathering", "Lumbering", "Mining",
+                    "OilExtraction", "Medicine", "Cooling", "Transport", "MonsterFarm"
+                }
+                for _, s in ipairs(suits) do
+                    pcall(function()
+                        local setter = paramComp["SetWorkSuitability_" .. s]
+                        if setter then setter(paramComp, suitLvl) end
+                    end)
+                end
+            end
+
+            -- Transmigrator: Unlimited Level Cap Growth past Lv 80
+            if auraConfig.UnlimitedLevelGrowth then
+                pcall(function()
+                    if paramComp.SetMaxLevel then paramComp:SetMaxLevel(999) end
+                    TransmigratorPals[ptrKey] = pal
+                end)
+            end
         end
 
         -- E. Passives Injection (Individual Parameter)
-        if auraConfig.Passives and #auraConfig.Passives > 0 then
-            local indParam = pal.GetIndividualParameter and pal:GetIndividualParameter() or nil
-            if indParam and indParam:IsValid() and indParam.AddPassiveSkill then
+        local indParam = pal.GetIndividualParameter and pal:GetIndividualParameter() or nil
+        if indParam and indParam:IsValid() then
+            if auraConfig.Passives and #auraConfig.Passives > 0 and indParam.AddPassiveSkill then
                 for _, passiveName in ipairs(auraConfig.Passives) do
                     pcall(function() indParam:AddPassiveSkill(passiveName) end)
                 end
             end
+            if auraConfig.PartnerSkillMult and indParam.SetPartnerSkillRank then
+                pcall(function() indParam:SetPartnerSkillRank(4) end)
+            end
+        end
+
+        -- F. Regressor Zero Cooldown Registration
+        if auraConfig.ZeroCooldown then
+            ZeroCooldownPals[ptrKey] = pal
         end
     end)
 end
 
 -- ============================================================================
--- 5. WILD AURA PAL ENHANCEMENT (0.1% Spawn Chance)
+-- 5. FAST REAL-TIME TICK ENGINES (Regressor 0 CD & Transmigrator Level Uncap)
+-- ============================================================================
+
+-- A. Regressor 100% Active Skill Cooldown Reduction (Instant Cast / 0 CD Loop)
+LoopAsync(250, function()
+    pcall(function()
+        for ptrKey, pal in pairs(ZeroCooldownPals) do
+            if not pal or not pal:IsValid() then
+                ZeroCooldownPals[ptrKey] = nil
+            else
+                pcall(function()
+                    -- Reset skill cooldown timers across action components
+                    local actComp = pal.ActionComponent
+                    if actComp and actComp:IsValid() and actComp.ResetAllSkillCooldowns then
+                        actComp:ResetAllSkillCooldowns()
+                    end
+                    local skillComp = pal.SkillComponent or pal.PalSkillComponent
+                    if skillComp and skillComp:IsValid() and skillComp.SetCooldownRate then
+                        skillComp:SetCooldownRate(0.0)
+                    end
+                end)
+            end
+        end
+    end)
+    return false
+end)
+
+-- B. Transmigrator Infinite Level Cap Watchdog
+LoopAsync(2000, function()
+    pcall(function()
+        for ptrKey, pal in pairs(TransmigratorPals) do
+            if not pal or not pal:IsValid() then
+                TransmigratorPals[ptrKey] = nil
+            else
+                pcall(function()
+                    local paramComp = pal.CharacterParameterComponent
+                    if paramComp and paramComp:IsValid() then
+                        if paramComp.SetMaxLevel then paramComp:SetMaxLevel(999) end
+                    end
+                end)
+            end
+        end
+    end)
+    return false
+end)
+
+-- ============================================================================
+-- 6. WILD AURA PAL ENHANCEMENT (0.1% Spawn Chance)
 -- ============================================================================
 
 local function EnhanceWildPal(pal, auraConfig)
@@ -394,10 +511,8 @@ local function EnhanceWildPal(pal, auraConfig)
             if id and id ~= "" then palName = tostring(id) end
         end
 
-        -- Apply all dynamic buffs for this aura type
         ApplyWildAuraBuffs(pal, auraConfig)
 
-        -- Track as active wild aura Pal
         ActiveWildAuras[ptrKey] = {
             PalName    = palName,
             AuraConfig = auraConfig,
@@ -412,7 +527,7 @@ local function EnhanceWildPal(pal, auraConfig)
 end
 
 -- ============================================================================
--- 6. PERIODIC WORLD BOSS SPAWNER (Strictly "World Boss" Neon Red Aura)
+-- 7. PERIODIC WORLD BOSS SPAWNER (Strictly "World Boss" Neon Red Aura)
 -- ============================================================================
 
 local function ScaleBossStats(pal)
@@ -449,7 +564,7 @@ local function SpawnWorldBoss()
         local spawnIndex = math.random(#Config.SpawnPoints)
         local targetLocation = Config.SpawnPoints[spawnIndex]
         local selectedPal = Config.BossPals[math.random(#Config.BossPals)]
-        local bossAura = Config.BossAura -- Strictly "World Boss" Neon Red
+        local bossAura = Config.BossAura
 
         Log(string.format("=== SPAWNING WORLD BOSS: %s (%s Aura) at %s ===",
             selectedPal, bossAura.Name, targetLocation.Name))
@@ -542,7 +657,7 @@ local function SpawnWorldBoss()
 end
 
 -- ============================================================================
--- 7. DYNAMIC WILD PAL SPAWN LISTENER (0.1% Aura Roll)
+-- 8. DYNAMIC WILD PAL SPAWN LISTENER (0.1% Aura Roll)
 -- ============================================================================
 
 pcall(function()
@@ -559,11 +674,11 @@ pcall(function()
             end
         end)
     end)
-    Log("Wild Aura spawn listener initialized (0.1% chance across 6 custom Auras).")
+    Log("Wild Aura spawn listener initialized (0.1% chance across 8 custom Auras).")
 end)
 
 -- ============================================================================
--- 8. CAPTURE HOOK (Boss Downsizing & Wild Aura Permanent Retention)
+-- 9. CAPTURE HOOK (Boss Downsizing & Wild Aura Permanent Retention)
 -- ============================================================================
 
 local function HandlePalCaptured(pal, playerActor)
@@ -660,7 +775,7 @@ pcall(function()
 end)
 
 -- ============================================================================
--- 9. PERIODIC TIMERS & DESPAWN CLEANUP
+-- 10. PERIODIC TIMERS & DESPAWN CLEANUP
 -- ============================================================================
 
 local spawnIntervalMs = (Config.SpawnIntervalSeconds or 3600) * 1000
@@ -694,4 +809,4 @@ LoopAsync(15000, function()
     return false
 end)
 
-Log("WorldBossAuraSystem v2.5 fully initialized.")
+Log("WorldBossAuraSystem v3.0 fully initialized with Regressor & Transmigrator engines.")
