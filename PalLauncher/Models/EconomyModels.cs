@@ -87,6 +87,11 @@ namespace PalLauncher.Models
         [JsonPropertyName("inventoryItems")]
         public Dictionary<string, int> InventoryItems { get; set; } = new(StringComparer.OrdinalIgnoreCase);
 
+        [JsonPropertyName("speedUpgradeCount")]
+        public int SpeedUpgradeCount { get; set; } = 0;
+
+        public int PermanentSpeedBonusPercent => SpeedUpgradeCount * 5;
+
         [JsonPropertyName("lastUpdated")]
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
     }
@@ -262,8 +267,11 @@ namespace PalLauncher.Models
         [JsonPropertyName("expBoostLevel")]
         public int ExpBoostLevel { get; set; } = 0;
 
+        [JsonPropertyName("moveSpeedLevel")]
+        public int MoveSpeedLevel { get; set; } = 0;
+
         public int TotalWorkSpeedPercent => WorkSpeedLevel * 1;
-        public int TotalMovementSpeedPercent => WorkSpeedLevel * 1;
+        public int TotalMovementSpeedPercent => MoveSpeedLevel * 2;
         public int TotalExpBoostPercent => ExpBoostLevel * 5;
     }
 

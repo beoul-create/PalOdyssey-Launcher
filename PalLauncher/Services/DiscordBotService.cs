@@ -617,12 +617,13 @@ namespace PalLauncher.Services
                             new
                             {
                                 name = "upgrade",
-                                description = "Perk to upgrade: Work Speed (5 Ancient Pts = +1%) or EXP Boost (20 Ancient Pts = +5%)",
+                                description = "Perk to upgrade: Work Speed (5 Pts = +1%), Move Speed (10 Pts = +2%), or EXP Boost (20 Pts = +5%)",
                                 type = 3, // STRING
                                 required = true,
                                 choices = new object[]
                                 {
-                                    new { name = "⚡ Base Pal Work & Movement Speed (5 Ancient Pts = +1%)", value = "work_speed" },
+                                    new { name = "⚡ Base Pal Work Speed (5 Ancient Pts = +1%)", value = "work_speed" },
+                                    new { name = "🏃 Guild Swift Strider Speed (10 Ancient Pts = +2%)", value = "move_speed" },
                                     new { name = "🌟 Global Server EXP Boost (20 Ancient Pts = +5%)", value = "exp_boost" }
                                 }
                             },
@@ -1720,7 +1721,8 @@ namespace PalLauncher.Services
             sb.AppendLine("• 🔮 **1 Ancient Technology Point** ➔ `🪙 +2 Standard Technology Points`\n");
 
             sb.AppendLine("### 🏰 Guild & Server Perks (`/perk` | `/perks`)");
-            sb.AppendLine($"• ⚡ **Base Pal Work & Movement Speed**: `5 Ancient Pts` = `+1% Speed` (Active: **+{perks.TotalWorkSpeedPercent}%**)");
+            sb.AppendLine($"• ⚡ **Base Pal Work Speed**: `5 Ancient Pts` = `+1% Work Speed` (Active: **+{perks.TotalWorkSpeedPercent}%**)");
+            sb.AppendLine($"• 🏃 **Guild Swift Strider Speed**: `10 Ancient Pts` = `+2% Move Speed` (Active: **+{perks.TotalMovementSpeedPercent}%**)");
             sb.AppendLine($"• 🌟 **Global Server EXP Boost**: `20 Ancient Pts` = `+5% EXP` (Active: **+{perks.TotalExpBoostPercent}%**)\n");
 
             sb.AppendLine("### 🎰 Mystery & Ancient Gacha Tiers (`/gacha`)");
@@ -2410,11 +2412,13 @@ namespace PalLauncher.Services
                 var perks = _economyService.GetGuildPerks();
                 var sb = new StringBuilder();
                 sb.AppendLine("### 🏰 Active Guild & Server Perks\n");
-                sb.AppendLine($"• ⚡ **Base Pal Work & Movement Speed**: **Tier {perks.WorkSpeedLevel}** (`+{perks.TotalWorkSpeedPercent}% Speed Boost`)");
-                sb.AppendLine($"  ↳ *Upgrade Cost: `🔮 5 Ancient Tech Points` (Adds +1% Work & Movement Speed)*\n");
+                sb.AppendLine($"• ⚡ **Base Pal Work Speed**: **Tier {perks.WorkSpeedLevel}** (`+{perks.TotalWorkSpeedPercent}% Work Boost`)");
+                sb.AppendLine($"  ↳ *Upgrade Cost: `🔮 5 Ancient Tech Points` (Adds +1% Base Work Speed)*\n");
+                sb.AppendLine($"• 🏃 **Guild Swift Strider Speed**: **Tier {perks.MoveSpeedLevel}** (`+{perks.TotalMovementSpeedPercent}% Move Speed Boost`)");
+                sb.AppendLine($"  ↳ *Upgrade Cost: `🔮 10 Ancient Tech Points` (Adds +2% Movement & Sprint Speed)*\n");
                 sb.AppendLine($"• 🌟 **Global Server EXP Boost**: **Tier {perks.ExpBoostLevel}** (`+{perks.TotalExpBoostPercent}% EXP Boost`)");
                 sb.AppendLine($"  ↳ *Upgrade Cost: `🔮 20 Ancient Tech Points` (Adds +5% Server EXP)*\n");
-                sb.AppendLine("💡 *Run `/perk upgrade:work_speed` or `/perk upgrade:exp_boost` to contribute!*");
+                sb.AppendLine("💡 *Run `/perk upgrade:work_speed`, `/perk upgrade:move_speed`, or `/perk upgrade:exp_boost` to contribute!*");
 
                 await EditDeferredResponseEmbedAsync(interactionToken,
                     title: "🏰 PalOdyssey Guild & Server Perks",

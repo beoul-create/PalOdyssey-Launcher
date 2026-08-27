@@ -49,7 +49,8 @@ namespace PalLauncher.Services
                 return new GuildPerksState
                 {
                     WorkSpeedLevel = _guildPerks.WorkSpeedLevel,
-                    ExpBoostLevel = _guildPerks.ExpBoostLevel
+                    ExpBoostLevel = _guildPerks.ExpBoostLevel,
+                    MoveSpeedLevel = _guildPerks.MoveSpeedLevel
                 };
             }
         }
@@ -57,6 +58,17 @@ namespace PalLauncher.Services
         private static readonly List<ShopItem> _shopCatalog = new()
         {
             // Ancient Tech Shop Category (Purchasable with Ancient Technology Points)
+            new ShopItem
+            {
+                Id = "swift_lotus",
+                Name = "Swift Lotus / Speed Fruit (+5% Movement Speed)",
+                ItemCode = "SwiftLotus",
+                TechPointCost = 0,
+                AncientPointCost = 3,
+                Category = "Ancient",
+                Description = "Sacred lotus fruit that permanently increases Player Character Sprint & Movement Speed by +5%.",
+                Emoji = "🪽"
+            },
             new ShopItem
             {
                 Id = "power_fruit",
@@ -1310,11 +1322,17 @@ namespace PalLauncher.Services
                 cost = 20;
                 perkName = "Global Server EXP Boost";
             }
+            else if (cleanType == "move_speed" || cleanType == "speed" || cleanType == "swift" || cleanType == "strider")
+            {
+                cleanType = "move_speed";
+                cost = 10;
+                perkName = "Guild Swift Strider Speed";
+            }
             else
             {
                 cleanType = "work_speed";
                 cost = 5;
-                perkName = "Base Pal Work & Movement Speed";
+                perkName = "Base Pal Work Speed";
             }
 
             int currentAncient;
@@ -1354,11 +1372,17 @@ namespace PalLauncher.Services
                     newLevel = _guildPerks.ExpBoostLevel;
                     bonusDesc = $"+{newLevel * 5}% Total Server EXP Boost (+5% added)";
                 }
+                else if (cleanType == "move_speed")
+                {
+                    _guildPerks.MoveSpeedLevel++;
+                    newLevel = _guildPerks.MoveSpeedLevel;
+                    bonusDesc = $"+{newLevel * 2}% Guild Movement & Sprint Speed (+2% added)";
+                }
                 else
                 {
                     _guildPerks.WorkSpeedLevel++;
                     newLevel = _guildPerks.WorkSpeedLevel;
-                    bonusDesc = $"+{newLevel * 1}% Base Pal Work & Movement Speed (+1% added)";
+                    bonusDesc = $"+{newLevel * 1}% Base Pal Work Speed (+1% added)";
                 }
                 SaveState();
             }
@@ -1734,7 +1758,8 @@ namespace PalLauncher.Services
                         guildPerks = new GuildPerksState
                         {
                             WorkSpeedLevel = _guildPerks.WorkSpeedLevel,
-                            ExpBoostLevel = _guildPerks.ExpBoostLevel
+                            ExpBoostLevel = _guildPerks.ExpBoostLevel,
+                            MoveSpeedLevel = _guildPerks.MoveSpeedLevel
                         }
                     };
 

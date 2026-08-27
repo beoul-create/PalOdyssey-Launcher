@@ -423,9 +423,15 @@ local function processQueue()
                         elseif action == "Transmute" then
                             msg = string.format("⚗️ [Transmute] Converted Ancient Points ➔ +%d Standard Tech Points! New Balance: %d pts", techPointsDelta, pts)
                         elseif action == "Perk" then
-                            msg = string.format("🏰 [Perk] Server Perk upgraded! Active bonuses increased.")
+                            if itemCode == "move_speed" or itemCode == "speed" or itemCode == "swift" then
+                                msg = string.format("🏃 [Guild Perk] Guild Swift Strider Speed upgraded! Movement & sprint speed increased globally.")
+                            else
+                                msg = string.format("🏰 [Perk] Server Perk upgraded! Active bonuses increased.")
+                            end
                         elseif action == "Exchange" then
-                            if techPointsDelta < 0 then
+                            if itemCode == "SwiftLotus" then
+                                msg = string.format("🪽 [Ancient Shop] Acquired Swift Lotus (+5%% Permanent Movement Speed)! Check your Virtual Vault or inventory.", quantity)
+                            elseif techPointsDelta < 0 then
                                 msg = string.format("🎟️ [Shop] Deducted %d Tech Points. Purchased %dx %s. Balance: %d pts", math.abs(techPointsDelta), quantity, itemCode, pts)
                             else
                                 msg = string.format("🔮 [Ancient Shop] Purchased %dx %s with Ancient Points! Items credited to Virtual Vault.", quantity, itemCode)
@@ -433,7 +439,11 @@ local function processQueue()
                         elseif action == "Recycle" then
                             msg = string.format("♻️ [Recycle] Gained +%d Tech Points! Balance: %d pts", techPointsDelta, pts)
                         elseif action == "Withdraw" or action == "Claim" then
-                            msg = string.format("📦 [Vault Delivery] Claimed %dx %s into your inventory!", quantity, itemCode)
+                            if itemCode == "SwiftLotus" then
+                                msg = string.format("🪽 [Vault Delivery] Claimed %dx Swift Lotus (+5%% Speed) into your inventory!", quantity)
+                            else
+                                msg = string.format("📦 [Vault Delivery] Claimed %dx %s into your inventory!", quantity, itemCode)
+                            end
                         end
 
                         if msg ~= "" and palUtil and palUtil:IsValid() and controller and controller:IsValid() then
