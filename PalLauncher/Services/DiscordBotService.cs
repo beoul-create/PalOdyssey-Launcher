@@ -2855,6 +2855,66 @@ namespace PalLauncher.Services
             }
         }
 
+        public async Task BroadcastWorldBossSpawnAsync(string palName, string location, string aura, double x, double y)
+        {
+            if (string.IsNullOrWhiteSpace(_channelId) || string.IsNullOrWhiteSpace(_token)) return;
+
+            try
+            {
+                // Map aura type to embed color
+                int embedColor = aura switch
+                {
+                    "Fiery" => 0xFF4500,      // Orange-Red
+                    "Corrupted" => 0x9B30FF,  // Purple
+                    "Celestial" => 0xFFD700,  // Gold
+                    _ => 0xFF0033              // Default Red
+                };
+
+                string auraEmoji = aura switch
+                {
+                    "Fiery" => "🔥",
+                    "Corrupted" => "🌑",
+                    "Celestial" => "✨",
+                    _ => "⚡"
+                };
+
+                _logService.LogInfo($"Broadcasting World Boss spawn: {palName} ({aura}) at {location}", "DiscordBot");
+                await SendEmbedMessageAsync(_channelId,
+                    title: $"⚠️ WORLD RAID BOSS SPAWNED!",
+                    description: $"{auraEmoji} **{palName}** ({aura} Aura) has emerged!\n\n" +
+                                 $"📍 **Location:** {location}\n" +
+                                 $"🗺️ **Coords:** X: {x:F0}, Y: {y:F0}\n\n" +
+                                 $"⚔️ **Stats:** 3× Scale • 100× HP • 2× ATK/DEF\n" +
+                                 $"🏆 **Reward:** Capture to earn a permanent 2× Scale trophy Pal!\n\n" +
+                                 $"⏱️ Boss will despawn in **30 minutes** — rally your party!",
+                    color: embedColor);
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to broadcast World Boss spawn to Discord: {ex.Message}", "DiscordBot");
+            }
+        }
+
+        public async Task BroadcastWorldBossCapturedAsync(string palName, string capturedBy)
+        {
+            if (string.IsNullOrWhiteSpace(_channelId) || string.IsNullOrWhiteSpace(_token)) return;
+
+            try
+            {
+                _logService.LogInfo($"Broadcasting World Boss capture: {palName} by {capturedBy}", "DiscordBot");
+                await SendEmbedMessageAsync(_channelId,
+                    title: $"🏆 WORLD BOSS CAPTURED!",
+                    description: $"**{capturedBy}** has captured the raid boss **{palName}**!\n\n" +
+                                 $"🎖️ The boss has been permanently tamed at **2× Scale** with **2× Stat Talents**.\n\n" +
+                                 $"A true Pioneer champion! 🎉",
+                    color: 0x00FF88);
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to broadcast World Boss capture to Discord: {ex.Message}", "DiscordBot");
+            }
+        }
+
         private void LoadLiveboardMessageId()
         {
             try

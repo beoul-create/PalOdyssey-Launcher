@@ -488,6 +488,22 @@ namespace PalLauncher.ViewModels
                             await _discordBot.BroadcastServerBootingAsync(source);
                         }
                     });
+
+                // Wire World Boss Aura System callbacks for Discord announcements
+                _remoteDaemon.OnWorldBossSpawn = async (palName, location, aura, x, y) =>
+                {
+                    if (_discordBot.IsRunning)
+                    {
+                        await _discordBot.BroadcastWorldBossSpawnAsync(palName, location, aura, x, y);
+                    }
+                };
+                _remoteDaemon.OnWorldBossCaptured = async (palName, capturedBy) =>
+                {
+                    if (_discordBot.IsRunning)
+                    {
+                        await _discordBot.BroadcastWorldBossCapturedAsync(palName, capturedBy);
+                    }
+                };
             }
 
             // Initialize Discord Bot Service unconditionally if enabled

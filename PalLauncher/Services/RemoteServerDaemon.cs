@@ -39,6 +39,10 @@ namespace PalLauncher.Services
         private readonly object _lock = new();
         private DateTime _lastTelemetryQueryTime = DateTime.MinValue;
 
+        // World Boss Aura System callbacks (set by MainViewModel after StartDaemonAsync)
+        public Func<string, string, string, double, double, Task>? OnWorldBossSpawn { get; set; }
+        public Func<string, string, Task>? OnWorldBossCaptured { get; set; }
+
         public bool IsRunning => _isRunning;
         public int Port => _port;
 
@@ -226,6 +230,10 @@ namespace PalLauncher.Services
                          path.Equals("/webhook/link-account", StringComparison.OrdinalIgnoreCase))
                 {
                     await HandleLinkAccountAsync(req, resp);
+                }
+                else if (path.Equals("/api/world-boss", StringComparison.OrdinalIgnoreCase))
+                {
+                    await HandleWorldBossEventAsync(req, resp);
                 }
                 else if (path.Equals("/api/health", StringComparison.OrdinalIgnoreCase) || string.IsNullOrEmpty(path))
                 {
@@ -448,6 +456,69 @@ namespace PalLauncher.Services
             catch (Exception ex)
             {
                 _logService.LogError("Failed to process account link request", "RemoteDaemon", ex);
+                await SendJsonResponseAsync(resp, HttpStatusCode.InternalServerError, new { error = ex.Message });
+            }
+        }
+
+        private async Task HandleWorldBossEventAsync(HttpListenerRequest req, HttpListenerResponse resp)
+        {
+            try
+            {
+                using var reader = new StreamReader(req.InputStream, req.ContentEncoding);
+                string json = await reader.ReadToEndAsync();
+
+                using var doc = JsonDocument.Parse(json);
+                var root = doc.RootElement;
+
+                string eventType = root.TryGetProperty("event", out var evProp) ? evProp.GetString() ?? "" : "";
+
+                if (eventType.Equals("spawn", StringComparison.OrdinalIgnoreCase))
+                {
+                    string palName = root.TryGetProperty("palName", out var p) ? p.GetString() ?? "Unknown" : "Unknown";
+                    string location = root.TryGetProperty("location", out var l) ? l.GetString() ?? "Unknown" : "Unknown";
+                    string aura = root.TryGetProperty("aura", out var a) ? a.GetString() ?? "Fiery" : "Fiery";
+                    double x = root.TryGetProperty("x", out var xp) ? xp.GetDouble() : 0;
+                    double y = root.TryGetProperty("y", out var yp) ? yp.GetDouble() : 0;
+
+                    _logService.LogInfo($"[WORLD BOSS] Spawn event: {palName} ({aura} Aura) at {location} (X:{x:F0}, Y:{y:F0})", "RemoteDaemon");
+
+                    if (OnWorldBossSpawn != null)
+                    {
+                        _ = Task.Run(async () =>
+                        {
+                            try { await OnWorldBossSpawn.Invoke(palName, location, aura, x, y); }
+                            catch (Exception ex) { _logService.LogWarning($"World Boss spawn broadcast error: {ex.Message}", "RemoteDaemon"); }
+                        });
+                    }
+
+                    await SendJsonResponseAsync(resp, HttpStatusCode.OK, new { success = true, message = $"World Boss spawn event received: {palName}" });
+                }
+                else if (eventType.Equals("captured", StringComparison.OrdinalIgnoreCase))
+                {
+                    string palName = root.TryGetProperty("palName", out var p) ? p.GetString() ?? "Unknown" : "Unknown";
+                    string capturedBy = root.TryGetProperty("capturedBy", out var c) ? c.GetString() ?? "Unknown Pioneer" : "Unknown Pioneer";
+
+                    _logService.LogInfo($"[WORLD BOSS] Capture event: {palName} captured by {capturedBy}", "RemoteDaemon");
+
+                    if (OnWorldBossCaptured != null)
+                    {
+                        _ = Task.Run(async () =>
+                        {
+                            try { await OnWorldBossCaptured.Invoke(palName, capturedBy); }
+                            catch (Exception ex) { _logService.LogWarning($"World Boss capture broadcast error: {ex.Message}", "RemoteDaemon"); }
+                        });
+                    }
+
+                    await SendJsonResponseAsync(resp, HttpStatusCode.OK, new { success = true, message = $"World Boss capture event received: {palName} by {capturedBy}" });
+                }
+                else
+                {
+                    await SendJsonResponseAsync(resp, HttpStatusCode.BadRequest, new { error = $"Unknown world boss event type: {eventType}" });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logService.LogError("Failed to process world boss event", "RemoteDaemon", ex);
                 await SendJsonResponseAsync(resp, HttpStatusCode.InternalServerError, new { error = ex.Message });
             }
         }

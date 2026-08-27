@@ -29,5 +29,7 @@ namespace PalLauncher.Services.Interfaces
         Task StopDaemonAsync();
         ServerLiveboardInfo GetCurrentLiveboard();
         void ConfigureIdleAutoShutdown(bool enabled, int minutes);
+        Func<string, string, string, double, double, Task>? OnWorldBossSpawn { get; set; }
+        Func<string, string, Task>? OnWorldBossCaptured { get; set; }
     }
 }

@@ -60,5 +60,76 @@ namespace PalLauncher.Tests
                 await daemon.StopDaemonAsync();
             }
         }
+
+        [Fact]
+        public async Task RemoteDaemon_HandlesWorldBossSpawnAndCaptureEvents_Successfully()
+        {
+            var launchService = new LaunchService(_logService);
+            var daemon = new RemoteServerDaemon(_logService, launchService);
+
+            int testPort = 18218;
+            string testKey = "TestBossKey123";
+
+            string? spawnedPal = null;
+            string? spawnLocation = null;
+            string? capturedPal = null;
+            string? capturer = null;
+
+            daemon.OnWorldBossSpawn = (pal, loc, aura, x, y) =>
+            {
+                spawnedPal = pal;
+                spawnLocation = loc;
+                return Task.CompletedTask;
+            };
+
+            daemon.OnWorldBossCaptured = (pal, by) =>
+            {
+                capturedPal = pal;
+                capturer = by;
+                return Task.CompletedTask;
+            };
+
+            try
+            {
+                bool started = await daemon.StartDaemonAsync(
+                    testPort,
+                    testKey,
+                    onStartServerRequested: () => Task.FromResult(true),
+                    onStopServerRequested: () => Task.FromResult(true));
+
+                Assert.True(started);
+
+                using var httpClient = new System.Net.Http.HttpClient { BaseAddress = new Uri($"http://127.0.0.1:{testPort}/") };
+
+                // 1. Post Spawn Event
+                var spawnPayload = new System.Net.Http.StringContent(
+                    "{\"event\":\"spawn\",\"palName\":\"Orserk_Terra\",\"location\":\"Desolate Dunes\",\"aura\":\"Corrupted\",\"x\":-120000,\"y\":-180000}",
+                    System.Text.Encoding.UTF8, "application/json");
+
+                var spawnResp = await httpClient.PostAsync("api/world-boss", spawnPayload);
+                Assert.Equal(System.Net.HttpStatusCode.OK, spawnResp.StatusCode);
+
+                // Give async task time to invoke callback
+                await Task.Delay(100);
+                Assert.Equal("Orserk_Terra", spawnedPal);
+                Assert.Equal("Desolate Dunes", spawnLocation);
+
+                // 2. Post Capture Event
+                var capPayload = new System.Net.Http.StringContent(
+                    "{\"event\":\"captured\",\"palName\":\"Orserk_Terra\",\"capturedBy\":\"PioneerHero\"}",
+                    System.Text.Encoding.UTF8, "application/json");
+
+                var capResp = await httpClient.PostAsync("api/world-boss", capPayload);
+                Assert.Equal(System.Net.HttpStatusCode.OK, capResp.StatusCode);
+
+                await Task.Delay(100);
+                Assert.Equal("Orserk_Terra", capturedPal);
+                Assert.Equal("PioneerHero", capturer);
+            }
+            finally
+            {
+                await daemon.StopDaemonAsync();
+            }
+        }
     }
 }

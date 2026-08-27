@@ -1,0 +1,8 @@
+{
+  "name": "WorldBossAuraSystem",
+  "authors": [
+    "PalOdyssey"
+  ],
+  "description": "Inverse-element boss subspecies data for the World Boss Aura raid system. Defines element-swapped variants with adjusted stats and work suitabilities.",
+  "version": "1.0.0"
+}

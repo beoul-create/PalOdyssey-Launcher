@@ -1,4 +1,4 @@
-﻿{
+{
     "serverVersion":  "0.3.6.0",
     "baseDownloadUrl":  "https://raw.githubusercontent.com/beoul-create/PalOdyssey-Launcher/main/Modpack/",
     "minimumLauncherVersion":  "1.0.0",
@@ -266,6 +266,18 @@
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\SAODeath\\Scripts\\main.lua",
                      "sizeBytes":  11366,
                      "sha256":  "93182CB40C050635E7B15CEDE655994DE462D2993B1C4A3545E1187573621704",
+                     "required":  false,
+                     "enabledByDefault":  true
+                 },
+                 {
+                     "id":  "world-boss-aura-system",
+                     "name":  "World Boss Aura & Raid System",
+                     "category":  "Gameplay",
+                     "version":  "1.0.0",
+                     "description":  "Periodic 3x scale, 100x HP raid bosses with custom aura VFX, Discord announcements, and 2x scale permanent capture rewards",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\WorldBossAuraSystem\\Scripts\\main.lua",
+                     "sizeBytes":  24582,
+                     "sha256":  "E8BA081A03D7FCFC102133F50FF4655AAFE1D5743EC9F3B64700403284F6EC09",
                      "required":  false,
                      "enabledByDefault":  true
                  }

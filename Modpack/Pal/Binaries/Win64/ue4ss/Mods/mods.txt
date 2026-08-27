@@ -27,6 +27,7 @@ CleanHUD : 1
 ShiningLuckies : 1
 PalCinematicStudio : 1
 SAODeath : 1
+WorldBossAuraSystem : 1
 
 ; Built-in keybinds, do not move up!
 Keybinds : 1

@@ -19,5 +19,7 @@ namespace PalLauncher.Services.Interfaces
         Task StopAsync();
         Task BroadcastServerBootingAsync(string triggeredBy = "Remote Webhook");
         Task BroadcastServerOnlineAsync();
+        Task BroadcastWorldBossSpawnAsync(string palName, string location, string aura, double x, double y);
+        Task BroadcastWorldBossCapturedAsync(string palName, string capturedBy);
     }
 }
