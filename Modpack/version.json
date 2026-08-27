@@ -72,8 +72,8 @@
                      "version":  "1.2.0",
                      "description":  "Synthesized rendering: Fog veil removal, night atmosphere, LOD draw distance, ultrawide fixes, and frame pacing",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\PalClearVision\\Scripts\\main.lua",
-                     "sizeBytes":  4012,
-                     "sha256":  "739EA3B70074112FBB47002A559DB6BAAE8B673D8AC99F962DE98B001B6F7B8B",
+                     "sizeBytes":  4577,
+                     "sha256":  "5B47BA3F77A1D9D150E589559BE0847CA4998C62C43830CE1E89DF690B2FE2C8",
                      "required":  false,
                      "enabledByDefault":  true
                  },
@@ -120,8 +120,8 @@
                      "version":  "1.0.0",
                      "description":  "Press G near base chests to auto-deposit matching inventory items",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\QuickDeposit\\Scripts\\main.lua",
-                     "sizeBytes":  8687,
-                     "sha256":  "FD770F06E22C5D0E5E76B2E97351D9AAB9CEFA0BC09D2E63EDC3A15856D07A3D",
+                     "sizeBytes":  13349,
+                     "sha256":  "ffbf23fc0df29d7a2b3994057f541070f4ebad9af6be7d1e901f835fea4c13b2",
                      "required":  false,
                      "enabledByDefault":  true
                  },
@@ -156,8 +156,8 @@
                      "version":  "1.8.11",
                      "description":  "ESC Mod Options and Configuration Interface",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\DarnMenu\\Scripts\\main.lua",
-                     "sizeBytes":  176309,
-                     "sha256":  "71A91B0A5E69C0878665CBFAF93376FED3DAF0DBFB3F7F6482B93ED858010477",
+                     "sizeBytes":  176312,
+                     "sha256":  "803d80ba0585c9f47571f17a49dfc064de2e110579f17d1542e1a96144527e96",
                      "required":  true,
                      "enabledByDefault":  true
                  },
@@ -254,6 +254,18 @@
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\PalSchema\\mods\\ChazzBuffs\\metadata.json",
                      "sizeBytes":  193,
                      "sha256":  "618041259D4C51D20B8AFF8FA89C0CC03F4F547976310602FA51086F2BFA64FB",
+                     "required":  false,
+                     "enabledByDefault":  true
+                 },
+                 {
+                     "id":  "sao-death",
+                     "name":  "SAO Death: Sword Art Online Polygon Shatter",
+                     "category":  "Visuals",
+                     "version":  "1.0.0",
+                     "description":  "Replaces vanilla ragdoll physics with instant crystalline polygon-shatter burst across all characters and Pals",
+                     "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\SAODeath\\Scripts\\main.lua",
+                     "sizeBytes":  11366,
+                     "sha256":  "93182CB40C050635E7B15CEDE655994DE462D2993B1C4A3545E1187573621704",
                      "required":  false,
                      "enabledByDefault":  true
                  }
