@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-global
 -- ============================================================================
--- WorldBossAuraSystem: World Boss & Wild Aura Engine for PalOdyssey
+-- WorldBossAuraSystem: World Boss & Multi-Tier Aura Engine for PalOdyssey
 -- 1. Periodic World Bosses: 1-hour interval, strictly "World Boss" Neon Red aura,
 --    3x scale, 100x HP, 2x ATK/DEF, 10m despawn, on-capture 2x scale + 2x stats.
 -- 2. Wild Auras (0.1% chance on normal wild Pal spawns):
@@ -10,8 +10,10 @@
 --    - Colossus (Neon Emerald): 1.5x Scale, 4x Defense, 2x HP, BurlyBody
 --    - Berserker (Blood Crimson): 2.5x Attack, 0.5x Defense, 1.5x Move Speed, Ferocious + Musclehead
 --    - Master Artisan (Amber Orange): 4x Work Speed, Max Sanity lock, Artisan + WorkSlave
+-- 3. Mythic Auras (0.0001% chance / 1 in 1,000,000 on wild Pal spawns):
 --    - Regressor (Chrono Platinum): 2x Combat Stats, 2x Partner Skill, 100% Active Skill Cooldown (0 CD)
---    - Transmigrator (Cosmic Prismatic): Unlimited Level Cap (Bypasses Lv 80 cap), Lv 5 in ALL Work Suitabilities
+--    - Transmigrator (Cosmic Prismatic): Unlimited Level Cap (Bypasses Lv 80 cap), Lv 5 in ALL Work Suitabilities,
+--      and Ranch Dog Coin drops if no pre-existing native drop exists.
 -- 100% Original Custom Script for PalOdyssey
 -- ============================================================================
 
@@ -53,9 +55,9 @@ if not ok or type(Config) ~= "table" then
         CapturedTalent = 200,    -- Talent IV value for captured boss (200 = 2x permanent)
 
         -- ====================================================================
-        -- 2. WILD AURA CONFIGURATION (0.1% Spawn Chance: 1 in 1,000)
+        -- 2. WILD AURA CONFIGURATION (0.1% Standard Wild Spawn Chance)
         -- ====================================================================
-        WildAuraChance = 0.001, -- 0.1% chance on normal wild Pal spawns
+        WildAuraChance = 0.001, -- 0.1% chance (1 in 1,000) for standard wild auras
 
         WildAuras = {
             {
@@ -117,7 +119,15 @@ if not ok or type(Config) ~= "table" then
                 WorkMult = 4.0,
                 LockSanity = true,
                 Passives = { "Artisan", "WorkSlave" }
-            },
+            }
+        },
+
+        -- ====================================================================
+        -- 3. MYTHIC AURA CONFIGURATION (0.0001% Ultra-Rare Spawn Chance: 1 in 1,000,000)
+        -- ====================================================================
+        MythicAuraChance = 0.000001, -- 0.0001% chance (1 in 1,000,000) for Regressor & Transmigrator
+
+        MythicAuras = {
             {
                 Name = "Regressor",
                 Title = "Regressor Chrono Pal",
@@ -139,17 +149,37 @@ if not ok or type(Config) ~= "table" then
                 RGB = { 1.0, 0.3, 0.85 },
                 AllWorkSuitabilities = 5,
                 UnlimitedLevelGrowth = true,
+                RanchDogCoinDrop = true,
                 Passives = { "Legend", "Artisan", "Swift", "BurlyBody" }
             }
         },
 
         -- ====================================================================
-        -- 3. INTEGRATION
+        -- 4. INTEGRATION
         -- ====================================================================
         DaemonPort  = 8215,     -- RemoteServerDaemon port for Discord announcements
         NotifyToast = true      -- In-game DarnToasts notifications
     }
 end
+
+-- Native Ranch Farm Pal Roster (Pals that ALREADY have pre-existing native ranch drops)
+local NativeRanchPals = {
+    ChickenPal   = true,   -- Chikipi (Eggs)
+    SheepBall    = true,   -- Lamball (Wool)
+    CuteFox      = true,   -- Vixy (Spheres/Gold/Arrows)
+    Ganesha      = true,   -- Mozzarina (Milk)
+    CowPal       = true,   -- Mozzarina (Milk)
+    WoolFox      = true,   -- Cremis (Wool)
+    Caprico      = true,   -- Caprity (Berries)
+    Alpaca       = true,   -- Melpaca (High Quality Cloth / Wool)
+    Kelpie       = true,   -- Kelpsea (Pal Fluids)
+    Kelpie_Fire  = true,   -- Kelpsea Ignis (High Quality Pal Oil)
+    FlameBambee  = true,   -- Beegarde (Honey)
+    SilkyMoth    = true,   -- Sibelyx (High Quality Cloth)
+    NightFox     = true,   -- Mau (Gold Coins)
+    NightFox_Ice = true,   -- Mau Cryst (Gold Coins)
+    CottonDog    = true    -- Flambelle (Flame Organs)
+}
 
 -- ============================================================================
 -- Logging
@@ -167,17 +197,17 @@ if not Config.enabled then
 end
 
 print("==========================================================")
-print("  WorldBossAuraSystem: Raid & Multi-Aura Engine Active")
+print("  WorldBossAuraSystem: Raid, Wild & Mythic Engine Active")
 print("==========================================================")
 
 -- ============================================================================
 -- State Tracking
 -- ============================================================================
 
-local ActiveBosses     = {}  -- [ptrKey] = { PalName, Aura, SpawnTime, ActorRef }
-local ActiveWildAuras  = {}  -- [ptrKey] = { PalName, AuraConfig, ActorRef }
-local ZeroCooldownPals = {}  -- [ptrKey] = palActor (Regressor zero cooldown loop)
-local TransmigratorPals = {} -- [ptrKey] = palActor (Transmigrator uncapped level loop)
+local ActiveBosses      = {}  -- [ptrKey] = { PalName, Aura, SpawnTime, ActorRef }
+local ActiveWildAuras   = {}  -- [ptrKey] = { PalName, AuraConfig, ActorRef }
+local ZeroCooldownPals  = {}  -- [ptrKey] = palActor (Regressor zero cooldown loop)
+local TransmigratorPals = {}  -- [ptrKey] = palActor (Transmigrator uncapped level & ranch loop)
 
 -- ============================================================================
 -- 1. DARNTOAST IN-GAME NOTIFICATIONS
@@ -198,7 +228,7 @@ local function SendBossToast(palName, auraName, locationName)
     end)
 end
 
-local function SendWildAuraToast(palName, auraConfig)
+local function SendWildAuraToast(palName, auraConfig, isMythic)
     if not Config.NotifyToast then return end
     pcall(function()
         local SDIR = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", ""))
@@ -206,15 +236,16 @@ local function SendWildAuraToast(palName, auraConfig)
         local Toast = require("ToastLib").new("WorldBossAura")
         if Toast and Toast.notify then
             local rgb = auraConfig.RGB or { 1.0, 1.0, 1.0 }
+            local prefix = isMythic and "🌌 ULTRA-MYTHIC PAL (1 in 1,000,000)" or "✨ RARE WILD PAL"
             Toast.notify(
-                string.format("✨ RARE WILD PAL: %s with %s Aura!", palName or "Pal", auraConfig.Name),
+                string.format("%s: %s with %s Aura!", prefix, palName or "Pal", auraConfig.Name),
                 rgb[1], rgb[2], rgb[3]
             )
         end
     end)
 end
 
-local function SendCaptureToast(palName, isBoss, auraName)
+local function SendCaptureToast(palName, isBoss, auraName, isMythic)
     if not Config.NotifyToast then return end
     pcall(function()
         local SDIR = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", ""))
@@ -223,6 +254,8 @@ local function SendCaptureToast(palName, isBoss, auraName)
         if Toast and Toast.notify then
             if isBoss then
                 Toast.notify(string.format("🏆 RAID BOSS CAPTURED: %s has been tamed (2x Scale & Stats)!", palName), 0.0, 1.0, 0.5)
+            elseif isMythic then
+                Toast.notify(string.format("👑 MYTHIC SOVEREIGN TAMED: %s with %s Aura permanently bound!", palName, auraName), 1.0, 0.84, 0.0)
             else
                 Toast.notify(string.format("✨ %s TAMED: %s retains permanent aura & stat buffs!", auraName or "Aura", palName), 0.0, 0.85, 1.0)
             end
@@ -317,7 +350,7 @@ local function AttachAuraStencil(pal, stencilValue)
 end
 
 -- ============================================================================
--- 4. DYNAMIC WILD AURA BUFF APPLICATION
+-- 4. DYNAMIC WILD & MYTHIC AURA BUFF APPLICATION
 -- ============================================================================
 
 local function ApplyWildAuraBuffs(pal, auraConfig)
@@ -448,7 +481,7 @@ local function ApplyWildAuraBuffs(pal, auraConfig)
 end
 
 -- ============================================================================
--- 5. FAST REAL-TIME TICK ENGINES (Regressor 0 CD & Transmigrator Level Uncap)
+-- 5. FAST REAL-TIME TICK ENGINES (Regressor 0 CD & Transmigrator Ranch Dog Coins)
 -- ============================================================================
 
 -- A. Regressor 100% Active Skill Cooldown Reduction (Instant Cast / 0 CD Loop)
@@ -459,7 +492,6 @@ LoopAsync(250, function()
                 ZeroCooldownPals[ptrKey] = nil
             else
                 pcall(function()
-                    -- Reset skill cooldown timers across action components
                     local actComp = pal.ActionComponent
                     if actComp and actComp:IsValid() and actComp.ResetAllSkillCooldowns then
                         actComp:ResetAllSkillCooldowns()
@@ -475,8 +507,8 @@ LoopAsync(250, function()
     return false
 end)
 
--- B. Transmigrator Infinite Level Cap Watchdog
-LoopAsync(2000, function()
+-- B. Transmigrator Infinite Level Cap Watchdog & Ranch Dog Coin Producer
+LoopAsync(25000, function()
     pcall(function()
         for ptrKey, pal in pairs(TransmigratorPals) do
             if not pal or not pal:IsValid() then
@@ -485,7 +517,27 @@ LoopAsync(2000, function()
                 pcall(function()
                     local paramComp = pal.CharacterParameterComponent
                     if paramComp and paramComp:IsValid() then
+                        -- 1. Ensure level uncap remains active
                         if paramComp.SetMaxLevel then paramComp:SetMaxLevel(999) end
+
+                        -- 2. Ranch Dog Coin Drop: If working at base camp and has no pre-existing native drop
+                        local charId = paramComp.GetCharacterID and tostring(paramComp:GetCharacterID()) or ""
+                        if not NativeRanchPals[charId] then
+                            local baseCamp = paramComp.GetAssignedBaseCamp and paramComp:GetAssignedBaseCamp() or nil
+                            if baseCamp and baseCamp:IsValid() then
+                                local loc = pal:K2_GetActorLocation()
+                                if loc then
+                                    local dropCount = math.random(1, 3)
+                                    local spawnCmd = string.format("SpawnItem DogCoin %d %f %f %f", dropCount, loc.X, loc.Y, loc.Z + 30.0)
+                                    local pc = GetPlayerController()
+                                    local kismet = StaticFindObject("/Script/Engine.Default__KismetSystemLibrary")
+                                    if kismet and kismet:IsValid() and pc and pc:IsValid() then
+                                        kismet:ExecuteConsoleCommand(pc, spawnCmd, nil)
+                                        Log(string.format("💰 [TRANSMIGRATOR RANCH] %s produced %d Dog Coins at Base Camp!", charId, dropCount))
+                                    end
+                                end
+                            end
+                        end
                     end
                 end)
             end
@@ -495,10 +547,10 @@ LoopAsync(2000, function()
 end)
 
 -- ============================================================================
--- 6. WILD AURA PAL ENHANCEMENT (0.1% Spawn Chance)
+-- 6. WILD & MYTHIC AURA PAL ENHANCEMENT
 -- ============================================================================
 
-local function EnhanceWildPal(pal, auraConfig)
+local function EnhanceWildPal(pal, auraConfig, isMythic)
     if not pal or not pal:IsValid() or not auraConfig then return end
     local ptrKey = tostring(pal:GetAddress())
     if ActiveWildAuras[ptrKey] or ActiveBosses[ptrKey] then return end
@@ -516,13 +568,14 @@ local function EnhanceWildPal(pal, auraConfig)
         ActiveWildAuras[ptrKey] = {
             PalName    = palName,
             AuraConfig = auraConfig,
+            IsMythic   = isMythic or false,
             ActorRef   = pal
         }
 
-        Log(string.format("✨ [WILD AURA] Generated %s (%s Aura, Stencil %d) (Ptr: %s)",
-            palName, auraConfig.Name, auraConfig.StencilValue, ptrKey))
+        Log(string.format("✨ [%s AURA] Generated %s (%s Aura, Stencil %d) (Ptr: %s)",
+            isMythic and "MYTHIC" or "WILD", palName, auraConfig.Name, auraConfig.StencilValue, ptrKey))
 
-        SendWildAuraToast(palName, auraConfig)
+        SendWildAuraToast(palName, auraConfig, isMythic)
     end)
 end
 
@@ -657,7 +710,7 @@ local function SpawnWorldBoss()
 end
 
 -- ============================================================================
--- 8. DYNAMIC WILD PAL SPAWN LISTENER (0.1% Aura Roll)
+-- 8. DYNAMIC WILD PAL SPAWN LISTENER (Multi-Tier Probability Rolls)
 -- ============================================================================
 
 pcall(function()
@@ -667,18 +720,28 @@ pcall(function()
             local ptrKey = tostring(pal:GetAddress())
             if ActiveBosses[ptrKey] or ActiveWildAuras[ptrKey] then return end
 
-            -- Roll 0.1% chance (1 in 1,000)
-            if math.random() <= (Config.WildAuraChance or 0.001) then
+            local roll = math.random()
+
+            -- Tier 1: Mythic Aura Roll (0.0001% chance / 1 in 1,000,000 for Regressor & Transmigrator)
+            if roll <= (Config.MythicAuraChance or 0.000001) then
+                local selectedMythic = Config.MythicAuras[math.random(#Config.MythicAuras)]
+                EnhanceWildPal(pal, selectedMythic, true)
+                return
+            end
+
+            -- Tier 2: Standard Wild Aura Roll (0.1% chance / 1 in 1,000 for Standard Wild Auras)
+            if roll <= (Config.WildAuraChance or 0.001) then
                 local selectedWildAura = Config.WildAuras[math.random(#Config.WildAuras)]
-                EnhanceWildPal(pal, selectedWildAura)
+                EnhanceWildPal(pal, selectedWildAura, false)
+                return
             end
         end)
     end)
-    Log("Wild Aura spawn listener initialized (0.1% chance across 8 custom Auras).")
+    Log("Aura spawn listener armed: 0.0001% for Mythic (Regressor/Transmigrator), 0.1% for Wild Auras.")
 end)
 
 -- ============================================================================
--- 9. CAPTURE HOOK (Boss Downsizing & Wild Aura Permanent Retention)
+-- 9. CAPTURE HOOK (Boss Downsizing & Wild/Mythic Aura Permanent Retention)
 -- ============================================================================
 
 local function HandlePalCaptured(pal, playerActor)
@@ -728,23 +791,24 @@ local function HandlePalCaptured(pal, playerActor)
                 end)
             end
 
-            SendCaptureToast(bossInfo.PalName, true, "World Boss")
+            SendCaptureToast(bossInfo.PalName, true, "World Boss", false)
             NotifyDaemonCapture(bossInfo.PalName, capturerName)
             ActiveBosses[ptrKey] = nil
         end)
         return
     end
 
-    -- B. Check if it's a Wild Aura Pal
+    -- B. Check if it's a Wild or Mythic Aura Pal
     local wildInfo = ActiveWildAuras[ptrKey]
     if wildInfo then
         pcall(function()
-            Log(string.format("=== WILD AURA PAL CAPTURED: %s (%s Aura) ===", wildInfo.PalName, wildInfo.AuraConfig.Name))
+            Log(string.format("=== %s PAL CAPTURED: %s (%s Aura) ===",
+                wildInfo.IsMythic and "MYTHIC" or "WILD", wildInfo.PalName, wildInfo.AuraConfig.Name))
 
             -- Permanently re-apply all aura buffs on captured instance
             ApplyWildAuraBuffs(pal, wildInfo.AuraConfig)
 
-            SendCaptureToast(wildInfo.PalName, false, wildInfo.AuraConfig.Name)
+            SendCaptureToast(wildInfo.PalName, false, wildInfo.AuraConfig.Name, wildInfo.IsMythic)
         end)
         return
     end
@@ -809,4 +873,4 @@ LoopAsync(15000, function()
     return false
 end)
 
-Log("WorldBossAuraSystem v3.0 fully initialized with Regressor & Transmigrator engines.")
+Log("WorldBossAuraSystem v3.5 fully initialized with Multi-Tier Odds & Ranch Dog Coin Engines.")
