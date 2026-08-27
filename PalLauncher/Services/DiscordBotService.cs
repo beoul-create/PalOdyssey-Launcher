@@ -3098,6 +3098,28 @@ namespace PalLauncher.Services
             }
         }
 
+        public async Task BroadcastWorldBossKilledAsync(string palName, string killedBy, string schematicName)
+        {
+            if (string.IsNullOrWhiteSpace(_token)) return;
+
+            string targetChannel = "1542531746937966592"; // Dedicated World Boss Raid channel
+
+            try
+            {
+                _logService.LogInfo($"Broadcasting World Boss defeated to channel {targetChannel}: {palName} slain by {killedBy}, dropped {schematicName}", "DiscordBot");
+                await SendEmbedMessageAsync(targetChannel,
+                    title: "🗡️ WORLD BOSS DEFEATED!",
+                    description: $"**{killedBy}** has defeated the raid boss **{palName}**!\n\n" +
+                                 $"🎁 **Legendary Loot Dropped:** **{schematicName}**\n\n" +
+                                 $"*(Note: Captured raid bosses yield no item drops — defeating the boss rewards the Legendary Schematic!)*",
+                    color: 0xFFD700); // Radiant Gold
+            }
+            catch (Exception ex)
+            {
+                _logService.LogWarning($"Failed to broadcast World Boss defeat to Discord: {ex.Message}", "DiscordBot");
+            }
+        }
+
         public async Task SetupChangelogRoleMessageAsync(string channelId = "1534308427080273990")
         {
             if (string.IsNullOrWhiteSpace(_token) || string.IsNullOrWhiteSpace(channelId)) return;

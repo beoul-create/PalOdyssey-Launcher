@@ -42,6 +42,7 @@ namespace PalLauncher.Services
         // World Boss Aura System callbacks (set by MainViewModel after StartDaemonAsync)
         public Func<string, string, string, double, double, Task>? OnWorldBossSpawn { get; set; }
         public Func<string, string, Task>? OnWorldBossCaptured { get; set; }
+        public Func<string, string, string, Task>? OnWorldBossKilled { get; set; }
 
         public bool IsRunning => _isRunning;
         public int Port => _port;
@@ -510,6 +511,25 @@ namespace PalLauncher.Services
                     }
 
                     await SendJsonResponseAsync(resp, HttpStatusCode.OK, new { success = true, message = $"World Boss capture event received: {palName} by {capturedBy}" });
+                }
+                else if (eventType.Equals("killed", StringComparison.OrdinalIgnoreCase) || eventType.Equals("slain", StringComparison.OrdinalIgnoreCase))
+                {
+                    string palName = root.TryGetProperty("palName", out var p) ? p.GetString() ?? "Unknown" : "Unknown";
+                    string killedBy = root.TryGetProperty("killedBy", out var k) ? k.GetString() ?? "Pioneers" : "Pioneers";
+                    string droppedSchematic = root.TryGetProperty("schematic", out var s) ? s.GetString() ?? "Legendary Schematic" : "Legendary Schematic";
+
+                    _logService.LogInfo($"[WORLD BOSS] Defeated event: {palName} slain by {killedBy}, dropped {droppedSchematic}", "RemoteDaemon");
+
+                    if (OnWorldBossKilled != null)
+                    {
+                        _ = Task.Run(async () =>
+                        {
+                            try { await OnWorldBossKilled.Invoke(palName, killedBy, droppedSchematic); }
+                            catch (Exception ex) { _logService.LogWarning($"World Boss defeated broadcast error: {ex.Message}", "RemoteDaemon"); }
+                        });
+                    }
+
+                    await SendJsonResponseAsync(resp, HttpStatusCode.OK, new { success = true, message = $"World Boss killed event received: {palName} by {killedBy}" });
                 }
                 else
                 {

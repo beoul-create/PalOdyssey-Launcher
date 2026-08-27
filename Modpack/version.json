@@ -276,8 +276,8 @@
                      "version":  "1.0.0",
                      "description":  "Periodic 3x scale, 100x HP raid bosses with custom aura VFX, Discord announcements, and 2x scale permanent capture rewards",
                      "relativeInstallPath":  "Pal\\Binaries\\Win64\\ue4ss\\Mods\\WorldBossAuraSystem\\Scripts\\main.lua",
-                     "sizeBytes":  44615,
-                     "sha256":  "0C7AD1C358796FB10A48B81978C16EACEA15A25925ED70A39B0D967DE2BA2256",
+                     "sizeBytes":  53986,
+                     "sha256":  "DC3B4C2122C8C07989639805B342303C36B32E9E082ED8BB868EB75AD715946E",
                      "required":  false,
                      "enabledByDefault":  true
                  }

@@ -31,5 +31,6 @@ namespace PalLauncher.Services.Interfaces
         void ConfigureIdleAutoShutdown(bool enabled, int minutes);
         Func<string, string, string, double, double, Task>? OnWorldBossSpawn { get; set; }
         Func<string, string, Task>? OnWorldBossCaptured { get; set; }
+        Func<string, string, string, Task>? OnWorldBossKilled { get; set; }
     }
 }

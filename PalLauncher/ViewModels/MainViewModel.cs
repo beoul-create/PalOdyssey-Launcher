@@ -504,6 +504,13 @@ namespace PalLauncher.ViewModels
                         await _discordBot.BroadcastWorldBossCapturedAsync(palName, capturedBy);
                     }
                 };
+                _remoteDaemon.OnWorldBossKilled = async (palName, killedBy, schematicName) =>
+                {
+                    if (_discordBot.IsRunning)
+                    {
+                        await _discordBot.BroadcastWorldBossKilledAsync(palName, killedBy, schematicName);
+                    }
+                };
             }
 
             // Initialize Discord Bot Service unconditionally if enabled

@@ -80,7 +80,40 @@ if not ok or type(Config) ~= "table" then
         CapturedTalent = 200,    -- Talent IV value for captured boss (200 = 2x permanent)
 
         -- ====================================================================
-        -- 2. WILD AURA CONFIGURATION (0.1% Standard Wild Spawn Chance)
+        -- 2. WORLD BOSS REWARD CONFIGURATION (Legendary Schematics on Kill, Zero on Capture)
+        -- ====================================================================
+        LegendarySchematics = {
+            { Id = "Recipe_Handgun_4",              Name = "Legendary Handgun Schematic 4" },
+            { Id = "Recipe_Shotgun_PumpAction_4",   Name = "Legendary Pump-Action Shotgun Schematic 4" },
+            { Id = "Recipe_AssaultRifle_Default_4", Name = "Legendary Assault Rifle Schematic 4" },
+            { Id = "Recipe_RocketLauncher_4",       Name = "Legendary Rocket Launcher Schematic 4" },
+            { Id = "Recipe_Bow_Old_4",               Name = "Legendary Old Bow Schematic 4" },
+            { Id = "Recipe_Crossbow_4",              Name = "Legendary Crossbow Schematic 4" },
+            { Id = "Recipe_ClothArmor_4",           Name = "Legendary Cloth Outfit Schematic 4" },
+            { Id = "Recipe_FurArmor_4",             Name = "Legendary Pelt Armor Schematic 4" },
+            { Id = "Recipe_CopperArmor_4",          Name = "Legendary Metal Armor Schematic 4" },
+            { Id = "Recipe_IronArmor_4",            Name = "Legendary Refined Metal Armor Schematic 4" },
+            { Id = "Recipe_IronArmorCold_4",        Name = "Legendary Cold Refined Metal Armor Schematic 4" },
+            { Id = "Recipe_IronArmorHeat_4",        Name = "Legendary Heat Refined Metal Armor Schematic 4" },
+            { Id = "Recipe_StealArmor_4",           Name = "Legendary Pal Metal Armor Schematic 4" },
+            { Id = "Recipe_StealArmorCold_4",       Name = "Legendary Cold Pal Metal Armor Schematic 4" },
+            { Id = "Recipe_StealArmorHeat_4",       Name = "Legendary Heat Pal Metal Armor Schematic 4" },
+            { Id = "Recipe_Head001_4",              Name = "Legendary Feathered Hair Band Schematic 4" },
+            { Id = "Recipe_Head002_4",              Name = "Legendary Metal Helmet Schematic 4" },
+            { Id = "Recipe_Head003_4",              Name = "Legendary Refined Metal Helmet Schematic 4" },
+            { Id = "Recipe_Head004_4",              Name = "Legendary Pal Metal Helmet Schematic 4" },
+            { Id = "Recipe_LaserRifle_4",           Name = "Legendary Laser Rifle Schematic 4" },
+            { Id = "Recipe_Flamethrower_4",         Name = "Legendary Flamethrower Schematic 4" },
+            { Id = "Recipe_GatlingGun_4",           Name = "Legendary Gatling Gun Schematic 4" },
+            { Id = "Recipe_GrenadeLauncher_4",      Name = "Legendary Multi Guided Missile Schematic 4" },
+            { Id = "Recipe_PlasteelArmor_4",        Name = "Legendary Plasteel Armor Schematic 4" },
+            { Id = "Recipe_PlasteelArmorCold_4",    Name = "Legendary Cold Plasteel Armor Schematic 4" },
+            { Id = "Recipe_PlasteelArmorHeat_4",    Name = "Legendary Heat Plasteel Armor Schematic 4" },
+            { Id = "Recipe_PlasteelHelmet_4",       Name = "Legendary Plasteel Helmet Schematic 4" }
+        },
+
+        -- ====================================================================
+        -- 3. WILD AURA CONFIGURATION (0.1% Standard Wild Spawn Chance)
         -- ====================================================================
         WildAuraChance = 0.001, -- 0.1% chance (1 in 1,000) for standard wild auras
 
@@ -374,6 +407,39 @@ local function NotifyDaemonCapture(palName, capturedBy)
         end
 
         Log(string.format("Notified daemon: %s captured by %s", palName, capturedBy or "Unknown"))
+    end)
+end
+
+local function NotifyDaemonKilled(palName, killedBy, schematicName)
+    pcall(function()
+        local payload = string.format(
+            '{"event":"killed","palName":"%s","killedBy":"%s","schematic":"%s"}',
+            palName, killedBy or "Pioneers", schematicName or "Legendary Schematic"
+        )
+        local url = string.format("http://127.0.0.1:%d/api/world-boss", Config.DaemonPort)
+
+        local httpOk, http = pcall(require, "socket.http")
+        if httpOk and http then
+            pcall(function()
+                http.request{
+                    url = url,
+                    method = "POST",
+                    headers = {
+                        ["Content-Type"] = "application/json",
+                        ["Content-Length"] = tostring(#payload)
+                    },
+                    source = require("ltn12").source.string(payload)
+                }
+            end)
+        else
+            local cmd = string.format(
+                'curl -s -X POST -H "Content-Type: application/json" -d "%s" %s',
+                payload:gsub('"', '\\"'), url
+            )
+            pcall(function() os.execute('start /B ' .. cmd .. ' >nul 2>&1') end)
+        end
+
+        Log(string.format("Notified daemon: %s slain by %s (Dropped %s)", palName, killedBy or "Pioneers", schematicName or "Legendary Schematic"))
     end)
 end
 
@@ -815,7 +881,17 @@ local function HandlePalCaptured(pal, playerActor)
     if not record then return end
 
     pcall(function()
+        record.Captured = true
         Log(string.format("=== PAL CAPTURED: %s ===", record.PalName))
+
+        -- Suppress / clear all inventory item drops on capture (players get the 2x scale trophy Pal, zero item drops)
+        pcall(function()
+            if pal.DropItemComponent and pal.DropItemComponent:IsValid() then
+                if pal.DropItemComponent.DropItems then
+                    pal.DropItemComponent.DropItems = {}
+                end
+            end
+        end)
 
         -- A. If it was a World Boss: Downsize & Normalize HP & Talents
         if record.BaseAura and record.BaseAura.IsBoss then
@@ -862,6 +938,61 @@ local function HandlePalCaptured(pal, playerActor)
     end)
 end
 
+local function HandlePalKilled(pal, killerActor)
+    if not pal or not pal:IsValid() then return end
+    local ptrKey = tostring(pal:GetAddress())
+    local record = PalRecords[ptrKey]
+    if not record or record.Captured or record.Killed or record.Despawned then return end
+
+    pcall(function()
+        if record.BaseAura and record.BaseAura.IsBoss then
+            record.Killed = true
+            Log(string.format("=== WORLD BOSS DEFEATED: %s ===", record.PalName))
+
+            -- 1. Determine killer pioneer name
+            local killerName = "Pioneers"
+            if killerActor and killerActor:IsValid() and killerActor.PlayerState then
+                pcall(function()
+                    local name = killerActor.PlayerState:GetPlayerName()
+                    if name and name ~= "" then killerName = tostring(name) end
+                end)
+            end
+
+            -- 2. Pick a random Tier-4 Legendary Schematic from drop table
+            local loot = Config.LegendarySchematics[math.random(#Config.LegendarySchematics)]
+            local schematicId = loot and loot.Id or "Recipe_AssaultRifle_Default_4"
+            local schematicName = loot and loot.Name or "Legendary Assault Rifle Schematic 4"
+
+            -- 3. Spawn the Legendary Schematic item at the boss's location
+            local loc = pal:K2_GetActorLocation()
+            if loc then
+                local spawnCmd = string.format("SpawnItem %s 1 %f %f %f", schematicId, loc.X, loc.Y, loc.Z + 40.0)
+                local pc = GetPlayerController()
+                local kismet = StaticFindObject("/Script/Engine.Default__KismetSystemLibrary")
+                if kismet and kismet:IsValid() and pc and pc:IsValid() then
+                    kismet:ExecuteConsoleCommand(pc, spawnCmd, nil)
+                    Log(string.format("🎁 [WORLD BOSS LOOT] Spawned %s (%s) at X:%.0f, Y:%.0f, Z:%.0f", schematicName, schematicId, loc.X, loc.Y, loc.Z))
+                end
+            end
+
+            -- 4. Send in-game golden victory toast
+            pcall(function()
+                local SDIR = (debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", ""))
+                package.path = SDIR .. "../../DarnToasts/Scripts/?.lua;" .. package.path
+                local Toast = require("ToastLib").new("WorldBossAura")
+                if Toast and Toast.notify then
+                    Toast.notify(string.format("🗡️ RAID BOSS SLAIN: %s defeated by %s! Dropped %s!", record.PalName, killerName, schematicName), 1.0, 0.84, 0.0)
+                end
+            end)
+
+            -- 5. Broadcast defeat & schematic drop to Discord raid channel
+            NotifyDaemonKilled(record.PalName, killerName, schematicName)
+
+            PalRecords[ptrKey] = nil
+        end
+    end)
+end
+
 pcall(function()
     RegisterHook("/Script/Pal.PalCaptureSubsystem:OnCaptureSuccess", function(Context, TargetPal, PlayerActor)
         ExecuteInGameThread(function()
@@ -886,6 +1017,33 @@ pcall(function()
     end)
 end)
 
+pcall(function()
+    RegisterHook("/Script/Pal.PalCharacter:OnDead", function(Context, Killer)
+        ExecuteInGameThread(function()
+            local pal = nil
+            local killer = nil
+            pcall(function() pal = Context:get() end)
+            pcall(function() killer = Killer:get() end)
+            HandlePalKilled(pal, killer)
+        end)
+    end)
+end)
+
+pcall(function()
+    RegisterHook("/Script/Pal.PalCharacterParameterComponent:OnDead", function(Context, Killer)
+        ExecuteInGameThread(function()
+            local paramComp = nil
+            local killer = nil
+            pcall(function() paramComp = Context:get() end)
+            pcall(function() killer = Killer:get() end)
+            if paramComp and paramComp:IsValid() and paramComp.GetOwner then
+                local ownerPal = paramComp:GetOwner()
+                HandlePalKilled(ownerPal, killer)
+            end
+        end)
+    end)
+end)
+
 -- ============================================================================
 -- 9. PERIODIC WORLD BOSS TIMERS & DESPAWN CLEANUP
 -- ============================================================================
@@ -906,11 +1064,28 @@ LoopAsync(15000, function()
         local despawnAge = Config.DespawnSeconds or 600 -- 10 minutes
 
         for ptrKey, record in pairs(PalRecords) do
-            if record.BaseAura and record.BaseAura.IsBoss and (now - (record.SpawnTime or now) >= despawnAge) then
+            local pal = record.ActorRef
+            -- Check if boss died from player damage
+            if pal and pal:IsValid() and record.BaseAura and record.BaseAura.IsBoss and not record.Captured and not record.Killed then
+                local isDead = false
+                pcall(function()
+                    local paramComp = pal.CharacterParameterComponent
+                    if paramComp and paramComp:IsValid() and paramComp.GetHP then
+                        if paramComp:GetHP() <= 0 then isDead = true end
+                    end
+                    if pal.IsDead and pal:IsDead() then isDead = true end
+                end)
+                if isDead then
+                    HandlePalKilled(pal, nil)
+                end
+            end
+
+            -- Check if boss timed out and despawned
+            if record.BaseAura and record.BaseAura.IsBoss and not record.Captured and not record.Killed and (now - (record.SpawnTime or now) >= despawnAge) then
+                record.Despawned = true
                 Log(string.format("World Boss '%s' timed out after %ds. Triggering SAO polygon shatter dissolve effect.", record.PalName, despawnAge))
                 
                 pcall(function()
-                    local pal = record.ActorRef
                     if pal and pal:IsValid() then
                         -- 1. In-game toast announcement that the boss shattered/dissipated
                         pcall(function()

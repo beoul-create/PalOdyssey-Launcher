@@ -21,6 +21,7 @@ namespace PalLauncher.Services.Interfaces
         Task BroadcastServerOnlineAsync();
         Task BroadcastWorldBossSpawnAsync(string palName, string location, string aura, double x, double y);
         Task BroadcastWorldBossCapturedAsync(string palName, string capturedBy);
+        Task BroadcastWorldBossKilledAsync(string palName, string killedBy, string schematicName);
         Task SetupChangelogRoleMessageAsync(string channelId = "1534308427080273990");
         Task BroadcastChangelogAsync(string title, string description, string channelId = "1542544366176968714", bool pingRole = true);
         Task PublishLatestUpdateChangelogAsync(string channelId = "1542544366176968714", bool pingRole = true);
