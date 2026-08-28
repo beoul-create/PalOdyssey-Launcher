@@ -566,12 +566,41 @@ namespace PalLauncher.Services
             {
                 if (forceLiveRefresh)
                 {
-                    // Freshly sync in-memory tech points and boss points cache with live game/save data
-                    _playerTechPoints[uid] = profile.TechnologyPoints;
-                    if (!string.IsNullOrWhiteSpace(playerUid)) _playerTechPoints[playerUid] = profile.TechnologyPoints;
+                    if (_playerTechPoints.TryGetValue(uid, out int cachedTech))
+                    {
+                        if (profile.TechnologyPoints > cachedTech)
+                        {
+                            _playerTechPoints[uid] = profile.TechnologyPoints;
+                            if (!string.IsNullOrWhiteSpace(playerUid)) _playerTechPoints[playerUid] = profile.TechnologyPoints;
+                        }
+                        else
+                        {
+                            profile.TechnologyPoints = cachedTech;
+                        }
+                    }
+                    else
+                    {
+                        _playerTechPoints[uid] = profile.TechnologyPoints;
+                        if (!string.IsNullOrWhiteSpace(playerUid)) _playerTechPoints[playerUid] = profile.TechnologyPoints;
+                    }
 
-                    _playerBossPoints[uid] = profile.BossTechnologyPoints;
-                    if (!string.IsNullOrWhiteSpace(playerUid)) _playerBossPoints[playerUid] = profile.BossTechnologyPoints;
+                    if (_playerBossPoints.TryGetValue(uid, out int cachedBoss))
+                    {
+                        if (profile.BossTechnologyPoints > cachedBoss)
+                        {
+                            _playerBossPoints[uid] = profile.BossTechnologyPoints;
+                            if (!string.IsNullOrWhiteSpace(playerUid)) _playerBossPoints[playerUid] = profile.BossTechnologyPoints;
+                        }
+                        else
+                        {
+                            profile.BossTechnologyPoints = cachedBoss;
+                        }
+                    }
+                    else
+                    {
+                        _playerBossPoints[uid] = profile.BossTechnologyPoints;
+                        if (!string.IsNullOrWhiteSpace(playerUid)) _playerBossPoints[playerUid] = profile.BossTechnologyPoints;
+                    }
 
                     SaveState();
                 }
@@ -665,23 +694,25 @@ namespace PalLauncher.Services
         private void QueueDelivery(string playerUid, string action, string itemCode, int quantity, int techPointsDelta)
         {
             string localAppData = Environment.GetEnvironmentVariable("LOCALAPPDATA") ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            string dir = Path.Combine(localAppData, "PalLauncher");
-            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-            string queueFile = Path.Combine(dir, "pending-deliveries.csv");
-
-            string serverQueuePath = @"C:\SteamLibrary\steamapps\common\PalServer\Pal\Binaries\Win64\ue4ss\Mods\PalOdysseyOptimizer\pending-deliveries.csv";
-            string serverQueueDir = Path.GetDirectoryName(serverQueuePath)!;
+            var queuePaths = new List<string>
+            {
+                Path.Combine(localAppData, "PalLauncher", "pending-deliveries.csv"),
+                Path.Combine(localAppData, "Pal", "Saved", "Config", "Windows", "pending-deliveries.csv"),
+                @"C:\SteamLibrary\steamapps\common\PalServer\Pal\Binaries\Win64\ue4ss\Mods\PalOdysseyOptimizer\pending-deliveries.csv",
+                @"C:\SteamLibrary\steamapps\common\Palworld\Pal\Binaries\Win64\ue4ss\Mods\PalOdysseyOptimizer\pending-deliveries.csv"
+            };
 
             string line = $"{playerUid},{action},{itemCode},{quantity},{techPointsDelta}\n";
-            try
+            foreach (var qPath in queuePaths)
             {
-                File.AppendAllText(queueFile, line);
-                if (Directory.Exists(serverQueueDir))
+                try
                 {
-                    File.AppendAllText(serverQueuePath, line);
+                    string dir = Path.GetDirectoryName(qPath)!;
+                    if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                    File.AppendAllText(qPath, line);
                 }
+                catch { }
             }
-            catch { }
         }
 
         public async Task<ExchangeReceipt> ExecuteExchangeAsync(string playerUid, string itemQuery, int quantity, bool isOnlineSession = false)
@@ -853,7 +884,12 @@ namespace PalLauncher.Services
 
             if (isOnlineSession)
             {
-                QueueDelivery(uid, "Exchange", item.ItemCode, quantity, isAncient ? 0 : -totalCost);
+                QueueDelivery(uid, isAncient ? "AncientExchange" : "Exchange", item.ItemCode, quantity, -totalCost);
+                _ = Task.Run(async () =>
+                {
+                    if (isAncient) await _saveService.UpdateBossTechnologyPointsAsync(uid, -totalCost);
+                    else await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
+                });
             }
             else if (!isAncient)
             {
@@ -1184,11 +1220,20 @@ namespace PalLauncher.Services
 
             if (isOnlineSession)
             {
-                QueueDelivery(uid, "Gacha", isAncient ? "AncientRelicBox" : "RelicMysteryBox", pulls, isAncient ? 0 : -totalCost);
+                QueueDelivery(uid, isAncient ? "AncientGacha" : "Gacha", isAncient ? "AncientRelicBox" : "RelicMysteryBox", pulls, -totalCost);
+                _ = Task.Run(async () =>
+                {
+                    if (isAncient) await _saveService.UpdateBossTechnologyPointsAsync(uid, -totalCost);
+                    else await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
+                });
             }
             else if (!isAncient)
             {
                 await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
+            }
+            else
+            {
+                await _saveService.UpdateBossTechnologyPointsAsync(uid, -totalCost);
             }
 
             _logService.LogSuccess($"[GACHA] {uid} performed {pulls}-pull using {(isAncient ? "Ancient Points" : "Tech Points")} (Cost: {totalCost}). " +
@@ -1277,10 +1322,16 @@ namespace PalLauncher.Services
 
             if (isOnlineSession)
             {
-                QueueDelivery(uid, "Transmute", "TechPointConversion", techPointsGained, techPointsGained);
+                QueueDelivery(uid, "AncientTransmute", "TechPointConversion", techPointsGained, -ancientPointsToConvert);
+                _ = Task.Run(async () =>
+                {
+                    await _saveService.UpdateBossTechnologyPointsAsync(uid, -ancientPointsToConvert);
+                    await _saveService.UpdateTechnologyPointsAsync(uid, techPointsGained);
+                });
             }
             else
             {
+                await _saveService.UpdateBossTechnologyPointsAsync(uid, -ancientPointsToConvert);
                 await _saveService.UpdateTechnologyPointsAsync(uid, techPointsGained);
             }
 

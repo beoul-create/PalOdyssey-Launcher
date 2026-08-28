@@ -27,12 +27,20 @@ local function cleanStr(s)
 end
 
 local function getQueueFilePaths()
-    return {
+    local paths = {
         "ue4ss/Mods/PalOdysseyOptimizer/pending-deliveries.csv",
         "Mods/PalOdysseyOptimizer/pending-deliveries.csv",
         "pending-deliveries.csv",
         "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/pending-deliveries.csv"
     }
+    local localApp = os.getenv("LOCALAPPDATA")
+    if localApp then
+        table.insert(paths, localApp .. "/PalLauncher/pending-deliveries.csv")
+        table.insert(paths, localApp .. "\\PalLauncher\\pending-deliveries.csv")
+        table.insert(paths, localApp .. "/Pal/Saved/Config/Windows/pending-deliveries.csv")
+        table.insert(paths, localApp .. "\\Pal\\Saved\\Config\\Windows\\pending-deliveries.csv")
+    end
+    return paths
 end
 
 local function findQueueFile()
@@ -341,9 +349,9 @@ local function processQueue()
                     end
 
                     if isMatch and ps and ps:IsValid() then
-                        -- 1. Grant items if applicable
-                        if action == "Withdraw" or action == "Claim" or action == "Exchange" or action == "Gacha" then
-                            if itemCode and itemCode ~= "None" and itemCode ~= "TechnologyPoints" and itemCode ~= "AncientBossPoints" and itemCode ~= "TechPointConversion" then
+                        -- 1. Grant items if applicable (Withdraw / Claim / Exchange)
+                        if action == "Withdraw" or action == "Claim" or action == "Exchange" then
+                            if itemCode and itemCode ~= "None" and itemCode ~= "TechnologyPoints" and itemCode ~= "AncientBossPoints" and itemCode ~= "TechPointConversion" and itemCode ~= "RelicMysteryBox" and itemCode ~= "AncientRelicBox" then
                                 grantPlayerItem(controller, ps, itemCode, quantity)
                             end
                         end
@@ -384,6 +392,22 @@ local function processQueue()
                                 end
                             end)
                             log(string.format("Granted Boss Points to player %s: %+d", targetUid, techPointsDelta))
+                        elseif action == "DeductBossPoints" or action == "AncientGacha" or action == "AncientExchange" or action == "AncientPerk" then
+                            pcall(function()
+                                local cur = ps.UnusedBossTechnologyPoint or 0
+                                local delta = techPointsDelta < 0 and techPointsDelta or -math.abs(techPointsDelta)
+                                local updated = math.max(0, cur + delta)
+                                ps.UnusedBossTechnologyPoint = updated
+                            end)
+                            pcall(function()
+                                if ps.RecordData and ps.RecordData:IsValid() then
+                                    local cur = ps.RecordData.UnusedBossTechnologyPoint or 0
+                                    local delta = techPointsDelta < 0 and techPointsDelta or -math.abs(techPointsDelta)
+                                    local updated = math.max(0, cur + delta)
+                                    ps.RecordData.UnusedBossTechnologyPoint = updated
+                                end
+                            end)
+                            log(string.format("Deducted Boss Points from player %s: %+d", targetUid, techPointsDelta))
                         elseif techPointsDelta ~= 0 then
                             pcall(function()
                                 if ps.UnusedTechnologyPoint ~= nil then
