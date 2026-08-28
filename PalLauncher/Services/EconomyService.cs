@@ -885,19 +885,15 @@ namespace PalLauncher.Services
             if (isOnlineSession)
             {
                 QueueDelivery(uid, isAncient ? "AncientExchange" : "Exchange", item.ItemCode, quantity, -totalCost);
-                _ = Task.Run(async () =>
-                {
-                    if (isAncient) await _saveService.UpdateBossTechnologyPointsAsync(uid, -totalCost);
-                    else await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
-                });
             }
-            else if (!isAncient)
+
+            if (isAncient)
             {
-                await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
+                await _saveService.UpdateBossTechnologyPointsAsync(uid, -totalCost);
             }
             else
             {
-                await _saveService.UpdateBossTechnologyPointsAsync(uid, -totalCost);
+                await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
             }
 
             _logService.LogSuccess($"[EXCHANGE] {uid} purchased {quantity}x {item.Name} for {totalCost} {(isAncient ? "Ancient Points" : "Tech Points")}.", "Economy");
@@ -1221,19 +1217,15 @@ namespace PalLauncher.Services
             if (isOnlineSession)
             {
                 QueueDelivery(uid, isAncient ? "AncientGacha" : "Gacha", isAncient ? "AncientRelicBox" : "RelicMysteryBox", pulls, -totalCost);
-                _ = Task.Run(async () =>
-                {
-                    if (isAncient) await _saveService.UpdateBossTechnologyPointsAsync(uid, -totalCost);
-                    else await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
-                });
             }
-            else if (!isAncient)
+
+            if (isAncient)
             {
-                await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
+                await _saveService.UpdateBossTechnologyPointsAsync(uid, -totalCost);
             }
             else
             {
-                await _saveService.UpdateBossTechnologyPointsAsync(uid, -totalCost);
+                await _saveService.UpdateTechnologyPointsAsync(uid, -totalCost);
             }
 
             _logService.LogSuccess($"[GACHA] {uid} performed {pulls}-pull using {(isAncient ? "Ancient Points" : "Tech Points")} (Cost: {totalCost}). " +
@@ -1323,17 +1315,10 @@ namespace PalLauncher.Services
             if (isOnlineSession)
             {
                 QueueDelivery(uid, "AncientTransmute", "TechPointConversion", techPointsGained, -ancientPointsToConvert);
-                _ = Task.Run(async () =>
-                {
-                    await _saveService.UpdateBossTechnologyPointsAsync(uid, -ancientPointsToConvert);
-                    await _saveService.UpdateTechnologyPointsAsync(uid, techPointsGained);
-                });
             }
-            else
-            {
-                await _saveService.UpdateBossTechnologyPointsAsync(uid, -ancientPointsToConvert);
-                await _saveService.UpdateTechnologyPointsAsync(uid, techPointsGained);
-            }
+
+            await _saveService.UpdateBossTechnologyPointsAsync(uid, -ancientPointsToConvert);
+            await _saveService.UpdateTechnologyPointsAsync(uid, techPointsGained);
 
             _logService.LogSuccess($"[TRANSMUTE] {uid} converted {ancientPointsToConvert} Ancient Points into +{techPointsGained} Standard Tech Points.", "Economy");
 
@@ -1602,16 +1587,14 @@ namespace PalLauncher.Services
                 string action = isBossPoints ? "SetBossPoints" : "SetTechPoints";
                 QueueDelivery(uid, action, isBossPoints ? "AncientBossPoints" : "TechnologyPoints", targetPoints, targetPoints);
             }
+
+            if (isBossPoints)
+            {
+                await _saveService.UpdateBossTechnologyPointsAsync(uid, targetPoints, isAbsolute: true);
+            }
             else
             {
-                if (isBossPoints)
-                {
-                    await _saveService.UpdateBossTechnologyPointsAsync(uid, targetPoints, isAbsolute: true);
-                }
-                else
-                {
-                    await _saveService.UpdateTechnologyPointsAsync(uid, targetPoints, isAbsolute: true);
-                }
+                await _saveService.UpdateTechnologyPointsAsync(uid, targetPoints, isAbsolute: true);
             }
 
             string currName = isBossPoints ? "Ancient Boss Points" : "Technology Points";
@@ -1685,16 +1668,14 @@ namespace PalLauncher.Services
                 string action = isBossPoints ? "GrantBossPoints" : "GrantTechPoints";
                 QueueDelivery(uid, action, isBossPoints ? "AncientBossPoints" : "TechnologyPoints", Math.Abs(pointDelta), pointDelta);
             }
+
+            if (isBossPoints)
+            {
+                await _saveService.UpdateBossTechnologyPointsAsync(uid, pointDelta, isAbsolute: false);
+            }
             else
             {
-                if (isBossPoints)
-                {
-                    await _saveService.UpdateBossTechnologyPointsAsync(uid, pointDelta, isAbsolute: false);
-                }
-                else
-                {
-                    await _saveService.UpdateTechnologyPointsAsync(uid, pointDelta, isAbsolute: false);
-                }
+                await _saveService.UpdateTechnologyPointsAsync(uid, pointDelta, isAbsolute: false);
             }
 
             string currName = isBossPoints ? "Ancient Boss Points" : "Technology Points";

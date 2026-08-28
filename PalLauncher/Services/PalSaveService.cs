@@ -1132,19 +1132,30 @@ r.ShaderPipelineCache.BatchTime=2.0";
             try
             {
                 byte[] rawBytes = await File.ReadAllBytesAsync(playerSave);
-                byte[] decompressed = DecompressPalSave(rawBytes);
+                byte[] finalBytes;
 
-                int currentPoints = ExtractIntProperty(decompressed, "UnusedTechnologyPoint", defaultValue: 0);
-                int newPoints = isAbsolute ? pointDelta : Math.Max(0, currentPoints + pointDelta);
-
-                byte[] modified = SetIntProperty(decompressed, "UnusedTechnologyPoint", newPoints);
-                byte[] recompressed = CompressPalSave(modified);
+                if (rawBytes.Length >= 24 && rawBytes[20] == (byte)'G' && rawBytes[21] == (byte)'V' && rawBytes[22] == (byte)'A' && rawBytes[23] == (byte)'S')
+                {
+                    // 20-byte Palworld wrapper format: modify directly in-place
+                    int currentPoints = ExtractIntProperty(rawBytes, "UnusedTechnologyPoint", defaultValue: 0);
+                    int newPoints = isAbsolute ? pointDelta : Math.Max(0, currentPoints + pointDelta);
+                    finalBytes = SetIntProperty(rawBytes, "UnusedTechnologyPoint", newPoints);
+                    _logService.LogSuccess($"[ECONOMY] Updated Technology Points for {actualUid} (GVAS): {currentPoints} -> {newPoints}", "SaveService");
+                }
+                else
+                {
+                    byte[] decompressed = DecompressPalSave(rawBytes);
+                    int currentPoints = ExtractIntProperty(decompressed, "UnusedTechnologyPoint", defaultValue: 0);
+                    int newPoints = isAbsolute ? pointDelta : Math.Max(0, currentPoints + pointDelta);
+                    byte[] modified = SetIntProperty(decompressed, "UnusedTechnologyPoint", newPoints);
+                    finalBytes = CompressPalSave(modified);
+                    _logService.LogSuccess($"[ECONOMY] Updated Technology Points for {actualUid} (Compressed): {currentPoints} -> {newPoints}", "SaveService");
+                }
 
                 string tmpFile = playerSave + ".tmp";
-                await File.WriteAllBytesAsync(tmpFile, recompressed);
+                await File.WriteAllBytesAsync(tmpFile, finalBytes);
                 File.Move(tmpFile, playerSave, overwrite: true);
 
-                _logService.LogSuccess($"[ECONOMY] Updated Technology Points for {actualUid}: {currentPoints} -> {newPoints}", "SaveService");
                 return true;
             }
             catch (Exception ex)
@@ -1174,19 +1185,30 @@ r.ShaderPipelineCache.BatchTime=2.0";
             try
             {
                 byte[] rawBytes = await File.ReadAllBytesAsync(playerSave);
-                byte[] decompressed = DecompressPalSave(rawBytes);
+                byte[] finalBytes;
 
-                int currentPoints = ExtractIntProperty(decompressed, "UnusedBossTechnologyPoint", defaultValue: 0);
-                int newPoints = isAbsolute ? pointDelta : Math.Max(0, currentPoints + pointDelta);
-
-                byte[] modified = SetIntProperty(decompressed, "UnusedBossTechnologyPoint", newPoints);
-                byte[] recompressed = CompressPalSave(modified);
+                if (rawBytes.Length >= 24 && rawBytes[20] == (byte)'G' && rawBytes[21] == (byte)'V' && rawBytes[22] == (byte)'A' && rawBytes[23] == (byte)'S')
+                {
+                    // 20-byte Palworld wrapper format: modify directly in-place
+                    int currentPoints = ExtractIntProperty(rawBytes, "UnusedBossTechnologyPoint", defaultValue: 0);
+                    int newPoints = isAbsolute ? pointDelta : Math.Max(0, currentPoints + pointDelta);
+                    finalBytes = SetIntProperty(rawBytes, "UnusedBossTechnologyPoint", newPoints);
+                    _logService.LogSuccess($"[ECONOMY] Updated Boss Technology Points for {actualUid} (GVAS): {currentPoints} -> {newPoints}", "SaveService");
+                }
+                else
+                {
+                    byte[] decompressed = DecompressPalSave(rawBytes);
+                    int currentPoints = ExtractIntProperty(decompressed, "UnusedBossTechnologyPoint", defaultValue: 0);
+                    int newPoints = isAbsolute ? pointDelta : Math.Max(0, currentPoints + pointDelta);
+                    byte[] modified = SetIntProperty(decompressed, "UnusedBossTechnologyPoint", newPoints);
+                    finalBytes = CompressPalSave(modified);
+                    _logService.LogSuccess($"[ECONOMY] Updated Boss Technology Points for {actualUid} (Compressed): {currentPoints} -> {newPoints}", "SaveService");
+                }
 
                 string tmpFile = playerSave + ".tmp";
-                await File.WriteAllBytesAsync(tmpFile, recompressed);
+                await File.WriteAllBytesAsync(tmpFile, finalBytes);
                 File.Move(tmpFile, playerSave, overwrite: true);
 
-                _logService.LogSuccess($"[ECONOMY] Updated Boss Technology Points for {actualUid}: {currentPoints} -> {newPoints}", "SaveService");
                 return true;
             }
             catch (Exception ex)
@@ -1262,18 +1284,23 @@ r.ShaderPipelineCache.BatchTime=2.0";
             return finalData;
         }
 
-        private static int ExtractIntProperty(byte[] buffer, string propertyName, int defaultValue = 0)
+        public static int ExtractIntProperty(byte[] buffer, string propertyName, int defaultValue = 0)
         {
             int index = FindPropertyIndex(buffer, propertyName);
-            if (index < 0 && propertyName.StartsWith("Technology", StringComparison.OrdinalIgnoreCase))
+            if (index < 0 && propertyName.Contains("Boss", StringComparison.OrdinalIgnoreCase))
             {
-                index = FindPropertyIndex(buffer, "TechnologyP");
-                if (index < 0) index = FindPropertyIndex(buffer, "Technology");
-            }
-            if (index < 0 && propertyName.StartsWith("BossTechnology", StringComparison.OrdinalIgnoreCase))
-            {
-                index = FindPropertyIndex(buffer, "BossTechnology");
+                index = FindPropertyIndex(buffer, "UnusedBossTechnologyPoint");
+                if (index < 0) index = FindPropertyIndex(buffer, "BossTechnologyPoint");
+                if (index < 0) index = FindPropertyIndex(buffer, "BossTechnology");
                 if (index < 0) index = FindPropertyIndex(buffer, "BossTech");
+            }
+            else if (index < 0 && propertyName.Contains("Tech", StringComparison.OrdinalIgnoreCase))
+            {
+                index = FindPropertyIndex(buffer, "UnusedTechnologyPoint");
+                if (index < 0) index = FindPropertyIndex(buffer, "TechnologyPoint");
+                if (index < 0) index = FindPropertyIndex(buffer, "TechnologyPoit");
+                if (index < 0) index = FindPropertyIndex(buffer, "TechnologyP");
+                if (index < 0) index = FindPropertyIndex(buffer, "Technology");
             }
             if (index < 0) return defaultValue;
 
@@ -1307,22 +1334,26 @@ r.ShaderPipelineCache.BatchTime=2.0";
             return defaultValue;
         }
 
-        private static byte[] SetIntProperty(byte[] buffer, string propertyName, int newValue)
+        public static byte[] SetIntProperty(byte[] buffer, string propertyName, int newValue)
         {
             int index = FindPropertyIndex(buffer, propertyName);
-            if (index < 0 && propertyName.StartsWith("Technology", StringComparison.OrdinalIgnoreCase))
+            if (index < 0 && propertyName.Contains("Boss", StringComparison.OrdinalIgnoreCase))
             {
-                index = FindPropertyIndex(buffer, "TechnologyP");
-                if (index < 0) index = FindPropertyIndex(buffer, "Technology");
-            }
-            if (index < 0 && propertyName.StartsWith("BossTechnology", StringComparison.OrdinalIgnoreCase))
-            {
-                index = FindPropertyIndex(buffer, "BossTechnology");
+                index = FindPropertyIndex(buffer, "UnusedBossTechnologyPoint");
+                if (index < 0) index = FindPropertyIndex(buffer, "BossTechnologyPoint");
+                if (index < 0) index = FindPropertyIndex(buffer, "BossTechnology");
                 if (index < 0) index = FindPropertyIndex(buffer, "BossTech");
+            }
+            else if (index < 0 && propertyName.Contains("Tech", StringComparison.OrdinalIgnoreCase))
+            {
+                index = FindPropertyIndex(buffer, "UnusedTechnologyPoint");
+                if (index < 0) index = FindPropertyIndex(buffer, "TechnologyPoint");
+                if (index < 0) index = FindPropertyIndex(buffer, "TechnologyPoit");
+                if (index < 0) index = FindPropertyIndex(buffer, "TechnologyP");
+                if (index < 0) index = FindPropertyIndex(buffer, "Technology");
             }
             if (index < 0)
             {
-                // Property not present; return existing buffer
                 return buffer;
             }
 

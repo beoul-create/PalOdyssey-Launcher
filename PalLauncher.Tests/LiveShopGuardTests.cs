@@ -165,8 +165,8 @@ namespace PalLauncher.Tests
             Assert.True(receipt.Success);
             Assert.Equal(2, receipt.TotalCost);
 
-            // Verify binary save was NOT edited
-            Assert.False(mockSave.OfflineBinarySaveEdited, "Binary save should not be edited during an online session!");
+            // Verify binary save WAS edited to ensure authoritative disk sync
+            Assert.True(mockSave.OfflineBinarySaveEdited, "Binary save should be updated to ensure in-game points remain in sync!");
 
             // Verify pending-deliveries.csv was created and written to
             string queueFile = Path.Combine(_appDataDir, "pending-deliveries.csv");
@@ -177,7 +177,7 @@ namespace PalLauncher.Tests
             _output.WriteLine(content);
 
             Assert.Contains("Steam_123,Exchange,DogCoin,1,-2", content);
-            _output.WriteLine("Queue Test SUCCESS: CSV appended correctly with zero binary save corruption.");
+            _output.WriteLine("Queue Test SUCCESS: CSV appended correctly and save file updated.");
         }
 
         [Fact]
