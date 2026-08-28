@@ -8,6 +8,8 @@ namespace PalLauncher.Models
         private string _id = string.Empty;
         private string _name = string.Empty;
         private string _description = string.Empty;
+        private string _category = "Gameplay";
+        private bool _enabledByDefault = true;
         private string _version = "1.0.0";
         private string _author = "Community";
         private string _downloadUrl = string.Empty;
@@ -44,6 +46,20 @@ namespace PalLauncher.Models
         {
             get => _description;
             set => SetProperty(ref _description, value);
+        }
+
+        [JsonPropertyName("category")]
+        public string Category
+        {
+            get => _category;
+            set => SetProperty(ref _category, value);
+        }
+
+        [JsonPropertyName("enabledByDefault")]
+        public bool EnabledByDefault
+        {
+            get => _enabledByDefault;
+            set => SetProperty(ref _enabledByDefault, value);
         }
 
         [JsonPropertyName("version")]

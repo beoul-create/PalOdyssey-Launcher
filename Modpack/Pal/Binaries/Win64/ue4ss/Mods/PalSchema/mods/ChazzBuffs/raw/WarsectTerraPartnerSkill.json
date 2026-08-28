@@ -1,0 +1,209 @@
+{
+	"DT_PassiveSkill_Main": {
+		"BugTerra_PartnerSkill_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerInflictEffect_MeleeHitBarrier",
+			"EffectValue1": 5,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue2": 20,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 5,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue4": 20,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::ToSelf",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"BugTerra_PartnerSkill_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerInflictEffect_MeleeHitBarrier",
+			"EffectValue1": 6,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue2": 25,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 6,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue4": 25,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::ToSelf",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"BugTerra_PartnerSkill_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerInflictEffect_MeleeHitBarrier",
+			"EffectValue1": 7,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue2": 30,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 7,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue4": 30,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::ToSelf",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"BugTerra_PartnerSkill_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerInflictEffect_MeleeHitBarrier",
+			"EffectValue1": 8,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue2": 35,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 8,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue4": 35,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::ToSelf",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"BugTerra_PartnerSkill_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerInflictEffect_MeleeHitBarrier",
+			"EffectValue1": 9,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue2": 40,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 10,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue4": 40,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::ToSelf",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		}
+            },
+	"DT_PartnerSkillParameter": {
+		"HerculesBeetle_Ground": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "BugTerra_PartnerSkill_1"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "BugTerra_PartnerSkill_2"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "BugTerra_PartnerSkill_3"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "BugTerra_PartnerSkill_4"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "BugTerra_PartnerSkill_5"
+							}
+                                                }
+                                              ]
+                                             }
+                                             ]
+                                           },
+		"BOSS_HerculesBeetle_Ground": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "BugTerra_PartnerSkill_1"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "BugTerra_PartnerSkill_2"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "BugTerra_PartnerSkill_3"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "BugTerra_PartnerSkill_4"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "BugTerra_PartnerSkill_5"
+							}
+                                                }
+                                              ]
+                                             }
+                                             ]
+                                           }
+                                        }
+        }

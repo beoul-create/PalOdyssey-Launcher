@@ -28,9 +28,10 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Row 0: Summary & Action Button -->
+                <!-- Row 0: Summary & Action Buttons -->
                 <Grid Grid.Row="0" Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -39,40 +40,99 @@
 
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <TextBlock Text="PALODYSSEY EXPEDITION MODPACK (v1.5.4)" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" />
+                            <TextBlock Text="PALODYSSEY EXPEDITION MODPACK" Foreground="{StaticResource BrushAccentCyan}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" />
                             <Border Background="#101827" CornerRadius="4" Padding="6,1" Margin="8,0,0,0" VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding TotalModsCount}" Foreground="{StaticResource BrushSuccess}" FontSize="10" FontWeight="Bold" Margin="0,0,4,0" />
-                                    <TextBlock Text="Paks &amp; Scripts Loaded" Foreground="{StaticResource BrushTextSecondary}" FontSize="10" />
+                                    <TextBlock Text="{Binding FilteredCountText}" Foreground="{StaticResource BrushSuccess}" FontSize="10" FontWeight="Bold" />
                                 </StackPanel>
                             </Border>
                         </StackPanel>
                         <TextBlock Text="Curated modification suite and gameplay expansions for the PalOdyssey realm." Foreground="{StaticResource BrushTextSecondary}" FontSize="12" />
                     </StackPanel>
 
-                    <!-- Right Action Button: Open Mods Folder -->
+                    <!-- Right Action Buttons -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Button Style="{StaticResource StyleGhostButton}" FontSize="11" Padding="12,6"
+                        <Button Style="{StaticResource StyleGhostButton}" FontSize="11" Padding="10,5" Margin="0,0,8,0"
+                                Command="{Binding CheckUpdatesCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconRefresh}" Fill="{StaticResource BrushAccentCyan}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                <TextBlock Text="Check Updates" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource StyleGhostButton}" FontSize="11" Padding="10,5"
                                 Command="{Binding OpenModsFolderCommand}">
                             <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconFolder}" Fill="{StaticResource BrushAccentCyan}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
-                                <TextBlock Text="Open Mods Folder" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                <Path Data="{StaticResource IconFolder}" Fill="{StaticResource BrushAccentCyan}" Width="11" Height="11" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                <TextBlock Text="Paks Folder" FontWeight="SemiBold" VerticalAlignment="Center" />
                             </StackPanel>
                         </Button>
                     </StackPanel>
                 </Grid>
 
-                <!-- Row 1: Filter Chips -->
-                <Border Grid.Row="1" Background="#0C1017" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="8,4">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Filter:" Foreground="{StaticResource BrushTextMuted}" FontSize="11" VerticalAlignment="Center" Margin="4,0,10,0" />
-                        <RadioButton Content="All Mods" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="10,4" FontSize="11" IsChecked="True"
-                                     Click="OnFilterAllClicked" />
-                        <RadioButton Content="Required Core" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="10,4" FontSize="11"
-                                     Click="OnFilterRequiredClicked" />
-                        <RadioButton Content="Pending Updates" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="10,4" FontSize="11"
-                                     Click="OnFilterUpdatesClicked" />
+                <!-- Row 1: Search & Sorting Bar -->
+                <Grid Grid.Row="1" Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left: Search Box -->
+                    <Border Grid.Column="0" Background="#0C1017" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="8,4" Margin="0,0,10,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Path Grid.Column="0" Data="{StaticResource IconSearch}" Fill="{StaticResource BrushTextMuted}" Width="12" Height="12" Stretch="Uniform" Margin="2,0,8,0" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Foreground="{StaticResource BrushTextPrimary}" BorderThickness="0" FontSize="11.5" VerticalAlignment="Center" Style="{x:Null}" />
+                            <TextBlock Grid.Column="1" Text="Search mods by name, description, or keyword..." Foreground="{StaticResource BrushTextMuted}" FontSize="11.5" IsHitTestVisible="False" VerticalAlignment="Center"
+                                       Visibility="{Binding HasSearchQuery, Converter={StaticResource InvertBoolToVis}}" />
+                            <Button Grid.Column="2" Style="{StaticResource StyleGhostButton}" Padding="4,1" FontSize="10" Command="{Binding ClearSearchCommand}"
+                                    Visibility="{Binding HasSearchQuery, Converter={StaticResource BoolToVis}}" VerticalAlignment="Center">
+                                <Path Data="{StaticResource IconClose}" Fill="{StaticResource BrushTextMuted}" Width="8" Height="8" Stretch="Uniform" />
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Right: Sort Options -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Sort:" Foreground="{StaticResource BrushTextMuted}" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0" />
+                        <Border Background="#0C1017" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="6,2">
+                            <StackPanel Orientation="Horizontal">
+                                <RadioButton Content="Name" GroupName="ModsSortGroup" Style="{StaticResource StyleNavRadioButton}" Padding="6,2" FontSize="10" IsChecked="True"
+                                             Command="{Binding DataContext.SetFilterCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                             Checked="OnSortNameChecked" />
+                                <RadioButton Content="Category" GroupName="ModsSortGroup" Style="{StaticResource StyleNavRadioButton}" Padding="6,2" FontSize="10"
+                                             Checked="OnSortCategoryChecked" />
+                                <RadioButton Content="Size" GroupName="ModsSortGroup" Style="{StaticResource StyleNavRadioButton}" Padding="6,2" FontSize="10"
+                                             Checked="OnSortSizeChecked" />
+                                <RadioButton Content="Status" GroupName="ModsSortGroup" Style="{StaticResource StyleNavRadioButton}" Padding="6,2" FontSize="10"
+                                             Checked="OnSortStatusChecked" />
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
+                </Grid>
+
+                <!-- Row 2: Status & Category Filter Chips -->
+                <Border Grid.Row="2" Background="#0C1017" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="8,4">
+                    <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Filter:" Foreground="{StaticResource BrushTextMuted}" FontSize="11" VerticalAlignment="Center" Margin="4,0,8,0" />
+                        <RadioButton Content="All" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="8,3" FontSize="10.5" IsChecked="True"
+                                     Click="OnFilterAllClicked" />
+                        <RadioButton Content="Core" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="8,3" FontSize="10.5"
+                                     Click="OnFilterCoreClicked" />
+                        <RadioButton Content="Gameplay" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="8,3" FontSize="10.5"
+                                     Click="OnFilterGameplayClicked" />
+                        <RadioButton Content="Quality of Life" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="8,3" FontSize="10.5"
+                                     Click="OnFilterQolClicked" />
+                        <RadioButton Content="Visuals" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="8,3" FontSize="10.5"
+                                     Click="OnFilterVisualsClicked" />
+                        <RadioButton Content="Performance" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="8,3" FontSize="10.5"
+                                     Click="OnFilterPerformanceClicked" />
+                        <RadioButton Content="Pending Updates" GroupName="ModsFilterGroup" Style="{StaticResource StyleNavRadioButton}" Padding="8,3" FontSize="10.5"
+                                     Click="OnFilterUpdatesClicked" />
+                    </WrapPanel>
                 </Border>
             </Grid>
         </Border>

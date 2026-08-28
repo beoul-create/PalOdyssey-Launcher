@@ -254,12 +254,28 @@ namespace PalLauncher.ViewModels
             }
         }
 
+        private bool _isServerWaking;
+        private string _serverBootProgressText = string.Empty;
+
+        public bool IsServerWaking
+        {
+            get => _isServerWaking;
+            set => SetProperty(ref _isServerWaking, value);
+        }
+
+        public string ServerBootProgressText
+        {
+            get => _serverBootProgressText;
+            set => SetProperty(ref _serverBootProgressText, value);
+        }
+
         public bool IsServerOnline => _launchService.IsServerRunning || _liveboard.IsServerRunning || _serverStatus.IsServerRunning;
 
         public string ServerStatusBadgeText
         {
             get
             {
+                if (IsServerWaking) return "Waking Dedicated Server...";
                 if (_launchService.IsServerRunning) return "Local Server Active";
                 if (_liveboard.IsServerRunning || _serverStatus.IsServerRunning) return "Server Online";
                 if (_liveboard.IsOnline || _serverStatus.IsOnline) return "Server Sleeping (Auto-Wake Ready)";
@@ -690,12 +706,14 @@ namespace PalLauncher.ViewModels
                     var currentServerStatus = await _remoteClient.QueryServerStatusAsync(config.ServerIp, config.RemoteManagementPort, 2000);
                     if (!currentServerStatus.IsServerRunning)
                     {
+                        IsServerWaking = true;
                         string targetDisplay = string.IsNullOrWhiteSpace(config.ServerIp) ||
                                                config.ServerIp == LauncherConfig.DirectHostEndpoint ||
                                                config.ServerIp.Equals(LauncherConfig.OfficialServerHost, StringComparison.OrdinalIgnoreCase)
                                                ? "PalOdyssey Realm"
                                                : config.ServerIp;
                         StatusText = $"Transmitting wake signal to {targetDisplay}...";
+                        ServerBootProgressText = $"Waking {targetDisplay}: Initializing server instance...";
                         ProgressPercentage = 15;
 
                         var wakeProgress = new Progress<string>(msg =>
@@ -703,6 +721,7 @@ namespace PalLauncher.ViewModels
                             Application.Current?.Dispatcher.InvokeAsync(() =>
                             {
                                 StatusText = msg;
+                                ServerBootProgressText = msg;
                             });
                         });
 
@@ -712,6 +731,9 @@ namespace PalLauncher.ViewModels
                             config.RemoteAccessKey,
                             wakeProgress,
                             timeoutSeconds: 30);
+
+                        ServerBootProgressText = "Server online & ready for connection.";
+                        IsServerWaking = false;
                     }
                 }
 
@@ -787,6 +809,7 @@ namespace PalLauncher.ViewModels
             }
             finally
             {
+                IsServerWaking = false;
                 IsBusy = false;
             }
         }

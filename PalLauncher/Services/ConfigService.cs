@@ -65,6 +65,12 @@ namespace PalLauncher.Services
                     {
                         _config = loadedConfig;
 
+                        // Decrypt DPAPI protected tokens if present
+                        if (!string.IsNullOrEmpty(_config.DiscordBotToken))
+                        {
+                            _config.DiscordBotToken = UnprotectString(_config.DiscordBotToken);
+                        }
+
                         // Prioritize Environment Variables & Secure Token File fallbacks
                         string? envBotToken = Environment.GetEnvironmentVariable("DISCORD_BOT_TOKEN");
                         if (!string.IsNullOrWhiteSpace(envBotToken))
@@ -77,11 +83,11 @@ namespace PalLauncher.Services
                             string baseDirTokenPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bot_token.txt");
                             if (File.Exists(appDataTokenPath))
                             {
-                                try { _config.DiscordBotToken = (await File.ReadAllTextAsync(appDataTokenPath)).Trim(); } catch { }
+                                try { _config.DiscordBotToken = UnprotectString((await File.ReadAllTextAsync(appDataTokenPath)).Trim()); } catch { }
                             }
                             else if (File.Exists(baseDirTokenPath))
                             {
-                                try { _config.DiscordBotToken = (await File.ReadAllTextAsync(baseDirTokenPath)).Trim(); } catch { }
+                                try { _config.DiscordBotToken = UnprotectString((await File.ReadAllTextAsync(baseDirTokenPath)).Trim()); } catch { }
                             }
                         }
 
@@ -116,11 +122,11 @@ namespace PalLauncher.Services
                 string baseDirTokenPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bot_token.txt");
                 if (File.Exists(appDataTokenPath))
                 {
-                    _config.DiscordBotToken = (await File.ReadAllTextAsync(appDataTokenPath)).Trim();
+                    _config.DiscordBotToken = UnprotectString((await File.ReadAllTextAsync(appDataTokenPath)).Trim());
                 }
                 else if (File.Exists(baseDirTokenPath))
                 {
-                    _config.DiscordBotToken = (await File.ReadAllTextAsync(baseDirTokenPath)).Trim();
+                    _config.DiscordBotToken = UnprotectString((await File.ReadAllTextAsync(baseDirTokenPath)).Trim());
                 }
             }
             catch { }
@@ -138,7 +144,14 @@ namespace PalLauncher.Services
 
             try
             {
-                string json = JsonSerializer.Serialize(_config, _jsonOptions);
+                // Create a clone or serialization object with protected token if configured
+                var configToSave = CloneConfig(_config);
+                if (!string.IsNullOrEmpty(configToSave.DiscordBotToken) && !configToSave.DiscordBotToken.StartsWith("ENC:"))
+                {
+                    configToSave.DiscordBotToken = ProtectString(configToSave.DiscordBotToken);
+                }
+
+                string json = JsonSerializer.Serialize(configToSave, _jsonOptions);
                 await File.WriteAllTextAsync(_configFilePath, json);
 
                 // Keep bot_token.txt synchronized
@@ -161,5 +174,47 @@ namespace PalLauncher.Services
         }
 
         public string GetConfigFilePath() => _configFilePath;
+
+        public static string ProtectString(string plainText)
+        {
+            if (string.IsNullOrEmpty(plainText)) return string.Empty;
+            if (plainText.StartsWith("ENC:")) return plainText;
+            try
+            {
+                if (OperatingSystem.IsWindows())
+                {
+                    byte[] plainBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+                    byte[] cipherBytes = System.Security.Cryptography.ProtectedData.Protect(plainBytes, null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
+                    return "ENC:" + Convert.ToBase64String(cipherBytes);
+                }
+            }
+            catch { }
+            return plainText;
+        }
+
+        public static string UnprotectString(string cipherOrPlain)
+        {
+            if (string.IsNullOrEmpty(cipherOrPlain)) return string.Empty;
+            if (cipherOrPlain.StartsWith("ENC:"))
+            {
+                try
+                {
+                    if (OperatingSystem.IsWindows())
+                    {
+                        byte[] cipherBytes = Convert.FromBase64String(cipherOrPlain[4..]);
+                        byte[] plainBytes = System.Security.Cryptography.ProtectedData.Unprotect(cipherBytes, null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
+                        return System.Text.Encoding.UTF8.GetString(plainBytes);
+                    }
+                }
+                catch { }
+            }
+            return cipherOrPlain;
+        }
+
+        private static LauncherConfig CloneConfig(LauncherConfig source)
+        {
+            string json = JsonSerializer.Serialize(source);
+            return JsonSerializer.Deserialize<LauncherConfig>(json) ?? new LauncherConfig();
+        }
     }
 }

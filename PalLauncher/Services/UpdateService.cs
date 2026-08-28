@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -247,10 +248,24 @@ namespace PalLauncher.Services
                 string downloadUrl = ResolveDownloadUrl(mod.DownloadUrl, mod.RelativeInstallPath);
                 _logService.LogInfo($"Downloading {mod.Name} from {downloadUrl}...", "Updater");
 
-                if (File.Exists(downloadUrl))
+                string localSourcePath = string.Empty;
+                if (File.Exists(mod.DownloadUrl))
+                {
+                    localSourcePath = mod.DownloadUrl;
+                }
+                else if (File.Exists(downloadUrl))
+                {
+                    localSourcePath = downloadUrl;
+                }
+                else if (Uri.TryCreate(downloadUrl, UriKind.Absolute, out var fileUri) && fileUri.IsFile && File.Exists(fileUri.LocalPath))
+                {
+                    localSourcePath = fileUri.LocalPath;
+                }
+
+                if (!string.IsNullOrEmpty(localSourcePath))
                 {
                     // Local file copy for offline/mock test
-                    File.Copy(downloadUrl, tempFilePath, true);
+                    File.Copy(localSourcePath, tempFilePath, true);
                 }
                 else
                 {
@@ -317,7 +332,30 @@ namespace PalLauncher.Services
                     return false;
                 }
 
-                // Safe replace
+                // Check if target or downloaded file is a zip archive
+                bool isZipArchive = targetFilePath.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) ||
+                                   downloadUrl.EndsWith(".zip", StringComparison.OrdinalIgnoreCase);
+
+                if (isZipArchive)
+                {
+                    try
+                    {
+                        string extractTargetDir = targetDirectory;
+                        if (targetFilePath.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // If target is named ".../ModName.zip", extract into ".../ModName" or parent
+                            extractTargetDir = targetDirectory;
+                        }
+                        System.IO.Compression.ZipFile.ExtractToDirectory(tempFilePath, extractTargetDir, true);
+                        _logService.LogSuccess($"Extracted archive package for {mod.Name} into {extractTargetDir}", "Updater");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logService.LogWarning($"Zip extraction notice for {mod.Name}: {ex.Message}", "Updater");
+                    }
+                }
+
+                // Safe replace target file
                 if (File.Exists(targetFilePath))
                 {
                     string backupPath = targetFilePath + ".bak";
@@ -429,30 +467,45 @@ namespace PalLauncher.Services
                     return 0;
                 }
 
-                _logService.LogInfo($"Starting batch download for {modQueue.Count} mods...", "Updater");
+                _logService.LogInfo($"Starting concurrent batch download for {modQueue.Count} mods...", "Updater");
 
-                int currentIndex = 0;
-                foreach (var mod in modQueue)
+                int completedCount = 0;
+                var progressLock = new object();
+                using var throttle = new SemaphoreSlim(3, 3); // Concurrent download throttle
+
+                var downloadTasks = modQueue.Select(async mod =>
                 {
-                    currentIndex++;
-                    progress?.Report(new UpdateProgressInfo
+                    await throttle.WaitAsync(cancellationToken);
+                    try
                     {
-                        TotalFiles = modQueue.Count,
-                        CurrentFileIndex = currentIndex,
-                        CurrentFileName = mod.Name,
-                        Percentage = 0,
-                        StatusMessage = $"[Mod {currentIndex}/{modQueue.Count}] Updating {mod.Name}..."
-                    });
+                        cancellationToken.ThrowIfCancellationRequested();
+                        bool success = await DownloadAndInstallModAsync(mod, gameRootPath, null, cancellationToken);
+                        if (success)
+                        {
+                            Interlocked.Increment(ref installedCount);
+                        }
 
-                    bool success = await DownloadAndInstallModAsync(mod, gameRootPath, progress, cancellationToken);
-                    if (success)
-                    {
-                        installedCount++;
+                        int current = Interlocked.Increment(ref completedCount);
+                        lock (progressLock)
+                        {
+                            double percent = (double)current / modQueue.Count * 100.0;
+                            progress?.Report(new UpdateProgressInfo
+                            {
+                                TotalFiles = modQueue.Count,
+                                CurrentFileIndex = current,
+                                CurrentFileName = mod.Name,
+                                Percentage = percent,
+                                StatusMessage = $"[{current}/{modQueue.Count}] Updated {mod.Name}"
+                            });
+                        }
                     }
+                    finally
+                    {
+                        throttle.Release();
+                    }
+                });
 
-                    cancellationToken.ThrowIfCancellationRequested();
-                }
-
+                await Task.WhenAll(downloadTasks);
                 _logService.LogSuccess($"Batch update completed: {installedCount}/{modQueue.Count} mods updated successfully.", "Updater");
             }
             finally

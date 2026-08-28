@@ -25,6 +25,9 @@ namespace PalLauncher.ViewModels
         private ICollectionView _filteredModsView;
         private ModInfo? _selectedMod;
         private string _selectedFilter = "All";
+        private string _selectedCategory = "All";
+        private string _searchQuery = string.Empty;
+        private string _sortBy = "Name";
         private string _statusText = "Ready";
         private double _overallProgress;
         private string _currentSpeedText = string.Empty;
@@ -48,6 +51,48 @@ namespace PalLauncher.ViewModels
                 if (SetProperty(ref _selectedFilter, value))
                 {
                     _filteredModsView.Refresh();
+                    OnPropertyChanged(nameof(FilteredCountText));
+                }
+            }
+        }
+
+        public string SelectedCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                if (SetProperty(ref _selectedCategory, value))
+                {
+                    _filteredModsView.Refresh();
+                    OnPropertyChanged(nameof(FilteredCountText));
+                }
+            }
+        }
+
+        public string SearchQuery
+        {
+            get => _searchQuery;
+            set
+            {
+                if (SetProperty(ref _searchQuery, value))
+                {
+                    _filteredModsView.Refresh();
+                    OnPropertyChanged(nameof(FilteredCountText));
+                    OnPropertyChanged(nameof(HasSearchQuery));
+                }
+            }
+        }
+
+        public bool HasSearchQuery => !string.IsNullOrWhiteSpace(SearchQuery);
+
+        public string SortBy
+        {
+            get => _sortBy;
+            set
+            {
+                if (SetProperty(ref _sortBy, value))
+                {
+                    ApplySorting();
                 }
             }
         }
@@ -89,11 +134,23 @@ namespace PalLauncher.ViewModels
         public int MissingCount => _mods.Count(m => m.Status == ModStatus.Missing);
         public bool HasUpdatesPending => UpdatesAvailableCount > 0 || MissingCount > 0;
 
+        public string FilteredCountText
+        {
+            get
+            {
+                int count = _filteredModsView.Cast<object>().Count();
+                return $"{count} of {_mods.Count} mods";
+            }
+        }
+
         public AsyncRelayCommand CheckUpdatesCommand { get; }
         public AsyncRelayCommand UpdateAllCommand { get; }
         public AsyncRelayCommand UpdateSingleModCommand { get; }
         public RelayCommand CancelCommand { get; }
         public RelayCommand OpenModsFolderCommand { get; }
+        public RelayCommand ClearSearchCommand { get; }
+        public RelayCommand SetFilterCommand { get; }
+        public RelayCommand SetCategoryCommand { get; }
 
         public ModsViewModel(
             IUpdateService updateService,
@@ -108,25 +165,77 @@ namespace PalLauncher.ViewModels
 
             _filteredModsView = CollectionViewSource.GetDefaultView(_mods);
             _filteredModsView.Filter = FilterMod;
+            ApplySorting();
 
             CheckUpdatesCommand = new AsyncRelayCommand(ExecuteCheckUpdatesAsync, () => !IsBusy);
             UpdateAllCommand = new AsyncRelayCommand(ExecuteUpdateAllAsync, () => !IsBusy && _mods.Any(m => m.CanUpdate));
             UpdateSingleModCommand = new AsyncRelayCommand(ExecuteUpdateSingleModAsync, _ => !IsBusy);
             CancelCommand = new RelayCommand(ExecuteCancel, () => IsBusy);
             OpenModsFolderCommand = new RelayCommand(ExecuteOpenModsFolder);
+            ClearSearchCommand = new RelayCommand(_ => SearchQuery = string.Empty);
+            SetFilterCommand = new RelayCommand(param => { if (param is string f) SelectedFilter = f; });
+            SetCategoryCommand = new RelayCommand(param => { if (param is string c) SelectedCategory = c; });
+        }
+
+        private void ApplySorting()
+        {
+            _filteredModsView.SortDescriptions.Clear();
+            switch (_sortBy)
+            {
+                case "Category":
+                    _filteredModsView.SortDescriptions.Add(new SortDescription(nameof(ModInfo.Category), ListSortDirection.Ascending));
+                    _filteredModsView.SortDescriptions.Add(new SortDescription(nameof(ModInfo.Name), ListSortDirection.Ascending));
+                    break;
+                case "Size":
+                    _filteredModsView.SortDescriptions.Add(new SortDescription(nameof(ModInfo.SizeBytes), ListSortDirection.Descending));
+                    break;
+                case "Status":
+                    _filteredModsView.SortDescriptions.Add(new SortDescription(nameof(ModInfo.Status), ListSortDirection.Ascending));
+                    _filteredModsView.SortDescriptions.Add(new SortDescription(nameof(ModInfo.Name), ListSortDirection.Ascending));
+                    break;
+                case "Name":
+                default:
+                    _filteredModsView.SortDescriptions.Add(new SortDescription(nameof(ModInfo.Name), ListSortDirection.Ascending));
+                    break;
+            }
         }
 
         private bool FilterMod(object obj)
         {
             if (obj is not ModInfo mod) return false;
 
-            return SelectedFilter switch
+            // 1. Status Filter
+            bool matchesFilter = SelectedFilter switch
             {
                 "Updates" => mod.CanUpdate,
                 "Required" => mod.IsRequired,
                 "Installed" => mod.Status == ModStatus.UpToDate,
                 _ => true
             };
+            if (!matchesFilter) return false;
+
+            // 2. Category Filter
+            if (!string.Equals(SelectedCategory, "All", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!string.Equals(mod.Category, SelectedCategory, StringComparison.OrdinalIgnoreCase))
+                    return false;
+            }
+
+            // 3. Search Query
+            if (!string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                string q = SearchQuery.Trim();
+                bool matchesSearch =
+                    (mod.Name?.Contains(q, StringComparison.OrdinalIgnoreCase) == true) ||
+                    (mod.Description?.Contains(q, StringComparison.OrdinalIgnoreCase) == true) ||
+                    (mod.Category?.Contains(q, StringComparison.OrdinalIgnoreCase) == true) ||
+                    (mod.Id?.Contains(q, StringComparison.OrdinalIgnoreCase) == true) ||
+                    (mod.RelativeInstallPath?.Contains(q, StringComparison.OrdinalIgnoreCase) == true);
+
+                if (!matchesSearch) return false;
+            }
+
+            return true;
         }
 
         public async Task ExecuteCheckUpdatesAsync()

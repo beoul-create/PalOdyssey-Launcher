@@ -1,0 +1,30 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "LanternButler": {
+      "ShotAttack": 130,
+      "Defense": 95,
+      "Friendship_ShotAttack": 1.3,
+      "Friendship_Defense": 2.7
+    },
+    "BOSS_LanternButler": {
+      "ShotAttack": 130,
+      "Defense": 95,
+      "Friendship_ShotAttack": 1.3,
+      "Friendship_Defense": 2.7
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_LanternButler_LanternFlame": {
+      "WazaType": "EPalWazaID::Unique_LanternButler_LanternFlame",
+      "Element": "EPalElementType::Dark",
+      "Power": 750,
+      "DisplayPower": 750,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Darkness",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::Burn",
+      "EffectValue2": 100
+    }
+  }
+}

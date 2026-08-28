@@ -5,25 +5,25 @@
       "Hp": 90,
       "ShotAttack": 95,
       "Defense": 80,
-      "Friendship_HP": 4.5,
-      "Friendship_ShotAttack": 2.7,
-      "Friendship_Defense": 3.3
+      "Friendship_HP": 5.5,
+      "Friendship_ShotAttack": 3.7,
+      "Friendship_Defense": 4.3
     },
     "BOSS_OctopusGirl": {
       "Hp": 108,
       "ShotAttack": 95,
       "Defense": 80,
-      "Friendship_HP": 3.6,
-      "Friendship_ShotAttack": 2.7,
-      "Friendship_Defense": 3.3
+      "Friendship_HP": 4.6,
+      "Friendship_ShotAttack": 3.7,
+      "Friendship_Defense": 4.3
     }
   },
   "DT_WazaDataTable": {
     "Unique_OctopursGirl_InkJet": {
       "WazaType": "EPalWazaID::Unique_OctopursGirl_InkJet",
       "Element": "EPalElementType::Water",
-      "Power": 250,
-      "DisplayPower": 250,
+      "Power": 300,
+      "DisplayPower": 300,
       "CoolTime": 10.0,
       "EffectType1": "EPalAdditionalEffectType::Wetness",
       "EffectValue1": 100,

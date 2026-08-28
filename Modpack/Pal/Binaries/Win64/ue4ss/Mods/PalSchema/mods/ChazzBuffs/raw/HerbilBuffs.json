@@ -20,8 +20,8 @@
     "Unique_LeafMomonga_SomerSault": {
       "WazaType": "EPalWazaID::Unique_LeafMomonga_SomerSault",
       "Element": "EPalElementType::Leaf",
-      "Power": 750,
-      "DisplayPower": 750,
+      "Power": 800,
+      "DisplayPower": 800,
       "CoolTime": 30.0,
       "EffectType1": "EPalAdditionalEffectType::IvyCling",
       "EffectValue1": 999,

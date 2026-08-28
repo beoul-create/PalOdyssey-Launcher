@@ -1,0 +1,17 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "BrownRabbit": {
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7,
+      "Defense": 120,
+      "Friendship_Defense": 1.7
+    },
+    "BOSS_BrownRabbit": {
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7,
+      "Defense": 120,
+      "Friendship_Defense": 1.7
+    }
+  }
+}

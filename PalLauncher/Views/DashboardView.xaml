@@ -161,6 +161,25 @@
                         </Button>
                     </Grid>
 
+                    <!-- Auto-Wake / Booting In-Progress Notification Banner -->
+                    <Border Background="#101C2E" BorderBrush="{StaticResource BrushAccentCyan}" BorderThickness="1.5" CornerRadius="8" Padding="14,10" Margin="0,0,0,14"
+                            Visibility="{Binding IsServerWaking, Converter={StaticResource BoolToVis}}">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="14" Color="#00F0FF" Opacity="0.5" ShadowDepth="0" />
+                        </Border.Effect>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Path Grid.Column="0" Data="{StaticResource IconRocket}" Fill="{StaticResource BrushAccentCyan}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" VerticalAlignment="Center" />
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="DEDICATED REALM AUTO-WAKING..." Foreground="{StaticResource BrushAccentCyan}" FontSize="12" FontWeight="Bold" Margin="0,0,0,2" />
+                                <TextBlock Text="{Binding ServerBootProgressText, FallbackValue='Connecting to host daemon and booting instance...'}" Foreground="{StaticResource BrushTextPrimary}" FontSize="11.5" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
                     <!-- Telemetry Metrics Grid (4 Stat Cards) -->
                     <Grid Margin="0,0,0,16">
                         <Grid.ColumnDefinitions>

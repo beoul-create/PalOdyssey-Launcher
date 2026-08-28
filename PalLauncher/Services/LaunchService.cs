@@ -988,10 +988,10 @@ namespace PalLauncher.Services
                 { "bAllowHardwareCursor", "bAllowHardwareCursor=True" }
             });
 
-            // 3. Resource, Render & Zero-Latency Slate Settings (Epic Performance Standard)
+            // 3. Resource, Render & Zero-Latency Slate Settings (Sodium, Lithium, FerriteCore & Option B)
             InjectSectionIntoIniLines(lines, "[SystemSettings]", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {
-                // Zero-Latency Slate UI & Direct Hardware Cursor
+                // Zero-Latency Slate UI & Direct Hardware Cursor (ImmediatelyFast Equivalent)
                 { "Slate.EnableMouseSmoother", "Slate.EnableMouseSmoother=0" },
                 { "Slate.EnableRenderHardwareCursor", "Slate.EnableRenderHardwareCursor=1" },
                 { "Slate.UseHardwareCursor", "Slate.UseHardwareCursor=1" },
@@ -999,50 +999,90 @@ namespace PalLauncher.Services
                 { "Slate.CursorRenderRate", "Slate.CursorRenderRate=0" },
                 { "Slate.SleepInterval", "Slate.SleepInterval=0" },
                 { "Slate.SleepIntervalWithUserInteraction", "Slate.SleepIntervalWithUserInteraction=0" },
+                { "Slate.CacheRenderData", "Slate.CacheRenderData=1" },
+                { "Slate.EnableAsyncDraw", "Slate.EnableAsyncDraw=1" },
                 { "r.Slate.EnableMouseCapture", "r.Slate.EnableMouseCapture=0" },
                 
+                // GPU Task/Mesh Shaders, GPUScene Occlusion & VRAM SkinCache (Nvidium / Sodium)
+                { "r.MeshShaders", "r.MeshShaders=1" },
+                { "r.MeshShaders.Enable", "r.MeshShaders.Enable=1" },
+                { "r.GPUScene.InstanceCulling", "r.GPUScene.InstanceCulling=1" },
+                { "r.EarlyZPass", "r.EarlyZPass=2" },
+                { "r.EarlyZPassMovable", "r.EarlyZPassMovable=1" },
+                { "r.SkinCache.Mode", "r.SkinCache.Mode=1" },
+                { "r.SkinCache.CompileShaders", "r.SkinCache.CompileShaders=1" },
+                { "r.SkinCache.RecomputeTangents", "r.SkinCache.RecomputeTangents=1" },
+                { "r.HZBOcclusion", "r.HZBOcclusion=1" },
+                { "r.AllowOcclusionQueries", "r.AllowOcclusionQueries=1" },
+                { "r.Occlusion.MaxQueriesPerFrame", "r.Occlusion.MaxQueriesPerFrame=50000" },
+
+                // Skeletal URO, Entity Animation & Physics Tick Culling (Lithium & ServerCore)
+                { "a.URO.Enable", "a.URO.Enable=1" },
+                { "a.URO.TickDistanceScale", "a.URO.TickDistanceScale=0.75" },
+                { "a.URO.Interpolation", "a.URO.Interpolation=1" },
+                { "a.URO.VisibilityBasedAnimTickRate", "a.URO.VisibilityBasedAnimTickRate=1" },
+                { "r.SkeletalMeshLODBias", "r.SkeletalMeshLODBias=2" },
+                { "p.RigidBodyLODSubStepping", "p.RigidBodyLODSubStepping=0" },
+                { "p.ClothPhysics", "p.ClothPhysics=0" },
+
+                // Continuous Landscape CDLOD & Mesh Range Falloff
+                { "r.DitheredLODTransition", "r.DitheredLODTransition=1" },
+                { "landscape.LODDistanceFactor", "landscape.LODDistanceFactor=2.50" },
+                { "landscape.LOD0DistributionScale", "landscape.LOD0DistributionScale=0.50" },
+                { "r.StaticMeshLODDistanceScale", "r.StaticMeshLODDistanceScale=0.75" },
+                { "r.MeshLODRange", "r.MeshLODRange=0.85" },
+                { "r.SkyAtmosphere.AerialPerspectiveLUT.FastSkyLUT", "r.SkyAtmosphere.AerialPerspectiveLUT.FastSkyLUT=1" },
+
                 // Frame Pacing & Pipeline Latency
                 { "r.OneFrameThreadLag", "r.OneFrameThreadLag=1" },
                 { "r.FinishCurrentFrame", "r.FinishCurrentFrame=0" },
                 { "r.GTSyncType", "r.GTSyncType=1" },
-                { "t.MaxFPS", "t.MaxFPS=144" },
+                { "t.MaxFPS", "t.MaxFPS=165" },
                 { "t.UnfocusedMaxFPS", "t.UnfocusedMaxFPS=30" },
+                { "r.ScreenPercentage", "r.ScreenPercentage=85" },
 
-                // Asynchronous Texture Streaming & CPU Amortization
+                // Asynchronous Texture Streaming & CPU Amortization (Sodium Equivalent)
                 { "r.TextureStreaming", "r.TextureStreaming=1" },
-                { "r.Streaming.PoolSize", "r.Streaming.PoolSize=3072" },
+                { "r.Streaming.PoolSize", "r.Streaming.PoolSize=2048" },
                 { "r.Streaming.LimitPoolSizeToVRAM", "r.Streaming.LimitPoolSizeToVRAM=1" },
                 { "r.Streaming.DefragDynamicBounds", "r.Streaming.DefragDynamicBounds=1" },
                 { "r.Streaming.AmortizeCPUWork", "r.Streaming.AmortizeCPUWork=1" },
                 { "r.Streaming.AmortizeCPUToGPUCopy", "r.Streaming.AmortizeCPUToGPUCopy=1" },
-                { "r.Streaming.FramesForFullUpdate", "r.Streaming.FramesForFullUpdate=20" },
-                { "r.Streaming.MaxNumTexturesToStreamPerFrame", "r.Streaming.MaxNumTexturesToStreamPerFrame=8" },
+                { "r.Streaming.FramesForFullUpdate", "r.Streaming.FramesForFullUpdate=25" },
+                { "r.Streaming.MaxNumTexturesToStreamPerFrame", "r.Streaming.MaxNumTexturesToStreamPerFrame=6" },
                 { "r.Streaming.HLODStrategy", "r.Streaming.HLODStrategy=1" },
 
-                // GPU Pass Trimming (Volumetrics, Shadows & Global Illumination)
+                // GPU Pass Trimming (Option B: 512p CSM Shadows, 1 Cascade, Volumetrics Off)
                 { "r.VolumetricCloud", "r.VolumetricCloud=0" },
                 { "r.VolumetricFog", "r.VolumetricFog=0" },
                 { "r.VolumetricFog.GridPixelSize", "r.VolumetricFog.GridPixelSize=16" },
                 { "r.VolumetricFog.GridSizeZ", "r.VolumetricFog.GridSizeZ=64" },
                 { "r.ContactShadows", "r.ContactShadows=0" },
                 { "r.DistanceFieldShadowing", "r.DistanceFieldShadowing=0" },
+                { "r.DistanceFieldAO", "r.DistanceFieldAO=0" },
                 { "r.DFShadowQuality", "r.DFShadowQuality=0" },
                 { "r.Shadow.Virtual.Enable", "r.Shadow.Virtual.Enable=0" },
-                { "r.Shadow.CSM.MaxCascades", "r.Shadow.CSM.MaxCascades=2" },
-                { "r.Shadow.MaxCSMResolution", "r.Shadow.MaxCSMResolution=1024" },
-                { "r.Shadow.DistanceScale", "r.Shadow.DistanceScale=0.80" },
+                { "r.Shadow.CSM.MaxCascades", "r.Shadow.CSM.MaxCascades=1" },
+                { "r.Shadow.MaxCSMResolution", "r.Shadow.MaxCSMResolution=512" },
+                { "r.Shadow.DistanceScale", "r.Shadow.DistanceScale=0.50" },
                 { "r.Lumen.Reflections.Allow", "r.Lumen.Reflections.Allow=0" },
                 { "r.Lumen.ScreenProbeGather.DownsampleFactor", "r.Lumen.ScreenProbeGather.DownsampleFactor=16" },
                 { "r.DynamicGlobalIlluminationMethod", "r.DynamicGlobalIlluminationMethod=0" },
+                { "r.AmbientOcclusionLevels", "r.AmbientOcclusionLevels=0" },
+                { "r.SSR.Quality", "r.SSR.Quality=0" },
 
-                // Foliage, LOD & Dynamic Light Batching
-                { "grass.DensityScale", "grass.DensityScale=0.8" },
-                { "foliage.LODDistanceScale", "foliage.LODDistanceScale=0.85" },
-                { "r.LightMaxDrawDistanceScale", "r.LightMaxDrawDistanceScale=0.8" },
+                // Foliage, Grass & Niagara VFX Culling (Option B: 40% Grass, Capped Emitters)
+                { "grass.DensityScale", "grass.DensityScale=0.40" },
+                { "foliage.LODDistanceScale", "foliage.LODDistanceScale=0.60" },
+                { "r.LightMaxDrawDistanceScale", "r.LightMaxDrawDistanceScale=0.70" },
+                { "fx.Niagara.QualityLevel", "fx.Niagara.QualityLevel=0" },
+                { "r.EmitterSpawnRateScale", "r.EmitterSpawnRateScale=0.50" },
+                { "fx.Niagara.Cull.MaxDistance", "fx.Niagara.Cull.MaxDistance=6000" },
+                { "r.TranslucencyLightingVolumeDim", "r.TranslucencyLightingVolumeDim=16" },
                 { "r.ParticleLODBias", "r.ParticleLODBias=1" },
                 { "r.Emitter.FastPool", "r.Emitter.FastPool=1" },
 
-                // Post-Processing & Upscaling Optimization
+                // Post-Processing & Upscaling Optimization (FerriteCore & TSR)
                 { "r.DepthOfFieldQuality", "r.DepthOfFieldQuality=0" },
                 { "r.MotionBlurQuality", "r.MotionBlurQuality=0" },
                 { "r.SceneColorFringeQuality", "r.SceneColorFringeQuality=0" },
@@ -1050,8 +1090,9 @@ namespace PalLauncher.Services
                 { "r.BloomQuality", "r.BloomQuality=1" },
                 { "r.TemporalAA.Upsampling", "r.TemporalAA.Upsampling=1" },
                 { "r.TSR.ShadingRejection.Flickering", "r.TSR.ShadingRejection.Flickering=1" },
+                { "gc.TimeBetweenPurgingPendingKillObjects", "gc.TimeBetweenPurgingPendingKillObjects=20" },
 
-                // Pipeline State Object (PSO) & Shader Caching (Stutter Elimination)
+                // Pipeline State Object (PSO) & Shader Caching (C2ME Equivalent)
                 { "r.CreateShadersOnLoad", "r.CreateShadersOnLoad=1" },
                 { "r.Shaders.Optimize", "r.Shaders.Optimize=1" },
                 { "r.ShaderPipelineCache.Enabled", "r.ShaderPipelineCache.Enabled=1" },

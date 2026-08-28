@@ -33,13 +33,18 @@ function GraphicsModule.apply(cfg)
             ExecuteConsole("r.SkinCache.Mode 1")
             ExecuteConsole("r.SkinCache.CompileShaders 1")
             ExecuteConsole("r.SkinCache.RecomputeTangents 1")
+            ExecuteConsole("r.HZBOcclusion 1")
+            ExecuteConsole("r.AllowOcclusionQueries 1")
+            ExecuteConsole("r.Occlusion.MaxQueriesPerFrame 50000")
 
-            -- 2. Skeletal URO + Pose Interpolation + LOD2 Mesh Optimization (Option B)
+            -- 2. Skeletal URO + Pose Interpolation + Physics Tick Amortization (Lithium & ServerCore)
             ExecuteConsole("a.URO.Enable 1")
-            ExecuteConsole("a.URO.TickDistanceScale 1.0")
+            ExecuteConsole("a.URO.TickDistanceScale 0.75")
             ExecuteConsole("a.URO.Interpolation 1")
             ExecuteConsole("a.URO.VisibilityBasedAnimTickRate 1")
             ExecuteConsole("r.SkeletalMeshLODBias 2")
+            ExecuteConsole("p.RigidBodyLODSubStepping 0")
+            ExecuteConsole("p.ClothPhysics 0")
 
             -- 3. Seamless Distance Falloff & Continuous Landscape CDLOD
             ExecuteConsole("r.DitheredLODTransition 1")
@@ -60,7 +65,7 @@ function GraphicsModule.apply(cfg)
             ExecuteConsole("r.Streaming.HLODStrategy 1")
             ExecuteConsole("r.Streaming.PoolSize 2048")
 
-            -- 5. Asynchronous Shader Compilation, PSO Caching & Stutter Elimination
+            -- 5. Asynchronous Shader Compilation, PSO Caching & Stutter Elimination (C2ME Equivalent)
             ExecuteConsole("r.CreateShadersOnLoad 1")
             ExecuteConsole("r.Shaders.Optimize 1")
             ExecuteConsole("r.ShaderPipelineCache.Enabled 1")
@@ -74,6 +79,7 @@ function GraphicsModule.apply(cfg)
             ExecuteConsole("r.VolumetricFog.GridSizeZ 64")
             ExecuteConsole("r.ContactShadows 0")
             ExecuteConsole("r.DistanceFieldShadowing 0")
+            ExecuteConsole("r.DistanceFieldAO 0")
             ExecuteConsole("r.DFShadowQuality 0")
             ExecuteConsole("r.Shadow.Virtual.Enable 0")
             ExecuteConsole("r.Shadow.CSM.MaxCascades 1")
@@ -120,15 +126,34 @@ function GraphicsModule.apply(cfg)
         end)
     end
 
-    -- Hook GameEngine Init and also run with delay
+    -- Hook GameEngine Init
     pcall(function()
         RegisterHook("/Script/Engine.GameEngine:Init", function(Context)
             optimizeRenderSettings()
         end)
     end)
 
-    ExecuteWithDelay(2500, optimizeRenderSettings)
-    ExecuteWithDelay(7000, optimizeRenderSettings)
+    -- Hook World BeginPlay and Player Restart for fast-travel / map transitions
+    pcall(function()
+        RegisterHook("/Script/Engine.World:ReceiveBeginPlay", function(Context)
+            optimizeRenderSettings()
+            ExecuteWithDelay(1500, optimizeRenderSettings)
+        end)
+        RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context)
+            optimizeRenderSettings()
+        end)
+    end)
+
+    -- Initial passes
+    ExecuteWithDelay(2000, optimizeRenderSettings)
+    ExecuteWithDelay(6000, optimizeRenderSettings)
+
+    -- Periodic 10-second sanity enforcement to prevent in-game scalability resets
+    local function continuousOptimizationLoop()
+        optimizeRenderSettings()
+        ExecuteWithDelay(10000, continuousOptimizationLoop)
+    end
+    ExecuteWithDelay(10000, continuousOptimizationLoop)
 
     print("[PalOdysseyOptimizer] Ultra-Performance Option B GPU Pipeline loaded successfully.")
 end
