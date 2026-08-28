@@ -3321,22 +3321,29 @@ namespace PalLauncher.Services
         public async Task PublishLatestUpdateChangelogAsync(string channelId = "1542544366176968714", bool pingRole = true)
         {
             string changelogBody =
-                "### 🚀 1. Modpack Synchronization & Balance (v2.5.0)\n" +
-                "• **143 Balance & Translation Modules**: Full rebalance from ChazzBuffs suite deployed to all pals and partner skills.\n" +
-                "• **New Additions**: `LapironBuffs.json`, `LoomenBuffs.json`, `WarsectTerraPartnerSkill.json`, and weapon translations.\n" +
-                "• **High-Performance Update Engine**: Automatic `.zip` archive extraction and 3x concurrent updating via `SemaphoreSlim(3)`.\n" +
-                "• **Hardware DPAPI Protection**: Tokens and access keys are hardware-encrypted at rest using Windows DPAPI.\n" +
-                "• **Mod Management Suite**: Multi-field search, category filters (*Core, Gameplay, QoL, Visuals, Performance*), and sorting.\n\n" +
-                "### 🔴 2. Periodic World Boss Raids (v2.4.0)\n" +
-                "• **Hourly World Raids**: Every 1 hour, a 3.0× scale boss spawns (10-minute despawn).\n" +
-                "• **Trophy Rewards**: Capture to earn a permanent **2.0× Scale Giant Pal**, **2.0× Base HP**, and **200 IV Talents**. Kill to guarantee a random Legendary Tier 4 Schematic!\n\n" +
-                "### ✨ 3. Multi-Tier Wild Aura System\n" +
-                "• ⚡ **Overcharged (Cyan)**, 🛡️ **Colossus (Emerald)**, ⚔️ **Berserker (Crimson)**, ⚙️ **Master Artisan (Amber)** (0.1% Chance).\n" +
-                "• ⏳ **Regressor (Platinum)**: 2× Combat Stats, **0s Skill Cooldown (100% CDR)**.\n" +
-                "• 🌌 **Transmigrator (Cosmic Violet)**: **Unlimited Level Cap (Bypasses Lv 80)**, **Lv 5 ALL Work Suitabilities**, **Ranch Dog Coin Drops** (0.0001% Mythic).\n\n" +
+                "### ⚡ 1. Minecraft-Blueprint Performance Architecture (v2.5.0)\n" +
+                "• **Sodium / Nvidium GPU Pipeline**: Hardware Mesh Shaders, GPU Scene Instance Culling (`r.GPUScene.InstanceCulling 1`), 512p Single-Cascade CSM Shadows, and Continuous CDLOD Terrain Falloff.\n" +
+                "• **Lithium / ServerCore Tick Amortization**: Skeletal Update Rate Optimization (`a.URO.TickDistanceScale 0.75`), zero ragdoll substepping overhead, and background AI tick rate scaling.\n" +
+                "• **FerriteCore RAM & GC**: 2048 MB capped texture streaming pool, asynchronous PSO shader pipeline pre-caching, and automated 20s orphan garbage collection.\n" +
+                "• **Permanent Engine.ini Bake**: Option B `[SystemSettings]` profile locked at binary launch to eliminate in-game scalability resets.\n\n" +
+                "### 🎮 2. Pal & Partner Skill Balance (ChazzBuffs Suite)\n" +
+                "• **143 Mod Balance Configurations**: Full overhaul across all pal combat stats, scaling curves, and partner skill parameters.\n" +
+                "• **5 New Mod Modules**: `LapironBuffs.json`, `LoomenBuffs.json`, `WarsectTerraPartnerSkill.json`, and bilingual weapon translation tables.\n\n" +
+                "### 🔴 3. World Boss Raids & Mythic Sovereign Auras\n" +
+                "• **Guaranteed Tier 4 Legendary Schematics**: Slaying any active World Boss guarantees a random T4 Legendary Schematic on kill (0 item drops on capture to reward raid elimination).\n" +
+                "• **SAO Hex Crystalline Death Effect**: Bosses despawning or slain dissolve in a signature crystalline polygon shatter effect.\n" +
+                "• **0.0001% Mythic Sovereign Auras**:\n" +
+                "  - ⏳ **Regressor**: 2× Combat & Partner Power, **0s Skill Cooldowns (100% CDR)**.\n" +
+                "  - 🌌 **Transmigrator**: **Uncapped Level Cap (80+)**, **Lv 5 ALL Work Suitabilities**, Ranch Dog Coin production.\n\n" +
+                "### 🛠️ 4. High-Performance Launcher Engine\n" +
+                "• **Concurrent Mod Updating**: 3x faster downloads via throttled multi-threading (`SemaphoreSlim(3)`).\n" +
+                "• **Direct `.zip` Extraction**: Automated in-place extraction for package-based mod updates.\n" +
+                "• **Windows DPAPI Security**: Sensitive tokens and credentials hardware-encrypted at rest.\n" +
+                "• **Instant Mod Library Filter**: Multi-field search and category filter chips (*Core, Gameplay, QoL, Visuals, Performance*).\n" +
+                "• **Dedicated Server Auto-Wake Visualizer**: Real-time boot progress telemetry.\n\n" +
                 "*🔔 React in <#1534308427080273990> to receive the @Changelog Notifications role!*";
 
-            await BroadcastChangelogAsync("PalOdyssey Major Update v2.5.0: Modpack Balance, Launcher Engine & World Boss Raids!", changelogBody, channelId, pingRole);
+            await BroadcastChangelogAsync("PalOdyssey Major Update v2.5.0: Performance Stack, Modpack Balance & Sovereign Raids!", changelogBody, channelId, pingRole);
         }
 
         private async Task<string?> GetOrCreateChangelogRoleAsync(string guildId)
