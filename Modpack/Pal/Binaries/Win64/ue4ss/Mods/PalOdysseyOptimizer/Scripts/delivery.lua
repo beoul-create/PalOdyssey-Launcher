@@ -279,6 +279,8 @@ local function grantPlayerItem(controller, ps, rawItemName, qty)
     return granted
 end
 
+local processedDeliveryCache = {}
+
 local function processQueue()
     pcall(exportLivePlayerData)
 
@@ -296,8 +298,24 @@ local function processQueue()
 
     if #lines == 0 then return end
 
+    -- Atomically truncate the processed queue file immediately to eliminate repeat loops
+    pcall(function()
+        local fTrunc = io.open(qPath, "w")
+        if fTrunc then fTrunc:close() end
+    end)
+
     local okFind, controllers = pcall(FindAllOf, "PalPlayerController")
-    if not okFind or not controllers or #controllers == 0 then return end
+    if not okFind or not controllers or #controllers == 0 then
+        -- Player controllers not loaded yet, preserve lines in queue
+        pcall(function()
+            local fOut = io.open(qPath, "w")
+            if fOut then
+                for _, l in ipairs(lines) do fOut:write(l .. "\n") end
+                fOut:close()
+            end
+        end)
+        return
+    end
 
     local palUtil = nil
     pcall(function()
@@ -308,10 +326,12 @@ local function processQueue()
     local processedAny = false
 
     for _, line in ipairs(lines) do
-        local parts = {}
-        for part in string.gmatch(line, "([^,]+)") do
-            table.insert(parts, part)
-        end
+        -- Skip duplicate processing if already executed in this runtime session
+        if not processedDeliveryCache[line] then
+            local parts = {}
+            for part in string.gmatch(line, "([^,]+)") do
+                table.insert(parts, part)
+            end
 
         if #parts >= 5 then
             local targetUid = cleanStr(parts[1])
@@ -501,6 +521,7 @@ local function processQueue()
 
                         delivered = true
                         processedAny = true
+                        processedDeliveryCache[line] = true
                         break
                     end
                 end
@@ -508,6 +529,8 @@ local function processQueue()
 
             if not delivered then
                 table.insert(remainingLines, line)
+            else
+                processedDeliveryCache[line] = true
             end
         end
     end
