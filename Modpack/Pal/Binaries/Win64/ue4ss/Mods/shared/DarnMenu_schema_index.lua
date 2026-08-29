@@ -6,5 +6,7 @@ return {
   "ShiningLuckies",
   "QuickDeposit",
   "PalboxSearchPlus",
-  "StuckPalRescuer"
+  "StuckPalRescuer",
+  "PalOdysseyShop",
+  "CS2Crosshair"
 }

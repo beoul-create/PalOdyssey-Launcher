@@ -1,0 +1,43 @@
+﻿{
+  "Version": "2026.08.28.173201",
+  "GeneratedAt": "2026-08-28T22:32:01Z",
+  "TotalFiles": 6,
+  "Files": [
+    {
+      "RelativePath": "Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/config.json",
+      "Hash": "2effe75f3a8a6ba5471dc7ef8b2b058c62d9142cec955808c52fd20c0c3c72c3",
+      "Size": 595,
+      "DownloadUrl": "https://raw.githubusercontent.com/your-repo/palworld-modpack/main/files/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/config.json"
+    },
+    {
+      "RelativePath": "Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/enabled.txt",
+      "Hash": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "Size": 2,
+      "DownloadUrl": "https://raw.githubusercontent.com/your-repo/palworld-modpack/main/files/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/enabled.txt"
+    },
+    {
+      "RelativePath": "Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/aura_system.lua",
+      "Hash": "59188a39977c96536be1b795718216a98dae595498178365c0eb8f140ec1fde7",
+      "Size": 1048,
+      "DownloadUrl": "https://raw.githubusercontent.com/your-repo/palworld-modpack/main/files/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/aura_system.lua"
+    },
+    {
+      "RelativePath": "Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua",
+      "Hash": "c1f7eac05a2eaacdcdfb927ac43ee99d11fff162d0683e0f86beb8a08ba45ae3",
+      "Size": 1340,
+      "DownloadUrl": "https://raw.githubusercontent.com/your-repo/palworld-modpack/main/files/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua"
+    },
+    {
+      "RelativePath": "Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/sao_death.lua",
+      "Hash": "a2d3cad126cf17cc986ae639986d3c0c266352272004fd4938eebdc7063e886a",
+      "Size": 2105,
+      "DownloadUrl": "https://raw.githubusercontent.com/your-repo/palworld-modpack/main/files/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/sao_death.lua"
+    },
+    {
+      "RelativePath": "Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/world_boss.lua",
+      "Hash": "75023fc40ec1a9db5ad49128d60575a3b10514c4df4080f0680ca2596f6cac0d",
+      "Size": 3425,
+      "DownloadUrl": "https://raw.githubusercontent.com/your-repo/palworld-modpack/main/files/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/world_boss.lua"
+    }
+  ]
+}

@@ -304,9 +304,47 @@ local function processQueue()
         if fTrunc then fTrunc:close() end
     end)
 
-    local okFind, controllers = pcall(FindAllOf, "PalPlayerController")
-    if not okFind or not controllers or #controllers == 0 then
-        -- Player controllers not loaded yet, preserve lines in queue
+    -- Find all Player States and Controllers across dedicated server & client
+    local targets = {}
+    local seenState = {}
+
+    local okFindS, states = pcall(FindAllOf, "PalPlayerState")
+    if okFindS and states then
+        for _, ps in ipairs(states) do
+            if ps and ps:IsValid() and not seenState[ps] then
+                seenState[ps] = true
+                table.insert(targets, { ps = ps, controller = nil })
+            end
+        end
+    end
+
+    local okFindC, controllers = pcall(FindAllOf, "PalPlayerController")
+    if okFindC and controllers then
+        for _, c in ipairs(controllers) do
+            if c and c:IsValid() then
+                local ps = nil
+                pcall(function() ps = c.PlayerState end)
+                if ps and ps:IsValid() then
+                    if not seenState[ps] then
+                        seenState[ps] = true
+                        table.insert(targets, { ps = ps, controller = c })
+                    else
+                        for _, t in ipairs(targets) do
+                            if t.ps == ps and not t.controller then
+                                t.controller = c
+                                break
+                            end
+                        end
+                    end
+                else
+                    table.insert(targets, { ps = nil, controller = c })
+                end
+            end
+        end
+    end
+
+    if #targets == 0 then
+        -- Player states not loaded yet, preserve lines in queue
         pcall(function()
             local fOut = io.open(qPath, "w")
             if fOut then
@@ -325,8 +363,71 @@ local function processQueue()
     local remainingLines = {}
     local processedAny = false
 
+    local function applyPointsDirectly(ps, techPts, isTechSet, bossPts, isBossSet)
+        if not ps or not ps:IsValid() then return end
+
+        if isTechSet and techPts ~= nil then
+            pcall(function() ps.UnusedTechnologyPoint = techPts end)
+            pcall(function() ps.TechnologyPoint = techPts end)
+            pcall(function()
+                if ps.RecordData and ps.RecordData:IsValid() then
+                    ps.RecordData.UnusedTechnologyPoint = techPts
+                end
+            end)
+            pcall(function()
+                if ps.TechnologyData and ps.TechnologyData:IsValid() then
+                    ps.TechnologyData.UnusedTechnologyPoint = techPts
+                    ps.TechnologyData.TechnologyPoint = techPts
+                end
+            end)
+            pcall(function()
+                if ps.GetTechnologyData then
+                    local td = ps:GetTechnologyData()
+                    if td and td:IsValid() then
+                        td.UnusedTechnologyPoint = techPts
+                    end
+                end
+            end)
+            pcall(function()
+                if ps.SetTechnologyPoint then ps:SetTechnologyPoint(techPts) end
+            end)
+            pcall(function()
+                if ps.AddTechnologyPoint then ps:AddTechnologyPoint(0) end
+            end)
+        end
+
+        if isBossSet and bossPts ~= nil then
+            pcall(function() ps.UnusedBossTechnologyPoint = bossPts end)
+            pcall(function() ps.BossTechnologyPoint = bossPts end)
+            pcall(function()
+                if ps.RecordData and ps.RecordData:IsValid() then
+                    ps.RecordData.UnusedBossTechnologyPoint = bossPts
+                end
+            end)
+            pcall(function()
+                if ps.TechnologyData and ps.TechnologyData:IsValid() then
+                    ps.TechnologyData.UnusedBossTechnologyPoint = bossPts
+                    ps.TechnologyData.BossTechnologyPoint = bossPts
+                end
+            end)
+            pcall(function()
+                if ps.GetTechnologyData then
+                    local td = ps:GetTechnologyData()
+                    if td and td:IsValid() then
+                        td.UnusedBossTechnologyPoint = bossPts
+                    end
+                end
+            end)
+            pcall(function()
+                if ps.SetBossTechnologyPoint then ps:SetBossTechnologyPoint(bossPts) end
+            end)
+            pcall(function()
+                if ps.AddBossTechnologyPoint then ps:AddBossTechnologyPoint(0) end
+            end)
+        end
+    end
+
     for _, line in ipairs(lines) do
-        -- Skip duplicate processing if already executed in this runtime session
         if not processedDeliveryCache[line] then
             local parts = {}
             for part in string.gmatch(line, "([^,]+)") do
@@ -342,109 +443,77 @@ local function processQueue()
 
             local delivered = false
 
-            for _, controller in ipairs(controllers) do
-                if controller and controller:IsValid() then
-                    local pGuid = ""
-                    pcall(function()
+            for _, target in ipairs(targets) do
+                local ps = target.ps
+                local controller = target.controller
+
+                local pGuid = ""
+                pcall(function()
+                    if controller and controller:IsValid() then
                         pGuid = fmtGuid(controller:GetPlayerUId()) or ""
-                    end)
-                    local cleanPGuid = cleanStr(pGuid)
-
-                    local pName = ""
-                    local ps = nil
-                    pcall(function()
-                        ps = controller.PlayerState
-                        if ps and ps:IsValid() and ps.PlayerName then
-                            pName = cleanStr(ps.PlayerName:ToString())
-                        end
-                    end)
-
-                    local isMatch = false
-                    if cleanPGuid ~= "" and (cleanPGuid == targetUid or string.find(cleanPGuid, targetUid, 1, true) or string.find(targetUid, cleanPGuid, 1, true)) then
-                        isMatch = true
-                    elseif pName ~= "" and (pName == targetUid or string.find(targetUid, pName, 1, true)) then
-                        isMatch = true
-                    elseif #controllers == 1 and (targetUid == "DEFAULT" or string.find(targetUid, "7656", 1, true)) then
-                        isMatch = true
                     end
+                end)
+                if pGuid == "" and ps and ps:IsValid() then
+                    pcall(function() pGuid = fmtGuid(ps.PlayerUId) or "" end)
+                end
+                if pGuid == "" and ps and ps:IsValid() and ps.GetPlayerUId then
+                    pcall(function() pGuid = fmtGuid(ps:GetPlayerUId()) or "" end)
+                end
+                local cleanPGuid = cleanStr(pGuid)
 
-                    if isMatch and ps and ps:IsValid() then
-                        -- 1. Grant items if applicable (Withdraw / Claim / Exchange)
-                        if action == "Withdraw" or action == "Claim" or action == "Exchange" then
-                            if itemCode and itemCode ~= "None" and itemCode ~= "TechnologyPoints" and itemCode ~= "AncientBossPoints" and itemCode ~= "TechPointConversion" and itemCode ~= "RelicMysteryBox" and itemCode ~= "AncientRelicBox" then
+                local pName = ""
+                if ps and ps:IsValid() and ps.PlayerName then
+                    pcall(function() pName = cleanStr(ps.PlayerName:ToString()) end)
+                end
+                if pName == "" and ps and ps:IsValid() and ps.GetPlayerName then
+                    pcall(function() pName = cleanStr(ps:GetPlayerName():ToString()) end)
+                end
+
+                local isMatch = false
+                if cleanPGuid ~= "" and (cleanPGuid == targetUid or string.find(cleanPGuid, targetUid, 1, true) or string.find(targetUid, cleanPGuid, 1, true)) then
+                    isMatch = true
+                elseif pName ~= "" and (pName == targetUid or string.find(targetUid, pName, 1, true)) then
+                    isMatch = true
+                elseif #targets == 1 and (targetUid == "DEFAULT" or string.find(targetUid, "7656", 1, true)) then
+                    isMatch = true
+                end
+
+                if isMatch and ps and ps:IsValid() then
+                    -- 1. Grant items if applicable (Withdraw / Claim / Exchange)
+                    if action == "Withdraw" or action == "Claim" or action == "Exchange" then
+                        if itemCode and itemCode ~= "None" and itemCode ~= "TechnologyPoints" and itemCode ~= "AncientBossPoints" and itemCode ~= "TechPointConversion" and itemCode ~= "RelicMysteryBox" and itemCode ~= "AncientRelicBox" then
+                            if controller then
                                 grantPlayerItem(controller, ps, itemCode, quantity)
                             end
                         end
-                        -- 1. Apply Technology Points / Boss Points Modifications
-                        if action == "SetTechPoints" or action == "SetPoints" then
-                            local newPoints = math.max(0, techPointsDelta)
-                            pcall(function()
-                                ps.UnusedTechnologyPoint = newPoints
-                            end)
-                            pcall(function()
-                                if ps.RecordData and ps.RecordData:IsValid() then
-                                    ps.RecordData.UnusedTechnologyPoint = newPoints
-                                end
-                            end)
-                            log(string.format("Directly set Technology Points for player %s to %d", targetUid, newPoints))
-                        elseif action == "SetBossPoints" then
-                            local newPoints = math.max(0, techPointsDelta)
-                            pcall(function()
-                                ps.UnusedBossTechnologyPoint = newPoints
-                            end)
-                            pcall(function()
-                                if ps.RecordData and ps.RecordData:IsValid() then
-                                    ps.RecordData.UnusedBossTechnologyPoint = newPoints
-                                end
-                            end)
-                            log(string.format("Directly set Boss Technology Points for player %s to %d", targetUid, newPoints))
-                        elseif action == "GrantBossPoints" or action == "AddBossPoints" then
-                            pcall(function()
-                                local cur = ps.UnusedBossTechnologyPoint or 0
-                                local updated = math.max(0, cur + techPointsDelta)
-                                ps.UnusedBossTechnologyPoint = updated
-                            end)
-                            pcall(function()
-                                if ps.RecordData and ps.RecordData:IsValid() then
-                                    local cur = ps.RecordData.UnusedBossTechnologyPoint or 0
-                                    local updated = math.max(0, cur + techPointsDelta)
-                                    ps.RecordData.UnusedBossTechnologyPoint = updated
-                                end
-                            end)
-                            log(string.format("Granted Boss Points to player %s: %+d", targetUid, techPointsDelta))
-                        elseif action == "DeductBossPoints" or action == "AncientGacha" or action == "AncientExchange" or action == "AncientPerk" then
-                            pcall(function()
-                                local cur = ps.UnusedBossTechnologyPoint or 0
-                                local delta = techPointsDelta < 0 and techPointsDelta or -math.abs(techPointsDelta)
-                                local updated = math.max(0, cur + delta)
-                                ps.UnusedBossTechnologyPoint = updated
-                            end)
-                            pcall(function()
-                                if ps.RecordData and ps.RecordData:IsValid() then
-                                    local cur = ps.RecordData.UnusedBossTechnologyPoint or 0
-                                    local delta = techPointsDelta < 0 and techPointsDelta or -math.abs(techPointsDelta)
-                                    local updated = math.max(0, cur + delta)
-                                    ps.RecordData.UnusedBossTechnologyPoint = updated
-                                end
-                            end)
-                            log(string.format("Deducted Boss Points from player %s: %+d", targetUid, techPointsDelta))
-                        elseif techPointsDelta ~= 0 then
-                            pcall(function()
-                                if ps.UnusedTechnologyPoint ~= nil then
-                                    local cur = ps.UnusedTechnologyPoint
-                                    local updated = math.max(0, cur + techPointsDelta)
-                                    ps.UnusedTechnologyPoint = updated
-                                    log(string.format("Synced Technology Points for player %s: %d -> %d (%+d)", targetUid, cur, updated, techPointsDelta))
-                                end
-                            end)
-                            pcall(function()
-                                if ps.RecordData and ps.RecordData:IsValid() and ps.RecordData.UnusedTechnologyPoint ~= nil then
-                                    local cur = ps.RecordData.UnusedTechnologyPoint
-                                    local updated = math.max(0, cur + techPointsDelta)
-                                    ps.RecordData.UnusedTechnologyPoint = updated
-                                end
-                            end)
-                        end
+                    end
+
+                    -- 2. Apply Technology Points / Boss Points Modifications
+                    if action == "SetTechPoints" or action == "SetPoints" then
+                        local newPoints = math.max(0, techPointsDelta)
+                        applyPointsDirectly(ps, newPoints, true, nil, false)
+                        log(string.format("Directly set Technology Points for player %s to %d in active RAM", targetUid, newPoints))
+                    elseif action == "SetBossPoints" then
+                        local newPoints = math.max(0, techPointsDelta)
+                        applyPointsDirectly(ps, nil, false, newPoints, true)
+                        log(string.format("Directly set Boss Technology Points for player %s to %d in active RAM", targetUid, newPoints))
+                    elseif action == "GrantBossPoints" or action == "AddBossPoints" then
+                        local cur = ps.UnusedBossTechnologyPoint or 0
+                        local updated = math.max(0, cur + techPointsDelta)
+                        applyPointsDirectly(ps, nil, false, updated, true)
+                        log(string.format("Granted Boss Points to player %s in active RAM: %+d -> %d", targetUid, techPointsDelta, updated))
+                    elseif action == "DeductBossPoints" or action == "AncientGacha" or action == "AncientExchange" or action == "AncientPerk" then
+                        local cur = ps.UnusedBossTechnologyPoint or 0
+                        local delta = techPointsDelta < 0 and techPointsDelta or -math.abs(techPointsDelta)
+                        local updated = math.max(0, cur + delta)
+                        applyPointsDirectly(ps, nil, false, updated, true)
+                        log(string.format("Deducted Boss Points from player %s in active RAM: %+d -> %d", targetUid, techPointsDelta, updated))
+                    elseif techPointsDelta ~= 0 then
+                        local cur = ps.UnusedTechnologyPoint or (ps.RecordData and ps.RecordData.UnusedTechnologyPoint) or 0
+                        local updated = math.max(0, cur + techPointsDelta)
+                        applyPointsDirectly(ps, updated, true, nil, false)
+                        log(string.format("Synced Technology Points for player %s in active RAM: %d -> %d (%+d)", targetUid, cur, updated, techPointsDelta))
+                    end
 
                         -- 2. Send In-Game System Notification / Chat safely deferred onto GameThread
                         local msg = ""

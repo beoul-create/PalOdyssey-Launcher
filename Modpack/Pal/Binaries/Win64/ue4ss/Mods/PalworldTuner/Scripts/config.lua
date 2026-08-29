@@ -2,6 +2,9 @@
 return {
     carry_weight_mult = 1.0,
     tech_point_mult   = 1.0,
+    -- Keep sprint proportional to the effective walk speed after perks/items.
+    sprint_speed_sync = true,
+    sprint_multiplier = 1.65,
     round_up          = true,
     log               = true,
 }

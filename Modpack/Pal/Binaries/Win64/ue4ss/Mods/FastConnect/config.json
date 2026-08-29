@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "bypassIntroMovies": true,
+  "accelerateLoadingScreens": true,
+  "bypassFastTravelWait": true,
+  "ultraFastNetworkRates": true,
+  "prewarmShaderPipelines": true
+}

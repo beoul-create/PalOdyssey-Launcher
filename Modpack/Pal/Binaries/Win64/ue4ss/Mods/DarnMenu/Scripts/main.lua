@@ -23,6 +23,7 @@
 -- (it has no dependency of its own) so the helper exists before we need it.
 local Darn = require("darn")
 local UI = Darn.requireUI()   -- DarnUI is a hard dependency (auto-installed)
+local alive = function(o) return (UI and UI.alive and UI.alive(o)) or false end
 local Schemas = require("schemas")
 local Writers = require("writers")
 local log  = Darn.logger("[DarnMenu]")
@@ -128,6 +129,9 @@ local injectSeq = 0
 -- happen here) and `alive()` cannot either (a lingering menu is a valid UObject).
 -- Reproduced 2026-07-31 by spamming ESC: three CTDs, DarnMenu alone and with AntiPhat.
 local newestMenuAddr = nil
+-- Addresses are reused by UE, so an old menu can acquire the same pointer as a newer
+-- one.  Keep a monotonic construction generation as the authoritative ordering key.
+local newestMenuGeneration = 0
 -- CHURN GATE (2026-07-31). Spamming ESC builds a new menu every ~330ms (measured across four
 -- crash logs), and we answered every single one: create a button, sweep the previous instance,
 -- write to the native canvas. Crashes 6/7/8 share one engine-only call path with a DIFFERENT bad
@@ -807,7 +811,7 @@ local ENTRY_OFFSET = {
 -- here: Mikey plays at 3440x1440 and the vault's standing rule is to anchor to real widgets,
 -- never to a screen corner.
 local function placeEntryOnCanvas(menu, btn, canvas)
-  if not (alive(canvas) and alive(btn)) then return false end
+  if not (UI.alive(canvas) and UI.alive(btn)) then return false end
   -- canvasAddAboveStretch, NOT canvasAddAbove. The bottom column is STRETCH-anchored
   -- ((0,1)-(1,1), measured), and canvasAddAbove mirrors those anchors while writing
   -- Position/Size -- a combination the slot cannot represent. It produced a degenerate rect and
@@ -828,7 +832,7 @@ local function placeEntryOnCanvas(menu, btn, canvas)
   -- same first-come rule seen from the other end.
   -- Once learned, never re-scanned -- see stackLift.
   local lift = stackLift or 0
-  if stackLift == nil and alive(anchorBox) and UI.bottomStackTop then
+  if stackLift == nil and UI.alive(anchorBox) and UI.bottomStackTop then
     local baseTop = safe(function() return anchorBox.Slot:GetOffsets().Top end)
     local stackTop = UI.bottomStackTop(canvas, btn)
     if type(baseTop) == "number" and type(stackTop) == "number" and stackTop < baseTop then
@@ -864,27 +868,44 @@ local function placeEntryOnCanvas(menu, btn, canvas)
   return ok
 end
 
-local function placeUnderDiscord(menu, btn)
-  -- POLICY ONLY: find the native button column and the row we want to sit under.
-  -- The mechanics of inserting into a native panel (detach the tail, restore every
-  -- slot property, force a relayout so hit-testing matches what is drawn) are a
-  -- reusable UI concern and live in DarnUI as UI.insertChildAt.
-  local addToBox = function(box, w) return box:AddChildToVerticalBox(w) end
-  local discord = safe(function() return menu.WBP_MenuESC_Button_S_Discord end)
-  if not alive(discord) then discord = UI.findByName(menu, "WBP_MenuESC_Button_S_Discord") end
-  local box = discord and safe(function() return discord:GetParent() end)
-  if not alive(box) then
-    -- no Discord row on this build: fall back to the column itself, appended
-    box = UI.findByName(menu, "VerticalBox_148")
-    if not alive(box) then return false end
-    return UI.insertChildAt(box, btn, nil, addToBox, padEntrySlot)
+local function findMenuVerticalBox(menu)
+  if not UI.alive(menu) then return nil end
+  -- 1. Try finding any child button's parent vertical box
+  local testButtons = {
+    "WBP_MenuESC_Button_S_Discord",
+    "WBP_MenuESC_Button_S_ReturnTitle",
+    "WBP_MenuESC_Button_S_ReturnGame",
+    "WBP_MenuESC_Button_S_Option",
+    "WBP_MenuESC_Button_S_Options",
+    "WBP_MenuESC_Button_S_WorldSetting"
+  }
+  for _, name in ipairs(testButtons) do
+    local b = safe(function() return menu[name] end) or UI.findByName(menu, name)
+    if UI.alive(b) then
+      local p = safe(function() return b:GetParent() end)
+      if UI.alive(p) then return p end
+    end
   end
-  local idx = safe(function() return box:GetChildIndex(discord) end)
-  if type(idx) ~= "number" or idx < 0 then idx = nil end   -- unknown position -> append
-  if ENTRY_APPEND_ONLY then idx = nil end                  -- see comment above the function
-  local placed = UI.insertChildAt(box, btn, idx and (idx + 1) or nil, addToBox, padEntrySlot)
-  if not placed then log("under-Discord placement failed; appended at end instead") end
-  return true
+  -- 2. Search all VerticalBox instances inside menu
+  local allBoxes = FindAllOf("VerticalBox") or {}
+  for _, box in ipairs(allBoxes) do
+    if UI.alive(box) and safe(function() return box:GetOuter() == menu or box:GetParent() == menu end) then
+      return box
+    end
+  end
+  return UI.findByName(menu, COLUMN_BOTTOM) or UI.findByName(menu, COLUMN_TOP)
+end
+
+local function placeUnderDiscord(menu, btn)
+  local box = findMenuVerticalBox(menu)
+  if not UI.alive(box) then return false end
+  local addToBox = function(b, w) return b:AddChildToVerticalBox(w) end
+  local placed = UI.insertChildAt(box, btn, nil, addToBox, padEntrySlot)
+  if not placed then
+    pcall(function() box:AddChildToVerticalBox(btn) end)
+    placed = true
+  end
+  return placed
 end
 
 -- RE-SETTLE HIT-TESTING AFTER THE OPEN ANIMATION.
@@ -3076,14 +3097,14 @@ local function inject(menu)
   -- Generated root names are not a stable Blueprint contract. CanvasPanel_0 is
   -- still the name on the current build, but use the WidgetTree's actual root
   -- when a game update renames it.
-  if not alive(pageRoot) and widgetTree then
+  if not UI.alive(pageRoot) and widgetTree then
     pageRoot = safe(function() return widgetTree.RootWidget end)
   end
   local buttonCanvas = UI.findByName(menu, "Canvas_Buttons")
-  if not (widgetTree and alive(pageRoot) and alive(buttonCanvas)) then
+  if not (widgetTree and UI.alive(pageRoot) and UI.alive(buttonCanvas)) then
     return false, string.format(
       "widget tree not ready (WidgetTree=%s, root=%s, Canvas_Buttons=%s)",
-      tostring(widgetTree ~= nil), tostring(alive(pageRoot)), tostring(alive(buttonCanvas)))
+      tostring(widgetTree ~= nil), tostring(UI.alive(pageRoot)), tostring(UI.alive(buttonCanvas)))
   end
 
   local inst = {
@@ -3147,7 +3168,7 @@ end
 
 -- waitedS: seconds already spent waiting out menu churn (see the CHURN GATE below). Carried
 -- across re-arms so the wait is bounded overall, not per attempt.
-local function tryInject(menu, attempt, waitedS)
+local function tryInject(menu, attempt, waitedS, generation)
   if serverDisabled then return end
   local a = UI.addr(menu)
   if not a then return end
@@ -3162,6 +3183,11 @@ local function tryInject(menu, attempt, waitedS)
     -- newer menu has its own tryInject in flight, so the button still arrives; it just arrives
     -- on the menu that is actually on screen. Retries stop too: attempt 2+ would race the same
     -- way. This is the same lever injectSeq already applies to page BUILDS, one step earlier.
+    if generation and generation ~= newestMenuGeneration then
+      log(string.format("inject skipped: menu generation %d was superseded by %d before we ran",
+        generation, newestMenuGeneration))
+      return
+    end
     if newestMenuAddr and newestMenuAddr ~= a then
       log(string.format("inject skipped: menu %s was superseded by %s before we ran",
         tostring(a), tostring(newestMenuAddr)))
@@ -3175,13 +3201,13 @@ local function tryInject(menu, attempt, waitedS)
     local waited = tonumber(waitedS) or 0
     if menuBurst > 0 and (os.clock() - lastMenuAt) < CHURN_QUIET and waited < CHURN_MAX_WAIT then
       ExecuteWithDelay(150, function()
-        pcall(function() tryInject(menu, attempt, waited + 0.15) end)
+        pcall(function() tryInject(menu, attempt, waited + 0.15, generation) end)
       end)
       return
     end
     local ok, done, reason = pcall(inject, menu)
     if (not ok or not done) and attempt < 4 then
-      tryInject(menu, attempt + 1)
+      tryInject(menu, attempt + 1, 0, generation)
     elseif not ok or not done then
       log("WARNING: could not inject into the ESC menu: "
         .. tostring(ok and reason or done or "unknown failure"))
@@ -3210,23 +3236,54 @@ end
 --
 -- 50ms later the widget is built and the mutation is ordinary. The pop it was avoiding was a
 -- ~1s-late appearance; 50ms lands inside the open animation, so the fix it bought is kept.
-NotifyOnNewObject(MENU_CLASS, function(menu)
+local function onMenuConstructed(menu)
   if serverDisabled then return end
-  -- SECOND RE-ARM. A fresh ESC-menu widget only ever comes into existence in a live
-  -- world, so this is independent proof the map is back -- and it does not depend on
-  -- RegisterLoadMapPostHook firing. If that hook is ever missing or silently drops an
-  -- event, every paused poll would otherwise stay paused until relaunch, with nothing
-  -- in the log to say why. One failure of two recovery paths is survivable.
   worldBack()
-  -- STAMP THE NEWEST MENU BEFORE SCHEDULING. Set here, on the construction notification
-  -- itself, so it is already updated when an older menu's deferred tryInject wakes up.
+  newestMenuGeneration = newestMenuGeneration + 1
+  local generation = newestMenuGeneration
   newestMenuAddr = UI.addr(menu) or newestMenuAddr
   menuCount.seen = menuCount.seen + 1
   local nowC = os.clock()
-  -- A long gap means this is a fresh, deliberate open: clear the burst so it injects instantly.
   if (nowC - lastMenuAt) > CHURN_BURST then menuBurst = 0 else menuBurst = menuBurst + 1 end
   lastMenuAt = nowC
-  pcall(function() tryInject(menu, 1) end)   -- 50ms, off the construction callback
+  pcall(function() tryInject(menu, 1, 0, generation) end)
+end
+
+NotifyOnNewObject(MENU_CLASS, onMenuConstructed)
+pcall(function() NotifyOnNewObject("WBP_MenuESC_C", onMenuConstructed) end)
+
+-- Polling fallback: ensures ESC menu is injected even if NotifyOnNewObject missed the blueprint path
+LoopAsync(300, function()
+  if serverDisabled then return false end
+  pcall(function()
+    local escMenu = FindFirstOf("WBP_MenuESC_C")
+    if escMenu and escMenu:IsValid() and UI.alive(escMenu) then
+      local a = UI.addr(escMenu)
+      if not instances[a] then
+        onMenuConstructed(escMenu)
+      end
+    end
+  end)
+  return false
+end)
+
+-- Startup diagnostic: confirm injection state in UE4SS console
+local diagCount = 0
+LoopAsync(10000, function()
+  diagCount = diagCount + 1
+  if diagCount > 3 then return true end  -- stop after 30s
+  local count = 0
+  for _ in pairs(instances) do count = count + 1 end
+  if serverDisabled then
+    print("[DarnMenu:DIAG] Server mode detected — ESC menu UI disabled (expected on dedicated server).")
+    return true
+  elseif count > 0 then
+    print(string.format("[DarnMenu:DIAG] ESC menu button ACTIVE (%d instance(s) tracked). 'Darn Mod Options' should be visible.", count))
+    return true
+  else
+    print("[DarnMenu:DIAG] No ESC menu instance found yet. Waiting for player to open ESC menu...")
+  end
+  return false
 end)
 
 -- Pure platform: no built-in pages, no directory scan (and therefore no

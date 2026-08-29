@@ -20,4 +20,11 @@ NotifyOnNewObject("/Script/Pal.PalGameSetting", function(s)
     for _, e in ipairs(GAME_SETTING) do scale(s, e.p, Config[e.m], e.t) end
     log("PalGameSetting done")
 end)
+
+-- Optional proportional sprint-to-walk synchronization engine.
+local syncOk, SprintSync = pcall(require, "movement_sync")
+if syncOk and type(SprintSync) == "table" and SprintSync.apply then
+    pcall(SprintSync.apply, Config)
+end
+
 log("loaded")

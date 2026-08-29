@@ -141,9 +141,13 @@ local function ScanAndRescue()
 end
 
 -- Register recurring lightweight scan hook (Interval: 10s)
-LoopAsync(10000, function()
-    ScanAndRescue()
-    return false -- Keep repeating
-end)
+local function ScheduleNextScan()
+    ExecuteWithDelay(10000, function()
+        ScanAndRescue()
+        ScheduleNextScan()
+    end)
+end
+
+ScheduleNextScan()
 
 Log("StuckPalRescuer loaded successfully (Event-Registered Zero-Stutter Mode).")

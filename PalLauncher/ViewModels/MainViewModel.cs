@@ -31,6 +31,7 @@ namespace PalLauncher.ViewModels
         private readonly ManifestService _manifestService;
         private readonly DownloadManager _downloadManager;
         private readonly GameProcessService _gameProcessService;
+        private readonly RemoteServerService _remoteServerService;
         private readonly DiscordRpcService _discordRpcService;
         private readonly AudioService _audioService;
         private readonly ServerQueryService _serverQueryService;
@@ -82,6 +83,7 @@ namespace PalLauncher.ViewModels
             _manifestService = new ManifestService(_hashService);
             _downloadManager = new DownloadManager(_hashService);
             _gameProcessService = new GameProcessService();
+            _remoteServerService = new RemoteServerService();
             _discordRpcService = new DiscordRpcService();
             _audioService = new AudioService();
             _serverQueryService = new ServerQueryService();
@@ -311,7 +313,36 @@ namespace PalLauncher.ViewModels
         }
 
         public GameProcessService GameProcessService => _gameProcessService;
+        public RemoteServerService RemoteServerService => _remoteServerService;
         public LauncherConfig Config => _config;
+
+        public string RemoteServerApiUrl
+        {
+            get => _config.RemoteServerApiUrl;
+            set
+            {
+                if (_config.RemoteServerApiUrl != value)
+                {
+                    _config.RemoteServerApiUrl = value;
+                    _config.Save();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RemoteServerApiUrl)));
+                }
+            }
+        }
+
+        public string RemoteAdminKey
+        {
+            get => _config.RemoteAdminKey;
+            set
+            {
+                if (_config.RemoteAdminKey != value)
+                {
+                    _config.RemoteAdminKey = value;
+                    _config.Save();
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RemoteAdminKey)));
+                }
+            }
+        }
 
         public string RemoteManifestUrl
         {

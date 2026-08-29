@@ -1,0 +1,37 @@
+{
+  // 1. Foxparks Aqua Egg (Damp / Frozen Egg variant)
+  "PalEgg_Foxparks_Aqua": {
+    "PalID": "EPalTribeID::Foxparks_Aqua",
+    "EggRank": 1,                       // 1 = Normal, 2 = Large, 3 = Huge
+    "HatchTimeSec": 1200.0,             // 20 minutes base hatch time
+    "TargetTemperature": 1,             // 1 = Cool (+1 level cold required for 100% boost)
+    "VisualItemStaticItemId": "PalItem_PalEgg_Water_01" // In-game 3D egg mesh & icon
+  },
+
+  // 2. Orserk Terra Egg (Rocky / Desert Earth Egg)
+  "PalEgg_Orserk_Terra": {
+    "PalID": "EPalTribeID::Orserk_Terra",
+    "EggRank": 3,                       // Huge Rocky Egg
+    "HatchTimeSec": 7200.0,             // 2 hours base hatch time (Tier 3 Endgame)
+    "TargetTemperature": 2,             // 2 = Warm/Hot (+1 level heat required for 100% boost)
+    "VisualItemStaticItemId": "PalItem_PalEgg_Earth_03"
+  },
+
+  // 3. Chillet Ignis Egg (Scorching Egg variant)
+  "PalEgg_Chillet_Ignis": {
+    "PalID": "EPalTribeID::Chillet_Ignis",
+    "EggRank": 2,                       // Large Scorching Egg
+    "HatchTimeSec": 3600.0,             // 1 hour base hatch time
+    "TargetTemperature": 2,             // 2 = Warm/Hot (Requires Campfire/Heater nearby)
+    "VisualItemStaticItemId": "PalItem_PalEgg_Fire_02"
+  },
+
+  // 4. Anubis Hydro Egg (Huge Damp Egg variant)
+  "PalEgg_Anubis_Hydro": {
+    "PalID": "EPalTribeID::Anubis_Hydro",
+    "EggRank": 3,                       // Huge Damp Egg
+    "HatchTimeSec": 7200.0,             // 2 hours base hatch time
+    "TargetTemperature": 0,             // 0 = Normal / Neutral Temperature
+    "VisualItemStaticItemId": "PalItem_PalEgg_Water_03"
+  }
+}

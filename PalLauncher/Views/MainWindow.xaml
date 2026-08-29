@@ -332,66 +332,13 @@
                         <TextBlock Text=" // V2.0 LAUNCHER" Foreground="{StaticResource AccentCyanBrush}" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" Margin="4,1,0,0" />
                     </StackPanel>
 
-                    <!-- Center: Dedicated Server Status Beacon & Quick Controls -->
+                    <!-- Center: Dedicated Realm Beacon -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Border Background="#1A0F172A" BorderBrush="#3338BDF8" BorderThickness="1" CornerRadius="12" Padding="12,4" WindowChrome.IsHitTestVisibleInChrome="True">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Ellipse x:Name="ServerStatusIndicator"
-                                         Width="8" Height="8"
-                                         Fill="#EF4444" Margin="0,0,8,0" VerticalAlignment="Center" />
-                                <TextBlock Text="DEDICATED SERVER:" 
-                                           FontWeight="Bold" 
-                                           Foreground="#94A3B8" 
-                                           FontSize="11" 
-                                           VerticalAlignment="Center"/>
-                                <TextBlock x:Name="ServerStatusText" 
-                                           Text="OFFLINE" 
-                                           FontWeight="SemiBold" 
-                                           Foreground="#EF4444" 
-                                           FontSize="11" 
-                                           Margin="6,0,10,0" 
-                                           VerticalAlignment="Center"/>
-
-                                <!-- Locate Server Button (If not detected) -->
-                                <Button x:Name="BtnSelectServerPath"
-                                        Content="Locate"
-                                        Margin="0,0,8,0"
-                                        Padding="8,2"
-                                        FontSize="10"
-                                        FontWeight="SemiBold"
-                                        Background="#1E293B"
-                                        Foreground="#38BDF8"
-                                        BorderBrush="#38BDF8"
-                                        BorderThickness="1"
-                                        Cursor="Hand"
-                                        Click="BtnSelectServerPath_Click"
-                                        MouseEnter="PlayHoverSound"
-                                        Visibility="Collapsed">
-                                    <Button.Resources>
-                                        <Style TargetType="Border">
-                                            <Setter Property="CornerRadius" Value="4"/>
-                                        </Style>
-                                    </Button.Resources>
-                                </Button>
-
-                                <!-- Start / Stop Server Toggle Button -->
-                                <Button x:Name="BtnServerToggle"
-                                        Content="Start Server"
-                                        Padding="10,3"
-                                        FontSize="10"
-                                        FontWeight="Bold"
-                                        Background="#0284C7"
-                                        Foreground="#FFFFFF"
-                                        BorderThickness="0"
-                                        Cursor="Hand"
-                                        Click="BtnServerToggle_Click"
-                                        MouseEnter="PlayHoverSound">
-                                    <Button.Resources>
-                                        <Style TargetType="Border">
-                                            <Setter Property="CornerRadius" Value="4"/>
-                                        </Style>
-                                    </Button.Resources>
-                                </Button>
+                                <Ellipse Width="8" Height="8" Fill="#10B981" Margin="0,0,8,0" VerticalAlignment="Center" />
+                                <TextBlock Text="REALM:" FontWeight="Bold" Foreground="#94A3B8" FontSize="11" VerticalAlignment="Center"/>
+                                <TextBlock Text="PALODYSSEY EXPEDITION" FontWeight="SemiBold" Foreground="{StaticResource AccentCyanBrush}" FontSize="11" Margin="6,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -515,21 +462,40 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <!-- Modpack Features & Status Card -->
-                        <Border Grid.Row="0" Style="{StaticResource GlassCardStyle}" Padding="20,16" Margin="0,0,0,16">
+                        <Border Grid.Row="0" Style="{StaticResource GlassCardStyle}" Padding="18,14" Margin="0,0,0,10">
                             <StackPanel>
                                 <TextBlock Text="MODPACK STATUS" Foreground="{StaticResource AccentCyanBrush}" FontSize="11" FontWeight="Bold" />
-                                <TextBlock Text="Active Modifications" Foreground="#FFFFFF" FontSize="18" FontWeight="Bold" Margin="0,2,0,12" />
+                                <TextBlock Text="Active Modifications" Foreground="#FFFFFF" FontSize="17" FontWeight="Bold" Margin="0,2,0,8" />
 
-                                <Grid Margin="0,0,0,10">
+                                <Grid Margin="0,0,0,8">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="PalOdyssey Core Engine" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
-                                    <TextBlock Grid.Column="1" Text="Installed" Foreground="#10B981" FontSize="12" FontWeight="SemiBold" />
+                                    <TextBlock Text="PalOdyssey Core Engine" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" />
+                                    <TextBlock Grid.Column="1" Text="Installed" Foreground="#10B981" FontSize="11" FontWeight="SemiBold" />
+                                </Grid>
+
+                                <Grid Margin="0,0,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="UE4SS Script Loader" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" />
+                                    <TextBlock Grid.Column="1" Text="Synced" Foreground="#10B981" FontSize="11" FontWeight="SemiBold" />
+                                </Grid>
+
+                                <Grid Margin="0,0,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Custom HUD &amp; MiniMap" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" />
+                                    <TextBlock Grid.Column="1" Text="v2.0.4" Foreground="{StaticResource AccentCyanBrush}" FontSize="11" FontWeight="SemiBold" />
                                 </Grid>
 
                                 <Grid Margin="0,0,0,10">
@@ -537,46 +503,28 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="UE4SS Script Loader" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
-                                    <TextBlock Grid.Column="1" Text="Synced" Foreground="#10B981" FontSize="12" FontWeight="SemiBold" />
+                                    <TextBlock Text="Cryptographic Hashing" Foreground="{StaticResource TextSecondaryBrush}" FontSize="11" />
+                                    <TextBlock Grid.Column="1" Text="SHA-256 Validated" Foreground="#10B981" FontSize="11" FontWeight="SemiBold" />
                                 </Grid>
 
-                                <Grid Margin="0,0,0,10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Custom HUD &amp; MiniMap" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
-                                    <TextBlock Grid.Column="1" Text="v2.0.4" Foreground="{StaticResource AccentCyanBrush}" FontSize="12" FontWeight="SemiBold" />
-                                </Grid>
-
-                                <Grid Margin="0,0,0,14">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Cryptographic Hashing" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
-                                    <TextBlock Grid.Column="1" Text="SHA-256 Validated" Foreground="#10B981" FontSize="12" FontWeight="SemiBold" />
-                                </Grid>
-
-                                <Border Background="#2038BDF8" BorderBrush="#3338BDF8" BorderThickness="1" CornerRadius="6" Padding="10,8">
+                                <Border Background="#2038BDF8" BorderBrush="#3338BDF8" BorderThickness="1" CornerRadius="6" Padding="8,6">
                                     <TextBlock Text="ℹ Server sync automatically checks and downloads required assets into your Palworld game folder."
-                                               Foreground="{StaticResource AccentCyanBrush}" FontSize="11" TextWrapping="Wrap" LineHeight="15" />
+                                               Foreground="{StaticResource AccentCyanBrush}" FontSize="10" TextWrapping="Wrap" LineHeight="14" />
                                 </Border>
                             </StackPanel>
                         </Border>
 
                         <!-- Game Path Selector Card -->
-                        <Border Grid.Row="1" Style="{StaticResource GlassCardStyle}" Padding="16,14">
+                        <Border Grid.Row="1" Style="{StaticResource GlassCardStyle}" Padding="14,10" Margin="0,0,0,10">
                             <StackPanel>
-                                <Grid Margin="0,0,0,6">
+                                <Grid Margin="0,0,0,4">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="GAME DIRECTORY" Foreground="{StaticResource TextMutedBrush}" FontSize="11" FontWeight="Bold" />
+                                    <TextBlock Text="GAME DIRECTORY" Foreground="{StaticResource TextMutedBrush}" FontSize="10" FontWeight="Bold" />
                                     <Button Grid.Column="1" Content="Browse..." Command="{Binding BrowseGamePathCommand}"
-                                            Background="#22304A" Foreground="#FFFFFF" BorderThickness="0" Padding="8,2" FontSize="11" FontWeight="SemiBold" Cursor="Hand"
+                                            Background="#22304A" Foreground="#FFFFFF" BorderThickness="0" Padding="8,2" FontSize="10" FontWeight="SemiBold" Cursor="Hand"
                                             MouseEnter="PlayHoverSound">
                                         <Button.Resources>
                                             <Style TargetType="Border">
@@ -588,8 +536,58 @@
 
                                 <TextBox Text="{Binding GamePath, Mode=TwoWay}" IsReadOnly="True"
                                          Background="#101726" Foreground="#CBD5E1" BorderBrush="#22304A" BorderThickness="1"
-                                         Padding="8,6" FontSize="11" FontFamily="Consolas, monospace" />
+                                         Padding="6,4" FontSize="10" FontFamily="Consolas, monospace" />
                             </StackPanel>
+                        </Border>
+
+                        <!-- Remote Server Controller Tray -->
+                        <Border Grid.Row="2" Background="#220F172A" BorderBrush="#3338BDF8" BorderThickness="1" CornerRadius="10" Margin="0,0,0,0" Padding="14,10" VerticalAlignment="Bottom" x:Name="ServerTrayBorder">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Ellipse Fill="#EF4444" Height="10" Margin="0,0,8,0" Width="10" x:Name="ServerStatusIndicator"/>
+                                    <TextBlock FontSize="11" FontWeight="Bold" Foreground="#94A3B8" Text="SERVER:" VerticalAlignment="Center"/>
+                                    <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="#EF4444" Margin="6,0,0,0" Text="OFFLINE" VerticalAlignment="Center" x:Name="ServerStatusText"/>
+                                </StackPanel>
+
+                                <TextBlock FontSize="10" Foreground="#64748B" Grid.Column="1" Margin="12,0,8,0" Text="Remote Controller Active" VerticalAlignment="Center" x:Name="ServerDetailText" TextTrimming="CharacterEllipsis"/>
+
+                                <Button x:Name="BtnSelectServerPath"
+                                        Content="Locate"
+                                        Margin="0,0,8,0"
+                                        Padding="8,3"
+                                        FontSize="10"
+                                        FontWeight="SemiBold"
+                                        Background="#1E293B"
+                                        Foreground="#38BDF8"
+                                        BorderBrush="#38BDF8"
+                                        BorderThickness="1"
+                                        Cursor="Hand"
+                                        Grid.Column="2"
+                                        Click="BtnSelectServerPath_Click"
+                                        MouseEnter="PlayHoverSound"
+                                        Visibility="Collapsed">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="4"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+
+                                <Button Background="#0284C7" BorderThickness="0" Click="BtnServerToggle_Click" Content="Start Server" Cursor="Hand" FontSize="11" FontWeight="Bold" Foreground="#FFFFFF" Grid.Column="3" Padding="12,5" x:Name="BtnServerToggle" MouseEnter="PlayHoverSound">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="6"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                            </Grid>
                         </Border>
                     </Grid>
                 </Grid>
@@ -665,6 +663,15 @@
                             <!-- Manifest URL -->
                             <TextBlock Text="Remote Manifest URL" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,4" />
                             <TextBox Text="{Binding RemoteManifestUrl, Mode=TwoWay, FallbackValue=https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/manifest.json}"
+                                     Background="#101726" Foreground="#FFFFFF" BorderBrush="#22304A" BorderThickness="1" Padding="8" FontSize="12" Margin="0,0,0,10" />
+
+                            <!-- Remote Server Controller API -->
+                            <TextBlock Text="Remote Server API URL" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,4" />
+                            <TextBox Text="{Binding RemoteServerApiUrl, Mode=TwoWay, FallbackValue=http://127.0.0.1:3001}"
+                                     Background="#101726" Foreground="#FFFFFF" BorderBrush="#22304A" BorderThickness="1" Padding="8" FontSize="12" Margin="0,0,0,10" />
+
+                            <TextBlock Text="Remote Admin Secret Key" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,4" />
+                            <TextBox Text="{Binding RemoteAdminKey, Mode=TwoWay, FallbackValue=DefaultSecretKey}"
                                      Background="#101726" Foreground="#FFFFFF" BorderBrush="#22304A" BorderThickness="1" Padding="8" FontSize="12" Margin="0,0,0,14" />
 
                             <!-- Audio & Discord Toggles -->

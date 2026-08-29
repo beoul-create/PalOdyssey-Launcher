@@ -54,6 +54,12 @@ namespace PalLauncher.Models
         [JsonPropertyName("closeLauncherOnStart")]
         public bool CloseLauncherOnStart { get; set; } = false;
 
+        [JsonPropertyName("remoteServerApiUrl")]
+        public string RemoteServerApiUrl { get; set; } = "http://127.0.0.1:3001";
+
+        [JsonPropertyName("remoteAdminKey")]
+        public string RemoteAdminKey { get; set; } = "DefaultSecretKey";
+
         [JsonPropertyName("launchViaSteamProtocol")]
         public bool LaunchViaSteamProtocol { get; set; } = false;
 

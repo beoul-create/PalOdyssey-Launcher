@@ -13,6 +13,7 @@ local Config = {
   applyDamage   = true,  -- true = weapons hit harder as they level. false = level & show progress only.
   dmgMult       = 1.0,   -- scales the damage BONUS (not base damage): 0.5 = half growth,
                          -- 2 = double, 0 = flat damage forever. Editable in-game (Mod Options).
+  recoilMult    = 0.5,   -- global weapon recoil scale (0.5 = 50% reduced recoil across all guns)
   xpMult        = 1.0,   -- weapon XP gain multiplier: 2 = level twice as fast. In-game too.
   applyDurability = true, -- weapons last longer as they level (cap = durabilityMaxMult)
   progressScope = "family", -- "family" = all copies & rarities share career (fully compatible with dedicated servers);

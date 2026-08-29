@@ -1,8 +1,10 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Microsoft.Win32;
 using PalLauncher.Models;
 using PalLauncher.Services;
@@ -14,7 +16,11 @@ namespace PalLauncher.Views
     {
         private string? _detectedServerPath;
         private GameProcessService _gameProcessService = null!;
+        private RemoteServerService _remoteServerService = null!;
         private LauncherConfig _config = null!;
+        private DispatcherTimer? _serverPollTimer;
+        private ServerStatusResponse? _lastRemoteStatus;
+        private bool _isActionInProgress;
 
         public MainWindow()
         {
@@ -28,11 +34,13 @@ namespace PalLauncher.Views
             if (DataContext is MainViewModel vm)
             {
                 _gameProcessService = vm.GameProcessService;
+                _remoteServerService = vm.RemoteServerService;
                 _config = vm.Config;
             }
             else
             {
                 _gameProcessService = new GameProcessService();
+                _remoteServerService = new RemoteServerService();
                 _config = LauncherConfig.Load();
             }
 
@@ -58,21 +66,54 @@ namespace PalLauncher.Views
             _detectedServerPath = _gameProcessService.DetectServerPath(_config.ServerInstallPath);
             _gameProcessService.ServerStateChanged += OnServerStateChanged;
 
-            UpdateServerUIState(_gameProcessService.IsServerRunning);
+            // Start 4-second polling timer for remote server daemon status
+            _serverPollTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(4)
+            };
+            _serverPollTimer.Tick += async (_, _) => await PollServerStatusAsync();
+            _serverPollTimer.Start();
+
+            // Initial poll
+            _ = PollServerStatusAsync();
+        }
+
+        private async Task PollServerStatusAsync()
+        {
+            if (_isActionInProgress) return;
+
+            if (!string.IsNullOrWhiteSpace(_config.RemoteServerApiUrl))
+            {
+                _lastRemoteStatus = await _remoteServerService.GetRemoteStatusAsync(_config.RemoteServerApiUrl);
+            }
+
+            UpdateServerUIState(_gameProcessService.IsServerRunning, _lastRemoteStatus);
         }
 
         private void OnServerStateChanged(bool isRunning)
         {
-            Dispatcher.Invoke(() => UpdateServerUIState(isRunning));
+            Dispatcher.Invoke(() => UpdateServerUIState(isRunning, _lastRemoteStatus));
         }
 
-        private void UpdateServerUIState(bool isRunning)
+        private void UpdateServerUIState(bool isLocalRunning, ServerStatusResponse? remoteStatus)
         {
-            if (isRunning)
+            bool isOnline = isLocalRunning || (remoteStatus != null && (remoteStatus.ServerOnline || remoteStatus.IsProcessRunning));
+
+            if (isOnline)
             {
                 ServerStatusIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#10B981")); // Emerald
-                ServerStatusText.Text = "ONLINE (Port: 8211)";
+                ServerStatusText.Text = "ONLINE";
                 ServerStatusText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#10B981"));
+
+                if (remoteStatus != null && remoteStatus.Success)
+                {
+                    ServerDetailText.Text = $"Remote Daemon Connected • {remoteStatus.PlayerCount}/{remoteStatus.MaxPlayers} Players";
+                }
+                else
+                {
+                    ServerDetailText.Text = "Local Server Process Active (Port: 8211)";
+                }
+
                 BtnServerToggle.Content = "Stop Server";
                 BtnServerToggle.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EF4444")); // Red
                 BtnServerToggle.IsEnabled = true;
@@ -83,10 +124,11 @@ namespace PalLauncher.Views
                 ServerStatusIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EF4444")); // Crimson
                 ServerStatusText.Text = "OFFLINE";
                 ServerStatusText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EF4444"));
+                ServerDetailText.Text = "Remote Controller Active";
                 BtnServerToggle.Content = "Start Server";
                 BtnServerToggle.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0284C7")); // Blue
 
-                if (string.IsNullOrEmpty(_detectedServerPath))
+                if (string.IsNullOrEmpty(_detectedServerPath) && string.IsNullOrEmpty(_config.RemoteServerApiUrl))
                 {
                     BtnServerToggle.IsEnabled = false;
                     BtnSelectServerPath.Visibility = Visibility.Visible;
@@ -99,23 +141,64 @@ namespace PalLauncher.Views
             }
         }
 
-        private void BtnServerToggle_Click(object sender, RoutedEventArgs e)
+        private async void BtnServerToggle_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is MainViewModel vm)
             {
                 vm.ClickSoundCommand.Execute(null);
             }
 
-            if (_gameProcessService.IsServerRunning)
+            if (_isActionInProgress) return;
+            _isActionInProgress = true;
+            BtnServerToggle.IsEnabled = false;
+
+            bool isCurrentlyOnline = _gameProcessService.IsServerRunning ||
+                                    (_lastRemoteStatus != null && (_lastRemoteStatus.ServerOnline || _lastRemoteStatus.IsProcessRunning));
+
+            try
             {
-                _gameProcessService.StopDedicatedServer();
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(_detectedServerPath))
+                if (isCurrentlyOnline)
                 {
-                    _gameProcessService.StartDedicatedServer(_detectedServerPath, _config.ServerLaunchArguments);
+                    ServerDetailText.Text = "Stopping server instance...";
+                    bool remoteStopped = false;
+                    if (!string.IsNullOrWhiteSpace(_config.RemoteServerApiUrl))
+                    {
+                        remoteStopped = await _remoteServerService.StopRemoteServerAsync(_config.RemoteServerApiUrl, _config.RemoteAdminKey);
+                    }
+
+                    if (_gameProcessService.IsServerRunning)
+                    {
+                        _gameProcessService.StopDedicatedServer();
+                    }
+
+                    await Task.Delay(1200);
                 }
+                else
+                {
+                    ServerDetailText.Text = "Starting server instance...";
+                    bool remoteStarted = false;
+                    if (!string.IsNullOrWhiteSpace(_config.RemoteServerApiUrl))
+                    {
+                        remoteStarted = await _remoteServerService.StartRemoteServerAsync(_config.RemoteServerApiUrl, _config.RemoteAdminKey);
+                    }
+
+                    if (!remoteStarted && !string.IsNullOrEmpty(_detectedServerPath))
+                    {
+                        _gameProcessService.StartDedicatedServer(_detectedServerPath, _config.ServerLaunchArguments);
+                    }
+
+                    await Task.Delay(2000);
+                }
+            }
+            catch (Exception ex)
+            {
+                ServerDetailText.Text = $"Action error: {ex.Message}";
+            }
+            finally
+            {
+                _isActionInProgress = false;
+                await PollServerStatusAsync();
+                BtnServerToggle.IsEnabled = true;
             }
         }
 
@@ -137,7 +220,7 @@ namespace PalLauncher.Views
                 _detectedServerPath = Path.GetDirectoryName(dialog.FileName);
                 _config.ServerInstallPath = _detectedServerPath;
                 _config.Save();
-                UpdateServerUIState(false);
+                UpdateServerUIState(false, _lastRemoteStatus);
             }
         }
 
@@ -185,6 +268,8 @@ namespace PalLauncher.Views
 
         private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
+            _serverPollTimer?.Stop();
+
             if (_gameProcessService != null)
             {
                 _gameProcessService.ServerStateChanged -= OnServerStateChanged;

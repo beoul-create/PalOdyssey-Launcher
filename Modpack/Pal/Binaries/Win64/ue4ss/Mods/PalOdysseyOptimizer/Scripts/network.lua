@@ -1,43 +1,79 @@
 -- PalOdysseyOptimizer - Network Pipeline & Low-Latency Synchronization
 local NetworkModule = {}
 
+local function GetWorldSafe()
+    if type(UEHelpers) ~= "table" then return nil end
+    local ok, world = pcall(function() return UEHelpers.GetWorld() or UEHelpers.GetWorldContextObject() end)
+    return ok and world or nil
+end
+
 function NetworkModule.apply(cfg)
     if not cfg or not cfg.enabled then return end
 
     print("[PalOdysseyOptimizer] Applying Network & Latency Optimization Pipeline...")
 
-    -- Hook GameInstance to set NetDriver parameters
-    local function tuneNetwork(gameInstance)
-        if not gameInstance or not gameInstance:IsValid() then return end
-
+    -- Tune NetDriver properties when a valid world + NetDriver is available
+    local tuned = false
+    local function tuneNetwork()
         pcall(function()
-            -- Uncap client bandwidth from default 10KB/s to 1MB/s
-            local minBw = cfg.minBandwidth or 65536
-            local maxBw = cfg.maxBandwidth or 1048576
+            local world = GetWorldSafe()
+            if not world or not world:IsValid() then return end
 
-            -- Apply network driver tuning
-            local world = gameInstance:GetWorld()
-            if world and world:IsValid() then
-                local netDriver = world.NetDriver
-                if netDriver and netDriver:IsValid() then
-                    netDriver.MaxClientRate = maxBw
-                    netDriver.MaxInternetClientRate = maxBw
-                    netDriver.MinNetUpdateFrequency = 30.0
-                    netDriver.MaxNetUpdateFrequency = 120.0
-                    netDriver.NetServerMaxTickRate = 60
-                end
+            local netDriver = world.NetDriver
+            if not netDriver or not netDriver:IsValid() then return end
+
+            local maxBw = cfg.maxBandwidth or 1048576
+            netDriver.MaxClientRate = maxBw
+            netDriver.MaxInternetClientRate = maxBw
+            netDriver.MinNetUpdateFrequency = 30.0
+            netDriver.MaxNetUpdateFrequency = 120.0
+            netDriver.NetServerMaxTickRate = 60
+
+            if not tuned then
+                print("[PalOdysseyOptimizer:Network] NetDriver tuned: 1MB/s bandwidth, 120Hz net update, 60-tick server rate.")
+                tuned = true
             end
         end)
     end
 
-    RegisterHook("/Script/Engine.GameInstance:ReceiveInit", function(Context)
-        local gi = Context:get()
-        if gi and gi:IsValid() then
-            tuneNetwork(gi)
-        end
+    -- Hook GameInstance init (may fire before NetDriver exists)
+    pcall(function()
+        RegisterHook("/Script/Engine.GameInstance:ReceiveInit", function(Context)
+            ExecuteWithDelay(500, tuneNetwork)
+            ExecuteWithDelay(2000, tuneNetwork)
+        end)
     end)
 
-    print("[PalOdysseyOptimizer] Network Optimization active: 1MB/s bandwidth cap, high-frequency tickrate, zero serialization choke.")
+    -- Hook World BeginPlay (NetDriver should exist by this point)
+    pcall(function()
+        RegisterHook("/Script/Engine.World:ReceiveBeginPlay", function(Context)
+            tuneNetwork()
+            ExecuteWithDelay(1000, tuneNetwork)
+        end)
+    end)
+
+    -- Hook player joins to re-apply on connection
+    pcall(function()
+        RegisterHook("/Script/Pal.PalPlayerController:ClientRestart", function(Context)
+            tuneNetwork()
+        end)
+    end)
+
+    -- Retry loop: wait for NetDriver to become available, try every 5s for 60s
+    local retryCount = 0
+    local function retryNetTuning()
+        if tuned then return end
+        retryCount = retryCount + 1
+        tuneNetwork()
+        if not tuned and retryCount < 12 then
+            ExecuteWithDelay(5000, retryNetTuning)
+        elseif not tuned then
+            print("[PalOdysseyOptimizer:Network] WARNING: Could not find a valid NetDriver after 60s. Network tuning deferred to next player join.")
+        end
+    end
+    ExecuteWithDelay(3000, retryNetTuning)
+
+    print("[PalOdysseyOptimizer] Network Optimization armed: 1MB/s bandwidth cap, high-frequency tickrate, zero serialization choke.")
 end
 
 return NetworkModule

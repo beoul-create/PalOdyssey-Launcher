@@ -512,9 +512,10 @@ local function tick()
     -- the [GRP] readback line is the probe.
     local grpYawBase, grpYawTarget, grpPitchBase, grpPitchTarget
     local grpPts = (row.prestige and tonumber(row.prestige.grp)) or 0
-    if cfg.applyGrouping ~= false and grpPts > 0 then
-      local m = (1 - (tonumber(cfg.prestigeGroupingPerPt) or 0.05)) ^ grpPts
-      if m < 0.4 then m = 0.4 end
+    local baseRecoilMult = tonumber(cfg.recoilMult) or 0.5
+    if cfg.applyGrouping ~= false or baseRecoilMult < 1.0 then
+      local m = baseRecoilMult * ((grpPts > 0) and ((1 - (tonumber(cfg.prestigeGroupingPerPt) or 0.05)) ^ grpPts) or 1.0)
+      if m < 0.1 then m = 0.1 end
       local gb = grpBases[key]
       if not gb then
         gb = { yaw = safe(function() return weapon.RecoilYawRange end),

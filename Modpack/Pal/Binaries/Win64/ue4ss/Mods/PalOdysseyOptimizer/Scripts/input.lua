@@ -1,6 +1,28 @@
 -- PalOdysseyOptimizer - Raw Mouse Input & Fluid Hardware Menu Cursor (2000Hz - 8000Hz Ultra-Low Latency)
 local InputModule = {}
 
+local function ExecuteConsole(cmd)
+    pcall(function()
+        if type(_G.ExecuteConsoleCommand) == "function" then
+            _G.ExecuteConsoleCommand(cmd)
+        end
+    end)
+    pcall(function()
+        if type(UEHelpers) ~= "table" then return end
+        local pc = UEHelpers.GetPlayerController()
+        if pc and pc:IsValid() and pc.ConsoleCommand then
+            pc:ConsoleCommand(cmd, true)
+        end
+    end)
+    pcall(function()
+        local kismet = StaticFindObject("/Script/Engine.Default__KismetSystemLibrary")
+        local world = type(UEHelpers) == "table" and (UEHelpers.GetWorld() or UEHelpers.GetWorldContextObject())
+        if kismet and kismet:IsValid() and world and world:IsValid() then
+            kismet:ExecuteConsoleCommand(world, cmd, nil)
+        end
+    end)
+end
+
 function InputModule.apply(cfg)
     if not cfg or not cfg.enabled then return end
 
@@ -52,7 +74,7 @@ function InputModule.apply(cfg)
         }
 
         for _, cmd in ipairs(commands) do
-            pcall(ExecuteConsoleCommand, cmd)
+            ExecuteConsole(cmd)
         end
     end
 
@@ -102,9 +124,9 @@ function InputModule.apply(cfg)
             if pc and pc:IsValid() and pc.PlayerInput and pc.PlayerInput:IsValid() then
                 pc.PlayerInput.bEnableMouseSmoothing = false
             end
-            pcall(ExecuteConsoleCommand, "Slate.EnableMouseSmoother 0")
-            pcall(ExecuteConsoleCommand, "Slate.EnableRenderHardwareCursor 1")
-            pcall(ExecuteConsoleCommand, "Slate.UseHardwareCursor 1")
+            ExecuteConsole("Slate.EnableMouseSmoother 0")
+            ExecuteConsole("Slate.EnableRenderHardwareCursor 1")
+            ExecuteConsole("Slate.UseHardwareCursor 1")
         end)
     end)
 
