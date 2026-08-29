@@ -1,7 +1,28 @@
 {
-  "Version": "2026.08.29.225546",
-  "GeneratedAt": "2026-08-29T22:55:46.043Z",
+  "Version": "2026.08.29.225711",
+  "GeneratedAt": "2026-08-29T22:57:11.601Z",
+  "ServerName": "PalOdyssey Official Modded Realm",
+  "ServerAddress": "palodyssey.duckdns.org",
+  "ServerPort": 8211,
+  "GameVersion": "v0.3.5 Modded",
   "TotalFiles": 331,
+  "News": [
+    {
+      "title": "⚡ v2.0.4 - Client Stability & Liveboard Sync",
+      "date": "Aug 29, 2026",
+      "summary": "Resolved Escape menu crash, added !shop / !buy / !gacha chat commands, optimized Unreal threadpools, and enabled real-time reactive Discord liveboard player tracking."
+    },
+    {
+      "title": "⚔️ Summon Around Arena Raids & Boss Auras",
+      "date": "Aug 29, 2026",
+      "summary": "Installed Summon Around and Find Out Arena Raids. Encounter enhanced Alpha Bosses with dynamic elemental auras and legendary drop tables."
+    },
+    {
+      "title": "🚀 Performance & Low Latency Optimization",
+      "date": "Aug 29, 2026",
+      "summary": "Balanced GPU/CPU performance profile applied with multi-core thread scaling and stutter-free asset streaming."
+    }
+  ],
   "Files": [
     {
       "RelativePath": "Pal/Binaries/Win64/dwmapi.dll",
