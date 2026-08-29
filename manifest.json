@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.231332",
-  "GeneratedAt": "2026-08-29T23:13:32.136Z",
+  "Version": "2026.08.29.231937",
+  "GeneratedAt": "2026-08-29T23:19:37.644Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,14 +8,14 @@
   "TotalFiles": 329,
   "News": [
     {
-      "title": "🛡️ Complete ESC Menu Crash Elimination",
+      "title": "🛒 Economy System: Normal & Ancient Tech Points Supported",
       "date": "Aug 29, 2026",
-      "summary": "Deactivated DarnUI widget injection across all mods (WeaponProficiency & DarnMenu). ESC spamming is now 100% stable and will never cause access violations."
+      "summary": "Use !shop or [F6] to browse. Items now support both Normal Tech Points and Ancient Tech Points. Gacha and recycling live."
     },
     {
-      "title": "🛒 Economy Shop & [F6] Hotkey Active!",
+      "title": "🛡️ Complete ESC Menu Crash Elimination",
       "date": "Aug 29, 2026",
-      "summary": "Press [F6] to view shop, [F7] to roll gacha, and [F8] to check tech point balance. Full in-game chat and HUD banner support enabled."
+      "summary": "Deactivated DarnUI widget injection across all mods (WeaponProficiency & DarnMenu). ESC spamming is now 100% stable."
     },
     {
       "title": "⚡ v2.0.7 - Liveboard Player Tracking & Path Resolution",
@@ -248,8 +248,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json",
-      "Hash": "591dce7ceb288a101cf2e0e9a06411f9ae5e4aedee7de49296d7b351a2d3f5a9",
-      "Size": 1353,
+      "Hash": "378a8cd3150237b328234eb481bc5b0890961b35dc107225f7da893e041482ac",
+      "Size": 1411,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json"
     },
     {
@@ -260,8 +260,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/chat_commands.lua",
-      "Hash": "19bd554e6cfcb63a16158919a497a1f6922cbdad555b35a91579cad2a65ce393",
-      "Size": 12143,
+      "Hash": "516e1d1d79918e993007d3d5394f48fb2a4052d91bd3dcd83996eac8caf6301d",
+      "Size": 13154,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/chat_commands.lua"
     },
     {

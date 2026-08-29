@@ -47,14 +47,16 @@
     },
     "ancientcore": {
       "ItemId": "PalItem_AncientCore",
-      "Cost": 4,
+      "Cost": 2,
       "Count": 1,
+      "Currency": "ancient",
       "Desc": "Ancient Civilization Core"
     },
     "respec": {
       "ItemId": "PalItem_StatResetMedicine",
-      "Cost": 5,
+      "Cost": 3,
       "Count": 1,
+      "Currency": "ancient",
       "Desc": "Memory Reset Drug"
     }
   },

@@ -9,7 +9,7 @@ function ChatCommands.Init(LoadedConfig)
         local SenderPlayer = nil
         local Text = ""
 
-        -- 1. Try to extract player controller/state
+        -- 1. Extract Player Controller
         pcall(function()
             if Context and Context.IsA and Context:IsA("/Script/Pal.PalPlayerController") then
                 SenderPlayer = Context
@@ -30,7 +30,7 @@ function ChatCommands.Init(LoadedConfig)
             end)
         end
 
-        -- 2. Extract text from all potential parameter positions
+        -- 2. Extract Text
         local function TryGetStr(val)
             if not val then return "" end
             local s = ""
@@ -58,18 +58,18 @@ function ChatCommands.Init(LoadedConfig)
         if Text == "" and Context and Context.Message then Text = TryGetStr(Context.Message) end
 
         if not Text or Text == "" then return end
-        local prefix = Text:sub(1, 1)
+        local cleanText = Text:gsub("^%s+", "")
+        local prefix = cleanText:sub(1, 1)
         if prefix ~= "/" and prefix ~= "!" then return end
 
-        -- Tokenize command
+        local body = cleanText:sub(2):gsub("^%s+", "")
         local Args = {}
-        for word in Text:gmatch("%S+") do
+        for word in body:gmatch("%S+") do
             table.insert(Args, word)
         end
 
         if #Args == 0 then return end
-        local RawCommand = Args[1]:lower()
-        local Command = RawCommand:gsub("^[!/]", "")
+        local Command = Args[1]:lower()
 
         if Command == "shop" or Command == "store" then
             ChatCommands.HandleShopList(SenderPlayer)
@@ -121,24 +121,34 @@ function ChatCommands.SendPlayerMessage(Player, Text, ColorHex)
 end
 
 function ChatCommands.GetPlayerTechPoints(Player)
-    local points = 0
+    local normalPoints = 0
+    local ancientPoints = 0
     pcall(function()
         local ParamComp = Player.CharacterParameterComponent
         if ParamComp and ParamComp:IsValid() then
-            points = ParamComp:GetTechnologyPoint()
+            normalPoints = ParamComp:GetTechnologyPoint() or 0
+            if type(ParamComp.GetbossTechnologyPoint) == "function" then
+                ancientPoints = ParamComp:GetbossTechnologyPoint() or 0
+            end
         end
     end)
-    return points
+    return normalPoints, ancientPoints
 end
 
-function ChatCommands.AddPlayerTechPoints(Player, Amount)
+function ChatCommands.AddPlayerTechPoints(Player, Amount, isAncient)
     local success = false
     pcall(function()
         local ParamComp = Player.CharacterParameterComponent
         if ParamComp and ParamComp:IsValid() then
-            local Current = ParamComp:GetTechnologyPoint()
-            ParamComp:SetTechnologyPoint(math.max(0, Current + Amount))
-            success = true
+            if isAncient and type(ParamComp.SetbossTechnologyPoint) == "function" then
+                local Current = ParamComp:GetbossTechnologyPoint() or 0
+                ParamComp:SetbossTechnologyPoint(math.max(0, Current + Amount))
+                success = true
+            else
+                local Current = ParamComp:GetTechnologyPoint() or 0
+                ParamComp:SetTechnologyPoint(math.max(0, Current + Amount))
+                success = true
+            end
         end
     end)
     return success
@@ -149,8 +159,17 @@ function ChatCommands.GiveItem(Player, ItemId, Count)
     pcall(function()
         local InvSubsystem = FindFirstOf("PalInventorySubsystem")
         if InvSubsystem and InvSubsystem:IsValid() and Player and Player:IsValid() then
-            local result = InvSubsystem:RequestAddItem(Player, FName(ItemId), Count, true)
-            success = result ~= false
+            local res = InvSubsystem:RequestAddItem(Player, FName(ItemId), Count, true)
+            if res ~= false then success = true end
+        end
+        if not success then
+            local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+            if PalUtil and PalUtil:IsValid() and Player and Player:IsValid() then
+                if type(PalUtil.AddSingleItemToInventory) == "function" then
+                    PalUtil:AddSingleItemToInventory(Player, FName(ItemId), Count)
+                    success = true
+                end
+            end
         end
     end)
     return success
@@ -161,7 +180,6 @@ function ChatCommands.TakeItem(Player, ItemId, Count)
     pcall(function()
         local InvSubsystem = FindFirstOf("PalInventorySubsystem")
         if InvSubsystem and InvSubsystem:IsValid() and Player and Player:IsValid() then
-            -- Fallback / inventory extraction
             local result = InvSubsystem:RequestRemoveItem(Player, FName(ItemId), Count)
             success = result ~= false
         end
@@ -171,63 +189,73 @@ end
 
 -- COMMAND HANDLERS
 function ChatCommands.HandleHelp(Player)
-    ChatCommands.SendPlayerMessage(Player, "=== 📜 ECONOMY SYSTEM COMMANDS ===", "00E5FF")
-    ChatCommands.SendPlayerMessage(Player, "• /shop — View available catalog items", "FFFFFF")
-    ChatCommands.SendPlayerMessage(Player, "• /exchange <item> [qty] — Purchase item with Tech Points", "FFFFFF")
-    ChatCommands.SendPlayerMessage(Player, "• /recycle <item> [qty] — Sell rare books/cores for Tech Points", "FFFFFF")
-    ChatCommands.SendPlayerMessage(Player, "• /gacha [1-10] — Roll gacha pool (3 Tech Pts per roll)", "FFFFFF")
-    ChatCommands.SendPlayerMessage(Player, "• /points — Check your current Tech Point balance", "FFFFFF")
+    local helpText = "=== 📜 ECONOMY SYSTEM COMMANDS ===\n"
+        .. "• !shop — View available catalog items\n"
+        .. "• !buy <item> [qty] — Purchase item with Tech Points\n"
+        .. "• !recycle <item> [qty] — Sell rare books/cores for Tech Points\n"
+        .. "• !gacha [1-10] — Roll gacha pool (3 Tech Pts per roll)\n"
+        .. "• !points — Check your Tech Point balance\n"
+        .. "• [F6] Shop  |  [F7] Gacha  |  [F8] Balance"
+    ChatCommands.SendPlayerMessage(Player, helpText)
 end
 
 function ChatCommands.HandleShopList(Player)
-    ChatCommands.SendPlayerMessage(Player, "=== 🛒 TECHNOLOGY POINT SHOP ===", "00E5FF")
+    local lines = {
+        "=== 🛒 TECHNOLOGY POINT SHOP ==="
+    }
     if Config.ShopItems then
         for key, item in pairs(Config.ShopItems) do
-            local line = string.format("• /exchange %s [qty] — %s (%d Tech Pts)", key, item.Desc or key, item.Cost or 1)
-            ChatCommands.SendPlayerMessage(Player, line, "FFFFFF")
+            local currType = (item.Currency == "ancient") and "Ancient Tech Pts" or "Tech Pts"
+            table.insert(lines, string.format("• !buy %s [%s] — %s (%d %s)", key, key, item.Desc or key, item.Cost or 1, currType))
         end
     end
-    ChatCommands.SendPlayerMessage(Player, "• /gacha [rolls] — Roll technology gacha (3 Tech Pts/roll)", "FFAA00")
+    table.insert(lines, "• !gacha [rolls] — Roll technology gacha (3 Tech Pts/roll)")
+    table.insert(lines, "• Shortcuts: [F6] Shop  [F7] Gacha  [F8] Balance")
+
+    ChatCommands.SendPlayerMessage(Player, table.concat(lines, "\n"))
 end
 
 function ChatCommands.HandleBalance(Player)
-    local Pts = ChatCommands.GetPlayerTechPoints(Player)
-    ChatCommands.SendPlayerMessage(Player, string.format("💳 You currently have %d Technology Point(s).", Pts), "00FF88")
+    local normPts, ancPts = ChatCommands.GetPlayerTechPoints(Player)
+    ChatCommands.SendPlayerMessage(Player, string.format("💳 Technology Points: %d  |  Ancient Tech Points: %d", normPts, ancPts))
 end
 
 function ChatCommands.HandleExchange(Player, ItemKey, Quantity)
     Quantity = math.min(999, math.max(1, math.floor(tonumber(Quantity) or 1)))
     if not ItemKey or not Config.ShopItems or not Config.ShopItems[ItemKey:lower()] then
-        ChatCommands.SendPlayerMessage(Player, "❌ Invalid item. Use /shop to see available inventory.", "FF4444")
+        ChatCommands.SendPlayerMessage(Player, "❌ Invalid item. Use !shop or [F6] to see available items.")
         return
     end
 
     local Item = Config.ShopItems[ItemKey:lower()]
+    local isAncient = (Item.Currency == "ancient")
     local TotalCost = math.max(0, tonumber(Item.Cost) or 1) * Quantity
-    local CurrentPoints = ChatCommands.GetPlayerTechPoints(Player)
+    local normPts, ancPts = ChatCommands.GetPlayerTechPoints(Player)
+    local available = isAncient and ancPts or normPts
+    local currLabel = isAncient and "Ancient Tech Points" or "Tech Points"
 
-    if CurrentPoints < TotalCost then
-        ChatCommands.SendPlayerMessage(Player, string.format("❌ Insufficient points. Required: %d, Available: %d.", TotalCost, CurrentPoints), "FF4444")
+    if available < TotalCost then
+        ChatCommands.SendPlayerMessage(Player, string.format("❌ Insufficient points. Required: %d %s (Available: %d).", TotalCost, currLabel, available))
         return
     end
 
     -- Process Transaction
-    if not ChatCommands.AddPlayerTechPoints(Player, -TotalCost) then
-        ChatCommands.SendPlayerMessage(Player, "❌ Purchase failed because the point balance could not be updated.", "FF4444")
+    if not ChatCommands.AddPlayerTechPoints(Player, -TotalCost, isAncient) then
+        ChatCommands.SendPlayerMessage(Player, "❌ Purchase failed because point balance could not be updated.")
         return
     end
     if not ChatCommands.GiveItem(Player, Item.ItemId, math.max(1, tonumber(Item.Count) or 1) * Quantity) then
-        ChatCommands.AddPlayerTechPoints(Player, TotalCost)
-        ChatCommands.SendPlayerMessage(Player, "❌ Item delivery failed; your Technology Points were refunded.", "FF4444")
+        ChatCommands.AddPlayerTechPoints(Player, TotalCost, isAncient)
+        ChatCommands.SendPlayerMessage(Player, "❌ Item delivery failed; points were refunded.")
         return
     end
-    ChatCommands.SendPlayerMessage(Player, string.format("✅ Purchased %dx %s for %d Tech Points!", Quantity, Item.Desc or ItemKey, TotalCost), "00FF88")
+    ChatCommands.SendPlayerMessage(Player, string.format("✅ Purchased %dx %s for %d %s!", Quantity, Item.Desc or ItemKey, TotalCost, currLabel))
 end
 
 function ChatCommands.HandleRecycle(Player, ItemKey, Quantity)
     Quantity = math.min(999, math.max(1, math.floor(tonumber(Quantity) or 1)))
     if not ItemKey or not Config.RecycleRates or not Config.RecycleRates[ItemKey] then
-        ChatCommands.SendPlayerMessage(Player, "❌ This item cannot be recycled into Tech Points.", "FF4444")
+        ChatCommands.SendPlayerMessage(Player, "❌ This item cannot be recycled into Tech Points.")
         return
     end
 
@@ -236,43 +264,46 @@ function ChatCommands.HandleRecycle(Player, ItemKey, Quantity)
 
     -- Remove item and credit points
     if not ChatCommands.TakeItem(Player, ItemKey, Quantity) then
-        ChatCommands.SendPlayerMessage(Player, "❌ Recycle failed; verify that you have enough of that item.", "FF4444")
+        ChatCommands.SendPlayerMessage(Player, "❌ Recycle failed; verify that you have enough of that item.")
         return
     end
-    if not ChatCommands.AddPlayerTechPoints(Player, Payout) then
+    if not ChatCommands.AddPlayerTechPoints(Player, Payout, false) then
         ChatCommands.GiveItem(Player, ItemKey, Quantity)
-        ChatCommands.SendPlayerMessage(Player, "❌ Point credit failed; the removed items were restored.", "FF4444")
+        ChatCommands.SendPlayerMessage(Player, "❌ Point credit failed; items were restored.")
         return
     end
-    ChatCommands.SendPlayerMessage(Player, string.format("♻️ Recycled %dx %s for +%d Tech Points!", Quantity, ItemKey, Payout), "00FF88")
+    ChatCommands.SendPlayerMessage(Player, string.format("♻️ Recycled %dx %s for +%d Tech Points!", Quantity, ItemKey, Payout))
 end
 
 function ChatCommands.HandleGacha(Player, Rolls)
     Rolls = math.min(math.max(1, math.floor(tonumber(Rolls) or 1)), 10)
     local CostPerRoll = math.max(0, tonumber(Config.GachaCostTechPoints) or 3)
     local TotalCost = CostPerRoll * Rolls
-    local CurrentPoints = ChatCommands.GetPlayerTechPoints(Player)
+    local normPts, _ = ChatCommands.GetPlayerTechPoints(Player)
 
-    if CurrentPoints < TotalCost then
-        ChatCommands.SendPlayerMessage(Player, string.format("❌ Not enough Tech Points. Rolling %dx costs %d points (You have: %d).", Rolls, TotalCost, CurrentPoints), "FF4444")
+    if normPts < TotalCost then
+        ChatCommands.SendPlayerMessage(Player, string.format("❌ Not enough Tech Points. Rolling %dx costs %d points (You have: %d).", Rolls, TotalCost, normPts))
         return
     end
 
-    if not ChatCommands.AddPlayerTechPoints(Player, -TotalCost) then
-        ChatCommands.SendPlayerMessage(Player, "❌ Gacha failed because the point balance could not be updated.", "FF4444")
+    if not ChatCommands.AddPlayerTechPoints(Player, -TotalCost, false) then
+        ChatCommands.SendPlayerMessage(Player, "❌ Gacha failed because point balance could not be updated.")
         return
     end
-    ChatCommands.SendPlayerMessage(Player, string.format("🎰 Rolling Gacha (%dx)...", Rolls), "FFAA00")
+
+    local results = { string.format("🎰 Rolling Gacha (%dx)...", Rolls) }
 
     for i = 1, Rolls do
         local Outcome = GachaEngine.Roll(Config.GachaPool)
         if not Outcome or not Outcome.ItemId or not ChatCommands.GiveItem(Player, Outcome.ItemId, math.max(1, tonumber(Outcome.Count) or 1)) then
-            ChatCommands.AddPlayerTechPoints(Player, CostPerRoll)
-            ChatCommands.SendPlayerMessage(Player, "  ❌ Reward delivery failed; this roll was refunded.", "FF4444")
+            ChatCommands.AddPlayerTechPoints(Player, CostPerRoll, false)
+            table.insert(results, "  ❌ Reward delivery failed; this roll was refunded.")
         else
-        ChatCommands.SendPlayerMessage(Player, string.format("  🎁 [%s] Received: %dx %s", Outcome.Rarity or "Reward", Outcome.Count or 1, Outcome.ItemId), "FFFFFF")
+            table.insert(results, string.format("  🎁 [%s] %dx %s", Outcome.Rarity or "Reward", Outcome.Count or 1, Outcome.ItemId))
         end
     end
+    ChatCommands.SendPlayerMessage(Player, table.concat(results, "\n"))
 end
 
 return ChatCommands
+
