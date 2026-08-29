@@ -32,23 +32,44 @@ namespace PalLauncher.Services
     public class ServerQueryService : IDisposable
     {
         private readonly Timer _pollTimer;
-        private bool _isQuerying;
+        private readonly string _host;
+        private readonly int _port;
+        private readonly string? _localServerDir;
+        private int _isQuerying;
         private CancellationTokenSource _cts = new();
 
         public event Action<ServerStatusInfo>? ServerStatusUpdated;
 
         public ServerStatusInfo CurrentStatus { get; private set; } = new();
 
-        public ServerQueryService()
+        public ServerQueryService(
+            string host = "palodyssey.duckdns.org",
+            int port = 8211,
+            string? localServerDir = null)
         {
+            _host = host;
+            _port = port;
+            _localServerDir = localServerDir;
             // Poll every 8 seconds
-            _pollTimer = new Timer(async _ => await QueryServerAsync(), null, 500, 8000);
+            _pollTimer = new Timer(
+                async _ => await QueryServerAsync(_host, _port, _localServerDir, _cts.Token),
+                null,
+                500,
+                8000);
         }
 
-        public async Task<ServerStatusInfo> QueryServerAsync(string host = "palodyssey.duckdns.org", int port = 8211, string? localServerDir = null)
+        public void SetPollingEnabled(bool enabled)
         {
-            if (_isQuerying) return CurrentStatus;
-            _isQuerying = true;
+            _pollTimer.Change(enabled ? 500 : Timeout.Infinite, enabled ? 8000 : Timeout.Infinite);
+        }
+
+        public async Task<ServerStatusInfo> QueryServerAsync(
+            string host = "palodyssey.duckdns.org",
+            int port = 8211,
+            string? localServerDir = null,
+            CancellationToken cancellationToken = default)
+        {
+            if (Interlocked.CompareExchange(ref _isQuerying, 1, 0) != 0) return CurrentStatus;
 
             var status = new ServerStatusInfo();
 
@@ -64,7 +85,7 @@ namespace PalLauncher.Services
                 }
 
                 // 2. Measure ping & probe network host
-                long measuredPing = await MeasurePingAsync(host, port);
+                long measuredPing = await MeasurePingAsync(host, port, cancellationToken);
                 status.PingMs = measuredPing;
 
                 // 3. Resolve status logic
@@ -99,7 +120,7 @@ namespace PalLauncher.Services
             }
             finally
             {
-                _isQuerying = false;
+                Interlocked.Exchange(ref _isQuerying, 0);
             }
 
             CurrentStatus = status;
@@ -107,13 +128,13 @@ namespace PalLauncher.Services
             return status;
         }
 
-        private static async Task<long> MeasurePingAsync(string host, int port)
+        private static async Task<long> MeasurePingAsync(string host, int port, CancellationToken cancellationToken)
         {
             try
             {
                 // Quick ICMP Ping
                 using var pinger = new Ping();
-                var reply = await pinger.SendPingAsync(host, 1500);
+                var reply = await pinger.SendPingAsync(host, TimeSpan.FromMilliseconds(1500), cancellationToken: cancellationToken);
                 if (reply.Status == IPStatus.Success)
                 {
                     return reply.RoundtripTime;
@@ -124,7 +145,8 @@ namespace PalLauncher.Services
             // Fallback: UDP / Socket DNS probe & connect simulation
             try
             {
-                using var cts = new CancellationTokenSource(1500);
+                using var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                cts.CancelAfter(1500);
                 var stopwatch = System.Diagnostics.Stopwatch.StartNew();
                 var addresses = await Dns.GetHostAddressesAsync(host, cts.Token);
                 if (addresses.Length > 0)

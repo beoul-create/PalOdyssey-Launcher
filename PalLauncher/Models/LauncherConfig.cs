@@ -21,7 +21,7 @@ namespace PalLauncher.Models
         public string? ServerInstallPath { get; set; }
 
         [JsonPropertyName("serverLaunchArguments")]
-        public string ServerLaunchArguments { get; set; } = "-useperfthreads -NoAsyncLoadingThread -port=8211";
+        public string ServerLaunchArguments { get; set; } = "-port=8211";
 
         [JsonPropertyName("autoStartServerWithClient")]
         public bool AutoStartServerWithClient { get; set; } = false;

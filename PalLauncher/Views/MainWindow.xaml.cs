@@ -21,12 +21,15 @@ namespace PalLauncher.Views
         private DispatcherTimer? _serverPollTimer;
         private ServerStatusResponse? _lastRemoteStatus;
         private bool _isActionInProgress;
+        private bool _isPollingServer;
+        private bool _isGameRunning;
 
         public MainWindow()
         {
             InitializeComponent();
             Loaded += MainWindow_Loaded;
             Closing += MainWindow_Closing;
+            StateChanged += MainWindow_StateChanged;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -45,6 +48,8 @@ namespace PalLauncher.Views
             }
 
             InitializeServerManagement();
+            _gameProcessService.GameStarted += OnGameStarted;
+            _gameProcessService.GameExited += OnGameExited;
 
             try
             {
@@ -80,14 +85,84 @@ namespace PalLauncher.Views
 
         private async Task PollServerStatusAsync()
         {
-            if (_isActionInProgress) return;
+            if (_isActionInProgress || _isPollingServer) return;
+            _isPollingServer = true;
 
-            if (!string.IsNullOrWhiteSpace(_config.RemoteServerApiUrl))
+            try
             {
-                _lastRemoteStatus = await _remoteServerService.GetRemoteStatusAsync(_config.RemoteServerApiUrl);
-            }
+                if (!string.IsNullOrWhiteSpace(_config.RemoteServerApiUrl))
+                {
+                    _lastRemoteStatus = await _remoteServerService.GetRemoteStatusAsync(_config.RemoteServerApiUrl);
+                }
 
-            UpdateServerUIState(_gameProcessService.IsServerRunning, _lastRemoteStatus);
+                UpdateServerUIState(_gameProcessService.IsServerRunning, _lastRemoteStatus);
+            }
+            finally
+            {
+                _isPollingServer = false;
+            }
+        }
+
+        [System.Runtime.InteropServices.DllImport("psapi.dll")]
+        private static extern int EmptyWorkingSet(IntPtr hwProc);
+
+        private void OnGameStarted()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                _isGameRunning = true;
+                if (_config.CloseLauncherOnStart)
+                {
+                    Application.Current?.Shutdown();
+                    return;
+                }
+
+                WindowState = WindowState.Minimized;
+                UpdateBackgroundActivity();
+
+                try
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    EmptyWorkingSet(System.Diagnostics.Process.GetCurrentProcess().Handle);
+                }
+                catch { }
+            });
+        }
+
+        private void OnGameExited()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                _isGameRunning = false;
+                WindowState = WindowState.Normal;
+                UpdateBackgroundActivity();
+                _ = PollServerStatusAsync();
+            });
+        }
+
+        private void MainWindow_StateChanged(object? sender, EventArgs e) => UpdateBackgroundActivity();
+
+        private void UpdateBackgroundActivity()
+        {
+            bool shouldRun = !_isGameRunning && WindowState != WindowState.Minimized && IsVisible;
+            if (shouldRun)
+            {
+                BackgroundVideo.Play();
+                _serverPollTimer?.Start();
+            }
+            else
+            {
+                BackgroundVideo.Pause();
+                _serverPollTimer?.Stop();
+
+                try
+                {
+                    GC.Collect();
+                    EmptyWorkingSet(System.Diagnostics.Process.GetCurrentProcess().Handle);
+                }
+                catch { }
+            }
         }
 
         private void OnServerStateChanged(bool isRunning)
@@ -273,7 +348,11 @@ namespace PalLauncher.Views
             if (_gameProcessService != null)
             {
                 _gameProcessService.ServerStateChanged -= OnServerStateChanged;
+                _gameProcessService.GameStarted -= OnGameStarted;
+                _gameProcessService.GameExited -= OnGameExited;
             }
+
+            StateChanged -= MainWindow_StateChanged;
 
             if (DataContext is IDisposable disposableVm)
             {

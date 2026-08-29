@@ -79,6 +79,10 @@ namespace PalLauncher.ViewModels
 
         public MainViewModel()
         {
+            _cacheFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache.json");
+            _cache = LocalCache.Load(_cacheFilePath);
+            _config = LauncherConfig.Load();
+
             _hashService = new HashService();
             _manifestService = new ManifestService(_hashService);
             _downloadManager = new DownloadManager(_hashService);
@@ -86,14 +90,11 @@ namespace PalLauncher.ViewModels
             _remoteServerService = new RemoteServerService();
             _discordRpcService = new DiscordRpcService();
             _audioService = new AudioService();
-            _serverQueryService = new ServerQueryService();
-
-            _cacheFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache.json");
-            _cache = LocalCache.Load(_cacheFilePath);
-            _config = LauncherConfig.Load();
+            _serverQueryService = new ServerQueryService(_config.ServerIp, _config.ServerPort, _config.ServerInstallPath);
 
             _isSoundEnabled = _config.SoundEnabled;
             _isDiscordRpcEnabled = _config.DiscordRpcEnabled;
+            _closeLauncherOnStart = _config.CloseLauncherOnStart;
             _audioService.IsSoundEnabled = _isSoundEnabled;
 
             // Wire commands
@@ -121,9 +122,6 @@ namespace PalLauncher.ViewModels
 
             // Detect Game Directory
             InitializeGamePath();
-
-            // Initial server probe
-            _ = _serverQueryService.QueryServerAsync(_config.ServerIp, _config.ServerPort, _config.ServerInstallPath);
 
             // Load initial news and fallback manifest
             var fallbackManifest = ManifestService.GetDefaultFallbackManifest();
@@ -308,6 +306,20 @@ namespace PalLauncher.ViewModels
                     _config.Save();
                     if (value) _discordRpcService.Initialize();
                     else _discordRpcService.Dispose();
+                }
+            }
+        }
+
+        private bool _closeLauncherOnStart;
+        public bool CloseLauncherOnStart
+        {
+            get => _closeLauncherOnStart;
+            set
+            {
+                if (SetProperty(ref _closeLauncherOnStart, value))
+                {
+                    _config.CloseLauncherOnStart = value;
+                    _config.Save();
                 }
             }
         }
@@ -543,6 +555,7 @@ namespace PalLauncher.ViewModels
 
         private void OnGameStarted()
         {
+            _serverQueryService.SetPollingEnabled(false);
             Application.Current?.Dispatcher.Invoke(() =>
             {
                 CurrentState = LauncherState.GameRunning;
@@ -551,6 +564,7 @@ namespace PalLauncher.ViewModels
 
         private void OnGameExited()
         {
+            _serverQueryService.SetPollingEnabled(true);
             Application.Current?.Dispatcher.Invoke(() =>
             {
                 CurrentState = LauncherState.Idle;
@@ -687,6 +701,7 @@ namespace PalLauncher.ViewModels
             _serverQueryService.ServerStatusUpdated -= OnServerStatusUpdated;
             _serverQueryService.Dispose();
             _downloadManager.Dispose();
+            _remoteServerService.Dispose();
             _discordRpcService.Dispose();
             _audioService.Dispose();
             GC.SuppressFinalize(this);

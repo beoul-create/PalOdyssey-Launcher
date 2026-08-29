@@ -1,7 +1,7 @@
 using System;
+using System.Buffers.Binary;
 using System.IO;
 using System.Media;
-using System.Threading.Tasks;
 
 namespace PalLauncher.Services
 {
@@ -68,11 +68,9 @@ namespace PalLauncher.Services
                 // Scale 16-bit PCM samples
                 for (int i = dataPos; i < bytes.Length - 1; i += 2)
                 {
-                    short sample = BitConverter.ToInt16(bytes, i);
+                    short sample = BinaryPrimitives.ReadInt16LittleEndian(bytes.AsSpan(i, 2));
                     short scaledSample = (short)Math.Clamp(sample * volume, short.MinValue, short.MaxValue);
-                    byte[] sampleBytes = BitConverter.GetBytes(scaledSample);
-                    bytes[i] = sampleBytes[0];
-                    bytes[i + 1] = sampleBytes[1];
+                    BinaryPrimitives.WriteInt16LittleEndian(bytes.AsSpan(i, 2), scaledSample);
                 }
             }
 
@@ -83,36 +81,14 @@ namespace PalLauncher.Services
         {
             if (!IsSoundEnabled || _hoverPlayer == null) return;
 
-            Task.Run(() =>
-            {
-                try
-                {
-                    if (_hoverStream != null && _hoverStream.CanSeek)
-                    {
-                        _hoverStream.Position = 0;
-                    }
-                    _hoverPlayer.Play();
-                }
-                catch { }
-            });
+            try { _hoverPlayer.Play(); } catch { }
         }
 
         public void PlayClick()
         {
             if (!IsSoundEnabled || _clickPlayer == null) return;
 
-            Task.Run(() =>
-            {
-                try
-                {
-                    if (_clickStream != null && _clickStream.CanSeek)
-                    {
-                        _clickStream.Position = 0;
-                    }
-                    _clickPlayer.Play();
-                }
-                catch { }
-            });
+            try { _clickPlayer.Play(); } catch { }
         }
 
         public void Dispose()

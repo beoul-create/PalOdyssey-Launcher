@@ -679,8 +679,12 @@
                                 <TextBlock Text="Enable Sound Effects (Hover &amp; Click Audio)" Foreground="#FFFFFF" FontSize="12" Margin="6,0,0,0" />
                             </CheckBox>
 
-                            <CheckBox IsChecked="{Binding IsDiscordRpcEnabled, Mode=TwoWay}" Margin="0,0,0,16" Cursor="Hand">
+                            <CheckBox IsChecked="{Binding IsDiscordRpcEnabled, Mode=TwoWay}" Margin="0,0,0,10" Cursor="Hand">
                                 <TextBlock Text="Enable Discord Rich Presence" Foreground="#FFFFFF" FontSize="12" Margin="6,0,0,0" />
+                            </CheckBox>
+
+                            <CheckBox IsChecked="{Binding CloseLauncherOnStart, Mode=TwoWay}" Margin="0,0,0,16" Cursor="Hand">
+                                <TextBlock Text="Auto-Close Launcher When Game Starts (100% Resource Free)" Foreground="#FFFFFF" FontSize="12" Margin="6,0,0,0" />
                             </CheckBox>
 
                             <Button Content="DONE" Command="{Binding ToggleSettingsCommand}"

@@ -66,7 +66,11 @@ namespace PalLauncher.Models
                     Directory.CreateDirectory(dir);
                 }
 
-                string json = JsonSerializer.Serialize(this, JsonOptions);
+                string json;
+                lock (Entries)
+                {
+                    json = JsonSerializer.Serialize(this, JsonOptions);
+                }
                 string tempPath = filePath + ".tmp." + Guid.NewGuid().ToString("N");
                 File.WriteAllText(tempPath, json);
                 File.Move(tempPath, filePath, overwrite: true);

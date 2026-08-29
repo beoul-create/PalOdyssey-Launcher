@@ -36,13 +36,25 @@ namespace PalLauncher.Services
                 if (_serverProcess != null && !_serverProcess.HasExited) return true;
                 try
                 {
-                    return Process.GetProcessesByName(ServerProcessName).Length > 0 ||
-                           Process.GetProcessesByName(AlternateServerProcessName).Length > 0;
+                    return AnyProcessRunning(ServerProcessName) || AnyProcessRunning(AlternateServerProcessName);
                 }
                 catch
                 {
                     return false;
                 }
+            }
+        }
+
+        private static bool AnyProcessRunning(string processName)
+        {
+            var processes = Process.GetProcessesByName(processName);
+            try
+            {
+                return processes.Any(process => !process.HasExited);
+            }
+            finally
+            {
+                foreach (var process in processes) process.Dispose();
             }
         }
 
@@ -136,6 +148,8 @@ namespace PalLauncher.Services
         public bool StartDedicatedServer(string serverDirectory, string arguments)
         {
             if (IsServerRunning) return true;
+            _serverProcess?.Dispose();
+            _serverProcess = null;
 
             string serverExe = Path.Combine(serverDirectory, "PalServer.exe");
             if (!File.Exists(serverExe))
@@ -362,7 +376,7 @@ namespace PalLauncher.Services
                 {
                     // Fallback to Steam URI Protocol
                     string steamUri = $"steam://rungameid/{PalworldAppId}";
-                    Process.Start(new ProcessStartInfo
+                    using var steamLauncherProcess = Process.Start(new ProcessStartInfo
                     {
                         FileName = steamUri,
                         UseShellExecute = true
@@ -385,6 +399,7 @@ namespace PalLauncher.Services
 
         private async Task MonitorGameProcessAsync(Process? directProcess, CancellationToken cancellationToken)
         {
+            Process? detectedProcess = null;
             try
             {
                 if (directProcess != null && !directProcess.HasExited)
@@ -394,7 +409,6 @@ namespace PalLauncher.Services
                 else
                 {
                     // Wait for process to appear if launched via Steam URI
-                    Process? detectedProcess = null;
                     for (int i = 0; i < 30; i++)
                     {
                         if (cancellationToken.IsCancellationRequested) break;
@@ -407,6 +421,7 @@ namespace PalLauncher.Services
                         if (processes.Length > 0)
                         {
                             detectedProcess = processes[0];
+                            foreach (var process in processes.Skip(1)) process.Dispose();
                             break;
                         }
                     }
@@ -423,6 +438,8 @@ namespace PalLauncher.Services
             }
             finally
             {
+                directProcess?.Dispose();
+                detectedProcess?.Dispose();
                 IsGameRunning = false;
                 GameExited?.Invoke();
             }
