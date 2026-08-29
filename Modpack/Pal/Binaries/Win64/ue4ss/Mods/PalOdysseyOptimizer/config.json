@@ -1,5 +1,5 @@
 {
-  "preset": "maximum_performance",
+  "preset": "balanced",
   "rawInput": {
     "enabled": true,
     "disableSmoothing": true,

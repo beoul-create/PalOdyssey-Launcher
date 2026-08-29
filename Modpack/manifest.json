@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.211232",
-  "GeneratedAt": "2026-08-29T21:12:32.146Z",
+  "Version": "2026.08.29.211525",
+  "GeneratedAt": "2026-08-29T21:15:25.333Z",
   "TotalFiles": 303,
   "Files": [
     {
@@ -437,8 +437,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/config.json",
-      "Hash": "960210ada11ee68044b984416f621fb93c9d48b72cddb102c9040f4febb2387a",
-      "Size": 1083,
+      "Hash": "69154bff66a9080be02d7f73a7dd8ae32fc8b9882d818805c11fa91128452592",
+      "Size": 1072,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/config.json"
     },
     {
