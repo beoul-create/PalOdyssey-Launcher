@@ -151,10 +151,16 @@ namespace PalLauncher.Services
             _serverProcess?.Dispose();
             _serverProcess = null;
 
-            string serverExe = Path.Combine(serverDirectory, "PalServer.exe");
-            if (!File.Exists(serverExe))
+            string shippingExe = Path.Combine(serverDirectory, ServerExecutableRelativePath);
+            string serverExe;
+            if (File.Exists(shippingExe))
             {
-                serverExe = Path.Combine(serverDirectory, ServerExecutableRelativePath);
+                serverExe = shippingExe;
+                arguments = string.IsNullOrWhiteSpace(arguments) ? "Pal" : $"Pal {arguments}";
+            }
+            else
+            {
+                serverExe = Path.Combine(serverDirectory, "PalServer.exe");
             }
 
             if (!File.Exists(serverExe)) return false;
