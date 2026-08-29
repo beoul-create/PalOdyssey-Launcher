@@ -6,53 +6,54 @@
 [![Modpack: UE4SS 3.0.1](https://img.shields.io/badge/Modpack-UE4SS%203.0.1%20Integrated-FF6F00?style=for-the-badge)](https://github.com/UE4SS-RE/RE-UE4SS)
 [![Release: v2.0.0](https://img.shields.io/badge/Release-v2.0.0--Astral-00E5FF?style=for-the-badge)](https://github.com/beoul-create/PalOdyssey-Launcher/releases)
 
-**PalOdyssey Launcher 2.0** is an all-in-one high-performance game client, modpack auto-updater, server companion, and system optimizer built specifically for **Palworld**. It automates game launch calibration, keeps your client synchronized with the server's 312+ mod assets, tunes memory and texture streaming for zero stutter, and features integrated remote server controls.
+**PalOdyssey Launcher 2.0** is an official custom game client, modpack auto-updater, server companion, and system optimizer built for **Palworld**. It automates game directory discovery, keeps your client synchronized with the server's 312+ mod assets, provides live server diagnostics, and integrates remote server controls.
 
 ---
 
 ## ⚡ Quick Start: How to Play
 
-Getting into the PalOdyssey realm takes less than a minute:
+Getting into the PalOdyssey realm takes less than 60 seconds:
 
 1. **Download the Launcher**:
    * Grab the latest **[PalOdyssey Launcher Release (`.zip`)](https://github.com/beoul-create/PalOdyssey-Launcher/releases)**.
    * Extract the `.zip` anywhere on your PC.
 2. **Launch `PalLauncher.exe`**:
    * Double-click **`PalLauncher.exe`**.
-   * The launcher automatically detects your Palworld Steam installation directory.
-3. **1-Click Auto-Calibrate**:
-   * On the **Dashboard** or **Launch Settings** tab, click **`⚡ AUTO-CALIBRATE & OPTIMIZE RIG`** to configure the optimal hardware thread, memory, and graphics flags for your system.
-4. **Launch Expedition**:
-   * Click the glowing **`Launch Expedition`** button. The launcher performs real-time SHA-256 integrity verification, applies updates, cleans stale dumps, and launches directly into the world!
+   * The launcher will start immediately and automatically detect your Palworld Steam installation directory.
+3. **Configure Settings (Optional)**:
+   * Click the **⚙ (Gear)** icon in the top-right title bar to open the **Settings Flyout** if you wish to adjust the remote manifest URL, server API endpoint, sound effects, or Discord Rich Presence.
+4. **Play Now**:
+   * Click the glowing **`PLAY NOW`** button on the bottom dock. The launcher performs real-time SHA-256 integrity verification, downloads missing or updated mod files, and launches directly into Palworld!
 
 ---
 
-## 🌟 Key Launcher Features
+## 🌟 Actual Launcher Features & Architecture
 
-### 🚀 1. Hardware Auto-Calibrator & Engine Optimization
-* **Instant Rig Benchmark**: Automatically analyzes your CPU topology, GPU tier, and physical RAM to recommend the ideal preset (**Efficiency APU**, **Balanced Gaming**, or **Ultra Enthusiast**).
-* **High-Performance Command-Line Flags**: Automatically configures system heap allocation (`-malloc=system`), worker thread dispatch (`-useperfthreads`, `-USEALLAVAILABLECORES`), and DirectX acceleration.
-* **Hardware-Accelerated WindowChrome UI**: Modern WPF glassmorphic design with zero window dragging lag and high-refresh-rate rendering.
+### 🚀 1. Hardware-Accelerated Glassmorphic UI
+* **Custom WindowChrome Design**: Zero window-dragging lag, smooth framerates, custom title bar with minimize/close buttons, and subtle audio cues on hover and click.
+* **Cinematic Ambient Video Background**: Features an embedded ambient looping background video (`background_loop.mp4`) with glassmorphic blur overlays and cyan/indigo glow auras.
 
-### 🔋 2. Memory Compactor & Crash Prevention
-* **Palworld Borealis Engine & Native DWMAPI**: Enhanced engine hooks preventing out-of-memory crashes and micro-stuttering during long multiplayer sessions.
-* **Background Idle Throttling (`t.UnfocusedMaxFPS=30`)**: Drops GPU/CPU usage by **~70%** when Alt-Tabbed or minimized.
-* **Dynamic Texture Pool Bounds (`r.Streaming.PoolSize=2560`)**: Prevents VRAM exhaustion and mesh popping while exploring new islands.
-* **Automated Log & Crash Sweep**: Cleans old crash dumps and temp logs on every launch to keep your install folder lean and healthy.
+### 🔄 2. High-Speed SHA-256 Delta Auto-Updater (312 Mod Files)
+* **Zero Manual Installation**: UE4SS 3.0.1 binaries, Lua scripts, and client `.pak` files are managed and installed automatically.
+* **Cryptographic Delta Verification**: Uses local SHA-256 hash caching (`cache.json`) to verify files in milliseconds and only downloads new or changed files from GitHub's raw CDN.
+* **Live Bandwidth & Progress Ticker**: Real-time progress bar with percentage readout, download speed indicator (`MB/s`), and active file ticker.
 
-### 🌐 3. Real-Time Server Liveboard & Remote Management
-* **Instant Roster & Status**: Displays connected players, ping, server latency, and server health directly on your dashboard with a 3-second live refresh.
-* **Remote Management Daemon**: Built-in background daemon integration for automated Discord liveboards, server monitoring, and RCON controls.
-* **FastConnect Direct-to-World**: Instant bypass connecting you directly into the PalOdyssey server without having to browse server lobbies.
+### 🌐 3. Live Server Beacon & Ping Diagnostics
+* **Realm Status Beacon**: Real-time server state monitor (`ONLINE`, `CHECKING...`, or `OFFLINE`) with color-coded beacon badges.
+* **Low-Latency Ping Indicator**: Measures direct round-trip latency to the dedicated server (`palodyssey.duckdns.org`).
+* **Liveboard Fallback Integration**: Reads local server state files (`liveboard_state.json`) when operating on the host machine.
 
-### 🔄 4. Automated Modpack Sync (312 Verified Files)
-* **Zero Manual Installation**: All mod files, UE4SS binaries, scripts, and pak mods are automatically downloaded and verified via high-speed GitHub raw endpoints.
-* **SHA-256 Delta Verification**: Computes cryptographic hashes of local assets and downloads only updated or missing files.
-* **Mod Manager UI**: Browse installed mods, verify integrity status, and toggle individual mods on or off directly from the launcher.
+### 🎛️ 4. Remote Server Controller Tray
+* **Built-in Server Management**: Directly monitor and toggle the dedicated server from the launcher dashboard via the **Server Controller Tray**.
+* **Remote Management Daemon Client**: Communicates securely with the local or remote daemon service using configurable API endpoints and admin secret keys.
 
-### 🎮 5. Discord Rich Presence
-* **Live Status**: Displays rich presence on your Discord profile (`⚡ Exploring Realm • Level & Status • PalOdyssey Expedition`).
-* **High-Res Assets**: Custom Discord activity icons and live session duration timers.
+### 🎮 5. Discord Rich Presence & Community Link
+* **Live Discord Activity**: Displays live rich presence on your Discord profile while preparing or playing in the PalOdyssey realm.
+* **1-Click Community Discord**: Quick-access Discord button in the title bar to connect with other players.
+
+### 📁 6. Automatic Steam Detection & Fallback Selector
+* **Smart Steam Registry Scanner**: Automatically queries Windows Registry (`HKCU\Software\Valve\Steam`) and parses `libraryfolders.vdf` to find Palworld across all SSDs and HDDs.
+* **Manual Directory Browser**: Allows manual game folder selection if using custom drive mappings.
 
 ---
 
@@ -62,8 +63,8 @@ When launching with PalOdyssey, you receive an expertly tuned suite of **312 mod
 
 | Mod / System | Description |
 | :--- | :--- |
-| 🧬 **Azomer's Passive Skill Expansion (APSE) & ChazzBuffs** | Deep skill matrices, custom items, Silvegis boss spawns, and rebalanced partner skills for all primary Pals. |
-| 🐣 **Custom Subspecies Breeding** | Expanded breeding combinations and custom egg item parameters. |
+| 🧬 **Azomer's Passive Skill Expansion (APSE) & ChazzBuffs** | Expanded passive skill matrices, custom items, Silvegis boss spawns, and partner skill rebalancing. |
+| 🐣 **Custom Subspecies Breeding** | Expanded Pal breeding combinations and custom egg item parameters. |
 | ⚡ **FastConnect Integration** | Bypasses title menu connection delays for instant world entry. |
 | 🎯 **CS2 Custom Crosshairs & Clean HUD** | Precision dynamic reticles (Dot, Crosshair, Circle-Dot) with watermark removal. |
 | 💰 **In-Game Economy & Shop System** | Player marketplace, currency system, and custom merchant tables. |
@@ -73,7 +74,7 @@ When launching with PalOdyssey, you receive an expertly tuned suite of **312 mod
 | 🐾 **Stuck Pal Rescuer** | Detects base worker Pals caught in collision or terrain geometry and automatically repositions them. |
 | 🌄 **PalClearVision Visual Suite** | Removes muddy fog filters, enhances night lighting, corrects ultra-wide (21:9 / 32:9) HUDs, and boosts LOD draw distance. |
 | ⚔️ **Weapon Proficiency & Mastery** | Weapon mastery progression, durability scaling, and combat bonuses. |
-| 🧹 **RAM Trim & Working Set Sweep** | Automatic background working-set memory compacting. |
+| 🧹 **RAM Trim & Borealis Engine** | Memory compacting engine and native DWMAPI hooks for smooth frametimes. |
 
 ---
 
@@ -91,26 +92,16 @@ Customize mod options in real-time while playing:
 
 ---
 
-## 🖥️ Recommended Hardware Presets
-
-| Hardware Tier | Recommended Preset | Target FPS | What Auto-Calibrate Configures |
-| :--- | :--- | :--- | :--- |
-| **APU / Integrated / 8GB RAM** *(Steam Deck, AMD Vega, Intel Iris)* | **Efficiency Max** | 40 – 60 FPS | `-lowmemory -USEALLAVAILABLECORES -dx11`<br>Lightweight particle budget, aggressive GC. |
-| **Mid-Range / 16GB RAM** *(RTX 2060/3060, RX 6600)* | **Balanced Gaming** | 60 – 85 FPS | `-malloc=system -useperfthreads -USEALLAVAILABLECORES -dx11`<br>System heap allocation, locked frametimes. |
-| **Enthusiast / 32GB+ RAM** *(RTX 4070/4080/4090, RX 7900)* | **Ultra Enthusiast** | 90 – 144+ FPS | `-malloc=system -useperfthreads -high -NoAsyncLoadingThread`<br>DX12 Async Compute, max streaming cache. |
-
----
-
 ## ❓ FAQ & Troubleshooting
 
 #### Q: Do I need to install UE4SS or extra dependencies manually?
 > **A:** No. The launcher bundles the entire UE4SS 3.0.1 runtime and all 312 mod dependencies automatically.
 
 #### Q: How do I select my game directory if Steam is on another drive?
-> **A:** In the launcher, open **Launch Settings**, click **Browse**, and select your root Palworld folder (e.g. `D:\SteamLibrary\steamapps\common\Palworld`).
+> **A:** On the right side of the dashboard, click the **Browse...** button under *GAME DIRECTORY* and select your root Palworld folder (e.g. `D:\SteamLibrary\steamapps\common\Palworld`).
 
-#### Q: How do I export logs for support?
-> **A:** Go to the **Activity Logs** tab in the launcher and click **`Export Logs`** or **`Copy to Clipboard`**.
+#### Q: How do I change the remote server or manifest URL?
+> **A:** Click the **⚙ (Gear)** icon in the top-right title bar to open the Settings flyout, where you can configure the Remote Manifest URL, Server API endpoint, and Admin Secret Key.
 
 ---
 
