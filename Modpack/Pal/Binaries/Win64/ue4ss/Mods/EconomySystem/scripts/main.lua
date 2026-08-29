@@ -75,26 +75,29 @@ if Config then
             return nil
         end
 
-        if type(RegisterKeyBindAsync) == "function" and Key then
-            if Key.F6 then
-                RegisterKeyBindAsync(Key.F6, {}, function()
-                    local p = GetLocalPlayer()
-                    if p then ChatCommands.HandleShopList(p) end
-                end)
+        local function BindKey(k, action)
+            if not k then return end
+            if type(RegisterKeyBind) == "function" then
+                pcall(RegisterKeyBind, k, action)
+            elseif type(RegisterKeyBindAsync) == "function" then
+                pcall(RegisterKeyBindAsync, k, {}, action)
             end
-            if Key.F7 then
-                RegisterKeyBindAsync(Key.F7, {}, function()
-                    local p = GetLocalPlayer()
-                    if p then ChatCommands.HandleGacha(p, 1) end
-                end)
-            end
-            if Key.F8 then
-                RegisterKeyBindAsync(Key.F8, {}, function()
-                    local p = GetLocalPlayer()
-                    if p then ChatCommands.HandleBalance(p) end
-                end)
-            end
-            print("[EconomySystem] Keybinds registered: [F6] Open Shop, [F7] Roll Gacha, [F8] Check Balance.")
+        end
+
+        if Key then
+            BindKey(Key.F6, function()
+                local p = GetLocalPlayer()
+                if p then ChatCommands.HandleShopList(p) end
+            end)
+            BindKey(Key.F7, function()
+                local p = GetLocalPlayer()
+                if p then ChatCommands.HandleGacha(p, 1) end
+            end)
+            BindKey(Key.F8, function()
+                local p = GetLocalPlayer()
+                if p then ChatCommands.HandleBalance(p) end
+            end)
+            print("[EconomySystem] Hotkeys registered: [F6] Open Shop, [F7] Roll Gacha, [F8] Check Balance.")
         end
     end)
 end

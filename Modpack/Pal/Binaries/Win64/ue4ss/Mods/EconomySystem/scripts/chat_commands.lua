@@ -103,18 +103,21 @@ end
 
 function ChatCommands.SendPlayerMessage(Player, Text, ColorHex)
     pcall(function()
-        local Subsystem = FindFirstOf("PalChatSubsystem")
-        if Subsystem and Subsystem:IsValid() and Player and Player:IsValid() then
-            Subsystem:SendSystemChatMessage(Player, FText(Text))
-            return
-        end
+        local str = tostring(Text or "")
         local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
-        if PalUtil and PalUtil:IsValid() and Player and Player:IsValid() then
-            PalUtil:SendSystemAnnounce(Player, FText(Text))
-            return
+        local pc = Player
+        if not pc or not pc:IsValid() then
+            pc = FindFirstOf("PalPlayerController")
         end
-        print("[EconomySystem] " .. tostring(Text))
+        if PalUtil and PalUtil:IsValid() and pc and pc:IsValid() then
+            PalUtil:SendSystemAnnounce(pc, str)
+        end
+        local Subsystem = FindFirstOf("PalChatSubsystem")
+        if Subsystem and Subsystem:IsValid() and pc and pc:IsValid() then
+            Subsystem:SendSystemChatMessage(pc, FText(str))
+        end
     end)
+    print("[EconomySystem] " .. tostring(Text))
 end
 
 function ChatCommands.GetPlayerTechPoints(Player)
