@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.211148",
-  "GeneratedAt": "2026-08-29T21:11:48.956Z",
+  "Version": "2026.08.29.211232",
+  "GeneratedAt": "2026-08-29T21:12:32.146Z",
   "TotalFiles": 303,
   "Files": [
     {
@@ -413,7 +413,7 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/mods.txt",
-      "Hash": "0527ee7bb20778f224ee66d8f5b3ef5dd518cf29e6c9e74663a56c30534b7798",
+      "Hash": "7b4b0efb3826de2b6c7ca3f126b2929d811218e92696054be5da3fc808be724a",
       "Size": 562,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/mods.txt"
     },
