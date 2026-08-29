@@ -1,12 +1,17 @@
 {
-  "Version": "2026.08.29.230207",
-  "GeneratedAt": "2026-08-29T23:02:07.700Z",
+  "Version": "2026.08.29.230532",
+  "GeneratedAt": "2026-08-29T23:05:32.658Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
   "TotalFiles": 331,
   "News": [
+    {
+      "title": "🛒 Economy System & Direct Hotkeys [F6/F7/F8]",
+      "date": "Aug 29, 2026",
+      "summary": "Use !shop or press [F6] to view shop, [F7] to roll gacha, and [F8] to check tech point balance. Full chat ingress hooks and system announce fallbacks active."
+    },
     {
       "title": "⚡ v2.0.7 - Liveboard Player Tracking & Path Resolution",
       "date": "Aug 29, 2026",
@@ -16,11 +21,6 @@
       "title": "⚔️ Summon Around Arena Raids & Boss Auras",
       "date": "Aug 29, 2026",
       "summary": "Installed Summon Around and Find Out Arena Raids. Encounter enhanced Alpha Bosses with dynamic elemental auras and legendary drop tables."
-    },
-    {
-      "title": "💬 Economy & In-Game Shop Commands",
-      "date": "Aug 29, 2026",
-      "summary": "Use !shop, !buy, and !gacha to trade spare Technology Points for legendary spheres, breeding cakes, and ancient cores."
     }
   ],
   "Files": [
@@ -272,8 +272,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/scripts/chat_commands.lua",
-      "Hash": "30daa28c3d16bb5cb2ed288993cd5fd0d3f944fe13e4dc424483314dfd070cb2",
-      "Size": 10280,
+      "Hash": "4e08050d752649c1ea64704cc1575c162ef14e3c08c00b8e6a6b0c36fe97e449",
+      "Size": 12044,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/scripts/chat_commands.lua"
     },
     {
@@ -284,8 +284,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/scripts/main.lua",
-      "Hash": "a58b657502f7930f108935ba875f1c5ff03a3ec869f07cdd7411aff8d5e5661b",
-      "Size": 2760,
+      "Hash": "7a7f2aadc2bb501e8ba7d2a4a2b3e4430f6d0be452e21e739f53293c7aab85be",
+      "Size": 4032,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/scripts/main.lua"
     },
     {

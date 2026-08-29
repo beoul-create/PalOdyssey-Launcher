@@ -5,19 +5,57 @@ local ShopCatalog = require("shop_catalog")
 function ChatCommands.Init(LoadedConfig)
     Config = LoadedConfig or {}
 
-    local function HandleIncomingChat(Context, ChatMessage, PlayerSender)
-        local Message = ChatMessage and (type(ChatMessage.get) == "function" and ChatMessage:get() or ChatMessage)
-        local SenderPlayer = PlayerSender or (Message and Message.SenderPlayer) or (Context and Context:get())
-        if not SenderPlayer or not SenderPlayer:IsValid() then return end
-
+    local function HandleIncomingChat(Context, Param1, Param2)
+        local SenderPlayer = nil
         local Text = ""
+
+        -- 1. Try to extract player controller/state
         pcall(function()
-            if Message and Message.Message then
-                Text = Message.Message:ToString()
-            elseif Context and Context.Message then
-                Text = Context.Message:ToString()
+            if Context and Context.IsA and Context:IsA("/Script/Pal.PalPlayerController") then
+                SenderPlayer = Context
+            elseif Context and type(Context.get) == "function" then
+                local obj = Context:get()
+                if obj and obj.IsA and obj:IsA("/Script/Pal.PalPlayerController") then
+                    SenderPlayer = obj
+                end
             end
         end)
+
+        if not SenderPlayer then
+            pcall(function()
+                local controllers = FindAllOf("PalPlayerController") or {}
+                if #controllers > 0 and controllers[1]:IsValid() then
+                    SenderPlayer = controllers[1]
+                end
+            end)
+        end
+
+        -- 2. Extract text from all potential parameter positions
+        local function TryGetStr(val)
+            if not val then return "" end
+            local s = ""
+            pcall(function()
+                if type(val) == "string" then
+                    s = val
+                elseif type(val.ToString) == "function" then
+                    s = val:ToString()
+                elseif val.Message then
+                    if type(val.Message.ToString) == "function" then
+                        s = val.Message:ToString()
+                    else
+                        s = tostring(val.Message)
+                    end
+                elseif type(val.get) == "function" then
+                    local inner = val:get()
+                    s = TryGetStr(inner)
+                end
+            end)
+            return s
+        end
+
+        Text = TryGetStr(Param1)
+        if Text == "" then Text = TryGetStr(Param2) end
+        if Text == "" and Context and Context.Message then Text = TryGetStr(Context.Message) end
 
         if not Text or Text == "" then return end
         local prefix = Text:sub(1, 1)
@@ -49,15 +87,17 @@ function ChatCommands.Init(LoadedConfig)
     end
 
     -- Hook all possible chat ingress points
-    pcall(RegisterHook, "/Script/Pal.PalChatSubsystem:OnReceivedChatMessage", function(Context, ChatMessage)
-        HandleIncomingChat(Context, ChatMessage)
+    pcall(RegisterHook, "/Script/Pal.PalChatSubsystem:OnReceivedChatMessage", function(Context, Param1, Param2)
+        HandleIncomingChat(Context, Param1, Param2)
     end)
-    pcall(RegisterHook, "/Script/Pal.PalChatSubsystem:BroadcastChatMessage", function(Context, ChatMessage)
-        HandleIncomingChat(Context, ChatMessage)
+    pcall(RegisterHook, "/Script/Pal.PalChatSubsystem:BroadcastChatMessage", function(Context, Param1, Param2)
+        HandleIncomingChat(Context, Param1, Param2)
     end)
-    pcall(RegisterHook, "/Script/Pal.PalPlayerController:SendChatMessage", function(Context, ChatMessage)
-        local Controller = Context:get()
-        HandleIncomingChat(Context, ChatMessage, Controller)
+    pcall(RegisterHook, "/Script/Pal.PalPlayerController:SendChatMessage", function(Context, Param1, Param2)
+        HandleIncomingChat(Context, Param1, Param2)
+    end)
+    pcall(RegisterHook, "/Script/Pal.PalPlayerController:ClientReceiveChatMessage", function(Context, Param1, Param2)
+        HandleIncomingChat(Context, Param1, Param2)
     end)
 end
 
@@ -66,7 +106,14 @@ function ChatCommands.SendPlayerMessage(Player, Text, ColorHex)
         local Subsystem = FindFirstOf("PalChatSubsystem")
         if Subsystem and Subsystem:IsValid() and Player and Player:IsValid() then
             Subsystem:SendSystemChatMessage(Player, FText(Text))
+            return
         end
+        local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+        if PalUtil and PalUtil:IsValid() and Player and Player:IsValid() then
+            PalUtil:SendSystemAnnounce(Player, FText(Text))
+            return
+        end
+        print("[EconomySystem] " .. tostring(Text))
     end)
 end
 
