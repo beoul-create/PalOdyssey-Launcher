@@ -63,6 +63,9 @@ namespace PalLauncher.Services
             _pollTimer.Change(enabled ? 500 : Timeout.Infinite, enabled ? 8000 : Timeout.Infinite);
         }
 
+        private static readonly System.Net.Http.HttpClient _httpClient = new() { Timeout = TimeSpan.FromSeconds(3) };
+        private static readonly JsonSerializerOptions _jsonOpts = new() { PropertyNameCaseInsensitive = true };
+
         public async Task<ServerStatusInfo> QueryServerAsync(
             string host = "palodyssey.duckdns.org",
             int port = 8211,
@@ -75,32 +78,67 @@ namespace PalLauncher.Services
 
             try
             {
-                // 1. Check local liveboard state if present
+                // 1. Check local liveboard state if hosted on this machine
                 LiveboardJsonState? localTelemetry = CheckLocalLiveboardState(localServerDir);
-                if (localTelemetry != null)
+                if (localTelemetry != null && localTelemetry.ServerOnline)
                 {
-                    status.IsOnline = localTelemetry.ServerOnline;
+                    status.IsOnline = true;
                     status.PlayerCount = localTelemetry.PlayerCount;
                     status.MaxPlayers = localTelemetry.MaxPlayers > 0 ? localTelemetry.MaxPlayers : 32;
+                    status.StatusText = "SERVER ONLINE (Host)";
+                    status.ColorHex = "#10B981";
+                    status.PingMs = 1;
+                    CurrentStatus = status;
+                    ServerStatusUpdated?.Invoke(status);
+                    return status;
                 }
 
-                // 2. Measure ping & probe network host
+                // 2. Query remote Liveboard Daemon REST API
+                var remoteApiCandidates = new[]
+                {
+                    $"http://{host}:3001",
+                    "http://127.0.0.1:3001"
+                };
+
+                foreach (var apiUrl in remoteApiCandidates)
+                {
+                    try
+                    {
+                        var sw = System.Diagnostics.Stopwatch.StartNew();
+                        using var res = await _httpClient.GetAsync($"{apiUrl}/api/server/status", cancellationToken);
+                        sw.Stop();
+
+                        if (res.IsSuccessStatusCode)
+                        {
+                            await using var stream = await res.Content.ReadAsStreamAsync(cancellationToken);
+                            var doc = await JsonSerializer.DeserializeAsync<ServerStatusResponse>(stream, _jsonOpts, cancellationToken);
+                            if (doc != null)
+                            {
+                                status.IsOnline = doc.ServerOnline || doc.IsProcessRunning;
+                                status.PlayerCount = doc.PlayerCount;
+                                status.MaxPlayers = doc.MaxPlayers > 0 ? doc.MaxPlayers : 32;
+                                status.PingMs = Math.Max(1, sw.ElapsedMilliseconds);
+                                status.StatusText = status.IsOnline ? "SERVER ONLINE" : "SERVER OFFLINE";
+                                status.ColorHex = status.IsOnline ? "#10B981" : "#EF4444";
+
+                                CurrentStatus = status;
+                                ServerStatusUpdated?.Invoke(status);
+                                return status;
+                            }
+                        }
+                    }
+                    catch { }
+                }
+
+                // 3. Fallback: Measure direct ping / probe network host
                 long measuredPing = await MeasurePingAsync(host, port, cancellationToken);
                 status.PingMs = measuredPing;
 
-                // 3. Resolve status logic
                 if (measuredPing >= 0)
                 {
                     status.IsOnline = true;
                     status.StatusText = "SERVER ONLINE";
                     status.ColorHex = "#10B981"; // Emerald
-                }
-                else if (localTelemetry != null && localTelemetry.ServerOnline)
-                {
-                    status.IsOnline = true;
-                    status.StatusText = "SERVER ONLINE (Local)";
-                    status.ColorHex = "#10B981";
-                    status.PingMs = 1;
                 }
                 else
                 {
