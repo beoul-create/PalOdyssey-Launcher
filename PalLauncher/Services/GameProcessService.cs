@@ -357,10 +357,11 @@ namespace PalLauncher.Services
             {
                 if (!useSteamProtocol && File.Exists(exePath))
                 {
-                    // Direct binary launch
+                    // Direct binary launch with multi-threaded performance flags
+                    string extraArgs = "-useperfthreads -NoAsyncLoadingThread -USEALLAVAILABLECORES -high -d3d12";
                     string arguments = string.IsNullOrWhiteSpace(serverIp)
-                        ? string.Empty
-                        : $"{serverIp}:{serverPort}";
+                        ? extraArgs
+                        : $"{serverIp}:{serverPort} {extraArgs}";
 
                     var startInfo = new ProcessStartInfo
                     {
@@ -371,6 +372,10 @@ namespace PalLauncher.Services
                     };
 
                     gameProcess = Process.Start(startInfo);
+                    if (gameProcess != null)
+                    {
+                        try { gameProcess.PriorityClass = ProcessPriorityClass.High; } catch { }
+                    }
                 }
                 else
                 {
@@ -428,6 +433,7 @@ namespace PalLauncher.Services
 
                     if (detectedProcess != null)
                     {
+                        try { detectedProcess.PriorityClass = ProcessPriorityClass.High; } catch { }
                         await detectedProcess.WaitForExitAsync(cancellationToken);
                     }
                 }
