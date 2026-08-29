@@ -1,4 +1,6 @@
-using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PalLauncher.Models
@@ -8,129 +10,100 @@ namespace PalLauncher.Models
         [JsonPropertyName("gamePath")]
         public string GamePath { get; set; } = string.Empty;
 
-        [JsonPropertyName("gameExecutableName")]
-        public string GameExecutableName { get; set; } = "Palworld.exe";
+        [JsonIgnore]
+        public string? GameInstallPath
+        {
+            get => GamePath;
+            set => GamePath = value ?? string.Empty;
+        }
 
-        [JsonPropertyName("serverExecutableName")]
-        public string ServerExecutableName { get; set; } = "PalServer.exe";
+        [JsonPropertyName("serverInstallPath")]
+        public string? ServerInstallPath { get; set; }
 
-        [JsonPropertyName("launchMode")]
-        public string LaunchMode { get; set; } = "Client"; // "Client" or "Server"
+        [JsonPropertyName("serverLaunchArguments")]
+        public string ServerLaunchArguments { get; set; } = "-useperfthreads -NoAsyncLoadingThread -port=8211";
 
-        public const string OfficialServerHost = "palodyssey.duckdns.org";
-        public const string DirectHostEndpoint = "palodyssey.duckdns.org";
-        public const int OfficialServerPort = 8211;
-        public const int OfficialManagementPort = 8215;
-        public const string DefaultRealmAccessKey = "PalOdyssey2026Secure";
-
-        [JsonPropertyName("serverIp")]
-        public string ServerIp { get; set; } = OfficialServerHost;
-
-        [JsonPropertyName("serverPort")]
-        public int ServerPort { get; set; } = OfficialServerPort;
-
-        [JsonPropertyName("remoteManagementPort")]
-        public int RemoteManagementPort { get; set; } = OfficialManagementPort;
-
-        [JsonPropertyName("remoteAccessKey")]
-        public string RemoteAccessKey { get; set; } = DefaultRealmAccessKey;
-
-        [JsonPropertyName("serverWebhookUrl")]
-        public string ServerWebhookUrl { get; set; } = "http://palodyssey.duckdns.org:8215/webhook/start-server";
-
-        [JsonPropertyName("enableRemoteHostDaemon")]
-        public bool EnableRemoteHostDaemon { get; set; } = true;
-
-        [JsonPropertyName("autoRemoteWakeOnLaunch")]
-        public bool AutoRemoteWakeOnLaunch { get; set; } = true;
-
-        [JsonPropertyName("enableIdleAutoShutdown")]
-        public bool EnableIdleAutoShutdown { get; set; } = true;
-
-        [JsonPropertyName("idleShutdownMinutes")]
-        public int IdleShutdownMinutes { get; set; } = 20;
-
-        [JsonPropertyName("restApiPort")]
-        public int RestApiPort { get; set; } = 8212;
-
-        [JsonPropertyName("serverAdminPassword")]
-        public string ServerAdminPassword { get; set; } = "0012";
-
-        [JsonPropertyName("enablePlayitTunnel")]
-        public bool EnablePlayitTunnel { get; set; } = false;
-
-        [JsonPropertyName("enableDiscordRpc")]
-        public bool EnableDiscordRpc { get; set; } = true;
-
-        [JsonPropertyName("discordApplicationId")]
-        public string DiscordApplicationId { get; set; } = "1541335019899977768";
-
-        [JsonPropertyName("enableDiscordBot")]
-        public bool EnableDiscordBot { get; set; } = true;
-
-        [JsonPropertyName("runInBackgroundOnClose")]
-        public bool RunInBackgroundOnClose { get; set; } = true;
-
-        [JsonPropertyName("autoStartWithWindows")]
-        public bool AutoStartWithWindows { get; set; } = true;
-
-        [JsonPropertyName("discordBotToken")]
-        public string DiscordBotToken { get; set; } = "";
-
-        [JsonPropertyName("discordCommandPrefix")]
-        public string DiscordCommandPrefix { get; set; } = "/";
-
-        [JsonPropertyName("discordBotChannelId")]
-        public string DiscordBotChannelId { get; set; } = "1541492780168380446";
-
-        [JsonPropertyName("liveboardMessageId")]
-        public string LiveboardMessageId { get; set; } = "";
-
-        [JsonPropertyName("discordAdminRoleId")]
-        public string DiscordAdminRoleId { get; set; } = "";
-
-        [JsonPropertyName("autoJoinServer")]
-        public bool AutoJoinServer { get; set; } = false;
-
-        [JsonPropertyName("launchServerWithGame")]
-        public bool LaunchServerWithGame { get; set; } = true;
-
-        public const string OfficialManifestUrl = "https://raw.githubusercontent.com/beoul-create/PalOdyssey-Launcher/main/Modpack/version.json";
+        [JsonPropertyName("autoStartServerWithClient")]
+        public bool AutoStartServerWithClient { get; set; } = false;
 
         [JsonPropertyName("remoteManifestUrl")]
-        public string RemoteManifestUrl { get; set; } = OfficialManifestUrl;
+        public string RemoteManifestUrl { get; set; } = "https://raw.githubusercontent.com/PalOdyssey/server-manifest/main/manifest.json";
 
-        [JsonPropertyName("paksRelativePath")]
-        public string PaksRelativePath { get; set; } = @"Pal\Content\Paks\~mods";
+        [JsonPropertyName("serverIp")]
+        public string ServerIp { get; set; } = "palodyssey.duckdns.org";
 
-        [JsonPropertyName("autoCheckUpdatesOnStartup")]
-        public bool AutoCheckUpdatesOnStartup { get; set; } = true;
+        [JsonPropertyName("serverPort")]
+        public int ServerPort { get; set; } = 8211;
 
-        [JsonPropertyName("autoUpdateBeforeLaunch")]
-        public bool AutoUpdateBeforeLaunch { get; set; } = true;
+        [JsonPropertyName("autoLaunchGame")]
+        public bool AutoLaunchGame { get; set; } = false;
 
-        [JsonPropertyName("closeLauncherOnLaunch")]
-        public bool CloseLauncherOnLaunch { get; set; } = false;
+        [JsonPropertyName("soundEnabled")]
+        public bool SoundEnabled { get; set; } = true;
 
-        [JsonPropertyName("useDirectX11")]
-        public bool UseDirectX11 { get; set; } = true;
+        [JsonPropertyName("discordRpcEnabled")]
+        public bool DiscordRpcEnabled { get; set; } = true;
 
-        [JsonPropertyName("useAllCores")]
-        public bool UseAllCores { get; set; } = true;
+        [JsonIgnore]
+        public bool EnableDiscordRpc
+        {
+            get => DiscordRpcEnabled;
+            set => DiscordRpcEnabled = value;
+        }
 
-        [JsonPropertyName("useHighPriority")]
-        public bool UseHighPriority { get; set; } = false;
+        [JsonPropertyName("closeLauncherOnStart")]
+        public bool CloseLauncherOnStart { get; set; } = false;
 
-        [JsonPropertyName("noSplash")]
-        public bool NoSplash { get; set; } = true;
+        [JsonPropertyName("launchViaSteamProtocol")]
+        public bool LaunchViaSteamProtocol { get; set; } = false;
 
-        [JsonPropertyName("windowedMode")]
-        public bool WindowedMode { get; set; } = false;
+        private static readonly JsonSerializerOptions JsonOptions = new()
+        {
+            WriteIndented = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
 
-        [JsonPropertyName("enableRawInputOptimization")]
-        public bool EnableRawInputOptimization { get; set; } = true;
+        public static string DefaultConfigPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "launcher_config.json");
 
-        [JsonPropertyName("customArguments")]
-        public string CustomArguments { get; set; } = "-culture=en";
+        public static LauncherConfig Load(string? path = null)
+        {
+            path ??= DefaultConfigPath;
+            try
+            {
+                if (File.Exists(path))
+                {
+                    string json = File.ReadAllText(path);
+                    return JsonSerializer.Deserialize<LauncherConfig>(json, JsonOptions) ?? new LauncherConfig();
+                }
+            }
+            catch (Exception)
+            {
+                // Fallback to default
+            }
+
+            return new LauncherConfig();
+        }
+
+        public void Save(string? path = null)
+        {
+            path ??= DefaultConfigPath;
+            try
+            {
+                string? dir = Path.GetDirectoryName(path);
+                if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                string json = JsonSerializer.Serialize(this, JsonOptions);
+                string tempPath = path + ".tmp." + Guid.NewGuid().ToString("N");
+                File.WriteAllText(tempPath, json);
+                File.Move(tempPath, path, overwrite: true);
+            }
+            catch (Exception)
+            {
+                // Silently handle save failures
+            }
+        }
     }
 }

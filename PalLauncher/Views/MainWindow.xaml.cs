@@ -1,179 +1,198 @@
 using System;
-using System.ComponentModel;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
+using Microsoft.Win32;
+using PalLauncher.Models;
+using PalLauncher.Services;
 using PalLauncher.ViewModels;
 
 namespace PalLauncher.Views
 {
     public partial class MainWindow : Window
     {
-        private int _currentTabIndex = 0;
+        private string? _detectedServerPath;
+        private GameProcessService _gameProcessService = null!;
+        private LauncherConfig _config = null!;
 
-        public MainWindow(MainViewModel viewModel)
+        public MainWindow()
         {
             InitializeComponent();
-            DataContext = viewModel;
-
-            viewModel.PropertyChanged += OnViewModelPropertyChanged;
-
-            Loaded += async (s, e) =>
-            {
-                TriggerHologramEntrance(ViewDashboard, slideFromRight: true);
-                await viewModel.InitializeAsync();
-            };
+            Loaded += MainWindow_Loaded;
+            Closing += MainWindow_Closing;
         }
 
-        private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (e.PropertyName == nameof(MainViewModel.ActiveView))
+            if (DataContext is MainViewModel vm)
             {
-                Dispatcher.InvokeAsync(ApplyHolographicTabTransition);
+                _gameProcessService = vm.GameProcessService;
+                _config = vm.Config;
             }
-        }
-
-        private void ApplyHolographicTabTransition()
-        {
-            if (DataContext is not MainViewModel vm) return;
-
-            int newIndex = vm.ActiveView switch
+            else
             {
-                "Dashboard" => 0,
-                "Mods" => 1,
-                "Settings" => 2,
-                "Logs" => 3,
-                _ => 0
-            };
-
-            if (newIndex == _currentTabIndex) return;
-
-            bool slideFromRight = newIndex > _currentTabIndex;
-            _currentTabIndex = newIndex;
-
-            FrameworkElement? targetView = newIndex switch
-            {
-                0 => ViewDashboard,
-                1 => ViewMods,
-                2 => ViewSettings,
-                3 => ViewLogs,
-                _ => ViewDashboard
-            };
-
-            if (targetView != null)
-            {
-                TriggerHologramEntrance(targetView, slideFromRight);
+                _gameProcessService = new GameProcessService();
+                _config = LauncherConfig.Load();
             }
-        }
 
-        private static void TriggerHologramEntrance(FrameworkElement targetElement, bool slideFromRight)
-        {
-            var transformGroup = new TransformGroup();
-            var scale = new ScaleTransform(0.95, 0.95, 450, 300);
-            var translate = new TranslateTransform(slideFromRight ? 70 : -70, 0);
-            var skew = new SkewTransform(slideFromRight ? -1.5 : 1.5, 0);
+            InitializeServerManagement();
 
-            transformGroup.Children.Add(scale);
-            transformGroup.Children.Add(translate);
-            transformGroup.Children.Add(skew);
-
-            targetElement.RenderTransform = transformGroup;
-
-            var storyboard = new Storyboard();
-
-            // Holographic Fading Beam
-            var fadeAnim = new DoubleAnimation
+            try
             {
-                From = 0.0,
-                To = 1.0,
-                Duration = TimeSpan.FromMilliseconds(320),
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-            };
-            Storyboard.SetTarget(fadeAnim, targetElement);
-            Storyboard.SetTargetProperty(fadeAnim, new PropertyPath("Opacity"));
-
-            // Rotating Horizontal Panel Slide
-            var slideAnim = new DoubleAnimation
-            {
-                From = slideFromRight ? 60 : -60,
-                To = 0,
-                Duration = TimeSpan.FromMilliseconds(360),
-                EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseOut }
-            };
-            Storyboard.SetTarget(slideAnim, targetElement);
-            Storyboard.SetTargetProperty(slideAnim, new PropertyPath("RenderTransform.Children[1].X"));
-
-            // Depth Scale Expansion
-            var scaleAnimX = new DoubleAnimation
-            {
-                From = 0.95,
-                To = 1.0,
-                Duration = TimeSpan.FromMilliseconds(360),
-                EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseOut }
-            };
-            Storyboard.SetTarget(scaleAnimX, targetElement);
-            Storyboard.SetTargetProperty(scaleAnimX, new PropertyPath("RenderTransform.Children[0].ScaleX"));
-
-            var scaleAnimY = new DoubleAnimation
-            {
-                From = 0.95,
-                To = 1.0,
-                Duration = TimeSpan.FromMilliseconds(360),
-                EasingFunction = new QuinticEase { EasingMode = EasingMode.EaseOut }
-            };
-            Storyboard.SetTarget(scaleAnimY, targetElement);
-            Storyboard.SetTargetProperty(scaleAnimY, new PropertyPath("RenderTransform.Children[0].ScaleY"));
-
-            // Rotating Skew Rest
-            var skewAnim = new DoubleAnimation
-            {
-                From = slideFromRight ? -1.5 : 1.5,
-                To = 0.0,
-                Duration = TimeSpan.FromMilliseconds(360),
-                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
-            };
-            Storyboard.SetTarget(skewAnim, targetElement);
-            Storyboard.SetTargetProperty(skewAnim, new PropertyPath("RenderTransform.Children[2].AngleX"));
-
-            storyboard.Children.Add(fadeAnim);
-            storyboard.Children.Add(slideAnim);
-            storyboard.Children.Add(scaleAnimX);
-            storyboard.Children.Add(scaleAnimY);
-            storyboard.Children.Add(skewAnim);
-
-            storyboard.Begin();
-        }
-
-        private void OnNavTabChecked(object sender, RoutedEventArgs e)
-        {
-            if (sender is RadioButton rb && rb.CommandParameter is string viewName && DataContext is MainViewModel vm)
-            {
-                vm.ActiveView = viewName;
-            }
-        }
-
-        private void OnNavTabClick(object sender, RoutedEventArgs e)
-        {
-            if (sender is RadioButton rb && rb.CommandParameter is string viewName && DataContext is MainViewModel vm)
-            {
-                vm.ActiveView = viewName;
-            }
-        }
-
-        private void OnTitleBarMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                if (e.ClickCount == 2)
+                string videoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "background_loop.mp4");
+                if (File.Exists(videoPath))
                 {
-                    WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+                    BackgroundVideo.Source = new Uri(videoPath, UriKind.Absolute);
+                    BackgroundVideo.Play();
+                }
+            }
+            catch (Exception)
+            {
+                // Fallback gradient remains visible
+            }
+        }
+
+        private void InitializeServerManagement()
+        {
+            _detectedServerPath = _gameProcessService.DetectServerPath(_config.ServerInstallPath);
+            _gameProcessService.ServerStateChanged += OnServerStateChanged;
+
+            UpdateServerUIState(_gameProcessService.IsServerRunning);
+        }
+
+        private void OnServerStateChanged(bool isRunning)
+        {
+            Dispatcher.Invoke(() => UpdateServerUIState(isRunning));
+        }
+
+        private void UpdateServerUIState(bool isRunning)
+        {
+            if (isRunning)
+            {
+                ServerStatusIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#10B981")); // Emerald
+                ServerStatusText.Text = "ONLINE (Port: 8211)";
+                ServerStatusText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#10B981"));
+                BtnServerToggle.Content = "Stop Server";
+                BtnServerToggle.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EF4444")); // Red
+                BtnServerToggle.IsEnabled = true;
+                BtnSelectServerPath.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                ServerStatusIndicator.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EF4444")); // Crimson
+                ServerStatusText.Text = "OFFLINE";
+                ServerStatusText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EF4444"));
+                BtnServerToggle.Content = "Start Server";
+                BtnServerToggle.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0284C7")); // Blue
+
+                if (string.IsNullOrEmpty(_detectedServerPath))
+                {
+                    BtnServerToggle.IsEnabled = false;
+                    BtnSelectServerPath.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    DragMove();
+                    BtnServerToggle.IsEnabled = true;
+                    BtnSelectServerPath.Visibility = Visibility.Collapsed;
                 }
+            }
+        }
+
+        private void BtnServerToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainViewModel vm)
+            {
+                vm.ClickSoundCommand.Execute(null);
+            }
+
+            if (_gameProcessService.IsServerRunning)
+            {
+                _gameProcessService.StopDedicatedServer();
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(_detectedServerPath))
+                {
+                    _gameProcessService.StartDedicatedServer(_detectedServerPath, _config.ServerLaunchArguments);
+                }
+            }
+        }
+
+        private void BtnSelectServerPath_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainViewModel vm)
+            {
+                vm.ClickSoundCommand.Execute(null);
+            }
+
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Palworld Server|PalServer.exe;PalServer-Win64-Shipping.exe|All Files|*.*",
+                Title = "Locate Palworld Dedicated Server Executable"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                _detectedServerPath = Path.GetDirectoryName(dialog.FileName);
+                _config.ServerInstallPath = _detectedServerPath;
+                _config.Save();
+                UpdateServerUIState(false);
+            }
+        }
+
+        private void BackgroundVideo_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                BackgroundVideo.Position = TimeSpan.Zero;
+                BackgroundVideo.Play();
+            }
+            catch { }
+        }
+
+        private void BackgroundVideo_MediaFailed(object? sender, ExceptionRoutedEventArgs e)
+        {
+            // Silently fall back to dark aesthetic gradient background
+            BackgroundVideo.Visibility = Visibility.Collapsed;
+        }
+
+        private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                DragMove();
+            }
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void PlayHoverSound(object sender, MouseEventArgs e)
+        {
+            if (DataContext is MainViewModel vm)
+            {
+                vm.HoverSoundCommand.Execute(null);
+            }
+        }
+
+        private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_gameProcessService != null)
+            {
+                _gameProcessService.ServerStateChanged -= OnServerStateChanged;
+            }
+
+            if (DataContext is IDisposable disposableVm)
+            {
+                disposableVm.Dispose();
             }
         }
     }
