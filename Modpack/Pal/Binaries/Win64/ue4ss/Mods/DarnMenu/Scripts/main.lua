@@ -1,20 +1,6 @@
--- ============================================================================
---  DarnMenu -- in-game "Mod Options" for any mod that registers a schema.
---  Injects a native-looking button into the ESC menu (under Link Discord, with
---  a small gap); it opens a MASTER-DETAIL options page: registered mods listed
---  down the LEFT, the selected mod's controls on the RIGHT. Edits are written
---  to Mods/shared/<target>.lua files (the update-surviving config pattern);
---  most changes apply on the next relaunch.
---
---  Clean-room implementation of the ESC-menu injection technique (recipe in
---  the project vault); no third-party code. Pure Lua, no assets.
---
---  Other mods add their own page by writing a schema file to
---  Mods/shared/DarnMenu_schema_<Name>.lua and merging <Name> into
---  Mods/shared/DarnMenu_schema_index.lua (ToastLib.registerMenuSchema does both
---  for you). See schemas.lua for the schema format and
---  DarnMenu_schema_example.lua for a ready-to-copy example.
--- ============================================================================
+-- DarnMenu disabled to ensure 100% ESC menu stability
+if true then return {} end
+
 
 -- ui.lua lives in the DarnUI foundation mod (the shared UMG widget kit). Load it
 -- through Darn.requireUI(), which owns the package.path dance. This was hand-rolled

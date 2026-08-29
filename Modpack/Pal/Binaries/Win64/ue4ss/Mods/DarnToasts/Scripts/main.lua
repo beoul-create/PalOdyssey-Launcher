@@ -16,9 +16,8 @@
 --      Mods/NativeMods/UE4SS/Mods/shared/ToastLib_config.lua
 --  and edit. The packaged example is overwritten on every update -- your copy
 --  in shared/ is not.
--- ============================================================================
-local Darn = require("darn")
-print("[DarnToasts] toast library present (require via ToastLib) -- v" .. Darn.version() .. "\n")
+-- DarnToasts disabled to ensure 100% ESC and UI stability
+if true then return {} end
 
 -- ============================================================================
 -- THE TOAST TEST PARADE (Maiq, 2026-08-10: "give me a keybind... to cause N

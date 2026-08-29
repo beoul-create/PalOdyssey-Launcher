@@ -1,12 +1,17 @@
 {
-  "Version": "2026.08.29.230532",
-  "GeneratedAt": "2026-08-29T23:05:32.658Z",
+  "Version": "2026.08.29.230758",
+  "GeneratedAt": "2026-08-29T23:07:58.232Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 331,
+  "TotalFiles": 329,
   "News": [
+    {
+      "title": "🛡️ ESC Menu Crash Fixed (DarnMenu UI Fully Removed)",
+      "date": "Aug 29, 2026",
+      "summary": "Completely eliminated all hooks into the game's Escape menu (WBP_MenuESC_C). Spamming or clicking ESC is now 100% crash-free and stable."
+    },
     {
       "title": "🛒 Economy System & Direct Hotkeys [F6/F7/F8]",
       "date": "Aug 29, 2026",
@@ -16,11 +21,6 @@
       "title": "⚡ v2.0.7 - Liveboard Player Tracking & Path Resolution",
       "date": "Aug 29, 2026",
       "summary": "Fixed liveboard state file path resolution across server environments. Real-time player join/leave telemetry now updates live on Discord."
-    },
-    {
-      "title": "⚔️ Summon Around Arena Raids & Boss Auras",
-      "date": "Aug 29, 2026",
-      "summary": "Installed Summon Around and Find Out Arena Raids. Encounter enhanced Alpha Bosses with dynamic elemental auras and legendary drop tables."
     }
   ],
   "Files": [
@@ -127,12 +127,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/ConsoleEnablerMod/Scripts/main.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/enabled.txt",
-      "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "Size": 0,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/enabled.txt"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Info.json",
       "Hash": "3ab3bbe3bb63854b43886c7e459c27a33ab5a617058ab9516dad714e377a0984",
       "Size": 406,
@@ -176,8 +170,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/main.lua",
-      "Hash": "d9f9cb124e444ed1bc7fb7bec54ec9365dbd340a642340178d578a4283354566",
-      "Size": 177558,
+      "Hash": "812bc4821df6a59dc1df71b848773c3b28e74abece059e90e9ac5820e3547f68",
+      "Size": 176569,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/main.lua"
     },
     {
@@ -203,12 +197,6 @@
       "Hash": "fec07c19ba9c32ee351fb5f1f179fa3cbca79be4fa0772db32789c018cceb2ac",
       "Size": 24047,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/writers.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/enabled.txt",
-      "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "Size": 0,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/enabled.txt"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Info.json",
@@ -242,8 +230,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/main.lua",
-      "Hash": "2dc940fbc6093e9de9d5ce89f5a2d1f1dd0d1cfcb320fd7b3db3d3ef22a13240",
-      "Size": 5989,
+      "Hash": "ce6f1399f57efac4ca9a7b8376f4bba55fed614f47f9769ddb3d16c8793b2a6b",
+      "Size": 5868,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/main.lua"
     },
     {
