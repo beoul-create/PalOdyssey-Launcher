@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.215218",
-  "GeneratedAt": "2026-08-29T21:52:18.065Z",
+  "Version": "2026.08.29.224505",
+  "GeneratedAt": "2026-08-29T22:45:05.053Z",
   "TotalFiles": 331,
   "Files": [
     {
@@ -1661,8 +1661,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalworldTuner/Scripts/config.lua",
-      "Hash": "7f8c8302ea0f2dbfad11aa4796633c90e90e59b01cd105e9f530c4ad41dbd97e",
-      "Size": 366,
+      "Hash": "8afbf06143c670b4e197d892a5d1756ad57c521367acb2139b86f3fd013c0fa0",
+      "Size": 368,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalworldTuner/Scripts/config.lua"
     },
     {
@@ -1673,8 +1673,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalworldTuner/Scripts/movement_sync.lua",
-      "Hash": "de8895c6070eb471d86ebb8a34cf10c8623056dc6f58ad3c808414fe9b78b2e8",
-      "Size": 2955,
+      "Hash": "8d7464c50da307377084948594ecb99e5bc8192264e05ad861f25edeaf834757",
+      "Size": 3044,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalworldTuner/Scripts/movement_sync.lua"
     },
     {

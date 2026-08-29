@@ -2,7 +2,7 @@
 -- Disabled by default because forcing movement speed on every player can
 -- conflict with server authority, buffs, mounts, and other movement mods.
 local SprintSync = {
-    states = setmetatable({}, { __mode = "k" }),
+    states = {},
     started = false
 }
 
@@ -13,6 +13,7 @@ end
 local function IsSprinting(pawn)
     local sprinting = false
     pcall(function()
+        if not pawn or not pawn:IsValid() then return end
         if pawn.IsSprinting then
             sprinting = pawn:IsSprinting() == true
         elseif pawn.bIsSprinting ~= nil then
@@ -35,7 +36,8 @@ function SprintSync.UpdatePlayerSpeeds()
             local moveComp = pawn.CharacterMovement
             if not moveComp or not moveComp:IsValid() then return end
 
-            local state = SprintSync.states[pawn] or { wasSprinting = false, walkSpeed = nil }
+            local pawnKey = tostring(pawn:get_address())
+            local state = SprintSync.states[pawnKey] or { wasSprinting = false, walkSpeed = nil }
             local sprinting = IsSprinting(pawn)
             local liveSpeed = tonumber(moveComp.MaxWalkSpeed) or 0
 
@@ -52,7 +54,7 @@ function SprintSync.UpdatePlayerSpeeds()
             end
 
             state.wasSprinting = sprinting
-            SprintSync.states[pawn] = state
+            SprintSync.states[pawnKey] = state
         end)
     end
 end
