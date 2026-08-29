@@ -1,7 +1,7 @@
 {
-  "Version": "2026.08.29.204513",
-  "GeneratedAt": "2026-08-29T20:45:13.921Z",
-  "TotalFiles": 310,
+  "Version": "2026.08.29.205807",
+  "GeneratedAt": "2026-08-29T20:58:07.622Z",
+  "TotalFiles": 303,
   "Files": [
     {
       "RelativePath": "Pal/Binaries/Win64/dwmapi.dll",
@@ -104,42 +104,6 @@
       "Hash": "b31feb8ffb8adac1aa8204d65665ddd2fc4971e61cba210f18054e9bfbe911a8",
       "Size": 3173,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/ConsoleEnablerMod/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/CS2Crosshair/config.json",
-      "Hash": "df655614c2c0c9a48911d4d7c8ff209998b6b684bf67a58565090eed28c16da8",
-      "Size": 385,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/CS2Crosshair/config.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/CS2Crosshair/enabled.txt",
-      "Hash": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
-      "Size": 2,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/CS2Crosshair/enabled.txt"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/CS2Crosshair/Info.json",
-      "Hash": "8ebd36349a7a55022767743a9ce3bf67a905171ce87a16957fff08cbc7c6c388",
-      "Size": 243,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/CS2Crosshair/Info.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/CS2Crosshair/Scripts/config.lua",
-      "Hash": "7ddc7e895063f15ab8d370fce4cdec43e310c3294d66d862f9db206f49d5bec0",
-      "Size": 2110,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/CS2Crosshair/Scripts/config.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/CS2Crosshair/Scripts/crosshair_ui.lua",
-      "Hash": "f5de40e42a975bc55eb8156552fd229ba93977c8f62ae44836cecd555a067454",
-      "Size": 3447,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/CS2Crosshair/Scripts/crosshair_ui.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/CS2Crosshair/Scripts/main.lua",
-      "Hash": "b95140b668dcd58491735971c78090fa603ec9b29b4b5de6ab56e7cb158d93ff",
-      "Size": 10523,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/CS2Crosshair/Scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/enabled.txt",
@@ -449,8 +413,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/mods.txt",
-      "Hash": "a6645ec7d409c5b42c74febc477674ddfcd0e4f544f425151211b1962f017eba",
-      "Size": 579,
+      "Hash": "0527ee7bb20778f224ee66d8f5b3ef5dd518cf29e6c9e74663a56c30534b7798",
+      "Size": 562,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/mods.txt"
     },
     {
@@ -1564,12 +1528,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_CleanHUD.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_CS2Crosshair.lua",
-      "Hash": "35ced5c04c70dc43e8133b1e32ab6c41e68f78a7509e5d053cd51c18a4f14f76",
-      "Size": 3083,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_CS2Crosshair.lua"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_DarnToasts.lua",
       "Hash": "ea28f21f8aecdb4304b76331daa7c44ebb309c102488ced97356dc77e9947de6",
       "Size": 2582,
@@ -1583,8 +1541,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_index.lua",
-      "Hash": "640bb2519ef4f8c9bed1dfa13eab903b70c8321f1ec89898564155467e79d222",
-      "Size": 203,
+      "Hash": "aae45bb3a5f2bf0e93df5b3710693792fe71069af6c2044eee8078e0cdac60c2",
+      "Size": 185,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_index.lua"
     },
     {

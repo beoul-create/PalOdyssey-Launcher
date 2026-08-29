@@ -28,6 +28,5 @@ WorldBossAuraSystem : 1
 Keybinds : 1
 
 
-CS2Crosshair : 1
 EconomySystem : 1
 GuildBuildingLimits : 1

@@ -7,6 +7,5 @@ return {
   "PalboxSearchPlus",
   "StuckPalRescuer",
   "PalOdysseyShop",
-  "CS2Crosshair",
   "FastConnect"
 }
