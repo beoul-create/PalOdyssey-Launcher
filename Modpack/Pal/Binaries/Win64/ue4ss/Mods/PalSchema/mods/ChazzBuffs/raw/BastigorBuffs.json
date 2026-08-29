@@ -1,0 +1,52 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "SnowTigerBeastman": {
+      "ElementType2": "Earth",
+      "Defense": 125,
+      "Friendship_Defense": 1.5
+    },
+    "BOSS_SnowTigerBeastman": {
+      "ElementType2": "Earth",
+      "Defense": 125,
+      "Friendship_Defense": 1.5
+    },
+    "GYM_SnowTigerBeastman": {
+      "ElementType2": "Earth",
+      "Defense": 125,
+      "Friendship_Defense": 1.5
+    },
+    "GYM_SnowTigerBeastman_2": {
+      "ElementType2": "Earth",
+      "Defense": 125,
+      "Friendship_Defense": 1.5
+    },
+    "BOSS_SnowTigerBeastman_BossRush": {
+      "ElementType2": "Earth",
+      "Defense": 125,
+      "Friendship_Defense": 1.5
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_SnowTigerBeastman_TrampleSlash": {
+      "WazaType": "EPalWazaID::Unique_SnowTigerBeastman_TrampleSlash",
+      "Element": "EPalElementType::Ice",
+      "Power": 350,
+      "DisplayPower": 350,
+      "CoolTime": 16.0,
+      "EffectType1": "EPalAdditionalEffectType::Freeze",
+      "EffectValue1": 100
+    },
+    "Unique_SnowTigerBeastman_SnowImpact": {
+      "WazaType": "EPalWazaID::Unique_SnowTigerBeastman_SnowImpact",
+      "Element": "EPalElementType::Ice",
+      "Power": 999,
+      "DisplayPower": 999,
+      "CoolTime": 40.0,
+      "EffectType1": "EPalAdditionalEffectType::Freeze",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::Stun",
+      "EffectValue2": 100
+    }
+  }
+}

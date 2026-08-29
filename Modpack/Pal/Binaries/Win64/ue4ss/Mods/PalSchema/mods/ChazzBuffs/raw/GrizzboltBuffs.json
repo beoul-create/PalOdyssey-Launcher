@@ -2,6 +2,7 @@
 {
   "DT_PalMonsterParameter": {
     "ElecPanda": {
+      "ElementType2": "Normal",
       "ShotAttack": 125,
       "Defense": 120,
       "Friendship_ShotAttack": 1.5,
@@ -11,6 +12,30 @@
       "IgnoreStun": true
     },
     "BOSS_ElecPanda": {
+      "ElementType2": "Normal",
+      "ShotAttack": 125,
+      "Defense": 120,
+      "Friendship_ShotAttack": 1.5,
+      "Friendship_Defense": 1.7,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    },
+    "BOSS_ElecPanda_BossRush": {
+      "ElementType2": "Normal",
+      "ShotAttack": 125,
+      "Defense": 120,
+      "Friendship_ShotAttack": 1.5,
+      "Friendship_Defense": 1.7,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    },
+    "GYM_ElecPanda": {
+      "ElementType2": "Normal"
+    },
+    "GYM_ElecPanda_2": {
+      "ElementType2": "Normal",
       "ShotAttack": 125,
       "Defense": 120,
       "Friendship_ShotAttack": 1.5,
@@ -20,6 +45,7 @@
       "IgnoreStun": true
     },
     "GYM_ElecPanda_Otomo": {
+      "ElementType2": "Normal",
       "ShotAttack": 130,
       "Defense": 120,
       "Friendship_ShotAttack": 1.3,

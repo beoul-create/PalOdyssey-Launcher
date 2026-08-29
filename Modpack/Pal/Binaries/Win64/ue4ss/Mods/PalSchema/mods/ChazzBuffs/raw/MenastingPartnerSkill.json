@@ -3,12 +3,12 @@
 		"TrainerDEF_UP_PartnerSkill_Otomo_1": {
 			"EffectType1": "EPalPassiveSkillEffectType::Defense",
 			"EffectValue1": 10,
-			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
-			"EffectType2": "EPalPassiveSkillEffectType::no",
-			"EffectValue2": 0,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue2": 10,
 			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType3": "EPalPassiveSkillEffectType::no",
-			"EffectValue3": 0,
+			"EffectType3": "EPalPassiveSkillEffectType::DamageRateIfDefender_Poison",
+			"EffectValue3": 50,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType4": "EPalPassiveSkillEffectType::no",
 			"EffectValue4": 0,
@@ -17,12 +17,12 @@
 		"TrainerDEF_UP_PartnerSkill_Otomo_2": {
 			"EffectType1": "EPalPassiveSkillEffectType::Defense",
 			"EffectValue1": 12,
-			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
-			"EffectType2": "EPalPassiveSkillEffectType::no",
-			"EffectValue2": 0,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue2": 11,
 			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType3": "EPalPassiveSkillEffectType::no",
-			"EffectValue3": 0,
+			"EffectType3": "EPalPassiveSkillEffectType::DamageRateIfDefender_Poison",
+			"EffectValue3": 60,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType4": "EPalPassiveSkillEffectType::no",
 			"EffectValue4": 0,
@@ -31,12 +31,12 @@
 		"TrainerDEF_UP_PartnerSkill_Otomo_3": {
 			"EffectType1": "EPalPassiveSkillEffectType::Defense",
 			"EffectValue1": 14,
-			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
-			"EffectType2": "EPalPassiveSkillEffectType::no",
-			"EffectValue2": 0,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue2": 12,
 			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType3": "EPalPassiveSkillEffectType::no",
-			"EffectValue3": 0,
+			"EffectType3": "EPalPassiveSkillEffectType::DamageRateIfDefender_Poison",
+			"EffectValue3": 70,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType4": "EPalPassiveSkillEffectType::no",
 			"EffectValue4": 0,
@@ -45,12 +45,12 @@
 		"TrainerDEF_UP_PartnerSkill_Otomo_4": {
 			"EffectType1": "EPalPassiveSkillEffectType::Defense",
 			"EffectValue1": 16,
-			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
-			"EffectType2": "EPalPassiveSkillEffectType::no",
-			"EffectValue2": 0,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue2": 13,
 			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType3": "EPalPassiveSkillEffectType::no",
-			"EffectValue3": 0,
+			"EffectType3": "EPalPassiveSkillEffectType::DamageRateIfDefender_Poison",
+			"EffectValue3": 80,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType4": "EPalPassiveSkillEffectType::no",
 			"EffectValue4": 0,
@@ -59,16 +59,930 @@
 		"TrainerDEF_UP_PartnerSkill_Otomo_5": {
 			"EffectType1": "EPalPassiveSkillEffectType::Defense",
 			"EffectValue1": 20,
-			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
-			"EffectType2": "EPalPassiveSkillEffectType::no",
-			"EffectValue2": 0,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue2": 15,
 			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType3": "EPalPassiveSkillEffectType::no",
-			"EffectValue3": 0,
+			"EffectType3": "EPalPassiveSkillEffectType::DamageRateIfDefender_Poison",
+			"EffectValue3": 100,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType4": "EPalPassiveSkillEffectType::no",
 			"EffectValue4": 0,
 			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
 		}
-	}
+	},
+	"DT_PartnerSkillParameter": {
+      "DarkScorpion": {
+        "RestrictionItems": [],
+        "ActiveSkill": {
+          "SkillName": "Unknown",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [],
+          "ActiveSkill_OverWriteCoolTimeByRank": [],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+        "PassiveSkills": [
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "ElementAddDrop_Thunder_1_PAL"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": true,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "TrainerDEF_UP_PartnerSkill_Otomo_1"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "ElementAddDrop_Thunder_2_PAL"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": true,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "TrainerDEF_UP_PartnerSkill_Otomo_2"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "ElementAddDrop_Thunder_3_PAL"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": true,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "TrainerDEF_UP_PartnerSkill_Otomo_3"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "ElementAddDrop_Thunder_4_PAL"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": true,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "TrainerDEF_UP_PartnerSkill_Otomo_4"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "ElementAddDrop_Thunder_5_PAL"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": true,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "TrainerDEF_UP_PartnerSkill_Otomo_5"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          }
+        ],
+        "TextReferencePassiveSkills": [
+          {
+            "PassiveSkillIds": [
+              {
+                "Key": "ElementAddDrop_Thunder_1_PAL"
+              }
+            ]
+          },
+          {
+            "PassiveSkillIds": [
+              {
+                "Key": "ElementAddDrop_Thunder_2_PAL"
+              }
+            ]
+          },
+          {
+            "PassiveSkillIds": [
+              {
+                "Key": "ElementAddDrop_Thunder_3_PAL"
+              }
+            ]
+          },
+          {
+            "PassiveSkillIds": [
+              {
+                "Key": "ElementAddDrop_Thunder_4_PAL"
+              }
+            ]
+          },
+          {
+            "PassiveSkillIds": [
+              {
+                "Key": "ElementAddDrop_Thunder_5_PAL"
+              }
+            ]
+          }
+        ]
+      }
+},
+      "BOSS_DarkScorpion": {
+        "RestrictionItems": [],
+        "ActiveSkill": {
+          "SkillName": "Unknown",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [],
+          "ActiveSkill_OverWriteCoolTimeByRank": [],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+        "PassiveSkills": [
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "ElementAddDrop_Thunder_1_PAL"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": true,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "TrainerDEF_UP_PartnerSkill_Otomo_1"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "ElementAddDrop_Thunder_2_PAL"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": true,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "TrainerDEF_UP_PartnerSkill_Otomo_2"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "ElementAddDrop_Thunder_3_PAL"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": true,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "TrainerDEF_UP_PartnerSkill_Otomo_3"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "ElementAddDrop_Thunder_4_PAL"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": true,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "TrainerDEF_UP_PartnerSkill_Otomo_4"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "ElementAddDrop_Thunder_5_PAL"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": true,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "TrainerDEF_UP_PartnerSkill_Otomo_5"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          }
+        ],
+        "TextReferencePassiveSkills": [
+          {
+            "PassiveSkillIds": [
+              {
+                "Key": "ElementAddDrop_Thunder_1_PAL"
+              }
+            ]
+          },
+          {
+            "PassiveSkillIds": [
+              {
+                "Key": "ElementAddDrop_Thunder_2_PAL"
+              }
+            ]
+          },
+          {
+            "PassiveSkillIds": [
+              {
+                "Key": "ElementAddDrop_Thunder_3_PAL"
+              }
+            ]
+          },
+          {
+            "PassiveSkillIds": [
+              {
+                "Key": "ElementAddDrop_Thunder_4_PAL"
+              }
+            ]
+          },
+          {
+            "PassiveSkillIds": [
+              {
+                "Key": "ElementAddDrop_Thunder_5_PAL"
+              }
+            ]
+          }
+        ]
+      }
 }

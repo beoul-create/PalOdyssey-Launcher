@@ -4,9 +4,9 @@
 			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Ice",
 			"EffectValue1": 25,
 			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType2": "EPalPassiveSkillEffectType::no",
-			"EffectValue2": 0,
-			"TargetType2": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementBoost_Earth",
+			"EffectValue2": 25,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType3": "EPalPassiveSkillEffectType::no",
 			"EffectValue3": 0,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
@@ -25,9 +25,9 @@
 			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Ice",
 			"EffectValue1": 30,
 			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType2": "EPalPassiveSkillEffectType::no",
-			"EffectValue2": 0,
-			"TargetType2": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementBoost_Earth",
+			"EffectValue2": 30,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType3": "EPalPassiveSkillEffectType::no",
 			"EffectValue3": 0,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
@@ -46,9 +46,9 @@
 			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Ice",
 			"EffectValue1": 35,
 			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType2": "EPalPassiveSkillEffectType::no",
-			"EffectValue2": 0,
-			"TargetType2": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementBoost_Earth",
+			"EffectValue2": 35,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType3": "EPalPassiveSkillEffectType::no",
 			"EffectValue3": 0,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
@@ -67,9 +67,9 @@
 			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Ice",
 			"EffectValue1": 40,
 			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType2": "EPalPassiveSkillEffectType::no",
-			"EffectValue2": 0,
-			"TargetType2": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementBoost_Earth",
+			"EffectValue2": 40,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType3": "EPalPassiveSkillEffectType::no",
 			"EffectValue3": 0,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
@@ -88,9 +88,9 @@
 			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Ice",
 			"EffectValue1": 50,
 			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
-			"EffectType2": "EPalPassiveSkillEffectType::no",
-			"EffectValue2": 0,
-			"TargetType2": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementBoost_Earth",
+			"EffectValue2": 50,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
 			"EffectType3": "EPalPassiveSkillEffectType::no",
 			"EffectValue3": 0,
 			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
@@ -108,6 +108,26 @@
 	},
 	"DT_PartnerSkillParameter": {
 		"SnowTigerBeastman": {
+        "ActiveSkill": {
+          "SkillName": "UniqueRideMelee_SnowHammer",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "ハンマー殴りの技威力",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [
+            200.0,
+            240.0,
+            280.0,
+            320.0,
+            400.0
+          ],
+          "ActiveSkill_OverWriteCoolTimeByRank": [],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
 			"PassiveSkills": [
 				{
 					"SkillAndParametersArray": [
@@ -157,6 +177,26 @@
                                              ]
                                            },
 		"BOSS_SnowTigerBeastman": {
+        "ActiveSkill": {
+          "SkillName": "UniqueRideMelee_SnowHammer",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "ハンマー殴りの技威力",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [
+            100.0,
+            120.0,
+            140.0,
+            160.0,
+            200.0
+          ],
+          "ActiveSkill_OverWriteCoolTimeByRank": [],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
 			"PassiveSkills": [
 				{
 					"SkillAndParametersArray": [

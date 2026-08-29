@@ -2,16 +2,42 @@
 {
   "DT_PalMonsterParameter": {
     "BrownRabbit": {
+      "ElementType2": "Electricity",
+      "WorkSuitability_GenerateElectricity": 4,
       "ShotAttack": 120,
       "Friendship_ShotAttack": 1.7,
       "Defense": 120,
       "Friendship_Defense": 1.7
     },
     "BOSS_BrownRabbit": {
+      "ElementType2": "Electricity",
+      "WorkSuitability_GenerateElectricity": 4,
       "ShotAttack": 120,
       "Friendship_ShotAttack": 1.7,
       "Defense": 120,
       "Friendship_Defense": 1.7
     }
-  }
+  },
+    "DT_WazaMasterLevel": {
+        "BrownRabbit35":{
+			"PalId": "BrownRabbit",
+            "WazaID": "EPalWazaID::LineThunder",
+			"Level": 35
+        },
+        "Boss_BrownRabbit35":{
+			"PalId": "BOSS_BrownRabbit",
+            "WazaID": "EPalWazaID::LineThunder",
+			"Level": 35
+        },
+        "BrownRabbit60":{
+			"PalId": "BrownRabbit",
+            "WazaID": "EPalWazaID::ThunderStorm",
+			"Level": 60
+        },
+        "Boss_BrownRabbit60":{
+			"PalId": "BOSS_BrownRabbit",
+            "WazaID": "EPalWazaID::ThunderStorm",
+			"Level": 60
+        }
+    }
 }

@@ -20,5 +20,17 @@
       "EffectType1": "EPalAdditionalEffectType::Darkness",
       "EffectValue1": 100
     }
-  }
+  },
+    "DT_WazaMasterLevel": {
+        "DarkAlien70":{
+			"PalId": "DarkAlien",
+            "WazaID": "EPalWazaID::StarMine",
+			"Level": 70
+        },
+        "Boss_DarkAlien70":{
+			"PalId": "BOSS_DarkAlien",
+            "WazaID": "EPalWazaID::StarMine",
+			"Level": 70
+        }
+    }
 }

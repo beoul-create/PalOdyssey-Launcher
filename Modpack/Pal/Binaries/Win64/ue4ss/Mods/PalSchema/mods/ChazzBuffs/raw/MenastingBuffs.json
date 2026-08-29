@@ -1,0 +1,34 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "DarkScorpion": {
+      "MeleeAttack": 110,
+      "ShotAttack": 110,
+      "Friendship_ShotAttack": 2.1
+    },
+    "BOSS_DarkScorpion": {
+      "MeleeAttack": 110,
+      "ShotAttack": 110,
+      "Friendship_ShotAttack": 2.1
+    },
+    "PREDATOR_DarkScorpion": {
+      "HP": 130,
+      "MeleeAttack": 120,
+      "ShotAttack": 120,
+      "Defense": 140,
+      "Friendship_ShotAttack": 2.1
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_DarkScorpion_Pierce": {
+      "WazaType": "EPalWazaID::Unique_DarkScorpion_Pierce",
+      "Element": "EPalElementType::Earth",
+      "Power": 375,
+      "DisplayPower": 375,
+      "CoolTime": 16.0,
+      "EffectType1": "EPalAdditionalEffectType::Poison",
+      "EffectValue1": 999
+    }
+  }
+}

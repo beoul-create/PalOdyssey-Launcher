@@ -15,5 +15,17 @@
       "IgnoreBlowAway": true,
       "IgnoreStun": true
     }
-  }
+  },
+    "DT_WazaMasterLevel": {
+        "WhiteAlienDragon70":{
+			"PalId": "WhiteAlienDragon",
+            "WazaID": "EPalWazaID::StarMine",
+			"Level": 70
+        },
+        "Boss_WhiteAlienDragon70":{
+			"PalId": "BOSS_WhiteAlienDragon",
+            "WazaID": "EPalWazaID::StarMine",
+			"Level": 70
+        }
+    }
 }

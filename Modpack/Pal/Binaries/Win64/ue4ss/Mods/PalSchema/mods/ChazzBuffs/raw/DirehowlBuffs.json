@@ -22,9 +22,20 @@
       "RunSpeed": 900,
       "RideSprintSpeed": 1200,
       "TransportSpeed": 460
+    },
+    "PREDATOR_Garm": {
+      "HP": 106,
+      "MeleeAttack": 110,
+      "ShotAttack": 110,
+      "Defense": 90,
+      "Friendship_ShotAttack": 3.3,
+      "Friendship_Defense": 3.3,
+      "WalkSpeed": 260,
+      "RunSpeed": 1100,
+      "RideSprintSpeed": 1400,
+      "TransportSpeed": 660
     }
   },
-
   "DT_WazaDataTable": {
     "Unique_Garm_BiteV2": {
       "WazaType": "EPalWazaID::Unique_Garm_BiteV2",
@@ -36,9 +47,9 @@
     "Unique_Garm_Bite": {
       "WazaType": "EPalWazaID::Unique_Garm_Bite",
       "Element": "EPalElementType::Normal",
-      "Power": 300,
-      "DisplayPower": 300,
-      "CoolTime": 10.0
+      "Power": 600,
+      "DisplayPower": 600,
+      "CoolTime": 20.0
     }
   }
 }
