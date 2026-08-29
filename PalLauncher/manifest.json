@@ -1,7 +1,7 @@
 {
-  "Version": "2026.08.29.211525",
-  "GeneratedAt": "2026-08-29T21:15:25.333Z",
-  "TotalFiles": 303,
+  "Version": "2026.08.29.212352",
+  "GeneratedAt": "2026-08-29T21:23:52.425Z",
+  "TotalFiles": 314,
   "Files": [
     {
       "RelativePath": "Pal/Binaries/Win64/dwmapi.dll",
@@ -1478,6 +1478,72 @@
       "Hash": "482b83f25d811e7c3c3139d1e50007fd800bdd976080a059e6b2afc1483e1cde",
       "Size": 51639,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/PalworldTuner/raw/20_enemy_humans.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/FUNNY_NAMES_AND_DESCRIPTIONS.txt",
+      "Hash": "c6c0f10d144ddd4112d8aab75da0e7fe00dc2afe9c1e7ce4a73fca31c7e6e0ea",
+      "Size": 9764,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/FUNNY_NAMES_AND_DESCRIPTIONS.txt"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/FUNNY_RAID_ROSTER.csv",
+      "Hash": "09530c89d55050d4491a25693056fd207c51150c98489b6255e73dd43764d6bc",
+      "Size": 10671,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/FUNNY_RAID_ROSTER.csv"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/items/SummonItems.jsonc",
+      "Hash": "2c16d298fe55dd13183913712c08fbc71b5c2bc0166dcabcc88aa8ce891ccb01",
+      "Size": 9512,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/items/SummonItems.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/pals/Bosses.jsonc",
+      "Hash": "fa8881e12dee467b7678d80f15a757cc919e7aefff88b71e61f478a5b82ee669",
+      "Size": 31330,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/pals/Bosses.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/pals/Minions.jsonc",
+      "Hash": "13457e91ce2ac297a8433c11656ff906267a2f69ff47a6bb5f177f9121b57dd4",
+      "Size": 31213,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/pals/Minions.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/raw/EarlyProgression.jsonc",
+      "Hash": "fb4623ca45e5ceaa6e5f82e3cf4047611400cfe9f48bd1078bce1696f63d80e4",
+      "Size": 68111,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/raw/EarlyProgression.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/raw/EarlyProgressionSkills.jsonc",
+      "Hash": "7335f1ac3a3cf349a0aec686943e2962852dcf823f625256de358695d9a59411",
+      "Size": 37312,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/raw/EarlyProgressionSkills.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/README.txt",
+      "Hash": "0200caf1c501896a3ff1b51c676175a82003e7bdbec138d4ca41d53cdd2e17a4",
+      "Size": 1425,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/README.txt"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/resources/images/Slab.png",
+      "Hash": "cfe4c93d328640dbfa54494e2c330f724c20ca478c193644bd0d0c1872bece0d",
+      "Size": 1976668,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/resources/images/Slab.png"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/translations/en/translations.jsonc",
+      "Hash": "ef977ac6a87d82acce954446952fed7deb5c8ce3b740836b8651239a53960eef",
+      "Size": 13763,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/translations/en/translations.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/UNIQUE_SKILL_LOADOUTS.txt",
+      "Hash": "7d16aa11dd1e29f770061cd43efa073a574dfc931089e27b076d871dbaaaede7",
+      "Size": 6504,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/SummonAroundAndFindOutArenaRaids/UNIQUE_SKILL_LOADOUTS.txt"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalworldTuner/enabled.txt",

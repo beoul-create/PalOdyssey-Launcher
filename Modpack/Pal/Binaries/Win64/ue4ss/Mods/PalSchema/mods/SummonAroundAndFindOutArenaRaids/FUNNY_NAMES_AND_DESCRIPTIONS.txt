@@ -1,0 +1,100 @@
+EARLY PROGRESSION - FUNNY NAMES AND DESCRIPTIONS
+=================================================
+
+Only Early Progression was changed.
+
+All 20 encounters are SINGLE BOSS raids.
+Boss names were replaced with unique funny names.
+Reinforcement names were also updated.
+Every slab/tablet description now:
+- names the exact boss being summoned
+- describes that boss
+- clearly says SINGLE BOSS RAID
+- lists the real reinforcement counts and HP thresholds
+- includes a humorous altar warning
+
+In-raid shared prefix:
+Boss: Local Menace
+Reinforcement: Unpaid Backup
+
+RAIDS
+-----
+Lv033 | [Lv 033] The Peckening Slab
+Boss: Sir Clucks-a-Lot
+Lv. 33 SINGLE BOSS RAID: Sir Clucks-a-Lot. A Chikipi that survived being called dinner one too many times. It has chosen violence, vengeance, and extremely aggressive pecking. It calls 2 backup Pals at 70% HP and 3 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv035 | [Lv 035] Audit Season Slab
+Boss: Lifmunk, Certified Nut Auditor
+Lv. 35 SINGLE BOSS RAID: Lifmunk, Certified Nut Auditor. This Lifmunk has reviewed your acorn inventory and found several serious discrepancies. Payment is now due in bruises. It calls 2 backup Pals at 70% HP and 3 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv037 | [Lv 037] Monday Morning Slab
+Boss: Depresso, Employee of the Month
+Lv. 37 SINGLE BOSS RAID: Depresso, Employee of the Month. A Depresso fueled entirely by bad moods and unpaid overtime. It does not want to be here, and now neither do you. It calls 2 backup Pals at 70% HP and 3 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv038 | [Lv 038] Do Not Touch the Tail Slab
+Boss: Dinossom, Zero Chill
+Lv. 38 SINGLE BOSS RAID: Dinossom, Zero Chill. Someone stepped on Dinossom's tail. Nobody will admit who did it, so Dinossom has decided everyone is guilty. It calls 2 backup Pals at 70% HP and 3 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv040 | [Lv 040] Freezer Burn Slab
+Boss: Jolthog Cryst, Pocket Freezer
+Lv. 40 SINGLE BOSS RAID: Jolthog Cryst, Pocket Freezer. A tiny frozen hedgehog with the emotional stability of a live grenade. Cute, cold, and absolutely not approved for indoor use. It calls 2 backup Pals at 70% HP and 3 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv041 | [Lv 041] Flying Pancake Slab
+Boss: Celaray, The Angry Bedsheet
+Lv. 41 SINGLE BOSS RAID: Celaray, The Angry Bedsheet. Celaray has spent years being used as transportation and has finally filed a formal complaint by becoming the transportation straight into the floor. It calls 2 backup Pals at 70% HP and 3 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv043 | [Lv 043] Who Asked? Slab
+Boss: Professor Hoot N. Holler
+Lv. 43 SINGLE BOSS RAID: Professor Hoot N. Holler. Hoocrates knows everything, including exactly how badly this fight is about to go. Unfortunately, the lecture includes practical demonstrations. It calls 2 backup Pals at 70% HP and 3 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv045 | [Lv 045] Berry Bad Decision Slab
+Boss: Caprity, Regional Berry Manager
+Lv. 45 SINGLE BOSS RAID: Caprity, Regional Berry Manager. Caprity has promoted itself to regional manager of all berries. Your base was not approved by corporate. It calls 2 backup Pals at 70% HP and 3 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv046 | [Lv 046] Branch Management Slab
+Boss: Eikthyrdeer, Head of Branch Management
+Lv. 46 SINGLE BOSS RAID: Eikthyrdeer, Head of Branch Management. Those antlers are not decorative. Eikthyrdeer has arrived to restructure your entire organization, beginning with your rib cage. It calls 2 backup Pals at 70% HP and 3 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv048 | [Lv 048] Night Shift Slab
+Boss: Nox, The 3 A.M. Problem
+Lv. 48 SINGLE BOSS RAID: Nox, The 3 A.M. Problem. Nox is what happens when you hear something outside at 3 A.M. and make the terrible decision to investigate. It calls 2 backup Pals at 70% HP and 3 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv049 | [Lv 049] Do Not Pet Slab
+Boss: Jolthog, OSHA Violation
+Lv. 49 SINGLE BOSS RAID: Jolthog, OSHA Violation. Ten million volts wrapped in a face that says 'pet me.' This is less a boss fight and more an electrical safety seminar. It calls 2 backup Pals at 70% HP and 3 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv051 | [Lv 051] Tail Insurance Slab
+Boss: Dinossom, Anger Management Dropout
+Lv. 51 SINGLE BOSS RAID: Dinossom, Anger Management Dropout. Dinossom attended one anger-management class, ate the paperwork, and declared the program completed. It calls 3 backup Pals at 70% HP and 4 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv053 | [Lv 053] Unauthorized Screaming Slab
+Boss: Tombat, Ceiling Fan Inspector
+Lv. 53 SINGLE BOSS RAID: Tombat, Ceiling Fan Inspector. Tombat has entered the building without permission and would like to inspect every ceiling, wall, and vulnerable player. It calls 3 backup Pals at 70% HP and 4 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv054 | [Lv 054] Static Appointment Slab
+Boss: Sparkit, Licensed Electrician-ish
+Lv. 54 SINGLE BOSS RAID: Sparkit, Licensed Electrician-ish. Sparkit insists it is fully licensed. Nobody has seen the paperwork, and the last three customers are still smoking. It calls 3 backup Pals at 70% HP and 4 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv056 | [Lv 056] Spicy Deer Slab
+Boss: Rooby, Mildly On Fire
+Lv. 56 SINGLE BOSS RAID: Rooby, Mildly On Fire. Rooby would like everyone to remain calm while it runs around the arena actively on fire. This request will not be honored. It calls 3 backup Pals at 70% HP and 4 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv057 | [Lv 057] Landscaping Complaint Slab
+Boss: Bristla, Thornado Supreme
+Lv. 57 SINGLE BOSS RAID: Bristla, Thornado Supreme. Bristla is proof that the garden can fight back. Please keep hands, feet, and expensive armor away from the shrubbery. It calls 3 backup Pals at 70% HP and 4 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv059 | [Lv 059] Corporate Restructure Slab
+Boss: Eikthyrdeer, Senior Branch Manager
+Lv. 59 SINGLE BOSS RAID: Eikthyrdeer, Senior Branch Manager. Promoted since the last encounter, Eikthyrdeer now has seniority, larger antlers, and absolutely no respect for your personal space. It calls 3 backup Pals at 70% HP and 4 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv060 | [Lv 060] Home Insurance Slab
+Boss: Foxparks, Definitely House Trained
+Lv. 60 SINGLE BOSS RAID: Foxparks, Definitely House Trained. Foxparks promises it is house trained. Your insurance company strongly disagrees and has stopped answering the phone. It calls 3 backup Pals at 70% HP and 4 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv062 | [Lv 062] Cold Shoulder Slab
+Boss: Jolthog Cryst, Freezer Burn
+Lv. 62 SINGLE BOSS RAID: Jolthog Cryst, Freezer Burn. The freezer has achieved consciousness, grown spikes, and developed a personal issue with you. It calls 3 backup Pals at 70% HP and 4 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
+
+Lv063 | [Lv 063] Absolutely Safe Bird Slab
+Boss: Tocotoco, Safety Manual Optional
+Lv. 63 SINGLE BOSS RAID: Tocotoco, Safety Manual Optional. Tocotoco has never read a safety manual and considers explosions a communication style. Stand somewhere else. Preferably another island. It calls 3 backup Pals at 70% HP and 4 backup Pals at 40% HP because apparently fighting fair was never discussed. Offer this slab to the Summoning Altar when you are ready to make a questionable life choice.
