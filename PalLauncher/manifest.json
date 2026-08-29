@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.225711",
-  "GeneratedAt": "2026-08-29T22:57:11.601Z",
+  "Version": "2026.08.29.225948",
+  "GeneratedAt": "2026-08-29T22:59:48.185Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,9 +8,9 @@
   "TotalFiles": 331,
   "News": [
     {
-      "title": "⚡ v2.0.4 - Client Stability & Liveboard Sync",
+      "title": "⚡ v2.0.5 - RAM & CPU Resource Optimization",
       "date": "Aug 29, 2026",
-      "summary": "Resolved Escape menu crash, added !shop / !buy / !gacha chat commands, optimized Unreal threadpools, and enabled real-time reactive Discord liveboard player tracking."
+      "summary": "Drastically reduced memory consumption on client and server. Optimized texture streaming pools to 1280MB, added fast 60s GC sweeps, and purged dormant physics item limits."
     },
     {
       "title": "⚔️ Summon Around Arena Raids & Boss Auras",
@@ -18,9 +18,9 @@
       "summary": "Installed Summon Around and Find Out Arena Raids. Encounter enhanced Alpha Bosses with dynamic elemental auras and legendary drop tables."
     },
     {
-      "title": "🚀 Performance & Low Latency Optimization",
+      "title": "💬 Economy & In-Game Shop Commands",
       "date": "Aug 29, 2026",
-      "summary": "Balanced GPU/CPU performance profile applied with multi-core thread scaling and stutter-free asset streaming."
+      "summary": "Use !shop, !buy, and !gacha to trade spare Technology Points for legendary spheres, breeding cakes, and ancient cores."
     }
   ],
   "Files": [
@@ -494,8 +494,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "b91b51dd8046d3eabf309b02e0dd8b702c885bf5b72b8cc2ee25fe228eef6be8",
-      "Size": 7280,
+      "Hash": "82cf4365b8eb7db97e9b166296f4c1a7472e683562f5210832f4c5966402c050",
+      "Size": 7467,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -512,8 +512,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/memory.lua",
-      "Hash": "f4ba0017b26c350cd3ef3c631287bbdc978f07976a0ce88732485b242369b0fc",
-      "Size": 1585,
+      "Hash": "3ad1e85aa6462eba6d98f1492dd7a2d75ebdd8f86fcd6b4697fa8bc775671e8c",
+      "Size": 1583,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/memory.lua"
     },
     {

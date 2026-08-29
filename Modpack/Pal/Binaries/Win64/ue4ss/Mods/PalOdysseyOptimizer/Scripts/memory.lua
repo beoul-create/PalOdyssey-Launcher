@@ -7,19 +7,19 @@ function MemoryModule.apply(cfg)
 
     print("[PalOdysseyOptimizer] Initializing RAM Reduction & Working Set Sweep Engine...")
 
-    -- Periodic non-intrusive GC cleanup scheduler
-    local trimIntervalMs = (cfg.trimIntervalMinutes or 3) * 60 * 1000
+    -- Periodic non-intrusive GC cleanup scheduler (every 60s)
+    local trimIntervalMs = (cfg.trimIntervalMinutes or 1) * 60 * 1000
 
     local function performMemoryMaintenance()
         pcall(function()
             -- 1. Incremental Lua GC step
-            collectgarbage("step", 100)
+            collectgarbage("collect")
 
             -- 2. Engine-level unused object and texture pool purge
-            if cfg.autoTrimWorkingSet then
+            if cfg.autoTrimWorkingSet ~= false then
                 ExecuteConsole("obj gc")
             end
-            if cfg.defragTexturePool then
+            if cfg.defragTexturePool ~= false then
                 ExecuteConsole("r.Streaming.PurgeUnused")
             end
         end)
@@ -28,19 +28,20 @@ function MemoryModule.apply(cfg)
         ExecuteWithDelay(trimIntervalMs, performMemoryMaintenance)
     end
 
-    -- Use incremental Lua collection on travel; forced engine GC causes visible stalls.
+    -- Fast-Travel hook
     pcall(function()
         RegisterHook("/Script/Pal.PalPlayerController:ClientRestart", function(Context)
             ExecuteWithDelay(2000, function()
-                collectgarbage("step", 200)
+                collectgarbage("collect")
+                ExecuteConsole("obj gc")
             end)
         end)
     end)
 
     -- Start initial delayed memory passes
-    ExecuteWithDelay(30000, performMemoryMaintenance)
+    ExecuteWithDelay(15000, performMemoryMaintenance)
 
-    print("[PalOdysseyOptimizer] Memory & Working Set Cleaner scheduled (Interval: " .. tostring(cfg.trimIntervalMinutes or 3) .. " mins).")
+    print("[PalOdysseyOptimizer] Proactive Memory Cleaner scheduled (Interval: " .. tostring(cfg.trimIntervalMinutes or 1) .. " mins).")
 end
 
 return MemoryModule
