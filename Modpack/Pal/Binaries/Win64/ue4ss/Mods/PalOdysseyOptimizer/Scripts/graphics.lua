@@ -1,37 +1,8 @@
 -- PalOdysseyOptimizer - FPS Boost & GPU Assist Subsystem (Ultra-Performance Option B Profile)
 local GraphicsModule = {}
+local ExecuteConsole = require("console")
 
--- Each dispatch path is tried independently so a failure in one never skips the others.
-local function ExecuteConsole(cmd)
-    pcall(function()
-        if type(_G.ExecuteConsoleCommand) == "function" then
-            _G.ExecuteConsoleCommand(cmd)
-        end
-    end)
-    pcall(function()
-        local pc = UEHelpers.GetPlayerController()
-        if not pc or not pc:IsValid() then
-            local pcs = FindAllOf("PalPlayerController") or FindAllOf("PlayerController")
-            if pcs and #pcs > 0 then pc = pcs[1] end
-        end
-        if pc and pc:IsValid() and pc.ConsoleCommand then
-            pc:ConsoleCommand(cmd, true)
-        end
-    end)
-    pcall(function()
-        local kismet = StaticFindObject("/Script/Engine.Default__KismetSystemLibrary")
-        local world = UEHelpers.GetWorldContextObject()
-        if not world or not world:IsValid() then
-            local pc = UEHelpers.GetPlayerController()
-            if pc and pc:IsValid() then world = pc end
-        end
-        if kismet and kismet:IsValid() and world and world:IsValid() then
-            kismet:ExecuteConsoleCommand(world, cmd, nil)
-        end
-    end)
-end
-
-function GraphicsModule.apply(cfg)
+function GraphicsModule.apply(cfg, cpuCfg)
     if not cfg or not cfg.enabled then return end
 
     print("[PalOdysseyOptimizer] Initializing Ultra-Performance Option B GPU Pipeline (Mesh Shaders + SkinCache + URO + 512p CSM)...")
@@ -139,7 +110,7 @@ function GraphicsModule.apply(cfg)
         ExecuteConsole("r.GTSyncType 1")
         ExecuteConsole("r.OneFrameThreadLag 1")
         ExecuteConsole("r.FinishCurrentFrame 0")
-        ExecuteConsole("t.MaxFPS 165")
+        -- Respect the player's display/VSync cap instead of forcing 165 FPS.
         ExecuteConsole("t.UnfocusedMaxFPS 30")
         ExecuteConsole("r.ScreenPercentage 85")
         ExecuteConsole("r.TemporalAA.Upsampling 1")
@@ -153,7 +124,8 @@ function GraphicsModule.apply(cfg)
         ExecuteConsole("r.Tonemapper.Quality 1")
         ExecuteConsole("r.FastVRam.BokehDOF 1")
         ExecuteConsole("r.BloomQuality 1")
-        ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 15")
+        local purgeInterval = math.max(15, tonumber(cpuCfg and cpuCfg.gcIntervalSeconds) or 60)
+        ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects " .. tostring(purgeInterval))
 
         if not appliedOnce then
             print("[PalOdysseyOptimizer:Graphics] All 80+ render CVars dispatched successfully.")
@@ -161,41 +133,14 @@ function GraphicsModule.apply(cfg)
         end
     end
 
-    -- Hook GameEngine Init
-    pcall(function()
-        RegisterHook("/Script/Engine.GameEngine:Init", function(Context)
-            optimizeRenderSettings()
-        end)
-    end)
-
-    -- Hook World BeginPlay and Player Restart for fast-travel / map transitions
+    -- Apply after each world is ready; CVars persist without a polling loop.
     pcall(function()
         RegisterHook("/Script/Engine.World:ReceiveBeginPlay", function(Context)
-            optimizeRenderSettings()
             ExecuteWithDelay(1500, optimizeRenderSettings)
         end)
     end)
-    pcall(function()
-        RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context)
-            optimizeRenderSettings()
-        end)
-    end)
-
-    -- Initial passes
-    ExecuteWithDelay(2000, optimizeRenderSettings)
+    -- Backup pass for builds that do not expose World:ReceiveBeginPlay.
     ExecuteWithDelay(6000, optimizeRenderSettings)
-
-    -- Periodic 30-second sanity enforcement to prevent in-game scalability resets
-    local enforceCount = 0
-    local function continuousOptimizationLoop()
-        optimizeRenderSettings()
-        enforceCount = enforceCount + 1
-        if enforceCount % 10 == 0 then
-            print(string.format("[PalOdysseyOptimizer:Graphics] Heartbeat #%d — GPU pipeline active.", enforceCount))
-        end
-        ExecuteWithDelay(30000, continuousOptimizationLoop)
-    end
-    ExecuteWithDelay(30000, continuousOptimizationLoop)
 
     print("[PalOdysseyOptimizer] Ultra-Performance Option B GPU Pipeline loaded successfully.")
 end

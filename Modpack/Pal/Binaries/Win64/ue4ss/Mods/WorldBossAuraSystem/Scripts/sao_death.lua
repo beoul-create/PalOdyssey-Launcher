@@ -21,15 +21,15 @@ function SAODeath.Init()
         end
 
         -- 2. Spawn SAO Particle System & Shatter Sound
-        local NiagaraFunc = StaticFindObject("/Script/Niagara.NiagaraFunctionLibrary")
+        local NiagaraFunc = StaticFindObject("/Script/Niagara.Default__NiagaraFunctionLibrary")
         local NiagaraAsset = StaticFindObject(NS_SAODeathPath)
-        if NiagaraFunc:IsValid() and NiagaraAsset:IsValid() then
+        if NiagaraFunc and NiagaraFunc:IsValid() and NiagaraAsset and NiagaraAsset:IsValid() then
             NiagaraFunc:SpawnSystemAtLocation(World, NiagaraAsset, Location, Rotation, { X=1, Y=1, Z=1 }, true, true, 0, true)
         end
 
-        local GameplayStatics = StaticFindObject("/Script/Engine.GameplayStatics")
+        local GameplayStatics = StaticFindObject("/Script/Engine.Default__GameplayStatics")
         local SoundAsset = StaticFindObject(A_SAOSoundPath)
-        if GameplayStatics:IsValid() and SoundAsset:IsValid() then
+        if GameplayStatics and GameplayStatics:IsValid() and SoundAsset and SoundAsset:IsValid() then
             GameplayStatics:PlaySoundAtLocation(World, SoundAsset, Location, 1.0, 1.0, 0.0, nil, nil, nil)
         end
 

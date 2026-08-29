@@ -13,9 +13,9 @@ function AuraSystem.Attach(Character, AuraType)
 
     local AssetPath = AuraMap[AuraType] or AuraMap["Fiery"]
     local NiagaraAsset = StaticFindObject(AssetPath)
-    local NiagaraFunc = StaticFindObject("/Script/Niagara.NiagaraFunctionLibrary")
+    local NiagaraFunc = StaticFindObject("/Script/Niagara.Default__NiagaraFunctionLibrary")
 
-    if NiagaraFunc:IsValid() and NiagaraAsset:IsValid() then
+    if NiagaraFunc and NiagaraFunc:IsValid() and NiagaraAsset and NiagaraAsset:IsValid() then
         return NiagaraFunc:SpawnSystemAttached(
             NiagaraAsset,
             Mesh,

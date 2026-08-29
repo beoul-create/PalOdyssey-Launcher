@@ -30,7 +30,7 @@ function LimitChecker.Init(LoadedConfig)
             pcall(function() Context:SetReturn(false) end)
 
             -- 2. Send in-game chat alert to the player
-            local ChatSubsystem = StaticFindObject("/Script/Pal.PalChatSubsystem")
+            local ChatSubsystem = FindFirstOf("PalChatSubsystem")
             if ChatSubsystem and ChatSubsystem:IsValid() then
                 local templateMsg = Config.NotificationMessage or "❌ Guild building limit reached: Your guild is capped at %d %s(s)."
                 local Msg = string.format(templateMsg, RestrictionRule.MaxPerGuild or 1, RestrictionRule.DisplayName or "Restricted Facility")
@@ -76,20 +76,27 @@ function LimitChecker.CountGuildStructures(GuildId, TargetTypeIds)
     local World = GetWorldContext and GetWorldContext() or nil
 
     pcall(function()
-        local GameplayStatics = StaticFindObject("/Script/Engine.GameplayStatics")
+        local GameplayStatics = StaticFindObject("/Script/Engine.Default__GameplayStatics")
         local MapObjectClass = StaticFindObject("/Script/Pal.PalMapObject")
         if GameplayStatics and GameplayStatics:IsValid() and MapObjectClass and MapObjectClass:IsValid() and World then
             local MapObjects = GameplayStatics:GetAllActorsOfClass(World, MapObjectClass)
             if MapObjects and MapObjects:IsValid() then
                 for i = 1, MapObjects:Num() do
                     local Obj = MapObjects:Get(i)
-                    if Obj and Obj:IsValid() and Obj.GetGuildName and Obj:GetGuildName():ToString() == GuildId then
-                        local TypeId = ""
-                        pcall(function() TypeId = Obj:GetMapObjectId():ToString() end)
-                        for _, target in ipairs(TargetTypeIds) do
-                            if TypeId == target or string.find(TypeId, target) then
-                                Count = Count + 1
-                                break
+                    if Obj and Obj:IsValid() and Obj.GetGuildName then
+                        local gObj = Obj:GetGuildName()
+                        local gStr = gObj and gObj:ToString() or ""
+                        if gStr == GuildId then
+                            local TypeId = ""
+                            pcall(function()
+                                local idObj = Obj.GetMapObjectId and Obj:GetMapObjectId()
+                                TypeId = idObj and idObj:ToString() or ""
+                            end)
+                            for _, target in ipairs(TargetTypeIds) do
+                                if TypeId == target or string.find(TypeId, target) then
+                                    Count = Count + 1
+                                    break
+                                end
                             end
                         end
                     end

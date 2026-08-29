@@ -7,16 +7,16 @@ function GachaEngine.Roll(Pool)
 
     local TotalWeight = 0
     for _, entry in ipairs(Pool) do
-        TotalWeight = TotalWeight + (entry.Weight or 1)
+        TotalWeight = TotalWeight + math.max(0, tonumber(entry.Weight) or 1)
     end
 
     if TotalWeight <= 0 then TotalWeight = 1 end
 
-    local Roll = math.random(1, TotalWeight)
+    local Roll = math.random() * TotalWeight
     local CurrentWeight = 0
 
     for _, entry in ipairs(Pool) do
-        CurrentWeight = CurrentWeight + (entry.Weight or 1)
+        CurrentWeight = CurrentWeight + math.max(0, tonumber(entry.Weight) or 1)
         if Roll <= CurrentWeight then
             return entry
         end

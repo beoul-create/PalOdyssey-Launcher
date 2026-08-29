@@ -4127,7 +4127,6 @@
         "AddArmor": false,
         "AddAccessory": false,
         "IsStackablePartnerSkillBySameTribe": false,
-        "IsStackablePartnerSkillBySameTribe": false,
         "OverrideNameTextID": "APSE_Mediator_NAME",
         "OverrideSummaryTextId": "None",
         "Category": "EPalPassiveCategory::SortDisplayable"

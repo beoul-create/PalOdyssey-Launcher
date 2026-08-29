@@ -19,8 +19,8 @@
       "CoolTime": 80.0,
       "EffectType1": "EPalAdditionalEffectType::IvyCling",
       "EffectValue1": 100,
-      "EffectType1": "EPalAdditionalEffectType::Stun",
-      "EffectValue1": 100
+      "EffectType2": "EPalAdditionalEffectType::Stun",
+      "EffectValue2": 100
     }
   }
 }

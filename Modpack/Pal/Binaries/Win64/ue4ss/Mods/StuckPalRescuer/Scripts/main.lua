@@ -65,7 +65,9 @@ local function RescuePal(palActor, baseLocation)
             moveComp:StopMovementImmediately()
         end
 
-        Log(string.format("Rescued stuck Pal '%s' -> Teleported to safe coordinate (X:%.1f, Y:%.1f, Z:%.1f)", name, targetLoc.X, targetLoc.Y, targetLoc.Z))
+        if Config.notifyOnRescue ~= false then
+            Log(string.format("Rescued stuck Pal '%s' -> Teleported to safe coordinate (X:%.1f, Y:%.1f, Z:%.1f)", name, targetLoc.X, targetLoc.Y, targetLoc.Z))
+        end
     end)
 end
 
@@ -81,6 +83,12 @@ pcall(function()
     NotifyOnNewObject("/Script/Pal.PalCharacter", function(pal)
         RegisterPal(pal)
     end)
+end)
+
+pcall(function()
+    for _, pal in ipairs(FindAllOf("PalCharacter") or {}) do
+        RegisterPal(pal)
+    end
 end)
 
 local function ScanAndRescue()
@@ -142,7 +150,8 @@ end
 
 -- Register recurring lightweight scan hook (Interval: 10s)
 local function ScheduleNextScan()
-    ExecuteWithDelay(10000, function()
+    local delayMs = math.max(3, tonumber(Config.checkIntervalSeconds) or 10) * 1000
+    ExecuteWithDelay(delayMs, function()
         ScanAndRescue()
         ScheduleNextScan()
     end)

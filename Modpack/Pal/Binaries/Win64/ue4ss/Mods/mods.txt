@@ -21,6 +21,7 @@ WeaponProficiency : 1
 PalOdysseyOptimizer : 1
 StuckPalRescuer : 1
 PalClearVision : 1
+FastConnect : 1
 WorldBossAuraSystem : 1
 
 ; Built-in keybinds, do not move up!

@@ -33,9 +33,9 @@
   },
   "memory": {
     "enabled": true,
-    "autoTrimWorkingSet": true,
+    "autoTrimWorkingSet": false,
     "trimIntervalMinutes": 4,
-    "defragTexturePool": true
+    "defragTexturePool": false
   },
   "server": {
     "enabled": true,

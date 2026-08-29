@@ -1,27 +1,6 @@
 -- PalOdysseyOptimizer - RAM & Memory Trimming Subsystem
 local MemoryModule = {}
-
-local function ExecuteConsole(cmd)
-    pcall(function()
-        if type(_G.ExecuteConsoleCommand) == "function" then
-            _G.ExecuteConsoleCommand(cmd)
-        end
-    end)
-    pcall(function()
-        if type(UEHelpers) ~= "table" then return end
-        local pc = UEHelpers.GetPlayerController()
-        if pc and pc:IsValid() and pc.ConsoleCommand then
-            pc:ConsoleCommand(cmd, true)
-        end
-    end)
-    pcall(function()
-        local kismet = StaticFindObject("/Script/Engine.Default__KismetSystemLibrary")
-        local world = type(UEHelpers) == "table" and (UEHelpers.GetWorld() or UEHelpers.GetWorldContextObject())
-        if kismet and kismet:IsValid() and world and world:IsValid() then
-            kismet:ExecuteConsoleCommand(world, cmd, nil)
-        end
-    end)
-end
+local ExecuteConsole = require("console")
 
 function MemoryModule.apply(cfg)
     if not cfg or not cfg.enabled then return end
@@ -49,12 +28,11 @@ function MemoryModule.apply(cfg)
         ExecuteWithDelay(trimIntervalMs, performMemoryMaintenance)
     end
 
-    -- Hook player respawns / fast travel to clean up orphaned assets
+    -- Use incremental Lua collection on travel; forced engine GC causes visible stalls.
     pcall(function()
         RegisterHook("/Script/Pal.PalPlayerController:ClientRestart", function(Context)
             ExecuteWithDelay(2000, function()
-                collectgarbage("collect")
-                ExecuteConsole("r.Streaming.PurgeUnused")
+                collectgarbage("step", 200)
             end)
         end)
     end)

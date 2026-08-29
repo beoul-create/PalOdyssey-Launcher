@@ -4,6 +4,11 @@ return {
     disableChromaticAberration = true,
     disableFilmGrain = true,
     crispDepthOfField = true,
-    enhancedShadowDistance = true,
+    betterNightLight = true,
+    enhancedLODDistance = true,
+    ultraWideSupport = true,
+    asyncTextureStreaming = true,
+    framePacingReflex = true,
+    enhancedUpscaling = true,
     log = true
 }

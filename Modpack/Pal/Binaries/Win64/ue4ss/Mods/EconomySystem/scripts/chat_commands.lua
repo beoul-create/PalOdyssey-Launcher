@@ -1,6 +1,9 @@
+local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
+package.path = ScriptDir .. "?.lua;" .. ScriptDir .. "../?.lua;" .. package.path
+
 local ChatCommands = {}
-local GachaEngine = require("scripts.gacha_engine")
-local ShopCatalog = require("scripts.shop_catalog")
+local GachaEngine = require("gacha_engine")
+local ShopCatalog = require("shop_catalog")
 
 local Config = {}
 
@@ -46,7 +49,7 @@ end
 
 function ChatCommands.SendPlayerMessage(Player, Text, ColorHex)
     pcall(function()
-        local Subsystem = StaticFindObject("/Script/Pal.PalChatSubsystem")
+        local Subsystem = FindFirstOf("PalChatSubsystem")
         if Subsystem and Subsystem:IsValid() and Player and Player:IsValid() then
             Subsystem:SendSystemChatMessage(Player, FText(Text))
         end
@@ -80,10 +83,10 @@ end
 function ChatCommands.GiveItem(Player, ItemId, Count)
     local success = false
     pcall(function()
-        local InvSubsystem = StaticFindObject("/Script/Pal.PalInventorySubsystem")
+        local InvSubsystem = FindFirstOf("PalInventorySubsystem")
         if InvSubsystem and InvSubsystem:IsValid() and Player and Player:IsValid() then
-            InvSubsystem:RequestAddItem(Player, FName(ItemId), Count, true)
-            success = true
+            local result = InvSubsystem:RequestAddItem(Player, FName(ItemId), Count, true)
+            success = result ~= false
         end
     end)
     return success
@@ -92,11 +95,11 @@ end
 function ChatCommands.TakeItem(Player, ItemId, Count)
     local success = false
     pcall(function()
-        local InvSubsystem = StaticFindObject("/Script/Pal.PalInventorySubsystem")
+        local InvSubsystem = FindFirstOf("PalInventorySubsystem")
         if InvSubsystem and InvSubsystem:IsValid() and Player and Player:IsValid() then
             -- Fallback / inventory extraction
-            InvSubsystem:RequestRemoveItem(Player, FName(ItemId), Count)
-            success = true
+            local result = InvSubsystem:RequestRemoveItem(Player, FName(ItemId), Count)
+            success = result ~= false
         end
     end)
     return success
@@ -129,14 +132,14 @@ function ChatCommands.HandleBalance(Player)
 end
 
 function ChatCommands.HandleExchange(Player, ItemKey, Quantity)
-    Quantity = math.max(1, Quantity or 1)
+    Quantity = math.min(999, math.max(1, math.floor(tonumber(Quantity) or 1)))
     if not ItemKey or not Config.ShopItems or not Config.ShopItems[ItemKey:lower()] then
         ChatCommands.SendPlayerMessage(Player, "❌ Invalid item. Use /shop to see available inventory.", "FF4444")
         return
     end
 
     local Item = Config.ShopItems[ItemKey:lower()]
-    local TotalCost = (Item.Cost or 1) * Quantity
+    local TotalCost = math.max(0, tonumber(Item.Cost) or 1) * Quantity
     local CurrentPoints = ChatCommands.GetPlayerTechPoints(Player)
 
     if CurrentPoints < TotalCost then
@@ -145,30 +148,44 @@ function ChatCommands.HandleExchange(Player, ItemKey, Quantity)
     end
 
     -- Process Transaction
-    ChatCommands.AddPlayerTechPoints(Player, -TotalCost)
-    ChatCommands.GiveItem(Player, Item.ItemId, (Item.Count or 1) * Quantity)
+    if not ChatCommands.AddPlayerTechPoints(Player, -TotalCost) then
+        ChatCommands.SendPlayerMessage(Player, "❌ Purchase failed because the point balance could not be updated.", "FF4444")
+        return
+    end
+    if not ChatCommands.GiveItem(Player, Item.ItemId, math.max(1, tonumber(Item.Count) or 1) * Quantity) then
+        ChatCommands.AddPlayerTechPoints(Player, TotalCost)
+        ChatCommands.SendPlayerMessage(Player, "❌ Item delivery failed; your Technology Points were refunded.", "FF4444")
+        return
+    end
     ChatCommands.SendPlayerMessage(Player, string.format("✅ Purchased %dx %s for %d Tech Points!", Quantity, Item.Desc or ItemKey, TotalCost), "00FF88")
 end
 
 function ChatCommands.HandleRecycle(Player, ItemKey, Quantity)
-    Quantity = math.max(1, Quantity or 1)
+    Quantity = math.min(999, math.max(1, math.floor(tonumber(Quantity) or 1)))
     if not ItemKey or not Config.RecycleRates or not Config.RecycleRates[ItemKey] then
         ChatCommands.SendPlayerMessage(Player, "❌ This item cannot be recycled into Tech Points.", "FF4444")
         return
     end
 
-    local Rate = Config.RecycleRates[ItemKey] or 1
+    local Rate = math.max(0, tonumber(Config.RecycleRates[ItemKey]) or 1)
     local Payout = Rate * Quantity
 
     -- Remove item and credit points
-    ChatCommands.TakeItem(Player, ItemKey, Quantity)
-    ChatCommands.AddPlayerTechPoints(Player, Payout)
+    if not ChatCommands.TakeItem(Player, ItemKey, Quantity) then
+        ChatCommands.SendPlayerMessage(Player, "❌ Recycle failed; verify that you have enough of that item.", "FF4444")
+        return
+    end
+    if not ChatCommands.AddPlayerTechPoints(Player, Payout) then
+        ChatCommands.GiveItem(Player, ItemKey, Quantity)
+        ChatCommands.SendPlayerMessage(Player, "❌ Point credit failed; the removed items were restored.", "FF4444")
+        return
+    end
     ChatCommands.SendPlayerMessage(Player, string.format("♻️ Recycled %dx %s for +%d Tech Points!", Quantity, ItemKey, Payout), "00FF88")
 end
 
 function ChatCommands.HandleGacha(Player, Rolls)
-    Rolls = math.min(math.max(1, Rolls or 1), 10) -- Clamp rolls between 1 and 10
-    local CostPerRoll = Config.GachaCostTechPoints or 3
+    Rolls = math.min(math.max(1, math.floor(tonumber(Rolls) or 1)), 10)
+    local CostPerRoll = math.max(0, tonumber(Config.GachaCostTechPoints) or 3)
     local TotalCost = CostPerRoll * Rolls
     local CurrentPoints = ChatCommands.GetPlayerTechPoints(Player)
 
@@ -177,13 +194,20 @@ function ChatCommands.HandleGacha(Player, Rolls)
         return
     end
 
-    ChatCommands.AddPlayerTechPoints(Player, -TotalCost)
+    if not ChatCommands.AddPlayerTechPoints(Player, -TotalCost) then
+        ChatCommands.SendPlayerMessage(Player, "❌ Gacha failed because the point balance could not be updated.", "FF4444")
+        return
+    end
     ChatCommands.SendPlayerMessage(Player, string.format("🎰 Rolling Gacha (%dx)...", Rolls), "FFAA00")
 
     for i = 1, Rolls do
         local Outcome = GachaEngine.Roll(Config.GachaPool)
-        ChatCommands.GiveItem(Player, Outcome.ItemId, Outcome.Count or 1)
+        if not Outcome or not Outcome.ItemId or not ChatCommands.GiveItem(Player, Outcome.ItemId, math.max(1, tonumber(Outcome.Count) or 1)) then
+            ChatCommands.AddPlayerTechPoints(Player, CostPerRoll)
+            ChatCommands.SendPlayerMessage(Player, "  ❌ Reward delivery failed; this roll was refunded.", "FF4444")
+        else
         ChatCommands.SendPlayerMessage(Player, string.format("  🎁 [%s] Received: %dx %s", Outcome.Rarity or "Reward", Outcome.Count or 1, Outcome.ItemId), "FFFFFF")
+        end
     end
 end
 

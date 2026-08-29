@@ -1,11 +1,23 @@
-local LimitChecker = require("scripts.limit_checker")
+local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
+package.path = ScriptDir .. "?.lua;" .. ScriptDir .. "../?.lua;" .. package.path
+
+local LimitChecker = require("limit_checker")
+
+local function DecodeJson(Content)
+    local decoders = {}
+    if JSON and type(JSON.parse) == "function" then table.insert(decoders, JSON.parse) end
+    if json and type(json.decode) == "function" then table.insert(decoders, json.decode) end
+    if _G.json and type(_G.json.decode) == "function" then table.insert(decoders, _G.json.decode) end
+    for _, decoder in ipairs(decoders) do
+        if type(decoder) == "function" then
+            local ok, parsed = pcall(decoder, Content)
+            if ok and type(parsed) == "table" then return parsed end
+        end
+    end
+    return nil
+end
 
 local function LoadConfig()
-    local File = io.open("Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/config.json", "r")
-    if not File then return nil end
-    local Content = File:read("*all")
-    File:close()
-
     local Config = {
         RestrictedBuildings = {
             Farm_Breed = {
@@ -22,12 +34,21 @@ local function LoadConfig()
         NotificationMessage = "❌ Guild building limit reached: Your guild is capped at %d %s(s) to maintain server economy balance."
     }
 
-    if JSON and JSON.parse then
-        pcall(function()
-            local parsed = JSON.parse(Content)
-            if parsed then Config = parsed end
-        end)
+    local File = io.open(ScriptDir .. "../config.json", "r")
+    if not File then
+        print("[GuildBuildingLimits] config.json was not found; using safe defaults.")
+        return Config
     end
+    local Content = File:read("*all")
+    File:close()
+
+    local Parsed = DecodeJson(Content)
+    if not Parsed then
+        print("[GuildBuildingLimits] config.json could not be decoded; using safe defaults.")
+        return Config
+    end
+
+    for Key, Value in pairs(Parsed) do Config[Key] = Value end
 
     return Config
 end

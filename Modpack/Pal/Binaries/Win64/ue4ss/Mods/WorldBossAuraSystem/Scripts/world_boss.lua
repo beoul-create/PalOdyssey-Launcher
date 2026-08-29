@@ -1,6 +1,9 @@
+local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
+package.path = ScriptDir .. "?.lua;" .. ScriptDir .. "../?.lua;" .. package.path
+
 local WorldBoss = {}
-local AuraSystem = require("scripts.aura_system")
-local LiveboardExport = require("scripts.liveboard_export")
+local AuraSystem = require("aura_system")
+local LiveboardExport = require("liveboard_export")
 
 local ActiveBosses = {}
 local Config = {}
@@ -23,14 +26,14 @@ function WorldBoss.BroadcastDiscord(PalName, AuraType, LocationName, Pos)
 end
 
 function WorldBoss.SpawnEvent()
-    if not Config.SpawnPoints or #Config.SpawnPoints == 0 then return end
+    if not Config.SpawnPoints or #Config.SpawnPoints == 0 or not Config.BossPalPool or #Config.BossPalPool == 0 then return end
 
     local Point = Config.SpawnPoints[math.random(#Config.SpawnPoints)]
     local PalId = Config.BossPalPool[math.random(#Config.BossPalPool)]
     local Auras = { "Fiery", "Corrupted", "Celestial" }
     local SelectedAura = Auras[math.random(#Auras)]
 
-    local SpawnerSubsystem = StaticFindObject("/Script/Pal.PalSpawnerSubsystem")
+    local SpawnerSubsystem = FindFirstOf("PalSpawnerSubsystem")
     if not SpawnerSubsystem or not SpawnerSubsystem:IsValid() then return end
 
     -- Spawn Actor at Target Location
@@ -39,7 +42,8 @@ function WorldBoss.SpawnEvent()
 
     if BossActor and BossActor:IsValid() then
         -- Apply 3.0x Visual Scale
-        BossActor:SetActorScale3D({ X = Config.BossScaleWorld, Y = Config.BossScaleWorld, Z = Config.BossScaleWorld })
+        local WorldScale = tonumber(Config.BossScaleWorld) or 3.0
+        BossActor:SetActorScale3D({ X = WorldScale, Y = WorldScale, Z = WorldScale })
 
         -- Apply 100x HP and 2x Combat Parameters
         local Param = BossActor.CharacterParameterComponent
@@ -80,7 +84,8 @@ function WorldBoss.InitHooks()
         local UID = Pal:GetUniqueID()
         if ActiveBosses[UID] then
             -- Downsize to 2x Scale
-            Pal:SetActorScale3D({ X = Config.BossScaleCaptured, Y = Config.BossScaleCaptured, Z = Config.BossScaleCaptured })
+            local CapturedScale = tonumber(Config.BossScaleCaptured) or 2.0
+            Pal:SetActorScale3D({ X = CapturedScale, Y = CapturedScale, Z = CapturedScale })
 
             -- Set Permanent 2x Talent (IV) Modifiers
             local IndividualParam = Pal:GetIndividualParameter()
@@ -93,6 +98,17 @@ function WorldBoss.InitHooks()
             ActiveBosses[UID] = nil
 
             -- Refresh liveboard file
+            LiveboardExport.DumpState(ActiveBosses, Config)
+        end
+    end)
+
+    RegisterHook("/Script/Pal.PalCharacter:OnDead", function(Context)
+        local Pal = Context:get()
+        if not Pal or not Pal:IsValid() then return end
+
+        local UID = Pal:GetUniqueID()
+        if ActiveBosses[UID] then
+            ActiveBosses[UID] = nil
             LiveboardExport.DumpState(ActiveBosses, Config)
         end
     end)

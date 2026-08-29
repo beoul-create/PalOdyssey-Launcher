@@ -12,7 +12,7 @@ local ServerModule = require("server")
 local DeliveryModule = require("delivery")
 
 print("==========================================================")
-print("  PalOdyssey Ultimate Optimization Suite v1.0.0 Starting  ")
+print("  PalOdyssey Performance Suite v1.1.0 Starting  ")
 print("==========================================================")
 
 -- Load configuration
@@ -21,7 +21,7 @@ local cfg = Config.load()
 -- Initialize each subsystem
 pcall(InputModule.apply, cfg.rawInput)
 pcall(NetworkModule.apply, cfg.network)
-pcall(GraphicsModule.apply, cfg.graphics)
+pcall(GraphicsModule.apply, cfg.graphics, cfg.cpu)
 pcall(MemoryModule.apply, cfg.memory)
 pcall(ServerModule.apply, cfg.server)
 pcall(DeliveryModule.apply)

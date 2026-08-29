@@ -31,9 +31,9 @@ Config.current = {
     },
     memory = {
         enabled = true,
-        autoTrimWorkingSet = true,
+        autoTrimWorkingSet = false,
         trimIntervalMinutes = 5,
-        defragTexturePool = true
+        defragTexturePool = false
     },
     server = {
         enabled = true,
@@ -44,15 +44,27 @@ Config.current = {
 }
 
 function Config.load()
-    local ok, file = pcall(io.open, "ue4ss/Mods/PalOdysseyOptimizer/config.json", "r")
-    if not ok or not file then
-        ok, file = pcall(io.open, "Mods/PalOdysseyOptimizer/config.json", "r")
-    end
+    local scriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
+    local ok, file = pcall(io.open, scriptDir .. "../config.json", "r")
 
     if ok and file then
         local content = file:read("*a")
         file:close()
-        -- Basic json value parser or fallback to defaults
+        if type(JSON) == "table" and type(JSON.parse) == "function" then
+            local parsedOk, parsed = pcall(JSON.parse, content)
+            if parsedOk and type(parsed) == "table" then
+                local function merge(target, source)
+                    for key, value in pairs(source) do
+                        if type(value) == "table" and type(target[key]) == "table" then
+                            merge(target[key], value)
+                        else
+                            target[key] = value
+                        end
+                    end
+                end
+                merge(Config.current, parsed)
+            end
+        end
     end
     return Config.current
 end

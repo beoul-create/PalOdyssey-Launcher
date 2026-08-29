@@ -280,9 +280,16 @@ local function grantPlayerItem(controller, ps, rawItemName, qty)
 end
 
 local processedDeliveryCache = {}
+local lastPlayerExport = 0
 
 local function processQueue()
-    pcall(exportLivePlayerData)
+    -- Object enumeration plus four telemetry writes is the expensive part of
+    -- this loop. Five-second data does not require doing that on every queue poll.
+    local now = os.time()
+    if now - lastPlayerExport >= 5 then
+        pcall(exportLivePlayerData)
+        lastPlayerExport = now
+    end
 
     local qPath = findQueueFile()
     local okOpen, f = pcall(io.open, qPath, "r")
@@ -620,8 +627,8 @@ end
 function DeliveryModule.apply()
     log("Initializing Live Economy & Tech Points Synchronization Engine...")
 
-    -- Poll every 1.5 seconds for instant in-game updates
-    LoopAsync(1500, function()
+    -- Keep deliveries responsive without continuously hitting the filesystem.
+    LoopAsync(2000, function()
         pcall(processQueue)
         return false -- keep looping indefinitely
     end)

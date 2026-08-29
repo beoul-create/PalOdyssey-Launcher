@@ -1,11 +1,29 @@
 local LiveboardExport = {}
+local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
+local StatePath = ScriptDir .. "../../../../../../Saved/liveboard_state.json"
+
+local function EncodeJsonString(value)
+    return '"' .. tostring(value)
+        :gsub("\\", "\\\\")
+        :gsub('"', '\\"')
+        :gsub("\b", "\\b")
+        :gsub("\f", "\\f")
+        :gsub("\n", "\\n")
+        :gsub("\r", "\\r")
+        :gsub("\t", "\\t")
+        :gsub("[%z\1-\31]", function(c) return string.format("\\u%04x", string.byte(c)) end)
+        .. '"'
+end
 
 -- Lightweight pure-Lua JSON serializer for UE4SS runtime
 local function EncodeJsonValue(val)
     local t = type(val)
     if t == "string" then
-        return string.format("%q", val):gsub("\n", "\\n"):gsub("\r", "\\r")
-    elseif t == "number" or t == "boolean" then
+        return EncodeJsonString(val)
+    elseif t == "number" then
+        if val ~= val or val == math.huge or val == -math.huge then return "null" end
+        return tostring(val)
+    elseif t == "boolean" then
         return tostring(val)
     elseif t == "table" then
         local isArray = true
@@ -28,7 +46,7 @@ local function EncodeJsonValue(val)
         else
             local fields = {}
             for k, v in pairs(val) do
-                table.insert(fields, string.format("%q:%s", tostring(k), EncodeJsonValue(v)))
+                table.insert(fields, EncodeJsonString(k) .. ":" .. EncodeJsonValue(v))
             end
             return "{" .. table.concat(fields, ",") .. "}"
         end
@@ -43,7 +61,7 @@ function LiveboardExport.DumpState(ActiveBosses, Config)
 
     -- 1. Gather Online Players & Levels
     pcall(function()
-        local GameplayStatics = StaticFindObject("/Script/Engine.GameplayStatics")
+        local GameplayStatics = StaticFindObject("/Script/Engine.Default__GameplayStatics")
         local PlayerStateClass = StaticFindObject("/Script/Pal.PalPlayerState")
         if GameplayStatics and GameplayStatics:IsValid() and PlayerStateClass and PlayerStateClass:IsValid() and World then
             local PlayerStates = GameplayStatics:GetAllActorsOfClass(World, PlayerStateClass)
@@ -95,8 +113,7 @@ function LiveboardExport.DumpState(ActiveBosses, Config)
     }
 
     pcall(function()
-        local dir = "Pal/Saved"
-        local File = io.open(dir .. "/liveboard_state.json", "w")
+        local File = io.open(StatePath, "w")
         if File then
             File:write(EncodeJsonValue(Data))
             File:close()

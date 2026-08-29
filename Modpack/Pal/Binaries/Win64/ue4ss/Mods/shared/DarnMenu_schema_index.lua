@@ -4,9 +4,9 @@ return {
   "CleanHUD",
   "DarnToasts",
   "ShiningLuckies",
-  "QuickDeposit",
   "PalboxSearchPlus",
   "StuckPalRescuer",
   "PalOdysseyShop",
-  "CS2Crosshair"
+  "CS2Crosshair",
+  "FastConnect"
 }

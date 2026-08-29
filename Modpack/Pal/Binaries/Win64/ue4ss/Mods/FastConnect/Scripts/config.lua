@@ -7,18 +7,21 @@ local Config = {
     prewarmShaderPipelines = true
 }
 
+local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
+
 local function LoadConfig()
     pcall(function()
-        local configFile = io.open("Mods/FastConnect/config.json", "r")
+        local configFile = io.open(ScriptDir .. "../config.json", "r")
         if configFile then
             local content = configFile:read("*all")
             configFile:close()
-            local jsonDecoder = json or _G.json
+            local jsonDecoder = JSON or json or _G.json
             if not jsonDecoder then
                 pcall(function() jsonDecoder = require("json") end)
             end
-            if jsonDecoder and type(jsonDecoder.decode) == "function" then
-                local decoded = jsonDecoder.decode(content)
+            local decode = jsonDecoder and (jsonDecoder.decode or jsonDecoder.parse)
+            if type(decode) == "function" then
+                local decoded = decode(content)
                 if type(decoded) == "table" then
                     for k, v in pairs(decoded) do
                         Config[k] = v

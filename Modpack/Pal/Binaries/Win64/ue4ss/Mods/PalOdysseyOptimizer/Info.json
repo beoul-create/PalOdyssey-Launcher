@@ -1,6 +1,6 @@
 {
   "name": "PalOdysseyOptimizer",
-  "version": "1.0.0",
-  "description": "Unified Ultimate Optimization Suite: Raw Input, Network Lag Fixes, FPS & GPU Assist, CPU & RAM Trimming, and Server Stability Engine.",
+  "version": "1.1.0",
+  "description": "Event-driven performance suite for input, rendering, networking, memory pacing, and server stability.",
   "author": "PalOdyssey Team"
 }

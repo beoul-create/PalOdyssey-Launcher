@@ -23,8 +23,8 @@
       "CoolTime": 30.0,
       "EffectType1": "EPalAdditionalEffectType::Burn",
       "EffectValue1": 100,
-      "EffectType1": "EPalAdditionalEffectType::Stun",
-      "EffectValue1": 100
+      "EffectType2": "EPalAdditionalEffectType::Stun",
+      "EffectValue2": 100
     },
     "SelfExplosion": {
       "WazaType": "EPalWazaID::SelfExplosion",
@@ -34,8 +34,8 @@
       "CoolTime": 60.0,
       "EffectType1": "EPalAdditionalEffectType::Burn",
       "EffectValue1": 999,
-      "EffectType1": "EPalAdditionalEffectType::Stun",
-      "EffectValue1": 999
+      "EffectType2": "EPalAdditionalEffectType::Stun",
+      "EffectValue2": 999
     }
   }
 }

@@ -1,45 +1,11 @@
 -- PalOdysseyOptimizer - Dedicated Server Performance Suite (Inspired by Lithium, ServerCore, Krypton, FerriteCore & C2ME)
 local ServerModule = {}
+local ExecuteConsole = require("console")
 
 local function GetWorldSafe()
     if type(UEHelpers) ~= "table" then return nil end
     local ok, world = pcall(function() return UEHelpers.GetWorld() or UEHelpers.GetWorldContextObject() end)
     return ok and world or nil
-end
-
--- Each dispatch path is tried independently so a failure in one never skips the others.
-local function ExecuteConsole(cmd)
-    -- Path 1: Global UE4SS ExecuteConsoleCommand
-    pcall(function()
-        if type(_G.ExecuteConsoleCommand) == "function" then
-            _G.ExecuteConsoleCommand(cmd)
-        end
-    end)
-    -- Path 2: PlayerController:ConsoleCommand
-    pcall(function()
-        if type(UEHelpers) ~= "table" then return end
-        local pc = UEHelpers.GetPlayerController()
-        if not pc or not pc:IsValid() then
-            local pcs = FindAllOf("PalPlayerController") or FindAllOf("PlayerController")
-            if pcs and #pcs > 0 then pc = pcs[1] end
-        end
-        if pc and pc:IsValid() and pc.ConsoleCommand then
-            pc:ConsoleCommand(cmd, true)
-        end
-    end)
-    -- Path 3: KismetSystemLibrary:ExecuteConsoleCommand
-    pcall(function()
-        local kismet = StaticFindObject("/Script/Engine.Default__KismetSystemLibrary")
-        if type(UEHelpers) ~= "table" then return end
-        local world = UEHelpers.GetWorldContextObject()
-        if not world or not world:IsValid() then
-            local pc = UEHelpers.GetPlayerController()
-            if pc and pc:IsValid() then world = pc end
-        end
-        if kismet and kismet:IsValid() and world and world:IsValid() then
-            kismet:ExecuteConsoleCommand(world, cmd, nil)
-        end
-    end)
 end
 
 function ServerModule.apply(cfg)
@@ -84,15 +50,8 @@ function ServerModule.apply(cfg)
         ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 5.0")
         ExecuteConsole("s.PriorityAsyncLoadingExtraTime 15.0")
         ExecuteConsole("s.AsyncLoadingTimeLimit 5.0")
-        ExecuteConsole("t.MaxFPS 60")
 
-        -- 4. FerriteCore Heap Reduction & Garbage Collection Acceleration
-        ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 10")
-        ExecuteConsole("gc.LowMemoryHostThresholdMB 1024")
-        ExecuteConsole("gc.CreateGCClusters 1")
-        ExecuteConsole("gc.NumRetriesBeforeForcingCSGC 0")
-
-        -- 5. Anti-Rubberband Momentum Tolerances & Network Movement Smoothing
+        -- 4. Anti-Rubberband Momentum Tolerances & Network Movement Smoothing
         ExecuteConsole("net.ClientMoveCorrectionThreshold 200.0")
         ExecuteConsole("p.NetCorrectionThreshold 200.0")
         ExecuteConsole("p.NetEnableMoveErrorSimulation 0")
@@ -105,38 +64,20 @@ function ServerModule.apply(cfg)
         end
     end
 
-    -- Run initial passes with staggered delays for engine readiness
-    ExecuteWithDelay(2000, function() setupServerEngineOptimization(GetWorldSafe()) end)
-    ExecuteWithDelay(5000, function() setupServerEngineOptimization(GetWorldSafe()) end)
-    ExecuteWithDelay(10000, function() setupServerEngineOptimization(GetWorldSafe()) end)
+    -- One backup pass covers builds where the world hook is unavailable.
+    ExecuteWithDelay(6000, function() setupServerEngineOptimization(GetWorldSafe()) end)
 
-    -- Hook World BeginPlay, GameState and Player joins
+    -- Apply once when each world becomes ready; engine CVars then persist.
     pcall(function()
         RegisterHook("/Script/Engine.World:ReceiveBeginPlay", function(Context)
-            setupServerEngineOptimization(Context:get())
-        end)
-    end)
-    pcall(function()
-        RegisterHook("/Script/Pal.PalGameStateInGame:ReceiveBeginPlay", function(Context)
-            setupServerEngineOptimization(GetWorldSafe())
-        end)
-    end)
-    pcall(function()
-        RegisterHook("/Script/Pal.PalPlayerController:ClientRestart", function(Context)
-            setupServerEngineOptimization(UEHelpers.GetWorld())
+            ExecuteWithDelay(1500, function() setupServerEngineOptimization(GetWorldSafe()) end)
         end)
     end)
 
-    -- Background server garbage collection and net tuning sweep (every 60s)
-    local sweepCount = 0
+    -- Incremental Lua maintenance only; engine/CVar sweeps create periodic stalls.
     local function serverMemoryMaintenance()
         pcall(function()
             collectgarbage("step", 100)
-            setupServerEngineOptimization(UEHelpers.GetWorld())
-            sweepCount = sweepCount + 1
-            if sweepCount % 5 == 0 then
-                print(string.format("[PalOdysseyOptimizer:Server] Heartbeat #%d — Server optimization suite active.", sweepCount))
-            end
         end)
         ExecuteWithDelay(60000, serverMemoryMaintenance)
     end

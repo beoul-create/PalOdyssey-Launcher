@@ -5,6 +5,11 @@ local function Log(msg)
     print(string.format("[FastConnect] %s", tostring(msg)))
 end
 
+if Config.enabled == false then
+    Log("Disabled in config.")
+    return
+end
+
 -- Multi-Path Console Command Dispatcher
 local function ExecuteConsole(command)
     if not command or command == "" then return false end
@@ -103,6 +108,17 @@ local function SkipIntroMovies()
     end)
 end
 
+local function ApplySteadyStateStreaming()
+    ExecuteConsole("s.AsyncLoadingTimeLimit 5.0")
+    ExecuteConsole("s.PriorityAsyncLoadingExtraTime 15.0")
+    ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 5.0")
+    ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 6")
+    ExecuteConsole("r.Streaming.HLODStrategy 1")
+    ExecuteConsole("r.Streaming.Boost 1")
+    ExecuteConsole("r.Streaming.FramesForFullUpdate 25")
+    ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 60")
+end
+
 -- 4. Fast Travel / Map Transition Acceleration
 local function OnPlayerTransition()
     pcall(function()
@@ -126,6 +142,7 @@ local function SafeDelayedEnforce()
         ApplyFastNetworkRates()
         ApplyLoadingOptimizations()
     end)
+    ExecuteWithDelay(8000, ApplySteadyStateStreaming)
 end
 
 -- Hook World, Network & Game Setting Initialization (Fully Automated)
