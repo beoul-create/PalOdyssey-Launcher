@@ -1,0 +1,15 @@
+{
+  "gamePath": "C:\\SteamLibrary\\steamapps\\common\\Palworld",
+  "serverLaunchArguments": "-useperfthreads -NoAsyncLoadingThread -port=8211",
+  "autoStartServerWithClient": false,
+  "remoteManifestUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/manifest.json",
+  "serverIp": "palodyssey.duckdns.org",
+  "serverPort": 8211,
+  "autoLaunchGame": false,
+  "soundEnabled": true,
+  "discordRpcEnabled": true,
+  "closeLauncherOnStart": false,
+  "remoteServerApiUrl": "http://127.0.0.1:3001",
+  "remoteAdminKey": "DefaultSecretKey",
+  "launchViaSteamProtocol": false
+}
