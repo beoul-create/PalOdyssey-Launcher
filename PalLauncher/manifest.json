@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.233123",
-  "GeneratedAt": "2026-08-29T23:31:23.427Z",
+  "Version": "2026.08.29.233745",
+  "GeneratedAt": "2026-08-29T23:37:45.433Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,14 +8,14 @@
   "TotalFiles": 331,
   "News": [
     {
+      "title": "🛒 Economy System v2.5.0: Interactive GUI + Clickable Shop Window",
+      "date": "Aug 29, 2026",
+      "summary": "Press [F6] to open the interactive graphical shop window with clickable [BUY] & [GACHA] buttons. Mouse focus and zero-crash Canvas HUD active."
+    },
+    {
       "title": "🧬 Universal Subspecies Roster Live!",
       "date": "Aug 29, 2026",
       "summary": "Rolled out full elemental subspecies variants (Foxparks Aqua, Lamball Ignis, Anubis Cryst, Jetragon Frost, Orserk Terra, etc.) with breeding & eggs."
-    },
-    {
-      "title": "🛒 Economy System: Standalone Engine v2.2.0",
-      "date": "Aug 29, 2026",
-      "summary": "Self-contained in-engine economy supporting Normal & Ancient Tech Points. Press [F6] or type !shop in chat."
     },
     {
       "title": "🛡️ Complete ESC Menu Crash Elimination",
@@ -272,8 +272,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "339496efd4726e43c2ceeae8b38a047976bd31dc1390ba0b23ce413864929f95",
-      "Size": 16368,
+      "Hash": "0f92f0149d1e3b965fb348452b41255986f371e916f6c4231a1fdf6e1fc1f22b",
+      "Size": 23389,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua"
     },
     {
