@@ -165,7 +165,8 @@ namespace PalLauncher.Services
                 Arguments = arguments,
                 WorkingDirectory = serverDirectory,
                 UseShellExecute = false,
-                CreateNoWindow = false // Keeps console window visible for server admin logs
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden
             };
 
             try
