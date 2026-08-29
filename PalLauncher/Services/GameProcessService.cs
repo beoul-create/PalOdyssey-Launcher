@@ -153,9 +153,15 @@ namespace PalLauncher.Services
 
             string shippingExe = Path.Combine(serverDirectory, ServerExecutableRelativePath);
             string serverExe;
+            if (File.Exists(shippingExe))
+            {
+                serverExe = shippingExe;
                 arguments = string.IsNullOrWhiteSpace(arguments) ? "Pal" : $"Pal {arguments}";
             }
+            else
+            {
                 serverExe = Path.Combine(serverDirectory, "PalServer.exe");
+            }
             var startInfo = new ProcessStartInfo
             {
                 FileName = serverExe,
