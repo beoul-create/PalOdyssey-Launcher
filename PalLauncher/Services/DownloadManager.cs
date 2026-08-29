@@ -1,7 +1,9 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -67,12 +69,18 @@ namespace PalLauncher.Services
             long lastReportBytes = 0;
             double lastReportTime = 0;
             double currentSpeedMb = 0;
+            var progressLock = new object();
 
-            for (int i = 0; i < filesToDownload.Count; i++)
+            await Parallel.ForEachAsync(
+                filesToDownload.Select((item, index) => (Item: item, Index: index)),
+                new ParallelOptions
+                {
+                    MaxDegreeOfParallelism = 4,
+                    CancellationToken = cancellationToken
+                },
+                async (entry, token) =>
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                var modItem = filesToDownload[i];
+                var modItem = entry.Item;
                 string destinationPath = modItem.GetResolvedPath(gameRootPath);
                 string destinationDir = Path.GetDirectoryName(destinationPath)!;
 
@@ -96,63 +104,91 @@ namespace PalLauncher.Services
 
                 try
                 {
-                    using var response = await _httpClient.GetAsync(
-                        modItem.DownloadUrl,
+                    using var request = new HttpRequestMessage(HttpMethod.Get, modItem.DownloadUrl);
+                    request.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue
+                    {
+                        NoCache = true,
+                        NoStore = true
+                    };
+
+                    using var response = await _httpClient.SendAsync(
+                        request,
                         HttpCompletionOption.ResponseHeadersRead,
-                        cancellationToken);
+                        token);
 
                     response.EnsureSuccessStatusCode();
 
-                    long fileContentLength = response.Content.Headers.ContentLength ?? modItem.FileSize;
-                    await using var streamToReadFrom = await response.Content.ReadAsStreamAsync(cancellationToken);
-                    await using (var fileStream = new FileStream(
-                        tempPath,
-                        FileMode.Create,
-                        FileAccess.Write,
-                        FileShare.None,
-                        81920,
-                        FileOptions.Asynchronous | FileOptions.SequentialScan))
+                    long? serverContentLength = response.Content.Headers.ContentLength;
+                    long expectedTotalBytes = serverContentLength ?? (modItem.FileSize > 0 ? modItem.FileSize : 0);
+
+                    await using var streamToReadFrom = await response.Content.ReadAsStreamAsync(token);
+                    await using (var fileStream = new FileStream(tempPath, new FileStreamOptions
                     {
-                        byte[] buffer = new byte[81920];
-                        int bytesRead;
+                        Mode = FileMode.Create,
+                        Access = FileAccess.Write,
+                        Share = FileShare.None,
+                        BufferSize = 256 * 1024,
+                        Options = FileOptions.Asynchronous | FileOptions.SequentialScan,
+                        PreallocationSize = Math.Max(0, expectedTotalBytes)
+                    }))
+                    {
+                        byte[] buffer = ArrayPool<byte>.Shared.Rent(256 * 1024);
+                        long fileBytesDownloaded = 0;
 
-                        while ((bytesRead = await streamToReadFrom.ReadAsync(buffer.AsMemory(0, buffer.Length), cancellationToken)) > 0)
+                        try
                         {
-                            await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), cancellationToken);
-                            globalBytesDownloaded += bytesRead;
-
-                            double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
-                            if (elapsedSeconds - lastReportTime >= 0.2 || globalBytesDownloaded == totalBytesAllFiles)
+                            int bytesRead;
+                            while ((bytesRead = await streamToReadFrom.ReadAsync(buffer.AsMemory(), token)) > 0)
                             {
-                                double timeDelta = elapsedSeconds - lastReportTime;
-                                long byteDelta = globalBytesDownloaded - lastReportBytes;
-                                if (timeDelta > 0)
+                                await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), token);
+                                fileBytesDownloaded += bytesRead;
+                                long downloaded = Interlocked.Add(ref globalBytesDownloaded, bytesRead);
+
+                                lock (progressLock)
                                 {
-                                    currentSpeedMb = (byteDelta / (1024.0 * 1024.0)) / timeDelta;
+                                    double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
+                                    if (elapsedSeconds - lastReportTime >= 0.2 || downloaded >= totalBytesAllFiles)
+                                    {
+                                        double timeDelta = elapsedSeconds - lastReportTime;
+                                        long byteDelta = downloaded - lastReportBytes;
+                                        if (timeDelta > 0)
+                                        {
+                                            currentSpeedMb = (byteDelta / (1024.0 * 1024.0)) / timeDelta;
+                                        }
+                                        lastReportTime = elapsedSeconds;
+                                        lastReportBytes = downloaded;
+
+                                        double overallPercentage = totalBytesAllFiles > 0
+                                            ? (double)downloaded / totalBytesAllFiles * 100.0
+                                            : 100.0;
+
+                                        progress?.Report(new DownloadProgressReport
+                                        {
+                                            BytesDownloaded = downloaded,
+                                            TotalBytesToDownload = totalBytesAllFiles,
+                                            Percentage = Math.Min(100.0, overallPercentage),
+                                            SpeedMbPerSec = Math.Max(0.0, currentSpeedMb),
+                                            CurrentFileName = Path.GetFileName(destinationPath),
+                                            CurrentFileIndex = entry.Index + 1,
+                                            TotalFileCount = filesToDownload.Count
+                                        });
+                                    }
                                 }
-                                lastReportTime = elapsedSeconds;
-                                lastReportBytes = globalBytesDownloaded;
-
-                                double overallPercentage = totalBytesAllFiles > 0
-                                    ? (double)globalBytesDownloaded / totalBytesAllFiles * 100.0
-                                    : 100.0;
-
-                                progress?.Report(new DownloadProgressReport
-                                {
-                                    BytesDownloaded = globalBytesDownloaded,
-                                    TotalBytesToDownload = totalBytesAllFiles,
-                                    Percentage = Math.Min(100.0, overallPercentage),
-                                    SpeedMbPerSec = Math.Max(0.0, currentSpeedMb),
-                                    CurrentFileName = Path.GetFileName(destinationPath),
-                                    CurrentFileIndex = i + 1,
-                                    TotalFileCount = filesToDownload.Count
-                                });
                             }
+                        }
+                        finally
+                        {
+                            ArrayPool<byte>.Shared.Return(buffer);
+                        }
+
+                        if (serverContentLength.HasValue && serverContentLength.Value > 0 && fileBytesDownloaded != serverContentLength.Value)
+                        {
+                            throw new EndOfStreamException($"Download for '{modItem.RelativePath}' ended at {fileBytesDownloaded} of {serverContentLength.Value} bytes.");
                         }
                     }
 
                     // Verify downloaded hash
-                    string downloadedHash = await _hashService.ComputeSha256Async(tempPath, cancellationToken);
+                    string downloadedHash = await _hashService.ComputeSha256Async(tempPath, token);
                     if (!string.IsNullOrWhiteSpace(modItem.Sha256) &&
                         !string.Equals(downloadedHash, modItem.Sha256, StringComparison.OrdinalIgnoreCase))
                     {
@@ -172,15 +208,17 @@ namespace PalLauncher.Services
 
                     // Update cache
                     var finalFileInfo = new FileInfo(destinationPath);
-                    cache.Entries[modItem.RelativePath] = new CacheFileEntry
+                    lock (cache.Entries)
                     {
-                        RelativePath = modItem.RelativePath,
-                        ResolvedFullPath = destinationPath,
-                        LastWriteTimeUtc = finalFileInfo.LastWriteTimeUtc,
-                        FileSize = finalFileInfo.Length,
-                        Sha256 = downloadedHash
-                    };
-                    cache.Save(cachePath);
+                        cache.Entries[modItem.RelativePath] = new CacheFileEntry
+                        {
+                            RelativePath = modItem.RelativePath,
+                            ResolvedFullPath = destinationPath,
+                            LastWriteTimeUtc = finalFileInfo.LastWriteTimeUtc,
+                            FileSize = finalFileInfo.Length,
+                            Sha256 = downloadedHash
+                        };
+                    }
                 }
                 catch
                 {
@@ -190,7 +228,10 @@ namespace PalLauncher.Services
                     }
                     throw;
                 }
-            }
+            });
+
+            // One atomic cache write replaces a full JSON serialization per file.
+            cache.Save(cachePath);
         }
 
         /// <summary>

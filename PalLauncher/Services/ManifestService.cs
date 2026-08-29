@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
@@ -48,10 +49,23 @@ namespace PalLauncher.Services
             {
                 if (!string.IsNullOrWhiteSpace(url) && (url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || url.StartsWith("https://", StringComparison.OrdinalIgnoreCase)))
                 {
-                    string json = await _httpClient.GetStringAsync(url, cancellationToken);
-                    var manifest = JsonSerializer.Deserialize<ManifestModel>(json, JsonOptions);
-                    if (manifest != null)
-                        return manifest;
+                    string cacheBusterUrl = url + (url.Contains('?') ? "&" : "?") + $"t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
+                    using var request = new HttpRequestMessage(HttpMethod.Get, cacheBusterUrl);
+                    request.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue
+                    {
+                        NoCache = true,
+                        NoStore = true,
+                        MustRevalidate = true
+                    };
+
+                    using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync(cancellationToken);
+                        var manifest = JsonSerializer.Deserialize<ManifestModel>(json, JsonOptions);
+                        if (manifest != null && manifest.Files.Count > 0)
+                            return manifest;
+                    }
                 }
             }
             catch (Exception)
@@ -87,19 +101,30 @@ namespace PalLauncher.Services
                 TotalFilesCount = manifest.Files.Count
             };
 
-            for (int i = 0; i < manifest.Files.Count; i++)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
+            var verificationResults = new bool[manifest.Files.Count];
+            int completedCount = 0;
 
+            // Two readers saturate typical SSDs without turning integrity checks into
+            // random-I/O contention on hard drives or starving the WPF UI thread.
+            await Parallel.ForEachAsync(
+                Enumerable.Range(0, manifest.Files.Count),
+                new ParallelOptions
+                {
+                    MaxDegreeOfParallelism = 2,
+                    CancellationToken = cancellationToken
+                },
+                async (i, token) =>
+            {
                 var item = manifest.Files[i];
                 string resolvedPath = item.GetResolvedPath(gameRootPath);
 
                 if (item.TargetCategory == ModTargetCategory.PakMod)
                 {
-                    result.ValidPakFileNames.Add(Path.GetFileName(resolvedPath));
+                    lock (result.ValidPakFileNames)
+                    {
+                        result.ValidPakFileNames.Add(Path.GetFileName(resolvedPath));
+                    }
                 }
-
-                statusProgress?.Report($"Verifying ({i + 1}/{manifest.Files.Count}): {Path.GetFileName(resolvedPath)}");
 
                 var (isValid, _) = await _hashService.VerifyFileWithCacheAsync(
                     resolvedPath,
@@ -107,9 +132,18 @@ namespace PalLauncher.Services
                     item.FileSize,
                     item.Sha256,
                     cache,
-                    cancellationToken);
+                    token);
 
-                if (!isValid)
+                verificationResults[i] = isValid;
+                int completed = Interlocked.Increment(ref completedCount);
+                statusProgress?.Report($"Verifying ({completed}/{manifest.Files.Count}): {Path.GetFileName(resolvedPath)}");
+            });
+
+            // Merge sequentially to retain manifest order and avoid locks in the hot path.
+            for (int i = 0; i < manifest.Files.Count; i++)
+            {
+                var item = manifest.Files[i];
+                if (!verificationResults[i])
                 {
                     result.FilesToDownload.Add(item);
                     result.TotalBytesToDownload += item.FileSize;

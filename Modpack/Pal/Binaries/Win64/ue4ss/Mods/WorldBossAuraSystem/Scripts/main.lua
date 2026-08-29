@@ -64,27 +64,22 @@ AutoShutdown.Init()
 -- Initial liveboard export
 LiveboardExport.DumpState(WorldBoss.GetActiveBosses(), Config)
 
--- Periodic Timer Ticker
-local AccumulatedBossTime = 0
-local AccumulatedLiveboardTime = 0
-local LiveboardInterval = math.max(1, tonumber(Config.LiveboardExportIntervalSeconds) or 15)
-local BossInterval = math.max(1, tonumber(Config.SpawnIntervalSeconds) or 1800)
+-- Periodic Background Timers (0% Game Thread Tick Overhead)
+local LiveboardIntervalMs = math.max(5000, (tonumber(Config.LiveboardExportIntervalSeconds) or 15) * 1000)
+local BossIntervalMs = math.max(60000, (tonumber(Config.SpawnIntervalSeconds) or 1800) * 1000)
 
-RegisterHook("/Script/Engine.World:Tick", function(Context, DeltaSeconds)
-    local dt = tonumber(DeltaSeconds and DeltaSeconds:get()) or 0
-    if dt <= 0 then return end
-    AccumulatedBossTime = AccumulatedBossTime + dt
-    AccumulatedLiveboardTime = AccumulatedLiveboardTime + dt
-
-    -- 1. Periodic World Boss Spawner (e.g. 1800s / 30m)
-    if AccumulatedBossTime >= BossInterval then
-        AccumulatedBossTime = 0
-        WorldBoss.SpawnEvent()
-    end
-
-    -- 2. Periodic Liveboard Telemetry Dumper (e.g. 15s)
-    if AccumulatedLiveboardTime >= LiveboardInterval then
-        AccumulatedLiveboardTime = 0
+-- 1. Periodic Liveboard Telemetry Dumper
+LoopAsync(LiveboardIntervalMs, function()
+    pcall(function()
         LiveboardExport.DumpState(WorldBoss.GetActiveBosses(), Config)
-    end
+    end)
+    return false -- continue looping
+end)
+
+-- 2. Periodic World Boss Spawner
+LoopAsync(BossIntervalMs, function()
+    pcall(function()
+        WorldBoss.SpawnEvent()
+    end)
+    return false -- continue looping
 end)

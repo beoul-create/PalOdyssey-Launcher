@@ -9,20 +9,13 @@ local LastLoggedMilestone = 0
 local IsShuttingDown = false
 
 function AutoShutdown.Init()
-    print("[AutoShutdown] 15-minute inactivity watchdog started.")
+    print("[AutoShutdown] 15-minute inactivity watchdog started (async timer).")
 
-    RegisterHook("/Script/Engine.World:Tick", function(Context, DeltaSeconds)
-        if IsShuttingDown then return end
-
-        local ok, Delta = pcall(function() return tonumber(DeltaSeconds:get()) or 0 end)
-        if not ok or Delta <= 0 then return end
-        ScanAccumulator = ScanAccumulator + Delta
-        if ScanAccumulator < 5 then return end
-        Delta = ScanAccumulator
-        ScanAccumulator = 0
+    LoopAsync(15000, function()
+        if IsShuttingDown then return true end
 
         local World = GetWorldContext and GetWorldContext() or nil
-        if not World then return end
+        if not World then return false end
 
         local GameplayStatics = StaticFindObject("/Script/Engine.Default__GameplayStatics")
         local PlayerStateClass = StaticFindObject("/Script/Pal.PalPlayerState")
@@ -37,10 +30,10 @@ function AutoShutdown.Init()
             end
         end
 
-        if not PlayerQuerySucceeded then return end
+        if not PlayerQuerySucceeded then return false end
 
         if PlayerCount == 0 then
-            IdleAccumulator = IdleAccumulator + Delta
+            IdleAccumulator = IdleAccumulator + 15
 
             local Milestone = math.floor(IdleAccumulator / 180)
             if Milestone > LastLoggedMilestone then
@@ -51,6 +44,7 @@ function AutoShutdown.Init()
             if IdleAccumulator >= IDLE_TIMEOUT_SECONDS then
                 IsShuttingDown = true
                 AutoShutdown.ExecuteGracefulShutdown()
+                return true -- stop looping
             end
         else
             if IdleAccumulator > 0 then
@@ -59,6 +53,8 @@ function AutoShutdown.Init()
                 LastLoggedMilestone = 0
             end
         end
+
+        return false -- continue looping
     end)
 end
 

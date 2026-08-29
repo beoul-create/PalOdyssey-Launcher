@@ -20,18 +20,15 @@ local function ApplyEngineUnlocks(PlayerController)
         KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.DistanceFieldShadowing 0", nil)
         
         KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.Water.SingleLayer.Reflection 1", nil)
-        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.SSR.Quality 2", nil)
-        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.Water.SingleLayer.ShadingQuality 1", nil)
-        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.Water.SingleLayer.WaterDepthQuality 1", nil)
+        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.SSR.Quality 1", nil)
+        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.Water.SingleLayer.ShadingQuality 0", nil)
+        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.Water.SingleLayer.WaterDepthQuality 0", nil)
         KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.Water.SingleLayer.UseSSR 1", nil)
         
         KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.RayTracing.Translucency 0", nil)
         
-        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.VolumetricCloud 1", nil)
-        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.VolumetricCloud.HighQuality 0", nil)
-        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.VolumetricCloud.ViewRaySampleCountMax 64", nil)
-        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.VolumetricCloud.Shadow.ViewRaySampleCountMax 32", nil)
-        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.VolumetricCloud.SkyAO 0", nil)
+        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.VolumetricCloud 0", nil)
+        KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.VolumetricFog 0", nil)
         
         KismetSystemLibrary:ExecuteConsoleCommand(PlayerController, "r.SkyAtmosphere.TransmittanceLUT.UseSmallFormat 1", nil)
         -- (Removed) r.ContactShadows 1 caused the player's hip lantern to self-shadow in caves, making them pitch black.

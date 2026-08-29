@@ -1,11 +1,6 @@
-local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
-package.path = ScriptDir .. "?.lua;" .. ScriptDir .. "../?.lua;" .. package.path
-
 local ChatCommands = {}
 local GachaEngine = require("gacha_engine")
 local ShopCatalog = require("shop_catalog")
-
-local Config = {}
 
 function ChatCommands.Init(LoadedConfig)
     Config = LoadedConfig or {}

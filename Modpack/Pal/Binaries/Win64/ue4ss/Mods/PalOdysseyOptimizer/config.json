@@ -1,5 +1,5 @@
 {
-  "preset": "balanced",
+  "preset": "maximum_performance",
   "rawInput": {
     "enabled": true,
     "disableSmoothing": true,
@@ -23,19 +23,19 @@
     "optimizeNaniteLumen": true,
     "shadowBudgetOptimization": true,
     "texturePoolStreamingDefrag": true,
-    "asyncCompute": false
+    "asyncCompute": true
   },
   "cpu": {
     "enabled": true,
-    "limitBackgroundCpu": false,
-    "taskGraphTasksPerTick": 80,
-    "gcIntervalSeconds": 60
+    "limitBackgroundCpu": true,
+    "taskGraphTasksPerTick": 60,
+    "gcIntervalSeconds": 90
   },
   "memory": {
     "enabled": true,
-    "autoTrimWorkingSet": false,
-    "trimIntervalMinutes": 4,
-    "defragTexturePool": false
+    "autoTrimWorkingSet": true,
+    "trimIntervalMinutes": 5,
+    "defragTexturePool": true
   },
   "server": {
     "enabled": true,
