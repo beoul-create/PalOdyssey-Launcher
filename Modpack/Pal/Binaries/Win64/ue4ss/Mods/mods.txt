@@ -14,8 +14,7 @@ PalSchema : 1
 RamTrimMod : 1
 PalworldTuner : 1
 ExpeditionXP : 1
-DarnMenu : 0
-DarnToasts : 0
+UniPalUI : 1
 LevelLock : 1
 WeaponProficiency : 1
 PalOdysseyOptimizer : 1

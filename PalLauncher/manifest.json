@@ -1,14 +1,19 @@
 {
-  "Version": "2026.08.29.233745",
-  "GeneratedAt": "2026-08-29T23:37:45.433Z",
+  "Version": "2026.08.29.234105",
+  "GeneratedAt": "2026-08-29T23:41:05.425Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 331,
+  "TotalFiles": 302,
   "News": [
     {
-      "title": "🛒 Economy System v2.5.0: Interactive GUI + Clickable Shop Window",
+      "title": "✨ UniPalUI Integrated (DarnToasts Fully Replaced)",
+      "date": "Aug 29, 2026",
+      "summary": "Integrated the crash-safe UniPalUI viewport framework. Completely removed legacy DarnMenu/DarnToasts artifacts. Press [F5] for menu dashboard."
+    },
+    {
+      "title": "🛒 Economy System v2.5.0: Interactive GUI + Clickable Shop",
       "date": "Aug 29, 2026",
       "summary": "Press [F6] to open the interactive graphical shop window with clickable [BUY] & [GACHA] buttons. Mouse focus and zero-crash Canvas HUD active."
     },
@@ -16,11 +21,6 @@
       "title": "🧬 Universal Subspecies Roster Live!",
       "date": "Aug 29, 2026",
       "summary": "Rolled out full elemental subspecies variants (Foxparks Aqua, Lamball Ignis, Anubis Cryst, Jetragon Frost, Orserk Terra, etc.) with breeding & eggs."
-    },
-    {
-      "title": "🛡️ Complete ESC Menu Crash Elimination",
-      "date": "Aug 29, 2026",
-      "summary": "Deactivated DarnUI widget injection across all mods (WeaponProficiency & DarnMenu). ESC spamming is 100% stable."
     }
   ],
   "Files": [
@@ -125,126 +125,6 @@
       "Hash": "b31feb8ffb8adac1aa8204d65665ddd2fc4971e61cba210f18054e9bfbe911a8",
       "Size": 3173,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/ConsoleEnablerMod/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Info.json",
-      "Hash": "3ab3bbe3bb63854b43886c7e459c27a33ab5a617058ab9516dad714e377a0984",
-      "Size": 406,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Info.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/LICENSE.txt",
-      "Hash": "53b6f25dc838a26b457551f72804146cb1b13b98eb8b1ac7845d7f6bf1f1b7d1",
-      "Size": 66,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/LICENSE.txt"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/darn.lua",
-      "Hash": "095202fa3fe42aa9e3337de76f2c87846a90595bb591bd5dab1ad8017eb33f70",
-      "Size": 14920,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/darn.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/DarnMenu_API.md",
-      "Hash": "fb43f16705294deb962f2b23505642d83c151f053a405d70f1c5c39ae2f96207",
-      "Size": 18711,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/DarnMenu_API.md"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/DarnMenu_schema_example.lua",
-      "Hash": "d6d2f4a4fc490e12d3910ae21f7fdbf05ae39ec62b916ead39dfcf2513c24485",
-      "Size": 7617,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/DarnMenu_schema_example.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/DarnMenu_TUTORIAL.md",
-      "Hash": "275c461a399eb6f48a67ed36d84eea4629956925a740dc1918d1b66da4f7f4f2",
-      "Size": 12229,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/DarnMenu_TUTORIAL.md"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/FOR_DEVS_BEST_PRACTICES.md",
-      "Hash": "94e8c9dc4307e632b56fa886e3efa2ab30b6f22f8b27b8031e692d06c4502b46",
-      "Size": 18725,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/FOR_DEVS_BEST_PRACTICES.md"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/main.lua",
-      "Hash": "812bc4821df6a59dc1df71b848773c3b28e74abece059e90e9ac5820e3547f68",
-      "Size": 176569,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/say.lua",
-      "Hash": "efe709301d353d1e8fcaafc96e0184f01417214bbfa0ca49a436fd5d2aa955f9",
-      "Size": 181043,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/say.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/schemas.lua",
-      "Hash": "00db15acbac95322a446a9ce39b5d897342d3779ab473574cfe32ea87281be72",
-      "Size": 41648,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/schemas.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/ui.lua",
-      "Hash": "a4904258b2aa7936a3ff5dc6d4f685136722ff41875a23b1375efa804d2cf287",
-      "Size": 195595,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/ui.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/writers.lua",
-      "Hash": "fec07c19ba9c32ee351fb5f1f179fa3cbca79be4fa0772db32789c018cceb2ac",
-      "Size": 24047,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/writers.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Info.json",
-      "Hash": "448a853dba8a55678954b180350de7b939aba5a3c34dbdd2fd299d6b2566e22d",
-      "Size": 418,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Info.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/LICENSE.txt",
-      "Hash": "3cfd22df3e1f00d46d2ea85ccd35172857767e098669002b6076a1da5a0298b0",
-      "Size": 77,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/LICENSE.txt"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/darn.lua",
-      "Hash": "095202fa3fe42aa9e3337de76f2c87846a90595bb591bd5dab1ad8017eb33f70",
-      "Size": 14920,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/darn.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/DarnToasts_API.md",
-      "Hash": "bf0ad2e8dfbce34e803804fae2a1ed1b70749e6528abd8591ce50f73bdd7807f",
-      "Size": 6292,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/DarnToasts_API.md"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/DarnToasts_TUTORIAL.md",
-      "Hash": "535a9adfd60c1034564a0624c6222c73f37790db880f7e9bbf0dc7bb4de38db0",
-      "Size": 3844,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/DarnToasts_TUTORIAL.md"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/main.lua",
-      "Hash": "ce6f1399f57efac4ca9a7b8376f4bba55fed614f47f9769ddb3d16c8793b2a6b",
-      "Size": 5868,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/ToastLib_config_example.lua",
-      "Hash": "282f71b998d525e25ac6f1333a213221281397ef14e79605bf60c7a08a6c6d96",
-      "Size": 3302,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/ToastLib_config_example.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/ToastLib.lua",
-      "Hash": "479d7395538b576a6011b52f3427109f6f43c532e1b1766ae6e333026a62315f",
-      "Size": 69308,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/ToastLib.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json",
@@ -422,8 +302,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/mods.txt",
-      "Hash": "ebfd44d7167d7249c652d03e6281838a466dc7d383d4afa2187e9fb7d4025b15",
-      "Size": 561,
+      "Hash": "e45af800a18bcf1c69eae0e30b88b5ccb26f0e75ff546339e278375f13df164e",
+      "Size": 546,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/mods.txt"
     },
     {
@@ -1711,78 +1591,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/RamTrimMod/enabled.txt"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_CleanHUD.lua",
-      "Hash": "cc04f91c34e31aec8c6cc6ea583457bb58af0e56149a15201ce795e2e23350c6",
-      "Size": 2201,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_CleanHUD.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_DarnToasts.lua",
-      "Hash": "ea28f21f8aecdb4304b76331daa7c44ebb309c102488ced97356dc77e9947de6",
-      "Size": 2582,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_DarnToasts.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_FastConnect.lua",
-      "Hash": "1e0055f54aedb46b9a1c736057a930877d9da1f0c795a1f0946b24cfffaefb91",
-      "Size": 1726,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_FastConnect.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_index.lua",
-      "Hash": "aae45bb3a5f2bf0e93df5b3710693792fe71069af6c2044eee8078e0cdac60c2",
-      "Size": 185,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_index.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_PalboxSearchPlus.lua",
-      "Hash": "16afece1ad603ae85bfd8c400c2907d79fc634150a00da8d1ba0f002166093b5",
-      "Size": 1278,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_PalboxSearchPlus.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_PalClearVision.lua",
-      "Hash": "c547b443f965d55645afd1566468a703775d65aded7971a6594b8740a93f6c62",
-      "Size": 2726,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_PalClearVision.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_PalOdysseyOptimizer.lua",
-      "Hash": "45799ad539117d65b61a212267f40820851d5341587f4e79e4f650212111182d",
-      "Size": 1139,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_PalOdysseyOptimizer.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_PalOdysseyShop.lua",
-      "Hash": "02ad829de74c59dbae9765791d0233e8e3465d00630a2370027ac32f4567375b",
-      "Size": 2326,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_PalOdysseyShop.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_PalworldTuner.lua",
-      "Hash": "5449dc3c83553d1e7da368f786bbf331c512bc1173ded7e4d43fc4fac9131ea2",
-      "Size": 93,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_PalworldTuner.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_ShiningLuckies.lua",
-      "Hash": "cd52dca03af475c5c8397ef8bc8a78d87aef5202fcdaaee943c98e2cc596d3c5",
-      "Size": 1171,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_ShiningLuckies.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_StuckPalRescuer.lua",
-      "Hash": "32891021c73b7bb808e4151cf2a07f4c86d9bf6960dcf3ea9c7cabf705961a9d",
-      "Size": 1165,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_StuckPalRescuer.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_WeaponProficiency.lua",
-      "Hash": "bb8330480f6666c691db0f586899a85a382a812c70710905b09cad970d160531",
-      "Size": 93,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/DarnMenu_schema_WeaponProficiency.lua"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/jsbProfiler/jsbProfi.lua",
       "Hash": "7390d12e3c3cd0256cf70ea277c3a0789d2a50bc713389da6d3f1c1dca3c7f78",
       "Size": 14113,
@@ -1829,6 +1637,24 @@
       "Hash": "40e0471994608fc2d0661ab9df6756d149d2777f081d90bd76c72fccb0c9af04",
       "Size": 5278,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/StuckPalRescuer/Scripts/main.lua"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/enabled.txt",
+      "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "Size": 0,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/enabled.txt"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/Info.json",
+      "Hash": "4cd2eaaa7491568fccb22b1c56fa038c271eb7cfaf4e76a44510fb299ec6d594",
+      "Size": 226,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/Info.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/Scripts/main.lua",
+      "Hash": "23b9d1105f02c0ff66eb8f0b783e4ce86ab0a7ff2e021e44e2451577300c4134",
+      "Size": 2653,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/Scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/enabled.txt",
