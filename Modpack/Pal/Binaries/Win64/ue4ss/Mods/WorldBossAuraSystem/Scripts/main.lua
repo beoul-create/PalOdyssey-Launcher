@@ -68,6 +68,33 @@ LiveboardExport.DumpState(WorldBoss.GetActiveBosses(), Config)
 local LiveboardIntervalMs = math.max(5000, (tonumber(Config.LiveboardExportIntervalSeconds) or 15) * 1000)
 local BossIntervalMs = math.max(60000, (tonumber(Config.SpawnIntervalSeconds) or 1800) * 1000)
 
+-- Reactive Join / Leave Event Hooks (Instant Liveboard Update)
+local function TriggerReactiveUpdate()
+    pcall(function()
+        if ExecuteWithDelay then
+            ExecuteWithDelay(1000, function()
+                pcall(LiveboardExport.DumpState, WorldBoss.GetActiveBosses(), Config)
+            end)
+        else
+            LiveboardExport.DumpState(WorldBoss.GetActiveBosses(), Config)
+        end
+    end)
+end
+
+local joinLeaveHooks = {
+    "/Script/Engine.GameModeBase:OnPostLogin",
+    "/Script/Engine.GameModeBase:Logout",
+    "/Script/Pal.PalGameMode:OnPostLogin",
+    "/Script/Pal.PalGameMode:Logout",
+    "/Script/Pal.PalPlayerState:OnCompleteSyncPlayer"
+}
+
+for _, hookName in ipairs(joinLeaveHooks) do
+    pcall(RegisterHook, hookName, function()
+        TriggerReactiveUpdate()
+    end)
+end
+
 -- 1. Periodic Liveboard Telemetry Dumper
 LoopAsync(LiveboardIntervalMs, function()
     pcall(function()

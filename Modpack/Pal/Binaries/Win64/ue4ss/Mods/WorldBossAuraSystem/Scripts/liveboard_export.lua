@@ -57,35 +57,78 @@ end
 
 function LiveboardExport.DumpState(ActiveBosses, Config)
     local PlayersList = {}
-    local World = GetWorldContext and GetWorldContext() or nil
+    local SeenNames = {}
 
-    -- 1. Gather Online Players & Levels
+    -- 1. Gather Online Players from PlayerStates
     pcall(function()
-        local GameplayStatics = StaticFindObject("/Script/Engine.Default__GameplayStatics")
-        local PlayerStateClass = StaticFindObject("/Script/Pal.PalPlayerState")
-        if GameplayStatics and GameplayStatics:IsValid() and PlayerStateClass and PlayerStateClass:IsValid() and World then
-            local PlayerStates = GameplayStatics:GetAllActorsOfClass(World, PlayerStateClass)
-            if PlayerStates and PlayerStates:IsValid() then
-                for i = 1, PlayerStates:Num() do
-                    local State = PlayerStates:Get(i)
-                    if State and State:IsValid() then
-                        local pName = "Unknown"
-                        local pLevel = 1
-                        local pGuild = "None"
-                        pcall(function() pName = State:GetPlayerName():ToString() end)
-                        pcall(function() pLevel = State:GetLevel() end)
-                        pcall(function() pGuild = State:GetGuildName():ToString() end)
+        local pStates = FindAllOf("PalPlayerState") or {}
+        for _, state in ipairs(pStates) do
+            pcall(function()
+                if not state or not state:IsValid() then return end
+                local pName = ""
+                local pLevel = 1
+                local pGuild = "None"
 
-                        table.insert(PlayersList, {
-                            Name = pName,
-                            Level = pLevel,
-                            GuildName = pGuild
-                        })
+                pcall(function()
+                    if state.GetPlayerName then
+                        pName = state:GetPlayerName():ToString()
+                    elseif state.PlayerNamePrivate then
+                        pName = state.PlayerNamePrivate:ToString()
                     end
+                end)
+
+                pcall(function()
+                    if state.GetLevel then
+                        pLevel = state:GetLevel()
+                    elseif state.Level then
+                        pLevel = state.Level
+                    end
+                end)
+
+                pcall(function()
+                    if state.GetGuildName then
+                        pGuild = state:GetGuildName():ToString()
+                    elseif state.GuildName then
+                        pGuild = state.GuildName:ToString()
+                    end
+                end)
+
+                if pName and pName ~= "" and pName ~= "Unknown" and not SeenNames[pName] then
+                    SeenNames[pName] = true
+                    table.insert(PlayersList, {
+                        Name = pName,
+                        Level = pLevel or 1,
+                        GuildName = pGuild or "None"
+                    })
                 end
-            end
+            end)
         end
     end)
+
+    -- Fallback to PlayerControllers if needed
+    if #PlayersList == 0 then
+        pcall(function()
+            local controllers = FindAllOf("PalPlayerController") or {}
+            for _, pc in ipairs(controllers) do
+                pcall(function()
+                    if not pc or not pc:IsValid() then return end
+                    local pState = pc.PlayerState
+                    if pState and pState:IsValid() then
+                        local pName = ""
+                        pcall(function() pName = pState:GetPlayerName():ToString() end)
+                        if pName and pName ~= "" and pName ~= "Unknown" and not SeenNames[pName] then
+                            SeenNames[pName] = true
+                            table.insert(PlayersList, {
+                                Name = pName,
+                                Level = 1,
+                                GuildName = "None"
+                            })
+                        end
+                    end
+                end)
+            end
+        end)
+    end
 
     -- 2. Format Active Boss Instances
     local BossesList = {}

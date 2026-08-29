@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.225402",
-  "GeneratedAt": "2026-08-29T22:54:02.809Z",
+  "Version": "2026.08.29.225546",
+  "GeneratedAt": "2026-08-29T22:55:46.043Z",
   "TotalFiles": 331,
   "Files": [
     {
@@ -1949,14 +1949,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/liveboard_export.lua",
-      "Hash": "cc9a2747f3d0ba808601cffa868d53ed3ec353e9033dd28c17fd71f4723e6aa3",
-      "Size": 4373,
+      "Hash": "1a433fbccd4d0e3b719f02e6302e98e20c97d4eb7c51c3ab31e2945f0f5445b9",
+      "Size": 5690,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/liveboard_export.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua",
-      "Hash": "021bebb7b5e68aded325174d8552ba96ce9bef56513e725dc103fffdb2894ea1",
-      "Size": 3063,
+      "Hash": "c49f14e358021c086a6d554178500cd527b82e4d5b63690a8cad1fdcdde49a58",
+      "Size": 3871,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua"
     },
     {
