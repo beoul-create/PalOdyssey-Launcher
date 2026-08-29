@@ -1,59 +1,7 @@
 {
   "GachaCostTechPoints": 3,
-  "GachaPool": [
-    {
-      "ItemId": "PalItem_TechnologyBook_G3",
-      "Weight": 5,
-      "Count": 1,
-      "Rarity": "Legendary"
-    },
-    {
-      "ItemId": "PalSphere_Legend",
-      "Weight": 15,
-      "Count": 5,
-      "Rarity": "Epic"
-    },
-    {
-      "ItemId": "PalSphere_Master",
-      "Weight": 30,
-      "Count": 10,
-      "Rarity": "Rare"
-    },
-    {
-      "ItemId": "PalItem_AncientTechnologyPointBook",
-      "Weight": 20,
-      "Count": 1,
-      "Rarity": "Rare"
-    },
-    {
-      "ItemId": "PalItem_PureQuartz",
-      "Weight": 30,
-      "Count": 50,
-      "Rarity": "Common"
-    }
-  ],
+  "GachaPool": [],
   "ShopItems": {
-    "cake": {
-      "ItemId": "Cake",
-      "Cost": 2,
-      "Count": 1,
-      "Currency": "tech",
-      "Desc": "Breeding Cake"
-    },
-    "legendsphere": {
-      "ItemId": "PalSphere_Legend",
-      "Cost": 1,
-      "Count": 3,
-      "Currency": "tech",
-      "Desc": "Legendary Pal Sphere x3"
-    },
-    "ancientcore": {
-      "ItemId": "PalItem_AncientCore",
-      "Cost": 2,
-      "Count": 1,
-      "Currency": "ancient",
-      "Desc": "Ancient Civilization Core"
-    },
     "respec": {
       "ItemId": "PalItem_StatResetMedicine",
       "Cost": 3,
@@ -62,10 +10,5 @@
       "Desc": "Memory Reset Drug"
     }
   },
-  "RecycleRates": {
-    "PalItem_TechnologyBook_G1": 1,
-    "PalItem_TechnologyBook_G2": 2,
-    "PalItem_TechnologyBook_G3": 5,
-    "PalItem_AncientCore": 2
-  }
+  "RecycleRates": {}
 }

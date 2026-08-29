@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.234105",
-  "GeneratedAt": "2026-08-29T23:41:05.425Z",
+  "Version": "2026.08.29.234332",
+  "GeneratedAt": "2026-08-29T23:43:32.534Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,14 +8,14 @@
   "TotalFiles": 302,
   "News": [
     {
+      "title": "🛒 Economy System: Config Inventory Cleaned",
+      "date": "Aug 29, 2026",
+      "summary": "Updated shop inventory, gacha, and recycling per server configuration. Only designated specialty items remain active."
+    },
+    {
       "title": "✨ UniPalUI Integrated (DarnToasts Fully Replaced)",
       "date": "Aug 29, 2026",
       "summary": "Integrated the crash-safe UniPalUI viewport framework. Completely removed legacy DarnMenu/DarnToasts artifacts. Press [F5] for menu dashboard."
-    },
-    {
-      "title": "🛒 Economy System v2.5.0: Interactive GUI + Clickable Shop",
-      "date": "Aug 29, 2026",
-      "summary": "Press [F6] to open the interactive graphical shop window with clickable [BUY] & [GACHA] buttons. Mouse focus and zero-crash Canvas HUD active."
     },
     {
       "title": "🧬 Universal Subspecies Roster Live!",
@@ -128,8 +128,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json",
-      "Hash": "4ac89ceaed5811479425df2ffa9da10418f49b05dcaffa181a7fa6ecca2b9d6d",
-      "Size": 1463,
+      "Hash": "1cd267d702caa2d0bf4c94a5491545529a5bdbf2085aac133d0d617c07707412",
+      "Size": 259,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json"
     },
     {
@@ -152,8 +152,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "0f92f0149d1e3b965fb348452b41255986f371e916f6c4231a1fdf6e1fc1f22b",
-      "Size": 23389,
+      "Hash": "017abb1ec04984eec534faada66cbd3f66089e6c21fd2cc76d16ec273b08321c",
+      "Size": 22417,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua"
     },
     {
