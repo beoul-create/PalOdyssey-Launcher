@@ -7,12 +7,23 @@
         mc:Ignorable="d"
         Title="PalOdyssey Launcher"
         Icon="pack://application:,,,/Assets/app.ico"
-        Height="700" Width="1160"
+        Height="680" Width="1140"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        AllowsTransparency="True"
-        Background="Transparent"
-        ResizeMode="CanMinimize">
+        AllowsTransparency="False"
+        Background="#0A0E1A"
+        ResizeMode="CanMinimize"
+        UseLayoutRounding="True"
+        TextOptions.TextFormattingMode="Display"
+        RenderOptions.BitmapScalingMode="HighQuality">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="50"
+                      ResizeBorderThickness="0"
+                      GlassFrameThickness="0"
+                      CornerRadius="0"
+                      UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
 
     <Window.DataContext>
         <vm:MainViewModel />
@@ -256,17 +267,9 @@
         </Style>
     </Window.Resources>
 
-    <!-- Main Container Shell with Drop Shadow -->
-    <Border CornerRadius="14" BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1.5" Margin="10">
-        <Border.Effect>
-            <DropShadowEffect Color="#000000" BlurRadius="24" ShadowDepth="8" Opacity="0.75" />
-        </Border.Effect>
-
+    <!-- Main Container Shell -->
+    <Border BorderBrush="{StaticResource BorderDarkBrush}" BorderThickness="1" Background="#0A0E1A">
         <Grid ClipToBounds="True">
-            <Grid.Clip>
-                <RectangleGeometry RadiusX="14" RadiusY="14" Rect="0,0,1140,680" />
-            </Grid.Clip>
-
             <!-- LAYER 0: Background Ambient Video Loop with Fallback Ambient Color -->
             <Border Background="{StaticResource BgDarkBrush}" />
 
@@ -331,7 +334,7 @@
 
                     <!-- Center: Dedicated Server Status Beacon & Quick Controls -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Border Background="#1A0F172A" BorderBrush="#3338BDF8" BorderThickness="1" CornerRadius="12" Padding="12,4">
+                        <Border Background="#1A0F172A" BorderBrush="#3338BDF8" BorderThickness="1" CornerRadius="12" Padding="12,4" WindowChrome.IsHitTestVisibleInChrome="True">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <Ellipse x:Name="ServerStatusIndicator"
                                          Width="8" Height="8"
@@ -394,7 +397,7 @@
                     </StackPanel>
 
                     <!-- Right: Window Navigation & Control Buttons -->
-                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0" WindowChrome.IsHitTestVisibleInChrome="True">
                         <!-- Discord Link -->
                         <Button Style="{StaticResource TitleBarButtonStyle}" Command="{Binding OpenDiscordCommand}"
                                 ToolTip="Join Palworld Community Discord" MouseEnter="PlayHoverSound">
@@ -661,7 +664,7 @@
 
                             <!-- Manifest URL -->
                             <TextBlock Text="Remote Manifest URL" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,4" />
-                            <TextBox Text="{Binding RemoteManifestUrl, Mode=TwoWay, FallbackValue=https://palodyssey.gg/manifest.json}"
+                            <TextBox Text="{Binding RemoteManifestUrl, Mode=TwoWay, FallbackValue=https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/manifest.json}"
                                      Background="#101726" Foreground="#FFFFFF" BorderBrush="#22304A" BorderThickness="1" Padding="8" FontSize="12" Margin="0,0,0,14" />
 
                             <!-- Audio & Discord Toggles -->

@@ -139,35 +139,26 @@ namespace PalLauncher.Services
                         Title = "PalOdyssey 2.0 Update Live!",
                         Date = "Today",
                         Summary = "Enhanced dedicated server synchronization, new raid bosses, and balanced pal breeding parameters are now active.",
-                        LinkUrl = "https://palodyssey.gg/news/2.0"
+                        LinkUrl = "https://discord.gg/8YCVeQgUVq"
                     },
                     new()
                     {
                         Title = "Weekend Breeding & EXP Event",
                         Date = "Upcoming",
                         Summary = "Enjoy 2.0x Egg Incubation speed and 1.5x Capture XP rate through Sunday midnight.",
-                        LinkUrl = "https://palodyssey.gg/events"
+                        LinkUrl = "https://discord.gg/8YCVeQgUVq"
                     }
                 },
                 Files = new List<ModFileItem>
                 {
                     new()
                     {
-                        RelativePath = "PalOdyssey_Core.pak",
-                        TargetCategory = ModTargetCategory.PakMod,
-                        FileSize = 1048576,
-                        Sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-                        DownloadUrl = "https://palodyssey.gg/mods/PalOdyssey_Core.pak",
-                        Description = "Core PalOdyssey game modifications and custom textures"
-                    },
-                    new()
-                    {
-                        RelativePath = "PalOdyssey_UI.pak",
-                        TargetCategory = ModTargetCategory.PakMod,
-                        FileSize = 524288,
-                        Sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-                        DownloadUrl = "https://palodyssey.gg/mods/PalOdyssey_UI.pak",
-                        Description = "Custom server HUD indicators and map markers"
+                        RelativePath = "Pal/Binaries/Win64/dwmapi.dll",
+                        TargetCategory = ModTargetCategory.Root,
+                        FileSize = 61952,
+                        Sha256 = "6c6e7151c206628445eb69c3dfee702b31bc51208df13a5cc15c2118c413cde1",
+                        DownloadUrl = "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/dwmapi.dll",
+                        Description = "Core UE4SS injection hook"
                     }
                 }
             };

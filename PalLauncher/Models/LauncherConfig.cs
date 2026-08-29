@@ -27,7 +27,7 @@ namespace PalLauncher.Models
         public bool AutoStartServerWithClient { get; set; } = false;
 
         [JsonPropertyName("remoteManifestUrl")]
-        public string RemoteManifestUrl { get; set; } = "https://raw.githubusercontent.com/PalOdyssey/server-manifest/main/manifest.json";
+        public string RemoteManifestUrl { get; set; } = "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/manifest.json";
 
         [JsonPropertyName("serverIp")]
         public string ServerIp { get; set; } = "palodyssey.duckdns.org";

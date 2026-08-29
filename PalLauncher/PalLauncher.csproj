@@ -15,7 +15,7 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
-    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishReadyToRun>false</PublishReadyToRun>
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
@@ -29,6 +29,11 @@
     <Compile Remove="tests\**" />
     <EmbeddedResource Remove="tests\**" />
     <None Remove="tests\**" />
+    <Page Remove="tests\**" />
+    <Compile Remove="github_staging\**" />
+    <EmbeddedResource Remove="github_staging\**" />
+    <None Remove="github_staging\**" />
+    <Page Remove="github_staging\**" />
   </ItemGroup>
 
   <ItemGroup>

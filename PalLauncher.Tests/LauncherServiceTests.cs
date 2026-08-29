@@ -229,7 +229,7 @@ namespace PalLauncher.Tests
                     ServerInstallPath = @"D:\Games\Steam\steamapps\common\PalServer",
                     ServerLaunchArguments = "-useperfthreads -NoAsyncLoadingThread -port=8211",
                     AutoStartServerWithClient = true,
-                    RemoteManifestUrl = "https://custom.palodyssey.gg/manifest.json",
+                    RemoteManifestUrl = "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/manifest.json",
                     ServerIp = "192.168.1.100",
                     ServerPort = 7777,
                     SoundEnabled = false,
