@@ -1,26 +1,26 @@
 {
-  "Version": "2026.08.29.232749",
-  "GeneratedAt": "2026-08-29T23:27:49.583Z",
+  "Version": "2026.08.29.233123",
+  "GeneratedAt": "2026-08-29T23:31:23.427Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 329,
+  "TotalFiles": 331,
   "News": [
     {
-      "title": "🛒 Economy System: v2.2.0 Standalone Engine",
+      "title": "🧬 Universal Subspecies Roster Live!",
       "date": "Aug 29, 2026",
-      "summary": "Resolved module resolution, load order, and JSON validation. Full support for !shop, !buy, !recycle, !gacha, and [F6]/[F7]/[F8] hotkeys."
+      "summary": "Rolled out full elemental subspecies variants (Foxparks Aqua, Lamball Ignis, Anubis Cryst, Jetragon Frost, Orserk Terra, etc.) with breeding & eggs."
+    },
+    {
+      "title": "🛒 Economy System: Standalone Engine v2.2.0",
+      "date": "Aug 29, 2026",
+      "summary": "Self-contained in-engine economy supporting Normal & Ancient Tech Points. Press [F6] or type !shop in chat."
     },
     {
       "title": "🛡️ Complete ESC Menu Crash Elimination",
       "date": "Aug 29, 2026",
-      "summary": "Deactivated DarnUI widget injection across all mods (WeaponProficiency & DarnMenu). ESC spamming is now 100% stable."
-    },
-    {
-      "title": "⚡ v2.0.7 - Liveboard Player Tracking & Path Resolution",
-      "date": "Aug 29, 2026",
-      "summary": "Fixed liveboard state file path resolution across server environments. Real-time player join/leave telemetry now updates live on Discord."
+      "summary": "Deactivated DarnUI widget injection across all mods (WeaponProficiency & DarnMenu). ESC spamming is 100% stable."
     }
   ],
   "Files": [
@@ -1555,22 +1555,34 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/WhiteAlienDragonTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/DT_PalCombiParameter.jsonc",
-      "Hash": "302cdba951e3717304d0f61408525bdb66561cb9c7bd1ca717079685034f8333",
-      "Size": 1910,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/DT_PalCombiParameter.jsonc"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/DT_PalEggItemParameter.jsonc",
-      "Hash": "b398705bcd28309288ca03767a3a5073fbc209f6d134611a538b8b9e6183010c",
-      "Size": 1658,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/DT_PalEggItemParameter.jsonc"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/mod.json",
-      "Hash": "540d1360d2429ce4c305d9346bf9899633114550b38f3e93078e80e7258f429f",
-      "Size": 174,
+      "Hash": "53e29ae1e6e7633de9f488320ee78bf2aa0d368149d471ade8f11c59aa2d7ebd",
+      "Size": 212,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/mod.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/pals/SubspeciesPals.jsonc",
+      "Hash": "311f8d3cb06dc7cd1d0d35b3faaef34ecd3722f5c0cc125ce2a89e9c3a7e2dfc",
+      "Size": 12724,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/pals/SubspeciesPals.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/raw/DT_PalCombiParameter.jsonc",
+      "Hash": "5841de8e8bd3849d3dec45b7ae28a50412763323d3724c192102bf823cf13298",
+      "Size": 6697,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/raw/DT_PalCombiParameter.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/raw/DT_PalEggItemParameter.jsonc",
+      "Hash": "053d468cfe977458c617d829a06226bb10fbafc772c614f7804669e1a6e24f7e",
+      "Size": 4414,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/raw/DT_PalEggItemParameter.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/translations/en/translations.jsonc",
+      "Hash": "9f495f746df00ffcc4d255842771027e183acc1de8df4edd7139cbe8b929f7a0",
+      "Size": 3189,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/translations/en/translations.jsonc"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/PalworldTuner/metadata.json",

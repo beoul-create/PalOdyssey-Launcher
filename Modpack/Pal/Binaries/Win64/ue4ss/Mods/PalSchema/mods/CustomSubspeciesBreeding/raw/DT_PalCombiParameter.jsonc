@@ -1,0 +1,174 @@
+{
+    "DT_PalCombiParameter": {
+        "Foxparks_Aqua_Combi": {
+            "TribeA": "EPalTribeID::Kitsunebi",
+            "TribeB": "EPalTribeID::Kelpie",
+            "Child": "EPalTribeID::Foxparks_Aqua"
+        },
+        "Foxparks_Aqua_Self": {
+            "TribeA": "EPalTribeID::Foxparks_Aqua",
+            "TribeB": "EPalTribeID::Foxparks_Aqua",
+            "Child": "EPalTribeID::Foxparks_Aqua"
+        },
+        "Lamball_Ignis_Combi": {
+            "TribeA": "EPalTribeID::SheepBall",
+            "TribeB": "EPalTribeID::FireKitsunebi",
+            "Child": "EPalTribeID::Lamball_Ignis"
+        },
+        "Lamball_Ignis_Self": {
+            "TribeA": "EPalTribeID::Lamball_Ignis",
+            "TribeB": "EPalTribeID::Lamball_Ignis",
+            "Child": "EPalTribeID::Lamball_Ignis"
+        },
+        "Cattiva_Noct_Combi": {
+            "TribeA": "EPalTribeID::PinkCat",
+            "TribeB": "EPalTribeID::DreamDemon",
+            "Child": "EPalTribeID::Cattiva_Noct"
+        },
+        "Cattiva_Noct_Self": {
+            "TribeA": "EPalTribeID::Cattiva_Noct",
+            "TribeB": "EPalTribeID::Cattiva_Noct",
+            "Child": "EPalTribeID::Cattiva_Noct"
+        },
+        "Chikipi_Electricity_Combi": {
+            "TribeA": "EPalTribeID::ChickenPal",
+            "TribeB": "EPalTribeID::ElecCat",
+            "Child": "EPalTribeID::Chikipi_Electricity"
+        },
+        "Chikipi_Electricity_Self": {
+            "TribeA": "EPalTribeID::Chikipi_Electricity",
+            "TribeB": "EPalTribeID::Chikipi_Electricity",
+            "Child": "EPalTribeID::Chikipi_Electricity"
+        },
+        "Depresso_Lux_Combi": {
+            "TribeA": "EPalTribeID::NegativeKoala",
+            "TribeB": "EPalTribeID::ElecCat",
+            "Child": "EPalTribeID::Depresso_Lux"
+        },
+        "Depresso_Lux_Self": {
+            "TribeA": "EPalTribeID::Depresso_Lux",
+            "TribeB": "EPalTribeID::Depresso_Lux",
+            "Child": "EPalTribeID::Depresso_Lux"
+        },
+        "Digtoise_Aqua_Combi": {
+            "TribeA": "EPalTribeID::DrillGame",
+            "TribeB": "EPalTribeID::Kelpie",
+            "Child": "EPalTribeID::Digtoise_Aqua"
+        },
+        "Digtoise_Aqua_Self": {
+            "TribeA": "EPalTribeID::Digtoise_Aqua",
+            "TribeB": "EPalTribeID::Digtoise_Aqua",
+            "Child": "EPalTribeID::Digtoise_Aqua"
+        },
+        "Direhowl_Cryst_Combi": {
+            "TribeA": "EPalTribeID::Garm",
+            "TribeB": "EPalTribeID::IceFox",
+            "Child": "EPalTribeID::Direhowl_Cryst"
+        },
+        "Direhowl_Cryst_Self": {
+            "TribeA": "EPalTribeID::Direhowl_Cryst",
+            "TribeB": "EPalTribeID::Direhowl_Cryst",
+            "Child": "EPalTribeID::Direhowl_Cryst"
+        },
+        "Anubis_Cryst_Combi": {
+            "TribeA": "EPalTribeID::Anubis",
+            "TribeB": "EPalTribeID::IceHorse",
+            "Child": "EPalTribeID::Anubis_Cryst"
+        },
+        "Anubis_Cryst_Self": {
+            "TribeA": "EPalTribeID::Anubis_Cryst",
+            "TribeB": "EPalTribeID::Anubis_Cryst",
+            "Child": "EPalTribeID::Anubis_Cryst"
+        },
+        "Orserk_Terra_Combi": {
+            "TribeA": "EPalTribeID::ThunderDragonMan",
+            "TribeB": "EPalTribeID::DrillGame",
+            "Child": "EPalTribeID::Orserk_Terra"
+        },
+        "Orserk_Terra_Self": {
+            "TribeA": "EPalTribeID::Orserk_Terra",
+            "TribeB": "EPalTribeID::Orserk_Terra",
+            "Child": "EPalTribeID::Orserk_Terra"
+        },
+        "Jetragon_Frost_Combi": {
+            "TribeA": "EPalTribeID::JetDragon",
+            "TribeB": "EPalTribeID::IceHorse",
+            "Child": "EPalTribeID::Jetragon_Frost"
+        },
+        "Jetragon_Frost_Self": {
+            "TribeA": "EPalTribeID::Jetragon_Frost",
+            "TribeB": "EPalTribeID::Jetragon_Frost",
+            "Child": "EPalTribeID::Jetragon_Frost"
+        },
+        "Blazamut_Aqua_Combi": {
+            "TribeA": "EPalTribeID::FlameBuffalo",
+            "TribeB": "EPalTribeID::Umihebi",
+            "Child": "EPalTribeID::Blazamut_Aqua"
+        },
+        "Blazamut_Aqua_Self": {
+            "TribeA": "EPalTribeID::Blazamut_Aqua",
+            "TribeB": "EPalTribeID::Blazamut_Aqua",
+            "Child": "EPalTribeID::Blazamut_Aqua"
+        },
+        "Chillet_Terra_Combi": {
+            "TribeA": "EPalTribeID::IceFox",
+            "TribeB": "EPalTribeID::DrillGame",
+            "Child": "EPalTribeID::Chillet_Terra"
+        },
+        "Chillet_Terra_Self": {
+            "TribeA": "EPalTribeID::Chillet_Terra",
+            "TribeB": "EPalTribeID::Chillet_Terra",
+            "Child": "EPalTribeID::Chillet_Terra"
+        },
+        "Lyleen_Ignis_Combi": {
+            "TribeA": "EPalTribeID::LilyQueen",
+            "TribeB": "EPalTribeID::FireKitsunebi",
+            "Child": "EPalTribeID::Lyleen_Ignis"
+        },
+        "Lyleen_Ignis_Self": {
+            "TribeA": "EPalTribeID::Lyleen_Ignis",
+            "TribeB": "EPalTribeID::Lyleen_Ignis",
+            "Child": "EPalTribeID::Lyleen_Ignis"
+        },
+        "Jormuntide_Cryst_Combi": {
+            "TribeA": "EPalTribeID::Umihebi",
+            "TribeB": "EPalTribeID::IceHorse",
+            "Child": "EPalTribeID::Jormuntide_Cryst"
+        },
+        "Jormuntide_Cryst_Self": {
+            "TribeA": "EPalTribeID::Jormuntide_Cryst",
+            "TribeB": "EPalTribeID::Jormuntide_Cryst",
+            "Child": "EPalTribeID::Jormuntide_Cryst"
+        },
+        "Relaxaurus_Terra_Combi": {
+            "TribeA": "EPalTribeID::LazyDragon",
+            "TribeB": "EPalTribeID::DrillGame",
+            "Child": "EPalTribeID::Relaxaurus_Terra"
+        },
+        "Relaxaurus_Terra_Self": {
+            "TribeA": "EPalTribeID::Relaxaurus_Terra",
+            "TribeB": "EPalTribeID::Relaxaurus_Terra",
+            "Child": "EPalTribeID::Relaxaurus_Terra"
+        },
+        "Grizzbolt_Dark_Combi": {
+            "TribeA": "EPalTribeID::ThunderDog",
+            "TribeB": "EPalTribeID::DreamDemon",
+            "Child": "EPalTribeID::Grizzbolt_Dark"
+        },
+        "Grizzbolt_Dark_Self": {
+            "TribeA": "EPalTribeID::Grizzbolt_Dark",
+            "TribeB": "EPalTribeID::Grizzbolt_Dark",
+            "Child": "EPalTribeID::Grizzbolt_Dark"
+        },
+        "Frostallion_Ignis_Combi": {
+            "TribeA": "EPalTribeID::IceHorse",
+            "TribeB": "EPalTribeID::FlameBuffalo",
+            "Child": "EPalTribeID::Frostallion_Ignis"
+        },
+        "Frostallion_Ignis_Self": {
+            "TribeA": "EPalTribeID::Frostallion_Ignis",
+            "TribeB": "EPalTribeID::Frostallion_Ignis",
+            "Child": "EPalTribeID::Frostallion_Ignis"
+        }
+    }
+}

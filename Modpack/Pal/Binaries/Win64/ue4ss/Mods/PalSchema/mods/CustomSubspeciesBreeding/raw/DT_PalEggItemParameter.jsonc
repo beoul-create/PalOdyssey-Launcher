@@ -1,0 +1,123 @@
+{
+    "DT_PalEggItemParameter": {
+        "PalEgg_Foxparks_Aqua": {
+            "PalID": "EPalTribeID::Foxparks_Aqua",
+            "EggRank": 1,
+            "HatchTimeSec": 600,
+            "TargetTemperature": 0,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Water_01"
+        },
+        "PalEgg_Lamball_Ignis": {
+            "PalID": "EPalTribeID::Lamball_Ignis",
+            "EggRank": 1,
+            "HatchTimeSec": 600,
+            "TargetTemperature": 2,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Fire_01"
+        },
+        "PalEgg_Cattiva_Noct": {
+            "PalID": "EPalTribeID::Cattiva_Noct",
+            "EggRank": 1,
+            "HatchTimeSec": 600,
+            "TargetTemperature": 0,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Dark_01"
+        },
+        "PalEgg_Chikipi_Electricity": {
+            "PalID": "EPalTribeID::Chikipi_Electricity",
+            "EggRank": 1,
+            "HatchTimeSec": 600,
+            "TargetTemperature": 0,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Electricity_01"
+        },
+        "PalEgg_Depresso_Lux": {
+            "PalID": "EPalTribeID::Depresso_Lux",
+            "EggRank": 1,
+            "HatchTimeSec": 600,
+            "TargetTemperature": 0,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Electricity_01"
+        },
+        "PalEgg_Digtoise_Aqua": {
+            "PalID": "EPalTribeID::Digtoise_Aqua",
+            "EggRank": 2,
+            "HatchTimeSec": 1800,
+            "TargetTemperature": 0,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Water_02"
+        },
+        "PalEgg_Direhowl_Cryst": {
+            "PalID": "EPalTribeID::Direhowl_Cryst",
+            "EggRank": 2,
+            "HatchTimeSec": 1800,
+            "TargetTemperature": 1,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Ice_02"
+        },
+        "PalEgg_Anubis_Cryst": {
+            "PalID": "EPalTribeID::Anubis_Cryst",
+            "EggRank": 3,
+            "HatchTimeSec": 3600,
+            "TargetTemperature": 1,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Ice_03"
+        },
+        "PalEgg_Orserk_Terra": {
+            "PalID": "EPalTribeID::Orserk_Terra",
+            "EggRank": 3,
+            "HatchTimeSec": 3600,
+            "TargetTemperature": 0,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Earth_03"
+        },
+        "PalEgg_Jetragon_Frost": {
+            "PalID": "EPalTribeID::Jetragon_Frost",
+            "EggRank": 3,
+            "HatchTimeSec": 3600,
+            "TargetTemperature": 1,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Ice_03"
+        },
+        "PalEgg_Blazamut_Aqua": {
+            "PalID": "EPalTribeID::Blazamut_Aqua",
+            "EggRank": 3,
+            "HatchTimeSec": 3600,
+            "TargetTemperature": 0,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Water_03"
+        },
+        "PalEgg_Chillet_Terra": {
+            "PalID": "EPalTribeID::Chillet_Terra",
+            "EggRank": 2,
+            "HatchTimeSec": 1800,
+            "TargetTemperature": 0,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Earth_02"
+        },
+        "PalEgg_Lyleen_Ignis": {
+            "PalID": "EPalTribeID::Lyleen_Ignis",
+            "EggRank": 3,
+            "HatchTimeSec": 3600,
+            "TargetTemperature": 2,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Fire_03"
+        },
+        "PalEgg_Jormuntide_Cryst": {
+            "PalID": "EPalTribeID::Jormuntide_Cryst",
+            "EggRank": 3,
+            "HatchTimeSec": 3600,
+            "TargetTemperature": 1,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Ice_03"
+        },
+        "PalEgg_Relaxaurus_Terra": {
+            "PalID": "EPalTribeID::Relaxaurus_Terra",
+            "EggRank": 3,
+            "HatchTimeSec": 3600,
+            "TargetTemperature": 0,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Earth_03"
+        },
+        "PalEgg_Grizzbolt_Dark": {
+            "PalID": "EPalTribeID::Grizzbolt_Dark",
+            "EggRank": 3,
+            "HatchTimeSec": 3600,
+            "TargetTemperature": 0,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Dark_03"
+        },
+        "PalEgg_Frostallion_Ignis": {
+            "PalID": "EPalTribeID::Frostallion_Ignis",
+            "EggRank": 3,
+            "HatchTimeSec": 3600,
+            "TargetTemperature": 2,
+            "VisualItemStaticItemId": "PalItem_PalEgg_Fire_03"
+        }
+    }
+}
