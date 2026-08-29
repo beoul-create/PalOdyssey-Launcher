@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.230108",
-  "GeneratedAt": "2026-08-29T23:01:08.438Z",
+  "Version": "2026.08.29.230207",
+  "GeneratedAt": "2026-08-29T23:02:07.700Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,9 +8,9 @@
   "TotalFiles": 331,
   "News": [
     {
-      "title": "⚡ v2.0.6 - Memory Safety & Reflection Crash Patch",
+      "title": "⚡ v2.0.7 - Liveboard Player Tracking & Path Resolution",
       "date": "Aug 29, 2026",
-      "summary": "Resolved UE4SS PropertyList/IsA reflection crash, stabilized LevelLock notification dispatch, and optimized client/server RAM consumption."
+      "summary": "Fixed liveboard state file path resolution across server environments. Real-time player join/leave telemetry now updates live on Discord."
     },
     {
       "title": "⚔️ Summon Around Arena Raids & Boss Auras",
@@ -1970,8 +1970,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/liveboard_export.lua",
-      "Hash": "1a433fbccd4d0e3b719f02e6302e98e20c97d4eb7c51c3ab31e2945f0f5445b9",
-      "Size": 5690,
+      "Hash": "91aec6f501c3720ada8e71a4e3f450671d5cb954f1b93324544cfbdaa57defa4",
+      "Size": 6357,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/liveboard_export.lua"
     },
     {

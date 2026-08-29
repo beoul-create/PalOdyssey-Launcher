@@ -155,13 +155,31 @@ function LiveboardExport.DumpState(ActiveBosses, Config)
         Timestamp = os.time()
     }
 
-    pcall(function()
-        local File = io.open(StatePath, "w")
-        if File then
-            File:write(EncodeJsonValue(Data))
-            File:close()
-        end
-    end)
+    local jsonPayload = EncodeJsonValue(Data)
+    local written = false
+
+    local CandidatePaths = {
+        "Pal/Saved/liveboard_state.json",
+        "C:/SteamLibrary/steamapps/common/PalServer/Pal/Saved/liveboard_state.json",
+        "../../../../../../Saved/liveboard_state.json",
+        "../../../../../Saved/liveboard_state.json",
+        "../../../../Saved/liveboard_state.json",
+        "../../../Saved/liveboard_state.json",
+        "../../Saved/liveboard_state.json",
+        "../Saved/liveboard_state.json"
+    }
+
+    for _, candidate in ipairs(CandidatePaths) do
+        pcall(function()
+            local File = io.open(candidate, "w")
+            if File then
+                File:write(jsonPayload)
+                File:close()
+                written = true
+            end
+        end)
+        if written then break end
+    end
 end
 
 return LiveboardExport
