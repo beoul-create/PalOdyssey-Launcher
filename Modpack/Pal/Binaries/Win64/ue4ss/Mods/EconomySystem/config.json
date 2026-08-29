@@ -205,21 +205,24 @@
       "Cost": 4,
       "Count": 1,
       "Currency": "ancient",
-      "Desc": "🏰 Guild Breeding Pen Expansion Permit"
+      "IsGuildExpansion": true,
+      "Desc": "🏰 Guild Breeding Pen Expansion (+1 Limit)"
     },
     "guild_ranch_expand": {
       "ItemId": "PalItem_TechnologyBook_G3",
       "Cost": 4,
       "Count": 1,
       "Currency": "ancient",
-      "Desc": "🌾 Guild Ranch Pasture Expansion Permit"
+      "IsGuildExpansion": true,
+      "Desc": "🌾 Guild Ranch Pasture Expansion (+1 Limit)"
     },
     "guild_base_expand": {
       "ItemId": "PalItem_AncientTechnologyPointBook",
       "Cost": 5,
       "Count": 1,
       "Currency": "ancient",
-      "Desc": "🚩 Guild Base Camp Expansion Permit"
+      "IsGuildExpansion": true,
+      "Desc": "🚩 Guild Base Camp Expansion (+1 Limit)"
     },
     "uniplant_rank4": {
       "ItemId": "APSE_Uniplant5",

@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.234717",
-  "GeneratedAt": "2026-08-29T23:47:17.101Z",
+  "Version": "2026.08.29.235124",
+  "GeneratedAt": "2026-08-29T23:51:24.648Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,19 +8,19 @@
   "TotalFiles": 302,
   "News": [
     {
-      "title": "🛒 Economy System v3.0.0: Stat Boosts, APSE Implants, Schematics & Two-Way Exchange",
+      "title": "🏰 Dynamic Guild Expansion Scaling Live!",
       "date": "Aug 29, 2026",
-      "summary": "Overhauled shop with Permanent Stat Elixirs, Guild Expansion Permits, APSE Passive Implants, Boss Drop Recycling, and 2-Way Point Conversion (5 Tech <-> 1 Ancient)."
+      "summary": "Guild expansion permits now scale dynamically per purchase (Cost = Base * 2^Tier). Integrates directly with GuildBuildingLimits."
+    },
+    {
+      "title": "🛒 Economy System v3.2.0: Stat Boosts, APSE Implants, Schematics & 2-Way Exchange",
+      "date": "Aug 29, 2026",
+      "summary": "Overhauled shop with Permanent Stat Elixirs, Guild Expansion Permits, APSE Passive Implants, Boss Drop Recycling, and 2-Way Point Conversion."
     },
     {
       "title": "✨ UniPalUI Integrated (DarnToasts Fully Replaced)",
       "date": "Aug 29, 2026",
       "summary": "Integrated the crash-safe UniPalUI viewport framework. Completely removed legacy DarnMenu/DarnToasts artifacts. Press [F5] for menu dashboard."
-    },
-    {
-      "title": "🧬 Universal Subspecies Roster Live!",
-      "date": "Aug 29, 2026",
-      "summary": "Rolled out full elemental subspecies variants (Foxparks Aqua, Lamball Ignis, Anubis Cryst, Jetragon Frost, Orserk Terra, etc.) with breeding & eggs."
     }
   ],
   "Files": [
@@ -128,8 +128,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json",
-      "Hash": "79d1b814271d89768d5eb11b66be02351a10211749133b46d4e891c88d0f753b",
-      "Size": 7133,
+      "Hash": "f7322e27b1d5e0012af8c3032b3d3a35007cac9ebcc7674941d0f89fec309798",
+      "Size": 7241,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json"
     },
     {
@@ -152,8 +152,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "f89f66119789d18c0636a71de2c06f3d2aa77abff3ad6c9899db2ab7d896459a",
-      "Size": 28126,
+      "Hash": "242286b7e05aa17837b4878b38aa740c76ac355c9e69f41ca1430fe4af2b6845",
+      "Size": 33016,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua"
     },
     {
@@ -242,8 +242,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/limit_checker.lua",
-      "Hash": "18cc47158bb3e0f7c312d6e6aefa729d0125a9e1d5ed52038b5a1a2bdc40b63e",
-      "Size": 4921,
+      "Hash": "7cfbd684063338d4032dda7f40d41fcfcb5611bf14c690add9dc9d73ee385234",
+      "Size": 6764,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/limit_checker.lua"
     },
     {

@@ -49,6 +49,76 @@ pcall(function()
     end
 end)
 
+local GuildUpgrades = {}
+local UPGRADES_FILE = "C:/PalOdyssey Launcher 2.0/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/guild_upgrades.json"
+
+local function LoadGuildUpgrades()
+    pcall(function()
+        local paths = {
+            UPGRADES_FILE,
+            "C:/SteamLibrary/steamapps/common/PalServer/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/guild_upgrades.json",
+            "C:/SteamLibrary/steamapps/common/Palworld/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/guild_upgrades.json"
+        }
+        for _, path in ipairs(paths) do
+            local f = io.open(path, "r")
+            if f then
+                local raw = f:read("*all")
+                f:close()
+                local decoders = {}
+                if JSON and type(JSON.parse) == "function" then table.insert(decoders, JSON.parse) end
+                if json and type(json.decode) == "function" then table.insert(decoders, json.decode) end
+                if _G.json and type(_G.json.decode) == "function" then table.insert(decoders, _G.json.decode) end
+                for _, d in ipairs(decoders) do
+                    local ok, parsed = pcall(d, raw)
+                    if ok and type(parsed) == "table" then
+                        GuildUpgrades = parsed
+                        return
+                    end
+                end
+            end
+        end
+    end)
+end
+LoadGuildUpgrades()
+
+local function SaveGuildUpgrades()
+    pcall(function()
+        local encoder = nil
+        if JSON and type(JSON.stringify) == "function" then encoder = JSON.stringify end
+        if not encoder and json and type(json.encode) == "function" then encoder = json.encode end
+        if not encoder and _G.json and type(_G.json.encode) == "function" then encoder = _G.json.encode end
+        
+        local raw = "{}"
+        if encoder then
+            local ok, str = pcall(encoder, GuildUpgrades)
+            if ok and str then raw = str end
+        else
+            local parts = {}
+            for gId, upgrades in pairs(GuildUpgrades) do
+                local subparts = {}
+                for k, v in pairs(upgrades) do
+                    table.insert(subparts, string.format('"%s": %d', k, tonumber(v) or 0))
+                end
+                table.insert(parts, string.format('"%s": { %s }', gId, table.concat(subparts, ", ")))
+            end
+            raw = "{\n  " .. table.concat(parts, ",\n  ") .. "\n}"
+        end
+
+        local paths = {
+            UPGRADES_FILE,
+            "C:/SteamLibrary/steamapps/common/PalServer/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/guild_upgrades.json",
+            "C:/SteamLibrary/steamapps/common/Palworld/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/guild_upgrades.json"
+        }
+        for _, path in ipairs(paths) do
+            local f = io.open(path, "w")
+            if f then
+                f:write(raw)
+                f:close()
+            end
+        end
+    end)
+end
+
 -- UI State Variables
 local IsShopWindowOpen = false
 local CurrentPage = 1
@@ -72,6 +142,39 @@ local function GetPlayerController(Context)
         return controllers[1]
     end
     return nil
+end
+
+local function GetPlayerGuildId(Player)
+    local guildId = "Solo_Guild"
+    pcall(function()
+        local pc = Player or GetPlayerController()
+        local PlayerState = pc and pc.PlayerState
+        if PlayerState and PlayerState:IsValid() then
+            local GuildData = PlayerState:GetGuildName()
+            if GuildData then
+                guildId = GuildData:ToString()
+            end
+        end
+    end)
+    return guildId
+end
+
+-- Dynamic Scaling: Cost = Base * 2^(PurchasedCount)
+local function GetItemCurrentCost(Player, ItemKey)
+    local item = Config.ShopItems and Config.ShopItems[ItemKey:lower()]
+    if not item then return 1 end
+    local baseCost = tonumber(item.Cost) or 1
+    if not item.IsGuildExpansion then
+        return baseCost
+    end
+
+    local guildId = GetPlayerGuildId(Player)
+    LoadGuildUpgrades()
+    local gData = GuildUpgrades[guildId] or {}
+    local currentLevel = tonumber(gData[ItemKey:lower()]) or 0
+
+    local multiplier = math.floor(2 ^ currentLevel)
+    return baseCost * multiplier, currentLevel
 end
 
 local function SendPlayerMessage(Player, Text)
@@ -214,14 +317,16 @@ end
 -- Purchase Handler
 local function HandleExchange(Player, ItemKey, Quantity)
     Quantity = math.min(999, math.max(1, math.floor(tonumber(Quantity) or 1)))
-    if not ItemKey or not Config.ShopItems or not Config.ShopItems[ItemKey:lower()] then
+    local cleanKey = ItemKey and ItemKey:lower() or ""
+    if not Config.ShopItems or not Config.ShopItems[cleanKey] then
         SendPlayerMessage(Player, "❌ Invalid item key. Use !shop or [F6] to view catalog.")
         return
     end
 
-    local Item = Config.ShopItems[ItemKey:lower()]
+    local Item = Config.ShopItems[cleanKey]
     local isAncient = (Item.Currency == "ancient")
-    local TotalCost = math.max(0, tonumber(Item.Cost) or 1) * Quantity
+    local unitCost, currentLevel = GetItemCurrentCost(Player, cleanKey)
+    local TotalCost = unitCost * Quantity
     local normPts, ancPts = GetPlayerTechPoints(Player)
     local available = isAncient and ancPts or normPts
     local currLabel = isAncient and "Ancient Tech Points" or "Tech Points"
@@ -235,12 +340,25 @@ local function HandleExchange(Player, ItemKey, Quantity)
         SendPlayerMessage(Player, "❌ Transaction failed.")
         return
     end
+
+    if Item.IsGuildExpansion then
+        local guildId = GetPlayerGuildId(Player)
+        GuildUpgrades[guildId] = GuildUpgrades[guildId] or {}
+        local newLevel = (tonumber(GuildUpgrades[guildId][cleanKey]) or 0) + Quantity
+        GuildUpgrades[guildId][cleanKey] = newLevel
+        SaveGuildUpgrades()
+
+        local nextCost = unitCost * (2 ^ Quantity)
+        SendPlayerMessage(Player, string.format("✅ Upgraded %s to Tier %d! Total Guild Limit: +%d slots. Next upgrade cost: %d %s.", Item.Desc or cleanKey, newLevel, newLevel, nextCost, currLabel))
+        return
+    end
+
     if not GiveItem(Player, Item.ItemId, math.max(1, tonumber(Item.Count) or 1) * Quantity) then
         AddPlayerTechPoints(Player, TotalCost, isAncient)
         SendPlayerMessage(Player, "❌ Item delivery failed; points refunded.")
         return
     end
-    SendPlayerMessage(Player, string.format("✅ Purchased %dx %s for %d %s!", Quantity, Item.Desc or ItemKey, TotalCost, currLabel))
+    SendPlayerMessage(Player, string.format("✅ Purchased %dx %s for %d %s!", Quantity, Item.Desc or cleanKey, TotalCost, currLabel))
 end
 
 -- Gacha Handler
@@ -409,6 +527,12 @@ local function DrawShopGUI(Canvas)
         local isAncient = (item.Currency == "ancient")
         local currName = isAncient and "Ancient Pts" or "Tech Pts"
         local costColor = isAncient and { R = 1.0, G = 0.4, B = 0.8, A = 1.0 } or { R = 0.0, G = 1.0, B = 0.6, A = 1.0 }
+        local currentCost, curLvl = GetItemCurrentCost(pc, entry.key)
+
+        local descText = item.Desc or entry.key
+        if item.IsGuildExpansion and curLvl then
+            descText = string.format("%s [Tier %d]", descText, curLvl + 1)
+        end
 
         -- Item Row
         pcall(function()
@@ -416,8 +540,8 @@ local function DrawShopGUI(Canvas)
                 Canvas:K2_DrawBox({ X = WinX + 20, Y = RowY }, { X = WinW - 40, Y = 62 }, 1.0, { R = 0.10, G = 0.15, B = 0.22, A = 0.9 })
             end
             if type(Canvas.K2_DrawText) == "function" then
-                Canvas:K2_DrawText(nil, item.Desc or entry.key, { X = WinX + 32, Y = RowY + 8 }, { X = 1.0, Y = 1.0 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
-                Canvas:K2_DrawText(nil, string.format("Price: %d %s", item.Cost or 1, currName), { X = WinX + 32, Y = RowY + 34 }, { X = 0.9, Y = 0.9 }, costColor, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+                Canvas:K2_DrawText(nil, descText, { X = WinX + 32, Y = RowY + 8 }, { X = 1.0, Y = 1.0 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+                Canvas:K2_DrawText(nil, string.format("Price: %d %s", currentCost, currName), { X = WinX + 32, Y = RowY + 34 }, { X = 0.9, Y = 0.9 }, costColor, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
             end
         end)
 
