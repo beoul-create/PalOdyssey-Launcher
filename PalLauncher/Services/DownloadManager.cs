@@ -192,8 +192,27 @@ namespace PalLauncher.Services
                     if (!string.IsNullOrWhiteSpace(modItem.Sha256) &&
                         !string.Equals(downloadedHash, modItem.Sha256, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (File.Exists(tempPath)) File.Delete(tempPath);
-                        throw new InvalidDataException($"Checksum validation failed for '{modItem.RelativePath}'. Expected: {modItem.Sha256}, Actual: {downloadedHash}");
+                        if (_hashService.IsTextFile(tempPath))
+                        {
+                            try
+                            {
+                                string textContent = await File.ReadAllTextAsync(tempPath, token);
+                                string normalized = textContent.Replace("\r\n", "\n").Replace("\r", "\n");
+                                byte[] normBytes = System.Text.Encoding.UTF8.GetBytes(normalized);
+                                string normHash = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(normBytes)).ToLowerInvariant();
+                                if (string.Equals(normHash, modItem.Sha256, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    downloadedHash = modItem.Sha256;
+                                }
+                            }
+                            catch { }
+                        }
+
+                        if (!string.Equals(downloadedHash, modItem.Sha256, StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (File.Exists(tempPath)) File.Delete(tempPath);
+                            throw new InvalidDataException($"Checksum validation failed for '{modItem.RelativePath}'. Expected: {modItem.Sha256}, Actual: {downloadedHash}");
+                        }
                     }
 
                     // Atomic Replace / Move

@@ -9,7 +9,7 @@ namespace PalLauncher.Services
 {
     public class HashService
     {
-        private const int ChunkBufferSize = 64 * 1024; // 64 KB streaming buffer
+        private const int ChunkBufferSize = 256 * 1024;
 
         /// <summary>
         /// Computes the SHA-256 hash of a file asynchronously in chunks to prevent memory spikes.
@@ -19,9 +19,6 @@ namespace PalLauncher.Services
             if (!File.Exists(filePath))
                 return string.Empty;
 
-            using var sha256 = SHA256.Create();
-            byte[] buffer = new byte[ChunkBufferSize];
-
             await using var stream = new FileStream(
                 filePath,
                 FileMode.Open,
@@ -29,20 +26,8 @@ namespace PalLauncher.Services
                 FileShare.Read,
                 ChunkBufferSize,
                 FileOptions.Asynchronous | FileOptions.SequentialScan);
-
-            int bytesRead;
-            while ((bytesRead = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length), cancellationToken)) > 0)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                sha256.TransformBlock(buffer, 0, bytesRead, null, 0);
-            }
-
-            sha256.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
-            byte[]? hashBytes = sha256.Hash;
-
-            return hashBytes != null
-                ? Convert.ToHexString(hashBytes).ToLowerInvariant()
-                : string.Empty;
+            byte[] hashBytes = await SHA256.HashDataAsync(stream, cancellationToken);
+            return Convert.ToHexString(hashBytes).ToLowerInvariant();
         }
 
         /// <summary>
@@ -69,35 +54,70 @@ namespace PalLauncher.Services
             DateTime lastWriteUtc = fileInfo.LastWriteTimeUtc;
 
             // Fast-path: Check local cache
-            if (cache.Entries.TryGetValue(relativeKey, out var cachedEntry))
+            CacheFileEntry? cachedEntry;
+            lock (cache.Entries)
             {
-                if (cachedEntry.LastWriteTimeUtc == lastWriteUtc &&
-                    cachedEntry.FileSize == fileInfo.Length &&
-                    !string.IsNullOrWhiteSpace(cachedEntry.Sha256))
-                {
-                    bool cachedMatch = string.Equals(cachedEntry.Sha256, expectedSha256, StringComparison.OrdinalIgnoreCase);
-                    return (cachedMatch, cachedEntry.Sha256);
-                }
+                cache.Entries.TryGetValue(relativeKey, out cachedEntry);
+            }
+            if (cachedEntry != null &&
+                string.Equals(cachedEntry.ResolvedFullPath, resolvedFullPath, StringComparison.OrdinalIgnoreCase) &&
+                cachedEntry.LastWriteTimeUtc == lastWriteUtc &&
+                cachedEntry.FileSize == fileInfo.Length &&
+                !string.IsNullOrWhiteSpace(cachedEntry.Sha256))
+            {
+                bool cachedMatch = string.Equals(cachedEntry.Sha256, expectedSha256, StringComparison.OrdinalIgnoreCase);
+                return (cachedMatch, cachedEntry.Sha256);
             }
 
             // Slow-path: Cryptographic hashing
             string computedHash = await ComputeSha256Async(resolvedFullPath, cancellationToken);
             bool isMatch = string.Equals(computedHash, expectedSha256, StringComparison.OrdinalIgnoreCase);
 
+            if (!isMatch && IsTextFile(resolvedFullPath))
+            {
+                try
+                {
+                    string textContent = await File.ReadAllTextAsync(resolvedFullPath, cancellationToken);
+                    string normalized = textContent.Replace("\r\n", "\n").Replace("\r", "\n");
+                    byte[] normalizedBytes = System.Text.Encoding.UTF8.GetBytes(normalized);
+                    byte[] normalizedHashBytes = SHA256.HashData(normalizedBytes);
+                    string normalizedHash = Convert.ToHexString(normalizedHashBytes).ToLowerInvariant();
+                    if (string.Equals(normalizedHash, expectedSha256, StringComparison.OrdinalIgnoreCase))
+                    {
+                        isMatch = true;
+                        computedHash = expectedSha256;
+                    }
+                }
+                catch { }
+            }
+
             if (isMatch)
             {
                 // Update local cache
-                cache.Entries[relativeKey] = new CacheFileEntry
+                lock (cache.Entries)
                 {
-                    RelativePath = relativeKey,
-                    ResolvedFullPath = resolvedFullPath,
-                    LastWriteTimeUtc = lastWriteUtc,
-                    FileSize = fileInfo.Length,
-                    Sha256 = computedHash
-                };
+                    cache.Entries[relativeKey] = new CacheFileEntry
+                    {
+                        RelativePath = relativeKey,
+                        ResolvedFullPath = resolvedFullPath,
+                        LastWriteTimeUtc = lastWriteUtc,
+                        FileSize = fileInfo.Length,
+                        Sha256 = computedHash
+                    };
+                }
             }
 
             return (isMatch, computedHash);
+        }
+
+        public bool IsTextFile(string filePath)
+        {
+            string ext = Path.GetExtension(filePath).ToLowerInvariant();
+            return ext switch
+            {
+                ".txt" or ".lua" or ".json" or ".jsonc" or ".ini" or ".cfg" or ".md" or ".xml" or ".csv" => true,
+                _ => false
+            };
         }
     }
 }
