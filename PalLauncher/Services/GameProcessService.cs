@@ -354,15 +354,17 @@ namespace PalLauncher.Services
             if (IsGameRunning)
                 return Task.FromResult(false);
 
-            string exePath = Path.Combine(gameDirectory, ExecutableRelativePath);
+            string palworldExe = Path.Combine(gameDirectory, "Palworld.exe");
+            string shippingExe = Path.Combine(gameDirectory, ExecutableRelativePath);
+            string exePath = File.Exists(palworldExe) ? palworldExe : shippingExe;
             Process? gameProcess = null;
 
             try
             {
                 if (!useSteamProtocol && File.Exists(exePath))
                 {
-                    // Direct binary launch with multi-threaded performance flags
-                    string extraArgs = "-useperfthreads -NoAsyncLoadingThread -USEALLAVAILABLECORES -high -d3d12";
+                    // Launch with multi-threaded performance flags
+                    string extraArgs = "-useperfthreads -NoAsyncLoadingThread -USEALLAVAILABLECORES";
                     string arguments = string.IsNullOrWhiteSpace(serverIp)
                         ? extraArgs
                         : $"{serverIp}:{serverPort} {extraArgs}";
@@ -371,15 +373,11 @@ namespace PalLauncher.Services
                     {
                         FileName = exePath,
                         Arguments = arguments,
-                        WorkingDirectory = Path.GetDirectoryName(exePath),
+                        WorkingDirectory = File.Exists(palworldExe) ? gameDirectory : Path.GetDirectoryName(shippingExe),
                         UseShellExecute = true
                     };
 
                     gameProcess = Process.Start(startInfo);
-                    if (gameProcess != null)
-                    {
-                        try { gameProcess.PriorityClass = ProcessPriorityClass.High; } catch { }
-                    }
                 }
                 else
                 {
