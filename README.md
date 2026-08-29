@@ -1,7 +1,7 @@
 # ⚡ PalOdyssey Launcher 2.0
 
-[![Platform: Windows](https://img.shields.io/badge/Platform-Windows%2010%2F11-0078D6?style=for-the-badge&logo=windows)](https://microsoft.com)
-[![Framework: .NET 8 WPF](https://img.shields.io/badge/Framework-.NET%208%20WPF-512BD4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com)
+[![Platform: Windows](https://img.shields.io/badge/Platform-Windows%2010%2F11%20(64--bit)-0078D6?style=for-the-badge&logo=windows)](https://microsoft.com)
+[![Framework: .NET 8 WPF](https://img.shields.io/badge/Framework-.NET%208%20WPF%20(Self--Contained)-512BD4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com)
 [![Unreal Engine: 5.1](https://img.shields.io/badge/Game-Palworld%20(UE%205.1)-313131?style=for-the-badge&logo=unrealengine)](https://unrealengine.com)
 [![Modpack: UE4SS 3.0.1](https://img.shields.io/badge/Modpack-UE4SS%203.0.1%20Integrated-FF6F00?style=for-the-badge)](https://github.com/UE4SS-RE/RE-UE4SS)
 [![Release: v2.0.0](https://img.shields.io/badge/Release-v2.0.0--Astral-00E5FF?style=for-the-badge)](https://github.com/beoul-create/PalOdyssey-Launcher/releases)
@@ -18,16 +18,35 @@ Getting into the PalOdyssey realm takes less than 60 seconds:
    * Grab the latest **[PalOdyssey Launcher Release (`.zip`)](https://github.com/beoul-create/PalOdyssey-Launcher/releases)**.
    * Extract the `.zip` anywhere on your PC.
 2. **Launch `PalLauncher.exe`**:
-   * Double-click **`PalLauncher.exe`**.
+   * Double-click **`PalLauncher.exe`** (no external .NET runtimes required — fully self-contained).
    * The launcher will start immediately and automatically detect your Palworld Steam installation directory.
 3. **Configure Settings (Optional)**:
-   * Click the **⚙ (Gear)** icon in the top-right title bar to open the **Settings Flyout** if you wish to adjust the remote manifest URL, server API endpoint, sound effects, or Discord Rich Presence.
+   * Click the **⚙ (Gear)** icon in the top-right title bar to open the **Settings Flyout** to adjust the remote manifest URL, server API endpoint, sound effects, or Discord Rich Presence.
 4. **Play Now**:
    * Click the glowing **`PLAY NOW`** button on the bottom dock. The launcher performs real-time SHA-256 integrity verification, downloads missing or updated mod files, and launches directly into Palworld!
 
 ---
 
-## 🌟 Actual Launcher Features & Architecture
+## 📁 What's in the Download Package?
+
+When you extract `PalOdyssey-Launcher-v2.0.0.zip`, you will find:
+
+```text
+PalOdyssey-Launcher/
+├── PalLauncher.exe           # Self-contained single-file launcher client (152 MB)
+├── Assets/
+│   ├── background_loop.mp4   # Ambient glassmorphic video background
+│   ├── app.png               # High-res branding badge
+│   ├── click.wav             # UI click audio cue
+│   └── hover.wav             # UI hover audio cue
+├── launcher_config.json      # Client configuration & endpoint settings
+├── manifest.json             # Modpack manifest (312 verified assets)
+└── cache.json                # Pre-computed SHA-256 hash cache for instant loading
+```
+
+---
+
+## 🌟 Core Features & Architecture
 
 ### 🚀 1. Hardware-Accelerated Glassmorphic UI
 * **Custom WindowChrome Design**: Zero window-dragging lag, smooth framerates, custom title bar with minimize/close buttons, and subtle audio cues on hover and click.
@@ -45,7 +64,7 @@ Getting into the PalOdyssey realm takes less than 60 seconds:
 
 ### 🎛️ 4. Remote Server Controller Tray
 * **Built-in Server Management**: Directly monitor and toggle the dedicated server from the launcher dashboard via the **Server Controller Tray**.
-* **Remote Management Daemon Client**: Communicates securely with the local or remote daemon service using configurable API endpoints and admin secret keys.
+* **Remote Management Daemon Client**: Communicates securely with the local or remote daemon service (`http://127.0.0.1:3001`) using configurable API endpoints and admin secret keys.
 
 ### 🎮 5. Discord Rich Presence & Community Link
 * **Live Discord Activity**: Displays live rich presence on your Discord profile while preparing or playing in the PalOdyssey realm.
@@ -94,8 +113,8 @@ Customize mod options in real-time while playing:
 
 ## ❓ FAQ & Troubleshooting
 
-#### Q: Do I need to install UE4SS or extra dependencies manually?
-> **A:** No. The launcher bundles the entire UE4SS 3.0.1 runtime and all 312 mod dependencies automatically.
+#### Q: Do I need to install .NET 8 or extra runtimes?
+> **A:** No! The launcher executable is 100% self-contained and bundles all necessary runtimes and libraries out of the box.
 
 #### Q: How do I select my game directory if Steam is on another drive?
 > **A:** On the right side of the dashboard, click the **Browse...** button under *GAME DIRECTORY* and select your root Palworld folder (e.g. `D:\SteamLibrary\steamapps\common\Palworld`).
