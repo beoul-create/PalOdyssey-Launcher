@@ -5,17 +5,23 @@ local ShopCatalog = require("shop_catalog")
 function ChatCommands.Init(LoadedConfig)
     Config = LoadedConfig or {}
 
-    -- Hook server-side chat resolution
-    RegisterHook("/Script/Pal.PalChatSubsystem:OnReceivedChatMessage", function(Context, ChatMessage)
-        local Message = ChatMessage:get()
-        if not Message then return end
-
-        local SenderPlayer = Message.SenderPlayer
+    local function HandleIncomingChat(Context, ChatMessage, PlayerSender)
+        local Message = ChatMessage and (type(ChatMessage.get) == "function" and ChatMessage:get() or ChatMessage)
+        local SenderPlayer = PlayerSender or (Message and Message.SenderPlayer) or (Context and Context:get())
         if not SenderPlayer or not SenderPlayer:IsValid() then return end
 
         local Text = ""
-        pcall(function() Text = Message.Message:ToString() end)
-        if not Text or Text:sub(1, 1) ~= "/" then return end
+        pcall(function()
+            if Message and Message.Message then
+                Text = Message.Message:ToString()
+            elseif Context and Context.Message then
+                Text = Context.Message:ToString()
+            end
+        end)
+
+        if not Text or Text == "" then return end
+        local prefix = Text:sub(1, 1)
+        if prefix ~= "/" and prefix ~= "!" then return end
 
         -- Tokenize command
         local Args = {}
@@ -24,21 +30,34 @@ function ChatCommands.Init(LoadedConfig)
         end
 
         if #Args == 0 then return end
-        local Command = Args[1]:lower()
+        local RawCommand = Args[1]:lower()
+        local Command = RawCommand:gsub("^[!/]", "")
 
-        if Command == "/shop" or Command == "/store" then
+        if Command == "shop" or Command == "store" then
             ChatCommands.HandleShopList(SenderPlayer)
-        elseif Command == "/exchange" or Command == "/buy" then
+        elseif Command == "exchange" or Command == "buy" then
             ChatCommands.HandleExchange(SenderPlayer, Args[2], tonumber(Args[3]) or 1)
-        elseif Command == "/recycle" or Command == "/sell" then
+        elseif Command == "recycle" or Command == "sell" then
             ChatCommands.HandleRecycle(SenderPlayer, Args[2], tonumber(Args[3]) or 1)
-        elseif Command == "/gacha" or Command == "/roll" then
+        elseif Command == "gacha" or Command == "roll" then
             ChatCommands.HandleGacha(SenderPlayer, tonumber(Args[2]) or 1)
-        elseif Command == "/points" or Command == "/tech" or Command == "/balance" then
+        elseif Command == "points" or Command == "tech" or Command == "balance" then
             ChatCommands.HandleBalance(SenderPlayer)
-        elseif Command == "/help_economy" then
+        elseif Command == "help_economy" or Command == "help" then
             ChatCommands.HandleHelp(SenderPlayer)
         end
+    end
+
+    -- Hook all possible chat ingress points
+    pcall(RegisterHook, "/Script/Pal.PalChatSubsystem:OnReceivedChatMessage", function(Context, ChatMessage)
+        HandleIncomingChat(Context, ChatMessage)
+    end)
+    pcall(RegisterHook, "/Script/Pal.PalChatSubsystem:BroadcastChatMessage", function(Context, ChatMessage)
+        HandleIncomingChat(Context, ChatMessage)
+    end)
+    pcall(RegisterHook, "/Script/Pal.PalPlayerController:SendChatMessage", function(Context, ChatMessage)
+        local Controller = Context:get()
+        HandleIncomingChat(Context, ChatMessage, Controller)
     end)
 end
 

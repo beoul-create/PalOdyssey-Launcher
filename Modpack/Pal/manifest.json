@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.224505",
-  "GeneratedAt": "2026-08-29T22:45:05.053Z",
+  "Version": "2026.08.29.225049",
+  "GeneratedAt": "2026-08-29T22:50:49.141Z",
   "TotalFiles": 331,
   "Files": [
     {
@@ -251,8 +251,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/scripts/chat_commands.lua",
-      "Hash": "6576e64a326b9e0f0db15a22b28a745c25d2583f2af7d0362452fa44df7dc96c",
-      "Size": 9317,
+      "Hash": "30daa28c3d16bb5cb2ed288993cd5fd0d3f944fe13e4dc424483314dfd070cb2",
+      "Size": 10280,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/scripts/chat_commands.lua"
     },
     {
