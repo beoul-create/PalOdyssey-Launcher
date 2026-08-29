@@ -1131,23 +1131,11 @@ local function writePrestige(t)
   return pcall(function() assert(os.rename(tmp, prestigePath)) end)
 end
 
--- IN-GAME prestige surfaces (ESC-menu badge + inventory-slot star), built on
--- DarnUI's UI.overlay. Installed ONCE at load (the overlays only fire when a menu
--- opens, long after prestigePath resolves; readPrestige/writePrestige close over
--- it). A missing/unsubscribed DarnUI must cost ONLY these surfaces, never the mod
--- -- so pcall the whole thing (prestige_ui's `require "ui"` runs at its load). The
--- Prestige tab in DarnMenu keeps working regardless (it uses the same bridge).
+-- IN-GAME prestige surfaces (ESC-menu badge + inventory-slot star):
+-- Disabled to prevent crash on opening ESC menu in modern Palworld patches.
+-- Weapon progression, leveling, perks, damage bonuses, and durability remain 100% active.
 do
-  local okPUI, PrestigeUI = pcall(require, "prestige_ui")
-  if okPUI and type(PrestigeUI) == "table" and PrestigeUI.install then
-    local ok, err = pcall(PrestigeUI.install, {
-      Darn = Darn, log = log,
-      readBridge = readPrestige, writeBridge = writePrestige,
-    })
-    if not ok then log("prestige UI install failed (badge/star off): " .. tostring(err)) end
-  else
-    log("DarnUI not available -- prestige badge/star off (Prestige tab still works)")
-  end
+  log("ESC-menu overlay disabled for client stability.")
 end
 
 -- Runs (throttled) from the tick for the currently equipped weapon.

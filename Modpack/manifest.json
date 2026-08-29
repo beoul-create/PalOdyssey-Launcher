@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.225049",
-  "GeneratedAt": "2026-08-29T22:50:49.141Z",
+  "Version": "2026.08.29.225402",
+  "GeneratedAt": "2026-08-29T22:54:02.809Z",
   "TotalFiles": 331,
   "Files": [
     {
@@ -1859,8 +1859,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/main.lua",
-      "Hash": "36838765549fc7a9689c3a32311dd021c1900cb26bf0cb15aa344320d056787e",
-      "Size": 95657,
+      "Hash": "eea3400cd77174cd69a4a4d153ed03e2dc0498a974173a355e2bcaf650554b60",
+      "Size": 94993,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/main.lua"
     },
     {
