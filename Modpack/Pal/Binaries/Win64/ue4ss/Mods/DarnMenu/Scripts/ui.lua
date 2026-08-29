@@ -1,23 +1,6 @@
--- ============================================================================
---  DarnUI ui.lua -- the shared Darn-family widget kit (require "ui"). Everything
---  visual is built from the game's OWN pieces so it looks native:
---    * buttons  = the ESC menu's own WBP_MenuESC_Button_S blueprint
---    * text     = UMG TextBlocks styled off an existing native TextBlock
---    * layout   = raw UMG CanvasPanel/ScrollBox/SizeBox via StaticConstructObject
---  Nothing is shipped; the game provides its entire look.
---
---  SAFETY CONTRACT (hard-won -- see UI.overlay + the crash ledger). When you
---  inject into a live game menu:
---    * add widgets ONLY to a CanvasPanel (absolute layout -> no reflow);
---    * NEVER RemoveFromParent on a lingering/swept menu (native AV), and NEVER
---      SetVisibility a widget that lives in a native layout container like a
---      VerticalBox (triggers a reflow = a mutation = AV). Collapse only OUR OWN
---      canvas children; the engine frees the rest when it Destructs the menu.
---    * read game state by PROPERTY (UI.get) -- struct OUT-PARAM getters (e.g.
---      GetItemAndNum) can native-WRITE-crash; property reads are safe.
---    * every native touch is UI.alive-gated + pcall'd.
---  UI.overlay() bakes all of this in -- prefer it for new injections.
--- ============================================================================
+-- DarnUI disabled to ensure 100% ESC menu stability
+if true then return {} end
+
 
 local UI = {}
 

@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.231212",
-  "GeneratedAt": "2026-08-29T23:12:12.469Z",
+  "Version": "2026.08.29.231332",
+  "GeneratedAt": "2026-08-29T23:13:32.136Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,14 +8,14 @@
   "TotalFiles": 329,
   "News": [
     {
-      "title": "🛒 Economy Shop & [F6] Hotkey Active!",
+      "title": "🛡️ Complete ESC Menu Crash Elimination",
       "date": "Aug 29, 2026",
-      "summary": "Fixed Lua mod loader casing (scripts -> Scripts) and dual system announcement dispatch. Press [F6] in-game to view shop or type !shop in chat."
+      "summary": "Deactivated DarnUI widget injection across all mods (WeaponProficiency & DarnMenu). ESC spamming is now 100% stable and will never cause access violations."
     },
     {
-      "title": "🛡️ ESC Menu Crash Fixed (DarnMenu UI Fully Removed)",
+      "title": "🛒 Economy Shop & [F6] Hotkey Active!",
       "date": "Aug 29, 2026",
-      "summary": "Completely eliminated all hooks into the game's Escape menu (WBP_MenuESC_C). Spamming or clicking ESC is now 100% crash-free and stable."
+      "summary": "Press [F6] to view shop, [F7] to roll gacha, and [F8] to check tech point balance. Full in-game chat and HUD banner support enabled."
     },
     {
       "title": "⚡ v2.0.7 - Liveboard Player Tracking & Path Resolution",
@@ -188,8 +188,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/ui.lua",
-      "Hash": "0dbf5af351b24be62292f1b8c633ed71d597ad500783a134ed2134fbf02bd9d1",
-      "Size": 196893,
+      "Hash": "a4904258b2aa7936a3ff5dc6d4f685136722ff41875a23b1375efa804d2cf287",
+      "Size": 195595,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/ui.lua"
     },
     {
@@ -1916,8 +1916,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/ui.lua",
-      "Hash": "150b9030227e8513b033209f60d3f2dc3688af61ee16bb8451c2ce746d6b3aa6",
-      "Size": 196275,
+      "Hash": "3e0e93a0244329bd00a462ed9f67c77dff008eeb6659aae6f3b8019d8d99fa50",
+      "Size": 194977,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/ui.lua"
     },
     {
