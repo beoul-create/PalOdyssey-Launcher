@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.235124",
-  "GeneratedAt": "2026-08-29T23:51:24.648Z",
+  "Version": "2026.08.29.235255",
+  "GeneratedAt": "2026-08-29T23:52:55.488Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,9 +8,9 @@
   "TotalFiles": 302,
   "News": [
     {
-      "title": "🏰 Dynamic Guild Expansion Scaling Live!",
+      "title": "🏰 Multi-Hook Guild Restriction Engine Live!",
       "date": "Aug 29, 2026",
-      "summary": "Guild expansion permits now scale dynamically per purchase (Cost = Base * 2^Tier). Integrates directly with GuildBuildingLimits."
+      "summary": "Verified and hardened GuildBuildingLimits with multi-hook coverage (RequestBuild, RequestBuild_Server, RequestBuildDirectly) and dynamic scaling."
     },
     {
       "title": "🛒 Economy System v3.2.0: Stat Boosts, APSE Implants, Schematics & 2-Way Exchange",
@@ -242,8 +242,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/limit_checker.lua",
-      "Hash": "7cfbd684063338d4032dda7f40d41fcfcb5611bf14c690add9dc9d73ee385234",
-      "Size": 6764,
+      "Hash": "67ac122cdd4fa6574b4e4093f3b0ded5bb012b7e66b3615c5940eedb27e41347",
+      "Size": 9361,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/limit_checker.lua"
     },
     {
