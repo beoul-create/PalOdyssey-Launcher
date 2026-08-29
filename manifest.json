@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.204122",
-  "GeneratedAt": "2026-08-29T20:41:22.284Z",
+  "Version": "2026.08.29.204237",
+  "GeneratedAt": "2026-08-29T20:42:37.469Z",
   "TotalFiles": 310,
   "Files": [
     {
@@ -503,8 +503,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/delivery.lua",
-      "Hash": "a070203a5e05e08d592670d422739e3d72151bc5f4893d872e70028376b49755",
-      "Size": 27877,
+      "Hash": "53a0ed35221a85143bc99766f8d3a196167255bb63066161a9af30f560d5f857",
+      "Size": 27702,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/delivery.lua"
     },
     {
@@ -1847,8 +1847,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/UE4SS-settings.ini",
-      "Hash": "02cc039f90242f22d5ebdcec74e4f69a88e5218346c247293cffc26e181a03c9",
-      "Size": 7635,
+      "Hash": "c684b6ca48e276c51f6abd5f29d2704bbbcad4627550d17992b1a2cf721f9f0c",
+      "Size": 7544,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/UE4SS-settings.ini"
     },
     {

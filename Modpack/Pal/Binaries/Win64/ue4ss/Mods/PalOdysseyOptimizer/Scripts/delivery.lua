@@ -97,7 +97,7 @@ local function exportLivePlayerData()
             if ps.UnusedTechnologyPoint ~= nil then techPts = ps.UnusedTechnologyPoint end
         end)
         pcall(function()
-            if techPts == 0 and ps.RecordData and ps.RecordData:IsValid() and ps.RecordData.UnusedTechnologyPoint ~= nil then
+            if techPts == 0 and ps.RecordData and ps.RecordData.UnusedTechnologyPoint ~= nil then
                 techPts = ps.RecordData.UnusedTechnologyPoint
             end
         end)
@@ -106,7 +106,7 @@ local function exportLivePlayerData()
             if ps.UnusedBossTechnologyPoint ~= nil then bossPts = ps.UnusedBossTechnologyPoint end
         end)
         pcall(function()
-            if bossPts == 0 and ps.RecordData and ps.RecordData:IsValid() and ps.RecordData.UnusedBossTechnologyPoint ~= nil then
+            if bossPts == 0 and ps.RecordData and ps.RecordData.UnusedBossTechnologyPoint ~= nil then
                 bossPts = ps.RecordData.UnusedBossTechnologyPoint
             end
         end)
@@ -375,9 +375,8 @@ local function processQueue()
 
         if isTechSet and techPts ~= nil then
             pcall(function() ps.UnusedTechnologyPoint = techPts end)
-            pcall(function() ps.TechnologyPoint = techPts end)
             pcall(function()
-                if ps.RecordData and ps.RecordData:IsValid() then
+                if ps.RecordData then
                     ps.RecordData.UnusedTechnologyPoint = techPts
                 end
             end)
@@ -407,7 +406,7 @@ local function processQueue()
             pcall(function() ps.UnusedBossTechnologyPoint = bossPts end)
             pcall(function() ps.BossTechnologyPoint = bossPts end)
             pcall(function()
-                if ps.RecordData and ps.RecordData:IsValid() then
+                if ps.RecordData then
                     ps.RecordData.UnusedBossTechnologyPoint = bossPts
                 end
             end)
