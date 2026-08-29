@@ -341,18 +341,22 @@ local function notifyAll(text)
     if not ok then dbg("notifyAll: SendSystemAnnounce failed: " .. tostring(err)) end
 end
 
--- targeted chat to one player (per-player events); falls back to a global
--- announce if the UID-array call fails, so the message still lands
+-- targeted chat to one player (per-player events); safe from TArray reflection crashes
 local function notifyController(controller, text)
     if not Config.EnableNotifications then return end
     if not controller or not controller:IsValid() then return end
-    local ok, err = pcall(function()
-        local uid = controller:GetPlayerUId()
-        getPalUtility():SendSystemToPlayerChat(controller, text, { uid })
+    pcall(function()
+        local chatSub = FindFirstOf("PalChatSubsystem")
+        if chatSub and chatSub:IsValid() then
+            chatSub:SendSystemChatMessage(controller, FText(text))
+            return
+        end
+        local palUtil = getPalUtility()
+        local world = worldContext()
+        if palUtil and palUtil:IsValid() and world and world:IsValid() then
+            palUtil:SendSystemAnnounce(world, FText(text))
+        end
     end)
-    if ok then return end
-    dbg("notify: SendSystemToPlayerChat failed: " .. tostring(err) .. " - falling back to announce")
-    pcall(function() getPalUtility():SendSystemAnnounce(worldContext(), text) end)
 end
 
 -- ServerAcknowledgePossession fires on every repossession (mount/dismount,

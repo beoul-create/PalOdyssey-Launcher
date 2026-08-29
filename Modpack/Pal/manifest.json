@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.225948",
-  "GeneratedAt": "2026-08-29T22:59:48.185Z",
+  "Version": "2026.08.29.230108",
+  "GeneratedAt": "2026-08-29T23:01:08.438Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,9 +8,9 @@
   "TotalFiles": 331,
   "News": [
     {
-      "title": "⚡ v2.0.5 - RAM & CPU Resource Optimization",
+      "title": "⚡ v2.0.6 - Memory Safety & Reflection Crash Patch",
       "date": "Aug 29, 2026",
-      "summary": "Drastically reduced memory consumption on client and server. Optimized texture streaming pools to 1280MB, added fast 60s GC sweeps, and purged dormant physics item limits."
+      "summary": "Resolved UE4SS PropertyList/IsA reflection crash, stabilized LevelLock notification dispatch, and optimized client/server RAM consumption."
     },
     {
       "title": "⚔️ Summon Around Arena Raids & Boss Auras",
@@ -416,8 +416,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua",
-      "Hash": "b8329d6eeb420491e92b185d50abbe6032f4c39ffd22f648387ec7be51bb4310",
-      "Size": 96616,
+      "Hash": "5f0eaca8024e1e04478948cc50c0885311e315a576d8862a891da802ebf626d9",
+      "Size": 96639,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua"
     },
     {
@@ -488,8 +488,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/delivery.lua",
-      "Hash": "53a0ed35221a85143bc99766f8d3a196167255bb63066161a9af30f560d5f857",
-      "Size": 27702,
+      "Hash": "9b469b6c8588f86772f2e47927386fd5caff8d3e61272c096f2043541c5d3267",
+      "Size": 27540,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/delivery.lua"
     },
     {

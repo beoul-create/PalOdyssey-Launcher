@@ -565,21 +565,19 @@ local function processQueue()
                             end
                         end
 
-                        if msg ~= "" and palUtil and palUtil:IsValid() and controller and controller:IsValid() then
+                        if msg ~= "" and controller and controller:IsValid() then
                             local cRef = controller
-                            local uRef = palUtil
                             local sendAction = function()
                                 pcall(function()
-                                    if cRef and cRef:IsValid() and uRef and uRef:IsValid() then
-                                        local uid = nil
-                                        pcall(function() uid = cRef:GetPlayerUId() end)
-                                        if uid then
-                                            local ok = pcall(function() uRef:SendSystemToPlayerChat(cRef, msg, { uid }) end)
-                                            if not ok then
-                                                pcall(function() uRef:SendSystemAnnounce(cRef, msg) end)
-                                            end
-                                        else
-                                            pcall(function() uRef:SendSystemAnnounce(cRef, msg) end)
+                                    if cRef and cRef:IsValid() then
+                                        local chatSub = FindFirstOf("PalChatSubsystem")
+                                        if chatSub and chatSub:IsValid() then
+                                            chatSub:SendSystemChatMessage(cRef, FText(msg))
+                                            return
+                                        end
+                                        local palUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+                                        if palUtil and palUtil:IsValid() then
+                                            palUtil:SendSystemAnnounce(cRef, FText(msg))
                                         end
                                     end
                                 end)
