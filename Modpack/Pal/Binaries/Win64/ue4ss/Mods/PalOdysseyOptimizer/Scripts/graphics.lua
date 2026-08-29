@@ -62,7 +62,7 @@ function GraphicsModule.apply(cfg, cpuCfg)
         ExecuteConsole("r.Streaming.DefragDynamicBounds 1")
         ExecuteConsole("r.Streaming.LimitPoolSizeToVRAM 1")
         ExecuteConsole("r.Streaming.HLODStrategy 1")
-        ExecuteConsole("r.Streaming.PoolSize 2048")
+        ExecuteConsole("r.Streaming.PoolSize 4096")
         ExecuteConsole("r.Streaming.Boost 1")
 
         -- 5. Asynchronous Shader Compilation, PSO Caching & Stutter Elimination (C2ME Equivalent)

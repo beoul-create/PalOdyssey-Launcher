@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.205807",
-  "GeneratedAt": "2026-08-29T20:58:07.622Z",
+  "Version": "2026.08.29.210048",
+  "GeneratedAt": "2026-08-29T21:00:48.035Z",
   "TotalFiles": 303,
   "Files": [
     {
@@ -473,7 +473,7 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "68daa7982a19f1c1737bef6e1c6da76cb1a3c8af0e79bc160b5084a19d4cb722",
+      "Hash": "d1bbd8bdf9210148cd35892ba279993fb5b03979230fa020914e710b91dcd886",
       "Size": 7185,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
