@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.231937",
-  "GeneratedAt": "2026-08-29T23:19:37.644Z",
+  "Version": "2026.08.29.232749",
+  "GeneratedAt": "2026-08-29T23:27:49.583Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,9 +8,9 @@
   "TotalFiles": 329,
   "News": [
     {
-      "title": "🛒 Economy System: Normal & Ancient Tech Points Supported",
+      "title": "🛒 Economy System: v2.2.0 Standalone Engine",
       "date": "Aug 29, 2026",
-      "summary": "Use !shop or [F6] to browse. Items now support both Normal Tech Points and Ancient Tech Points. Gacha and recycling live."
+      "summary": "Resolved module resolution, load order, and JSON validation. Full support for !shop, !buy, !recycle, !gacha, and [F6]/[F7]/[F8] hotkeys."
     },
     {
       "title": "🛡️ Complete ESC Menu Crash Elimination",
@@ -248,8 +248,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json",
-      "Hash": "378a8cd3150237b328234eb481bc5b0890961b35dc107225f7da893e041482ac",
-      "Size": 1411,
+      "Hash": "4ac89ceaed5811479425df2ffa9da10418f49b05dcaffa181a7fa6ecca2b9d6d",
+      "Size": 1463,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json"
     },
     {
@@ -272,8 +272,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "9abafc7aa9413645e552fe3a328d24b4732302015a22baf7d1572b8f4e1cf495",
-      "Size": 4096,
+      "Hash": "339496efd4726e43c2ceeae8b38a047976bd31dc1390ba0b23ce413864929f95",
+      "Size": 16368,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua"
     },
     {
@@ -422,8 +422,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/mods.txt",
-      "Hash": "7b4b0efb3826de2b6c7ca3f126b2929d811218e92696054be5da3fc808be724a",
-      "Size": 562,
+      "Hash": "ebfd44d7167d7249c652d03e6281838a466dc7d383d4afa2187e9fb7d4025b15",
+      "Size": 561,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/mods.txt"
     },
     {
