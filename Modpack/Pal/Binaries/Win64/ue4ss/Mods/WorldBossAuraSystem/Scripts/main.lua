@@ -66,7 +66,24 @@ LiveboardExport.DumpState(WorldBoss.GetActiveBosses(), Config)
 
 -- Periodic Background Timers (0% Game Thread Tick Overhead)
 local LiveboardIntervalMs = math.max(5000, (tonumber(Config.LiveboardExportIntervalSeconds) or 15) * 1000)
-local BossIntervalMs = math.max(60000, (tonumber(Config.SpawnIntervalSeconds) or 1800) * 1000)
+local BossIntervalMs = math.max(60000, (tonumber(Config.SpawnIntervalSeconds) or 900) * 1000)
+
+-- Initial Spawn Check (15 seconds after server start)
+pcall(function()
+    if ExecuteWithDelay then
+        ExecuteWithDelay(15000, function()
+            pcall(function()
+                local bosses = WorldBoss.GetActiveBosses()
+                local count = 0
+                for _ in pairs(bosses) do count = count + 1 end
+                if count == 0 then
+                    print("[WorldBossAuraSystem] Triggering initial startup World Boss spawn...")
+                    WorldBoss.SpawnEvent()
+                end
+            end)
+        end)
+    end
+end)
 
 -- Reactive Join / Leave Event Hooks (Instant Liveboard Update)
 local function TriggerReactiveUpdate()

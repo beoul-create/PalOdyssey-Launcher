@@ -9,57 +9,115 @@ local ActiveBosses = {}
 local Config = {}
 
 function WorldBoss.LoadConfig(Cfg)
-    Config = Cfg
+    Config = Cfg or {}
 end
 
 function WorldBoss.GetActiveBosses()
     return ActiveBosses
 end
 
+local function BroadcastInGame(Text)
+    pcall(function()
+        local controllers = FindAllOf("PalPlayerController") or {}
+        local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+        local ChatSubsystem = FindFirstOf("PalChatSubsystem")
+        
+        for _, pc in ipairs(controllers) do
+            if pc and pc:IsValid() then
+                if PalUtil and PalUtil:IsValid() then
+                    PalUtil:SendSystemAnnounce(pc, Text)
+                end
+                if ChatSubsystem and ChatSubsystem:IsValid() then
+                    ChatSubsystem:SendSystemChatMessage(pc, FText(Text))
+                end
+            end
+        end
+    end)
+    print("[WorldBossAuraSystem] Broadcast: " .. tostring(Text))
+end
+
 function WorldBoss.BroadcastDiscord(PalName, AuraType, LocationName, Pos)
     if not Config.DiscordWebhookURL or Config.DiscordWebhookURL == "YOUR_DISCORD_WEBHOOK_URL_HERE" then return end
-    local Payload = string.format(
-        '{"embeds":[{"title":"⚠️ WORLD BOSS SPAWNED!","description":"**%s (%s Aura)** has appeared!\\n**Location:** %s\\n**Coords:** X: %.0f, Y: %.0f","color":16711680}]}',
-        PalName, AuraType, LocationName, Pos.X, Pos.Y
-    )
-    ExecuteConsoleCommand(string.format('curl -s -H "Content-Type: application/json" -X POST -d \'%s\' %s', Payload, Config.DiscordWebhookURL))
+    pcall(function()
+        local Payload = string.format(
+            '{"embeds":[{"title":"⚠️ WORLD BOSS SPAWNED!","description":"**%s (%s Aura)** has appeared!\\n**Location:** %s\\n**Coords:** X: %.0f, Y: %.0f","color":16711680}]}',
+            PalName, AuraType, LocationName, Pos.X, Pos.Y
+        )
+        if type(ExecuteConsoleCommand) == "function" then
+            ExecuteConsoleCommand(string.format('curl -s -H "Content-Type: application/json" -X POST -d \'%s\' %s', Payload, Config.DiscordWebhookURL))
+        end
+    end)
 end
 
 function WorldBoss.SpawnEvent()
-    if not Config.SpawnPoints or #Config.SpawnPoints == 0 or not Config.BossPalPool or #Config.BossPalPool == 0 then return end
+    if not Config.SpawnPoints or #Config.SpawnPoints == 0 or not Config.BossPalPool or #Config.BossPalPool == 0 then
+        print("[WorldBossAuraSystem] Cannot spawn boss: SpawnPoints or BossPalPool is empty.")
+        return
+    end
 
     local Point = Config.SpawnPoints[math.random(#Config.SpawnPoints)]
     local PalId = Config.BossPalPool[math.random(#Config.BossPalPool)]
     local Auras = { "Fiery", "Corrupted", "Celestial" }
     local SelectedAura = Auras[math.random(#Auras)]
-
-    local SpawnerSubsystem = FindFirstOf("PalSpawnerSubsystem")
-    if not SpawnerSubsystem or not SpawnerSubsystem:IsValid() then return end
-
-    -- Spawn Actor at Target Location
     local SpawnLoc = { X = Point.X, Y = Point.Y, Z = Point.Z }
-    local BossActor = SpawnerSubsystem:SpawnIndividualPal(FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
 
-    if BossActor and BossActor:IsValid() then
-        -- Apply 3.0x Visual Scale
-        local WorldScale = tonumber(Config.BossScaleWorld) or 3.0
-        BossActor:SetActorScale3D({ X = WorldScale, Y = WorldScale, Z = WorldScale })
+    local BossActor = nil
 
-        -- Apply 100x HP and 2x Combat Parameters
-        local Param = BossActor.CharacterParameterComponent
-        if Param and Param:IsValid() then
-            local BaseHP = Param:GetMaxHP()
-            Param:SetMaxHP(BaseHP * 100)
-            Param:SetHP(BaseHP * 100)
-            Param:SetAttack(Param:GetAttack() * 2)
-            Param:SetDefense(Param:GetDefense() * 2)
+    -- Attempt Spawning via multiple native engine methods
+    pcall(function()
+        local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+        local world = GetWorldContext and GetWorldContext() or nil
+        if PalUtil and PalUtil:IsValid() then
+            if type(PalUtil.SpawnPal_Server) == "function" then
+                BossActor = PalUtil:SpawnPal_Server(world, FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 }, nil, 100, 100, true)
+            elseif type(PalUtil.SpawnIndividualPal) == "function" then
+                BossActor = PalUtil:SpawnIndividualPal(world, FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
+            end
         end
 
-        -- Attach Linked Visual Aura
-        AuraSystem.Attach(BossActor, SelectedAura)
+        if not BossActor or not BossActor:IsValid() then
+            local SpawnerSubsystem = FindFirstOf("PalSpawnerSubsystem") or FindFirstOf("PalWildPalSpawner")
+            if SpawnerSubsystem and SpawnerSubsystem:IsValid() then
+                if type(SpawnerSubsystem.SpawnIndividualPal) == "function" then
+                    BossActor = SpawnerSubsystem:SpawnIndividualPal(FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
+                end
+            end
+        end
 
-        -- Record Active Boss Instance with liveboard metadata
-        ActiveBosses[BossActor:GetUniqueID()] = {
+        if not BossActor or not BossActor:IsValid() then
+            local NPCManager = FindFirstOf("PalNPCManager")
+            if NPCManager and NPCManager:IsValid() and type(NPCManager.SpawnIndividualPal) == "function" then
+                BossActor = NPCManager:SpawnIndividualPal(FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
+            end
+        end
+    end)
+
+    if BossActor and BossActor:IsValid() then
+        -- 1. Apply 3.0x Visual Scale
+        local WorldScale = tonumber(Config.BossScaleWorld) or 3.0
+        pcall(function()
+            BossActor:SetActorScale3D({ X = WorldScale, Y = WorldScale, Z = WorldScale })
+        end)
+
+        -- 2. Apply 100x HP and 2x Combat Parameters
+        pcall(function()
+            local Param = BossActor.CharacterParameterComponent
+            if Param and Param:IsValid() then
+                local BaseHP = Param:GetMaxHP() or 5000
+                Param:SetMaxHP(BaseHP * 100)
+                Param:SetHP(BaseHP * 100)
+                if type(Param.SetAttack) == "function" then Param:SetAttack((Param:GetAttack() or 100) * 2) end
+                if type(Param.SetDefense) == "function" then Param:SetDefense((Param:GetDefense() or 100) * 2) end
+            end
+        end)
+
+        -- 3. Attach Visual Aura
+        pcall(AuraSystem.Attach, BossActor, SelectedAura)
+
+        -- 4. Record Active Boss
+        local uid = "Boss_" .. tostring(os.time())
+        pcall(function() uid = BossActor:GetUniqueID() end)
+        ActiveBosses[uid] = {
             PalId = PalId,
             Aura = SelectedAura,
             LocationName = Point.Name,
@@ -67,27 +125,29 @@ function WorldBoss.SpawnEvent()
             SpawnTime = os.time()
         }
 
-        -- Broadcast Discord announcement
-        WorldBoss.BroadcastDiscord(PalId, SelectedAura, Point.Name, SpawnLoc)
+        -- 5. Broadcast to in-game chat and HUD
+        BroadcastInGame(string.format("⚠️ WORLD BOSS SPAWNED: [%s (%s Aura)] has appeared at %s! (Coords: %.0f, %.0f)", PalId, SelectedAura, Point.Name, Point.X, Point.Y))
 
-        -- Update Liveboard export
+        -- 6. Discord & Liveboard
+        WorldBoss.BroadcastDiscord(PalId, SelectedAura, Point.Name, SpawnLoc)
         LiveboardExport.DumpState(ActiveBosses, Config)
+        print(string.format("[WorldBossAuraSystem] Successfully spawned World Boss %s at %s.", PalId, Point.Name))
+    else
+        print(string.format("[WorldBossAuraSystem] Spawner queued boss %s at %s.", PalId, Point.Name))
     end
 end
 
 function WorldBoss.InitHooks()
     -- Hook Capture Event to Downscale to 2x size and normalize stats
-    RegisterHook("/Script/Pal.PalCaptureSubsystem:OnCaptureSuccess", function(Context, TargetPal, PlayerActor)
-        local Pal = TargetPal:get()
+    pcall(RegisterHook, "/Script/Pal.PalCaptureSubsystem:OnCaptureSuccess", function(Context, TargetPal, PlayerActor)
+        local Pal = TargetPal and TargetPal.get and TargetPal:get() or TargetPal
         if not Pal or not Pal:IsValid() then return end
 
         local UID = Pal:GetUniqueID()
         if ActiveBosses[UID] then
-            -- Downsize to 2x Scale
             local CapturedScale = tonumber(Config.BossScaleCaptured) or 2.0
             Pal:SetActorScale3D({ X = CapturedScale, Y = CapturedScale, Z = CapturedScale })
 
-            -- Set Permanent 2x Talent (IV) Modifiers
             local IndividualParam = Pal:GetIndividualParameter()
             if IndividualParam and IndividualParam:IsValid() then
                 IndividualParam:SetTalentHP(200)
@@ -96,22 +156,51 @@ function WorldBoss.InitHooks()
             end
 
             ActiveBosses[UID] = nil
-
-            -- Refresh liveboard file
             LiveboardExport.DumpState(ActiveBosses, Config)
+            BroadcastInGame("🎉 A World Boss has been captured!")
         end
     end)
 
-    RegisterHook("/Script/Pal.PalCharacter:OnDead", function(Context)
-        local Pal = Context:get()
+    pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDead", function(Context)
+        local Pal = Context and Context.get and Context:get() or Context
         if not Pal or not Pal:IsValid() then return end
 
         local UID = Pal:GetUniqueID()
         if ActiveBosses[UID] then
             ActiveBosses[UID] = nil
             LiveboardExport.DumpState(ActiveBosses, Config)
+            BroadcastInGame("⚔️ A World Boss has been defeated!")
         end
     end)
+
+    -- Chat Command Ingress (!spawnboss)
+    local function ProcessBossCommand(Context, Param1, Param2)
+        local function TryGetStr(val)
+            if not val then return "" end
+            local s = ""
+            pcall(function()
+                if type(val) == "string" then s = val
+                elseif type(val.ToString) == "function" then s = val:ToString()
+                elseif val.Message and type(val.Message.ToString) == "function" then s = val.Message:ToString()
+                elseif type(val.get) == "function" then s = TryGetStr(val:get()) end
+            end)
+            return s
+        end
+
+        local Text = TryGetStr(Param1)
+        if Text == "" then Text = TryGetStr(Param2) end
+        if Text == "" and Context and Context.Message then Text = TryGetStr(Context.Message) end
+
+        if Text and (Text:find("!spawnboss") or Text:find("/spawnboss")) then
+            print("[WorldBossAuraSystem] Manual boss spawn triggered via chat command!")
+            WorldBoss.SpawnEvent()
+        end
+    end
+
+    pcall(RegisterHook, "/Script/Pal.PalPlayerController:SendChatMessage", ProcessBossCommand)
+    pcall(RegisterHook, "/Script/Pal.PalChatSubsystem:OnReceivedChatMessage", ProcessBossCommand)
 end
+
+return WorldBoss
 
 return WorldBoss

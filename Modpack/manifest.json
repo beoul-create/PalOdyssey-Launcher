@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.235610",
-  "GeneratedAt": "2026-08-29T23:56:10.402Z",
+  "Version": "2026.08.29.235934",
+  "GeneratedAt": "2026-08-29T23:59:34.120Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,14 +8,14 @@
   "TotalFiles": 302,
   "News": [
     {
-      "title": "🛡️ Modular UI Architecture (Zero Hard Dependencies)",
+      "title": "⚡ Ultra FastConnect 2.0 & World Boss Spawning Overhaul",
       "date": "Aug 29, 2026",
-      "summary": "Verified all mods operate autonomously. Removed legacy Darn dependencies from metadata. UniPalUI active as isolated UI provider."
+      "summary": "Boosted FastConnect bandwidth to 300KB/s & 10,000 GUIDs/frame. Fixed WorldBossAuraSystem native spawning, added in-game alerts & !spawnboss command."
     },
     {
       "title": "🏰 Multi-Hook Guild Restriction Engine Live!",
       "date": "Aug 29, 2026",
-      "summary": "Verified and hardened GuildBuildingLimits with multi-hook coverage (RequestBuild, RequestBuild_Server, RequestBuildDirectly) and dynamic scaling."
+      "summary": "Verified and hardened GuildBuildingLimits with multi-hook coverage and dynamic exponential price scaling."
     },
     {
       "title": "🛒 Economy System v3.2.0: Stat Boosts, APSE Implants, Schematics & 2-Way Exchange",
@@ -224,8 +224,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/FastConnect/Scripts/main.lua",
-      "Hash": "36db4ecf3774eb1d0285ee34b6137e0b4faf377946822690772229990a4fe4ea",
-      "Size": 6690,
+      "Hash": "15b20d1d7237ef80e9cbbd2374915e09d360ffbc60093e51104b373e241aca73",
+      "Size": 6865,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/FastConnect/Scripts/main.lua"
     },
     {
@@ -1802,8 +1802,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/main.lua",
-      "Hash": "c49f14e358021c086a6d554178500cd527b82e4d5b63690a8cad1fdcdde49a58",
-      "Size": 3871,
+      "Hash": "0da36cb2d66b271e00f4d24da908b20534d360ae2812a8f57ea63a35db544838",
+      "Size": 4438,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/main.lua"
     },
     {
@@ -1814,8 +1814,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/world_boss.lua",
-      "Hash": "363e2d0d308e8a8bf7f7803bb1a7eae07c219fa1bd3d0111ba4c905d0d1d57c9",
-      "Size": 4546,
+      "Hash": "271541d056a13d03dc977f2292e623e39554e20e5ac5f16a066fd41674aa2f20",
+      "Size": 8875,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/world_boss.lua"
     },
     {

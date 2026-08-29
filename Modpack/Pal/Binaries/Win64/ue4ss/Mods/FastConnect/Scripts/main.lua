@@ -57,12 +57,14 @@ local function ApplyFastNetworkRates()
     pcall(function()
         if not Config.ultraFastNetworkRates then return end
 
-        -- 10x Bandwidth for instant server handshake and world snapshot replication
-        ExecuteConsole("net.IpNetDriver.MaxClientRate 150000")
-        ExecuteConsole("net.PackageMap.MaxNetGUIDsPerFrame 3000")
-        ExecuteConsole("net.MaxRPCPerSecond 500")
-        ExecuteConsole("net.ReliableBufferSize 4194304")
-        Log("Ultra-fast network replication and server handshake bandwidth applied.")
+        -- Maximum network bandwidth for instant server handshake and world snapshot replication
+        ExecuteConsole("net.IpNetDriver.MaxClientRate 300000")
+        ExecuteConsole("net.PackageMap.MaxNetGUIDsPerFrame 10000")
+        ExecuteConsole("net.MaxRPCPerSecond 1500")
+        ExecuteConsole("net.ReliableBufferSize 8388608")
+        ExecuteConsole("net.TrackNetBandwidth 0")
+        ExecuteConsole("net.TickRate 60")
+        Log("Ultra-fast network replication and high-throughput server handshake bandwidth applied.")
     end)
 end
 
@@ -72,18 +74,19 @@ local function ApplyLoadingOptimizations()
         if not Config.accelerateLoadingScreens then return end
 
         -- Maximize frame time allocation for asynchronous world/shader loading
-        ExecuteConsole("s.AsyncLoadingTimeLimit 25.0")
-        ExecuteConsole("s.PriorityAsyncLoadingExtraTime 50.0")
-        ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 25.0")
-        ExecuteConsole("s.UnregisterComponentsTimeLimit 25.0")
+        ExecuteConsole("s.AsyncLoadingTimeLimit 50.0")
+        ExecuteConsole("s.PriorityAsyncLoadingExtraTime 100.0")
+        ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 50.0")
+        ExecuteConsole("s.UnregisterComponentsTimeLimit 50.0")
         ExecuteConsole("s.AsyncLoadingUseFullTimeLimit 1")
-        ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 20")
+        ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 60")
         ExecuteConsole("r.Streaming.HLODStrategy 2")
         ExecuteConsole("r.Streaming.DefragDynamicBounds 1")
         ExecuteConsole("r.Streaming.AmortizeCPUWork 1")
-        ExecuteConsole("r.Streaming.Boost 2")
+        ExecuteConsole("r.Streaming.Boost 3")
+        ExecuteConsole("r.Streaming.PoolSize 4096")
         ExecuteConsole("r.Streaming.LimitPoolSizeToVRAM 1")
-        ExecuteConsole("r.Streaming.FramesForFullUpdate 20")
+        ExecuteConsole("r.Streaming.FramesForFullUpdate 15")
 
         if Config.prewarmShaderPipelines then
             ExecuteConsole("r.CreateShadersOnLoad 1")
@@ -91,7 +94,7 @@ local function ApplyLoadingOptimizations()
         end
 
         -- Batch GC allocations and prevent mid-load GC hitching
-        ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 120")
+        ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 180")
         ExecuteConsole("gc.NumRetriesBeforeForcingCSGC 0")
         ExecuteConsole("gc.CreateGCClusters 1")
         
@@ -109,13 +112,13 @@ local function SkipIntroMovies()
 end
 
 local function ApplySteadyStateStreaming()
-    ExecuteConsole("s.AsyncLoadingTimeLimit 5.0")
-    ExecuteConsole("s.PriorityAsyncLoadingExtraTime 15.0")
-    ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 5.0")
-    ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 6")
+    ExecuteConsole("s.AsyncLoadingTimeLimit 8.0")
+    ExecuteConsole("s.PriorityAsyncLoadingExtraTime 25.0")
+    ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 8.0")
+    ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 12")
     ExecuteConsole("r.Streaming.HLODStrategy 1")
     ExecuteConsole("r.Streaming.Boost 1")
-    ExecuteConsole("r.Streaming.FramesForFullUpdate 25")
+    ExecuteConsole("r.Streaming.FramesForFullUpdate 20")
     ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 60")
 end
 
@@ -134,15 +137,15 @@ local function SafeDelayedEnforce()
     ApplyFastNetworkRates()
     ApplyLoadingOptimizations()
     SkipIntroMovies()
-    ExecuteWithDelay(1500, function()
+    ExecuteWithDelay(800, function()
         ApplyFastNetworkRates()
         ApplyLoadingOptimizations()
     end)
-    ExecuteWithDelay(4000, function()
+    ExecuteWithDelay(2500, function()
         ApplyFastNetworkRates()
         ApplyLoadingOptimizations()
     end)
-    ExecuteWithDelay(8000, ApplySteadyStateStreaming)
+    ExecuteWithDelay(6000, ApplySteadyStateStreaming)
 end
 
 -- Hook World, Network & Game Setting Initialization (Fully Automated)
