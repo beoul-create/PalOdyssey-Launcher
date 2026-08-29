@@ -7,9 +7,7 @@
   "MinRevision": 82182,
   "Author": "A New Darn",
   "Dependencies": [
-    "UE4SSExperimentalPW",
-    "DarnToasts",
-    "DarnMenu"
+    "UE4SSExperimentalPW"
   ],
   "Tags": [
     "UE4SS",
