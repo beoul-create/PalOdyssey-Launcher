@@ -20,6 +20,10 @@ local function FindValidAura(auraType)
     local list = AuraMap[auraType] or AuraMap["Fiery"]
     for _, path in ipairs(list) do
         local obj = StaticFindObject(path)
+        if (not obj or not obj:IsValid()) and type(LoadAsset) == "function" then
+            local ok, loaded = pcall(LoadAsset, path)
+            if ok then obj = loaded end
+        end
         if obj and obj:IsValid() then
             return obj
         end

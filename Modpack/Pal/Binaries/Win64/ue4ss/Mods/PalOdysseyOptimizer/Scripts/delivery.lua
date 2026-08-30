@@ -292,7 +292,14 @@ local function processQueue()
     end
 
     local qPath = findQueueFile()
-    local okOpen, f = pcall(io.open, qPath, "r")
+    local processingPath = qPath .. ".processing"
+    local f = io.open(processingPath, "r")
+    if not f then
+        local claimed = os.rename(qPath, processingPath)
+        if not claimed then return end
+        f = io.open(processingPath, "r")
+    end
+    local okOpen = f ~= nil
     if not okOpen or not f then return end
 
     local lines = {}
@@ -303,13 +310,17 @@ local function processQueue()
     end
     f:close()
 
-    if #lines == 0 then return end
+    if #lines == 0 then os.remove(processingPath); return end
 
-    -- Atomically truncate the processed queue file immediately to eliminate repeat loops
-    pcall(function()
-        local fTrunc = io.open(qPath, "w")
-        if fTrunc then fTrunc:close() end
-    end)
+    local function Requeue(pending)
+        if #pending == 0 then return true end
+        local fOut = io.open(qPath, "a")
+        if not fOut then return false end
+        for _, pendingLine in ipairs(pending) do fOut:write(pendingLine .. "\n") end
+        fOut:flush()
+        fOut:close()
+        return true
+    end
 
     -- Find all Player States and Controllers across dedicated server & client
     local targets = {}
@@ -352,13 +363,7 @@ local function processQueue()
 
     if #targets == 0 then
         -- Player states not loaded yet, preserve lines in queue
-        pcall(function()
-            local fOut = io.open(qPath, "w")
-            if fOut then
-                for _, l in ipairs(lines) do fOut:write(l .. "\n") end
-                fOut:close()
-            end
-        end)
+        if Requeue(lines) then os.remove(processingPath) end
         return
     end
 
@@ -608,27 +613,22 @@ local function processQueue()
         end
     end
 
-    if processedAny then
-        for _, path in ipairs(getQueueFilePaths()) do
-            local okWrite, fOut = pcall(io.open, path, "w")
-            if okWrite and fOut then
-                for _, rem in ipairs(remainingLines) do
-                    fOut:write(rem .. "\n")
-                end
-                fOut:close()
-            end
-        end
-    end
+    if Requeue(remainingLines) then os.remove(processingPath) end
 end
 
 function DeliveryModule.apply()
     log("Initializing Live Economy & Tech Points Synchronization Engine...")
 
     -- Keep deliveries responsive without continuously hitting the filesystem.
-    LoopAsync(2000, function()
-        pcall(processQueue)
-        return false -- keep looping indefinitely
-    end)
+    if type(LoopInGameThreadWithDelay) == "function" then
+        LoopInGameThreadWithDelay(2000, function() pcall(processQueue) end)
+    else
+        LoopAsync(2000, function()
+            if type(ExecuteInGameThread) == "function" then ExecuteInGameThread(function() pcall(processQueue) end)
+            else pcall(processQueue) end
+            return false
+        end)
+    end
 
     log("Live Economy & Tech Points Synchronization Engine Active.")
 end

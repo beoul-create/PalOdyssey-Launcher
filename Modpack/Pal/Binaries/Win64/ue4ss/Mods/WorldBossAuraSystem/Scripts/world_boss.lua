@@ -7,6 +7,8 @@ local LiveboardExport = require("liveboard_export")
 
 local ActiveBosses = {}
 local Config = {}
+local SpawnInProgress = false
+local LastCommandSpawn = 0
 
 function WorldBoss.LoadConfig(Cfg)
     Config = Cfg or {}
@@ -50,10 +52,21 @@ function WorldBoss.BroadcastDiscord(PalName, AuraType, LocationName, Pos)
 end
 
 function WorldBoss.SpawnEvent()
+    if SpawnInProgress then
+        print("[WorldBossAuraSystem] Spawn already in progress; request ignored.")
+        return false
+    end
+    local activeCount = 0
+    for _ in pairs(ActiveBosses) do activeCount = activeCount + 1 end
+    if activeCount >= math.max(1, tonumber(Config.MaxActiveBosses) or 1) then
+        print("[WorldBossAuraSystem] Active boss limit reached; spawn skipped.")
+        return false
+    end
     if not Config.SpawnPoints or #Config.SpawnPoints == 0 or not Config.BossPalPool or #Config.BossPalPool == 0 then
         print("[WorldBossAuraSystem] Cannot spawn boss: SpawnPoints or BossPalPool is empty.")
-        return
+        return false
     end
+    SpawnInProgress = true
 
     local Point = Config.SpawnPoints[math.random(#Config.SpawnPoints)]
     local PalId = Config.BossPalPool[math.random(#Config.BossPalPool)]
@@ -63,15 +76,31 @@ function WorldBoss.SpawnEvent()
 
     local BossActor = nil
 
-    -- Attempt Spawning via multiple native engine methods
+    local function TrySpawn(label, callable)
+        local ok, result = pcall(callable)
+        if ok and result and result.IsValid and result:IsValid() then
+            BossActor = result
+            return true
+        end
+        if not ok then print(string.format("[WorldBossAuraSystem] %s failed: %s", label, tostring(result))) end
+        return false
+    end
+
+    -- Attempt each native method independently so a bad signature cannot suppress fallbacks.
     pcall(function()
         local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
-        local world = GetWorldContext and GetWorldContext() or nil
+        local world = (UEHelpers and UEHelpers.GetWorldContextObject and UEHelpers.GetWorldContextObject())
+            or (GetWorldContext and GetWorldContext()) or nil
         if PalUtil and PalUtil:IsValid() then
             if type(PalUtil.SpawnPal_Server) == "function" then
-                BossActor = PalUtil:SpawnPal_Server(world, FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 }, nil, 100, 100, true)
-            elseif type(PalUtil.SpawnIndividualPal) == "function" then
-                BossActor = PalUtil:SpawnIndividualPal(world, FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
+                TrySpawn("PalUtility.SpawnPal_Server", function()
+                    return PalUtil:SpawnPal_Server(world, FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 }, nil, 100, 100, true)
+                end)
+            end
+            if not BossActor and type(PalUtil.SpawnIndividualPal) == "function" then
+                TrySpawn("PalUtility.SpawnIndividualPal", function()
+                    return PalUtil:SpawnIndividualPal(world, FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
+                end)
             end
         end
 
@@ -79,7 +108,9 @@ function WorldBoss.SpawnEvent()
             local SpawnerSubsystem = FindFirstOf("PalSpawnerSubsystem") or FindFirstOf("PalWildPalSpawner")
             if SpawnerSubsystem and SpawnerSubsystem:IsValid() then
                 if type(SpawnerSubsystem.SpawnIndividualPal) == "function" then
-                    BossActor = SpawnerSubsystem:SpawnIndividualPal(FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
+                    TrySpawn("PalSpawnerSubsystem.SpawnIndividualPal", function()
+                        return SpawnerSubsystem:SpawnIndividualPal(FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
+                    end)
                 end
             end
         end
@@ -87,7 +118,9 @@ function WorldBoss.SpawnEvent()
         if not BossActor or not BossActor:IsValid() then
             local NPCManager = FindFirstOf("PalNPCManager")
             if NPCManager and NPCManager:IsValid() and type(NPCManager.SpawnIndividualPal) == "function" then
-                BossActor = NPCManager:SpawnIndividualPal(FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
+                TrySpawn("PalNPCManager.SpawnIndividualPal", function()
+                    return NPCManager:SpawnIndividualPal(FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
+                end)
             end
         end
     end)
@@ -116,7 +149,10 @@ function WorldBoss.SpawnEvent()
 
         -- 4. Record Active Boss
         local uid = "Boss_" .. tostring(os.time())
-        pcall(function() uid = BossActor:GetUniqueID() end)
+        pcall(function()
+            local nativeUid = BossActor:GetUniqueID()
+            if nativeUid ~= nil then uid = nativeUid end
+        end)
         ActiveBosses[uid] = {
             PalId = PalId,
             Aura = SelectedAura,
@@ -132,8 +168,12 @@ function WorldBoss.SpawnEvent()
         WorldBoss.BroadcastDiscord(PalId, SelectedAura, Point.Name, SpawnLoc)
         LiveboardExport.DumpState(ActiveBosses, Config)
         print(string.format("[WorldBossAuraSystem] Successfully spawned World Boss %s at %s.", PalId, Point.Name))
+        SpawnInProgress = false
+        return true
     else
-        print(string.format("[WorldBossAuraSystem] Spawner queued boss %s at %s.", PalId, Point.Name))
+        print(string.format("[WorldBossAuraSystem] All spawn methods failed for %s at %s.", PalId, Point.Name))
+        SpawnInProgress = false
+        return false
     end
 end
 
@@ -191,14 +231,21 @@ function WorldBoss.InitHooks()
         if Text == "" then Text = TryGetStr(Param2) end
         if Text == "" and Context and Context.Message then Text = TryGetStr(Context.Message) end
 
-        if Text and (Text:find("!spawnboss") or Text:find("/spawnboss")) then
+        Text = tostring(Text or ""):lower():match("^%s*(.-)%s*$")
+        if Text == "!spawnboss" or Text == "/spawnboss" then
+            local now = os.time()
+            local cooldown = math.max(1, tonumber(Config.SpawnCommandCooldownSeconds) or 60)
+            if now - LastCommandSpawn < cooldown then
+                print("[WorldBossAuraSystem] Manual boss command ignored during cooldown.")
+                return
+            end
+            LastCommandSpawn = now
             print("[WorldBossAuraSystem] Manual boss spawn triggered via chat command!")
             WorldBoss.SpawnEvent()
         end
     end
 
     pcall(RegisterHook, "/Script/Pal.PalPlayerController:SendChatMessage", ProcessBossCommand)
-    pcall(RegisterHook, "/Script/Pal.PalChatSubsystem:OnReceivedChatMessage", ProcessBossCommand)
 end
 
 return WorldBoss

@@ -158,28 +158,23 @@ function LiveboardExport.DumpState(ActiveBosses, Config)
     local jsonPayload = EncodeJsonValue(Data)
     local written = false
 
-    local CandidatePaths = {
-        "Pal/Saved/liveboard_state.json",
-        "C:/SteamLibrary/steamapps/common/PalServer/Pal/Saved/liveboard_state.json",
-        "../../../../../../Saved/liveboard_state.json",
-        "../../../../../Saved/liveboard_state.json",
-        "../../../../Saved/liveboard_state.json",
-        "../../../Saved/liveboard_state.json",
-        "../../Saved/liveboard_state.json",
-        "../Saved/liveboard_state.json"
-    }
-
-    for _, candidate in ipairs(CandidatePaths) do
-        pcall(function()
-            local File = io.open(candidate, "w")
-            if File then
-                File:write(jsonPayload)
-                File:close()
-                written = true
-            end
-        end)
-        if written then break end
-    end
+    pcall(function()
+        local tempPath = StatePath .. ".tmp"
+        local backupPath = StatePath .. ".bak"
+        local File = assert(io.open(tempPath, "w"))
+        assert(File:write(jsonPayload))
+        File:flush()
+        File:close()
+        os.remove(backupPath)
+        local hadOriginal = os.rename(StatePath, backupPath)
+        if not os.rename(tempPath, StatePath) then
+            if hadOriginal then os.rename(backupPath, StatePath) end
+            error("unable to atomically publish liveboard state")
+        end
+        os.remove(backupPath)
+        written = true
+    end)
+    if not written then print("[WorldBossAuraSystem] Failed to publish liveboard state.") end
 end
 
 return LiveboardExport

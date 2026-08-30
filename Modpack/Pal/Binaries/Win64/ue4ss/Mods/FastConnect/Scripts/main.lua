@@ -1,5 +1,6 @@
 -- FastConnect & Seamless Loading Pipeline for PalOdyssey
 local Config = require("config")
+local ConnectionPhase = false
 
 local function Log(msg)
     print(string.format("[FastConnect] %s", tostring(msg)))
@@ -95,7 +96,6 @@ local function ApplyLoadingOptimizations()
 
         -- Batch GC allocations and prevent mid-load GC hitching
         ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 180")
-        ExecuteConsole("gc.NumRetriesBeforeForcingCSGC 0")
         ExecuteConsole("gc.CreateGCClusters 1")
         
         Log("Instant world loading and shader streaming parameters applied.")
@@ -112,6 +112,7 @@ local function SkipIntroMovies()
 end
 
 local function ApplySteadyStateStreaming()
+    ConnectionPhase = false
     ExecuteConsole("s.AsyncLoadingTimeLimit 8.0")
     ExecuteConsole("s.PriorityAsyncLoadingExtraTime 25.0")
     ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 8.0")
@@ -132,8 +133,21 @@ local function OnPlayerTransition()
     end)
 end
 
+local function BeginConnectionPhase()
+    ConnectionPhase = true
+    ApplyFastNetworkRates()
+    ApplyLoadingOptimizations()
+end
+
+local function ScheduleSteadyState(delayMs)
+    ExecuteWithDelay(delayMs, function()
+        if ConnectionPhase then ApplySteadyStateStreaming() end
+    end)
+end
+
 -- Delayed enforcement helper to overcome engine resets on world transitions
 local function SafeDelayedEnforce()
+    ConnectionPhase = true
     ApplyFastNetworkRates()
     ApplyLoadingOptimizations()
     SkipIntroMovies()
@@ -145,7 +159,8 @@ local function SafeDelayedEnforce()
         ApplyFastNetworkRates()
         ApplyLoadingOptimizations()
     end)
-    ExecuteWithDelay(6000, ApplySteadyStateStreaming)
+    -- Startup fallback. A real connection/restart event supersedes this timer.
+    ScheduleSteadyState(30000)
 end
 
 -- Hook World, Network & Game Setting Initialization (Fully Automated)
@@ -169,8 +184,8 @@ end)
 
 pcall(function()
     NotifyOnNewObject("/Script/Engine.NetConnection", function()
-        ApplyFastNetworkRates()
-        ApplyLoadingOptimizations()
+        BeginConnectionPhase()
+        ScheduleSteadyState(60000)
     end)
 end)
 
@@ -178,6 +193,8 @@ pcall(function()
     RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context)
         OnPlayerTransition()
         ApplyLoadingOptimizations()
+        ConnectionPhase = true
+        ScheduleSteadyState(10000)
     end)
 end)
 

@@ -22,7 +22,8 @@ function NetworkModule.apply(cfg)
             local netDriver = world.NetDriver
             if not netDriver or not netDriver:IsValid() then return end
 
-            local maxBw = cfg.maxBandwidth or 1048576
+            local fastConnectActive = _G.FastConnect and _G.FastConnect.Config and _G.FastConnect.Config.ultraFastNetworkRates
+            local maxBw = fastConnectActive and 300000 or (cfg.maxBandwidth or 1048576)
             netDriver.MaxClientRate = maxBw
             netDriver.MaxInternetClientRate = maxBw
             netDriver.MinNetUpdateFrequency = 30.0
@@ -30,7 +31,7 @@ function NetworkModule.apply(cfg)
             netDriver.NetServerMaxTickRate = 60
 
             if not tuned then
-                print("[PalOdysseyOptimizer:Network] NetDriver tuned: 1MB/s bandwidth, 120Hz net update, 60-tick server rate.")
+                print(string.format("[PalOdysseyOptimizer:Network] NetDriver tuned: %d B/s bandwidth, 120Hz net update, 60-tick server rate.", maxBw))
                 tuned = true
             end
         end)

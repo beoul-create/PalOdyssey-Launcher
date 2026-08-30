@@ -24,7 +24,9 @@ local function LoadConfigFile()
     local Config = {
         ServerName = "PalOdyssey Official Modded Realm",
         MaxPlayers = 32,
-        SpawnIntervalSeconds = 1800,
+        SpawnIntervalSeconds = 900,
+        MaxActiveBosses = 1,
+        SpawnCommandCooldownSeconds = 60,
         LiveboardExportIntervalSeconds = 15,
         DiscordWebhookURL = "YOUR_DISCORD_WEBHOOK_URL_HERE",
         BossPalPool = { "Foxparks", "Orserk", "Mammorest", "Chillet", "Anubis" },
@@ -70,8 +72,9 @@ local BossIntervalMs = math.max(60000, (tonumber(Config.SpawnIntervalSeconds) or
 
 -- Initial Spawn Check (15 seconds after server start)
 pcall(function()
-    if ExecuteWithDelay then
-        ExecuteWithDelay(15000, function()
+    local delay = ExecuteInGameThreadWithDelay or ExecuteWithDelay
+    if delay then
+        delay(15000, function()
             pcall(function()
                 local bosses = WorldBoss.GetActiveBosses()
                 local count = 0
@@ -112,18 +115,22 @@ for _, hookName in ipairs(joinLeaveHooks) do
     end)
 end
 
--- 1. Periodic Liveboard Telemetry Dumper
-LoopAsync(LiveboardIntervalMs, function()
-    pcall(function()
-        LiveboardExport.DumpState(WorldBoss.GetActiveBosses(), Config)
+local function StartGameThreadLoop(intervalMs, callback)
+    if type(LoopInGameThreadWithDelay) == "function" then
+        return LoopInGameThreadWithDelay(intervalMs, function() pcall(callback) end)
+    end
+    return LoopAsync(intervalMs, function()
+        if type(ExecuteInGameThread) == "function" then
+            ExecuteInGameThread(function() pcall(callback) end)
+        else
+            pcall(callback)
+        end
+        return false
     end)
-    return false -- continue looping
-end)
+end
 
--- 2. Periodic World Boss Spawner
-LoopAsync(BossIntervalMs, function()
-    pcall(function()
-        WorldBoss.SpawnEvent()
-    end)
-    return false -- continue looping
+-- Both callbacks touch UObjects and must be marshalled onto the game thread.
+StartGameThreadLoop(LiveboardIntervalMs, function()
+    LiveboardExport.DumpState(WorldBoss.GetActiveBosses(), Config)
 end)
+StartGameThreadLoop(BossIntervalMs, function() WorldBoss.SpawnEvent() end)

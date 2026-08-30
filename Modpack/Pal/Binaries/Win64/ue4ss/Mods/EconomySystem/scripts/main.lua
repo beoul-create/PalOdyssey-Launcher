@@ -1,5 +1,5 @@
 -- ============================================================================
--- EconomySystem v3.0.0 - Unified Technology & Ancient Point Economy
+-- EconomySystem v3.2.0 - Unified Technology & Ancient Point Economy
 -- Features:
 --   • [F6] Interactive Graphical Shop Window with Clickable [BUY], [GACHA], [CONVERT]
 --   • Direct Player Stat Boosting Items (Might, Vitality, Stamina, Speed, Burden)
@@ -10,7 +10,9 @@
 --   • Two-Way Point Currency Converter (5 Normal <-> 1 Ancient)
 -- ============================================================================
 
-print("[EconomySystem] Booting EconomySystem v3.0.0 Unified Economy Suite...")
+print("[EconomySystem] Booting EconomySystem v3.2.0 Unified Economy Suite...")
+
+local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
 
 local Config = {
     GachaCostTechPoints = 3,
@@ -22,8 +24,6 @@ local Config = {
 
 -- Safe config loader
 pcall(function()
-    local src = debug.getinfo(1, "S").source:gsub("^@", "")
-    local ScriptDir = src:match("(.*/)") or src:match("(.*\\)") or ""
     local candidates = {
         ScriptDir .. "../config.json",
         ScriptDir .. "config.json",
@@ -52,15 +52,13 @@ pcall(function()
 end)
 
 local GuildUpgrades = {}
-local UPGRADES_FILE = "C:/PalOdyssey Launcher 2.0/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/guild_upgrades.json"
+-- Runtime state is authoritative in the active installation only. Never write
+-- into the launcher workspace or another Palworld process' installation.
+local UPGRADES_FILE = ScriptDir .. "../../GuildBuildingLimits/guild_upgrades.json"
 
 local function LoadGuildUpgrades()
     pcall(function()
-        local paths = {
-            UPGRADES_FILE,
-            "C:/SteamLibrary/steamapps/common/PalServer/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/guild_upgrades.json",
-            "C:/SteamLibrary/steamapps/common/Palworld/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/guild_upgrades.json"
-        }
+        local paths = { UPGRADES_FILE }
         for _, path in ipairs(paths) do
             local f = io.open(path, "r")
             if f then
@@ -84,7 +82,8 @@ end
 LoadGuildUpgrades()
 
 local function SaveGuildUpgrades()
-    pcall(function()
+    local saved = false
+    local ok, err = pcall(function()
         local encoder = nil
         if JSON and type(JSON.stringify) == "function" then encoder = JSON.stringify end
         if not encoder and json and type(json.encode) == "function" then encoder = json.encode end
@@ -96,29 +95,40 @@ local function SaveGuildUpgrades()
             if ok and str then raw = str end
         else
             local parts = {}
+            local function EscapeJson(value)
+                return tostring(value):gsub("\\", "\\\\"):gsub('"', '\\"'):gsub("\r", "\\r"):gsub("\n", "\\n")
+            end
             for gId, upgrades in pairs(GuildUpgrades) do
                 local subparts = {}
                 for k, v in pairs(upgrades) do
-                    table.insert(subparts, string.format('"%s": %d', k, tonumber(v) or 0))
+                    table.insert(subparts, string.format('"%s": %d', EscapeJson(k), tonumber(v) or 0))
                 end
-                table.insert(parts, string.format('"%s": { %s }', gId, table.concat(subparts, ", ")))
+                table.insert(parts, string.format('"%s": { %s }', EscapeJson(gId), table.concat(subparts, ", ")))
             end
             raw = "{\n  " .. table.concat(parts, ",\n  ") .. "\n}"
         end
 
-        local paths = {
-            UPGRADES_FILE,
-            "C:/SteamLibrary/steamapps/common/PalServer/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/guild_upgrades.json",
-            "C:/SteamLibrary/steamapps/common/Palworld/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/guild_upgrades.json"
-        }
-        for _, path in ipairs(paths) do
-            local f = io.open(path, "w")
-            if f then
-                f:write(raw)
-                f:close()
-            end
+        local tempPath = UPGRADES_FILE .. ".tmp"
+        local backupPath = UPGRADES_FILE .. ".bak"
+        local f, openErr = io.open(tempPath, "w")
+        if not f then error(openErr or "unable to open temporary upgrade file") end
+        local writeOk, writeErr = f:write(raw)
+        f:flush()
+        f:close()
+        if not writeOk then error(writeErr or "unable to write upgrade file") end
+
+        os.remove(backupPath)
+        local hadOriginal = os.rename(UPGRADES_FILE, backupPath)
+        local renamed, renameErr = os.rename(tempPath, UPGRADES_FILE)
+        if not renamed then
+            if hadOriginal then os.rename(backupPath, UPGRADES_FILE) end
+            error(renameErr or "unable to publish upgrade file")
         end
+        os.remove(backupPath)
+        saved = true
     end)
+    if not ok then print("[EconomySystem] Failed to save guild upgrades: " .. tostring(err)) end
+    return saved
 end
 
 -- UI State Variables
@@ -152,9 +162,14 @@ local function GetPlayerGuildId(Player)
         local pc = Player or GetPlayerController()
         local PlayerState = pc and pc.PlayerState
         if PlayerState and PlayerState:IsValid() then
-            local GuildData = PlayerState:GetGuildName()
-            if GuildData then
-                guildId = GuildData:ToString()
+            if PlayerState.GuildId ~= nil then
+                guildId = tostring(PlayerState.GuildId)
+            elseif type(PlayerState.GetGuildId) == "function" then
+                local id = PlayerState:GetGuildId()
+                if id then guildId = tostring(id) end
+            elseif type(PlayerState.GetGuildName) == "function" then
+                local GuildData = PlayerState:GetGuildName()
+                if GuildData then guildId = GuildData:ToString() end
             end
         end
     end)
@@ -297,7 +312,11 @@ local function HandleConvertCurrency(Player, Direction, Quantity)
             return
         end
         if AddPlayerTechPoints(Player, -costNormal, false) then
-            AddPlayerTechPoints(Player, Quantity, true)
+            if not AddPlayerTechPoints(Player, Quantity, true) then
+                AddPlayerTechPoints(Player, costNormal, false)
+                SendPlayerMessage(Player, "❌ Conversion failed; points restored.")
+                return
+            end
             SendPlayerMessage(Player, string.format("🔄 Converted %d Normal Tech Points into +%d Ancient Tech Point(s)!", costNormal, Quantity))
         end
     elseif Direction == "ancient" or Direction == "to_normal" then
@@ -308,7 +327,11 @@ local function HandleConvertCurrency(Player, Direction, Quantity)
         end
         local gainNormal = rate * Quantity
         if AddPlayerTechPoints(Player, -Quantity, true) then
-            AddPlayerTechPoints(Player, gainNormal, false)
+            if not AddPlayerTechPoints(Player, gainNormal, false) then
+                AddPlayerTechPoints(Player, Quantity, true)
+                SendPlayerMessage(Player, "❌ Conversion failed; points restored.")
+                return
+            end
             SendPlayerMessage(Player, string.format("🔄 Converted %d Ancient Tech Point(s) into +%d Normal Tech Points!", Quantity, gainNormal))
         end
     else
@@ -318,7 +341,7 @@ end
 
 -- Purchase Handler
 local function HandleExchange(Player, ItemKey, Quantity)
-    Quantity = math.min(999, math.max(1, math.floor(tonumber(Quantity) or 1)))
+    Quantity = math.min(10, math.max(1, math.floor(tonumber(Quantity) or 1)))
     local cleanKey = ItemKey and ItemKey:lower() or ""
     if not Config.ShopItems or not Config.ShopItems[cleanKey] then
         SendPlayerMessage(Player, "❌ Invalid item key. Use !shop or [F6] to view catalog.")
@@ -326,9 +349,17 @@ local function HandleExchange(Player, ItemKey, Quantity)
     end
 
     local Item = Config.ShopItems[cleanKey]
+    if Item.Enabled == false then
+        SendPlayerMessage(Player, "❌ This upgrade is temporarily unavailable until its native base-cap hook is verified.")
+        return
+    end
     local isAncient = (Item.Currency == "ancient")
     local unitCost, currentLevel = GetItemCurrentCost(Player, cleanKey)
     local TotalCost = unitCost * Quantity
+    if Item.IsGuildExpansion then
+        -- Sum the geometric series so every tier in a bulk purchase is priced.
+        TotalCost = unitCost * ((2 ^ Quantity) - 1)
+    end
     local normPts, ancPts = GetPlayerTechPoints(Player)
     local available = isAncient and ancPts or normPts
     local currLabel = isAncient and "Ancient Tech Points" or "Tech Points"
@@ -346,9 +377,15 @@ local function HandleExchange(Player, ItemKey, Quantity)
     if Item.IsGuildExpansion then
         local guildId = GetPlayerGuildId(Player)
         GuildUpgrades[guildId] = GuildUpgrades[guildId] or {}
-        local newLevel = (tonumber(GuildUpgrades[guildId][cleanKey]) or 0) + Quantity
+        local oldLevel = tonumber(GuildUpgrades[guildId][cleanKey]) or 0
+        local newLevel = oldLevel + Quantity
         GuildUpgrades[guildId][cleanKey] = newLevel
-        SaveGuildUpgrades()
+        if not SaveGuildUpgrades() then
+            GuildUpgrades[guildId][cleanKey] = oldLevel
+            AddPlayerTechPoints(Player, TotalCost, isAncient)
+            SendPlayerMessage(Player, "❌ Upgrade could not be saved; points restored.")
+            return
+        end
 
         local nextCost = unitCost * (2 ^ Quantity)
         SendPlayerMessage(Player, string.format("✅ Upgraded %s to Tier %d! Total Guild Limit: +%d slots. Next upgrade cost: %d %s.", Item.Desc or cleanKey, newLevel, newLevel, nextCost, currLabel))
@@ -390,8 +427,7 @@ local function HandleGacha(Player, Rolls)
             table.insert(results, string.format("  🎁 [%s] %s (x%d)", Outcome.Rarity or "Reward", Outcome.Desc or Outcome.ItemId, Outcome.Count or 1))
         end
     end
-    SendPlayerMessage(Player, table.concat(results, "
-"))
+    SendPlayerMessage(Player, table.concat(results, "\n"))
 end
 
 -- Boss Drops Recycling Handler
@@ -421,16 +457,17 @@ local function HandleShopList(Player)
     local lines = { "=== 🛒 PALODYSSEY TECHNOLOGY SHOP ===" }
     if Config.ShopItems then
         for key, item in pairs(Config.ShopItems) do
+            if item.Enabled ~= false then
             local currType = (item.Currency == "ancient") and "Ancient Pts" or "Tech Pts"
             table.insert(lines, string.format("• !buy %s — %s (%d %s)", key, item.Desc or key, item.Cost or 1, currType))
+            end
         end
     end
     table.insert(lines, "• !convert normal [qty] — Exchange 5 Tech Pts -> 1 Ancient Pt")
     table.insert(lines, "• !convert ancient [qty] — Exchange 1 Ancient Pt -> 5 Tech Pts")
     table.insert(lines, "• !gacha [rolls] — Roll Schematics & Coin Gacha (3 Tech Pts/roll)")
     table.insert(lines, "• Shortcuts: [F6] Open GUI  [F7] Gacha  [F8] Balance")
-    SendPlayerMessage(Player, table.concat(lines, "
-"))
+    SendPlayerMessage(Player, table.concat(lines, "\n"))
 end
 
 local function HandleBalance(Player)
@@ -450,8 +487,8 @@ local function ToggleShopWindow()
 end
 
 -- Interactive Canvas HUD Renderer
-local function DrawShopGUI(Canvas)
-    if not IsShopWindowOpen or not Canvas then return end
+local function DrawShopGUI(Canvas, ForceDraw)
+    if (not IsShopWindowOpen and not ForceDraw) or not Canvas then return end
     ClickableButtons = {}
 
     local pc = GetPlayerController()
@@ -511,7 +548,7 @@ local function DrawShopGUI(Canvas)
     local itemList = {}
     if Config.ShopItems then
         for k, v in pairs(Config.ShopItems) do
-            table.insert(itemList, { key = k, data = v })
+            if v.Enabled ~= false then table.insert(itemList, { key = k, data = v }) end
         end
     end
     table.sort(itemList, function(a, b) return (a.data.Cost or 0) < (b.data.Cost or 0) end)
@@ -619,29 +656,37 @@ pcall(RegisterHook, "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C:
 end)
 
 -- Screen Click Handler
-local function HandleScreenClick()
-    if not IsShopWindowOpen then return end
+local function HandleScreenClick(InputX, InputY, ForceInput)
+    if not IsShopWindowOpen and not ForceInput then return false end
     local now = os.clock()
     if (now - LastClickTime) < 0.2 then return end
     LastClickTime = now
 
+    local clicked = false
     pcall(function()
         local pc = GetPlayerController()
         if not pc or not pc:IsValid() then return end
 
-        local mouseX, mouseY = 0, 0
-        if type(pc.GetMousePosition) == "function" then
-            local mx, my = pc:GetMousePosition(0, 0)
-            if mx and my then mouseX, mouseY = mx, my end
+        local mouseX, mouseY = tonumber(InputX), tonumber(InputY)
+        if (not mouseX or not mouseY) and type(pc.GetMousePosition) == "function" then
+            local a, b, c = pc:GetMousePosition()
+            if type(a) == "boolean" then
+                mouseX, mouseY = tonumber(b), tonumber(c)
+            else
+                mouseX, mouseY = tonumber(a), tonumber(b)
+            end
         end
+        if not mouseX or not mouseY then return end
 
         for _, btn in ipairs(ClickableButtons) do
             if mouseX >= btn.x1 and mouseX <= btn.x2 and mouseY >= btn.y1 and mouseY <= btn.y2 then
                 btn.action()
+                clicked = true
                 return
             end
         end
     end)
+    return clicked
 end
 
 -- Chat Ingress
@@ -705,16 +750,9 @@ local function ProcessChatMessage(Context, Param1, Param2)
     end
 end
 
-pcall(RegisterHook, "/Script/Pal.PalChatSubsystem:OnReceivedChatMessage", function(Context, Param1, Param2)
-    ProcessChatMessage(Context, Param1, Param2)
-end)
-pcall(RegisterHook, "/Script/Pal.PalChatSubsystem:BroadcastChatMessage", function(Context, Param1, Param2)
-    ProcessChatMessage(Context, Param1, Param2)
-end)
+-- Use the controller-owned ingress so commands are applied to the sender. The
+-- subsystem/broadcast hooks caused duplicate transactions and guessed players.
 pcall(RegisterHook, "/Script/Pal.PalPlayerController:SendChatMessage", function(Context, Param1, Param2)
-    ProcessChatMessage(Context, Param1, Param2)
-end)
-pcall(RegisterHook, "/Script/Pal.PalPlayerController:ClientReceiveChatMessage", function(Context, Param1, Param2)
     ProcessChatMessage(Context, Param1, Param2)
 end)
 
@@ -749,18 +787,13 @@ end)
 -- Register into UniPalUI Dashboard [F5] as an integrated tab
 pcall(function()
     if UniPalUI and type(UniPalUI.RegisterTab) == "function" then
-        UniPalUI.RegisterTab({
-            Id = "economy_shop",
-            Title = "🛒 Technology Shop",
-            OnDraw = function(Canvas)
-                DrawShopUI(Canvas)
-            end,
-            OnClick = function(X, Y)
-                return HandleScreenClick()
-            end
-        })
+        UniPalUI.RegisterTab("🛒 Technology Shop", function(Canvas)
+            DrawShopGUI(Canvas, true)
+        end, function(X, Y)
+            return HandleScreenClick(X, Y, true)
+        end)
         print("[EconomySystem] Registered tab with UniPalUI Framework [F5].")
     end
 end)
 
-print("[EconomySystem] EconomySystem v3.0.0 Unified Suite initialized successfully.")
+print("[EconomySystem] EconomySystem v3.2.0 Unified Suite initialized successfully.")

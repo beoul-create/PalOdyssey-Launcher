@@ -26,7 +26,8 @@ function ServerModule.apply(cfg)
                 netDriver.ConnectionTimeout = cfg.connectionTimeout or 120.0
                 netDriver.InitialConnectTimeout = cfg.initialConnectTimeout or 180.0
                 netDriver.KeepAliveTime = 0.2
-                netDriver.MaxClientRate = 1048576       -- 1 MB/s throughput
+                local fastConnectActive = _G.FastConnect and _G.FastConnect.Config and _G.FastConnect.Config.ultraFastNetworkRates
+                netDriver.MaxClientRate = fastConnectActive and 300000 or 1048576
                 netDriver.MaxInternetClientRate = 1048576
                 netDriver.MinNetUpdateFrequency = 30.0
                 netDriver.MaxNetUpdateFrequency = 60.0
@@ -46,10 +47,12 @@ function ServerModule.apply(cfg)
         ExecuteConsole("ai.MaxSimultaneousPathRequests 250")
 
         -- 3. C2ME Concurrent Async World Streaming & Actor Spawning
-        ExecuteConsole("s.AsyncLoadingThreadEnabled 1")
-        ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 5.0")
-        ExecuteConsole("s.PriorityAsyncLoadingExtraTime 15.0")
-        ExecuteConsole("s.AsyncLoadingTimeLimit 5.0")
+        if not (_G.FastConnect and _G.FastConnect.Config and _G.FastConnect.Config.accelerateLoadingScreens) then
+            ExecuteConsole("s.AsyncLoadingThreadEnabled 1")
+            ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 5.0")
+            ExecuteConsole("s.PriorityAsyncLoadingExtraTime 15.0")
+            ExecuteConsole("s.AsyncLoadingTimeLimit 5.0")
+        end
 
         -- 4. Anti-Rubberband Momentum Tolerances & Network Movement Smoothing
         ExecuteConsole("net.ClientMoveCorrectionThreshold 200.0")

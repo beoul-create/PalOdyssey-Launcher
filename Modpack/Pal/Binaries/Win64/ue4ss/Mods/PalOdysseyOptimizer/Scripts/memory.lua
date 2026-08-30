@@ -31,9 +31,11 @@ function MemoryModule.apply(cfg)
     -- Fast-Travel hook
     pcall(function()
         RegisterHook("/Script/Pal.PalPlayerController:ClientRestart", function(Context)
-            ExecuteWithDelay(2000, function()
+            ExecuteWithDelay(15000, function()
                 collectgarbage("collect")
-                ExecuteConsole("obj gc")
+                if not (_G.FastConnect and _G.FastConnect.Config and _G.FastConnect.Config.accelerateLoadingScreens) then
+                    ExecuteConsole("obj gc")
+                end
             end)
         end)
     end)

@@ -1,4 +1,6 @@
 local SAODeath = {}
+local RecentlyHandled = setmetatable({}, { __mode = "k" })
+local OriginalState = setmetatable({}, { __mode = "k" })
 
 -- Native Palworld disintegration & crystal burst effects
 local CandidateParticles = {
@@ -17,6 +19,10 @@ local CandidateSounds = {
 local function FindFirstValidAsset(candidates)
     for _, path in ipairs(candidates) do
         local obj = StaticFindObject(path)
+        if (not obj or not obj:IsValid()) and type(LoadAsset) == "function" then
+            local ok, loaded = pcall(LoadAsset, path)
+            if ok then obj = loaded end
+        end
         if obj and obj:IsValid() then
             return obj
         end
@@ -26,6 +32,9 @@ end
 
 local function HandleSAODeath(Character)
     if not Character or not Character:IsValid() then return end
+    local now = os.clock()
+    if RecentlyHandled[Character] and now - RecentlyHandled[Character] < 1.0 then return end
+    RecentlyHandled[Character] = now
 
     pcall(function()
         local Location = Character:K2_GetActorLocation()
@@ -33,6 +42,12 @@ local function HandleSAODeath(Character)
         local World = Character:GetWorld()
 
         -- 1. Disable Actor Collision & Ragdoll Physics across all components
+        local Mesh = Character.Mesh
+        local state = { actorCollision = true, meshCollision = 1, meshPhysics = false }
+        pcall(function() state.actorCollision = Character:GetActorEnableCollision() end)
+        pcall(function() if Mesh then state.meshCollision = Mesh:GetCollisionEnabled() end end)
+        pcall(function() if Mesh then state.meshPhysics = Mesh:IsSimulatingPhysics() end end)
+        OriginalState[Character] = state
         Character:SetActorEnableCollision(false)
 
         if Character.PalDeadRagdollComponent and Character.PalDeadRagdollComponent:IsValid() then
@@ -42,7 +57,6 @@ local function HandleSAODeath(Character)
             end
         end
 
-        local Mesh = Character.Mesh
         if Mesh and Mesh:IsValid() then
             if type(Mesh.SetSimulatePhysics) == "function" then
                 Mesh:SetSimulatePhysics(false)
@@ -75,6 +89,22 @@ local function HandleSAODeath(Character)
     end)
 end
 
+local function RestoreCharacter(Character)
+    pcall(function()
+        if not Character or not Character:IsValid() then return end
+        RecentlyHandled[Character] = nil
+        local state = OriginalState[Character] or {}
+        Character:SetActorEnableCollision(state.actorCollision ~= false)
+        local Mesh = Character.Mesh
+        if Mesh and Mesh:IsValid() then
+            Mesh:SetVisibility(true, true)
+            if type(Mesh.SetCollisionEnabled) == "function" then Mesh:SetCollisionEnabled(state.meshCollision or 1) end
+            if type(Mesh.SetSimulatePhysics) == "function" then Mesh:SetSimulatePhysics(state.meshPhysics == true) end
+        end
+        OriginalState[Character] = nil
+    end)
+end
+
 function SAODeath.Init()
     -- Universal death hooks covering Wild Pals, Bosses, Human NPCs, and Players
     local deathHooks = {
@@ -103,6 +133,13 @@ function SAODeath.Init()
                 end
             end
         end)
+    end)
+
+    pcall(RegisterHook, "/Script/Pal.PalCharacter:OnRevive", function(Context)
+        RestoreCharacter(Context and Context.get and Context:get() or Context)
+    end)
+    pcall(RegisterHook, "/Script/Engine.PlayerController:ClientRestart", function(Context, NewPawn)
+        RestoreCharacter(NewPawn and NewPawn.get and NewPawn:get() or NewPawn)
     end)
 
     print("[WorldBossAuraSystem] Universal SAO Death Disintegration initialized (Pals, NPCs, and Players).")

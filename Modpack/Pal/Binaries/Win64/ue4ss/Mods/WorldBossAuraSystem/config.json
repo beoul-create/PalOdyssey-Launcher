@@ -1,5 +1,7 @@
 {
-  "SpawnIntervalSeconds": 1800,
+  "SpawnIntervalSeconds": 900,
+  "MaxActiveBosses": 1,
+  "SpawnCommandCooldownSeconds": 60,
   "DiscordWebhookURL": "YOUR_DISCORD_WEBHOOK_URL_HERE",
   "BossPalPool": [
     "Foxparks",

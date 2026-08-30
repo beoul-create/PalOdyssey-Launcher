@@ -48,6 +48,25 @@ function UniPalUI.Toggle()
     end
 end
 
+function UniPalUI.DispatchPointerInput()
+    if not UniPalUI.IsOpen then return false end
+    local tab = UniPalUI.Tabs[UniPalUI.ActiveTab]
+    if not tab or type(tab.OnInput) ~= "function" then return false end
+
+    local handled = false
+    pcall(function()
+        local controllers = FindAllOf("PalPlayerController") or {}
+        local pc = controllers[1]
+        if not pc or not pc:IsValid() or type(pc.GetMousePosition) ~= "function" then return end
+        local a, b, c = pc:GetMousePosition()
+        local x, y
+        if type(a) == "boolean" then x, y = tonumber(b), tonumber(c)
+        else x, y = tonumber(a), tonumber(b) end
+        if x and y then handled = tab.OnInput(x, y) == true end
+    end)
+    return handled
+end
+
 -- Hook Canvas Drawing safely without touching Escape Menu
 pcall(RegisterHook, "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C:ReceiveDrawHUD", function(Context)
     if not UniPalUI.IsOpen then return end
@@ -76,6 +95,7 @@ pcall(function()
 
     if Key and Key.F5 then
         BindKey(Key.F5, UniPalUI.Toggle)
+        if Key.LeftMouseButton then BindKey(Key.LeftMouseButton, UniPalUI.DispatchPointerInput) end
         print("[UniPalUI] Hotkey registered: [F5] Toggle UniPalUI Dashboard.")
     end
 end)

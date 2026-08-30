@@ -222,6 +222,7 @@
       "Count": 1,
       "Currency": "ancient",
       "IsGuildExpansion": true,
+      "Enabled": false,
       "Desc": "🚩 Guild Base Camp Expansion (+1 Limit)"
     },
     "uniplant_rank4": {
