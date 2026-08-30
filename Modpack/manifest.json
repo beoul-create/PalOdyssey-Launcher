@@ -1,11 +1,11 @@
 {
-  "Version": "2026.08.30.195632",
-  "GeneratedAt": "2026-08-30T19:56:32.550Z",
+  "Version": "2026.08.30.195849",
+  "GeneratedAt": "2026-08-30T19:58:49.845Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 598,
+  "TotalFiles": 602,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -14,9 +14,9 @@
   },
   "News": [
     {
-      "title": "✨ Dual Path Architecture & APSE Localization Fix",
+      "title": "✨ Azomer Passive Skill Name Key Alias & Translation Fix",
       "date": "Aug 30, 2026",
-      "summary": "Standardized all mods and schemas to Win64/Mods and ue4ss/Mods with root UE4SS.dll. All Azomer passives and translation dictionaries active."
+      "summary": "Expanded all APSE skill name and description keys with universal engine aliases (PASSIVE_*, *_NAME, raw ID) and dual OverrideNameMsgID/TextID properties so all passives render crystal clear."
     },
     {
       "title": "🚀 In-App Launcher Self-Updater Live",
@@ -398,9 +398,21 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/raw/APSE_FoP.json",
-      "Hash": "85735874f8345f6484b1afccba16f2baa867a1d2dd3532737499a049ff33dc4b",
-      "Size": 84188,
+      "Hash": "e28c616d65fd3209174a6ecec970f2c074b41bf22bc67f45b5c76e605890f771",
+      "Size": 86272,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/raw/APSE_FoP.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/translations/en/APSE_Translation.json",
+      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
+      "Size": 468413,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/translations/en/APSE_Translation.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/translations/global/APSE_Translation.json",
+      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
+      "Size": 468413,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/translations/global/APSE_Translation.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE/blueprints/Silvegis.jsonc",
@@ -428,8 +440,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE/raw/APSE.json",
-      "Hash": "cb2af53eed04cdf5845b4a8b3ffe570c403c40d2edc49d92e564c933f50899fb",
-      "Size": 478133,
+      "Hash": "498a958a8b0a6f7e29e667191805ff47e280dd0ee79cddc0ac52662b0c7f485b",
+      "Size": 472682,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE/raw/APSE.json"
     },
     {
@@ -440,14 +452,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE/translations/en/APSE_Translation.json",
-      "Hash": "af1aa8a69213c9ed926969bb5a438fc513f8a5a5b1ada319797cd14a11226b69",
-      "Size": 102453,
+      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
+      "Size": 468413,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE/translations/en/APSE_Translation.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE/translations/global/APSE_Translation.json",
-      "Hash": "af1aa8a69213c9ed926969bb5a438fc513f8a5a5b1ada319797cd14a11226b69",
-      "Size": 102453,
+      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
+      "Size": 468413,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE/translations/global/APSE_Translation.json"
     },
     {
@@ -2192,9 +2204,21 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/raw/APSE_FoP.json",
-      "Hash": "85735874f8345f6484b1afccba16f2baa867a1d2dd3532737499a049ff33dc4b",
-      "Size": 84188,
+      "Hash": "e28c616d65fd3209174a6ecec970f2c074b41bf22bc67f45b5c76e605890f771",
+      "Size": 86272,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/raw/APSE_FoP.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/translations/en/APSE_Translation.json",
+      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
+      "Size": 468413,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/translations/en/APSE_Translation.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/translations/global/APSE_Translation.json",
+      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
+      "Size": 468413,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/translations/global/APSE_Translation.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE/blueprints/Silvegis.jsonc",
@@ -2222,8 +2246,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE/raw/APSE.json",
-      "Hash": "cb2af53eed04cdf5845b4a8b3ffe570c403c40d2edc49d92e564c933f50899fb",
-      "Size": 478133,
+      "Hash": "498a958a8b0a6f7e29e667191805ff47e280dd0ee79cddc0ac52662b0c7f485b",
+      "Size": 472682,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE/raw/APSE.json"
     },
     {
@@ -2234,14 +2258,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE/translations/en/APSE_Translation.json",
-      "Hash": "af1aa8a69213c9ed926969bb5a438fc513f8a5a5b1ada319797cd14a11226b69",
-      "Size": 102453,
+      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
+      "Size": 468413,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE/translations/en/APSE_Translation.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE/translations/global/APSE_Translation.json",
-      "Hash": "af1aa8a69213c9ed926969bb5a438fc513f8a5a5b1ada319797cd14a11226b69",
-      "Size": 102453,
+      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
+      "Size": 468413,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE/translations/global/APSE_Translation.json"
     },
     {
