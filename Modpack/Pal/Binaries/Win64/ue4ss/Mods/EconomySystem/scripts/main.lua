@@ -13,6 +13,8 @@
 print("[EconomySystem] Booting EconomySystem v3.2.0 Unified Economy Suite...")
 
 local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
+package.path = ScriptDir .. "../../shared/?.lua;" .. package.path
+local Json = require("palodyssey_json")
 
 local Config = {
     GachaCostTechPoints = 3,
@@ -39,6 +41,7 @@ pcall(function()
             if JSON and type(JSON.parse) == "function" then table.insert(decoders, JSON.parse) end
             if json and type(json.decode) == "function" then table.insert(decoders, json.decode) end
             if _G.json and type(_G.json.decode) == "function" then table.insert(decoders, _G.json.decode) end
+            table.insert(decoders, Json.decode)
             for _, d in ipairs(decoders) do
                 local ok, parsed = pcall(d, raw)
                 if ok and type(parsed) == "table" then
@@ -68,6 +71,7 @@ local function LoadGuildUpgrades()
                 if JSON and type(JSON.parse) == "function" then table.insert(decoders, JSON.parse) end
                 if json and type(json.decode) == "function" then table.insert(decoders, json.decode) end
                 if _G.json and type(_G.json.decode) == "function" then table.insert(decoders, _G.json.decode) end
+                table.insert(decoders, Json.decode)
                 for _, d in ipairs(decoders) do
                     local ok, parsed = pcall(d, raw)
                     if ok and type(parsed) == "table" then
@@ -88,6 +92,7 @@ local function SaveGuildUpgrades()
         if JSON and type(JSON.stringify) == "function" then encoder = JSON.stringify end
         if not encoder and json and type(json.encode) == "function" then encoder = json.encode end
         if not encoder and _G.json and type(_G.json.encode) == "function" then encoder = _G.json.encode end
+        if not encoder then encoder = Json.encode end
         
         local raw = "{}"
         if encoder then
@@ -137,6 +142,10 @@ local CurrentPage = 1
 local ItemsPerPage = 5
 local ClickableButtons = {}
 local LastClickTime = 0
+local LastChatCommand = ""
+local LastChatCommandTime = 0
+local CanvasFont = nil
+local HudDrawErrorReported = false
 
 -- Core Game State Accessors
 local function GetPlayerController(Context)
@@ -198,13 +207,12 @@ local function SendPlayerMessage(Player, Text)
     pcall(function()
         local str = tostring(Text or "")
         local pc = Player or GetPlayerController()
+        local ps = pc and pc.PlayerState
         local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
-        if PalUtil and PalUtil:IsValid() and pc and pc:IsValid() then
-            PalUtil:SendSystemAnnounce(pc, str)
-        end
-        local Subsystem = FindFirstOf("PalChatSubsystem")
-        if Subsystem and Subsystem:IsValid() and pc and pc:IsValid() then
-            Subsystem:SendSystemChatMessage(pc, FText(str))
+        local world = (UEHelpers and UEHelpers.GetWorldContextObject and UEHelpers.GetWorldContextObject())
+            or (GetWorldContext and GetWorldContext()) or nil
+        if PalUtil and PalUtil:IsValid() and world and ps and ps:IsValid() then
+            PalUtil:SendSystemToPlayerChat(world, str, ps.PlayerUId)
         end
     end)
     print("[EconomySystem] " .. tostring(Text))
@@ -215,12 +223,11 @@ local function GetPlayerTechPoints(Player)
     local ancientPoints = 0
     pcall(function()
         local pc = Player or GetPlayerController()
-        local ParamComp = pc and pc.CharacterParameterComponent
-        if ParamComp and ParamComp:IsValid() then
-            normalPoints = ParamComp:GetTechnologyPoint() or 0
-            if type(ParamComp.GetbossTechnologyPoint) == "function" then
-                ancientPoints = ParamComp:GetbossTechnologyPoint() or 0
-            end
+        local ps = pc and pc.PlayerState
+        local tech = ps and type(ps.GetTechnologyData) == "function" and ps:GetTechnologyData() or nil
+        if tech and tech:IsValid() then
+            normalPoints = tech:GetTechnologyPoints() or tech.TechnologyPoint or 0
+            ancientPoints = tech:GetBossTechnologyPoints() or tech.bossTechnologyPoint or 0
         end
     end)
     return normalPoints, ancientPoints
@@ -230,17 +237,19 @@ local function AddPlayerTechPoints(Player, Amount, isAncient)
     local success = false
     pcall(function()
         local pc = Player or GetPlayerController()
-        local ParamComp = pc and pc.CharacterParameterComponent
-        if ParamComp and ParamComp:IsValid() then
-            if isAncient and type(ParamComp.SetbossTechnologyPoint) == "function" then
-                local Current = ParamComp:GetbossTechnologyPoint() or 0
-                ParamComp:SetbossTechnologyPoint(math.max(0, Current + Amount))
-                success = true
+        local ps = pc and pc.PlayerState
+        local tech = ps and type(ps.GetTechnologyData) == "function" and ps:GetTechnologyData() or nil
+        if tech and tech:IsValid() then
+            if isAncient then
+                local current = tech:GetBossTechnologyPoints() or tech.bossTechnologyPoint or 0
+                tech.bossTechnologyPoint = math.max(0, current + Amount)
+                if type(tech.OnRep_BossTechnologyPoint) == "function" then tech:OnRep_BossTechnologyPoint() end
             else
-                local Current = ParamComp:GetTechnologyPoint() or 0
-                ParamComp:SetTechnologyPoint(math.max(0, Current + Amount))
-                success = true
+                local current = tech:GetTechnologyPoints() or tech.TechnologyPoint or 0
+                tech.TechnologyPoint = math.max(0, current + Amount)
+                if type(tech.OnRep_TechnologyPoint) == "function" then tech:OnRep_TechnologyPoint() end
             end
+            success = true
         end
     end)
     return success
@@ -250,19 +259,11 @@ local function GiveItem(Player, ItemId, Count)
     local success = false
     pcall(function()
         local pc = Player or GetPlayerController()
-        local InvSubsystem = FindFirstOf("PalInventorySubsystem")
-        if InvSubsystem and InvSubsystem:IsValid() and pc and pc:IsValid() then
-            local res = InvSubsystem:RequestAddItem(pc, FName(ItemId), Count, true)
-            if res ~= false then success = true end
-        end
-        if not success then
-            local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
-            if PalUtil and PalUtil:IsValid() and pc and pc:IsValid() then
-                if type(PalUtil.AddSingleItemToInventory) == "function" then
-                    PalUtil:AddSingleItemToInventory(pc, FName(ItemId), Count)
-                    success = true
-                end
-            end
+        local ps = pc and pc.PlayerState
+        local inventory = ps and type(ps.GetInventoryData) == "function" and ps:GetInventoryData() or nil
+        if inventory and inventory:IsValid() then
+            inventory:AddItem_ServerInternal(FName(ItemId), Count, true)
+            success = true
         end
     end)
     return success
@@ -486,6 +487,18 @@ local function ToggleShopWindow()
     end)
 end
 
+local function GetCanvasFont()
+    if CanvasFont and CanvasFont.IsValid and CanvasFont:IsValid() then return CanvasFont end
+    pcall(function()
+        CanvasFont = StaticFindObject("/Engine/EngineFonts/Roboto.Roboto")
+        if not CanvasFont or not CanvasFont:IsValid() then
+            local engine = FindFirstOf("Engine")
+            CanvasFont = engine and (engine.MediumFont or engine.SmallFont) or nil
+        end
+    end)
+    return CanvasFont
+end
+
 -- Interactive Canvas HUD Renderer
 local function DrawShopGUI(Canvas, ForceDraw)
     if (not IsShopWindowOpen and not ForceDraw) or not Canvas then return end
@@ -511,8 +524,8 @@ local function DrawShopGUI(Canvas, ForceDraw)
     -- Header Title
     pcall(function()
         if type(Canvas.K2_DrawText) == "function" then
-            Canvas:K2_DrawText(nil, "🛒 PALODYSSEY TECHNOLOGY SHOP", { X = WinX + 24, Y = WinY + 16 }, { X = 1.2, Y = 1.2 }, { R = 0.0, G = 0.9, B = 1.0, A = 1.0 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
-            Canvas:K2_DrawText(nil, string.format("Tech Points: %d   |   Ancient Points: %d", normPts, ancPts), { X = WinX + 24, Y = WinY + 46 }, { X = 1.0, Y = 1.0 }, { R = 1.0, G = 0.84, B = 0.0, A = 1.0 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+            Canvas:K2_DrawText(GetCanvasFont(), "PALODYSSEY TECHNOLOGY SHOP", { X = WinX + 24, Y = WinY + 16 }, { X = 1.2, Y = 1.2 }, { R = 0.0, G = 0.9, B = 1.0, A = 1.0 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+            Canvas:K2_DrawText(GetCanvasFont(), string.format("Tech Points: %d   |   Ancient Points: %d", normPts, ancPts), { X = WinX + 24, Y = WinY + 46 }, { X = 1.0, Y = 1.0 }, { R = 1.0, G = 0.84, B = 0.0, A = 1.0 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
         end
     end)
 
@@ -523,7 +536,7 @@ local function DrawShopGUI(Canvas, ForceDraw)
             Canvas:K2_DrawBox({ X = CloseX, Y = CloseY }, { X = CloseW, Y = CloseH }, 1.0, { R = 0.8, G = 0.2, B = 0.2, A = 1.0 })
         end
         if type(Canvas.K2_DrawText) == "function" then
-            Canvas:K2_DrawText(nil, "X", { X = CloseX + 8, Y = CloseY + 4 }, { X = 1.1, Y = 1.1 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+            Canvas:K2_DrawText(GetCanvasFont(), "X", { X = CloseX + 8, Y = CloseY + 4 }, { X = 1.1, Y = 1.1 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
         end
     end)
     table.insert(ClickableButtons, { x1 = CloseX, y1 = CloseY, x2 = CloseX + CloseW, y2 = CloseY + CloseH, action = ToggleShopWindow })
@@ -537,8 +550,8 @@ local function DrawShopGUI(Canvas, ForceDraw)
             Canvas:K2_DrawBox({ X = Conv2X, Y = Conv2Y }, { X = Conv2W, Y = Conv2H }, 1.0, { R = 0.6, G = 0.2, B = 0.8, A = 1.0 })
         end
         if type(Canvas.K2_DrawText) == "function" then
-            Canvas:K2_DrawText(nil, "5 Tech -> 1 Ancient", { X = Conv1X + 8, Y = Conv1Y + 5 }, { X = 0.8, Y = 0.8 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
-            Canvas:K2_DrawText(nil, "1 Ancient -> 5 Tech", { X = Conv2X + 8, Y = Conv2Y + 5 }, { X = 0.8, Y = 0.8 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+            Canvas:K2_DrawText(GetCanvasFont(), "5 Tech -> 1 Ancient", { X = Conv1X + 8, Y = Conv1Y + 5 }, { X = 0.8, Y = 0.8 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+            Canvas:K2_DrawText(GetCanvasFont(), "1 Ancient -> 5 Tech", { X = Conv2X + 8, Y = Conv2Y + 5 }, { X = 0.8, Y = 0.8 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
         end
     end)
     table.insert(ClickableButtons, { x1 = Conv1X, y1 = Conv1Y, x2 = Conv1X + Conv1W, y2 = Conv1Y + Conv1H, action = function() HandleConvertCurrency(pc, "normal", 1) end })
@@ -579,8 +592,8 @@ local function DrawShopGUI(Canvas, ForceDraw)
                 Canvas:K2_DrawBox({ X = WinX + 20, Y = RowY }, { X = WinW - 40, Y = 62 }, 1.0, { R = 0.10, G = 0.15, B = 0.22, A = 0.9 })
             end
             if type(Canvas.K2_DrawText) == "function" then
-                Canvas:K2_DrawText(nil, descText, { X = WinX + 32, Y = RowY + 8 }, { X = 1.0, Y = 1.0 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
-                Canvas:K2_DrawText(nil, string.format("Price: %d %s", currentCost, currName), { X = WinX + 32, Y = RowY + 34 }, { X = 0.9, Y = 0.9 }, costColor, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+                Canvas:K2_DrawText(GetCanvasFont(), descText, { X = WinX + 32, Y = RowY + 8 }, { X = 1.0, Y = 1.0 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+                Canvas:K2_DrawText(GetCanvasFont(), string.format("Price: %d %s", currentCost, currName), { X = WinX + 32, Y = RowY + 34 }, { X = 0.9, Y = 0.9 }, costColor, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
             end
         end)
 
@@ -591,7 +604,7 @@ local function DrawShopGUI(Canvas, ForceDraw)
                 Canvas:K2_DrawBox({ X = BtnX, Y = BtnY }, { X = BtnW, Y = BtnH }, 1.0, { R = 0.0, G = 0.7, B = 0.4, A = 1.0 })
             end
             if type(Canvas.K2_DrawText) == "function" then
-                Canvas:K2_DrawText(nil, "BUY 1", { X = BtnX + 26, Y = BtnY + 8 }, { X = 0.95, Y = 0.95 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+                Canvas:K2_DrawText(GetCanvasFont(), "BUY 1", { X = BtnX + 26, Y = BtnY + 8 }, { X = 0.95, Y = 0.95 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
             end
         end)
         table.insert(ClickableButtons, {
@@ -613,9 +626,9 @@ local function DrawShopGUI(Canvas, ForceDraw)
             Canvas:K2_DrawBox({ X = NextX, Y = NextY }, { X = NextW, Y = NextH }, 1.0, { R = 0.2, G = 0.3, B = 0.4, A = 1.0 })
         end
         if type(Canvas.K2_DrawText) == "function" then
-            Canvas:K2_DrawText(nil, "< Prev", { X = PrevX + 16, Y = PrevY + 6 }, { X = 0.9, Y = 0.9 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
-            Canvas:K2_DrawText(nil, string.format("Page %d / %d", CurrentPage, totalPages), { X = WinX + 345, Y = PageY + 6 }, { X = 0.95, Y = 0.95 }, { R = 0.9, G = 0.9, B = 0.9, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
-            Canvas:K2_DrawText(nil, "Next >", { X = NextX + 16, Y = NextY + 6 }, { X = 0.9, Y = 0.9 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+            Canvas:K2_DrawText(GetCanvasFont(), "< Prev", { X = PrevX + 16, Y = PrevY + 6 }, { X = 0.9, Y = 0.9 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+            Canvas:K2_DrawText(GetCanvasFont(), string.format("Page %d / %d", CurrentPage, totalPages), { X = WinX + 345, Y = PageY + 6 }, { X = 0.95, Y = 0.95 }, { R = 0.9, G = 0.9, B = 0.9, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+            Canvas:K2_DrawText(GetCanvasFont(), "Next >", { X = NextX + 16, Y = NextY + 6 }, { X = 0.9, Y = 0.9 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
         end
     end)
     table.insert(ClickableButtons, { x1 = PrevX, y1 = PrevY, x2 = PrevX + PrevW, y2 = PrevY + PrevH, action = function() CurrentPage = math.max(1, CurrentPage - 1) end })
@@ -629,7 +642,7 @@ local function DrawShopGUI(Canvas, ForceDraw)
             Canvas:K2_DrawBox({ X = GachaX, Y = GachaY }, { X = GachaW, Y = GachaH }, 1.0, { R = 0.9, G = 0.5, B = 0.0, A = 1.0 })
         end
         if type(Canvas.K2_DrawText) == "function" then
-            Canvas:K2_DrawText(nil, "🎰 SCHEMATICS GACHA (3 Pts)", { X = GachaX + 24, Y = GachaY + 11 }, { X = 1.05, Y = 1.05 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+            Canvas:K2_DrawText(GetCanvasFont(), "SCHEMATICS GACHA (3 Pts)", { X = GachaX + 24, Y = GachaY + 11 }, { X = 1.05, Y = 1.05 }, { R = 1, G = 1, B = 1, A = 1 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
         end
     end)
     table.insert(ClickableButtons, {
@@ -640,20 +653,37 @@ local function DrawShopGUI(Canvas, ForceDraw)
     local InfoX, InfoY = WinX + 370, BottomY + 12
     pcall(function()
         if type(Canvas.K2_DrawText) == "function" then
-            Canvas:K2_DrawText(nil, "Shortcuts: [F6] Close | [F7] Gacha | [F8] Pts", { X = InfoX, Y = InfoY }, { X = 0.85, Y = 0.85 }, { R = 0.7, G = 0.8, B = 0.9, A = 1.0 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
+            Canvas:K2_DrawText(GetCanvasFont(), "Shortcuts: [F6] Close | [F7] Gacha | [F8] Pts", { X = InfoX, Y = InfoY }, { X = 0.85, Y = 0.85 }, { R = 0.7, G = 0.8, B = 0.9, A = 1.0 }, 0.0, { R = 0, G = 0, B = 0, A = 1 }, { X = 0, Y = 0 }, false, false, false, { R = 0, G = 0, B = 0, A = 1 })
         end
     end)
 end
 
--- Register HUD Hook
-pcall(RegisterHook, "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C:ReceiveDrawHUD", function(Context)
-    pcall(function()
-        local hud = Context:get()
-        if hud and hud.Canvas and hud.Canvas:IsValid() then
+-- Register against the always-loaded native HUD event. Blueprint-only paths
+-- are not present when UE4SS starts and previously failed silently.
+local function OnHudDraw(Context)
+    local ok, err = pcall(function()
+        local hud = Context and Context.get and Context:get() or Context
+        if hud and hud:IsValid() and hud.Canvas and hud.Canvas:IsValid() then
             DrawShopGUI(hud.Canvas)
         end
     end)
-end)
+    if not ok and not HudDrawErrorReported then
+        HudDrawErrorReported = true
+        print("[EconomySystem] HUD draw error: " .. tostring(err))
+    end
+end
+
+local hudOk, hudPreId = pcall(RegisterHook, "/Script/Engine.HUD:ReceiveDrawHUD", OnHudDraw)
+if hudOk and hudPreId then
+    print("[EconomySystem] Native HUD draw hook registered.")
+else
+    print("[EconomySystem] Native HUD hook unavailable; arming delayed Pal HUD hook.")
+    pcall(NotifyOnNewObject, "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C", function()
+        local ok, preId = pcall(RegisterHook,
+            "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C:ReceiveDrawHUD", OnHudDraw)
+        if ok and preId then print("[EconomySystem] Delayed Pal HUD draw hook registered.") end
+    end)
+end
 
 -- Screen Click Handler
 local function HandleScreenClick(InputX, InputY, ForceInput)
@@ -691,26 +721,69 @@ end
 
 -- Chat Ingress
 local function ProcessChatMessage(Context, Param1, Param2)
-    local pc = GetPlayerController(Context)
+    local function DirectController(value)
+        local controller = nil
+        pcall(function()
+            local obj = value and value.get and value:get() or value
+            if obj and obj.IsA and obj:IsA("/Script/Pal.PalPlayerController") then
+                controller = obj
+                return
+            end
+            if obj and obj.IsA and obj:IsA("/Script/Pal.PalPlayerState") then
+                local owner = type(obj.GetOwner) == "function" and obj:GetOwner() or obj.Owner
+                if owner and owner.IsA and owner:IsA("/Script/Pal.PalPlayerController") then
+                    controller = owner
+                    return
+                end
+            end
+            for _, field in ipairs({ "PlayerController", "Sender", "SenderPlayer", "Owner" }) do
+                local candidate = obj and obj[field]
+                if candidate and candidate.IsA and candidate:IsA("/Script/Pal.PalPlayerController") then
+                    controller = candidate
+                    return
+                end
+            end
+            if not controller and obj and obj.SenderPlayerUId then
+                local function GuidText(guid)
+                    local text = ""
+                    pcall(function()
+                        text = string.format("%08X%08X%08X%08X", guid.A & 0xFFFFFFFF,
+                            guid.B & 0xFFFFFFFF, guid.C & 0xFFFFFFFF, guid.D & 0xFFFFFFFF)
+                    end)
+                    return text
+                end
+                local senderUid = GuidText(obj.SenderPlayerUId)
+                for _, candidate in ipairs(FindAllOf("PalPlayerController") or {}) do
+                    local ps = candidate and candidate.PlayerState
+                    if ps and ps:IsValid() and GuidText(ps.PlayerUId) == senderUid then
+                        controller = candidate
+                        return
+                    end
+                end
+            end
+        end)
+        return controller
+    end
+
+    local pc = DirectController(Context) or DirectController(Param1) or DirectController(Param2)
     local Text = ""
 
     local function TryGetStr(val)
         if not val then return "" end
         local s = ""
         pcall(function()
-            if type(val) == "string" then
-                s = val
-            elseif type(val.ToString) == "function" then
-                s = val:ToString()
-            elseif val.Message then
-                if type(val.Message.ToString) == "function" then
-                    s = val.Message:ToString()
+            local obj = val
+            if type(val.get) == "function" then obj = val:get() end
+            if type(obj) == "string" then
+                s = obj
+            elseif type(obj.ToString) == "function" then
+                s = obj:ToString()
+            elseif obj.Message then
+                if type(obj.Message.ToString) == "function" then
+                    s = obj.Message:ToString()
                 else
-                    s = tostring(val.Message)
+                    s = tostring(obj.Message)
                 end
-            elseif type(val.get) == "function" then
-                local inner = val:get()
-                s = TryGetStr(inner)
             end
         end)
         return s
@@ -718,7 +791,7 @@ local function ProcessChatMessage(Context, Param1, Param2)
 
     Text = TryGetStr(Param1)
     if Text == "" then Text = TryGetStr(Param2) end
-    if Text == "" and Context and Context.Message then Text = TryGetStr(Context.Message) end
+    if Text == "" then pcall(function() Text = TryGetStr(Context and Context.Message) end) end
 
     if not Text or Text == "" then return end
     local cleanText = Text:gsub("^%s+", "")
@@ -733,11 +806,30 @@ local function ProcessChatMessage(Context, Param1, Param2)
     if #Args == 0 then return end
     local Command = Args[1]:lower()
 
+    local dedupeKey = tostring(pc) .. "|" .. cleanText:lower()
+    local now = os.clock()
+    if dedupeKey == LastChatCommand and now - LastChatCommandTime < 1.0 then return end
+    LastChatCommand, LastChatCommandTime = dedupeKey, now
+
     print(string.format("[EconomySystem] Command: %s (args: %d)", Command, #Args - 1))
 
     if Command == "shop" or Command == "store" or Command == "gui" then
-        ToggleShopWindow()
-    elseif Command == "exchange" or Command == "buy" then
+        -- The menu is client-local; dedicated servers have no viewport.
+        local viewport = FindFirstOf("GameViewportClient")
+        if viewport and viewport:IsValid() then ToggleShopWindow() end
+        return
+    end
+
+    -- Purchases and point changes must execute only where GameMode exists
+    -- (dedicated/listen server or standalone), never on a remote client.
+    local gameMode = FindFirstOf("PalGameMode")
+    if not gameMode or not gameMode:IsValid() then return end
+    if not pc or not pc:IsValid() then
+        print("[EconomySystem] Command ignored because its sender could not be resolved safely.")
+        return
+    end
+
+    if Command == "exchange" or Command == "buy" then
         HandleExchange(pc, Args[2], tonumber(Args[3]) or 1)
     elseif Command == "convert" or Command == "exchange_points" then
         HandleConvertCurrency(pc, Args[2] and Args[2]:lower() or "normal", tonumber(Args[3]) or 1)
@@ -750,11 +842,20 @@ local function ProcessChatMessage(Context, Param1, Param2)
     end
 end
 
--- Use the controller-owned ingress so commands are applied to the sender. The
--- subsystem/broadcast hooks caused duplicate transactions and guessed players.
-pcall(RegisterHook, "/Script/Pal.PalPlayerController:SendChatMessage", function(Context, Param1, Param2)
-    ProcessChatMessage(Context, Param1, Param2)
-end)
+-- Palworld v0.3.5 chat enters through PlayerState and is then broadcast by
+-- GameState. Both are reflected native functions in this build.
+local chatHookCount = 0
+for _, hookPath in ipairs({
+    "/Script/Pal.PalPlayerState:EnterChat",
+    "/Script/Pal.PalGameStateInGame:BroadcastChatMessage"
+}) do
+    local ok, preId = pcall(RegisterHook, hookPath, ProcessChatMessage)
+    if ok and preId then
+        chatHookCount = chatHookCount + 1
+        print("[EconomySystem] Chat ingress registered: " .. hookPath)
+    end
+end
+print(string.format("[EconomySystem] %d chat ingress hook(s) registered.", chatHookCount))
 
 -- Keybinds
 pcall(function()

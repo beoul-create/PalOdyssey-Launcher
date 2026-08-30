@@ -102,9 +102,19 @@ namespace PalLauncher.Services
                     throw new InvalidOperationException($"No download URL provided for '{modItem.RelativePath}'.");
                 }
 
-                try
+                Exception? lastRetryableError = null;
+                for (int attempt = 1; attempt <= 3; attempt++)
                 {
-                    using var request = new HttpRequestMessage(HttpMethod.Get, modItem.DownloadUrl);
+                    long attemptBytesDownloaded = 0;
+                    try
+                    {
+                    string requestUrl = modItem.DownloadUrl;
+                    if (attempt > 1)
+                    {
+                        string separator = requestUrl.Contains('?') ? "&" : "?";
+                        requestUrl += $"{separator}retry={attempt}&expected={Uri.EscapeDataString(modItem.Sha256 ?? string.Empty)}";
+                    }
+                    using var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
                     request.Headers.CacheControl = new System.Net.Http.Headers.CacheControlHeaderValue
                     {
                         NoCache = true,
@@ -133,15 +143,13 @@ namespace PalLauncher.Services
                     }))
                     {
                         byte[] buffer = ArrayPool<byte>.Shared.Rent(256 * 1024);
-                        long fileBytesDownloaded = 0;
-
-                        try
-                        {
+                    try
+                    {
                             int bytesRead;
                             while ((bytesRead = await streamToReadFrom.ReadAsync(buffer.AsMemory(), token)) > 0)
                             {
                                 await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), token);
-                                fileBytesDownloaded += bytesRead;
+                                attemptBytesDownloaded += bytesRead;
                                 long downloaded = Interlocked.Add(ref globalBytesDownloaded, bytesRead);
 
                                 lock (progressLock)
@@ -181,9 +189,9 @@ namespace PalLauncher.Services
                             ArrayPool<byte>.Shared.Return(buffer);
                         }
 
-                        if (serverContentLength.HasValue && serverContentLength.Value > 0 && fileBytesDownloaded != serverContentLength.Value)
+                        if (serverContentLength.HasValue && serverContentLength.Value > 0 && attemptBytesDownloaded != serverContentLength.Value)
                         {
-                            throw new EndOfStreamException($"Download for '{modItem.RelativePath}' ended at {fileBytesDownloaded} of {serverContentLength.Value} bytes.");
+                            throw new EndOfStreamException($"Download for '{modItem.RelativePath}' ended at {attemptBytesDownloaded} of {serverContentLength.Value} bytes.");
                         }
                     }
 
@@ -238,15 +246,29 @@ namespace PalLauncher.Services
                             Sha256 = downloadedHash
                         };
                     }
-                }
-                catch
-                {
+                    return;
+                    }
+                    catch (Exception ex) when (attempt < 3 &&
+                        (ex is HttpRequestException || ex is InvalidDataException || ex is EndOfStreamException || ex is TaskCanceledException))
+                    {
+                        lastRetryableError = ex;
+                        Interlocked.Add(ref globalBytesDownloaded, -attemptBytesDownloaded);
+                        if (File.Exists(tempPath))
+                        {
+                            try { File.Delete(tempPath); } catch { }
+                        }
+                        await Task.Delay(TimeSpan.FromMilliseconds(400 * attempt), token);
+                    }
+                    catch
+                    {
                     if (File.Exists(tempPath))
                     {
                         try { File.Delete(tempPath); } catch { }
                     }
                     throw;
+                    }
                 }
+                throw new IOException($"Download failed after 3 attempts for '{modItem.RelativePath}'.", lastRetryableError);
             });
 
             // One atomic cache write replaces a full JSON serialization per file.

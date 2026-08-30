@@ -22,15 +22,14 @@ local function BroadcastInGame(Text)
     pcall(function()
         local controllers = FindAllOf("PalPlayerController") or {}
         local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
-        local ChatSubsystem = FindFirstOf("PalChatSubsystem")
+        local world = (UEHelpers and UEHelpers.GetWorldContextObject and UEHelpers.GetWorldContextObject())
+            or (GetWorldContext and GetWorldContext()) or nil
         
         for _, pc in ipairs(controllers) do
             if pc and pc:IsValid() then
-                if PalUtil and PalUtil:IsValid() then
-                    PalUtil:SendSystemAnnounce(pc, Text)
-                end
-                if ChatSubsystem and ChatSubsystem:IsValid() then
-                    ChatSubsystem:SendSystemChatMessage(pc, FText(Text))
+                local ps = pc.PlayerState
+                if PalUtil and PalUtil:IsValid() and world and ps and ps:IsValid() then
+                    PalUtil:SendSystemToPlayerChat(world, Text, ps.PlayerUId)
                 end
             end
         end
@@ -214,15 +213,18 @@ function WorldBoss.InitHooks()
     end)
 
     -- Chat Command Ingress (!spawnboss)
+    local LastBossCommandText = ""
+    local LastBossCommandTime = 0
     local function ProcessBossCommand(Context, Param1, Param2)
         local function TryGetStr(val)
             if not val then return "" end
             local s = ""
             pcall(function()
-                if type(val) == "string" then s = val
-                elseif type(val.ToString) == "function" then s = val:ToString()
-                elseif val.Message and type(val.Message.ToString) == "function" then s = val.Message:ToString()
-                elseif type(val.get) == "function" then s = TryGetStr(val:get()) end
+                local obj = val
+                if type(val.get) == "function" then obj = val:get() end
+                if type(obj) == "string" then s = obj
+                elseif type(obj.ToString) == "function" then s = obj:ToString()
+                elseif obj.Message and type(obj.Message.ToString) == "function" then s = obj.Message:ToString() end
             end)
             return s
         end
@@ -233,6 +235,11 @@ function WorldBoss.InitHooks()
 
         Text = tostring(Text or ""):lower():match("^%s*(.-)%s*$")
         if Text == "!spawnboss" or Text == "/spawnboss" then
+            local gameMode = FindFirstOf("PalGameMode")
+            if not gameMode or not gameMode:IsValid() then return end
+            local clock = os.clock()
+            if Text == LastBossCommandText and clock - LastBossCommandTime < 1.0 then return end
+            LastBossCommandText, LastBossCommandTime = Text, clock
             local now = os.time()
             local cooldown = math.max(1, tonumber(Config.SpawnCommandCooldownSeconds) or 60)
             if now - LastCommandSpawn < cooldown then
@@ -245,7 +252,18 @@ function WorldBoss.InitHooks()
         end
     end
 
-    pcall(RegisterHook, "/Script/Pal.PalPlayerController:SendChatMessage", ProcessBossCommand)
+    local registered = 0
+    for _, hookPath in ipairs({
+        "/Script/Pal.PalPlayerState:EnterChat",
+        "/Script/Pal.PalGameStateInGame:BroadcastChatMessage"
+    }) do
+        local ok, preId = pcall(RegisterHook, hookPath, ProcessBossCommand)
+        if ok and preId then
+            registered = registered + 1
+            print("[WorldBossAuraSystem] Chat ingress registered: " .. hookPath)
+        end
+    end
+    print(string.format("[WorldBossAuraSystem] %d chat ingress hook(s) registered.", registered))
 end
 
 return WorldBoss

@@ -67,11 +67,12 @@ function UniPalUI.DispatchPointerInput()
     return handled
 end
 
--- Hook Canvas Drawing safely without touching Escape Menu
-pcall(RegisterHook, "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C:ReceiveDrawHUD", function(Context)
+-- Hook the native HUD event, which is already reflected when UE4SS starts.
+-- The old Blueprint path was not loaded yet and silently registered nothing.
+local function DrawDashboard(Context)
     if not UniPalUI.IsOpen then return end
     pcall(function()
-        local hud = Context:get()
+        local hud = Context and Context.get and Context:get() or Context
         if hud and hud.Canvas and hud.Canvas:IsValid() then
             local Canvas = hud.Canvas
             local tab = UniPalUI.Tabs[UniPalUI.ActiveTab]
@@ -80,7 +81,19 @@ pcall(RegisterHook, "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C:
             end
         end
     end)
-end)
+end
+
+local hudOk, hudPreId = pcall(RegisterHook, "/Script/Engine.HUD:ReceiveDrawHUD", DrawDashboard)
+if hudOk and hudPreId then
+    print("[UniPalUI] Native HUD draw hook registered.")
+else
+    print("[UniPalUI] Native HUD hook unavailable; arming delayed Pal HUD hook.")
+    pcall(NotifyOnNewObject, "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C", function()
+        local ok, preId = pcall(RegisterHook,
+            "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C:ReceiveDrawHUD", DrawDashboard)
+        if ok and preId then print("[UniPalUI] Delayed Pal HUD draw hook registered.") end
+    end)
+end
 
 -- Register Framework Keybinds (F5: Toggle UniPalUI Dashboard)
 pcall(function()

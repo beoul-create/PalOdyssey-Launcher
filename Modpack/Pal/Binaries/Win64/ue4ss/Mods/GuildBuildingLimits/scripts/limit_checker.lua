@@ -2,6 +2,8 @@ local LimitChecker = {}
 local Config = {}
 local UpgradesCache = {}
 local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\\]+$", "")
+package.path = ScriptDir .. "../../shared/?.lua;" .. package.path
+local Json = require("palodyssey_json")
 local UpgradesFile = ScriptDir .. "../guild_upgrades.json"
 
 local function LoadGuildUpgrades()
@@ -16,6 +18,7 @@ local function LoadGuildUpgrades()
                 if JSON and type(JSON.parse) == "function" then table.insert(decoders, JSON.parse) end
                 if json and type(json.decode) == "function" then table.insert(decoders, json.decode) end
                 if _G.json and type(_G.json.decode) == "function" then table.insert(decoders, _G.json.decode) end
+                table.insert(decoders, Json.decode)
                 for _, d in ipairs(decoders) do
                     local ok, parsed = pcall(d, raw)
                     if ok and type(parsed) == "table" then
@@ -161,6 +164,22 @@ local function ProcessBuildRequest(Context, ...)
     local Player = nil
     local TargetBuildingStr = ""
     local args = { ... }
+
+    -- RequestBuild_ToServer belongs to UPalBuilderComponent. Resolve its
+    -- owning pawn/controller before inspecting request parameters.
+    pcall(function()
+        local owner = type(Subsystem.GetOwner) == "function" and Subsystem:GetOwner() or Subsystem.Owner
+        if owner and owner:IsValid() then
+            if owner.IsA and owner:IsA("/Script/Pal.PalPlayerController") then
+                Player = owner
+            elseif owner.Controller and owner.Controller:IsValid() then
+                Player = owner.Controller
+            elseif type(owner.GetController) == "function" then
+                local controller = owner:GetController()
+                if controller and controller:IsValid() then Player = controller end
+            end
+        end
+    end)
     for _, param in ipairs(args) do
         local value = param and param.get and param:get() or param
         if value then
@@ -220,8 +239,19 @@ local function ProcessBuildRequest(Context, ...)
                 PalUtil:SendSystemAnnounce(Player, string.format("❌ Guild Limit Reached (%d/%d %s)", CurrentCount, AllowedMax, RestrictionRule.DisplayName or "Facility"))
             end
         end)
-        -- UE4SS hook return values override the UFunction result. No materials
-        -- are refunded here because this is a pre-construction rejection.
+        -- RequestBuild_ToServer is void, so a hook return cannot cancel it.
+        -- Replace its FName request parameter with None before the RPC body
+        -- runs; no materials have been consumed at this point.
+        local blocked = false
+        pcall(function()
+            if args[1] and type(args[1].set) == "function" then
+                args[1]:set(FName("None"))
+                blocked = true
+            end
+        end)
+        if not blocked then
+            print("[GuildBuildingLimits] WARNING: limit reached but BuildObjectId could not be cancelled.")
+        end
         return false
     end
 end
@@ -230,16 +260,15 @@ function LimitChecker.Init(LoadedConfig)
     Config = LoadedConfig or {}
 
     local registered = 0
-    for _, hookName in ipairs({
-        "/Script/Pal.PalBuildSubsystem:RequestBuild",
-        "/Script/Pal.PalBuildSubsystem:RequestBuild_Server",
-        "/Script/Pal.PalBuildSubsystem:RequestBuildDirectly"
-    }) do
+    local hookNames = {
+        "/Script/Pal.PalBuilderComponent:RequestBuild_ToServer"
+    }
+    for _, hookName in ipairs(hookNames) do
         local ok, preId = pcall(RegisterHook, hookName, ProcessBuildRequest)
         if ok and preId then registered = registered + 1
         else print("[GuildBuildingLimits] Hook unavailable: " .. hookName) end
     end
-    print(string.format("[GuildBuildingLimits] %d/3 limit hooks registered.", registered))
+    print(string.format("[GuildBuildingLimits] %d/%d limit hooks registered.", registered, #hookNames))
 end
 
 return LimitChecker
