@@ -1,0 +1,4 @@
+C:\PalOdyssey Launcher 2.0\scratch\github-audit-20260829\publish-audit\Assets\app.png
+C:\PalOdyssey Launcher 2.0\scratch\github-audit-20260829\publish-audit\Assets\click.wav
+C:\PalOdyssey Launcher 2.0\scratch\github-audit-20260829\publish-audit\Assets\hover.wav
+C:\PalOdyssey Launcher 2.0\scratch\github-audit-20260829\publish-audit\PalLauncher.exe

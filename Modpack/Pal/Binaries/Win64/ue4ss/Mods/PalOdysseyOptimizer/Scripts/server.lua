@@ -40,9 +40,9 @@ function ServerModule.apply(cfg)
 
         -- 2. Lithium & ServerCore Entity Activation Range / Tick Throttling
         ExecuteConsole("a.URO.Enable 1")
-        ExecuteConsole("a.URO.TickDistanceScale 0.75")
-        ExecuteConsole("a.URO.VisibilityBasedAnimTickRate 1")
-        ExecuteConsole("a.URO.ForceAnimRate 1")
+        ExecuteConsole("a.URO.TickDistanceScale 1.0")
+        ExecuteConsole("a.URO.VisibilityBasedAnimTickRate 0")
+        ExecuteConsole("a.URO.ForceAnimRate 0")
         ExecuteConsole("p.ClothPhysics 0")
         ExecuteConsole("ai.MaxSimultaneousPathRequests 250")
 

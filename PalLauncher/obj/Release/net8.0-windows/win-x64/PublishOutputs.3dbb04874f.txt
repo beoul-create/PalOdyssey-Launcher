@@ -1,0 +1,6 @@
+C:\PalOdyssey Launcher 2.0\scratch\github-audit-20260829\launcher\release-v2.0.1-final\Assets\app.png
+C:\PalOdyssey Launcher 2.0\scratch\github-audit-20260829\launcher\release-v2.0.1-final\Assets\click.wav
+C:\PalOdyssey Launcher 2.0\scratch\github-audit-20260829\launcher\release-v2.0.1-final\Assets\hover.wav
+C:\PalOdyssey Launcher 2.0\scratch\github-audit-20260829\launcher\release-v2.0.1-final\launcher_config.json
+C:\PalOdyssey Launcher 2.0\scratch\github-audit-20260829\launcher\release-v2.0.1-final\manifest.json
+C:\PalOdyssey Launcher 2.0\scratch\github-audit-20260829\launcher\release-v2.0.1-final\PalLauncher.exe

@@ -1,0 +1,14 @@
+﻿{
+  "autoStartServerWithClient": false,
+  "serverPort": 8211,
+  "closeLauncherOnStart": false,
+  "soundEnabled": true,
+  "remoteManifestUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/manifest.json",
+  "serverIp": "palodyssey.duckdns.org",
+  "gamePath": "",
+  "launchViaSteamProtocol": false,
+  "discordRpcEnabled": true,
+  "autoLaunchGame": false,
+  "serverLaunchArguments": "-useperfthreads -NoAsyncLoadingThread -port=8211",
+  "serverInstallPath": null
+}

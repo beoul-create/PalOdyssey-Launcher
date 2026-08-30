@@ -1,12 +1,17 @@
 {
-  "Version": "2026.08.30.181920",
-  "GeneratedAt": "2026-08-30T18:19:20.235Z",
+  "Version": "2026.08.30.182036",
+  "GeneratedAt": "2026-08-30T18:20:36.467Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
   "TotalFiles": 304,
   "News": [
+    {
+      "title": "🐎 Instant Pal Mount Stutter & Freeze Fix Live",
+      "date": "Aug 30, 2026",
+      "summary": "Eliminated compute SkinCache shader stalls and URO animation tick recalculations on Pal mounting and skeletal attachment."
+    },
     {
       "title": "🎣 Fishing Rod Dismount Stretched Cable Fix Live",
       "date": "Aug 30, 2026",
@@ -16,11 +21,6 @@
       "title": "🛒 Economy System & World Boss Boot Fixes Live",
       "date": "Aug 29, 2026",
       "summary": "Fixed Lua escape sequence in EconomySystem and duplicate return in WorldBoss. [F6] shop & in-game chat commands now active!"
-    },
-    {
-      "title": "💎 Universal SAO Death (Zero Corpse Ragdolls across Pals, NPCs & Players)",
-      "date": "Aug 29, 2026",
-      "summary": "Universalized SAO death disintegration across all characters with full physical ragdoll suppression."
     }
   ],
   "Files": [
@@ -362,8 +362,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "657780530e7d6b50a87fad9a4cd0f11d312fcfc0c7c8e3d9d774b1489066c12d",
-      "Size": 7863,
+      "Hash": "b523dac87af3994a809a2496965312fe04e9766e9cb3c1bc747725f7324ac065",
+      "Size": 7851,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -392,8 +392,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/server.lua",
-      "Hash": "31dc1b7c48b017fe049fac4a7ef229dc8575aac11cae83ec647a77a904d0e438",
-      "Size": 4228,
+      "Hash": "aafa020871035a4b0a58d2768065c61aa7d4c6887049fd0e078ae3a8489aed5c",
+      "Size": 4227,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/server.lua"
     },
     {
