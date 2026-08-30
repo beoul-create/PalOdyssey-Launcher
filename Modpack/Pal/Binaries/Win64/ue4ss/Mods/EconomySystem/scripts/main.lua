@@ -269,16 +269,52 @@ local function GiveItem(Player, ItemId, Count)
     return success
 end
 
+local InventoryConsumeHelper = nil
+
+local function GetInventoryConsumeHelper()
+    if InventoryConsumeHelper and InventoryConsumeHelper.IsValid and InventoryConsumeHelper:IsValid() then
+        return InventoryConsumeHelper
+    end
+
+    local incidentClass = StaticFindObject("/Script/Pal.PalIncidentBase")
+    local outer = (UEHelpers and UEHelpers.GetGameInstance and UEHelpers.GetGameInstance())
+        or FindFirstOf("GameInstance")
+    if incidentClass and incidentClass:IsValid() and outer and outer:IsValid() then
+        InventoryConsumeHelper = StaticConstructObject(incidentClass, outer)
+    end
+    return InventoryConsumeHelper
+end
+
 local function TakeItem(Player, ItemId, Count)
     local success = false
-    pcall(function()
+    local ok, err = pcall(function()
         local pc = Player or GetPlayerController()
-        local InvSubsystem = FindFirstOf("PalInventorySubsystem")
-        if InvSubsystem and InvSubsystem:IsValid() and pc and pc:IsValid() then
-            local result = InvSubsystem:RequestRemoveItem(pc, FName(ItemId), Count)
-            success = result ~= false
+        local ps = pc and pc.PlayerState
+        local inventory = ps and type(ps.GetInventoryData) == "function" and ps:GetInventoryData() or nil
+        if not inventory or not inventory:IsValid() then return end
+
+        local requested = math.max(1, math.floor(tonumber(Count) or 1))
+        local itemName = FName(ItemId)
+        local before = tonumber(inventory:CountItemNum(itemName)) or 0
+        if before < requested then return end
+
+        local helper = GetInventoryConsumeHelper()
+        if not helper or not helper:IsValid() then return end
+        helper:RequestConsumeInventoryItem(inventory, itemName, requested)
+
+        local after = tonumber(inventory:CountItemNum(itemName)) or before
+        local removed = math.max(0, before - after)
+        if removed == requested then
+            success = true
+        elseif removed > 0 then
+            -- The native call should be atomic, but never leave a partial removal
+            -- behind if the engine rejects part of the requested quantity.
+            inventory:AddItem_ServerInternal(itemName, removed, true)
         end
     end)
+    if not ok then
+        print("[EconomySystem] Inventory consumption failed: " .. tostring(err))
+    end
     return success
 end
 

@@ -178,10 +178,29 @@ end
 function ChatCommands.TakeItem(Player, ItemId, Count)
     local success = false
     pcall(function()
-        local InvSubsystem = FindFirstOf("PalInventorySubsystem")
-        if InvSubsystem and InvSubsystem:IsValid() and Player and Player:IsValid() then
-            local result = InvSubsystem:RequestRemoveItem(Player, FName(ItemId), Count)
-            success = result ~= false
+        local ps = Player and Player.PlayerState
+        local inventory = ps and type(ps.GetInventoryData) == "function" and ps:GetInventoryData() or nil
+        if not inventory or not inventory:IsValid() then return end
+
+        local requested = math.max(1, math.floor(tonumber(Count) or 1))
+        local itemName = FName(ItemId)
+        local before = tonumber(inventory:CountItemNum(itemName)) or 0
+        if before < requested then return end
+
+        local incidentClass = StaticFindObject("/Script/Pal.PalIncidentBase")
+        local outer = (UEHelpers and UEHelpers.GetGameInstance and UEHelpers.GetGameInstance())
+            or FindFirstOf("GameInstance")
+        if not incidentClass or not incidentClass:IsValid() or not outer or not outer:IsValid() then return end
+        local helper = StaticConstructObject(incidentClass, outer)
+        if not helper or not helper:IsValid() then return end
+        helper:RequestConsumeInventoryItem(inventory, itemName, requested)
+
+        local after = tonumber(inventory:CountItemNum(itemName)) or before
+        local removed = math.max(0, before - after)
+        if removed == requested then
+            success = true
+        elseif removed > 0 then
+            inventory:AddItem_ServerInternal(itemName, removed, true)
         end
     end)
     return success
@@ -306,4 +325,3 @@ function ChatCommands.HandleGacha(Player, Rolls)
 end
 
 return ChatCommands
-
