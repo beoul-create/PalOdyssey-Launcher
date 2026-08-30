@@ -9,6 +9,13 @@ local ActiveBosses = {}
 local Config = {}
 local SpawnInProgress = false
 local LastCommandSpawn = 0
+local PalDisplayNames = {
+    Kitsunebi = "Foxparks",
+    ThunderDragonMan = "Orserk",
+    GrassMammoth = "Mammorest",
+    WeaselDragon = "Chillet",
+    Anubis = "Anubis"
+}
 
 function WorldBoss.LoadConfig(Cfg)
     Config = Cfg or {}
@@ -69,11 +76,18 @@ function WorldBoss.SpawnEvent()
 
     local Point = Config.SpawnPoints[math.random(#Config.SpawnPoints)]
     local PalId = Config.BossPalPool[math.random(#Config.BossPalPool)]
+    local PalDisplayName = PalDisplayNames[PalId] or PalId
     local Auras = { "Fiery", "Corrupted", "Celestial" }
     local SelectedAura = Auras[math.random(#Auras)]
     local SpawnLoc = { X = Point.X, Y = Point.Y, Z = Point.Z }
 
     local BossActor = nil
+    local actorsBefore = {}
+    pcall(function()
+        for _, actor in ipairs(FindAllOf("PalCharacter") or {}) do
+            if actor and actor:IsValid() then actorsBefore[tostring(actor:GetAddress())] = true end
+        end
+    end)
 
     local function TrySpawn(label, callable)
         local ok, result = pcall(callable)
@@ -124,6 +138,41 @@ function WorldBoss.SpawnEvent()
         end
     end)
 
+    -- v0.3.5 exposes spawning through UPalCheatManager. It creates the Pal
+    -- synchronously near the selected online player, so diff the actor set to
+    -- recover the newly spawned native actor for boss initialization.
+    if not BossActor or not BossActor:IsValid() then
+        pcall(function()
+            for _, pc in ipairs(FindAllOf("PalPlayerController") or {}) do
+                if pc and pc:IsValid() then
+                    if (not pc.CheatManager or not pc.CheatManager:IsValid()) and type(pc.EnableCheats) == "function" then
+                        pc:EnableCheats()
+                    end
+                    local manager = pc.CheatManager
+                    if manager and manager:IsValid() and type(manager.SpawnMonster) == "function" then
+                        manager:SpawnMonster(FName(PalId), tonumber(Config.BossLevel) or 100)
+                        for _, actor in ipairs(FindAllOf("PalCharacter") or {}) do
+                            local address = actor and actor:IsValid() and tostring(actor:GetAddress()) or ""
+                            if address ~= "" and not actorsBefore[address] then
+                                BossActor = actor
+                                break
+                            end
+                        end
+                        if BossActor then
+                            local location = BossActor:GetActorLocation()
+                            if location then
+                                SpawnLoc = { X = location.X, Y = location.Y, Z = location.Z }
+                                Point = { Name = "Near an online player", X = location.X, Y = location.Y, Z = location.Z }
+                            end
+                            print("[WorldBossAuraSystem] Spawned through PalCheatManager.SpawnMonster fallback.")
+                        end
+                        break
+                    end
+                end
+            end
+        end)
+    end
+
     if BossActor and BossActor:IsValid() then
         -- 1. Apply 3.0x Visual Scale
         local WorldScale = tonumber(Config.BossScaleWorld) or 3.0
@@ -161,12 +210,12 @@ function WorldBoss.SpawnEvent()
         }
 
         -- 5. Broadcast to in-game chat and HUD
-        BroadcastInGame(string.format("⚠️ WORLD BOSS SPAWNED: [%s (%s Aura)] has appeared at %s! (Coords: %.0f, %.0f)", PalId, SelectedAura, Point.Name, Point.X, Point.Y))
+        BroadcastInGame(string.format("⚠️ WORLD BOSS SPAWNED: [%s (%s Aura)] has appeared at %s! (Coords: %.0f, %.0f)", PalDisplayName, SelectedAura, Point.Name, Point.X, Point.Y))
 
         -- 6. Discord & Liveboard
-        WorldBoss.BroadcastDiscord(PalId, SelectedAura, Point.Name, SpawnLoc)
+        WorldBoss.BroadcastDiscord(PalDisplayName, SelectedAura, Point.Name, SpawnLoc)
         LiveboardExport.DumpState(ActiveBosses, Config)
-        print(string.format("[WorldBossAuraSystem] Successfully spawned World Boss %s at %s.", PalId, Point.Name))
+        print(string.format("[WorldBossAuraSystem] Successfully spawned World Boss %s (%s) at %s.", PalDisplayName, PalId, Point.Name))
         SpawnInProgress = false
         return true
     else

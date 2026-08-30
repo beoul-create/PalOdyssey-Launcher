@@ -32,7 +32,8 @@ local function LoadConfigFile()
         SpawnCommandCooldownSeconds = 60,
         LiveboardExportIntervalSeconds = 15,
         DiscordWebhookURL = "YOUR_DISCORD_WEBHOOK_URL_HERE",
-        BossPalPool = { "Foxparks", "Orserk", "Mammorest", "Chillet", "Anubis" },
+        BossPalPool = { "Kitsunebi", "ThunderDragonMan", "GrassMammoth", "WeaselDragon", "Anubis" },
+        BossLevel = 100,
         BossScaleWorld = 3.0,
         BossScaleCaptured = 2.0,
         SpawnPoints = {

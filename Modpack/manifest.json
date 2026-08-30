@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.30.010349",
-  "GeneratedAt": "2026-08-30T01:03:49Z",
+  "Version": "2026.08.30.010653",
+  "GeneratedAt": "2026-08-30T01:06:53Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -1778,9 +1778,9 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/config.json",
-      "Hash": "95c9e6f133c4b54d7c7b49eeb1575fccacce91668575670a50ada450c3f70627",
-      "Size": 655,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/config.json?sha=95c9e6f133c4b54d7c7b49eeb1575fccacce91668575670a50ada450c3f70627"
+      "Hash": "ed21e2b1e65f6499a495cc44792bd33be5b323ef3a983827e7bd520d17c6828e",
+      "Size": 694,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/config.json?sha=ed21e2b1e65f6499a495cc44792bd33be5b323ef3a983827e7bd520d17c6828e"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/enabled.txt",
@@ -1808,9 +1808,9 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua",
-      "Hash": "5a6a36bed869ddc3c78912630236e9e50e95e0b8be8a297c7b42bbd13ac4a61f",
-      "Size": 5034,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua?sha=5a6a36bed869ddc3c78912630236e9e50e95e0b8be8a297c7b42bbd13ac4a61f"
+      "Hash": "3bf0d1a43f7826f2837048ed645468351d27d29be49753c0e47452487f7fa580",
+      "Size": 5078,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua?sha=3bf0d1a43f7826f2837048ed645468351d27d29be49753c0e47452487f7fa580"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/sao_death.lua",
@@ -1820,9 +1820,9 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/world_boss.lua",
-      "Hash": "d83bbe6e295ad240f8636634b9e45ef0e588a68c00305261c1c483a36a20b2ec",
-      "Size": 11671,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/world_boss.lua?sha=d83bbe6e295ad240f8636634b9e45ef0e588a68c00305261c1c483a36a20b2ec"
+      "Hash": "2ab55081bad68ce6ada0c40d6324dccf4581938f047a44d1eade3ce1292f3721",
+      "Size": 14124,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/world_boss.lua?sha=2ab55081bad68ce6ada0c40d6324dccf4581938f047a44d1eade3ce1292f3721"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/UE4SS-settings.ini",
