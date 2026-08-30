@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.30.182158",
-  "GeneratedAt": "2026-08-30T18:21:58.489Z",
+  "Version": "2026.08.30.182245",
+  "GeneratedAt": "2026-08-30T18:22:45.509Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,9 +8,9 @@
   "TotalFiles": 304,
   "News": [
     {
-      "title": "⚡ Zero-Stutter Pal Mounting & Direct Cable Architecture",
+      "title": "⚡ Dynamic Steady-State Async Loading Pipeline Live",
       "date": "Aug 30, 2026",
-      "summary": "Refactored CableReset to use direct-pointer actor resolution with zero UObject array scans. Fully eliminated GPU compute SkinCache stalls."
+      "summary": "Throttled in-game async loading budget to 5ms with adaptive texture streaming boost for butter-smooth Pal mounting and fast travel."
     },
     {
       "title": "🐎 Instant Pal Mount Stutter & Freeze Fix Live",
@@ -224,8 +224,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/FastConnect/Scripts/main.lua",
-      "Hash": "78cb9e1a8851c380ee69801fd9ee97816c2ebb8c6b1b8c74f3697a5ac0620906",
-      "Size": 7305,
+      "Hash": "35b63e47123adf2e1816fcb8c776d6ef96c3d1c48131fdf841ecb60b43d0bc4f",
+      "Size": 7456,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/FastConnect/Scripts/main.lua"
     },
     {

@@ -113,14 +113,17 @@ end
 
 local function ApplySteadyStateStreaming()
     ConnectionPhase = false
-    ExecuteConsole("s.AsyncLoadingTimeLimit 8.0")
-    ExecuteConsole("s.PriorityAsyncLoadingExtraTime 25.0")
-    ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 8.0")
-    ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 12")
+    ExecuteConsole("s.AsyncLoadingUseFullTimeLimit 0")
+    ExecuteConsole("s.AsyncLoadingTimeLimit 5.0")
+    ExecuteConsole("s.PriorityAsyncLoadingExtraTime 10.0")
+    ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 5.0")
+    ExecuteConsole("s.UnregisterComponentsTimeLimit 5.0")
+    ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 20")
     ExecuteConsole("r.Streaming.HLODStrategy 1")
-    ExecuteConsole("r.Streaming.Boost 1")
+    ExecuteConsole("r.Streaming.Boost 1.5")
     ExecuteConsole("r.Streaming.FramesForFullUpdate 20")
-    ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 60")
+    ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 120")
+    Log("Steady-state gameplay streaming activated (Zero game-thread async loading stalls).")
 end
 
 -- 4. Fast Travel / Map Transition Acceleration
@@ -128,7 +131,6 @@ local function OnPlayerTransition()
     pcall(function()
         if not Config.bypassFastTravelWait then return end
         ExecuteConsole("r.Streaming.PurgeUnused")
-        ExecuteConsole("s.AsyncLoadingUseFullTimeLimit 1")
         ApplyFastNetworkRates()
     end)
 end
