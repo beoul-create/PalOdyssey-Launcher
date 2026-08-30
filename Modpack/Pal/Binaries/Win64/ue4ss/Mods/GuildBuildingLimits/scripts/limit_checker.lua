@@ -165,7 +165,8 @@ local function ProcessBuildRequest(Context, ...)
     local TargetBuildingStr = ""
     local args = { ... }
 
-    -- RequestBuild_ToServer belongs to UPalBuilderComponent. Resolve its
+    -- In the live v0.3.5 server, RequestBuild_ToServer belongs to
+    -- UPalNetworkPlayerComponent. Resolve its
     -- owning pawn/controller before inspecting request parameters.
     pcall(function()
         local owner = type(Subsystem.GetOwner) == "function" and Subsystem:GetOwner() or Subsystem.Owner
@@ -261,7 +262,7 @@ function LimitChecker.Init(LoadedConfig)
 
     local registered = 0
     local hookNames = {
-        "/Script/Pal.PalBuilderComponent:RequestBuild_ToServer"
+        "/Script/Pal.PalNetworkPlayerComponent:RequestBuild_ToServer"
     }
     for _, hookName in ipairs(hookNames) do
         local ok, preId = pcall(RegisterHook, hookName, ProcessBuildRequest)

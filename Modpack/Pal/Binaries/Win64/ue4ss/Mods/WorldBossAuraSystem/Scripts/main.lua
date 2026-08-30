@@ -74,21 +74,29 @@ LiveboardExport.DumpState(WorldBoss.GetActiveBosses(), Config)
 local LiveboardIntervalMs = math.max(5000, (tonumber(Config.LiveboardExportIntervalSeconds) or 15) * 1000)
 local BossIntervalMs = math.max(60000, (tonumber(Config.SpawnIntervalSeconds) or 900) * 1000)
 
--- Initial Spawn Check (15 seconds after server start)
+-- Initial Spawn Check (15 seconds after server start). Keep retrying while the
+-- server is empty because the verified native SpawnMonster fallback requires
+-- an online player's controller and cheat manager.
 pcall(function()
     local delay = ExecuteInGameThreadWithDelay or ExecuteWithDelay
     if delay then
-        delay(15000, function()
+        local function TryInitialSpawn()
             pcall(function()
                 local bosses = WorldBoss.GetActiveBosses()
                 local count = 0
                 for _ in pairs(bosses) do count = count + 1 end
                 if count == 0 then
-                    print("[WorldBossAuraSystem] Triggering initial startup World Boss spawn...")
-                    WorldBoss.SpawnEvent()
+                    if WorldBoss.HasOnlinePlayer() then
+                        print("[WorldBossAuraSystem] Triggering initial startup World Boss spawn...")
+                        WorldBoss.SpawnEvent()
+                    else
+                        print("[WorldBossAuraSystem] Initial boss spawn waiting for an online player.")
+                        delay(15000, TryInitialSpawn)
+                    end
                 end
             end)
-        end)
+        end
+        delay(15000, TryInitialSpawn)
     end
 end)
 

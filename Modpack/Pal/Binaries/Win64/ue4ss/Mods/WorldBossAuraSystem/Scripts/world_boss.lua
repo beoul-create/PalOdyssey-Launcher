@@ -25,6 +25,20 @@ function WorldBoss.GetActiveBosses()
     return ActiveBosses
 end
 
+function WorldBoss.HasOnlinePlayer()
+    local found = false
+    pcall(function()
+        for _, pc in ipairs(FindAllOf("PalPlayerController") or {}) do
+            local ps = pc and pc:IsValid() and pc.PlayerState or nil
+            if ps and ps:IsValid() then
+                found = true
+                return
+            end
+        end
+    end)
+    return found
+end
+
 local function BroadcastInGame(Text)
     pcall(function()
         local controllers = FindAllOf("PalPlayerController") or {}
@@ -70,6 +84,10 @@ function WorldBoss.SpawnEvent()
     end
     if not Config.SpawnPoints or #Config.SpawnPoints == 0 or not Config.BossPalPool or #Config.BossPalPool == 0 then
         print("[WorldBossAuraSystem] Cannot spawn boss: SpawnPoints or BossPalPool is empty.")
+        return false
+    end
+    if not WorldBoss.HasOnlinePlayer() then
+        print("[WorldBossAuraSystem] Boss spawn deferred until a player is online.")
         return false
     end
     SpawnInProgress = true
