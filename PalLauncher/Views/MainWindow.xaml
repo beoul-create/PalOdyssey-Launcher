@@ -384,11 +384,46 @@
                     <Grid Grid.Column="0" Margin="0,0,18,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
+                        <!-- Launcher Update Notification Banner -->
+                        <Border Grid.Row="0" Visibility="{Binding IsLauncherUpdateAvailable, Converter={StaticResource BoolToVisConverter}}"
+                                Background="#1E1B4B" BorderBrush="#818CF8" BorderThickness="1"
+                                CornerRadius="8" Margin="0,0,0,12" Padding="14,10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="🚀" FontSize="18" VerticalAlignment="Center" Margin="0,0,12,0" />
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding LauncherUpdateVersion, StringFormat='Launcher Update Available ({0})'}"
+                                               Foreground="#FFFFFF" FontWeight="Bold" FontSize="13" />
+                                    <TextBlock Text="{Binding LauncherUpdateNotes}"
+                                               Foreground="#94A3B8" FontSize="11" TextTrimming="CharacterEllipsis" Margin="0,2,0,0" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Button Content="UPDATE NOW" Command="{Binding UpdateLauncherCommand}"
+                                            Background="#6366F1" Foreground="#FFFFFF" FontWeight="Bold" FontSize="11"
+                                            Padding="14,6" Margin="0,0,8,0" Cursor="Hand">
+                                        <Button.Resources>
+                                            <Style TargetType="Border">
+                                                <Setter Property="CornerRadius" Value="6"/>
+                                            </Style>
+                                        </Button.Resources>
+                                    </Button>
+                                    <Button Content="✕" Command="{Binding DismissLauncherUpdateCommand}"
+                                            Background="Transparent" Foreground="#64748B" BorderThickness="0"
+                                            FontSize="12" Padding="6" Cursor="Hand" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
                         <!-- Server Branding Card -->
-                        <Border Grid.Row="0" Style="{StaticResource GlassCardStyle}" Padding="22,18" Margin="0,0,0,16">
+                        <Border Grid.Row="1" Style="{StaticResource GlassCardStyle}" Padding="22,18" Margin="0,0,0,16">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -414,7 +449,7 @@
                         </Border>
 
                         <!-- News & Patch Notes Card -->
-                        <Border Grid.Row="1" Style="{StaticResource GlassCardStyle}" Padding="18,14">
+                        <Border Grid.Row="2" Style="{StaticResource GlassCardStyle}" Padding="18,14">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />

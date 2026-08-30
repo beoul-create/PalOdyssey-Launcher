@@ -1,0 +1,6 @@
+C:\PalOdyssey Launcher 2.0\publish\Release\Assets\app.png
+C:\PalOdyssey Launcher 2.0\publish\Release\Assets\click.wav
+C:\PalOdyssey Launcher 2.0\publish\Release\Assets\hover.wav
+C:\PalOdyssey Launcher 2.0\publish\Release\launcher_config.json
+C:\PalOdyssey Launcher 2.0\publish\Release\manifest.json
+C:\PalOdyssey Launcher 2.0\publish\Release\PalLauncher.exe

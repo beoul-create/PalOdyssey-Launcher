@@ -35,6 +35,7 @@ namespace PalLauncher.ViewModels
         private readonly DiscordRpcService _discordRpcService;
         private readonly AudioService _audioService;
         private readonly ServerQueryService _serverQueryService;
+        private readonly LauncherUpdaterService _launcherUpdaterService;
 
         private LauncherConfig _config;
         private LocalCache _cache;
@@ -63,6 +64,11 @@ namespace PalLauncher.ViewModels
         private bool _isSoundEnabled = true;
         private bool _isDiscordRpcEnabled = true;
 
+        private bool _isLauncherUpdateAvailable;
+        private string _launcherUpdateVersion = "";
+        private string _launcherUpdateNotes = "";
+        private LauncherReleaseInfo? _pendingLauncherRelease;
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public ObservableCollection<ServerNewsItem> NewsItems { get; } = new();
@@ -76,6 +82,8 @@ namespace PalLauncher.ViewModels
         public ICommand LaunchWithoutUpdatingCommand { get; }
         public ICommand HoverSoundCommand { get; }
         public ICommand ClickSoundCommand { get; }
+        public ICommand UpdateLauncherCommand { get; }
+        public ICommand DismissLauncherUpdateCommand { get; }
 
         public MainViewModel()
         {
@@ -91,6 +99,7 @@ namespace PalLauncher.ViewModels
             _discordRpcService = new DiscordRpcService();
             _audioService = new AudioService();
             _serverQueryService = new ServerQueryService(_config.ServerIp, _config.ServerPort, _config.ServerInstallPath);
+            _launcherUpdaterService = new LauncherUpdaterService(_hashService);
 
             _isSoundEnabled = _config.SoundEnabled;
             _isDiscordRpcEnabled = _config.DiscordRpcEnabled;
@@ -107,6 +116,8 @@ namespace PalLauncher.ViewModels
             LaunchWithoutUpdatingCommand = new AsyncRelayCommand(OnLaunchDirectAsync);
             HoverSoundCommand = new RelayCommand(() => _audioService.PlayHover());
             ClickSoundCommand = new RelayCommand(() => _audioService.PlayClick());
+            UpdateLauncherCommand = new AsyncRelayCommand(OnUpdateLauncherAsync);
+            DismissLauncherUpdateCommand = new RelayCommand(() => IsLauncherUpdateAvailable = false);
 
             // Wire game process events
             _gameProcessService.GameStarted += OnGameStarted;
@@ -356,6 +367,24 @@ namespace PalLauncher.ViewModels
             }
         }
 
+        public bool IsLauncherUpdateAvailable
+        {
+            get => _isLauncherUpdateAvailable;
+            set => SetProperty(ref _isLauncherUpdateAvailable, value);
+        }
+
+        public string LauncherUpdateVersion
+        {
+            get => _launcherUpdateVersion;
+            set => SetProperty(ref _launcherUpdateVersion, value);
+        }
+
+        public string LauncherUpdateNotes
+        {
+            get => _launcherUpdateNotes;
+            set => SetProperty(ref _launcherUpdateNotes, value);
+        }
+
         public string RemoteManifestUrl
         {
             get => _config.RemoteManifestUrl;
@@ -405,6 +434,58 @@ namespace PalLauncher.ViewModels
             {
                 NewsItems.Add(news);
             }
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    var (hasUpdate, releaseInfo) = await _launcherUpdaterService.CheckForLauncherUpdateAsync(manifest);
+                    if (hasUpdate && releaseInfo != null)
+                    {
+                        App.Current?.Dispatcher?.Invoke(() =>
+                        {
+                            _pendingLauncherRelease = releaseInfo;
+                            LauncherUpdateVersion = $"v{releaseInfo.Version}";
+                            LauncherUpdateNotes = releaseInfo.ReleaseNotes;
+                            IsLauncherUpdateAvailable = true;
+                        });
+                    }
+                }
+                catch { }
+            });
+        }
+
+        private async Task OnUpdateLauncherAsync()
+        {
+            if (_pendingLauncherRelease == null) return;
+            _audioService.PlayClick();
+
+            try
+            {
+                CurrentState = LauncherState.Downloading;
+                StatusMessage = "UPDATING LAUNCHER...";
+                SubStatusMessage = $"Downloading PalLauncher {_pendingLauncherRelease.Version}...";
+                IsProgressVisible = true;
+                DownloadPercentage = 0;
+                DownloadSpeedText = "Connecting...";
+
+                var downloadProgress = new Progress<DownloadProgressReport>(report =>
+                {
+                    DownloadPercentage = report.Percentage;
+                    DownloadSpeedText = report.FormattedSpeedText;
+                    CurrentProgressText = report.FormattedProgressText;
+                    SubStatusMessage = $"Downloading update ({report.FormattedProgressText})";
+                });
+
+                await _launcherUpdaterService.DownloadAndApplyUpdateAsync(_pendingLauncherRelease, downloadProgress);
+            }
+            catch (Exception ex)
+            {
+                CurrentState = LauncherState.Error;
+                StatusMessage = "UPDATE FAILED";
+                SubStatusMessage = ex.Message;
+                MessageBox.Show($"Failed to apply launcher update:\n\n{ex.Message}", "Launcher Update Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public async Task OnPlayClickedAsync()
@@ -433,6 +514,30 @@ namespace PalLauncher.ViewModels
                 string localFallbackPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "manifest.json");
                 _currentManifest = await _manifestService.FetchManifestAsync(_config.RemoteManifestUrl, localFallbackPath);
                 LoadManifestData(_currentManifest);
+
+                // 2.5 Check Launcher Self-Update
+                var (hasLauncherUpdate, releaseInfo) = await _launcherUpdaterService.CheckForLauncherUpdateAsync(_currentManifest);
+                if (hasLauncherUpdate && releaseInfo != null)
+                {
+                    _pendingLauncherRelease = releaseInfo;
+                    LauncherUpdateVersion = $"v{releaseInfo.Version}";
+                    LauncherUpdateNotes = releaseInfo.ReleaseNotes;
+                    IsLauncherUpdateAvailable = true;
+
+                    var promptResult = MessageBox.Show(
+                        $"A new version of the PalOdyssey Launcher is available ({LauncherUpdateVersion})!\n\n" +
+                        $"Release Notes: {releaseInfo.ReleaseNotes}\n\n" +
+                        "Would you like to update the launcher now?",
+                        "Launcher Update Available",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Information);
+
+                    if (promptResult == MessageBoxResult.Yes || releaseInfo.Mandatory)
+                    {
+                        await OnUpdateLauncherAsync();
+                        return;
+                    }
+                }
 
                 // 3. Verify Delta & Hashing
                 CurrentState = LauncherState.VerifyingIntegrity;

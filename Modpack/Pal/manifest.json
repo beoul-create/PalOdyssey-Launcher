@@ -1,26 +1,32 @@
 {
-  "Version": "2026.08.30.182245",
-  "GeneratedAt": "2026-08-30T18:22:45.509Z",
+  "Version": "2026.08.30.182654",
+  "GeneratedAt": "2026-08-30T18:26:54.969Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
   "TotalFiles": 304,
+  "Launcher": {
+    "Version": "2.0.1",
+    "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
+    "ReleaseNotes": "In-app self-updater, zero-stutter Pal mounting, and dismount cable restorer.",
+    "Mandatory": false
+  },
   "News": [
     {
-      "title": "⚡ Dynamic Steady-State Async Loading Pipeline Live",
+      "title": "🚀 In-App Launcher Self-Updater Live",
       "date": "Aug 30, 2026",
-      "summary": "Throttled in-game async loading budget to 5ms with adaptive texture streaming boost for butter-smooth Pal mounting and fast travel."
+      "summary": "PalLauncher now automatically checks for newer launcher versions and seamlessly downloads and hot-swaps updates in-app."
     },
     {
-      "title": "🐎 Instant Pal Mount Stutter & Freeze Fix Live",
+      "title": "⚡ Zero-Stutter Pal Mounting & Steady-State Pipeline",
       "date": "Aug 30, 2026",
-      "summary": "Eliminated compute SkinCache shader stalls and URO animation tick recalculations on Pal mounting and skeletal attachment."
+      "summary": "Eliminated compute SkinCache stalls, URO animation thrashing, and throttled steady-state async loading to 5ms for instant mount response."
     },
     {
-      "title": "🛒 Economy System & World Boss Boot Fixes Live",
-      "date": "Aug 29, 2026",
-      "summary": "Fixed Lua escape sequence in EconomySystem and duplicate return in WorldBoss. [F6] shop & in-game chat commands now active!"
+      "title": "🎣 Fishing Rod Dismount Stretched Cable Fix Live",
+      "date": "Aug 30, 2026",
+      "summary": "Direct-pointer CableReset module in PalworldTuner automatically purges and re-anchors cable physics on mount transitions."
     }
   ],
   "Files": [

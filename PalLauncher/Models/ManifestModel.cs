@@ -147,6 +147,24 @@ namespace PalLauncher.Models
         public string? LinkUrl { get; set; }
     }
 
+    public class LauncherReleaseInfo
+    {
+        [JsonPropertyName("version")]
+        public string Version { get; set; } = "2.0.2";
+
+        [JsonPropertyName("downloadUrl")]
+        public string DownloadUrl { get; set; } = "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe";
+
+        [JsonPropertyName("releaseNotes")]
+        public string ReleaseNotes { get; set; } = "Latest launcher performance and stability updates.";
+
+        [JsonPropertyName("sha256")]
+        public string? Sha256 { get; set; }
+
+        [JsonPropertyName("mandatory")]
+        public bool Mandatory { get; set; } = false;
+    }
+
     public class ManifestModel
     {
         private string _version = "1.0.0";
@@ -192,6 +210,9 @@ namespace PalLauncher.Models
         [JsonPropertyName("bannerUrl")]
         public string? BannerUrl { get; set; }
 
+        [JsonPropertyName("launcher")]
+        public LauncherReleaseInfo? Launcher { get; set; }
+
         [JsonPropertyName("news")]
         public List<ServerNewsItem> News { get; set; } = new();
 
@@ -199,3 +220,4 @@ namespace PalLauncher.Models
         public List<ModFileItem> Files { get; set; } = new();
     }
 }
+
