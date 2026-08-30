@@ -1,50 +1,75 @@
 local SAODeath = {}
 
-local NS_SAODeathPath = "/Game/Mods/SAODeath/NS_SAODeath.NS_SAODeath"
-local A_SAOSoundPath = "/Game/Mods/SAODeath/A_SAODeathShatter.A_SAODeathShatter"
+-- Native Palworld disintegration & crystal burst effects
+local CandidateParticles = {
+    "/Game/Pal/Effect/Niagara/Common/NS_Capture_Success.NS_Capture_Success",
+    "/Game/Pal/Effect/Niagara/Common/NS_Pal_Vanish.NS_Pal_Vanish",
+    "/Game/Pal/Effect/Niagara/Common/NS_PalDead_Dissolve.NS_PalDead_Dissolve",
+    "/Game/Pal/Effect/Niagara/Common/NS_Common_Hit_Critical.NS_Common_Hit_Critical",
+    "/Game/Pal/Effect/Niagara/Common/NS_Common_Hit_01.NS_Common_Hit_01"
+}
+
+local CandidateSounds = {
+    "/Game/Pal/Sound/Events/SE/SE_Pal_Capture_Success.SE_Pal_Capture_Success",
+    "/Game/Pal/Sound/Events/SE/SE_Damage_Critical.SE_Damage_Critical"
+}
+
+local function FindFirstValidAsset(candidates)
+    for _, path in ipairs(candidates) do
+        local obj = StaticFindObject(path)
+        if obj and obj:IsValid() then
+            return obj
+        end
+    end
+    return nil
+end
 
 function SAODeath.Init()
-    -- Universal death hook on character damage resolution
-    RegisterHook("/Script/Pal.PalCharacter:OnDead", function(Context, DeadCharacter)
-        local Character = Context:get()
-        if not Character or not Character:IsValid() then return end
+    -- Hook character death for SAO polygon crystal shatter effect
+    pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDead", function(Context, DeadCharacter)
+        pcall(function()
+            local Character = Context and Context.get and Context:get() or Context
+            if not Character or not Character:IsValid() then return end
 
-        local Mesh = Character.Mesh
-        local World = Character:GetWorld()
-        local Location = Character:K2_GetActorLocation()
-        local Rotation = Character:K2_GetActorRotation()
+            local Location = Character:K2_GetActorLocation()
+            local Rotation = Character:K2_GetActorRotation()
+            local World = Character:GetWorld()
 
-        -- 1. Disable Actor Collision & Ragdoll Physics
-        Character:SetActorEnableCollision(false)
-        if Character.PalDeadRagdollComponent and Character.PalDeadRagdollComponent:IsValid() then
-            Character.PalDeadRagdollComponent.bEnablePhysics = false
-        end
+            -- 1. Disable Ragdoll & Collision so character doesn't flop as a physical corpse
+            Character:SetActorEnableCollision(false)
+            if Character.PalDeadRagdollComponent and Character.PalDeadRagdollComponent:IsValid() then
+                Character.PalDeadRagdollComponent.bEnablePhysics = false
+            end
 
-        -- 2. Spawn SAO Particle System & Shatter Sound
-        local NiagaraFunc = StaticFindObject("/Script/Niagara.Default__NiagaraFunctionLibrary")
-        local NiagaraAsset = StaticFindObject(NS_SAODeathPath)
-        if NiagaraFunc and NiagaraFunc:IsValid() and NiagaraAsset and NiagaraAsset:IsValid() then
-            NiagaraFunc:SpawnSystemAtLocation(World, NiagaraAsset, Location, Rotation, { X=1, Y=1, Z=1 }, true, true, 0, true)
-        end
+            -- 2. Spawn Crystal Polygon Burst (SAO Shatter Effect)
+            local NiagaraFunc = StaticFindObject("/Script/Niagara.Default__NiagaraFunctionLibrary")
+            local NiagaraAsset = FindFirstValidAsset(CandidateParticles)
 
-        local GameplayStatics = StaticFindObject("/Script/Engine.Default__GameplayStatics")
-        local SoundAsset = StaticFindObject(A_SAOSoundPath)
-        if GameplayStatics and GameplayStatics:IsValid() and SoundAsset and SoundAsset:IsValid() then
-            GameplayStatics:PlaySoundAtLocation(World, SoundAsset, Location, 1.0, 1.0, 0.0, nil, nil, nil)
-        end
+            if NiagaraFunc and NiagaraFunc:IsValid() and NiagaraAsset and NiagaraAsset:IsValid() and World then
+                NiagaraFunc:SpawnSystemAtLocation(World, NiagaraAsset, Location, Rotation, { X=2.0, Y=2.0, Z=2.0 }, true, true, 0, true)
+            else
+                -- Fallback via PalUtility effect spawner
+                local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+                if PalUtil and PalUtil:IsValid() and type(PalUtil.PlayEffectAtLocation) == "function" then
+                    PalUtil:PlayEffectAtLocation(World, Location, Rotation)
+                end
+            end
 
-        -- 3. Hide Skeletal Mesh Immediately
-        if Mesh and Mesh:IsValid() then
-            Mesh:SetVisibility(false, true)
-        end
+            -- 3. Play Glass / Crystal Shatter Sound
+            local SoundAsset = FindFirstValidAsset(CandidateSounds)
+            local GameplayStatics = StaticFindObject("/Script/Engine.Default__GameplayStatics")
+            if GameplayStatics and GameplayStatics:IsValid() and SoundAsset and SoundAsset:IsValid() and World then
+                GameplayStatics:PlaySoundAtLocation(World, SoundAsset, Location, 1.2, 1.0, 0.0, nil, nil, nil)
+            end
 
-        -- 4. Queue actor cleanup after a slight tick delay to let loot drop routines resolve
-        ExecuteWithDelay(150, function()
-            if Character and Character:IsValid() then
-                Character:K2_DestroyActor()
+            -- 4. Hide Mesh and Dissolve safely
+            local Mesh = Character.Mesh
+            if Mesh and Mesh:IsValid() then
+                Mesh:SetVisibility(false, true)
             end
         end)
     end)
+    print("[WorldBossAuraSystem] SAO Death Disintegration effect initialized.")
 end
 
 return SAODeath

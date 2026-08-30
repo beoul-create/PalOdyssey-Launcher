@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.29.235934",
-  "GeneratedAt": "2026-08-29T23:59:34.120Z",
+  "Version": "2026.08.30.000046",
+  "GeneratedAt": "2026-08-30T00:00:46.760Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,14 +8,14 @@
   "TotalFiles": 302,
   "News": [
     {
-      "title": "⚡ Ultra FastConnect 2.0 & World Boss Spawning Overhaul",
+      "title": "✨ SAO Crystal Death & Elemental Aura Overhaul",
       "date": "Aug 29, 2026",
-      "summary": "Boosted FastConnect bandwidth to 300KB/s & 10,000 GUIDs/frame. Fixed WorldBossAuraSystem native spawning, added in-game alerts & !spawnboss command."
+      "summary": "Mapped SAODeath and WorldBossAuras directly to native Palworld particle & crystal shatter audio libraries with fallback."
     },
     {
-      "title": "🏰 Multi-Hook Guild Restriction Engine Live!",
+      "title": "⚡ Ultra FastConnect 2.0 & World Boss Spawner Live",
       "date": "Aug 29, 2026",
-      "summary": "Verified and hardened GuildBuildingLimits with multi-hook coverage and dynamic exponential price scaling."
+      "summary": "Boosted FastConnect bandwidth to 300KB/s & 10,000 GUIDs/frame. Fixed WorldBossAuraSystem native spawning, added in-game alerts & !spawnboss command."
     },
     {
       "title": "🛒 Economy System v3.2.0: Stat Boosts, APSE Implants, Schematics & 2-Way Exchange",
@@ -1784,8 +1784,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/aura_system.lua",
-      "Hash": "ead059f9160243af824237830a4417c8f60a2c23cea1e89d4c20e88d2ab6ba5d",
-      "Size": 1090,
+      "Hash": "fb494e401ba1a3d7b0f03210b83a0e1705905812eaca31939417fb4d5de81219",
+      "Size": 1875,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/aura_system.lua"
     },
     {
@@ -1808,8 +1808,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/sao_death.lua",
-      "Hash": "fe3a5acdc92442e2c99443c75da3f54380b3ac3498aa2d6a7dadc106366dfe8c",
-      "Size": 2191,
+      "Hash": "5630310e460701ca020d9d6dc437915ef98eb839989e3c3d3b8d7bf755ecf131",
+      "Size": 3423,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/sao_death.lua"
     },
     {
