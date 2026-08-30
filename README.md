@@ -4,7 +4,7 @@
 [![Framework: .NET 8 WPF](https://img.shields.io/badge/Framework-.NET%208%20WPF%20(Self--Contained)-512BD4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com)
 [![Unreal Engine: 5.1](https://img.shields.io/badge/Game-Palworld%20(UE%205.1)-313131?style=for-the-badge&logo=unrealengine)](https://unrealengine.com)
 [![Modpack: UE4SS 3.0.1](https://img.shields.io/badge/Modpack-UE4SS%203.0.1%20Integrated-FF6F00?style=for-the-badge)](https://github.com/UE4SS-RE/RE-UE4SS)
-[![Release: v2.0.0](https://img.shields.io/badge/Release-v2.0.0--Astral-00E5FF?style=for-the-badge)](https://github.com/beoul-create/PalOdyssey-Launcher/releases)
+[![Release: v2.0.1](https://img.shields.io/badge/Release-v2.0.1--Astral-00E5FF?style=for-the-badge)](https://github.com/beoul-create/PalOdyssey-Launcher/releases)
 
 **PalOdyssey Launcher 2.0** is an official custom game client, modpack auto-updater, server companion, and system optimizer built for **Palworld**. It automates game directory discovery, keeps your client synchronized with the server's 312+ mod assets, provides live server diagnostics, and integrates remote server controls.
 
@@ -29,7 +29,7 @@ Getting into the PalOdyssey realm takes less than 60 seconds:
 
 ## 📁 What's in the Download Package?
 
-When you extract `PalOdyssey-Launcher-v2.0.0.zip`, you will find:
+When you extract `PalOdyssey-Launcher-v2.0.1.zip`, you will find:
 
 ```text
 PalOdyssey-Launcher/
