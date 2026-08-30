@@ -1,0 +1,24 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "DrillGame": {
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7
+    },
+    "BOSS_DrillGame": {
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_DrillGame_ShellAttack": {
+      "WazaType": "EPalWazaID::Unique_DrillGame_ShellAttack",
+      "Element": "EPalElementType::Earth",
+      "Power": 450,
+      "DisplayPower": 450,
+      "CoolTime": 20.0,
+      "EffectType1": "EPalAdditionalEffectType::Muddy",
+      "EffectValue1": 100
+    }
+  }
+}

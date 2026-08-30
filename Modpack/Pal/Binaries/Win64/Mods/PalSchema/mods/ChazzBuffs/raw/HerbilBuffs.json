@@ -1,0 +1,32 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "LeafMomonga": {
+      "HP": 95,
+      "Defense": 95,
+      "Friendship_HP": 6.5,
+      "Friendship_ShotAttack": 5.5,
+      "Friendship_Defense": 4.7
+    },
+    "BOSS_LeafMomonga": {
+      "HP": 108,
+      "Defense": 95,
+      "Friendship_HP": 5.6,
+      "Friendship_ShotAttack": 5.5,
+      "Friendship_Defense": 4.7
+    }
+   },
+  "DT_WazaDataTable": {
+    "Unique_LeafMomonga_SomerSault": {
+      "WazaType": "EPalWazaID::Unique_LeafMomonga_SomerSault",
+      "Element": "EPalElementType::Leaf",
+      "Power": 800,
+      "DisplayPower": 800,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::IvyCling",
+      "EffectValue1": 999,
+      "EffectType2": "EPalAdditionalEffectType::Stun",
+      "EffectValue2": 999
+    }
+  }
+}

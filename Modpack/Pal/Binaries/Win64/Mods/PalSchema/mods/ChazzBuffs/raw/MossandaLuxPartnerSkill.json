@@ -1,0 +1,115 @@
+{
+	"DT_PassiveSkill_Main": {
+		"ShockTime": {
+			"EffectType1": "EPalPassiveSkillEffectType::MoveSpeed",
+			"EffectValue1": 100,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::PalSP_Increase",
+			"EffectValue2": 100,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::Toself",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+		"GrassPanda_Electric": {
+        "RestrictionItems": [
+          {
+            "Key": "SkillUnlock_GrassPanda_Electric"
+          }
+        ],
+        "ActiveSkill": {
+          "SkillName": "UniqueRideShooting_DualGrenadeLauncher",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [
+            110.0,
+            125.0,
+            145.0,
+            180.0,
+            225.0
+          ],
+          "ActiveSkill_OverWriteCoolTimeByRank": [
+            210.0,
+            160.0,
+            100.0,
+            60.0,
+            30.0
+          ],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ShockTime"
+							}
+                                                }
+                                             ]
+                                           }
+                                         ]
+                                       },
+		"BOSS_GrassPanda_Electric": {
+        "RestrictionItems": [
+          {
+            "Key": "SkillUnlock_GrassPanda_Electric"
+          }
+        ],
+        "ActiveSkill": {
+          "SkillName": "UniqueRideShooting_DualGrenadeLauncher",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [
+            110.0,
+            125.0,
+            145.0,
+            180.0,
+            225.0
+          ],
+          "ActiveSkill_OverWriteCoolTimeByRank": [
+            210.0,
+            160.0,
+            100.0,
+            60.0,
+            30.0
+          ],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ShockTime"
+							}
+                                                }
+                                             ]
+                                           }
+                                         ]
+                                       }
+                                   }
+}

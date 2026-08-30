@@ -1,0 +1,36 @@
+{
+  "SpawnIntervalSeconds": 900,
+  "MaxActiveBosses": 1,
+  "SpawnCommandCooldownSeconds": 60,
+  "DiscordWebhookURL": "YOUR_DISCORD_WEBHOOK_URL_HERE",
+  "BossPalPool": [
+    "Kitsunebi",
+    "ThunderDragonMan",
+    "GrassMammoth",
+    "WeaselDragon",
+    "Anubis"
+  ],
+  "BossLevel": 100,
+  "BossScaleWorld": 3.0,
+  "BossScaleCaptured": 2.0,
+  "SpawnPoints": [
+    {
+      "Name": "Grassy Behemoth Hills",
+      "X": 172000.0,
+      "Y": -420000.0,
+      "Z": 3500.0
+    },
+    {
+      "Name": "Desolate Dunes",
+      "X": -120000.0,
+      "Y": -180000.0,
+      "Z": 4200.0
+    },
+    {
+      "Name": "Astral Mountains",
+      "X": -320000.0,
+      "Y": 250000.0,
+      "Z": 12000.0
+    }
+  ]
+}

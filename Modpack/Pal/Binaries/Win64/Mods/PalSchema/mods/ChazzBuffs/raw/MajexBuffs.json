@@ -1,0 +1,13 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "DarkFlameFox": {
+      "ShotAttack": 125,
+      "Friendship_ShotAttack": 1.5
+    },
+    "BOSS_DarkFlameFox": {
+      "ShotAttack": 125,
+      "Friendship_ShotAttack": 1.5
+    }
+  }
+}

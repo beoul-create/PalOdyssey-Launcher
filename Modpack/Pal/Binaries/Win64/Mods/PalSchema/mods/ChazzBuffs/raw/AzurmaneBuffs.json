@@ -1,0 +1,38 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "BlueThunderHorse": {
+      "ShotAttack": 125,
+      "Friendship_ShotAttack": 1.5
+    },
+    "BOSS_BlueThunderHorse": {
+      "ShotAttack": 125,
+      "Friendship_ShotAttack": 1.5
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_BlueThunderHorse_Tossin": {
+      "WazaType": "EPalWazaID::Unique_BlueThunderHorse_Tossin",
+      "Element": "EPalElementType::Electricity",
+      "Power": 550,
+      "DisplayPower": 550,
+      "CoolTime": 24.0,
+      "EffectType1": "EPalAdditionalEffectType::Electrical",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::Burn",
+      "EffectValue2": 100
+    },
+    "Unique_BlueThunderHorse_FlashDash": {
+      "WazaType": "EPalWazaID::Unique_BlueThunderHorse_FlashDash",
+      "Element": "EPalElementType::Electricity",
+      "Power": 999,
+      "DisplayPower": 999,
+      "CoolTime": 40.0,
+      "EffectType1": "EPalAdditionalEffectType::Electrical",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::Burn",
+      "EffectValue2": 100
+    }
+  }
+}

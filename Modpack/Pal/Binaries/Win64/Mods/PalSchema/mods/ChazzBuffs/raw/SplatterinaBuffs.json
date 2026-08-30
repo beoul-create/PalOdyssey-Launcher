@@ -1,0 +1,27 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "GrimGirl": {
+      "MeleeAttack": 145,
+      "ShotAttack": 145,
+      "Friendship_ShotAttack": 1
+    },
+    "BOSS_GrimGirl": {
+      "MeleeAttack": 145,
+      "ShotAttack": 145,
+      "Friendship_ShotAttack": 1
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_GrimGirl_BrutalMachete": {
+      "WazaType": "EPalWazaID::Unique_GrimGirl_BrutalMachete",
+      "Element": "EPalElementType::Dark",
+      "Power": 750,
+      "DisplayPower": 750,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Darkness",
+      "EffectValue1": 100
+    }
+  }
+}

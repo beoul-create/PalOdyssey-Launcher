@@ -1,0 +1,15 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "VenusFlytrap": {
+      "MeleeAttack": 110,
+      "ShotAttack": 110,
+      "Friendship_ShotAttack": 2.1
+    },
+    "BOSS_VenusFlytrap": {
+      "MeleeAttack": 110,
+      "ShotAttack": 110,
+      "Friendship_ShotAttack": 2.1
+    }
+  }
+}

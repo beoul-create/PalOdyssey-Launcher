@@ -1,0 +1,28 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "Baphomet": {
+      "ShotAttack": 115,
+      "Friendship_ShotAttack": 1.9,
+      "Defense": 90,
+      "Friendship_Defense": 2.9
+    },
+    "BOSS_Baphomet": {
+      "ShotAttack": 115,
+      "Friendship_ShotAttack": 1.9,
+      "Defense": 90,
+      "Friendship_Defense": 2.9
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_Baphomet_Dark_DarkKite": {
+      "WazaType": "EPalWazaID::Unique_Baphomet_Dark_DarkKite",
+      "Element": "EPalElementType::Dark",
+      "Power": 480,
+      "DisplayPower": 480,
+      "CoolTime": 24.0,
+      "EffectType1": "EPalAdditionalEffectType::Darkness",
+      "EffectValue1": 100
+    }
+  }
+}

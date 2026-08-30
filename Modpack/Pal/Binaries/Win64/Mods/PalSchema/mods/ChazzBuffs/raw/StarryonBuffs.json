@@ -1,0 +1,31 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "NightBlueHorse": {
+      "MeleeAttack": 110,
+      "ShotAttack": 110,
+      "Defense": 110,
+      "Friendship_ShotAttack": 2.1,
+      "Friendship_Defense": 2.1
+    },
+    "BOSS_NightBlueHorse": {
+      "MeleeAttack": 110,
+      "ShotAttack": 110,
+      "Defense": 110,
+      "Friendship_ShotAttack": 2.1,
+      "Friendship_Defense": 2.1
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_NightBlueHorse_DeathStep": {
+      "WazaType": "EPalWazaID::Unique_NightBlueHorse_DeathStep",
+      "Element": "EPalElementType::Dark",
+      "Power": 600,
+      "DisplayPower": 600,
+      "CoolTime": 24.0,
+      "EffectType1": "EPalAdditionalEffectType::Darkness",
+      "EffectValue1": 100
+    }
+  }
+}

@@ -1,0 +1,27 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "KingBahamut": {
+      "Hp": 110,
+      "Friendship_HP": 3.5
+    },
+    "BOSS_KingBahamut": {
+      "Hp": 110,
+      "Friendship_HP": 3.5
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_KingBahamut_ArmSmash": {
+      "WazaType": "EPalWazaID::Unique_KingBahamut_ArmSmash",
+      "Element": "EPalElementType::Fire",
+      "Power": 700,
+      "DisplayPower": 700,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Burn",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::Stun",
+      "EffectValue2": 100
+    }
+  }
+}

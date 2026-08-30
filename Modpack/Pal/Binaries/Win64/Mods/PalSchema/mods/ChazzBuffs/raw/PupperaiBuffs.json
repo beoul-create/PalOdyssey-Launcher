@@ -1,0 +1,45 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "SamuraiDog": {
+      "MeleeAttack": 110,
+      "ShotAttack": 110,
+      "Friendship_ShotAttack": 2.1
+    },
+    "BOSS_SamuraiDog": {
+      "MeleeAttack": 110,
+      "ShotAttack": 110,
+      "Friendship_ShotAttack": 2.1
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_SamuraiDog_BiteV2": {
+      "WazaType": "EPalWazaID::Unique_SamuraiDog_BiteV2",
+      "Element": "EPalElementType::Earth",
+      "Power": 250,
+      "DisplayPower": 250,
+      "CoolTime": 10.0,
+      "EffectType1": "EPalAdditionalEffectType::Muddy",
+      "EffectValue1": 50
+    },
+    "Unique_SamuraiDog_Bite": {
+      "WazaType": "EPalWazaID::Unique_SamuraiDog_Bite",
+      "Element": "EPalElementType::Earth",
+      "Power": 300,
+      "DisplayPower": 300,
+      "CoolTime": 10.0,
+      "EffectType1": "EPalAdditionalEffectType::Muddy",
+      "EffectValue1": 50
+    },
+    "Unique_SamuraiDog_DashSlash": {
+      "WazaType": "EPalWazaID::Unique_SamuraiDog_DashSlash",
+      "Element": "EPalElementType::Earth",
+      "Power": 550,
+      "DisplayPower": 550,
+      "CoolTime": 20.0,
+      "EffectType1": "EPalAdditionalEffectType::Muddy",
+      "EffectValue1": 100
+    }
+  }
+}

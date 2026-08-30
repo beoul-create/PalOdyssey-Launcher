@@ -1,0 +1,13 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "BadCatgirl": {
+      "ShotAttack": 115,
+      "Friendship_ShotAttack": 1.9
+    },
+    "BOSS_BadCatgirl": {
+      "ShotAttack": 115,
+      "Friendship_ShotAttack": 1.9
+    }
+  }
+}

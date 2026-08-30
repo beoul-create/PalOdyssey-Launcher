@@ -1,0 +1,5 @@
+{
+	"DT_PalFirstActivatedInfoText":{
+		"PAL_FIRST_SPAWN_DESC_Mutant":"While in party, spheres home in on Pals, and carrying capacity increases by <Status_Up>{Passive1_EffectValue1}%</>.\r\nIncreases own Ice and Electric damage by <Status_Up>{Passive3_EffectValue2}%</> and reduces own active skill cooldowns by <Status_Up>{Passive3_EffectValue1}%</>. (Does not stack)"
+	}
+}

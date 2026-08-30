@@ -1,0 +1,32 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "Horus_Water": {
+      "Hp": 130,
+      "ShotAttack": 125,
+      "Defense": 125,
+      "Friendship_HP": 2.5,
+      "Friendship_ShotAttack": 1.5,
+      "Friendship_Defense": 1.5
+    },
+    "BOSS_Horus_Water": {
+      "Hp": 156,
+      "ShotAttack": 125,
+      "Defense": 125,
+      "Friendship_HP": 1.2,
+      "Friendship_ShotAttack": 1.5,
+      "Friendship_Defense": 1.5
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_Horus_Water_AquaStorm": {
+      "WazaType": "EPalWazaID::Unique_Horus_Water_AquaStorm",
+      "Element": "EPalElementType::Fire",
+      "Power": 360,
+      "DisplayPower": 360,
+      "CoolTime": 16.0,
+      "EffectType1": "EPalAdditionalEffectType::Wetness",
+      "EffectValue1": 100
+    }
+  }
+}

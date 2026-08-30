@@ -1,0 +1,1980 @@
+{
+    "DT_PalRaidBoss": {
+        "PalSummon_MRB8_001_Lv033_SparkOfChaos": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R01_ElectricityBoss"
+                    },
+                    "Level": 33,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Electricity",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R01_ElectricityMinion"
+                                    },
+                                    "Value": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R01_ElectricityMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 3,
+                    "Max": 5
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 3
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_002_Lv035_WildSprouts": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R02_LeafBoss"
+                    },
+                    "Level": 35,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Leaf",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R02_LeafMinion"
+                                    },
+                                    "Value": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R02_LeafMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 3,
+                    "Max": 5
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 3
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_003_Lv037_NightCurrent": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R03_DarkBoss"
+                    },
+                    "Level": 37,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Dark",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R03_DarkMinion"
+                                    },
+                                    "Value": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R03_DarkMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 3,
+                    "Max": 5
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 3
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_004_Lv038_DragonEmbers": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R04_DragonBoss"
+                    },
+                    "Level": 38,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Dragon",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R04_DragonMinion"
+                                    },
+                                    "Value": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R04_DragonMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 3,
+                    "Max": 5
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 3
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_005_Lv040_FrozenRoots": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R05_IceBoss"
+                    },
+                    "Level": 40,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Ice",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R05_IceMinion"
+                                    },
+                                    "Value": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R05_IceMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 4,
+                    "Max": 7
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 4
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_006_Lv041_StormTide": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R06_WaterBoss"
+                    },
+                    "Level": 41,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Water",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R06_WaterMinion"
+                                    },
+                                    "Value": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R06_WaterMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 4,
+                    "Max": 7
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 4
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_007_Lv043_ShadowFlame": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R07_DarkBoss"
+                    },
+                    "Level": 43,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Dark",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R07_DarkMinion"
+                                    },
+                                    "Value": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R07_DarkMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 4,
+                    "Max": 7
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 4
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_008_Lv045_VerdantSky": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R08_LeafBoss"
+                    },
+                    "Level": 45,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Leaf",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R08_LeafMinion"
+                                    },
+                                    "Value": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R08_LeafMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 4,
+                    "Max": 7
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 4
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_009_Lv046_StoneTempest": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R09_EarthBoss"
+                    },
+                    "Level": 46,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Earth",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R09_EarthMinion"
+                                    },
+                                    "Value": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R09_EarthMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 4,
+                    "Max": 7
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 4
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_010_Lv048_FrostedAbyss": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R10_DarkBoss"
+                    },
+                    "Level": 48,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Dark",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R10_DarkMinion"
+                                    },
+                                    "Value": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R10_DarkMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 4,
+                    "Max": 7
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 4
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_011_Lv049_PrimalSpark": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R11_ElectricityBoss"
+                    },
+                    "Level": 49,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Electricity",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R11_ElectricityMinion"
+                                    },
+                                    "Value": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R11_ElectricityMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 4,
+                    "Max": 7
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 4
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_012_Lv051_WyrmTide": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R12_DragonBoss"
+                    },
+                    "Level": 51,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Dragon",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R12_DragonMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R12_DragonMinion"
+                                    },
+                                    "Value": 4
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 5,
+                    "Max": 8
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 3,
+                    "Max": 5
+                },
+                {
+                    "ItemName": {
+                        "Key": "WorldTreeRelic_05"
+                    },
+                    "Rate": 100.0,
+                    "Min": 1,
+                    "Max": 2
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_013_Lv053_NightBloom": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R13_DarkBoss"
+                    },
+                    "Level": 53,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Dark",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R13_DarkMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R13_DarkMinion"
+                                    },
+                                    "Value": 4
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 5,
+                    "Max": 8
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 3,
+                    "Max": 5
+                },
+                {
+                    "ItemName": {
+                        "Key": "WorldTreeRelic_05"
+                    },
+                    "Rate": 100.0,
+                    "Min": 1,
+                    "Max": 2
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_014_Lv054_ThunderStone": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R14_ElectricityBoss"
+                    },
+                    "Level": 54,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Electricity",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R14_ElectricityMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R14_ElectricityMinion"
+                                    },
+                                    "Value": 4
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 5,
+                    "Max": 8
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 3,
+                    "Max": 5
+                },
+                {
+                    "ItemName": {
+                        "Key": "WorldTreeRelic_05"
+                    },
+                    "Rate": 100.0,
+                    "Min": 1,
+                    "Max": 2
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_015_Lv056_InfernalFrost": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R15_FireBoss"
+                    },
+                    "Level": 56,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Fire",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R15_FireMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R15_FireMinion"
+                                    },
+                                    "Value": 4
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 5,
+                    "Max": 8
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 3,
+                    "Max": 5
+                },
+                {
+                    "ItemName": {
+                        "Key": "WorldTreeRelic_05"
+                    },
+                    "Rate": 100.0,
+                    "Min": 1,
+                    "Max": 2
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_016_Lv057_LivingStorm": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R16_LeafBoss"
+                    },
+                    "Level": 57,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Leaf",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R16_LeafMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R16_LeafMinion"
+                                    },
+                                    "Value": 4
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 5,
+                    "Max": 8
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 3,
+                    "Max": 5
+                },
+                {
+                    "ItemName": {
+                        "Key": "WorldTreeRelic_05"
+                    },
+                    "Rate": 100.0,
+                    "Min": 1,
+                    "Max": 2
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_017_Lv059_AbyssalEarth": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R17_EarthBoss"
+                    },
+                    "Level": 59,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Earth",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R17_EarthMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R17_EarthMinion"
+                                    },
+                                    "Value": 4
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 5,
+                    "Max": 8
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 3,
+                    "Max": 5
+                },
+                {
+                    "ItemName": {
+                        "Key": "WorldTreeRelic_05"
+                    },
+                    "Rate": 100.0,
+                    "Min": 1,
+                    "Max": 2
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_018_Lv060_SkyfireTorrent": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R18_FireBoss"
+                    },
+                    "Level": 60,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Fire",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R18_FireMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R18_FireMinion"
+                                    },
+                                    "Value": 4
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 6,
+                    "Max": 10
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 4,
+                    "Max": 6
+                },
+                {
+                    "ItemName": {
+                        "Key": "WorldTreeRelic_05"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 3
+                },
+                {
+                    "ItemName": {
+                        "Key": "Rankup_Arbitrary"
+                    },
+                    "Rate": 50.0,
+                    "Min": 1,
+                    "Max": 1
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_019_Lv062_ElementalCrown": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R19_IceBoss"
+                    },
+                    "Level": 62,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Ice",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R19_IceMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R19_IceMinion"
+                                    },
+                                    "Value": 4
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 6,
+                    "Max": 10
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 4,
+                    "Max": 6
+                },
+                {
+                    "ItemName": {
+                        "Key": "WorldTreeRelic_05"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 3
+                },
+                {
+                    "ItemName": {
+                        "Key": "Rankup_Arbitrary"
+                    },
+                    "Rate": 50.0,
+                    "Min": 1,
+                    "Max": 1
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        },
+        "PalSummon_MRB8_020_Lv063_TrialOfEight": {
+            "InfoList": [
+                {
+                    "PalId": {
+                        "Key": "MRB8_R20_FireBoss"
+                    },
+                    "Level": 63,
+                    "WarpWazaID": "None",
+                    "BaseCampAttackWazaIDs": [],
+                    "OverrideInitialElement1": "Fire",
+                    "OverrideInitialElement2": "None",
+                    "CanModeChange": false,
+                    "IgnoreLargeDown": false,
+                    "ModeChange_AddStatusToAllWhenModeChgange": "None",
+                    "ModeChange_Element1": "None",
+                    "ModeChange_Element2": "None",
+                    "ModeChange_AddPassiveSkill": [],
+                    "ModeChange_AddWaza": [],
+                    "ModeChange_RemoveWaza": []
+                }
+            ],
+            "SummonMeteor_Num": [
+                {
+                    "HPRate": 0.7,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R20_FireMinion"
+                                    },
+                                    "Value": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "HPRate": 0.4,
+                    "SummonPalInfoList": [
+                        {
+                            "PalNameAndNum": [
+                                {
+                                    "Key": {
+                                        "Key": "MRB8_R20_FireMinion"
+                                    },
+                                    "Value": 4
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "SummonGeneratorClass": "/Game/Pal/Blueprint/RaidBoss/SummonGenerator/BP_RaidBossMeteorGenerator.BP_RaidBossMeteorGenerator_C",
+            "EggPalIDAndWeight": [],
+            "SuccessItemList": [
+                {
+                    "ItemName": {
+                        "Key": "PalRevive"
+                    },
+                    "Rate": 100.0,
+                    "Min": 6,
+                    "Max": 10
+                },
+                {
+                    "ItemName": {
+                        "Key": "LvUP_01"
+                    },
+                    "Rate": 100.0,
+                    "Min": 4,
+                    "Max": 6
+                },
+                {
+                    "ItemName": {
+                        "Key": "WorldTreeRelic_05"
+                    },
+                    "Rate": 100.0,
+                    "Min": 2,
+                    "Max": 3
+                },
+                {
+                    "ItemName": {
+                        "Key": "Rankup_Arbitrary"
+                    },
+                    "Rate": 50.0,
+                    "Min": 1,
+                    "Max": 1
+                }
+            ],
+            "SuccessAnyOneItemList": [
+                {
+                    "ItemName": {
+                        "Key": "Fruit_attack_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit_hp_01"
+                    },
+                    "Num": 1
+                },
+                {
+                    "ItemName": {
+                        "Key": "Fruit__defense_01"
+                    },
+                    "Num": 1
+                }
+            ]
+        }
+    }
+}

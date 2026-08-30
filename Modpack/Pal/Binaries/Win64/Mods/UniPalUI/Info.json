@@ -1,0 +1,7 @@
+{
+  "ModName": "UniPalUI",
+  "PackageName": "UniPalUI",
+  "Author": "PalOdyssey",
+  "Version": "1.0.0",
+  "Description": "Unified Palworld User Interface Framework for isolated viewport rendering and interactive mod menus."
+}

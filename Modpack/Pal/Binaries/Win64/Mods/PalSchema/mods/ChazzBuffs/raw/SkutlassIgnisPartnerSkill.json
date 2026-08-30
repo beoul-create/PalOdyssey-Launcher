@@ -1,0 +1,53 @@
+{
+	"DT_PassiveSkill_Main": {
+		"BladeFishBoost_Fire": {
+			"EffectType1": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue1": 30,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementFire",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::AttackSpeedUp",
+			"EffectValue3": 20,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+		"SwordCutlassfish_Fire": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "BladeFishBoost_Fire"
+							}
+                                                }
+                                             ]
+                                           }
+                                         ]
+                                       },
+		"BOSS_SwordCutlassfish_Fire": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "BladeFishBoost_Fire"
+							}
+                                                }
+                                             ]
+                                           }
+                                         ]
+                                       }
+                                   }
+}

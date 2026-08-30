@@ -1,0 +1,25 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "Gorilla": {
+      "MeleeAttack": 110,
+      "ShotAttack": 110,
+      "Friendship_ShotAttack": 2.1
+    },
+    "BOSS_Gorilla": {
+      "MeleeAttack": 110,
+      "ShotAttack": 110,
+      "Friendship_ShotAttack": 2.1
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_Gorilla_GroundPunch": {
+      "WazaType": "EPalWazaID::Unique_Gorilla_GroundPunch",
+      "Element": "EPalElementType::Normal",
+      "Power": 250,
+      "DisplayPower": 250,
+      "CoolTime": 10.0
+    }
+  }
+}

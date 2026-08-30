@@ -1,0 +1,15 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "KingAlpaca_Ice": {
+      "ElementType2": "Normal",
+      "Defense": 120,
+      "Friendship_Defense": 1.7
+    },
+    "BOSS_KingAlpaca_Ice": {
+      "ElementType2": "Normal",
+      "Defense": 120,
+      "Friendship_Defense": 1.7
+    }
+  }
+}

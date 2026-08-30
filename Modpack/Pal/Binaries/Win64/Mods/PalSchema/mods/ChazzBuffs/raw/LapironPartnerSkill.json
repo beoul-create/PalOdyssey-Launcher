@@ -1,0 +1,336 @@
+{
+	"DT_PassiveSkill_Main": {
+		"DashDefence_PartnerSkill_BrownRabbit_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue1": 50,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::MoveSpeed",
+			"EffectValue2": 50,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"DashDefence_PartnerSkill_BrownRabbit_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue1": 60,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::MoveSpeed",
+			"EffectValue2": 60,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"DashDefence_PartnerSkill_BrownRabbit_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue1": 70,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::MoveSpeed",
+			"EffectValue2": 70,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"DashDefence_PartnerSkill_BrownRabbit_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue1": 80,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::MoveSpeed",
+			"EffectValue2": 80,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"DashDefence_PartnerSkill_BrownRabbit_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue1": 100,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::MoveSpeed",
+			"EffectValue2": 100,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": true,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"Melee_PartnerSkill_BrownRabbit_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerSP_DecreaseRate",
+			"EffectValue1": -25,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::MoveSpeed",
+			"EffectValue2": 50,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::AttackSpeedUp",
+			"EffectValue3": 15,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": true,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"Melee_PartnerSkill_BrownRabbit_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerSP_DecreaseRate",
+			"EffectValue1": -30,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::MoveSpeed",
+			"EffectValue2": 52,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::AttackSpeedUp",
+			"EffectValue3": 18,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": true,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"Melee_PartnerSkill_BrownRabbit_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerSP_DecreaseRate",
+			"EffectValue1": -35,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::MoveSpeed",
+			"EffectValue2": 55,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::AttackSpeedUp",
+			"EffectValue3": 21,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": true,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"Melee_PartnerSkill_BrownRabbit_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerSP_DecreaseRate",
+			"EffectValue1": -40,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::MoveSpeed",
+			"EffectValue2": 59,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::AttackSpeedUp",
+			"EffectValue3": 24,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": true,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"Melee_PartnerSkill_BrownRabbit_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerSP_DecreaseRate",
+			"EffectValue1": -50,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::MoveSpeed",
+			"EffectValue2": 65,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::AttackSpeedUp",
+			"EffectValue3": 30,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": true,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+		"BrownRabbit": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "DashDefence_PartnerSkill_BrownRabbit_1"
+							}
+                                                },
+						{
+							"SkillName": {
+								"Key": "Melee_PartnerSkill_BrownRabbit_1"
+							}
+                }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "DashDefence_PartnerSkill_BrownRabbit_2"
+							}
+                                                },
+						{
+							"SkillName": {
+								"Key": "Melee_PartnerSkill_BrownRabbit_2"
+							}
+                }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "DashDefence_PartnerSkill_BrownRabbit_3"
+							}
+                                                },
+						{
+							"SkillName": {
+								"Key": "Melee_PartnerSkill_BrownRabbit_3"
+							}
+                }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "DashDefence_PartnerSkill_BrownRabbit_4"
+							}
+                                                },
+						{
+							"SkillName": {
+								"Key": "Melee_PartnerSkill_BrownRabbit_4"
+							}
+                }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "DashDefence_PartnerSkill_BrownRabbit_5"
+							}
+                                                },
+						{
+							"SkillName": {
+								"Key": "Melee_PartnerSkill_BrownRabbit_5"
+							}
+                }
+            ]
+          }
+         ]
+       },
+		"BOSS_BrownRabbit": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "DashDefence_PartnerSkill_BrownRabbit_1"
+							}
+                                                },
+						{
+							"SkillName": {
+								"Key": "Melee_PartnerSkill_BrownRabbit_1"
+							}
+                }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "DashDefence_PartnerSkill_BrownRabbit_2"
+							}
+                                                },
+						{
+							"SkillName": {
+								"Key": "Melee_PartnerSkill_BrownRabbit_2"
+							}
+                }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "DashDefence_PartnerSkill_BrownRabbit_3"
+							}
+                                                },
+						{
+							"SkillName": {
+								"Key": "Melee_PartnerSkill_BrownRabbit_3"
+							}
+                }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "DashDefence_PartnerSkill_BrownRabbit_4"
+							}
+                                                },
+						{
+							"SkillName": {
+								"Key": "Melee_PartnerSkill_BrownRabbit_4"
+							}
+                }
+            ]
+          },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "DashDefence_PartnerSkill_BrownRabbit_5"
+							}
+                                                },
+						{
+							"SkillName": {
+								"Key": "Melee_PartnerSkill_BrownRabbit_5"
+							}
+                }
+            ]
+          }
+         ]
+       }
+     }
+}

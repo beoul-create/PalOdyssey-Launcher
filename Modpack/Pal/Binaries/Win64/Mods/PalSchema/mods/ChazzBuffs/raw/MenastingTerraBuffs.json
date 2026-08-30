@@ -1,0 +1,15 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "DarkScorpion_Ground": {
+      "MeleeAttack": 115,
+      "ShotAttack": 115,
+      "Friendship_ShotAttack": 1.9
+    },
+    "BOSS_DarkScorpion_Ground": {
+      "MeleeAttack": 115,
+      "ShotAttack": 115,
+      "Friendship_ShotAttack": 1.9
+    }
+  }
+}

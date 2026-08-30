@@ -1,0 +1,41 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "ColorfulBird": {
+      "ShotAttack": 140,
+      "Defense": 40,
+      "Friendship_ShotAttack": 1,
+      "Friendship_Defense": 4.5
+    },
+    "BOSS_ColorfulBird": {
+      "ShotAttack": 140,
+      "Defense": 40,
+      "Friendship_ShotAttack": 1,
+      "Friendship_Defense": 4.5
+    }
+  },
+  "DT_WazaDataTable": {
+    "SelfDestruct": {
+      "WazaType": "EPalWazaID::SelfDestruct",
+      "Element": "EPalElementType::Normal",
+      "Power": 700,
+      "DisplayPower": 700,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Burn",
+      "EffectValue1": 100,
+      "EffectType1": "EPalAdditionalEffectType::Stun",
+      "EffectValue1": 100
+    },
+    "SelfExplosion": {
+      "WazaType": "EPalWazaID::SelfExplosion",
+      "Element": "EPalElementType::Normal",
+      "Power": 1400,
+      "DisplayPower": 1400,
+      "CoolTime": 60.0,
+      "EffectType1": "EPalAdditionalEffectType::Burn",
+      "EffectValue1": 999,
+      "EffectType1": "EPalAdditionalEffectType::Stun",
+      "EffectValue1": 999
+    }
+  }
+}

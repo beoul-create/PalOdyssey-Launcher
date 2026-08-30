@@ -1,0 +1,284 @@
+{
+  "GachaCostTechPoints": 3,
+  "PointExchangeRate": 5,
+  "GachaPool": [
+    {
+      "ItemId": "PalItem_RecipeBook_RocketLauncher_4",
+      "Weight": 3,
+      "Count": 1,
+      "Rarity": "Legendary",
+      "Desc": "Legendary Rocket Launcher Schematic"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_AssaultRifle_4",
+      "Weight": 3,
+      "Count": 1,
+      "Rarity": "Legendary",
+      "Desc": "Legendary Assault Rifle Schematic"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_LaserRifle_4",
+      "Weight": 3,
+      "Count": 1,
+      "Rarity": "Legendary",
+      "Desc": "Legendary Laser Rifle Schematic"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_PalMetalArmor_4",
+      "Weight": 3,
+      "Count": 1,
+      "Rarity": "Legendary",
+      "Desc": "Legendary Pal Metal Armor Schematic"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_PalMetalHelmet_4",
+      "Weight": 3,
+      "Count": 1,
+      "Rarity": "Legendary",
+      "Desc": "Legendary Pal Metal Helmet Schematic"
+    },
+    {
+      "ItemId": "PalItem_Medal",
+      "Weight": 10,
+      "Count": 250,
+      "Rarity": "Legendary",
+      "Desc": "250x Dog Coins"
+    },
+    {
+      "ItemId": "Money",
+      "Weight": 10,
+      "Count": 100000,
+      "Rarity": "Legendary",
+      "Desc": "100,000 Gold Coins"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_PumpActionShotgun_4",
+      "Weight": 6,
+      "Count": 1,
+      "Rarity": "Epic",
+      "Desc": "Legendary Pump-Action Shotgun Schematic"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_GrenadeLauncher_4",
+      "Weight": 6,
+      "Count": 1,
+      "Rarity": "Epic",
+      "Desc": "Legendary Grenade Launcher Schematic"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_AssaultRifle_3",
+      "Weight": 8,
+      "Count": 1,
+      "Rarity": "Epic",
+      "Desc": "Epic Assault Rifle Schematic"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_MetalArmorHeat_4",
+      "Weight": 8,
+      "Count": 1,
+      "Rarity": "Epic",
+      "Desc": "Legendary Heat Metal Armor Schematic"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_MetalArmorCold_4",
+      "Weight": 8,
+      "Count": 1,
+      "Rarity": "Epic",
+      "Desc": "Legendary Cold Metal Armor Schematic"
+    },
+    {
+      "ItemId": "PalItem_Medal",
+      "Weight": 15,
+      "Count": 100,
+      "Rarity": "Epic",
+      "Desc": "100x Dog Coins"
+    },
+    {
+      "ItemId": "Money",
+      "Weight": 15,
+      "Count": 50000,
+      "Rarity": "Epic",
+      "Desc": "50,000 Gold Coins"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_Handgun_4",
+      "Weight": 12,
+      "Count": 1,
+      "Rarity": "Rare",
+      "Desc": "Legendary Handgun Schematic"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_PumpActionShotgun_3",
+      "Weight": 14,
+      "Count": 1,
+      "Rarity": "Rare",
+      "Desc": "Epic Pump Shotgun Schematic"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_MetalArmor_3",
+      "Weight": 14,
+      "Count": 1,
+      "Rarity": "Rare",
+      "Desc": "Epic Metal Armor Schematic"
+    },
+    {
+      "ItemId": "PalItem_Medal",
+      "Weight": 20,
+      "Count": 50,
+      "Rarity": "Rare",
+      "Desc": "50x Dog Coins"
+    },
+    {
+      "ItemId": "Money",
+      "Weight": 25,
+      "Count": 25000,
+      "Rarity": "Rare",
+      "Desc": "25,000 Gold Coins"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_Handgun_2",
+      "Weight": 25,
+      "Count": 1,
+      "Rarity": "Common",
+      "Desc": "Rare Handgun Schematic"
+    },
+    {
+      "ItemId": "PalItem_RecipeBook_CrossBow_2",
+      "Weight": 25,
+      "Count": 1,
+      "Rarity": "Common",
+      "Desc": "Rare Crossbow Schematic"
+    },
+    {
+      "ItemId": "Money",
+      "Weight": 35,
+      "Count": 10000,
+      "Rarity": "Common",
+      "Desc": "10,000 Gold Coins"
+    }
+  ],
+  "ShopItems": {
+    "might_elixir": {
+      "ItemId": "PalItem_PlayerLotus_Attack",
+      "Cost": 2,
+      "Count": 1,
+      "Currency": "tech",
+      "Desc": "💪 Might Elixir (+Attack Permanent)"
+    },
+    "vitality_elixir": {
+      "ItemId": "PalItem_PlayerLotus_HP",
+      "Cost": 2,
+      "Count": 1,
+      "Currency": "tech",
+      "Desc": "❤️ Vitality Elixir (+Max HP Permanent)"
+    },
+    "stamina_elixir": {
+      "ItemId": "PalItem_PlayerLotus_Stamina",
+      "Cost": 2,
+      "Count": 1,
+      "Currency": "tech",
+      "Desc": "⚡ Stamina Elixir (+Stamina Permanent)"
+    },
+    "speed_elixir": {
+      "ItemId": "PalItem_PlayerLotus_WorkSpeed",
+      "Cost": 2,
+      "Count": 1,
+      "Currency": "tech",
+      "Desc": "🔨 Speed Elixir (+Work Speed Permanent)"
+    },
+    "burden_elixir": {
+      "ItemId": "PalItem_PlayerLotus_Weight",
+      "Cost": 2,
+      "Count": 1,
+      "Currency": "tech",
+      "Desc": "🎒 Burden Elixir (+Max Weight Permanent)"
+    },
+    "respec": {
+      "ItemId": "PalItem_StatResetMedicine",
+      "Cost": 3,
+      "Count": 1,
+      "Currency": "ancient",
+      "Desc": "🧪 Memory Reset Drug (Full Respec)"
+    },
+    "guild_breeding_expand": {
+      "ItemId": "PalItem_TechnologyBook_G3",
+      "Cost": 4,
+      "Count": 1,
+      "Currency": "ancient",
+      "IsGuildExpansion": true,
+      "Desc": "🏰 Guild Breeding Pen Expansion (+1 Limit)"
+    },
+    "guild_ranch_expand": {
+      "ItemId": "PalItem_TechnologyBook_G3",
+      "Cost": 4,
+      "Count": 1,
+      "Currency": "ancient",
+      "IsGuildExpansion": true,
+      "Desc": "🌾 Guild Ranch Pasture Expansion (+1 Limit)"
+    },
+    "guild_base_expand": {
+      "ItemId": "PalItem_AncientTechnologyPointBook",
+      "Cost": 5,
+      "Count": 1,
+      "Currency": "ancient",
+      "IsGuildExpansion": true,
+      "Enabled": false,
+      "Desc": "🚩 Guild Base Camp Expansion (+1 Limit)"
+    },
+    "uniplant_rank4": {
+      "ItemId": "APSE_Uniplant5",
+      "Cost": 4,
+      "Count": 1,
+      "Currency": "ancient",
+      "Desc": "🧬 APSE Tier 4 Universal Passive Implant"
+    },
+    "uniplant_rank3": {
+      "ItemId": "APSE_Uniplant4",
+      "Cost": 3,
+      "Count": 1,
+      "Currency": "ancient",
+      "Desc": "🧬 APSE Tier 3 Universal Passive Implant"
+    },
+    "uniplant_rank2": {
+      "ItemId": "APSE_Uniplant3",
+      "Cost": 2,
+      "Count": 1,
+      "Currency": "tech",
+      "Desc": "🧬 APSE Tier 2 Universal Passive Implant"
+    },
+    "uniplant_rank1": {
+      "ItemId": "APSE_Uniplant2",
+      "Cost": 1,
+      "Count": 1,
+      "Currency": "tech",
+      "Desc": "🧬 APSE Tier 1 Universal Passive Implant"
+    },
+    "uniplant_mutation": {
+      "ItemId": "APSE_UniplantMutation",
+      "Cost": 5,
+      "Count": 1,
+      "Currency": "ancient",
+      "Desc": "🧪 APSE Genetic Mutation Passive Implant"
+    }
+  },
+  "RecycleRates": {
+    "PalItem_AncientCore": 5,
+    "PalItem_AncientParts": 1,
+    "PalItem_PreciousDragonStone_03": 6,
+    "PalItem_PreciousDragonStone_02": 4,
+    "PalItem_PreciousDragonStone_01": 2,
+    "PalItem_PreciousPelt_03": 3,
+    "PalItem_PreciousPelt_02": 2,
+    "PalItem_PreciousPelt_01": 1,
+    "PalItem_PreciousClaw_03": 3,
+    "PalItem_PreciousClaw_02": 2,
+    "PalItem_PreciousClaw_01": 1,
+    "PalItem_PreciousFang_03": 3,
+    "PalItem_PreciousFang_02": 2,
+    "PalItem_PreciousFang_01": 1,
+    "PalItem_TechnologyBook_G3": 8,
+    "PalItem_TechnologyBook_G2": 4,
+    "PalItem_TechnologyBook_G1": 2,
+    "PalItem_AncientTechnologyPointBook": 5
+  }
+}

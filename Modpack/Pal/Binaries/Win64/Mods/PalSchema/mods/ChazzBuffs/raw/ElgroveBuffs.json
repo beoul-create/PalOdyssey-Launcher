@@ -1,0 +1,40 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "GrassMinotaur": {
+      "ShotAttack": 125,
+      "Defense": 115,
+      "Friendship_ShotAttack": 1.5,
+      "Friendship_Defense": 1.9
+    },
+    "BOSS_GrassMinotaur": {
+      "ShotAttack": 125,
+      "Defense": 115,
+      "Friendship_ShotAttack": 1.5,
+      "Friendship_Defense": 1.9
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_GrassMinotaur_BullRush_Lower": {
+      "WazaType": "Unique_GrassMinotaur_BullRush_Lower",
+      "Element": "EPalElementType::Leaf",
+      "Power": 300,
+      "DisplayPower": 300,
+      "CoolTime": 12.0,
+      "EffectType1": "EPalAdditionalEffectType::IvyCling",
+      "EffectValue1": 100
+    },
+    "Unique_GrassMinotaur_BullRush": {
+      "WazaType": "Unique_GrassMinotaur_BullRush",
+      "Element": "EPalElementType::Leaf",
+      "Power": 800,
+      "DisplayPower": 800,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::IvyCling",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::Stun",
+      "EffectValue2": 100
+    }
+  }
+}

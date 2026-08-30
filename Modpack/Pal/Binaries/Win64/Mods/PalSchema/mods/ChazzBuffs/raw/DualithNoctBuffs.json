@@ -1,0 +1,26 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "GrassGolem_Dark": {
+      "Hp": 130,
+      "Friendship_HP": 2.5
+    },
+    "BOSS_GrassGolem_Dark": {
+      "Hp": 156,
+      "Friendship_HP": 1.2
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_GrassGolem_Dark_DarkArmCannon": {
+      "WazaType": "EPalWazaID::Unique_GrassGolem_Dark_DarkArmCannon",
+      "Element": "EPalElementType::Dark",
+      "Power": 999,
+      "DisplayPower": 999,
+      "CoolTime": 40.0,
+      "EffectType1": "EPalAdditionalEffectType::Darkness",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::IvyCling",
+      "EffectValue2": 100
+    }
+  }
+}

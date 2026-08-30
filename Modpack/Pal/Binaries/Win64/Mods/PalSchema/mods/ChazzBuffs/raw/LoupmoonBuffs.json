@@ -1,0 +1,29 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "Werewolf": {
+      "Hp": 100,
+      "Defense": 90,
+      "Friendship_HP": 4,
+      "Friendship_Defense": 2.9
+    },
+    "BOSS_Werewolf": {
+      "Hp": 120,
+      "Defense": 90,
+      "Friendship_HP": 3,
+      "Friendship_Defense": 2.9
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_Werewolf_Scratch": {
+      "WazaType": "EPalWazaID::Unique_Werewolf_Scratch",
+      "Element": "EPalElementType::Dark",
+      "Power": 280,
+      "DisplayPower": 280,
+      "CoolTime": 16.0,
+      "EffectType1": "EPalAdditionalEffectType::Darkness",
+      "EffectValue1": 100
+    }
+  }
+}

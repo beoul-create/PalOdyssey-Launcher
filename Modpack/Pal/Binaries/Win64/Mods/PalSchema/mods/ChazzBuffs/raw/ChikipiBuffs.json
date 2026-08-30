@@ -1,0 +1,24 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "ChickenPal": {
+      "Friendship_HP": 8,
+      "Friendship_ShotAttack": 6.1,
+      "Friendship_Defense": 6.1
+    },
+    "BOSS_ChickenPal": {
+      "Friendship_HP": 7.4,
+      "Friendship_ShotAttack": 6.1,
+      "Friendship_Defense": 6.1
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_ChickenPal_ChickenPeck": {
+      "WazaType": "EPalWazaID::Unique_ChickenPal_ChickenPeck",
+      "Element": "EPalElementType::Normal",
+      "Power": 250,
+      "DisplayPower": 250,
+      "CoolTime": 10.0
+    }
+  }
+}

@@ -1,0 +1,1244 @@
+{
+    "DT_WazaMasterLevel": {
+        "MRB8_R01_ElectricityBoss001": {
+            "PalId": "MRB8_R01_ElectricityBoss",
+            "WazaID": "LineThunder",
+            "Level": 1
+        },
+        "MRB8_R01_ElectricityBoss002": {
+            "PalId": "MRB8_R01_ElectricityBoss",
+            "WazaID": "LightningStrike",
+            "Level": 2
+        },
+        "MRB8_R01_ElectricityBoss003": {
+            "PalId": "MRB8_R01_ElectricityBoss",
+            "WazaID": "Thunderbolt",
+            "Level": 3
+        },
+        "MRB8_R01_ElectricityBoss004": {
+            "PalId": "MRB8_R01_ElectricityBoss",
+            "WazaID": "LockonLaser",
+            "Level": 4
+        },
+        "MRB8_R01_ElectricityMinion001": {
+            "PalId": "MRB8_R01_ElectricityMinion",
+            "WazaID": "LineThunder",
+            "Level": 1
+        },
+        "MRB8_R01_ElectricityMinion002": {
+            "PalId": "MRB8_R01_ElectricityMinion",
+            "WazaID": "LockonLaser",
+            "Level": 2
+        },
+        "MRB8_R01_ElectricityMinion003": {
+            "PalId": "MRB8_R01_ElectricityMinion",
+            "WazaID": "CommetRain",
+            "Level": 3
+        },
+        "MRB8_R01_ElectricityMinion004": {
+            "PalId": "MRB8_R01_ElectricityMinion",
+            "WazaID": "PredatorWave",
+            "Level": 4
+        },
+        "MRB8_R02_LeafBoss001": {
+            "PalId": "MRB8_R02_LeafBoss",
+            "WazaID": "SolarBeam",
+            "Level": 1
+        },
+        "MRB8_R02_LeafBoss002": {
+            "PalId": "MRB8_R02_LeafBoss",
+            "WazaID": "AirBlade",
+            "Level": 2
+        },
+        "MRB8_R02_LeafBoss003": {
+            "PalId": "MRB8_R02_LeafBoss",
+            "WazaID": "RaidCutter",
+            "Level": 3
+        },
+        "MRB8_R02_LeafBoss004": {
+            "PalId": "MRB8_R02_LeafBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 4
+        },
+        "MRB8_R02_LeafBoss005": {
+            "PalId": "MRB8_R02_LeafBoss",
+            "WazaID": "CommetRain",
+            "Level": 5
+        },
+        "MRB8_R02_LeafMinion001": {
+            "PalId": "MRB8_R02_LeafMinion",
+            "WazaID": "SolarBeam",
+            "Level": 1
+        },
+        "MRB8_R02_LeafMinion002": {
+            "PalId": "MRB8_R02_LeafMinion",
+            "WazaID": "PredatorBeam",
+            "Level": 2
+        },
+        "MRB8_R02_LeafMinion003": {
+            "PalId": "MRB8_R02_LeafMinion",
+            "WazaID": "CommetRain",
+            "Level": 3
+        },
+        "MRB8_R02_LeafMinion004": {
+            "PalId": "MRB8_R02_LeafMinion",
+            "WazaID": "WindBurst",
+            "Level": 4
+        },
+        "MRB8_R02_LeafMinion005": {
+            "PalId": "MRB8_R02_LeafMinion",
+            "WazaID": "AirBlade",
+            "Level": 5
+        },
+        "MRB8_R03_DarkBoss001": {
+            "PalId": "MRB8_R03_DarkBoss",
+            "WazaID": "PoisonFog",
+            "Level": 1
+        },
+        "MRB8_R03_DarkBoss002": {
+            "PalId": "MRB8_R03_DarkBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 2
+        },
+        "MRB8_R03_DarkBoss003": {
+            "PalId": "MRB8_R03_DarkBoss",
+            "WazaID": "PredatorWave",
+            "Level": 3
+        },
+        "MRB8_R03_DarkBoss004": {
+            "PalId": "MRB8_R03_DarkBoss",
+            "WazaID": "LockonLaser",
+            "Level": 4
+        },
+        "MRB8_R03_DarkBoss005": {
+            "PalId": "MRB8_R03_DarkBoss",
+            "WazaID": "DarkLaser",
+            "Level": 5
+        },
+        "MRB8_R03_DarkBoss006": {
+            "PalId": "MRB8_R03_DarkBoss",
+            "WazaID": "DarkWave",
+            "Level": 6
+        },
+        "MRB8_R03_DarkMinion001": {
+            "PalId": "MRB8_R03_DarkMinion",
+            "WazaID": "PoisonFog",
+            "Level": 1
+        },
+        "MRB8_R03_DarkMinion002": {
+            "PalId": "MRB8_R03_DarkMinion",
+            "WazaID": "LockonLaser",
+            "Level": 2
+        },
+        "MRB8_R03_DarkMinion003": {
+            "PalId": "MRB8_R03_DarkMinion",
+            "WazaID": "DarkLaser",
+            "Level": 3
+        },
+        "MRB8_R03_DarkMinion004": {
+            "PalId": "MRB8_R03_DarkMinion",
+            "WazaID": "DarkWave",
+            "Level": 4
+        },
+        "MRB8_R04_DragonBoss001": {
+            "PalId": "MRB8_R04_DragonBoss",
+            "WazaID": "StarMine",
+            "Level": 1
+        },
+        "MRB8_R04_DragonBoss002": {
+            "PalId": "MRB8_R04_DragonBoss",
+            "WazaID": "AirBlade",
+            "Level": 2
+        },
+        "MRB8_R04_DragonBoss003": {
+            "PalId": "MRB8_R04_DragonBoss",
+            "WazaID": "RaidCutter",
+            "Level": 3
+        },
+        "MRB8_R04_DragonBoss004": {
+            "PalId": "MRB8_R04_DragonBoss",
+            "WazaID": "LockonLaser",
+            "Level": 4
+        },
+        "MRB8_R04_DragonMinion001": {
+            "PalId": "MRB8_R04_DragonMinion",
+            "WazaID": "StarMine",
+            "Level": 1
+        },
+        "MRB8_R04_DragonMinion002": {
+            "PalId": "MRB8_R04_DragonMinion",
+            "WazaID": "LockonLaser",
+            "Level": 2
+        },
+        "MRB8_R04_DragonMinion003": {
+            "PalId": "MRB8_R04_DragonMinion",
+            "WazaID": "CommetRain",
+            "Level": 3
+        },
+        "MRB8_R04_DragonMinion004": {
+            "PalId": "MRB8_R04_DragonMinion",
+            "WazaID": "PredatorBeam",
+            "Level": 4
+        },
+        "MRB8_R04_DragonMinion005": {
+            "PalId": "MRB8_R04_DragonMinion",
+            "WazaID": "PredatorWave",
+            "Level": 5
+        },
+        "MRB8_R04_DragonMinion006": {
+            "PalId": "MRB8_R04_DragonMinion",
+            "WazaID": "AirBlade",
+            "Level": 6
+        },
+        "MRB8_R05_IceBoss001": {
+            "PalId": "MRB8_R05_IceBoss",
+            "WazaID": "DoubleIcicleThrow",
+            "Level": 1
+        },
+        "MRB8_R05_IceBoss002": {
+            "PalId": "MRB8_R05_IceBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 2
+        },
+        "MRB8_R05_IceBoss003": {
+            "PalId": "MRB8_R05_IceBoss",
+            "WazaID": "WindBurst",
+            "Level": 3
+        },
+        "MRB8_R05_IceBoss004": {
+            "PalId": "MRB8_R05_IceBoss",
+            "WazaID": "AirBlade",
+            "Level": 4
+        },
+        "MRB8_R05_IceBoss005": {
+            "PalId": "MRB8_R05_IceBoss",
+            "WazaID": "RaidCutter",
+            "Level": 5
+        },
+        "MRB8_R05_IceBoss006": {
+            "PalId": "MRB8_R05_IceBoss",
+            "WazaID": "CommetRain",
+            "Level": 6
+        },
+        "MRB8_R05_IceBoss007": {
+            "PalId": "MRB8_R05_IceBoss",
+            "WazaID": "SandTwister",
+            "Level": 7
+        },
+        "MRB8_R05_IceMinion001": {
+            "PalId": "MRB8_R05_IceMinion",
+            "WazaID": "DoubleIcicleThrow",
+            "Level": 1
+        },
+        "MRB8_R05_IceMinion002": {
+            "PalId": "MRB8_R05_IceMinion",
+            "WazaID": "AirBlade",
+            "Level": 2
+        },
+        "MRB8_R05_IceMinion003": {
+            "PalId": "MRB8_R05_IceMinion",
+            "WazaID": "RaidCutter",
+            "Level": 3
+        },
+        "MRB8_R05_IceMinion004": {
+            "PalId": "MRB8_R05_IceMinion",
+            "WazaID": "CommetRain",
+            "Level": 4
+        },
+        "MRB8_R05_IceMinion005": {
+            "PalId": "MRB8_R05_IceMinion",
+            "WazaID": "PredatorBeam",
+            "Level": 5
+        },
+        "MRB8_R06_WaterBoss001": {
+            "PalId": "MRB8_R06_WaterBoss",
+            "WazaID": "RipTide",
+            "Level": 1
+        },
+        "MRB8_R06_WaterBoss002": {
+            "PalId": "MRB8_R06_WaterBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 2
+        },
+        "MRB8_R06_WaterBoss003": {
+            "PalId": "MRB8_R06_WaterBoss",
+            "WazaID": "SeaGush",
+            "Level": 3
+        },
+        "MRB8_R06_WaterBoss004": {
+            "PalId": "MRB8_R06_WaterBoss",
+            "WazaID": "WindBurst",
+            "Level": 4
+        },
+        "MRB8_R06_WaterBoss005": {
+            "PalId": "MRB8_R06_WaterBoss",
+            "WazaID": "AirBlade",
+            "Level": 5
+        },
+        "MRB8_R06_WaterMinion001": {
+            "PalId": "MRB8_R06_WaterMinion",
+            "WazaID": "RipTide",
+            "Level": 1
+        },
+        "MRB8_R06_WaterMinion002": {
+            "PalId": "MRB8_R06_WaterMinion",
+            "WazaID": "WindBurst",
+            "Level": 2
+        },
+        "MRB8_R06_WaterMinion003": {
+            "PalId": "MRB8_R06_WaterMinion",
+            "WazaID": "AirBlade",
+            "Level": 3
+        },
+        "MRB8_R06_WaterMinion004": {
+            "PalId": "MRB8_R06_WaterMinion",
+            "WazaID": "RaidCutter",
+            "Level": 4
+        },
+        "MRB8_R07_DarkBoss001": {
+            "PalId": "MRB8_R07_DarkBoss",
+            "WazaID": "ShokeiLaser",
+            "Level": 1
+        },
+        "MRB8_R07_DarkBoss002": {
+            "PalId": "MRB8_R07_DarkBoss",
+            "WazaID": "DarkWave",
+            "Level": 2
+        },
+        "MRB8_R07_DarkBoss003": {
+            "PalId": "MRB8_R07_DarkBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 3
+        },
+        "MRB8_R07_DarkBoss004": {
+            "PalId": "MRB8_R07_DarkBoss",
+            "WazaID": "PredatorWave",
+            "Level": 4
+        },
+        "MRB8_R07_DarkBoss005": {
+            "PalId": "MRB8_R07_DarkBoss",
+            "WazaID": "LockonLaser",
+            "Level": 5
+        },
+        "MRB8_R07_DarkBoss006": {
+            "PalId": "MRB8_R07_DarkBoss",
+            "WazaID": "DarkLaser",
+            "Level": 6
+        },
+        "MRB8_R07_DarkBoss007": {
+            "PalId": "MRB8_R07_DarkBoss",
+            "WazaID": "FireBall",
+            "Level": 7
+        },
+        "MRB8_R07_DarkBoss008": {
+            "PalId": "MRB8_R07_DarkBoss",
+            "WazaID": "FlareTornado",
+            "Level": 8
+        },
+        "MRB8_R07_DarkMinion001": {
+            "PalId": "MRB8_R07_DarkMinion",
+            "WazaID": "ShokeiLaser",
+            "Level": 1
+        },
+        "MRB8_R07_DarkMinion002": {
+            "PalId": "MRB8_R07_DarkMinion",
+            "WazaID": "PredatorWave",
+            "Level": 2
+        },
+        "MRB8_R07_DarkMinion003": {
+            "PalId": "MRB8_R07_DarkMinion",
+            "WazaID": "LockonLaser",
+            "Level": 3
+        },
+        "MRB8_R07_DarkMinion004": {
+            "PalId": "MRB8_R07_DarkMinion",
+            "WazaID": "DarkLaser",
+            "Level": 4
+        },
+        "MRB8_R07_DarkMinion005": {
+            "PalId": "MRB8_R07_DarkMinion",
+            "WazaID": "DarkWave",
+            "Level": 5
+        },
+        "MRB8_R07_DarkMinion006": {
+            "PalId": "MRB8_R07_DarkMinion",
+            "WazaID": "PredatorBeam",
+            "Level": 6
+        },
+        "MRB8_R08_LeafBoss001": {
+            "PalId": "MRB8_R08_LeafBoss",
+            "WazaID": "RootLance",
+            "Level": 1
+        },
+        "MRB8_R08_LeafBoss002": {
+            "PalId": "MRB8_R08_LeafBoss",
+            "WazaID": "RaidCutter",
+            "Level": 2
+        },
+        "MRB8_R08_LeafBoss003": {
+            "PalId": "MRB8_R08_LeafBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 3
+        },
+        "MRB8_R08_LeafBoss004": {
+            "PalId": "MRB8_R08_LeafBoss",
+            "WazaID": "CommetRain",
+            "Level": 4
+        },
+        "MRB8_R08_LeafBoss005": {
+            "PalId": "MRB8_R08_LeafBoss",
+            "WazaID": "WindBurst",
+            "Level": 5
+        },
+        "MRB8_R08_LeafBoss006": {
+            "PalId": "MRB8_R08_LeafBoss",
+            "WazaID": "AirBlade",
+            "Level": 6
+        },
+        "MRB8_R08_LeafMinion001": {
+            "PalId": "MRB8_R08_LeafMinion",
+            "WazaID": "RootLance",
+            "Level": 1
+        },
+        "MRB8_R08_LeafMinion002": {
+            "PalId": "MRB8_R08_LeafMinion",
+            "WazaID": "CommetRain",
+            "Level": 2
+        },
+        "MRB8_R08_LeafMinion003": {
+            "PalId": "MRB8_R08_LeafMinion",
+            "WazaID": "WindBurst",
+            "Level": 3
+        },
+        "MRB8_R08_LeafMinion004": {
+            "PalId": "MRB8_R08_LeafMinion",
+            "WazaID": "AirBlade",
+            "Level": 4
+        },
+        "MRB8_R08_LeafMinion005": {
+            "PalId": "MRB8_R08_LeafMinion",
+            "WazaID": "RaidCutter",
+            "Level": 5
+        },
+        "MRB8_R09_EarthBoss001": {
+            "PalId": "MRB8_R09_EarthBoss",
+            "WazaID": "RockBeat",
+            "Level": 1
+        },
+        "MRB8_R09_EarthBoss002": {
+            "PalId": "MRB8_R09_EarthBoss",
+            "WazaID": "RaidCutter",
+            "Level": 2
+        },
+        "MRB8_R09_EarthBoss003": {
+            "PalId": "MRB8_R09_EarthBoss",
+            "WazaID": "PredatorWave",
+            "Level": 3
+        },
+        "MRB8_R09_EarthBoss004": {
+            "PalId": "MRB8_R09_EarthBoss",
+            "WazaID": "RockLance",
+            "Level": 4
+        },
+        "MRB8_R09_EarthBoss005": {
+            "PalId": "MRB8_R09_EarthBoss",
+            "WazaID": "SandTornado",
+            "Level": 5
+        },
+        "MRB8_R09_EarthBoss006": {
+            "PalId": "MRB8_R09_EarthBoss",
+            "WazaID": "SandTwister",
+            "Level": 6
+        },
+        "MRB8_R09_EarthBoss007": {
+            "PalId": "MRB8_R09_EarthBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 7
+        },
+        "MRB8_R09_EarthBoss008": {
+            "PalId": "MRB8_R09_EarthBoss",
+            "WazaID": "SeaGush",
+            "Level": 8
+        },
+        "MRB8_R09_EarthBoss009": {
+            "PalId": "MRB8_R09_EarthBoss",
+            "WazaID": "Thunderbolt",
+            "Level": 9
+        },
+        "MRB8_R09_EarthMinion001": {
+            "PalId": "MRB8_R09_EarthMinion",
+            "WazaID": "RockBeat",
+            "Level": 1
+        },
+        "MRB8_R09_EarthMinion002": {
+            "PalId": "MRB8_R09_EarthMinion",
+            "WazaID": "RockLance",
+            "Level": 2
+        },
+        "MRB8_R09_EarthMinion003": {
+            "PalId": "MRB8_R09_EarthMinion",
+            "WazaID": "SandTornado",
+            "Level": 3
+        },
+        "MRB8_R09_EarthMinion004": {
+            "PalId": "MRB8_R09_EarthMinion",
+            "WazaID": "SandTwister",
+            "Level": 4
+        },
+        "MRB8_R10_DarkBoss001": {
+            "PalId": "MRB8_R10_DarkBoss",
+            "WazaID": "ShadowBall",
+            "Level": 1
+        },
+        "MRB8_R10_DarkBoss002": {
+            "PalId": "MRB8_R10_DarkBoss",
+            "WazaID": "LockonLaser",
+            "Level": 2
+        },
+        "MRB8_R10_DarkBoss003": {
+            "PalId": "MRB8_R10_DarkBoss",
+            "WazaID": "DarkLaser",
+            "Level": 3
+        },
+        "MRB8_R10_DarkBoss004": {
+            "PalId": "MRB8_R10_DarkBoss",
+            "WazaID": "DarkWave",
+            "Level": 4
+        },
+        "MRB8_R10_DarkBoss005": {
+            "PalId": "MRB8_R10_DarkBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 5
+        },
+        "MRB8_R10_DarkBoss006": {
+            "PalId": "MRB8_R10_DarkBoss",
+            "WazaID": "PredatorWave",
+            "Level": 6
+        },
+        "MRB8_R10_DarkBoss007": {
+            "PalId": "MRB8_R10_DarkBoss",
+            "WazaID": "RockLance",
+            "Level": 7
+        },
+        "MRB8_R10_DarkMinion001": {
+            "PalId": "MRB8_R10_DarkMinion",
+            "WazaID": "ShadowBall",
+            "Level": 1
+        },
+        "MRB8_R10_DarkMinion002": {
+            "PalId": "MRB8_R10_DarkMinion",
+            "WazaID": "DarkWave",
+            "Level": 2
+        },
+        "MRB8_R10_DarkMinion003": {
+            "PalId": "MRB8_R10_DarkMinion",
+            "WazaID": "PredatorBeam",
+            "Level": 3
+        },
+        "MRB8_R10_DarkMinion004": {
+            "PalId": "MRB8_R10_DarkMinion",
+            "WazaID": "PredatorWave",
+            "Level": 4
+        },
+        "MRB8_R10_DarkMinion005": {
+            "PalId": "MRB8_R10_DarkMinion",
+            "WazaID": "LockonLaser",
+            "Level": 5
+        },
+        "MRB8_R10_DarkMinion006": {
+            "PalId": "MRB8_R10_DarkMinion",
+            "WazaID": "DarkLaser",
+            "Level": 6
+        },
+        "MRB8_R11_ElectricityBoss001": {
+            "PalId": "MRB8_R11_ElectricityBoss",
+            "WazaID": "RangeThunder",
+            "Level": 1
+        },
+        "MRB8_R11_ElectricityBoss002": {
+            "PalId": "MRB8_R11_ElectricityBoss",
+            "WazaID": "LightningStrike",
+            "Level": 2
+        },
+        "MRB8_R11_ElectricityBoss003": {
+            "PalId": "MRB8_R11_ElectricityBoss",
+            "WazaID": "Thunderbolt",
+            "Level": 3
+        },
+        "MRB8_R11_ElectricityBoss004": {
+            "PalId": "MRB8_R11_ElectricityBoss",
+            "WazaID": "LockonLaser",
+            "Level": 4
+        },
+        "MRB8_R11_ElectricityBoss005": {
+            "PalId": "MRB8_R11_ElectricityBoss",
+            "WazaID": "CommetRain",
+            "Level": 5
+        },
+        "MRB8_R11_ElectricityBoss006": {
+            "PalId": "MRB8_R11_ElectricityBoss",
+            "WazaID": "PredatorWave",
+            "Level": 6
+        },
+        "MRB8_R11_ElectricityBoss007": {
+            "PalId": "MRB8_R11_ElectricityBoss",
+            "WazaID": "SeaGush",
+            "Level": 7
+        },
+        "MRB8_R11_ElectricityBoss008": {
+            "PalId": "MRB8_R11_ElectricityBoss",
+            "WazaID": "WindBurst",
+            "Level": 8
+        },
+        "MRB8_R11_ElectricityBoss009": {
+            "PalId": "MRB8_R11_ElectricityBoss",
+            "WazaID": "AirBlade",
+            "Level": 9
+        },
+        "MRB8_R11_ElectricityBoss010": {
+            "PalId": "MRB8_R11_ElectricityBoss",
+            "WazaID": "DarkLaser",
+            "Level": 10
+        },
+        "MRB8_R11_ElectricityMinion001": {
+            "PalId": "MRB8_R11_ElectricityMinion",
+            "WazaID": "RangeThunder",
+            "Level": 1
+        },
+        "MRB8_R11_ElectricityMinion002": {
+            "PalId": "MRB8_R11_ElectricityMinion",
+            "WazaID": "LockonLaser",
+            "Level": 2
+        },
+        "MRB8_R11_ElectricityMinion003": {
+            "PalId": "MRB8_R11_ElectricityMinion",
+            "WazaID": "CommetRain",
+            "Level": 3
+        },
+        "MRB8_R11_ElectricityMinion004": {
+            "PalId": "MRB8_R11_ElectricityMinion",
+            "WazaID": "PredatorWave",
+            "Level": 4
+        },
+        "MRB8_R11_ElectricityMinion005": {
+            "PalId": "MRB8_R11_ElectricityMinion",
+            "WazaID": "LightningStrike",
+            "Level": 5
+        },
+        "MRB8_R12_DragonBoss001": {
+            "PalId": "MRB8_R12_DragonBoss",
+            "WazaID": "HolyBlast",
+            "Level": 1
+        },
+        "MRB8_R12_DragonBoss002": {
+            "PalId": "MRB8_R12_DragonBoss",
+            "WazaID": "LockonLaser",
+            "Level": 2
+        },
+        "MRB8_R12_DragonBoss003": {
+            "PalId": "MRB8_R12_DragonBoss",
+            "WazaID": "CommetRain",
+            "Level": 3
+        },
+        "MRB8_R12_DragonBoss004": {
+            "PalId": "MRB8_R12_DragonBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 4
+        },
+        "MRB8_R12_DragonBoss005": {
+            "PalId": "MRB8_R12_DragonBoss",
+            "WazaID": "PredatorWave",
+            "Level": 5
+        },
+        "MRB8_R12_DragonBoss006": {
+            "PalId": "MRB8_R12_DragonBoss",
+            "WazaID": "AirBlade",
+            "Level": 6
+        },
+        "MRB8_R12_DragonBoss007": {
+            "PalId": "MRB8_R12_DragonBoss",
+            "WazaID": "RaidCutter",
+            "Level": 7
+        },
+        "MRB8_R12_DragonBoss008": {
+            "PalId": "MRB8_R12_DragonBoss",
+            "WazaID": "DarkLaser",
+            "Level": 8
+        },
+        "MRB8_R12_DragonMinion001": {
+            "PalId": "MRB8_R12_DragonMinion",
+            "WazaID": "HolyBlast",
+            "Level": 1
+        },
+        "MRB8_R12_DragonMinion002": {
+            "PalId": "MRB8_R12_DragonMinion",
+            "WazaID": "PredatorBeam",
+            "Level": 2
+        },
+        "MRB8_R12_DragonMinion003": {
+            "PalId": "MRB8_R12_DragonMinion",
+            "WazaID": "PredatorWave",
+            "Level": 3
+        },
+        "MRB8_R12_DragonMinion004": {
+            "PalId": "MRB8_R12_DragonMinion",
+            "WazaID": "AirBlade",
+            "Level": 4
+        },
+        "MRB8_R13_DarkBoss001": {
+            "PalId": "MRB8_R13_DarkBoss",
+            "WazaID": "DarkLegion",
+            "Level": 1
+        },
+        "MRB8_R13_DarkBoss002": {
+            "PalId": "MRB8_R13_DarkBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 2
+        },
+        "MRB8_R13_DarkBoss003": {
+            "PalId": "MRB8_R13_DarkBoss",
+            "WazaID": "PredatorWave",
+            "Level": 3
+        },
+        "MRB8_R13_DarkBoss004": {
+            "PalId": "MRB8_R13_DarkBoss",
+            "WazaID": "LockonLaser",
+            "Level": 4
+        },
+        "MRB8_R13_DarkBoss005": {
+            "PalId": "MRB8_R13_DarkBoss",
+            "WazaID": "DarkLaser",
+            "Level": 5
+        },
+        "MRB8_R13_DarkBoss006": {
+            "PalId": "MRB8_R13_DarkBoss",
+            "WazaID": "DarkWave",
+            "Level": 6
+        },
+        "MRB8_R13_DarkMinion001": {
+            "PalId": "MRB8_R13_DarkMinion",
+            "WazaID": "DarkLegion",
+            "Level": 1
+        },
+        "MRB8_R13_DarkMinion002": {
+            "PalId": "MRB8_R13_DarkMinion",
+            "WazaID": "LockonLaser",
+            "Level": 2
+        },
+        "MRB8_R13_DarkMinion003": {
+            "PalId": "MRB8_R13_DarkMinion",
+            "WazaID": "DarkLaser",
+            "Level": 3
+        },
+        "MRB8_R13_DarkMinion004": {
+            "PalId": "MRB8_R13_DarkMinion",
+            "WazaID": "DarkWave",
+            "Level": 4
+        },
+        "MRB8_R13_DarkMinion005": {
+            "PalId": "MRB8_R13_DarkMinion",
+            "WazaID": "PredatorBeam",
+            "Level": 5
+        },
+        "MRB8_R13_DarkMinion006": {
+            "PalId": "MRB8_R13_DarkMinion",
+            "WazaID": "PredatorWave",
+            "Level": 6
+        },
+        "MRB8_R13_DarkMinion007": {
+            "PalId": "MRB8_R13_DarkMinion",
+            "WazaID": "WindBurst",
+            "Level": 7
+        },
+        "MRB8_R14_ElectricityBoss001": {
+            "PalId": "MRB8_R14_ElectricityBoss",
+            "WazaID": "Railbolt",
+            "Level": 1
+        },
+        "MRB8_R14_ElectricityBoss002": {
+            "PalId": "MRB8_R14_ElectricityBoss",
+            "WazaID": "CommetRain",
+            "Level": 2
+        },
+        "MRB8_R14_ElectricityBoss003": {
+            "PalId": "MRB8_R14_ElectricityBoss",
+            "WazaID": "PredatorWave",
+            "Level": 3
+        },
+        "MRB8_R14_ElectricityBoss004": {
+            "PalId": "MRB8_R14_ElectricityBoss",
+            "WazaID": "LightningStrike",
+            "Level": 4
+        },
+        "MRB8_R14_ElectricityBoss005": {
+            "PalId": "MRB8_R14_ElectricityBoss",
+            "WazaID": "Thunderbolt",
+            "Level": 5
+        },
+        "MRB8_R14_ElectricityBoss006": {
+            "PalId": "MRB8_R14_ElectricityBoss",
+            "WazaID": "LockonLaser",
+            "Level": 6
+        },
+        "MRB8_R14_ElectricityBoss007": {
+            "PalId": "MRB8_R14_ElectricityBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 7
+        },
+        "MRB8_R14_ElectricityBoss008": {
+            "PalId": "MRB8_R14_ElectricityBoss",
+            "WazaID": "RaidCutter",
+            "Level": 8
+        },
+        "MRB8_R14_ElectricityBoss009": {
+            "PalId": "MRB8_R14_ElectricityBoss",
+            "WazaID": "RockLance",
+            "Level": 9
+        },
+        "MRB8_R14_ElectricityMinion001": {
+            "PalId": "MRB8_R14_ElectricityMinion",
+            "WazaID": "Railbolt",
+            "Level": 1
+        },
+        "MRB8_R14_ElectricityMinion002": {
+            "PalId": "MRB8_R14_ElectricityMinion",
+            "WazaID": "LightningStrike",
+            "Level": 2
+        },
+        "MRB8_R14_ElectricityMinion003": {
+            "PalId": "MRB8_R14_ElectricityMinion",
+            "WazaID": "Thunderbolt",
+            "Level": 3
+        },
+        "MRB8_R14_ElectricityMinion004": {
+            "PalId": "MRB8_R14_ElectricityMinion",
+            "WazaID": "LockonLaser",
+            "Level": 4
+        },
+        "MRB8_R14_ElectricityMinion005": {
+            "PalId": "MRB8_R14_ElectricityMinion",
+            "WazaID": "CommetRain",
+            "Level": 5
+        },
+        "MRB8_R15_FireBoss001": {
+            "PalId": "MRB8_R15_FireBoss",
+            "WazaID": "FlameWall",
+            "Level": 1
+        },
+        "MRB8_R15_FireBoss002": {
+            "PalId": "MRB8_R15_FireBoss",
+            "WazaID": "WindBurst",
+            "Level": 2
+        },
+        "MRB8_R15_FireBoss003": {
+            "PalId": "MRB8_R15_FireBoss",
+            "WazaID": "FireBall",
+            "Level": 3
+        },
+        "MRB8_R15_FireBoss004": {
+            "PalId": "MRB8_R15_FireBoss",
+            "WazaID": "FlareTornado",
+            "Level": 4
+        },
+        "MRB8_R15_FireBoss005": {
+            "PalId": "MRB8_R15_FireBoss",
+            "WazaID": "CommetRain",
+            "Level": 5
+        },
+        "MRB8_R15_FireBoss006": {
+            "PalId": "MRB8_R15_FireBoss",
+            "WazaID": "PredatorWave",
+            "Level": 6
+        },
+        "MRB8_R15_FireBoss007": {
+            "PalId": "MRB8_R15_FireBoss",
+            "WazaID": "RaidCutter",
+            "Level": 7
+        },
+        "MRB8_R15_FireMinion001": {
+            "PalId": "MRB8_R15_FireMinion",
+            "WazaID": "FlameWall",
+            "Level": 1
+        },
+        "MRB8_R15_FireMinion002": {
+            "PalId": "MRB8_R15_FireMinion",
+            "WazaID": "FlareTornado",
+            "Level": 2
+        },
+        "MRB8_R15_FireMinion003": {
+            "PalId": "MRB8_R15_FireMinion",
+            "WazaID": "CommetRain",
+            "Level": 3
+        },
+        "MRB8_R15_FireMinion004": {
+            "PalId": "MRB8_R15_FireMinion",
+            "WazaID": "PredatorWave",
+            "Level": 4
+        },
+        "MRB8_R16_LeafBoss001": {
+            "PalId": "MRB8_R16_LeafBoss",
+            "WazaID": "WindEdge",
+            "Level": 1
+        },
+        "MRB8_R16_LeafBoss002": {
+            "PalId": "MRB8_R16_LeafBoss",
+            "WazaID": "WindBurst",
+            "Level": 2
+        },
+        "MRB8_R16_LeafBoss003": {
+            "PalId": "MRB8_R16_LeafBoss",
+            "WazaID": "AirBlade",
+            "Level": 3
+        },
+        "MRB8_R16_LeafBoss004": {
+            "PalId": "MRB8_R16_LeafBoss",
+            "WazaID": "RaidCutter",
+            "Level": 4
+        },
+        "MRB8_R16_LeafBoss005": {
+            "PalId": "MRB8_R16_LeafBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 5
+        },
+        "MRB8_R16_LeafBoss006": {
+            "PalId": "MRB8_R16_LeafBoss",
+            "WazaID": "CommetRain",
+            "Level": 6
+        },
+        "MRB8_R16_LeafBoss007": {
+            "PalId": "MRB8_R16_LeafBoss",
+            "WazaID": "SandTornado",
+            "Level": 7
+        },
+        "MRB8_R16_LeafBoss008": {
+            "PalId": "MRB8_R16_LeafBoss",
+            "WazaID": "SandTwister",
+            "Level": 8
+        },
+        "MRB8_R16_LeafBoss009": {
+            "PalId": "MRB8_R16_LeafBoss",
+            "WazaID": "SeaGush",
+            "Level": 9
+        },
+        "MRB8_R16_LeafBoss010": {
+            "PalId": "MRB8_R16_LeafBoss",
+            "WazaID": "Thunderbolt",
+            "Level": 10
+        },
+        "MRB8_R16_LeafMinion001": {
+            "PalId": "MRB8_R16_LeafMinion",
+            "WazaID": "WindEdge",
+            "Level": 1
+        },
+        "MRB8_R16_LeafMinion002": {
+            "PalId": "MRB8_R16_LeafMinion",
+            "WazaID": "RaidCutter",
+            "Level": 2
+        },
+        "MRB8_R16_LeafMinion003": {
+            "PalId": "MRB8_R16_LeafMinion",
+            "WazaID": "PredatorBeam",
+            "Level": 3
+        },
+        "MRB8_R16_LeafMinion004": {
+            "PalId": "MRB8_R16_LeafMinion",
+            "WazaID": "CommetRain",
+            "Level": 4
+        },
+        "MRB8_R16_LeafMinion005": {
+            "PalId": "MRB8_R16_LeafMinion",
+            "WazaID": "WindBurst",
+            "Level": 5
+        },
+        "MRB8_R16_LeafMinion006": {
+            "PalId": "MRB8_R16_LeafMinion",
+            "WazaID": "AirBlade",
+            "Level": 6
+        },
+        "MRB8_R17_EarthBoss001": {
+            "PalId": "MRB8_R17_EarthBoss",
+            "WazaID": "Tremor",
+            "Level": 1
+        },
+        "MRB8_R17_EarthBoss002": {
+            "PalId": "MRB8_R17_EarthBoss",
+            "WazaID": "SandTornado",
+            "Level": 2
+        },
+        "MRB8_R17_EarthBoss003": {
+            "PalId": "MRB8_R17_EarthBoss",
+            "WazaID": "SandTwister",
+            "Level": 3
+        },
+        "MRB8_R17_EarthBoss004": {
+            "PalId": "MRB8_R17_EarthBoss",
+            "WazaID": "RaidCutter",
+            "Level": 4
+        },
+        "MRB8_R17_EarthBoss005": {
+            "PalId": "MRB8_R17_EarthBoss",
+            "WazaID": "PredatorWave",
+            "Level": 5
+        },
+        "MRB8_R17_EarthBoss006": {
+            "PalId": "MRB8_R17_EarthBoss",
+            "WazaID": "RockLance",
+            "Level": 6
+        },
+        "MRB8_R17_EarthBoss007": {
+            "PalId": "MRB8_R17_EarthBoss",
+            "WazaID": "Thunderbolt",
+            "Level": 7
+        },
+        "MRB8_R17_EarthBoss008": {
+            "PalId": "MRB8_R17_EarthBoss",
+            "WazaID": "WindBurst",
+            "Level": 8
+        },
+        "MRB8_R17_EarthMinion001": {
+            "PalId": "MRB8_R17_EarthMinion",
+            "WazaID": "Tremor",
+            "Level": 1
+        },
+        "MRB8_R17_EarthMinion002": {
+            "PalId": "MRB8_R17_EarthMinion",
+            "WazaID": "RaidCutter",
+            "Level": 2
+        },
+        "MRB8_R17_EarthMinion003": {
+            "PalId": "MRB8_R17_EarthMinion",
+            "WazaID": "PredatorWave",
+            "Level": 3
+        },
+        "MRB8_R17_EarthMinion004": {
+            "PalId": "MRB8_R17_EarthMinion",
+            "WazaID": "RockLance",
+            "Level": 4
+        },
+        "MRB8_R17_EarthMinion005": {
+            "PalId": "MRB8_R17_EarthMinion",
+            "WazaID": "SandTornado",
+            "Level": 5
+        },
+        "MRB8_R18_FireBoss001": {
+            "PalId": "MRB8_R18_FireBoss",
+            "WazaID": "FlameFunnel",
+            "Level": 1
+        },
+        "MRB8_R18_FireBoss002": {
+            "PalId": "MRB8_R18_FireBoss",
+            "WazaID": "CommetRain",
+            "Level": 2
+        },
+        "MRB8_R18_FireBoss003": {
+            "PalId": "MRB8_R18_FireBoss",
+            "WazaID": "PredatorWave",
+            "Level": 3
+        },
+        "MRB8_R18_FireBoss004": {
+            "PalId": "MRB8_R18_FireBoss",
+            "WazaID": "WindBurst",
+            "Level": 4
+        },
+        "MRB8_R18_FireBoss005": {
+            "PalId": "MRB8_R18_FireBoss",
+            "WazaID": "FireBall",
+            "Level": 5
+        },
+        "MRB8_R18_FireBoss006": {
+            "PalId": "MRB8_R18_FireBoss",
+            "WazaID": "FlareTornado",
+            "Level": 6
+        },
+        "MRB8_R18_FireBoss007": {
+            "PalId": "MRB8_R18_FireBoss",
+            "WazaID": "DarkLaser",
+            "Level": 7
+        },
+        "MRB8_R18_FireBoss008": {
+            "PalId": "MRB8_R18_FireBoss",
+            "WazaID": "DarkWave",
+            "Level": 8
+        },
+        "MRB8_R18_FireBoss009": {
+            "PalId": "MRB8_R18_FireBoss",
+            "WazaID": "LightningStrike",
+            "Level": 9
+        },
+        "MRB8_R18_FireMinion001": {
+            "PalId": "MRB8_R18_FireMinion",
+            "WazaID": "FlameFunnel",
+            "Level": 1
+        },
+        "MRB8_R18_FireMinion002": {
+            "PalId": "MRB8_R18_FireMinion",
+            "WazaID": "WindBurst",
+            "Level": 2
+        },
+        "MRB8_R18_FireMinion003": {
+            "PalId": "MRB8_R18_FireMinion",
+            "WazaID": "FireBall",
+            "Level": 3
+        },
+        "MRB8_R18_FireMinion004": {
+            "PalId": "MRB8_R18_FireMinion",
+            "WazaID": "FlareTornado",
+            "Level": 4
+        },
+        "MRB8_R19_IceBoss001": {
+            "PalId": "MRB8_R19_IceBoss",
+            "WazaID": "CrossWind",
+            "Level": 1
+        },
+        "MRB8_R19_IceBoss002": {
+            "PalId": "MRB8_R19_IceBoss",
+            "WazaID": "CommetRain",
+            "Level": 2
+        },
+        "MRB8_R19_IceBoss003": {
+            "PalId": "MRB8_R19_IceBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 3
+        },
+        "MRB8_R19_IceBoss004": {
+            "PalId": "MRB8_R19_IceBoss",
+            "WazaID": "WindBurst",
+            "Level": 4
+        },
+        "MRB8_R19_IceBoss005": {
+            "PalId": "MRB8_R19_IceBoss",
+            "WazaID": "AirBlade",
+            "Level": 5
+        },
+        "MRB8_R19_IceBoss006": {
+            "PalId": "MRB8_R19_IceBoss",
+            "WazaID": "RaidCutter",
+            "Level": 6
+        },
+        "MRB8_R19_IceBoss007": {
+            "PalId": "MRB8_R19_IceBoss",
+            "WazaID": "FireBall",
+            "Level": 7
+        },
+        "MRB8_R19_IceBoss008": {
+            "PalId": "MRB8_R19_IceBoss",
+            "WazaID": "FlareTornado",
+            "Level": 8
+        },
+        "MRB8_R19_IceBoss009": {
+            "PalId": "MRB8_R19_IceBoss",
+            "WazaID": "LightningStrike",
+            "Level": 9
+        },
+        "MRB8_R19_IceBoss010": {
+            "PalId": "MRB8_R19_IceBoss",
+            "WazaID": "LockonLaser",
+            "Level": 10
+        },
+        "MRB8_R19_IceMinion001": {
+            "PalId": "MRB8_R19_IceMinion",
+            "WazaID": "CrossWind",
+            "Level": 1
+        },
+        "MRB8_R19_IceMinion002": {
+            "PalId": "MRB8_R19_IceMinion",
+            "WazaID": "WindBurst",
+            "Level": 2
+        },
+        "MRB8_R19_IceMinion003": {
+            "PalId": "MRB8_R19_IceMinion",
+            "WazaID": "AirBlade",
+            "Level": 3
+        },
+        "MRB8_R19_IceMinion004": {
+            "PalId": "MRB8_R19_IceMinion",
+            "WazaID": "RaidCutter",
+            "Level": 4
+        },
+        "MRB8_R19_IceMinion005": {
+            "PalId": "MRB8_R19_IceMinion",
+            "WazaID": "CommetRain",
+            "Level": 5
+        },
+        "MRB8_R19_IceMinion006": {
+            "PalId": "MRB8_R19_IceMinion",
+            "WazaID": "PredatorBeam",
+            "Level": 6
+        },
+        "MRB8_R20_FireBoss001": {
+            "PalId": "MRB8_R20_FireBoss",
+            "WazaID": "Eruption",
+            "Level": 1
+        },
+        "MRB8_R20_FireBoss002": {
+            "PalId": "MRB8_R20_FireBoss",
+            "WazaID": "WindBurst",
+            "Level": 2
+        },
+        "MRB8_R20_FireBoss003": {
+            "PalId": "MRB8_R20_FireBoss",
+            "WazaID": "FireBall",
+            "Level": 3
+        },
+        "MRB8_R20_FireBoss004": {
+            "PalId": "MRB8_R20_FireBoss",
+            "WazaID": "FlareTornado",
+            "Level": 4
+        },
+        "MRB8_R20_FireBoss005": {
+            "PalId": "MRB8_R20_FireBoss",
+            "WazaID": "CommetRain",
+            "Level": 5
+        },
+        "MRB8_R20_FireBoss006": {
+            "PalId": "MRB8_R20_FireBoss",
+            "WazaID": "PredatorWave",
+            "Level": 6
+        },
+        "MRB8_R20_FireBoss007": {
+            "PalId": "MRB8_R20_FireBoss",
+            "WazaID": "LockonLaser",
+            "Level": 7
+        },
+        "MRB8_R20_FireBoss008": {
+            "PalId": "MRB8_R20_FireBoss",
+            "WazaID": "PredatorBeam",
+            "Level": 8
+        },
+        "MRB8_R20_FireBoss009": {
+            "PalId": "MRB8_R20_FireBoss",
+            "WazaID": "RaidCutter",
+            "Level": 9
+        },
+        "MRB8_R20_FireBoss010": {
+            "PalId": "MRB8_R20_FireBoss",
+            "WazaID": "RockLance",
+            "Level": 10
+        },
+        "MRB8_R20_FireMinion001": {
+            "PalId": "MRB8_R20_FireMinion",
+            "WazaID": "Eruption",
+            "Level": 1
+        },
+        "MRB8_R20_FireMinion002": {
+            "PalId": "MRB8_R20_FireMinion",
+            "WazaID": "FlareTornado",
+            "Level": 2
+        },
+        "MRB8_R20_FireMinion003": {
+            "PalId": "MRB8_R20_FireMinion",
+            "WazaID": "CommetRain",
+            "Level": 3
+        },
+        "MRB8_R20_FireMinion004": {
+            "PalId": "MRB8_R20_FireMinion",
+            "WazaID": "PredatorWave",
+            "Level": 4
+        },
+        "MRB8_R20_FireMinion005": {
+            "PalId": "MRB8_R20_FireMinion",
+            "WazaID": "WindBurst",
+            "Level": 5
+        }
+    }
+}

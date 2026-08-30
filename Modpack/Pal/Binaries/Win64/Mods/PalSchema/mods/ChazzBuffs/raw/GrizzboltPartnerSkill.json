@@ -1,0 +1,261 @@
+{
+	"DT_PassiveSkill_Main": {
+		"ThunderTank_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue1": 50,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 25,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"ThunderTank_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue1": 60,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 30,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"ThunderTank_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue1": 70,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 35,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"ThunderTank_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue1": 80,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 40,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"ThunderTank_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue1": 100,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 50,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": true,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+		"ElecPanda": {
+        "ActiveSkill": {
+          "SkillName": "UniqueRideShooting_Minigun",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [
+            10.0,
+            12.0,
+            14.0,
+            16.0,
+            20.0
+          ],
+          "ActiveSkill_OverWriteCoolTimeByRank": [
+            120.0,
+            100.0,
+            80.0,
+            60.0,
+            40.0
+],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ThunderTank_1"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ThunderTank_2"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ThunderTank_3"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ThunderTank_4"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ThunderTank_5"
+							}
+                                                }
+                                              ]
+                                             }
+                                             ]
+                                           },
+		"BOSS_ElecPanda": {
+        "ActiveSkill": {
+          "SkillName": "UniqueRideShooting_Minigun",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [
+            10.0,
+            12.0,
+            14.0,
+            16.0,
+            20.0
+          ],
+          "ActiveSkill_OverWriteCoolTimeByRank": [
+            120.0,
+            100.0,
+            80.0,
+            60.0,
+            40.0
+],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ThunderTank_1"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ThunderTank_2"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ThunderTank_3"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ThunderTank_4"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ThunderTank_5"
+							}
+                                                }
+                                              ]
+                                             }
+                                             ]
+                                           }
+                                        }
+                                       }

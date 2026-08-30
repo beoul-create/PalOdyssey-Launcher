@@ -1,0 +1,27 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "MonochromeQueen": {
+      "MeleeAttack": 120,
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7
+    },
+    "BOSS_MonochromeQueen": {
+      "MeleeAttack": 120,
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_MonochromeQueen_BalletJump": {
+      "WazaType": "EPalWazaID::Unique_MonochromeQueen_BalletJump",
+      "Element": "EPalElementType::Dark",
+      "Power": 700,
+      "DisplayPower": 700,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Darkness",
+      "EffectValue1": 100
+    }
+  }
+}

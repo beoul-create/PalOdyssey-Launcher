@@ -1,0 +1,13 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "ThunderDragonMan": {
+      "Defense": 120,
+      "Friendship_Defense": 1.7
+    },
+    "BOSS_ThunderDragonMan": {
+      "Defense": 120,
+      "Friendship_Defense": 1.7
+    }
+  }
+}

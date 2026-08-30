@@ -1,0 +1,209 @@
+{
+	"DT_PassiveSkill_Main": {
+		"GoddessLeaf_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Leaf",
+			"EffectValue1": 15,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementLeaf",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue3": 10,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"GoddessLeaf_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Leaf",
+			"EffectValue1": 18,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementLeaf",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue3": 12,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"GoddessLeaf_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Leaf",
+			"EffectValue1": 21,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementLeaf",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue3": 14,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"GoddessLeaf_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Leaf",
+			"EffectValue1": 24,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementLeaf",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue3": 16,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"GoddessLeaf_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Leaf",
+			"EffectValue1": 30,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementLeaf",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue3": 20,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+		"LilyQueen": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessLeaf_1"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessLeaf_2"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessLeaf_3"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessLeaf_4"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessLeaf_5"
+							}
+                                                }
+                                              ]
+                                             }
+                                             ]
+                                           },
+		"BOSS_LilyQueen": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessLeaf_1"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessLeaf_2"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessLeaf_3"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessLeaf_4"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessLeaf_5"
+							}
+                                                }
+                                              ]
+                                             }
+                                             ]
+                                           }
+                                        }
+                                       }

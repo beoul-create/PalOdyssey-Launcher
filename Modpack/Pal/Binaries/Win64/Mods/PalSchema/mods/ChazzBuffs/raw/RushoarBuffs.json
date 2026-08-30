@@ -1,0 +1,37 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "Boar": {
+      "MeleeAttack": 120,
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7,
+      "WalkSpeed": 200,
+      "RunSpeed": 650,
+      "RideSprintSpeed": 1000,
+      "TransportSpeed": 350
+    },
+    "BOSS_Boar": {
+      "MeleeAttack": 120,
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7,
+      "WalkSpeed": 200,
+      "RunSpeed": 650,
+      "RideSprintSpeed": 1000,
+      "TransportSpeed": 350
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_Boar_Tackle": {
+      "WazaType": "Unique_Boar_Tackle",
+      "Element": "EPalElementType::Earth",
+      "Power": 550,
+      "DisplayPower": 550,
+      "CoolTime": 20.0,
+      "EffectType1": "EPalAdditionalEffectType::Muddy",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::Stun",
+      "EffectValue2": 100
+    }
+  }
+}

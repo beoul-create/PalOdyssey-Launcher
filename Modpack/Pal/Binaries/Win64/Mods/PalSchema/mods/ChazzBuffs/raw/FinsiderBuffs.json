@@ -1,0 +1,13 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "StuffedShark": {
+      "ShotAttack": 100,
+      "Friendship_ShotAttack": 2.5
+    },
+    "BOSS_StuffedShark": {
+      "ShotAttack": 100,
+      "Friendship_ShotAttack": 2.5
+    }
+  }
+}

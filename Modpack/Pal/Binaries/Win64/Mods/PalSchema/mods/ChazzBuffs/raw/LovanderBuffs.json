@@ -1,0 +1,37 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "PinkLizard": {
+      "ElementType2": "Normal",
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7
+    },
+    "BOSS_PinkLizard": {
+      "ElementType2": "Normal",
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7
+    }
+  },	
+    "DT_WazaMasterLevel": {
+        "PinkLizard60":{
+			"PalId": "PinkLizard",
+            "WazaID": "EPalWazaID::SelfExplosion",
+			"Level": 60
+        },
+        "Boss_PinkLizard60":{
+			"PalId": "BOSS_PinkLizard",
+            "WazaID": "EPalWazaID::SelfExplosion",
+			"Level": 60
+        },
+        "PinkLizard80":{
+			"PalId": "PinkLizard",
+            "WazaID": "EPalWazaID::Psychokinesis",
+			"Level": 80
+        },
+        "Boss_PinkLizard80":{
+			"PalId": "BOSS_PinkLizard",
+            "WazaID": "EPalWazaID::Psychokinesis",
+			"Level": 80
+        }
+    }
+}

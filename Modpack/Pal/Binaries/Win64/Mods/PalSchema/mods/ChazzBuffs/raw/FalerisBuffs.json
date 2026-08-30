@@ -1,0 +1,41 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "Horus": {
+      "Hp": 125,
+      "ShotAttack": 125,
+      "Defense": 125,
+      "Friendship_HP": 2.8,
+      "Friendship_ShotAttack": 1.5,
+      "Friendship_Defense": 1.5
+    },
+    "BOSS_Horus": {
+      "Hp": 150,
+      "ShotAttack": 125,
+      "Defense": 125,
+      "Friendship_HP": 1.5,
+      "Friendship_ShotAttack": 1.5,
+      "Friendship_Defense": 1.5
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_Horus_FlareBird": {
+      "WazaType": "EPalWazaID::Unique_Horus_FlareBird",
+      "Element": "EPalElementType::Fire",
+      "Power": 360,
+      "DisplayPower": 360,
+      "CoolTime": 16.0,
+      "EffectType1": "EPalAdditionalEffectType::Burn",
+      "EffectValue1": 100
+    },
+    "Unique_Horus_PerfectStorm": {
+      "WazaType": "EPalWazaID::Unique_Horus_PerfectStorm",
+      "Element": "EPalElementType::Fire",
+      "Power": 750,
+      "DisplayPower": 750,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Burn",
+      "EffectValue1": 100
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+	"DT_PassiveSkill_Main": {
+		"PlayerInflictEffect_AttackWet_ApplyFreeze": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerInflictEffect_AttackWet_ApplyFreeze",
+			"EffectValue1": 100,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue2": 30,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::ElementIce",
+			"EffectValue3": 1.0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		}
+	}
+}

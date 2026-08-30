@@ -1,0 +1,40 @@
+{
+    "DT_PalNameText": {
+        "PAL_NAME_Foxparks_Aqua": "Foxparks Aqua",
+        "PAL_NAME_Lamball_Ignis": "Lamball Ignis",
+        "PAL_NAME_Cattiva_Noct": "Cattiva Noct",
+        "PAL_NAME_Chikipi_Electricity": "Chikipi Lux",
+        "PAL_NAME_Depresso_Lux": "Depresso Lux",
+        "PAL_NAME_Digtoise_Aqua": "Digtoise Aqua",
+        "PAL_NAME_Direhowl_Cryst": "Direhowl Cryst",
+        "PAL_NAME_Anubis_Cryst": "Anubis Cryst",
+        "PAL_NAME_Orserk_Terra": "Orserk Terra",
+        "PAL_NAME_Jetragon_Frost": "Jetragon Frost",
+        "PAL_NAME_Blazamut_Aqua": "Blazamut Aqua",
+        "PAL_NAME_Chillet_Terra": "Chillet Terra",
+        "PAL_NAME_Lyleen_Ignis": "Lyleen Ignis",
+        "PAL_NAME_Jormuntide_Cryst": "Jormuntide Cryst",
+        "PAL_NAME_Relaxaurus_Terra": "Relaxaurus Terra",
+        "PAL_NAME_Grizzbolt_Dark": "Grizzbolt Noct",
+        "PAL_NAME_Frostallion_Ignis": "Frostallion Ignis"
+    },
+    "DT_PalDescriptionText": {
+        "PAL_DESC_Foxparks_Aqua": "A variant of Foxparks adapted to coastal waters. It exhales high-pressure water jets instead of fire.",
+        "PAL_DESC_Lamball_Ignis": "A fiery Lamball coated in heat-resistant volcanic fleece. It rolls at high speeds leaving trails of fire.",
+        "PAL_DESC_Cattiva_Noct": "A nocturnal Cattiva cloaked in shadows. Its cowardice has been replaced by cunning ambush tactics.",
+        "PAL_DESC_Chikipi_Electricity": "A supercharged Chikipi infused with lightning. Its rapid pecks deliver sharp electric shocks.",
+        "PAL_DESC_Depresso_Lux": "Caffeinated beyond mortal limits. Constant electric discharges keep this Depresso perpetually vibrating.",
+        "PAL_DESC_Digtoise_Aqua": "An amphibious Digtoise that drills into undersea mineral deposits with pressurized hydro-vortexes.",
+        "PAL_DESC_Direhowl_Cryst": "A northern frost wolf that glides across glacial peaks at breakneck speeds.",
+        "PAL_DESC_Anubis_Cryst": "The glacial guardian of ancient frozen tombs. Master of high-speed icy martial arts.",
+        "PAL_DESC_Orserk_Terra": "A colossal dragon that channels seismic fault energy directly into titanic earthen shockwaves.",
+        "PAL_DESC_Jetragon_Frost": "A supersonic celestial dragon enveloped in sub-zero atmospheric vapor.",
+        "PAL_DESC_Blazamut_Aqua": "A deep-sea volcanic dragon capable of generating scalding hydrothermic eruptions.",
+        "PAL_DESC_Chillet_Terra": "A gentle serpentine dragon burrowing through bedrock and mineral veins with playful ease.",
+        "PAL_DESC_Lyleen_Ignis": "A majestic solar sovereign blooming with radiant solar flames that invigorate allies.",
+        "PAL_DESC_Jormuntide_Cryst": "The mythical frost serpent of the deep abyss, encasing entire waterways in unbreakable glaciers.",
+        "PAL_DESC_Relaxaurus_Terra": "A heavy, content dragon covered in moss and rocky slabs that loves nothing more than sunbathing in dirt.",
+        "PAL_DESC_Grizzbolt_Dark": "An intimidating nocturnal behemoth that stalks dense forests under the cover of thunderstorm skies.",
+        "PAL_DESC_Frostallion_Ignis": "A celestial pegasus consumed by eternal primordial fire, soaring across scorching volcanic skies."
+    }
+}

@@ -1,0 +1,55 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "Garm": {
+      "MeleeAttack": 100,
+      "ShotAttack": 100,
+      "Defense": 80,
+      "Friendship_ShotAttack": 3.3,
+      "Friendship_Defense": 3.3,
+      "WalkSpeed": 220,
+      "RunSpeed": 900,
+      "RideSprintSpeed": 1200,
+      "TransportSpeed": 460
+    },
+    "BOSS_Garm": {
+      "MeleeAttack": 100,
+      "ShotAttack": 100,
+      "Defense": 80,
+      "Friendship_ShotAttack": 3.3,
+      "Friendship_Defense": 3.3,
+      "WalkSpeed": 220,
+      "RunSpeed": 900,
+      "RideSprintSpeed": 1200,
+      "TransportSpeed": 460
+    },
+    "PREDATOR_Garm": {
+      "HP": 106,
+      "MeleeAttack": 110,
+      "ShotAttack": 110,
+      "Defense": 90,
+      "Friendship_ShotAttack": 3.3,
+      "Friendship_Defense": 3.3,
+      "WalkSpeed": 260,
+      "RunSpeed": 1100,
+      "RideSprintSpeed": 1400,
+      "TransportSpeed": 660
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_Garm_BiteV2": {
+      "WazaType": "EPalWazaID::Unique_Garm_BiteV2",
+      "Element": "EPalElementType::Normal",
+      "Power": 250,
+      "DisplayPower": 250,
+      "CoolTime": 10.0
+    },
+    "Unique_Garm_Bite": {
+      "WazaType": "EPalWazaID::Unique_Garm_Bite",
+      "Element": "EPalElementType::Normal",
+      "Power": 600,
+      "DisplayPower": 600,
+      "CoolTime": 20.0
+    }
+  }
+}

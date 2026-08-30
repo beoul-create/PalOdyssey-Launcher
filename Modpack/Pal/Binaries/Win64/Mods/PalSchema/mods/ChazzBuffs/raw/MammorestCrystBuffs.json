@@ -1,0 +1,17 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "GrassMammoth": {
+      "ShotAttack": 95,
+      "Defense": 95,
+      "Friendship_ShotAttack": 2.7,
+      "Friendship_Defense": 2.7
+    },
+    "BOSS_GrassMammoth": {
+      "ShotAttack": 95,
+      "Defense": 95,
+      "Friendship_ShotAttack": 2.7,
+      "Friendship_Defense": 2.7
+    }
+  }
+}

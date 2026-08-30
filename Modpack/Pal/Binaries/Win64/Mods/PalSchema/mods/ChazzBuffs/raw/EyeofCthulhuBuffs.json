@@ -1,0 +1,52 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "YakushimaBoss001": {
+      "ShotAttack": 125,
+      "Friendship_ShotAttack": 1.5
+    },
+    "BOSS_YakushimaBoss001": {
+      "ShotAttack": 125,
+      "Friendship_ShotAttack": 1.5
+    }
+   },
+  "DT_WazaDataTable": {
+    "Unique_Yakushima_EyeTossin": {
+      "WazaType": "EPalWazaID::Unique_Yakushima_EyeTossin",
+      "Element": "EPalElementType::Dark",
+      "Power": 400,
+      "DisplayPower": 400,
+      "CoolTime": 15.0,
+      "EffectType1": "EPalAdditionalEffectType::Stun",
+      "EffectValue1": 100
+    },
+    "Unique_Yakushima_MouthTossin": {
+      "WazaType": "EPalWazaID::Unique_Yakushima_MouthTossin",
+      "Element": "EPalElementType::Dark",
+      "Power": 800,
+      "DisplayPower": 800,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Stun",
+      "EffectValue1": 100
+    },
+    "Unique_Yakushima_Unique_Yakushima_SummonServant": {
+      "WazaType": "EPalWazaID::Unique_Yakushima_SummonServant",
+      "Element": "EPalElementType::Dark",
+      "Power": 300,
+      "DisplayPower": 350,
+      "CoolTime": 10.0
+    }
+  },
+    "DT_WazaMasterLevel": {
+        "YakushimaBoss00160":{
+			"PalId": "YakushimaBoss001",
+            "WazaID": "EPalWazaID::Unique_Yakushima_MouthTossin",
+			"Level": 60
+        },
+        "Boss_YakushimaBoss00160":{
+			"PalId": "BOSS_YakushimaBoss001",
+            "WazaID": "EPalWazaID::Unique_Yakushima_MouthTossin",
+			"Level": 60
+        }
+    }
+ }

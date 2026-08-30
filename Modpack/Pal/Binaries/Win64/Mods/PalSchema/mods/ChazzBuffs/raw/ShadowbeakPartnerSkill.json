@@ -1,0 +1,74 @@
+{
+	"DT_PassiveSkill_Main": {
+		"ElementBoost_Dark_PAL_PartnerSKill_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 25,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"ElementBoost_Dark_PAL_PartnerSKill_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 30,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"ElementBoost_Dark_PAL_PartnerSKill_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 35,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"ElementBoost_Dark_PAL_PartnerSKill_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 40,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"ElementBoost_Dark_PAL_PartnerSKill_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 50,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		}
+	}
+}
