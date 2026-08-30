@@ -13,6 +13,8 @@ export function initLiveboard(client, options = {}) {
     const configuredInterval = Number.parseInt(process.env.POLL_INTERVAL_MS || '', 10);
     const intervalMs = options.intervalMs || (Number.isFinite(configuredInterval) && configuredInterval >= 5000 ? configuredInterval : 15000);
     const connectAddress = options.connectAddress || process.env.SERVER_CONNECT_ADDRESS || 'play.palodyssey.com:8211';
+    const launcherReleaseUrl = options.launcherReleaseUrl || process.env.LAUNCHER_RELEASE_URL || 'https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest';
+    const launcherVersion = options.launcherVersion || process.env.LAUNCHER_VERSION || 'v2.0.1';
 
     if (!channelId) {
         console.warn('[Liveboard Plugin] DISCORD_LIVEBOARD_CHANNEL_ID not set. Skipping liveboard.');
@@ -99,7 +101,8 @@ export function initLiveboard(client, options = {}) {
                     { name: '🖥️ Server State', value: `\`\`\`yaml\nStatus: ${state.ServerOnline ? 'ONLINE' : 'OFFLINE'}\nPlayers: ${playerCount}/${maxPlayers}\n\`\`\``, inline: true },
                     { name: `👥 Online Players (${playerCount}/${maxPlayers})`, value: `\`\`\`css\n${playerEntries}\n\`\`\``, inline: true },
                     { name: '⚔️ Active World Boss Spawns', value: bossEntries, inline: false },
-                    { name: '🔗 Quick Connect', value: `\`${connectAddress}\``, inline: true }
+                    { name: '🔗 Quick Connect', value: `\`${connectAddress}\``, inline: true },
+                    { name: '📥 Launcher Update', value: `[Download ${launcherVersion}](${launcherReleaseUrl})\nExisting launchers require a manual update.`, inline: true }
                 )
                 .setFooter({ text: 'PalOdyssey Live Engine • Last Polled' })
                 .setTimestamp();
