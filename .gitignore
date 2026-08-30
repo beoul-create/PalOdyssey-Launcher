@@ -45,7 +45,11 @@ $RECYCLE.BIN/
 /Install-PalOdyssey-*
 dev-tools/
 server-tools/
-tools/
+tools/*
+!tools/liveboard-bot/
+tools/liveboard-bot/node_modules/
+tools/liveboard-bot/.env
+tools/liveboard-bot/liveboard-message-id.txt
 
 
 
