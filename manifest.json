@@ -1,11 +1,11 @@
 {
-  "Version": "2026.08.30.183350",
-  "GeneratedAt": "2026-08-30T18:33:50.242Z",
+  "Version": "2026.08.30.195121",
+  "GeneratedAt": "2026-08-30T19:51:21.310Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 302,
+  "TotalFiles": 304,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -14,9 +14,9 @@
   },
   "News": [
     {
-      "title": "⚡ Core UE4SS Path Alignment & Legacy Mod Cleanse",
+      "title": "⚡ Core UE4SS Injection Fix & Root DLL Alignment",
       "date": "Aug 30, 2026",
-      "summary": "Aligned UE4SS to load from ue4ss/Mods and purged 400MB+ of stale legacy mods (DarnMenu, DarnToasts, PalOlympics) to ensure instant mount and cable fixes apply."
+      "summary": "Fixed dwmapi.dll LoadLibrary resolution by deploying UE4SS.dll to Win64 root pointing to ue4ss/Mods. All client mods, schemas, and UI hooks now active."
     },
     {
       "title": "🚀 In-App Launcher Self-Updater Live",
@@ -37,6 +37,12 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/dwmapi.dll"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/MemberVariableLayout.ini",
+      "Hash": "dcd0e6915cb1a7f514b08b12c49b9e3aaad4ee9dd2b5823e8285ffca6e463f5c",
+      "Size": 36851,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/MemberVariableLayout.ini"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/Palworld_Borealis_Preset.ini",
       "Hash": "e187c8e93299e45f3034240435c6c66045748d9059cc44df4fb0518959500eb0",
       "Size": 4800,
@@ -44,9 +50,15 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/UE4SS-settings.ini",
-      "Hash": "2f9df9eda8cf10d3e0b429e9b82263b5bf1ea6778cc07eeebf8501feb47e14ad",
-      "Size": 7555,
+      "Hash": "87df2449cc7d46f7083d3b156ff5c5991dec16de980c210c9e161cf512546a35",
+      "Size": 363,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/UE4SS-settings.ini"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/UE4SS.dll",
+      "Hash": "d0107f63e567313cb6a15c505b5db2bdba38130964a04e019bda7611c6178022",
+      "Size": 16519168,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/UE4SS.dll"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/LICENSE",
@@ -1826,8 +1838,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/UE4SS-settings.ini",
-      "Hash": "2f9df9eda8cf10d3e0b429e9b82263b5bf1ea6778cc07eeebf8501feb47e14ad",
-      "Size": 7555,
+      "Hash": "87df2449cc7d46f7083d3b156ff5c5991dec16de980c210c9e161cf512546a35",
+      "Size": 363,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/UE4SS-settings.ini"
     },
     {
