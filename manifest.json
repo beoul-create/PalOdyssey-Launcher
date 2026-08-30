@@ -1,11 +1,11 @@
 {
-  "Version": "2026.08.30.182654",
-  "GeneratedAt": "2026-08-30T18:26:54.969Z",
+  "Version": "2026.08.30.183350",
+  "GeneratedAt": "2026-08-30T18:33:50.242Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 304,
+  "TotalFiles": 302,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -14,19 +14,19 @@
   },
   "News": [
     {
+      "title": "⚡ Core UE4SS Path Alignment & Legacy Mod Cleanse",
+      "date": "Aug 30, 2026",
+      "summary": "Aligned UE4SS to load from ue4ss/Mods and purged 400MB+ of stale legacy mods (DarnMenu, DarnToasts, PalOlympics) to ensure instant mount and cable fixes apply."
+    },
+    {
       "title": "🚀 In-App Launcher Self-Updater Live",
       "date": "Aug 30, 2026",
       "summary": "PalLauncher now automatically checks for newer launcher versions and seamlessly downloads and hot-swaps updates in-app."
     },
     {
-      "title": "⚡ Zero-Stutter Pal Mounting & Steady-State Pipeline",
+      "title": "🐎 Instant Pal Mount Stutter & Freeze Fix Live",
       "date": "Aug 30, 2026",
-      "summary": "Eliminated compute SkinCache stalls, URO animation thrashing, and throttled steady-state async loading to 5ms for instant mount response."
-    },
-    {
-      "title": "🎣 Fishing Rod Dismount Stretched Cable Fix Live",
-      "date": "Aug 30, 2026",
-      "summary": "Direct-pointer CableReset module in PalworldTuner automatically purges and re-anchors cable physics on mount transitions."
+      "summary": "Eliminated compute SkinCache shader stalls, URO animation thrashing, and throttled steady-state async loading to 5ms for instant mount response."
     }
   ],
   "Files": [
@@ -37,28 +37,16 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/dwmapi.dll"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/enabled.txt",
-      "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "Size": 0,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/enabled.txt"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/Scripts/config.lua",
-      "Hash": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
-      "Size": 1,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/Scripts/config.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/Scripts/main.lua",
-      "Hash": "9bfcec2a92ac3630f9003bd9b6029aac581caa078d5cd8b250cce879201ecfdd",
-      "Size": 2996,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalworldBorealisEngineFix/Scripts/main.lua"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Palworld_Borealis_Preset.ini",
       "Hash": "e187c8e93299e45f3034240435c6c66045748d9059cc44df4fb0518959500eb0",
       "Size": 4800,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Palworld_Borealis_Preset.ini"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/UE4SS-settings.ini",
+      "Hash": "2f9df9eda8cf10d3e0b429e9b82263b5bf1ea6778cc07eeebf8501feb47e14ad",
+      "Size": 7555,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/UE4SS-settings.ini"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/LICENSE",
@@ -1838,8 +1826,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/UE4SS-settings.ini",
-      "Hash": "c684b6ca48e276c51f6abd5f29d2704bbbcad4627550d17992b1a2cf721f9f0c",
-      "Size": 7544,
+      "Hash": "2f9df9eda8cf10d3e0b429e9b82263b5bf1ea6778cc07eeebf8501feb47e14ad",
+      "Size": 7555,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/UE4SS-settings.ini"
     },
     {
