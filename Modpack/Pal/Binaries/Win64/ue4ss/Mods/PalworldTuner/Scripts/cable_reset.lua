@@ -1,66 +1,75 @@
-﻿-- ============================================================================
+-- ============================================================================
 -- PalworldTuner - Cable & Weapon Dismount Physics Restorer
--- Fixes Unreal Engine 5 CableComponent particle stretching on Pal dismount
+-- Lightweight direct-pointer cable particle reset (Zero Global Array Scans)
 -- ============================================================================
 
 local CableReset = {}
 
-local function ResetAllCables()
+local function ResetTargetActorCables(Actor)
+    if not Actor or not Actor:IsValid() then return end
     pcall(function()
-        local cables = FindAllOf("CableComponent") or {}
-        for _, cable in ipairs(cables) do
-            if cable and cable:IsValid() then
-                pcall(function()
-                    -- Momentarily toggle visibility to force UE5 to purge distant vertex buffer
-                    cable:SetVisibility(false, true)
-                    
-                    if type(cable.ResetParticles) == "function" then
-                        cable:ResetParticles()
-                    end
-                    
-                    cable.bEnableStiffness = true
-
-                    -- Re-enable visibility at correct local socket offset after 1 frame
-                    if ExecuteWithDelay then
-                        ExecuteWithDelay(60, function()
-                            if cable and cable:IsValid() then
+        -- Directly check components on the actor without scanning FUObjectArray
+        if type(Actor.GetComponentsByClass) == "function" then
+            local cableClass = StaticFindObject("/Script/CableComponent.CableComponent")
+            if cableClass and cableClass:IsValid() then
+                local comps = Actor:GetComponentsByClass(cableClass)
+                if comps and comps:IsValid() then
+                    for i = 1, comps:Num() do
+                        local cable = comps:Get(i)
+                        if cable and cable:IsValid() then
+                            cable:SetVisibility(false, true)
+                            if type(cable.ResetParticles) == "function" then
+                                cable:ResetParticles()
+                            end
+                            cable.bEnableStiffness = true
+                            if ExecuteWithDelay then
+                                ExecuteWithDelay(50, function()
+                                    if cable and cable:IsValid() then
+                                        cable:SetVisibility(true, true)
+                                    end
+                                end)
+                            else
                                 cable:SetVisibility(true, true)
                             end
-                        end)
-                    else
-                        cable:SetVisibility(true, true)
+                        end
                     end
-                end)
+                end
             end
         end
     end)
 end
 
 function CableReset.Init()
-    -- Hook all mount / dismount / weapon equip transition events
+    -- Only hook dismount end action directly
     local dismountHooks = {
         "/Script/Pal.PalRideMarkerComponent:OnEndRiding",
-        "/Script/Pal.PalActionRide:OnEndAction",
-        "/Script/Pal.PalPlayerCharacter:OnEndRide",
-        "/Script/Pal.PalPlayerCharacter:OnUnRide",
-        "/Script/Pal.PalCharacter:OnEndRide",
-        "/Script/Pal.PalWeaponBase:OnEquip",
-        "/Script/Pal.PalWeaponBase:OnAttachWeapon",
-        "/Script/Engine.PlayerController:ClientRestart"
+        "/Script/Pal.PalActionRide:OnEndAction"
     }
 
     for _, hookName in ipairs(dismountHooks) do
-        pcall(RegisterHook, hookName, function()
-            if ExecuteWithDelay then
-                ExecuteWithDelay(50, ResetAllCables)
-                ExecuteWithDelay(200, ResetAllCables)
-            else
-                ResetAllCables()
-            end
+        pcall(RegisterHook, hookName, function(Context)
+            pcall(function()
+                local obj = Context and Context.get and Context:get() or Context
+                if not obj or not obj:IsValid() then return end
+                
+                local char = nil
+                if type(obj.GetOwner) == "function" then
+                    char = obj:GetOwner()
+                elseif obj.Character then
+                    char = obj.Character
+                end
+
+                if char and char:IsValid() then
+                    -- Check equipped weapon on character
+                    if char.ShooterComponent and char.ShooterComponent:IsValid() and char.ShooterComponent.EquippedWeapon then
+                        ResetTargetActorCables(char.ShooterComponent.EquippedWeapon)
+                    end
+                end
+            end)
         end)
     end
 
-    print("[PalworldTuner] CableReset module active: Dismount fishing rod particle stretching fix initialized.")
+    print("[PalworldTuner] Lightweight CableReset initialized (Zero UObject table scanning).")
 end
 
 return CableReset

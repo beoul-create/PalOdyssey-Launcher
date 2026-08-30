@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.30.182036",
-  "GeneratedAt": "2026-08-30T18:20:36.467Z",
+  "Version": "2026.08.30.182158",
+  "GeneratedAt": "2026-08-30T18:21:58.489Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,14 +8,14 @@
   "TotalFiles": 304,
   "News": [
     {
+      "title": "⚡ Zero-Stutter Pal Mounting & Direct Cable Architecture",
+      "date": "Aug 30, 2026",
+      "summary": "Refactored CableReset to use direct-pointer actor resolution with zero UObject array scans. Fully eliminated GPU compute SkinCache stalls."
+    },
+    {
       "title": "🐎 Instant Pal Mount Stutter & Freeze Fix Live",
       "date": "Aug 30, 2026",
       "summary": "Eliminated compute SkinCache shader stalls and URO animation tick recalculations on Pal mounting and skeletal attachment."
-    },
-    {
-      "title": "🎣 Fishing Rod Dismount Stretched Cable Fix Live",
-      "date": "Aug 30, 2026",
-      "summary": "Created CableReset module in PalworldTuner to automatically flush and re-anchor CableComponent particles on mount/dismount transitions."
     },
     {
       "title": "🛒 Economy System & World Boss Boot Fixes Live",
@@ -1562,8 +1562,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalworldTuner/Scripts/cable_reset.lua",
-      "Hash": "dba8e1f76dd4745303baec66b726f52e846ec9e2338666c1d2e2b2bc6c779b46",
-      "Size": 2483,
+      "Hash": "574d26400fbafbf0ac39649835ae7dc86fb04ce7c9a4f73b4c0b328a1b237eb4",
+      "Size": 3131,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalworldTuner/Scripts/cable_reset.lua"
     },
     {
