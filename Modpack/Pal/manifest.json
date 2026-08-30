@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.30.000046",
-  "GeneratedAt": "2026-08-30T00:00:46.760Z",
+  "Version": "2026.08.30.000144",
+  "GeneratedAt": "2026-08-30T00:01:44.850Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -8,9 +8,9 @@
   "TotalFiles": 302,
   "News": [
     {
-      "title": "✨ SAO Crystal Death & Elemental Aura Overhaul",
+      "title": "💎 Universal SAO Death (Zero Corpse Ragdolls across Pals, NPCs & Players)",
       "date": "Aug 29, 2026",
-      "summary": "Mapped SAODeath and WorldBossAuras directly to native Palworld particle & crystal shatter audio libraries with fallback."
+      "summary": "Universalized SAO death disintegration across all characters (PalMonsterCharacter, PalPlayerCharacter, PalNPC) with full physical ragdoll suppression."
     },
     {
       "title": "⚡ Ultra FastConnect 2.0 & World Boss Spawner Live",
@@ -1808,8 +1808,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/sao_death.lua",
-      "Hash": "5630310e460701ca020d9d6dc437915ef98eb839989e3c3d3b8d7bf755ecf131",
-      "Size": 3423,
+      "Hash": "43ae99db4fb9ccbebca83b5f2f41a929c360ffb9e3936a9760d261fe4ed588de",
+      "Size": 4550,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/sao_death.lua"
     },
     {
