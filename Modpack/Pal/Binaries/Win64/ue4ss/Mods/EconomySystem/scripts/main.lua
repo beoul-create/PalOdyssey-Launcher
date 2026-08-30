@@ -22,9 +22,11 @@ local Config = {
 
 -- Safe config loader
 pcall(function()
-    local ScriptDir = debug.getinfo(1, "S").source:gsub("^@", ""):gsub("[^/\]+$", "")
+    local src = debug.getinfo(1, "S").source:gsub("^@", "")
+    local ScriptDir = src:match("(.*/)") or src:match("(.*\\)") or ""
     local candidates = {
         ScriptDir .. "../config.json",
+        ScriptDir .. "config.json",
         "C:/SteamLibrary/steamapps/common/Palworld/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json",
         "C:/SteamLibrary/steamapps/common/PalServer/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json"
     }
@@ -741,6 +743,23 @@ pcall(function()
             BindKey(Key.LeftMouseButton, HandleScreenClick)
         end
         print("[EconomySystem] Hotkeys registered: [F6] Toggle Shop GUI, [F7] Roll Gacha, [F8] Check Balance.")
+    end
+end)
+
+-- Register into UniPalUI Dashboard [F5] as an integrated tab
+pcall(function()
+    if UniPalUI and type(UniPalUI.RegisterTab) == "function" then
+        UniPalUI.RegisterTab({
+            Id = "economy_shop",
+            Title = "🛒 Technology Shop",
+            OnDraw = function(Canvas)
+                DrawShopUI(Canvas)
+            end,
+            OnClick = function(X, Y)
+                return HandleScreenClick()
+            end
+        })
+        print("[EconomySystem] Registered tab with UniPalUI Framework [F5].")
     end
 end)
 

@@ -202,5 +202,3 @@ function WorldBoss.InitHooks()
 end
 
 return WorldBoss
-
-return WorldBoss
