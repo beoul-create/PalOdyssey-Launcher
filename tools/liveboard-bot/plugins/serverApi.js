@@ -78,7 +78,9 @@ export function initServerApi(options = {}) {
             isProcessRunning = await isProcessRunningSilent('PalServer-Win64-Shipping.exe');
         }
 
-        const isOnline = Boolean(palSnapshot.reachable || stateData.ServerOnline || isProcessRunning);
+        // The JSON file can remain stale after a graceful server shutdown.
+        // REST reachability or the local PalServer process determines liveness.
+        const isOnline = Boolean(palSnapshot.reachable || isProcessRunning);
         const restPlayers = palSnapshot.reachable ? palSnapshot.players : null;
 
         return res.json({

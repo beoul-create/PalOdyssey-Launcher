@@ -47,7 +47,7 @@ export function initLiveboard(client, options = {}) {
                 if (palSnapshot.serverName) state.ServerName = palSnapshot.serverName;
             }
 
-            if (!state.ServerOnline) {
+            if (!palSnapshot.reachable) {
                 try {
                     const isRunning = await new Promise(resolve => {
                         const child = spawn('tasklist', ['/FI', 'IMAGENAME eq PalServer*'], {
@@ -61,8 +61,14 @@ export function initLiveboard(client, options = {}) {
                     });
                     if (isRunning) {
                         state.ServerOnline = true;
+                    } else {
+                        state.ServerOnline = false;
+                        state.Players = [];
+                        state.PlayerCount = 0;
                     }
-                } catch { }
+                } catch {
+                    state.ServerOnline = false;
+                }
             }
 
             const channel = cachedChannel || await client.channels.fetch(channelId);
