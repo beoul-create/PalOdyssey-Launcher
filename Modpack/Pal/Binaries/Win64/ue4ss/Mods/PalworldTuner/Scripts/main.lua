@@ -27,4 +27,10 @@ if syncOk and type(SprintSync) == "table" and SprintSync.apply then
     pcall(SprintSync.apply, Config)
 end
 
+-- Dismount Cable & Fishing Rod physics restorer
+local cableOk, CableReset = pcall(require, "cable_reset")
+if cableOk and type(CableReset) == "table" and CableReset.Init then
+    pcall(CableReset.Init)
+end
+
 log("loaded")

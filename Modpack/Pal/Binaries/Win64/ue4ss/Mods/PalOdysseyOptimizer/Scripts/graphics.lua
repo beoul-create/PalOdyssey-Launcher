@@ -42,6 +42,8 @@ function GraphicsModule.apply(cfg, cpuCfg)
         ExecuteConsole("r.SkeletalMeshLODBias 2")
         ExecuteConsole("p.RigidBodyLODSubStepping 0")
         ExecuteConsole("p.ClothPhysics 0")
+        ExecuteConsole("r.DrawDebug 0")
+        ExecuteConsole("p.VisualizeLineTraces 0")
 
         -- 3. Seamless Distance Falloff & Continuous Landscape CDLOD
         ExecuteConsole("r.DitheredLODTransition 1")
