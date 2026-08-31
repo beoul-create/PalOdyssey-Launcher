@@ -1,0 +1,1009 @@
+{
+  "DT_PassiveSkill_Main": {
+    "IceHound_1": {
+      "EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Ice",
+      "EffectValue1": 15,
+      "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType2": "EPalPassiveSkillEffectType::Defense",
+      "EffectValue2": 25,
+      "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+      "EffectType3": "EPalPassiveSkillEffectType::no",
+      "EffectValue3": 0,
+      "TargetType3": "EPalPassiveSkillEffectTargetType::None",
+      "EffectType4": "EPalPassiveSkillEffectType::no",
+      "EffectValue4": 0,
+      "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+      "InvokeActiveOtomo": false,
+      "InvokeWorker": false,
+      "InvokeRiding": true,
+      "InvokeReserve": false,
+      "InvokeInOtomo": false,
+      "InvokeAlways": false,
+      "InvokeInBaseCamp": false
+    },
+    "IceHound_2": {
+      "EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Ice",
+      "EffectValue1": 18,
+      "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType2": "EPalPassiveSkillEffectType::Defense",
+      "EffectValue2": 30,
+      "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+      "EffectType3": "EPalPassiveSkillEffectType::no",
+      "EffectValue3": 0,
+      "TargetType3": "EPalPassiveSkillEffectTargetType::None",
+      "EffectType4": "EPalPassiveSkillEffectType::no",
+      "EffectValue4": 0,
+      "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+      "InvokeActiveOtomo": false,
+      "InvokeWorker": false,
+      "InvokeRiding": true,
+      "InvokeReserve": false,
+      "InvokeInOtomo": false,
+      "InvokeAlways": false,
+      "InvokeInBaseCamp": false
+    },
+    "IceHound_3": {
+      "EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Ice",
+      "EffectValue1": 21,
+      "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType2": "EPalPassiveSkillEffectType::Defense",
+      "EffectValue2": 35,
+      "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+      "EffectType3": "EPalPassiveSkillEffectType::no",
+      "EffectValue3": 0,
+      "TargetType3": "EPalPassiveSkillEffectTargetType::None",
+      "EffectType4": "EPalPassiveSkillEffectType::no",
+      "EffectValue4": 0,
+      "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+      "InvokeActiveOtomo": false,
+      "InvokeWorker": false,
+      "InvokeRiding": true,
+      "InvokeReserve": false,
+      "InvokeInOtomo": false,
+      "InvokeAlways": false,
+      "InvokeInBaseCamp": false
+    },
+    "IceHound_4": {
+      "EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Ice",
+      "EffectValue1": 24,
+      "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType2": "EPalPassiveSkillEffectType::Defense",
+      "EffectValue2": 40,
+      "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+      "EffectType3": "EPalPassiveSkillEffectType::no",
+      "EffectValue3": 0,
+      "TargetType3": "EPalPassiveSkillEffectTargetType::None",
+      "EffectType4": "EPalPassiveSkillEffectType::no",
+      "EffectValue4": 0,
+      "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+      "InvokeActiveOtomo": false,
+      "InvokeWorker": false,
+      "InvokeRiding": true,
+      "InvokeReserve": false,
+      "InvokeInOtomo": false,
+      "InvokeAlways": false,
+      "InvokeInBaseCamp": false
+    },
+    "IceHound_5": {
+      "EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Ice",
+      "EffectValue1": 30,
+      "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType2": "EPalPassiveSkillEffectType::Defense",
+      "EffectValue2": 50,
+      "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+      "EffectType3": "EPalPassiveSkillEffectType::no",
+      "EffectValue3": 0,
+      "TargetType3": "EPalPassiveSkillEffectTargetType::None",
+      "EffectType4": "EPalPassiveSkillEffectType::no",
+      "EffectValue4": 0,
+      "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+      "InvokeActiveOtomo": false,
+      "InvokeWorker": false,
+      "InvokeRiding": true,
+      "InvokeReserve": false,
+      "InvokeInOtomo": false,
+      "InvokeAlways": false,
+      "InvokeInBaseCamp": false
+    }
+  },
+  "DT_PartnerSkillParameter": {
+    "ThunderDog_Ice": {
+      "RestrictionItems": [
+        {
+          "Key": "SkillUnlock_Thunderdog_Ice"
+        }
+      ],
+      "ActiveSkill": {
+        "SkillName": "Unknown",
+        "WazaID": "EPalWazaID::None",
+        "bIdlelCostDecreaseEveryFrame": false,
+        "bIsExecSkillContinuation": false,
+        "bIsOneShotRideAction": false,
+        "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+        "IsRidingActiveSkillNotWeapon": false,
+        "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+        "bIsToggleRidingActiveSkillNotWeapon": false,
+        "ActiveSkill_MainValueByRank": [],
+        "ActiveSkill_OverWriteCoolTimeByRank": [],
+        "ActiveSkill_OverWriteEffectTimeByRank": []
+      },
+      "PassiveSkills": [
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DefenseUp_Ice_PartnerSkill_1"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "MoveSpeed_up_PartnerSkill_Ride_1"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": false,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "IceHound_1"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DefenseUp_Ice_PartnerSkill_2"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "MoveSpeed_up_PartnerSkill_Ride_1"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": false,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "IceHound_2"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DefenseUp_Ice_PartnerSkill_3"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "MoveSpeed_up_PartnerSkill_Ride_2"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": false,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "IceHound_3"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DefenseUp_Ice_PartnerSkill_4"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "MoveSpeed_up_PartnerSkill_Ride_3"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": false,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "IceHound_4"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DefenseUp_Ice_PartnerSkill_5"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "MoveSpeed_up_PartnerSkill_Ride_4"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": false,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "IceHound_5"
+              }
+            }
+          ]
+        }
+      ],
+      "TextReferencePassiveSkills": []
+    },
+    "BOSS_ThunderDog_Ice": {
+      "RestrictionItems": [
+        {
+          "Key": "SkillUnlock_Thunderdog_Ice"
+        }
+      ],
+      "ActiveSkill": {
+        "SkillName": "Unknown",
+        "WazaID": "EPalWazaID::None",
+        "bIdlelCostDecreaseEveryFrame": false,
+        "bIsExecSkillContinuation": false,
+        "bIsOneShotRideAction": false,
+        "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+        "IsRidingActiveSkillNotWeapon": false,
+        "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+        "bIsToggleRidingActiveSkillNotWeapon": false,
+        "ActiveSkill_MainValueByRank": [],
+        "ActiveSkill_OverWriteCoolTimeByRank": [],
+        "ActiveSkill_OverWriteEffectTimeByRank": []
+      },
+      "PassiveSkills": [
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DefenseUp_Ice_PartnerSkill_1"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "MoveSpeed_up_PartnerSkill_Ride_1"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": false,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "IceHound_1"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DefenseUp_Ice_PartnerSkill_2"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "MoveSpeed_up_PartnerSkill_Ride_1"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": false,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "IceHound_2"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DefenseUp_Ice_PartnerSkill_3"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "MoveSpeed_up_PartnerSkill_Ride_2"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": false,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "IceHound_3"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DefenseUp_Ice_PartnerSkill_4"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "MoveSpeed_up_PartnerSkill_Ride_3"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": false,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "IceHound_4"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DefenseUp_Ice_PartnerSkill_5"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "MoveSpeed_up_PartnerSkill_Ride_4"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": false,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "IceHound_5"
+              }
+            }
+          ]
+        }
+      ],
+      "TextReferencePassiveSkills": []
+   }
+ }
+}

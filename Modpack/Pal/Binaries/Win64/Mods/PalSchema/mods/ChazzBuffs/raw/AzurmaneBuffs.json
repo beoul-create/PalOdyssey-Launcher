@@ -2,11 +2,11 @@
 {
   "DT_PalMonsterParameter": {
     "BlueThunderHorse": {
-      "ShotAttack": 125,
+      "Attack": 125,
       "Friendship_ShotAttack": 1.5
     },
     "BOSS_BlueThunderHorse": {
-      "ShotAttack": 125,
+      "Attack": 125,
       "Friendship_ShotAttack": 1.5
     }
   },

@@ -1,5 +1,5 @@
 {
 	"DT_PalFirstActivatedInfoText":{
-		"PAL_FIRST_SPAWN_DESC_PREDATOR_DarkScorpion":"While in party,\r\nWhile in party, player and pal's Defense increases by <Status_Up>{Passive2_EffectValue1}%</>, grants pal a lifesteal effect that restores <Status_Up>{Passive2_EffectValue2}%</> of damage dealt as Health, and <img id=|ElemIcon_Electric|/><uiCommon id=|COMMON_ELEMENT_NAME_Electricity| style=|Elem_Electric|/> Pals drop <Status_Up>{Passive1_EffectValue1}%</> more items when defeated. (Does not stack.)\r\nIncreases own Attack and Defense by 20% and boosts lifesteal by 15%."
+		"PAL_FIRST_SPAWN_DESC_PREDATOR_DarkScorpion":"While in party,\r\nplayer and pal's Defense increases by <Status_Up>{Passive2_EffectValue1}%</>, grants pal a lifesteal effect that restores <Status_Up>{Passive2_EffectValue2}%</> of damage dealt as Health, increases pal's damage against poisoned enemies by <Status_Up>{Passive2_EffectValue3}%</>, and <img id=|ElemIcon_Electric|/><uiCommon id=|COMMON_ELEMENT_NAME_Electricity| style=|Elem_Electric|/> Pals drop <Status_Up>{Passive1_EffectValue1}%</> more items when defeated. (Does not stack.)\r\nIncreases own Attack and Defense by 20% and boosts lifesteal by 15%."
 	}
 }

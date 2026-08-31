@@ -1,0 +1,5 @@
+{
+	"DT_PalFirstActivatedInfoText":{
+		"PAL_FIRST_SPAWN_DESC_BrownRabbit":"While in party,\r\nincreases the player's Defense and Movement Speed by <Status_Up>{Passive1_EffectValue1}%</> while sprinting, increases the player's movement speed by <Status_Up>{Passive2_EffectValue2}%</>, increases the player's melee attack speed by <Status_Up>{Passive2_EffectValue3}%</>, and reduces the player's stamina consumption by <Status_Up>{Passive2_EffectValue1}%</>. (Does not stack)"
+	}
+}

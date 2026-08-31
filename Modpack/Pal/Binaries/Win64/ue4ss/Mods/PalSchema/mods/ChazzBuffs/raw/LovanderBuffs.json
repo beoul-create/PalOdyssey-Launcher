@@ -3,11 +3,23 @@
   "DT_PalMonsterParameter": {
     "PinkLizard": {
       "ElementType2": "Normal",
+      "WorkSuitability_Watering": 3,
+      "WorkSuitability_Seeding": 4,
+      "WorkSuitability_Handcraft": 4,
+      "WorkSuitability_Collection": 3,
+      "WorkSuitability_ProductMedicine": 5,
+      "WorkSuitability_Transport": 4,
       "ShotAttack": 120,
       "Friendship_ShotAttack": 1.7
     },
     "BOSS_PinkLizard": {
       "ElementType2": "Normal",
+      "WorkSuitability_Watering": 3,
+      "WorkSuitability_Seeding": 4,
+      "WorkSuitability_Handcraft": 4,
+      "WorkSuitability_Collection": 3,
+      "WorkSuitability_ProductMedicine": 5,
+      "WorkSuitability_Transport": 4,
       "ShotAttack": 120,
       "Friendship_ShotAttack": 1.7
     }

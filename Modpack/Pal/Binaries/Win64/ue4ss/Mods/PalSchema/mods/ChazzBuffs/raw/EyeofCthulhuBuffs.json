@@ -18,7 +18,7 @@
       "DisplayPower": 400,
       "CoolTime": 15.0,
       "EffectType1": "EPalAdditionalEffectType::Stun",
-      "EffectValue1": 100
+      "EffectValue1": 50
     },
     "Unique_Yakushima_MouthTossin": {
       "WazaType": "EPalWazaID::Unique_Yakushima_MouthTossin",
@@ -33,7 +33,7 @@
       "WazaType": "EPalWazaID::Unique_Yakushima_SummonServant",
       "Element": "EPalElementType::Dark",
       "Power": 300,
-      "DisplayPower": 350,
+      "DisplayPower": 300,
       "CoolTime": 10.0
     }
   },

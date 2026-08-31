@@ -1,0 +1,5 @@
+{
+	"DT_PalFirstActivatedInfoText":{
+		"PAL_FIRST_SPAWN_DESC_GrassMinotaur_Ice":"While fighting together, increases the Attack of both the player and this Pal by 30%, converts the player's attacks to <img id=|ElemIcon_Ice|/><uiCommon id=|COMMON_ELEMENT_NAME_Ice| style=|Elem_Ice|/>, and grants the player the ability to Freeze enemies afflicted with Soak in one strike."
+	}
+}

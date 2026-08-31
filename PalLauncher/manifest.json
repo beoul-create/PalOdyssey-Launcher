@@ -1,11 +1,11 @@
 {
-  "Version": "2026.08.31.211457",
-  "GeneratedAt": "2026-08-31T21:14:57.858Z",
+  "Version": "2026.08.31.220311",
+  "GeneratedAt": "2026-08-31T22:03:11.220Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 582,
+  "TotalFiles": 662,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -14,6 +14,11 @@
   },
   "News": [
     {
+      "title": "🔥 Updated ChazzBuffs Balance & Partner Skill Overhaul",
+      "date": "Aug 31, 2026",
+      "summary": "Integrated the latest ChazzBuffs release with reworked element attack/defense scaling, new partner skill multipliers, and multi-language translation dictionaries."
+    },
+    {
       "title": "⚡ Total Mount Lag & Fishing Rod Cable Physics Cure",
       "date": "Aug 31, 2026",
       "summary": "Purged all legacy LineTrace and debug mods, deployed multi-target (Player + Mount + Weapon + Sockets) CableReset on dismount, and locked in steady-state streaming limits."
@@ -21,12 +26,7 @@
     {
       "title": "✨ Azomer Passive Skill Name Key Alias & Translation Fix",
       "date": "Aug 30, 2026",
-      "summary": "Expanded all APSE skill name and description keys with universal engine aliases (PASSIVE_*, *_NAME, raw ID) and dual OverrideNameMsgID/TextID properties so all passives render crystal clear."
-    },
-    {
-      "title": "🚀 In-App Launcher Self-Updater Live",
-      "date": "Aug 30, 2026",
-      "summary": "PalLauncher now automatically checks for newer launcher versions and seamlessly downloads and hot-swaps updates in-app."
+      "summary": "Expanded all APSE skill name and description keys with universal engine aliases (PASSIVE_*, *_NAME, raw ID) and dual OverrideNameMsgID/TextID properties."
     }
   ],
   "Files": [
@@ -428,8 +428,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/AzurmaneBuffs.json",
-      "Hash": "36d4f69a8f5941895dac1a5a9f3807207d10334b7e57f6b535a76fe4111c395e",
-      "Size": 1064,
+      "Hash": "64edc8beb1aed46f3681944e24162eb917169d5b359452feb5a274f2c26b5a21",
+      "Size": 1055,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/AzurmaneBuffs.json"
     },
     {
@@ -566,8 +566,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/EyeofCthulhuBuffs.json",
-      "Hash": "d17b1d03b805009b84993c0493b07b79f589bec36b478a9e87770d37b94c5c7e",
-      "Size": 1451,
+      "Hash": "486f0af4522d2edfa5ac6e48483eeae0736cdb0d2a0828a40943a76f281229d0",
+      "Size": 1450,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/EyeofCthulhuBuffs.json"
     },
     {
@@ -644,8 +644,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/HartalisBuffs.json",
-      "Hash": "30888e7a56fc4b83da9cf243ea21ea45d37650ef2fb555d1139b1a14a8d67a7f",
-      "Size": 790,
+      "Hash": "5ab96fa6fe003e2b76f44d03dc9eb1be6b46b2b4efb03c306bf589a0063be7e6",
+      "Size": 1033,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/HartalisBuffs.json"
     },
     {
@@ -752,8 +752,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/LovanderBuffs.json",
-      "Hash": "a6b79453221bde818503ec2c913e4adc77460177f7179b5f81126ec364276625",
-      "Size": 847,
+      "Hash": "9560053babf32f1e08354459f594ab6c51909787484752c3287327811018cdc8",
+      "Size": 1311,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/LovanderBuffs.json"
     },
     {
@@ -764,8 +764,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/LunarisPartnerSkill.json",
-      "Hash": "7edd4b6352b2176b2f183d827ccd6c636671bcd7d8c6eab14891aeb925873580",
-      "Size": 10221,
+      "Hash": "8085fc220d7fa0330455a74b13eacb0f8488b4af5c858bda84cd9d28e02a7f20",
+      "Size": 10220,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/LunarisPartnerSkill.json"
     },
     {
@@ -860,13 +860,13 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/MossandaBuffs.json",
-      "Hash": "5e245f622faace9e6e7b9c52eeb55152e7bf365fb842d0ef53aa892cfdf153bf",
+      "Hash": "97ace7ab4c5514384ce46eaf345afe8295ba15f93a7e13d47eabd13fd0cb144a",
       "Size": 631,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/MossandaBuffs.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/MossandaLuxBuffs.json",
-      "Hash": "a0ee385115bc729aa7d5d26cd6b0b76be3e389849554620f7bb180840e789496",
+      "Hash": "749fe936efa570ce13f7632410c792b48833f83276e4ec7f49352f64bb4d7e98",
       "Size": 680,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/MossandaLuxBuffs.json"
     },
@@ -929,6 +929,36 @@
       "Hash": "c9a51a06f902e02452968078d7319850e83d453abe66dda6fcced4d4bf5c3d61",
       "Size": 40985,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/PupperaiPartnerSkill.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundBuffs.json",
+      "Hash": "3f55114fdc1ba0a9caa320ac1a068be612a58c3c0455cf4c0786906fa74c75c3",
+      "Size": 1694,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundBuffs.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundCrystBuffs.json",
+      "Hash": "9179783d6929b9f819262daf7b9a5a378cf92571244960225fd214451e427a8f",
+      "Size": 1417,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundCrystBuffs.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundCrystPartnerSkill.json",
+      "Hash": "d5df87cd369ae31e145df54d658022a035a7ced669d61f8a0c45db31949f2894",
+      "Size": 35605,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundCrystPartnerSkill.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundPartnerSkill.json",
+      "Hash": "a1790516637366d20b7a26a5533cfc65237ec88f32ad2bc2e73e8bb159632047",
+      "Size": 22621,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundPartnerSkill.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundPartnerSkill2.json",
+      "Hash": "431fe183f1e020db140c1f9abf95862588d7c443b53799dce65654d46c90cecc",
+      "Size": 10664,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundPartnerSkill2.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/RenjishiBuffs.json",
@@ -1136,7 +1166,7 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/WistellaBuffs.json",
-      "Hash": "1368c03ec32a9c8547d9b9998f41efa51508de0d7109997225d94f2b72603b4a",
+      "Hash": "0846fd61eaf910b0ac6b3da8fd987b3e796173b2ea1f8d68adb9f2ec13c102c1",
       "Size": 596,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/raw/WistellaBuffs.json"
     },
@@ -1214,20 +1244,20 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpion_GroundTranslations.json",
-      "Hash": "372e8abdc189e143086b7e33f4742237d01ff501e857b82a07059c8908e527e7",
-      "Size": 463,
+      "Hash": "2f49e29d747d7e248e3dda32cc14cdf063eeffcd32d528ab31f617f0e5fa901f",
+      "Size": 603,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpion_GroundTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpionPredatorTranslations.json",
-      "Hash": "26aedb2094d606c9909e8dd87df6506adef5858aaa778b63073f47b1347003d8",
-      "Size": 581,
+      "Hash": "3c4162a7fb680d6b2b36ac664d33205cc769d60145d2a152b5473aea49f849b1",
+      "Size": 656,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpionPredatorTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpionTranslations.json",
-      "Hash": "4f9f773a3affc2a45648925bf3a0441b8e74e00f74d50d7332649c98272ef1cb",
-      "Size": 500,
+      "Hash": "7f7e4b2afeb306aa1fc860065b12406a031505a65f9edc59cd39aa8f4840776f",
+      "Size": 575,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpionTranslations.json"
     },
     {
@@ -1357,10 +1387,220 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfishTranslations.json"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDog_IceTranslations.json",
+      "Hash": "268c30cfb2fa11f6029760d1d762d650f98a9187f795e01049e24307e66f7128",
+      "Size": 534,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDog_IceTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDogTranslations.json",
+      "Hash": "2479e61ce6ed158cff11ef70bb382c4a8c3a50dd11dbaddd4943131d98bfaae5",
+      "Size": 614,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDogTranslations.json"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/WhiteAlienDragonTranslations.json",
       "Hash": "76835897cee0b890a67c16ca77d607bff134082cc73383c830d90def65c860da",
       "Size": 347,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/WhiteAlienDragonTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/BlackMetalDragonTranslations.json",
+      "Hash": "091132eaf9bbb6056d17e020a607f4c8286c8ff08e01e3219e851bcb76c212ce",
+      "Size": 344,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/BlackMetalDragonTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/BlueThunderHorseTranslations.json",
+      "Hash": "9ac19272bcbc764db7d3eb49122454775046e57a84a5313c63a61b800e5a8859",
+      "Size": 307,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/BlueThunderHorseTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/BrownRabbitTranslations.json",
+      "Hash": "6550e92012b2439ab3a06ce7a68fc2821f454c2a1798c32e9f32065586b60cbb",
+      "Size": 478,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/BrownRabbitTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/ChikipiTranslations.json",
+      "Hash": "f2367bd044291b7043e021d3b063b89c2c26dc350685d8268cc72b11ff963bdc",
+      "Size": 160,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/ChikipiTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkFlameFoxTranslations.json",
+      "Hash": "c10851bb0c1fa50897f19a5af5b2ba52046d1734ea4f89591cdff430e2dee73c",
+      "Size": 540,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkFlameFoxTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkMechaDragonTranslations.json",
+      "Hash": "ac6f25e77c9cc590616696703d81b6ad576241fa9eb82e47a360158561d1bfa9",
+      "Size": 323,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkMechaDragonTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkScorpion_GroundTranslations.json",
+      "Hash": "2f49e29d747d7e248e3dda32cc14cdf063eeffcd32d528ab31f617f0e5fa901f",
+      "Size": 603,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkScorpion_GroundTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkScorpionPredatorTranslations.json",
+      "Hash": "3c4162a7fb680d6b2b36ac664d33205cc769d60145d2a152b5473aea49f849b1",
+      "Size": 656,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkScorpionPredatorTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkScorpionTranslations.json",
+      "Hash": "7f7e4b2afeb306aa1fc860065b12406a031505a65f9edc59cd39aa8f4840776f",
+      "Size": 575,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkScorpionTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/ElecPandaTranslations.json",
+      "Hash": "b414cc36377d400327e7b3ec44f60711b5dc53b8ff6d729983b484ee2f2bbda0",
+      "Size": 450,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/ElecPandaTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/Gorilla_GroundTranslations.json",
+      "Hash": "3c1cc4145ac90fc61233a5449bbebe2b6cb6286c3acd677070dae4fee987f0cb",
+      "Size": 395,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/Gorilla_GroundTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassGolem_DarkTranslations.json",
+      "Hash": "cdf3ea58c223677780764bf4dfdcd655b9a7b0a79086100f990c5140e83612d1",
+      "Size": 398,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassGolem_DarkTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassGolemTranslations.json",
+      "Hash": "8be6ba93359b5ea7e975d6bdbb2259b5d66047344e725943df7486191ec796ca",
+      "Size": 353,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassGolemTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassMammoth_IceTranslations.json",
+      "Hash": "9d9155c24d4acf2173e305c1fb598016f4a640f1ddf9ceda1df4fbabe5df9745",
+      "Size": 536,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassMammoth_IceTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassMammothTranslations.json",
+      "Hash": "70113939dc7877b71bb63da8823404a3f155607866276d15a45f40f51b9e41d7",
+      "Size": 506,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassMammothTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassMinotaur_IceTranslations.json",
+      "Hash": "987fdc466c4d35a7321c9ee75214c286faeb42dad6118b7ea28076d704d8e57c",
+      "Size": 374,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassMinotaur_IceTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrimGirlTranslations.json",
+      "Hash": "ce9cd28d977525053274dd6582ea987350f6fe46f36138b1785285225cb20daa",
+      "Size": 325,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrimGirlTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/HerbilTranslations.json",
+      "Hash": "79955511c40c7a01ba82b5c3750eb85fd058319d50f364cf2174b8ea893e4162",
+      "Size": 181,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/HerbilTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/HerculesBeetle_GroundTranslations.json",
+      "Hash": "5f7b6a048c3ca0bc4008d009c38db1c546718009fcea34d39f6ab07dad88e36d",
+      "Size": 434,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/HerculesBeetle_GroundTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/HerculesBeetleTranslations.json",
+      "Hash": "981c64aa738e23ea988047d46b2059a3e13d77a752abd64524c7604a153badaa",
+      "Size": 530,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/HerculesBeetleTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/KabukiManTranslations.json",
+      "Hash": "e4e36e324455d8d7908516522bda399076f57af5c01153216433af24b2c8ad79",
+      "Size": 489,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/KabukiManTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/LeafMomongaTranslations.json",
+      "Hash": "7d7072035959239f235e4ddf48362ad8f723206d22b789e9c3c88cfea3800bef",
+      "Size": 447,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/LeafMomongaTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/LegendDeerTranslations.json",
+      "Hash": "ae190884e0323e1ceecbfef86578603f372962e9c4a9b99baed7664c11c9826e",
+      "Size": 483,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/LegendDeerTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/LilyQueenDarkTranslations.json",
+      "Hash": "04a1c5186a2a197cd03fc1892a409d419dc679f1f5fc50834c38c9ede3d833e2",
+      "Size": 424,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/LilyQueenDarkTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/LilyQueenTranslations.json",
+      "Hash": "b98279c3a09614da9f5de994b251ec5f220ce32853803aad3cdc1b19dca8af75",
+      "Size": 388,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/LilyQueenTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/MushroomLadyTranslations.json",
+      "Hash": "b219150af0a30b06cbb9c6e5e4c0eb7fee867eb8c76b96c5234cf78540c755e4",
+      "Size": 147,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/MushroomLadyTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/MutantTranslations.json",
+      "Hash": "4cc54fc8b2d9e6c1c3e982488270ff08dd7ce8e4ddf98449bb20e1bfcb16ff48",
+      "Size": 372,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/MutantTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/SnowTigerBeastmanTranslations.json",
+      "Hash": "3ca28bb9779785524f67ccaaabed8883b85e23cae4e24269a7318d6154c83115",
+      "Size": 504,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/SnowTigerBeastmanTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/SwordCutlassfish_FireTranslations.json",
+      "Hash": "a327f87f4dad0d4deac345bd8cbf89230ceee0d87992dd8f2e302f38dd0d99c8",
+      "Size": 614,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/SwordCutlassfish_FireTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/SwordCutlassfishTranslations.json",
+      "Hash": "0b88b903484feab31dda7a8ae04b0afec1563ec0830432dacef93df668504093",
+      "Size": 600,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/SwordCutlassfishTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/ThunderDog_IceTranslations.json",
+      "Hash": "268c30cfb2fa11f6029760d1d762d650f98a9187f795e01049e24307e66f7128",
+      "Size": 534,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/ThunderDog_IceTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/ThunderDogTranslations.json",
+      "Hash": "2479e61ce6ed158cff11ef70bb382c4a8c3a50dd11dbaddd4943131d98bfaae5",
+      "Size": 614,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/ThunderDogTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/WhiteAlienDragonTranslations.json",
+      "Hash": "76835897cee0b890a67c16ca77d607bff134082cc73383c830d90def65c860da",
+      "Size": 347,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/global/WhiteAlienDragonTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/CustomSubspeciesBreeding/mod.json",
@@ -2174,8 +2414,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/AzurmaneBuffs.json",
-      "Hash": "36d4f69a8f5941895dac1a5a9f3807207d10334b7e57f6b535a76fe4111c395e",
-      "Size": 1064,
+      "Hash": "64edc8beb1aed46f3681944e24162eb917169d5b359452feb5a274f2c26b5a21",
+      "Size": 1055,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/AzurmaneBuffs.json"
     },
     {
@@ -2312,8 +2552,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/EyeofCthulhuBuffs.json",
-      "Hash": "d17b1d03b805009b84993c0493b07b79f589bec36b478a9e87770d37b94c5c7e",
-      "Size": 1451,
+      "Hash": "486f0af4522d2edfa5ac6e48483eeae0736cdb0d2a0828a40943a76f281229d0",
+      "Size": 1450,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/EyeofCthulhuBuffs.json"
     },
     {
@@ -2390,8 +2630,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/HartalisBuffs.json",
-      "Hash": "30888e7a56fc4b83da9cf243ea21ea45d37650ef2fb555d1139b1a14a8d67a7f",
-      "Size": 790,
+      "Hash": "5ab96fa6fe003e2b76f44d03dc9eb1be6b46b2b4efb03c306bf589a0063be7e6",
+      "Size": 1033,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/HartalisBuffs.json"
     },
     {
@@ -2498,8 +2738,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/LovanderBuffs.json",
-      "Hash": "a6b79453221bde818503ec2c913e4adc77460177f7179b5f81126ec364276625",
-      "Size": 847,
+      "Hash": "9560053babf32f1e08354459f594ab6c51909787484752c3287327811018cdc8",
+      "Size": 1311,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/LovanderBuffs.json"
     },
     {
@@ -2510,8 +2750,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/LunarisPartnerSkill.json",
-      "Hash": "7edd4b6352b2176b2f183d827ccd6c636671bcd7d8c6eab14891aeb925873580",
-      "Size": 10221,
+      "Hash": "8085fc220d7fa0330455a74b13eacb0f8488b4af5c858bda84cd9d28e02a7f20",
+      "Size": 10220,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/LunarisPartnerSkill.json"
     },
     {
@@ -2606,13 +2846,13 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/MossandaBuffs.json",
-      "Hash": "5e245f622faace9e6e7b9c52eeb55152e7bf365fb842d0ef53aa892cfdf153bf",
+      "Hash": "97ace7ab4c5514384ce46eaf345afe8295ba15f93a7e13d47eabd13fd0cb144a",
       "Size": 631,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/MossandaBuffs.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/MossandaLuxBuffs.json",
-      "Hash": "a0ee385115bc729aa7d5d26cd6b0b76be3e389849554620f7bb180840e789496",
+      "Hash": "749fe936efa570ce13f7632410c792b48833f83276e4ec7f49352f64bb4d7e98",
       "Size": 680,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/MossandaLuxBuffs.json"
     },
@@ -2675,6 +2915,36 @@
       "Hash": "c9a51a06f902e02452968078d7319850e83d453abe66dda6fcced4d4bf5c3d61",
       "Size": 40985,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/PupperaiPartnerSkill.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundBuffs.json",
+      "Hash": "3f55114fdc1ba0a9caa320ac1a068be612a58c3c0455cf4c0786906fa74c75c3",
+      "Size": 1694,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundBuffs.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundCrystBuffs.json",
+      "Hash": "9179783d6929b9f819262daf7b9a5a378cf92571244960225fd214451e427a8f",
+      "Size": 1417,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundCrystBuffs.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundCrystPartnerSkill.json",
+      "Hash": "d5df87cd369ae31e145df54d658022a035a7ced669d61f8a0c45db31949f2894",
+      "Size": 35605,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundCrystPartnerSkill.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundPartnerSkill.json",
+      "Hash": "a1790516637366d20b7a26a5533cfc65237ec88f32ad2bc2e73e8bb159632047",
+      "Size": 22621,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundPartnerSkill.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundPartnerSkill2.json",
+      "Hash": "431fe183f1e020db140c1f9abf95862588d7c443b53799dce65654d46c90cecc",
+      "Size": 10664,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/RayhoundPartnerSkill2.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/RenjishiBuffs.json",
@@ -2882,7 +3152,7 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/WistellaBuffs.json",
-      "Hash": "1368c03ec32a9c8547d9b9998f41efa51508de0d7109997225d94f2b72603b4a",
+      "Hash": "0846fd61eaf910b0ac6b3da8fd987b3e796173b2ea1f8d68adb9f2ec13c102c1",
       "Size": 596,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/raw/WistellaBuffs.json"
     },
@@ -2960,20 +3230,20 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpion_GroundTranslations.json",
-      "Hash": "372e8abdc189e143086b7e33f4742237d01ff501e857b82a07059c8908e527e7",
-      "Size": 463,
+      "Hash": "2f49e29d747d7e248e3dda32cc14cdf063eeffcd32d528ab31f617f0e5fa901f",
+      "Size": 603,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpion_GroundTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpionPredatorTranslations.json",
-      "Hash": "26aedb2094d606c9909e8dd87df6506adef5858aaa778b63073f47b1347003d8",
-      "Size": 581,
+      "Hash": "3c4162a7fb680d6b2b36ac664d33205cc769d60145d2a152b5473aea49f849b1",
+      "Size": 656,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpionPredatorTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpionTranslations.json",
-      "Hash": "4f9f773a3affc2a45648925bf3a0441b8e74e00f74d50d7332649c98272ef1cb",
-      "Size": 500,
+      "Hash": "7f7e4b2afeb306aa1fc860065b12406a031505a65f9edc59cd39aa8f4840776f",
+      "Size": 575,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpionTranslations.json"
     },
     {
@@ -3103,10 +3373,220 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfishTranslations.json"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDog_IceTranslations.json",
+      "Hash": "268c30cfb2fa11f6029760d1d762d650f98a9187f795e01049e24307e66f7128",
+      "Size": 534,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDog_IceTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDogTranslations.json",
+      "Hash": "2479e61ce6ed158cff11ef70bb382c4a8c3a50dd11dbaddd4943131d98bfaae5",
+      "Size": 614,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDogTranslations.json"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/WhiteAlienDragonTranslations.json",
       "Hash": "76835897cee0b890a67c16ca77d607bff134082cc73383c830d90def65c860da",
       "Size": 347,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/WhiteAlienDragonTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/BlackMetalDragonTranslations.json",
+      "Hash": "091132eaf9bbb6056d17e020a607f4c8286c8ff08e01e3219e851bcb76c212ce",
+      "Size": 344,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/BlackMetalDragonTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/BlueThunderHorseTranslations.json",
+      "Hash": "9ac19272bcbc764db7d3eb49122454775046e57a84a5313c63a61b800e5a8859",
+      "Size": 307,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/BlueThunderHorseTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/BrownRabbitTranslations.json",
+      "Hash": "6550e92012b2439ab3a06ce7a68fc2821f454c2a1798c32e9f32065586b60cbb",
+      "Size": 478,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/BrownRabbitTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/ChikipiTranslations.json",
+      "Hash": "f2367bd044291b7043e021d3b063b89c2c26dc350685d8268cc72b11ff963bdc",
+      "Size": 160,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/ChikipiTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkFlameFoxTranslations.json",
+      "Hash": "c10851bb0c1fa50897f19a5af5b2ba52046d1734ea4f89591cdff430e2dee73c",
+      "Size": 540,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkFlameFoxTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkMechaDragonTranslations.json",
+      "Hash": "ac6f25e77c9cc590616696703d81b6ad576241fa9eb82e47a360158561d1bfa9",
+      "Size": 323,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkMechaDragonTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkScorpion_GroundTranslations.json",
+      "Hash": "2f49e29d747d7e248e3dda32cc14cdf063eeffcd32d528ab31f617f0e5fa901f",
+      "Size": 603,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkScorpion_GroundTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkScorpionPredatorTranslations.json",
+      "Hash": "3c4162a7fb680d6b2b36ac664d33205cc769d60145d2a152b5473aea49f849b1",
+      "Size": 656,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkScorpionPredatorTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkScorpionTranslations.json",
+      "Hash": "7f7e4b2afeb306aa1fc860065b12406a031505a65f9edc59cd39aa8f4840776f",
+      "Size": 575,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/DarkScorpionTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/ElecPandaTranslations.json",
+      "Hash": "b414cc36377d400327e7b3ec44f60711b5dc53b8ff6d729983b484ee2f2bbda0",
+      "Size": 450,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/ElecPandaTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/Gorilla_GroundTranslations.json",
+      "Hash": "3c1cc4145ac90fc61233a5449bbebe2b6cb6286c3acd677070dae4fee987f0cb",
+      "Size": 395,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/Gorilla_GroundTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassGolem_DarkTranslations.json",
+      "Hash": "cdf3ea58c223677780764bf4dfdcd655b9a7b0a79086100f990c5140e83612d1",
+      "Size": 398,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassGolem_DarkTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassGolemTranslations.json",
+      "Hash": "8be6ba93359b5ea7e975d6bdbb2259b5d66047344e725943df7486191ec796ca",
+      "Size": 353,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassGolemTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassMammoth_IceTranslations.json",
+      "Hash": "9d9155c24d4acf2173e305c1fb598016f4a640f1ddf9ceda1df4fbabe5df9745",
+      "Size": 536,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassMammoth_IceTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassMammothTranslations.json",
+      "Hash": "70113939dc7877b71bb63da8823404a3f155607866276d15a45f40f51b9e41d7",
+      "Size": 506,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassMammothTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassMinotaur_IceTranslations.json",
+      "Hash": "987fdc466c4d35a7321c9ee75214c286faeb42dad6118b7ea28076d704d8e57c",
+      "Size": 374,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrassMinotaur_IceTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrimGirlTranslations.json",
+      "Hash": "ce9cd28d977525053274dd6582ea987350f6fe46f36138b1785285225cb20daa",
+      "Size": 325,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/GrimGirlTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/HerbilTranslations.json",
+      "Hash": "79955511c40c7a01ba82b5c3750eb85fd058319d50f364cf2174b8ea893e4162",
+      "Size": 181,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/HerbilTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/HerculesBeetle_GroundTranslations.json",
+      "Hash": "5f7b6a048c3ca0bc4008d009c38db1c546718009fcea34d39f6ab07dad88e36d",
+      "Size": 434,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/HerculesBeetle_GroundTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/HerculesBeetleTranslations.json",
+      "Hash": "981c64aa738e23ea988047d46b2059a3e13d77a752abd64524c7604a153badaa",
+      "Size": 530,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/HerculesBeetleTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/KabukiManTranslations.json",
+      "Hash": "e4e36e324455d8d7908516522bda399076f57af5c01153216433af24b2c8ad79",
+      "Size": 489,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/KabukiManTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/LeafMomongaTranslations.json",
+      "Hash": "7d7072035959239f235e4ddf48362ad8f723206d22b789e9c3c88cfea3800bef",
+      "Size": 447,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/LeafMomongaTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/LegendDeerTranslations.json",
+      "Hash": "ae190884e0323e1ceecbfef86578603f372962e9c4a9b99baed7664c11c9826e",
+      "Size": 483,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/LegendDeerTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/LilyQueenDarkTranslations.json",
+      "Hash": "04a1c5186a2a197cd03fc1892a409d419dc679f1f5fc50834c38c9ede3d833e2",
+      "Size": 424,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/LilyQueenDarkTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/LilyQueenTranslations.json",
+      "Hash": "b98279c3a09614da9f5de994b251ec5f220ce32853803aad3cdc1b19dca8af75",
+      "Size": 388,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/LilyQueenTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/MushroomLadyTranslations.json",
+      "Hash": "b219150af0a30b06cbb9c6e5e4c0eb7fee867eb8c76b96c5234cf78540c755e4",
+      "Size": 147,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/MushroomLadyTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/MutantTranslations.json",
+      "Hash": "4cc54fc8b2d9e6c1c3e982488270ff08dd7ce8e4ddf98449bb20e1bfcb16ff48",
+      "Size": 372,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/MutantTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/SnowTigerBeastmanTranslations.json",
+      "Hash": "3ca28bb9779785524f67ccaaabed8883b85e23cae4e24269a7318d6154c83115",
+      "Size": 504,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/SnowTigerBeastmanTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/SwordCutlassfish_FireTranslations.json",
+      "Hash": "a327f87f4dad0d4deac345bd8cbf89230ceee0d87992dd8f2e302f38dd0d99c8",
+      "Size": 614,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/SwordCutlassfish_FireTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/SwordCutlassfishTranslations.json",
+      "Hash": "0b88b903484feab31dda7a8ae04b0afec1563ec0830432dacef93df668504093",
+      "Size": 600,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/SwordCutlassfishTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/ThunderDog_IceTranslations.json",
+      "Hash": "268c30cfb2fa11f6029760d1d762d650f98a9187f795e01049e24307e66f7128",
+      "Size": 534,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/ThunderDog_IceTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/ThunderDogTranslations.json",
+      "Hash": "2479e61ce6ed158cff11ef70bb382c4a8c3a50dd11dbaddd4943131d98bfaae5",
+      "Size": 614,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/ThunderDogTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/WhiteAlienDragonTranslations.json",
+      "Hash": "76835897cee0b890a67c16ca77d607bff134082cc73383c830d90def65c860da",
+      "Size": 347,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/global/WhiteAlienDragonTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/mod.json",

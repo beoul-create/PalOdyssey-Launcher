@@ -3,16 +3,16 @@
   "DT_PalMonsterParameter": {
     "MoonChild": {
       "ElementType2": "Normal",
-      "ShotAttack": 100,
+      "ShotAttack": 115,
       "Defense": 80,
-      "Friendship_ShotAttack": 2.5,
+      "Friendship_ShotAttack": 1.9,
       "Friendship_Defense": 3.3
     },
     "BOSS_MoonChild": {
       "ElementType2": "Normal",
-      "ShotAttack": 100,
+      "ShotAttack": 115,
       "Defense": 80,
-      "Friendship_ShotAttack": 2.5,
+      "Friendship_ShotAttack": 1.9,
       "Friendship_Defense": 3.3
     }
   },

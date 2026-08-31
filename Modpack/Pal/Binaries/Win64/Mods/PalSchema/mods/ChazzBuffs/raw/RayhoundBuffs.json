@@ -1,0 +1,63 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "ThunderDog": {
+      "MeleeAttack": 120,
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7,
+      "WalkSpeed": 230,
+      "RunSpeed": 900,
+      "RideSprintSpeed": 1350,
+      "TransportSpeed": 555
+    },
+    "BOSS_ThunderDog": {
+      "MeleeAttack": 120,
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7,
+      "WalkSpeed": 230,
+      "RunSpeed": 900,
+      "RideSprintSpeed": 1350,
+      "TransportSpeed": 555
+    },
+    "PREDATOR_ThunderDog": {
+      "HP": 118,
+      "MeleeAttack": 120,
+      "ShotAttack": 120,
+      "Defense": 90,
+      "Friendship_ShotAttack": 1.7,
+      "WalkSpeed": 230,
+      "RunSpeed": 900,
+      "RideSprintSpeed": 1350,
+      "TransportSpeed": 555
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_ThunderDog_BiteV2": {
+      "WazaType": "Unique_ThunderDog_BiteV2",
+      "Element": "EPalElementType::Electricity",
+      "Power": 225,
+      "DisplayPower": 225,
+      "CoolTime": 10.0,
+      "EffectType1": "EPalAdditionalEffectType::Electrical",
+      "EffectValue1": 100
+    },
+    "Unique_ThunderDog_Bite": {
+      "WazaType": "EPalWazaID::Unique_ThunderDog_Bite",
+      "Element": "EPalElementType::Electricity",
+      "Power": 550,
+      "DisplayPower": 550,
+      "CoolTime": 20.0,
+      "EffectType1": "EPalAdditionalEffectType::Electrical",
+      "EffectValue1": 100
+    },
+    "Unique_ThunderDog_InazumaShorai": {
+      "WazaType": "EPalWazaID::Unique_ThunderDog_InazumaShorai",
+      "Element": "EPalElementType::Electricity",
+      "Power": 750,
+      "DisplayPower": 750,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Electrical",
+      "EffectValue1": 100
+    },
+  }
+}

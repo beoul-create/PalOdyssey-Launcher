@@ -1,0 +1,5 @@
+{
+	"DT_PalFirstActivatedInfoText":{
+		"PAL_FIRST_SPAWN_DESC_KabukiMan":"While in party,\r\nwhen the player's attacks increase Burn buildup by <Status_Up>{Passive1_EffectValue1}</>. (Does not stack)\r\nThis pal's skills are converted to <img id=|ElemIcon_Fire|/><uiCommon id=|COMMON_ELEMENT_NAME_Fire| style=|Elem_Fire|/> and this pal's <img id=|ElemIcon_Fire|/><uiCommon id=|COMMON_ELEMENT_NAME_Fire| style=|Elem_Fire|/> damage is increased by <Status_Up>{Passive1_EffectValue3}%</>."
+	}
+}

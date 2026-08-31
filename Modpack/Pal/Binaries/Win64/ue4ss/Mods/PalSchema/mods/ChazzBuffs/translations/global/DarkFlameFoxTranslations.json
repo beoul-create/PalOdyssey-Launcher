@@ -1,0 +1,5 @@
+{
+	"DT_PalFirstActivatedInfoText":{
+		"PAL_FIRST_SPAWN_DESC_DarkFlameFox":"While in party,\r\nwhen the player attacks an enemy afflicted with Burn, the enemy creates flames around itself, dealing continuous damage equal to <Status_Up>{Passive1_EffectValue1}%</> of the player's attack damage to enemies that come into contact with them. (Does not stack.)\r\nReduces own active skill cooldowns by <Status_Up>{Passive1_EffectValue2}%</>.\r\n Increases own damage when attacking burning enemies by <Status_Up>{Passive1_EffectValue2}%</>."
+	}
+}

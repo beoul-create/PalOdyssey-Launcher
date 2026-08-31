@@ -1,0 +1,5 @@
+{
+	"DT_PalFirstActivatedInfoText":{
+		"PAL_FIRST_SPAWN_DESC_GrassMammoth_Ice":"Can be ridden.\r\nWhile mounted, increases logging efficiency by <Status_Up>{Passive1_EffectValue1}%</> and mining efficiency by <Status_Up>{Passive2_EffectValue1}%</>.\r\nWhile in party, increases player's and Pals' damage to enemies afflicted with Freeze by <Status_Up>{Passive3_EffectValue4}%</> and increases own Health by <Status_Up>{Passive3_EffectValue3}%</> and Attack and Defense by <Status_Up>{Passive3_EffectValue1}%</>.\r\n(Does not stack)"
+	}
+}

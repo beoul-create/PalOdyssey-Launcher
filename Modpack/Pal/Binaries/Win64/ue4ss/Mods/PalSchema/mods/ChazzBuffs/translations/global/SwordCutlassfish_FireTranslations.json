@@ -1,0 +1,5 @@
+{
+	"DT_PalFirstActivatedInfoText":{
+		"PAL_FIRST_SPAWN_DESC_SwordCutlassfish_Fire":"While fighting together, increases the Attack of both the player and this Pal by 30%, converts the player's attacks to <img id=|ElemIcon_Fire|/><uiCommon id=|COMMON_ELEMENT_NAME_Fire| style=|Elem_Fire|/>, and increases player's melee weapon attack speed by 20%.\r\nWhen activated, Skutlass Ignis becomes the player's katana (Attack: <Status_Up>x{ActiveSkillMainValueByRank}</>). If it does not revert to its normal form quickly, Skutlass Ignis will become incapacitated. It will also become incapacitated if Iaigiri is used."
+	}
+}

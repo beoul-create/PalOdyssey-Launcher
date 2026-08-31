@@ -1,0 +1,5 @@
+{
+	"DT_PalFirstActivatedInfoText":{
+		"PAL_FIRST_SPAWN_DESC_GrimGirl":"While in party, the amount of items obtained from using the Meat Cleaver increases by <Status_Up>{Passive2_EffectValue1}%</>.\r\nAdditionally, while this pal's Health is below 50%, it's Attack is increased by <Status_Up>{Passive1_EffectValue1}%</>."
+	}
+}

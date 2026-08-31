@@ -22,9 +22,20 @@
       "IgnoreLeanBack": true,
       "IgnoreBlowAway": true,
       "IgnoreStun": true
+    },
+    "RAID_LegendDeer": {
+      "Hp": 130,
+      "MeleeAttack": 130,
+      "ShotAttack": 130,
+      "Defense": 130
+    },
+    "RAID_LegendDeer_2": {
+      "Hp": 130,
+      "MeleeAttack": 130,
+      "ShotAttack": 130,
+      "Defense": 130
     }
   },
-
   "DT_WazaDataTable": {
     "NewRow_307": {
       "Power": 1500,
