@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PalLauncher")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("2.0.1.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.0.1+7a239aace73505598f3159ec6b97eeb7608b0bd5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.0.1+e6563e407283234a53ece3e0aca8a26c65e9e223")]
 [assembly: System.Reflection.AssemblyProductAttribute("PalLauncher")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PalLauncher")]
 [assembly: System.Reflection.AssemblyVersionAttribute("2.0.1.0")]

@@ -74,31 +74,29 @@ local function ApplyLoadingOptimizations()
     pcall(function()
         if not Config.accelerateLoadingScreens then return end
 
-        -- Maximize frame time allocation for asynchronous world/shader loading
-        ExecuteConsole("s.AsyncLoadingTimeLimit 50.0")
-        ExecuteConsole("s.PriorityAsyncLoadingExtraTime 100.0")
-        ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 50.0")
-        ExecuteConsole("s.UnregisterComponentsTimeLimit 50.0")
-        ExecuteConsole("s.AsyncLoadingUseFullTimeLimit 1")
-        ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 60")
-        ExecuteConsole("r.Streaming.HLODStrategy 2")
+        ExecuteConsole("s.AsyncLoadingTimeLimit 15.0")
+        ExecuteConsole("s.PriorityAsyncLoadingExtraTime 20.0")
+        ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 10.0")
+        ExecuteConsole("s.UnregisterComponentsTimeLimit 5.0")
+        ExecuteConsole("s.AsyncLoadingUseFullTimeLimit 0")
+        ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 30")
+        ExecuteConsole("r.Streaming.HLODStrategy 1")
         ExecuteConsole("r.Streaming.DefragDynamicBounds 1")
         ExecuteConsole("r.Streaming.AmortizeCPUWork 1")
-        ExecuteConsole("r.Streaming.Boost 3")
-        ExecuteConsole("r.Streaming.PoolSize 4096")
+        ExecuteConsole("r.Streaming.Boost 2")
+        ExecuteConsole("r.Streaming.PoolSize 2048")
         ExecuteConsole("r.Streaming.LimitPoolSizeToVRAM 1")
-        ExecuteConsole("r.Streaming.FramesForFullUpdate 15")
+        ExecuteConsole("r.Streaming.FramesForFullUpdate 20")
 
         if Config.prewarmShaderPipelines then
             ExecuteConsole("r.CreateShadersOnLoad 1")
             ExecuteConsole("r.Shaders.Optimize 1")
         end
 
-        -- Batch GC allocations and prevent mid-load GC hitching
-        ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 180")
+        ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 120")
         ExecuteConsole("gc.CreateGCClusters 1")
         
-        Log("Instant world loading and shader streaming parameters applied.")
+        Log("Smooth world loading and shader streaming parameters applied.")
     end)
 end
 
@@ -117,7 +115,7 @@ local function ApplySteadyStateStreaming()
     ExecuteConsole("s.AsyncLoadingTimeLimit 5.0")
     ExecuteConsole("s.PriorityAsyncLoadingExtraTime 10.0")
     ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 5.0")
-    ExecuteConsole("s.UnregisterComponentsTimeLimit 5.0")
+    ExecuteConsole("s.UnregisterComponentsTimeLimit 2.0")
     ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 20")
     ExecuteConsole("r.Streaming.HLODStrategy 1")
     ExecuteConsole("r.Streaming.Boost 1.5")
@@ -132,6 +130,7 @@ local function OnPlayerTransition()
         if not Config.bypassFastTravelWait then return end
         ExecuteConsole("r.Streaming.PurgeUnused")
         ApplyFastNetworkRates()
+        ApplySteadyStateStreaming()
     end)
 end
 
@@ -143,26 +142,23 @@ end
 
 local function ScheduleSteadyState(delayMs)
     ExecuteWithDelay(delayMs, function()
-        if ConnectionPhase then ApplySteadyStateStreaming() end
+        ApplySteadyStateStreaming()
     end)
 end
 
 -- Delayed enforcement helper to overcome engine resets on world transitions
 local function SafeDelayedEnforce()
-    ConnectionPhase = true
     ApplyFastNetworkRates()
-    ApplyLoadingOptimizations()
+    ApplySteadyStateStreaming()
     SkipIntroMovies()
     ExecuteWithDelay(800, function()
         ApplyFastNetworkRates()
-        ApplyLoadingOptimizations()
+        ApplySteadyStateStreaming()
     end)
     ExecuteWithDelay(2500, function()
         ApplyFastNetworkRates()
-        ApplyLoadingOptimizations()
+        ApplySteadyStateStreaming()
     end)
-    -- Startup fallback. A real connection/restart event supersedes this timer.
-    ScheduleSteadyState(30000)
 end
 
 -- Hook World, Network & Game Setting Initialization (Fully Automated)
@@ -187,16 +183,14 @@ end)
 pcall(function()
     NotifyOnNewObject("/Script/Engine.NetConnection", function()
         BeginConnectionPhase()
-        ScheduleSteadyState(60000)
+        ScheduleSteadyState(5000)
     end)
 end)
 
 pcall(function()
     RegisterHook("/Script/Engine.PlayerController:ClientRestart", function(Context)
         OnPlayerTransition()
-        ApplyLoadingOptimizations()
-        ConnectionPhase = true
-        ScheduleSteadyState(10000)
+        ApplySteadyStateStreaming()
     end)
 end)
 

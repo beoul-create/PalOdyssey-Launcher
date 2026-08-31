@@ -1,11 +1,11 @@
 {
-  "Version": "2026.08.30.195849",
-  "GeneratedAt": "2026-08-30T19:58:49.845Z",
+  "Version": "2026.08.31.211457",
+  "GeneratedAt": "2026-08-31T21:14:57.858Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 602,
+  "TotalFiles": 582,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -13,6 +13,11 @@
     "Mandatory": false
   },
   "News": [
+    {
+      "title": "⚡ Total Mount Lag & Fishing Rod Cable Physics Cure",
+      "date": "Aug 31, 2026",
+      "summary": "Purged all legacy LineTrace and debug mods, deployed multi-target (Player + Mount + Weapon + Sockets) CableReset on dismount, and locked in steady-state streaming limits."
+    },
     {
       "title": "✨ Azomer Passive Skill Name Key Alias & Translation Fix",
       "date": "Aug 30, 2026",
@@ -22,11 +27,6 @@
       "title": "🚀 In-App Launcher Self-Updater Live",
       "date": "Aug 30, 2026",
       "summary": "PalLauncher now automatically checks for newer launcher versions and seamlessly downloads and hot-swaps updates in-app."
-    },
-    {
-      "title": "🐎 Instant Pal Mount Stutter & Freeze Fix Live",
-      "date": "Aug 30, 2026",
-      "summary": "Eliminated compute SkinCache shader stalls, URO animation thrashing, and throttled steady-state async loading to 5ms for instant mount response."
     }
   ],
   "Files": [
@@ -41,12 +41,6 @@
       "Hash": "dcd0e6915cb1a7f514b08b12c49b9e3aaad4ee9dd2b5823e8285ffca6e463f5c",
       "Size": 36851,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/MemberVariableLayout.ini"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/ActorDumperMod/Scripts/main.lua",
-      "Hash": "e69510e52bf43f1b53854de6fb185013ab87e2dcd55a4007a0dac3297fe80c2b",
-      "Size": 593,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/ActorDumperMod/Scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/BPML_GenericFunctions/Scripts/main.lua",
@@ -65,42 +59,6 @@
       "Hash": "81a3ff37b5376a84ab1fa7e880da914aa571f55f2beafaf030c817503a962ec9",
       "Size": 10953,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/BPModLoaderMod/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/CheatManagerEnablerMod/Scripts/main.lua",
-      "Hash": "0b70465317ef3fced4e342f04592896658e590c3cab472e2993460fba6734c83",
-      "Size": 1407,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/CheatManagerEnablerMod/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/ConsoleCommandsMod/Scripts/dump_object.lua",
-      "Hash": "0d9b9bddcd3de38910c8321073d7d262e086b16b1265c6809cd714d050a28b71",
-      "Size": 12777,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/ConsoleCommandsMod/Scripts/dump_object.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/ConsoleCommandsMod/Scripts/main.lua",
-      "Hash": "eb691aba47da830383e85c6208fda8cf6984ad37a12d6fe8eaa5b6daa4092f84",
-      "Size": 286,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/ConsoleCommandsMod/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/ConsoleCommandsMod/Scripts/set.lua",
-      "Hash": "a2e170d3367c20537c676954fced3ea88e0c82418b1eba657e33002518806993",
-      "Size": 2007,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/ConsoleCommandsMod/Scripts/set.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/ConsoleCommandsMod/Scripts/summon_unloaded_assets.lua",
-      "Hash": "a8a0ee6547482212fe89241792f0c5cb2b5c09ab612d020c2d10c7771805b289",
-      "Size": 479,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/ConsoleCommandsMod/Scripts/summon_unloaded_assets.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/ConsoleEnablerMod/Scripts/main.lua",
-      "Hash": "b31feb8ffb8adac1aa8204d65665ddd2fc4971e61cba210f18054e9bfbe911a8",
-      "Size": 3173,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/ConsoleEnablerMod/Scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/EconomySystem/config.json",
@@ -137,12 +95,6 @@
       "Hash": "ad2ffe3f766489732db2cacd06ac54edf44c490590f29d3308292cba95023699",
       "Size": 382,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/EconomySystem/Scripts/shop_catalog.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/EventViewerMod/dlls/main.dll",
-      "Hash": "96f2ab97b45d11a00a33bc5f02279f034850b10ee76ab28ade97f998b40cff66",
-      "Size": 607744,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/EventViewerMod/dlls/main.dll"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/ExpeditionXP/config.lua",
@@ -200,8 +152,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/FastConnect/Scripts/main.lua",
-      "Hash": "35b63e47123adf2e1816fcb8c776d6ef96c3d1c48131fdf841ecb60b43d0bc4f",
-      "Size": 7456,
+      "Hash": "60be8879d3396d9a1f2a717b46da9226db3ad0fdbf53922d68c1e0253eb79e30",
+      "Size": 7111,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/FastConnect/Scripts/main.lua"
     },
     {
@@ -235,12 +187,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/Keybinds/Scripts/main.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/KismetDebuggerMod/dlls/main.dll",
-      "Hash": "89dd6ae0808a477ef6822d363dfed61c9e72befabddf94d57f59ef0ca711eee8",
-      "Size": 726016,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/KismetDebuggerMod/dlls/main.dll"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/LevelLock/enabled.txt",
       "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "Size": 0,
@@ -265,12 +211,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/LevelLock/Scripts/main.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/LineTraceMod/Scripts/main.lua",
-      "Hash": "807d1cb0142f24de1534eb85e3ff98a0db5242c7d5856962738c268b3cbf89a6",
-      "Size": 2642,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/LineTraceMod/Scripts/main.lua"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/mods.json",
       "Hash": "9b0a00b5eec27b1575ce3cda5d756556061993552be971e7a25314d41adb17aa",
       "Size": 973,
@@ -278,8 +218,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/mods.txt",
-      "Hash": "e45af800a18bcf1c69eae0e30b88b5ccb26f0e75ff546339e278375f13df164e",
-      "Size": 546,
+      "Hash": "7bcaecca0082c0986bed7c031ed0f82c71764d27b9dee747094225745892ac0a",
+      "Size": 356,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/mods.txt"
     },
     {
@@ -338,8 +278,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "b523dac87af3994a809a2496965312fe04e9766e9cb3c1bc747725f7324ac065",
-      "Size": 7851,
+      "Hash": "a3a0268ca9c209b330065bb35a1a3f071bb4f7f626d37213ccfc91d130b98e66",
+      "Size": 7738,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -1550,8 +1490,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalworldTuner/Scripts/cable_reset.lua",
-      "Hash": "574d26400fbafbf0ac39649835ae7dc86fb04ce7c9a4f73b4c0b328a1b237eb4",
-      "Size": 3131,
+      "Hash": "c7d62913793192b77695da2d152f12cade772b9fd3b942e9fe0acf52c29ce4f2",
+      "Size": 3803,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalworldTuner/Scripts/cable_reset.lua"
     },
     {
@@ -1849,12 +1789,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/MemberVariableLayout.ini"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/ActorDumperMod/Scripts/main.lua",
-      "Hash": "e69510e52bf43f1b53854de6fb185013ab87e2dcd55a4007a0dac3297fe80c2b",
-      "Size": 593,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/ActorDumperMod/Scripts/main.lua"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/BPML_GenericFunctions/Scripts/main.lua",
       "Hash": "dccb6501355247c83b2afb2179f6f135a32a3dc5202a5261d5afa32a6ae443a3",
       "Size": 2883,
@@ -1871,42 +1805,6 @@
       "Hash": "81a3ff37b5376a84ab1fa7e880da914aa571f55f2beafaf030c817503a962ec9",
       "Size": 10953,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/BPModLoaderMod/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/CheatManagerEnablerMod/Scripts/main.lua",
-      "Hash": "0b70465317ef3fced4e342f04592896658e590c3cab472e2993460fba6734c83",
-      "Size": 1407,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/CheatManagerEnablerMod/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/ConsoleCommandsMod/Scripts/dump_object.lua",
-      "Hash": "0d9b9bddcd3de38910c8321073d7d262e086b16b1265c6809cd714d050a28b71",
-      "Size": 12777,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/ConsoleCommandsMod/Scripts/dump_object.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/ConsoleCommandsMod/Scripts/main.lua",
-      "Hash": "eb691aba47da830383e85c6208fda8cf6984ad37a12d6fe8eaa5b6daa4092f84",
-      "Size": 286,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/ConsoleCommandsMod/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/ConsoleCommandsMod/Scripts/set.lua",
-      "Hash": "a2e170d3367c20537c676954fced3ea88e0c82418b1eba657e33002518806993",
-      "Size": 2007,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/ConsoleCommandsMod/Scripts/set.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/ConsoleCommandsMod/Scripts/summon_unloaded_assets.lua",
-      "Hash": "a8a0ee6547482212fe89241792f0c5cb2b5c09ab612d020c2d10c7771805b289",
-      "Size": 479,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/ConsoleCommandsMod/Scripts/summon_unloaded_assets.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/ConsoleEnablerMod/Scripts/main.lua",
-      "Hash": "b31feb8ffb8adac1aa8204d65665ddd2fc4971e61cba210f18054e9bfbe911a8",
-      "Size": 3173,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/ConsoleEnablerMod/Scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json",
@@ -1943,12 +1841,6 @@
       "Hash": "ad2ffe3f766489732db2cacd06ac54edf44c490590f29d3308292cba95023699",
       "Size": 382,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/shop_catalog.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EventViewerMod/dlls/main.dll",
-      "Hash": "96f2ab97b45d11a00a33bc5f02279f034850b10ee76ab28ade97f998b40cff66",
-      "Size": 607744,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EventViewerMod/dlls/main.dll"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/ExpeditionXP/config.lua",
@@ -2006,8 +1898,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/FastConnect/Scripts/main.lua",
-      "Hash": "35b63e47123adf2e1816fcb8c776d6ef96c3d1c48131fdf841ecb60b43d0bc4f",
-      "Size": 7456,
+      "Hash": "60be8879d3396d9a1f2a717b46da9226db3ad0fdbf53922d68c1e0253eb79e30",
+      "Size": 7111,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/FastConnect/Scripts/main.lua"
     },
     {
@@ -2041,12 +1933,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/Keybinds/Scripts/main.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/KismetDebuggerMod/dlls/main.dll",
-      "Hash": "89dd6ae0808a477ef6822d363dfed61c9e72befabddf94d57f59ef0ca711eee8",
-      "Size": 726016,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/KismetDebuggerMod/dlls/main.dll"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/LevelLock/enabled.txt",
       "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "Size": 0,
@@ -2071,12 +1957,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/LineTraceMod/Scripts/main.lua",
-      "Hash": "807d1cb0142f24de1534eb85e3ff98a0db5242c7d5856962738c268b3cbf89a6",
-      "Size": 2642,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/LineTraceMod/Scripts/main.lua"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/mods.json",
       "Hash": "9b0a00b5eec27b1575ce3cda5d756556061993552be971e7a25314d41adb17aa",
       "Size": 973,
@@ -2084,8 +1964,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/mods.txt",
-      "Hash": "e45af800a18bcf1c69eae0e30b88b5ccb26f0e75ff546339e278375f13df164e",
-      "Size": 546,
+      "Hash": "7bcaecca0082c0986bed7c031ed0f82c71764d27b9dee747094225745892ac0a",
+      "Size": 356,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/mods.txt"
     },
     {
@@ -2144,8 +2024,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "b523dac87af3994a809a2496965312fe04e9766e9cb3c1bc747725f7324ac065",
-      "Size": 7851,
+      "Hash": "a3a0268ca9c209b330065bb35a1a3f071bb4f7f626d37213ccfc91d130b98e66",
+      "Size": 7738,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -3356,8 +3236,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalworldTuner/Scripts/cable_reset.lua",
-      "Hash": "574d26400fbafbf0ac39649835ae7dc86fb04ce7c9a4f73b4c0b328a1b237eb4",
-      "Size": 3131,
+      "Hash": "c7d62913793192b77695da2d152f12cade772b9fd3b942e9fe0acf52c29ce4f2",
+      "Size": 3803,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalworldTuner/Scripts/cable_reset.lua"
     },
     {

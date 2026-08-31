@@ -1,15 +1,5 @@
-KismetDebuggerMod : 0
-EventViewerMod : 0
-CheatManagerEnablerMod : 0
-ActorDumperMod : 0
-ConsoleCommandsMod : 0
-ConsoleEnablerMod : 0
-SplitScreenMod : 0
-LineTraceMod : 0
-BPML_GenericFunctions : 1
+﻿BPML_GenericFunctions : 1
 BPModLoaderMod : 1
-jsbLuaProfilerMod : 0
-
 PalSchema : 1
 RamTrimMod : 1
 PalworldTuner : 1
@@ -27,4 +17,3 @@ GuildBuildingLimits : 1
 
 ; Built-in keybinds, do not move up!
 Keybinds : 1
-

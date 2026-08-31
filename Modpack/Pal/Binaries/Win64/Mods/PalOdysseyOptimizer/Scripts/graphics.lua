@@ -19,9 +19,9 @@ function GraphicsModule.apply(cfg, cpuCfg)
             end
         end)
 
-        -- 1. GPU Task/Mesh Shaders, GPUScene Occlusion & Direct Skeletal Evaluation
-        ExecuteConsole("r.MeshShaders 1")
-        ExecuteConsole("r.MeshShaders.Enable 1")
+        -- 1. Direct GPU Vertex Shading & GPUScene Occlusion (Zero Shader Pipeline Stalls)
+        ExecuteConsole("r.MeshShaders 0")
+        ExecuteConsole("r.MeshShaders.Enable 0")
         ExecuteConsole("r.GPUScene.InstanceCulling 1")
         ExecuteConsole("r.EarlyZPass 2")
         ExecuteConsole("r.EarlyZPassMovable 1")
@@ -31,8 +31,6 @@ function GraphicsModule.apply(cfg, cpuCfg)
         ExecuteConsole("r.HZBOcclusion 1")
         ExecuteConsole("r.AllowOcclusionQueries 1")
         ExecuteConsole("r.Occlusion.MaxQueriesPerFrame 50000")
-        ExecuteConsole("r.D3D12.TextureCreationParallel 1")
-        ExecuteConsole("r.D3D12.UseAsyncDescriptorCopy 1")
 
         -- 2. Skeletal URO + Pose Interpolation (Zero-Stutter Mount & Attach Transitions)
         ExecuteConsole("a.URO.Enable 1")
