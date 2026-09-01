@@ -514,6 +514,10 @@ end
 
 -- Toggle Interactive Window
 local function ToggleShopWindow()
+    if UniPalUI and type(UniPalUI.OpenTab) == "function" then
+        UniPalUI.OpenTab("🛒 Technology Shop")
+        return
+    end
     IsShopWindowOpen = not IsShopWindowOpen
     pcall(function()
         local pc = GetPlayerController()
