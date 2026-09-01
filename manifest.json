@@ -1,15 +1,15 @@
 {
-  "Version": "2026.09.01.231402",
-  "GeneratedAt": "2026-09-01T23:14:02.631Z",
+  "Version": "2026.09.01.231713",
+  "GeneratedAt": "2026-09-01T23:17:13.835Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 708,
+  "TotalFiles": 712,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Deployed custom Technology Merchant at Plateau of Beginnings with full Economy inventory.",
+    "ReleaseNotes": "Added physical Guild Expansion Vouchers to Technology Merchant with auto-perk activation.",
     "Mandatory": false
   },
   "Files": [
@@ -273,8 +273,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/GuildBuildingLimits/Scripts/limit_checker.lua",
-      "Hash": "be06020309cdbb5bbb86ce38d2d1ce0750e1fa9385fa36cbc32305e3caee6600",
-      "Size": 12173,
+      "Hash": "4947976ff9a395026090f2a468417fea84f617d94f16029f9521854873890349",
+      "Size": 16674,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/GuildBuildingLimits/Scripts/limit_checker.lua"
     },
     {
@@ -1574,6 +1574,18 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/EconomyShop/items/ShopItems.jsonc"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/GuildBuildingLimits/items/GuildVouchers.jsonc",
+      "Hash": "5a98e7780b174d20418dda43d9964596d467505f8e23e6c0fa82a67ecffeae39",
+      "Size": 2134,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/GuildBuildingLimits/items/GuildVouchers.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/GuildBuildingLimits/metadata.json",
+      "Hash": "60eee0167d3f55cd4e5497aacb2bfeb7b6f31353ce5db900cdd716dcd9a318b3",
+      "Size": 172,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/GuildBuildingLimits/metadata.json"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/PalworldTuner/metadata.json",
       "Hash": "d80cb3ba8a7f286d206a7c7d43b5f310265c2b25953661328acd67eae625d2dd",
       "Size": 168,
@@ -1719,8 +1731,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_gadgets (gold).json",
-      "Hash": "8477f19ec136cd0304f588d81092385c8fe342da084573c52ed66cf9adabece2",
-      "Size": 3344,
+      "Hash": "bb34f5bebda1d699ff4a492f1176f5e5de766bcdfdbd3d1a9d46bce0c9c8741b",
+      "Size": 3817,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_gadgets%20(gold).json"
     },
     {
@@ -1935,8 +1947,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/TechPointShopBridge/Scripts/main.lua",
-      "Hash": "bbc0986157e13f1cc90072ca6a58fe3e17d6ea56176a451530d6f7e8249c137f",
-      "Size": 12450,
+      "Hash": "6e9c7c0f5c655012eaa85050d9cab6580eb4035eb4bfb5fbaa8d56f022292fa4",
+      "Size": 11565,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/TechPointShopBridge/Scripts/main.lua"
     },
     {
@@ -2397,8 +2409,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/limit_checker.lua",
-      "Hash": "be06020309cdbb5bbb86ce38d2d1ce0750e1fa9385fa36cbc32305e3caee6600",
-      "Size": 12173,
+      "Hash": "4947976ff9a395026090f2a468417fea84f617d94f16029f9521854873890349",
+      "Size": 16674,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/limit_checker.lua"
     },
     {
@@ -3696,6 +3708,18 @@
       "Hash": "bf1e65f5a99c98867a3f925785ac3fc70403dd5910326966ea1d6b4be61ac70a",
       "Size": 1921,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/EconomyShop/items/ShopItems.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/GuildBuildingLimits/items/GuildVouchers.jsonc",
+      "Hash": "5a98e7780b174d20418dda43d9964596d467505f8e23e6c0fa82a67ecffeae39",
+      "Size": 2134,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/GuildBuildingLimits/items/GuildVouchers.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/GuildBuildingLimits/metadata.json",
+      "Hash": "60eee0167d3f55cd4e5497aacb2bfeb7b6f31353ce5db900cdd716dcd9a318b3",
+      "Size": 172,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/GuildBuildingLimits/metadata.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/PalworldTuner/metadata.json",

@@ -4,6 +4,9 @@
       "productDataArray": {
         "Action": "Clear",
         "Items": [
+          { "StaticItemId": "PalOdyssey_Voucher_Breeding", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 4, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "PalOdyssey_Voucher_Ranch", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 4, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "PalOdyssey_Voucher_Base", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 5, "ProductNum": 1, "Stock": 0 },
           { "StaticItemId": "AncientTechnologyBook_G1", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 5, "ProductNum": 1, "Stock": 0 },
           { "StaticItemId": "TechnologyBook_G1", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 1, "ProductNum": 1, "Stock": 0 },
           { "StaticItemId": "PlayerLotus_Attack", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 2, "ProductNum": 1, "Stock": 0 },

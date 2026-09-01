@@ -28,7 +28,89 @@ local function LoadGuildUpgrades()
                 end
             end
         end
+local function SaveGuildUpgrades()
+    pcall(function()
+        local encoder = nil
+        if JSON and type(JSON.stringify) == "function" then encoder = JSON.stringify end
+        if not encoder and json and type(json.encode) == "function" then encoder = json.encode end
+        if not encoder and _G.json and type(_G.json.encode) == "function" then encoder = _G.json.encode end
+        if not encoder then encoder = Json.encode end
+        
+        local raw = "{}"
+        if encoder then
+            local ok, str = pcall(encoder, UpgradesCache)
+            if ok and str then raw = str end
+        end
+        local f = io.open(UpgradesFile, "w")
+        if f then
+            f:write(raw)
+            f:close()
+        end
     end)
+end
+
+local consumeHelper = nil
+local function getConsumeHelper()
+    if consumeHelper and consumeHelper:IsValid() then return consumeHelper end
+    pcall(function()
+        local helperClass = StaticFindObject("/Script/Pal.PalIncidentBase")
+        local outer = (UEHelpers and UEHelpers.GetGameInstance and UEHelpers.GetGameInstance())
+            or FindFirstOf("GameInstance")
+        if helperClass and outer then
+            consumeHelper = StaticConstructObject(helperClass, outer)
+        end
+    end)
+    return consumeHelper
+end
+
+local VOUCHER_MAP = {
+    PalOdyssey_Voucher_Breeding = { key = "guild_breeding_expand", name = "Breeding Farm Limit (+1)" },
+    PalOdyssey_Voucher_Ranch = { key = "guild_ranch_expand", name = "Ranch Pasture Limit (+1)" },
+    PalOdyssey_Voucher_Base = { key = "guild_base_expand", name = "Base Camp Limit (+1)" }
+}
+
+function LimitChecker.CheckAndRedeemVouchers(Player)
+    if not Player or not Player:IsValid() then return end
+    local GuildId, GuildName = LimitChecker.GetPlayerGuildId(Player)
+    if not GuildId then return end
+
+    local PlayerState = Player.PlayerState or (Player.GetPlayerState and Player:GetPlayerState())
+    if not PlayerState or not PlayerState:IsValid() then return end
+    local Inventory = PlayerState:GetInventoryData()
+    if not Inventory or not Inventory:IsValid() then return end
+
+    local helper = getConsumeHelper()
+
+    for voucherId, info in pairs(VOUCHER_MAP) do
+        local count = 0
+        pcall(function() count = tonumber(Inventory:CountItemNum(FName(voucherId))) or 0 end)
+        if count > 0 then
+            pcall(function()
+                if helper and helper:IsValid() then
+                    helper:RequestConsumeInventoryItem(Inventory, FName(voucherId), count)
+                end
+            end)
+
+            LoadGuildUpgrades()
+            UpgradesCache[GuildId] = UpgradesCache[GuildId] or {}
+            local current = tonumber(UpgradesCache[GuildId][info.key]) or 0
+            local newLvl = current + count
+            UpgradesCache[GuildId][info.key] = newLvl
+            SaveGuildUpgrades()
+
+            pcall(function()
+                local ChatSubsystem = FindFirstOf("PalChatSubsystem")
+                if ChatSubsystem and ChatSubsystem:IsValid() then
+                    ChatSubsystem:SendSystemChatMessage(Player, FText(string.format("✨ [Guild Perk Activated] Your guild redeemed %d %s! New capacity: +%d slots.", count, info.name, newLvl)))
+                end
+                local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+                if PalUtil and PalUtil:IsValid() then
+                    PalUtil:SendSystemAnnounce(Player, string.format("✨ Guild Perk Activated: +%d %s", count, info.name))
+                end
+            end)
+            print(string.format("[GuildBuildingLimits] Guild %s redeemed %d %s -> New Tier: %d", GuildId, count, info.name, newLvl))
+        end
+    end
 end
 
 function LimitChecker.GetPlayerGuildId(Player)
@@ -202,6 +284,7 @@ local function ProcessBuildRequest(Context, ...)
         end
     end
     if not Player or not Player:IsValid() then return end
+    LimitChecker.CheckAndRedeemVouchers(Player)
 
     if TargetBuildingStr == "" then return end
 
@@ -232,7 +315,7 @@ local function ProcessBuildRequest(Context, ...)
         pcall(function()
             local ChatSubsystem = FindFirstOf("PalChatSubsystem")
             if ChatSubsystem and ChatSubsystem:IsValid() then
-                local templateMsg = Config.NotificationMessage or "❌ Guild limit reached: Your guild is capped at %d %s(s). Upgrade in the Economy Shop [F6] to unlock more!"
+                local templateMsg = Config.NotificationMessage or "❌ Guild limit reached: Your guild is capped at %d %s(s). Purchase a Voucher at the Technology Merchant to unlock more!"
                 ChatSubsystem:SendSystemChatMessage(Player, FText(string.format(templateMsg, AllowedMax, RestrictionRule.DisplayName or "Restricted Facility")))
             end
             local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
@@ -269,6 +352,23 @@ function LimitChecker.Init(LoadedConfig)
         if ok and preId then registered = registered + 1
         else print("[GuildBuildingLimits] Hook unavailable: " .. hookName) end
     end
+
+    pcall(function()
+        RegisterHook("/Script/Pal.PalNetworkShopComponent:RequestBuyProduct_ToServer", function() end, function(Context)
+            local component = Context and Context.get and Context:get() or Context
+            if not component or not component:IsValid() then return end
+            pcall(function()
+                local transmitter = component:GetOwner()
+                if transmitter and transmitter:IsValid() then
+                    local pc = transmitter.PlayerState and transmitter or transmitter:GetOwner()
+                    if pc and pc:IsValid() then
+                        ExecuteWithDelay(500, function() LimitChecker.CheckAndRedeemVouchers(pc) end)
+                    end
+                end
+            end)
+        end)
+    end)
+
     print(string.format("[GuildBuildingLimits] %d/%d limit hooks registered.", registered, #hookNames))
 end
 

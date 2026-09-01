@@ -178,31 +178,12 @@ local function vendorMatches(vendor, component)
     local fullName = tostring(vendor or "")
     if alive(vendor) then
         pcall(function() fullName = vendor:GetFullName() end)
-    end
-    local lowered = fullName:lower()
-    for _, pattern in ipairs(Config.vendorNamePatterns or {}) do
-        if lowered:find(tostring(pattern):lower(), 1, true) then
-            return true, fullName
         end
     end
 
     -- Check if the shop component itself specifies the TechPoint token currency
     local usesToken = false
     if alive(component) then
-        pcall(function()
-            local shop = component.CurrentShop or component.ShopData or (component.GetShopData and component:GetShopData())
-            if alive(shop) then
-                local curr = shop.CurrencyItemID or (shop.GetCurrencyItemID and shop:GetCurrencyItemID())
-                if curr and tostring(curr) == TOKEN_ID then usesToken = true end
-            end
-        end)
-    end
-    if usesToken then return true, fullName end
-
-    return false, fullName
-end
-
-local function syncDisplayBalance(component, reason)
     local _, state, inventory, technology = getPlayerData(component)
     if not alive(state) then
         log("Cannot resolve the server player for " .. tostring(reason), true)
@@ -225,7 +206,6 @@ local function syncDisplayBalance(component, reason)
 end
 
 local function closeSession(component, reason)
-    local key = objectKey(component)
     local session = sessions[key]
     sessions[key] = nil
     local _, _, inventory = getPlayerData(component)
@@ -236,7 +216,6 @@ end
 local function setupPost(selfParam, vendorParam)
     local component = unwrap(selfParam)
     if not alive(component) or not isAuthority(component) then return end
-    local vendor = unwrap(vendorParam)
     local matches, fullName = vendorMatches(vendor, component)
     if not matches then return end
 
@@ -244,14 +223,12 @@ local function setupPost(selfParam, vendorParam)
     sessions[key] = { active = true, pending = nil, vendor = fullName }
     syncDisplayBalance(component, "merchant opened")
     log("Activated for vendor " .. tostring(fullName), true)
-end
 
 local function buyPre(selfParam, ...)
     local component = unwrap(selfParam)
     if not alive(component) or not isAuthority(component) then return end
     local key = objectKey(component)
     local session = sessions[key]
-    if not session or not session.active then return end
     if session.pending then
         log("Rejected overlapping purchase normalization", true)
         return
