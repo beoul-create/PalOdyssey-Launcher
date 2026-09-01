@@ -23,7 +23,10 @@
     "optimizeNaniteLumen": true,
     "shadowBudgetOptimization": true,
     "texturePoolStreamingDefrag": true,
-    "asyncCompute": true
+    "asyncCompute": true,
+    "skeletalLODBias": 1,
+    "staticMeshLODDistanceScale": 0.70,
+    "naniteMaxPixelsPerEdge": 4.0
   },
   "cpu": {
     "enabled": true,

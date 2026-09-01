@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.130713",
-  "GeneratedAt": "2026-09-01T13:07:13.869Z",
+  "Version": "2026.09.01.132655",
+  "GeneratedAt": "2026-09-01T13:26:55.498Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "F6 Economy GUI, Custom Subspecies BPClass fixes, World Boss SpawnActor pipeline, and Zero-Delay network replication.",
+    "ReleaseNotes": "Configurable polygon reduction & skeletal LOD bias optimization for all PC hardware tiers.",
     "Mandatory": false
   },
   "Files": [
@@ -225,8 +225,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/config.json",
-      "Hash": "69154bff66a9080be02d7f73a7dd8ae32fc8b9882d818805c11fa91128452592",
-      "Size": 1072,
+      "Hash": "9d0ba5c88790ef361b1d1434428ed96940a6a7a85c05fccc1b82cd9c60d82cf3",
+      "Size": 1173,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/config.json"
     },
     {
@@ -261,8 +261,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "44fde1b16423faeb342be410bac60713ab9f8f39b4f91d975edad69dc3fe3f7b",
-      "Size": 7835,
+      "Hash": "ef3f9ec1e140f8a198b2806cf345e3c1fe109df5522b66c0b084b3ba68b3a623",
+      "Size": 8171,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -2211,8 +2211,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/config.json",
-      "Hash": "69154bff66a9080be02d7f73a7dd8ae32fc8b9882d818805c11fa91128452592",
-      "Size": 1072,
+      "Hash": "9d0ba5c88790ef361b1d1434428ed96940a6a7a85c05fccc1b82cd9c60d82cf3",
+      "Size": 1173,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/config.json"
     },
     {
@@ -2247,8 +2247,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "44fde1b16423faeb342be410bac60713ab9f8f39b4f91d975edad69dc3fe3f7b",
-      "Size": 7835,
+      "Hash": "ef3f9ec1e140f8a198b2806cf345e3c1fe109df5522b66c0b084b3ba68b3a623",
+      "Size": 8171,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {

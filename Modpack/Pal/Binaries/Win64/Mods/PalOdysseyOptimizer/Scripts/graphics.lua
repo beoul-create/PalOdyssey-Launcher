@@ -35,12 +35,16 @@ function GraphicsModule.apply(cfg, cpuCfg)
         ExecuteConsole("r.AllowOcclusionQueries 1")
         ExecuteConsole("r.Occlusion.MaxQueriesPerFrame 1000")
 
-        -- 2. Skeletal URO + Pose Interpolation (Zero-Stutter Mount & Attach Transitions)
+        -- 2. Skeletal URO + Pose Interpolation + Low-Spec Pal Polygon Optimization
+        local lodBias = tonumber(cfg and cfg.skeletalLODBias) or 1
+        local meshDist = tonumber(cfg and cfg.staticMeshLODDistanceScale) or 0.70
+        local nanitePix = tonumber(cfg and cfg.naniteMaxPixelsPerEdge) or 4.0
+
         ExecuteConsole("a.URO.Enable 1")
         ExecuteConsole("a.URO.TickDistanceScale 1.0")
         ExecuteConsole("a.URO.Interpolation 1")
         ExecuteConsole("a.URO.VisibilityBasedAnimTickRate 1")
-        ExecuteConsole("r.SkeletalMeshLODBias 0")
+        ExecuteConsole("r.SkeletalMeshLODBias " .. tostring(lodBias))
         ExecuteConsole("p.RigidBodyLODSubStepping 0")
         ExecuteConsole("r.DrawDebug 0")
         ExecuteConsole("p.VisualizeLineTraces 0")
@@ -49,8 +53,9 @@ function GraphicsModule.apply(cfg, cpuCfg)
         ExecuteConsole("r.DitheredLODTransition 1")
         ExecuteConsole("landscape.LODDistanceFactor 2.50")
         ExecuteConsole("landscape.LOD0DistributionScale 0.50")
-        ExecuteConsole("r.StaticMeshLODDistanceScale 0.75")
-        ExecuteConsole("r.MeshLODRange 0.85")
+        ExecuteConsole("r.StaticMeshLODDistanceScale " .. tostring(meshDist))
+        ExecuteConsole("r.MeshLODRange 0.80")
+        ExecuteConsole("r.Nanite.MaxPixelsPerEdge " .. tostring(nanitePix))
         ExecuteConsole("r.SkyAtmosphere.AerialPerspectiveLUT.FastSkyLUT 1")
         ExecuteConsole("foliage.CullDistanceScale 0.75")
         ExecuteConsole("r.ViewDistanceScale 0.90")
