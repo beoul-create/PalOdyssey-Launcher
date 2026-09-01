@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.133419",
-  "GeneratedAt": "2026-09-01T13:34:19.186Z",
+  "Version": "2026.09.01.133615",
+  "GeneratedAt": "2026-09-01T13:36:15.458Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Fast server boot with UObject caching and 4x accelerated async level loading.",
+    "ReleaseNotes": "Server performance upgrades: actor dormancy, 500 AI path requests, and GC clustering.",
     "Mandatory": false
   },
   "Files": [
@@ -291,8 +291,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/server.lua",
-      "Hash": "c2c816d2665caeff292c9e38d008c4f3bb9eba39f59979029539808b5d17b659",
-      "Size": 4152,
+      "Hash": "4d839938f7eb1310917306df6bc41d9892ca243a942c3339db4c52a7631853bb",
+      "Size": 4620,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/server.lua"
     },
     {
@@ -2277,8 +2277,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/server.lua",
-      "Hash": "c2c816d2665caeff292c9e38d008c4f3bb9eba39f59979029539808b5d17b659",
-      "Size": 4152,
+      "Hash": "4d839938f7eb1310917306df6bc41d9892ca243a942c3339db4c52a7631853bb",
+      "Size": 4620,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/server.lua"
     },
     {

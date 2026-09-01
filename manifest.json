@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.133615",
-  "GeneratedAt": "2026-09-01T13:36:15.458Z",
+  "Version": "2026.09.01.134105",
+  "GeneratedAt": "2026-09-01T13:41:05.556Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Server performance upgrades: actor dormancy, 500 AI path requests, and GC clustering.",
+    "ReleaseNotes": "Fixed PalClearVision Lua syntax and synchronized all client/server assets.",
     "Mandatory": false
   },
   "Files": [
@@ -219,8 +219,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalClearVision/Scripts/main.lua",
-      "Hash": "e6d9cb1f123bea7aa6a47fe5dffe17f2102562355ac118b2bd7a5c29d061194b",
-      "Size": 5488,
+      "Hash": "1db35af814f9a47941c688263908fc8ece490980a45caadb84ea95284378eaa3",
+      "Size": 5500,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalClearVision/Scripts/main.lua"
     },
     {
@@ -291,8 +291,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/server.lua",
-      "Hash": "4d839938f7eb1310917306df6bc41d9892ca243a942c3339db4c52a7631853bb",
-      "Size": 4620,
+      "Hash": "26d9a79a417a9907ce9925e9d65b8d0fa90019bbd77009e7999e8fe30b17e330",
+      "Size": 4037,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/server.lua"
     },
     {

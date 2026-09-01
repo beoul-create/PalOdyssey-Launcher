@@ -111,6 +111,7 @@ local function ApplyVisualTweaks()
             ExecuteConsole("r.GTSyncType 0")
             ExecuteConsole("r.OneFrameThreadLag 1")
             ExecuteConsole("r.FinishCurrentFrame 0")
+        end
 
         -- 7. Enhanced Upscaling Reconstruction & Anti-Aliasing (Option B: 85% TSR)
         if Config.enhancedUpscaling then
