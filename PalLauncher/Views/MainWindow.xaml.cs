@@ -257,9 +257,31 @@ namespace PalLauncher.Views
                         remoteStarted = await _remoteServerService.StartRemoteServerAsync(_config.RemoteServerApiUrl, _config.RemoteAdminKey);
                     }
 
-                    if (!remoteStarted && !string.IsNullOrEmpty(_detectedServerPath))
+                    if (!remoteStarted)
                     {
-                        _gameProcessService.StartDedicatedServer(_detectedServerPath, _config.ServerLaunchArguments);
+                        string? serverPath = _detectedServerPath;
+                        if (string.IsNullOrEmpty(serverPath) || !_gameProcessService.IsValidServerDirectory(serverPath))
+                        {
+                            serverPath = _gameProcessService.DetectServerPath(_config.ServerInstallPath);
+                            _detectedServerPath = serverPath;
+                        }
+
+                        if (!string.IsNullOrEmpty(serverPath))
+                        {
+                            bool localStarted = _gameProcessService.StartDedicatedServer(serverPath, _config.ServerLaunchArguments);
+                            if (localStarted)
+                            {
+                                ServerDetailText.Text = "Local server started successfully.";
+                            }
+                            else
+                            {
+                                ServerDetailText.Text = "Failed to launch server process.";
+                            }
+                        }
+                        else
+                        {
+                            ServerDetailText.Text = "Server directory not found. Please set path in Settings.";
+                        }
                     }
 
                     await Task.Delay(2000);

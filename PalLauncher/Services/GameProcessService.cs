@@ -151,25 +151,40 @@ namespace PalLauncher.Services
             _serverProcess?.Dispose();
             _serverProcess = null;
 
+            string palServerExe = Path.Combine(serverDirectory, "PalServer.exe");
             string shippingExe = Path.Combine(serverDirectory, ServerExecutableRelativePath);
-            string serverExe;
-            if (File.Exists(shippingExe))
+
+            string exePath;
+            string workingDir;
+            string launchArgs;
+
+            if (File.Exists(palServerExe))
             {
-                serverExe = shippingExe;
-                arguments = string.IsNullOrWhiteSpace(arguments) ? "Pal" : $"Pal {arguments}";
+                exePath = palServerExe;
+                workingDir = serverDirectory;
+                launchArgs = string.IsNullOrWhiteSpace(arguments) 
+                    ? "-useperfthreads -NoAsyncLoadingThread -USEALLAVAILABLECORES" 
+                    : $"{arguments} -useperfthreads -NoAsyncLoadingThread -USEALLAVAILABLECORES";
+            }
+            else if (File.Exists(shippingExe))
+            {
+                exePath = shippingExe;
+                workingDir = Path.GetDirectoryName(shippingExe) ?? serverDirectory;
+                launchArgs = string.IsNullOrWhiteSpace(arguments) 
+                    ? "Pal -useperfthreads -NoAsyncLoadingThread -USEALLAVAILABLECORES" 
+                    : $"Pal {arguments} -useperfthreads -NoAsyncLoadingThread -USEALLAVAILABLECORES";
             }
             else
             {
-                serverExe = Path.Combine(serverDirectory, "PalServer.exe");
+                return false;
             }
+
             var startInfo = new ProcessStartInfo
             {
-                FileName = serverExe,
-                Arguments = arguments,
-                WorkingDirectory = serverDirectory,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden
+                FileName = exePath,
+                Arguments = launchArgs,
+                WorkingDirectory = workingDir,
+                UseShellExecute = true
             };
 
             try
@@ -177,18 +192,23 @@ namespace PalLauncher.Services
                 _serverProcess = Process.Start(startInfo);
                 if (_serverProcess != null)
                 {
-                    _serverProcess.EnableRaisingEvents = true;
-                    _serverProcess.Exited += (s, e) =>
+                    try
                     {
-                        ServerStateChanged?.Invoke(false);
-                    };
+                        _serverProcess.EnableRaisingEvents = true;
+                        _serverProcess.Exited += (s, e) =>
+                        {
+                            ServerStateChanged?.Invoke(false);
+                        };
+                    }
+                    catch { }
 
                     ServerStateChanged?.Invoke(true);
                     return true;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine($"Failed to start dedicated server: {ex.Message}");
                 return false;
             }
 
@@ -203,23 +223,28 @@ namespace PalLauncher.Services
                 {
                     _serverProcess.Kill(entireProcessTree: true);
                     _serverProcess.Dispose();
+                    _serverProcess = null;
                 }
-            }
-            catch { }
-            finally
-            {
-                _serverProcess = null;
-            }
 
-            try
-            {
-                foreach (var p in Process.GetProcessesByName(ServerProcessName))
+                // Also kill any lingering PalServer / PalServer-Win64-Shipping processes
+                var processes = Process.GetProcessesByName(ServerProcessName)
+                    .Concat(Process.GetProcessesByName(AlternateServerProcessName))
+                    .ToArray();
+
+                foreach (var p in processes)
                 {
-                    try { p.Kill(entireProcessTree: true); p.Dispose(); } catch { }
-                }
-                foreach (var p in Process.GetProcessesByName(AlternateServerProcessName))
-                {
-                    try { p.Kill(entireProcessTree: true); p.Dispose(); } catch { }
+                    try
+                    {
+                        if (!p.HasExited)
+                        {
+                            p.Kill(entireProcessTree: true);
+                        }
+                    }
+                    catch { }
+                    finally
+                    {
+                        p.Dispose();
+                    }
                 }
             }
             catch { }

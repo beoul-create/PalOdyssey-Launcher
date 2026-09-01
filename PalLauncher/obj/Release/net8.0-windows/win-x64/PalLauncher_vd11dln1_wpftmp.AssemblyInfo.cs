@@ -11,7 +11,7 @@ using System;
 using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("PalLauncher")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("2.0.1.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.0.1+055c4a9ba920e1335d24b7b7cb4607c6eb285f21")]
 [assembly: System.Reflection.AssemblyProductAttribute("PalLauncher")]
