@@ -2254,8 +2254,31 @@ end
 
 RegisterHook("/Script/Engine.PlayerController:ServerAcknowledgePossession",
     function(self, Pawn)
+        local pawnObj = Pawn and (Pawn.get and Pawn:get() or Pawn)
+        if pawnObj and pawnObj.IsA then
+            local isPlayerPawn = false
+            pcall(function()
+                local cls = pawnObj:GetClass():GetFName():ToString()
+                if cls:find("^BP_Player_") or cls:find("PalPlayerCharacter") then
+                    isPlayerPawn = true
+                end
+            end)
+            if not isPlayerPawn then
+                -- Mounting a Pal: controller repossesses the mount, ignore completely!
+                return
+            end
+        end
+
         local controller = self
         pcall(function() controller = self:get() end)
+        if not (controller and controller:IsValid()) then return end
+
+        -- If player's progress is already loaded in memory, do not re-run file reads on dismount!
+        local uid = realUid(fmtGuid(controller:GetPlayerUId()))
+        if uid and playerDefeated[uid] then
+            return
+        end
+
         ExecuteWithDelay(3000, function()
             local ok, err = pcall(function() onPossession(controller) end)
             if not ok then

@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.233148",
-  "GeneratedAt": "2026-09-01T23:31:48.945Z",
+  "Version": "2026.09.01.233414",
+  "GeneratedAt": "2026-09-01T23:34:14.025Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Cleaned up obsolete EconomySystem and UniPalUI while retaining DarnMenu & DarnToasts for Living Arsenal prestige.",
+    "ReleaseNotes": "Fixed mount/dismount frame lag by resolving URO bone reconciliation stalls, texture streaming FOV spike, and LevelLock repossession disk hits.",
     "Mandatory": false
   },
   "Files": [
@@ -273,8 +273,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/LevelLock/Scripts/main.lua",
-      "Hash": "5f0eaca8024e1e04478948cc50c0885311e315a576d8862a891da802ebf626d9",
-      "Size": 96639,
+      "Hash": "3caad2bfb1ad19bab3f7a62f4b20998565b5469eee445c989ce9d5c085563d73",
+      "Size": 97528,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/LevelLock/Scripts/main.lua"
     },
     {
@@ -345,8 +345,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "8a8dec18fe7f75899b4a9b128d7d2d7feffc7619995ffe6fbb70c4c68c6f2b7a",
-      "Size": 8639,
+      "Hash": "1148053052e8ba79c225e973176c50e51cf12d8ba4d30277d5ef78b6129694e8",
+      "Size": 8675,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -1911,8 +1911,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/TechPointShopBridge/Scripts/main.lua",
-      "Hash": "382772fc2cfdf08f99db864bfa5fc7a81e1255a5670f8537eb8bc165541fb930",
-      "Size": 16811,
+      "Hash": "a23c3a13c2ce6c8f8005e8d5abd78dc5aa453a77153c485961bc475621a02140",
+      "Size": 12178,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/TechPointShopBridge/Scripts/main.lua"
     },
     {
@@ -2355,8 +2355,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua",
-      "Hash": "5f0eaca8024e1e04478948cc50c0885311e315a576d8862a891da802ebf626d9",
-      "Size": 96639,
+      "Hash": "3caad2bfb1ad19bab3f7a62f4b20998565b5469eee445c989ce9d5c085563d73",
+      "Size": 97528,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua"
     },
     {
@@ -2427,8 +2427,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "8a8dec18fe7f75899b4a9b128d7d2d7feffc7619995ffe6fbb70c4c68c6f2b7a",
-      "Size": 8639,
+      "Hash": "1148053052e8ba79c225e973176c50e51cf12d8ba4d30277d5ef78b6129694e8",
+      "Size": 8675,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {

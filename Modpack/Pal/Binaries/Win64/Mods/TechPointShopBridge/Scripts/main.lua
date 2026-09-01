@@ -15,52 +15,7 @@ local TOKEN_ID = tostring(Config.currencyItemId or "PalOdyssey_TechPointToken")
 local SETUP_HOOK = "/Script/Pal.PalNetworkShopComponent:SetupShopDataForActor_ToServer"
 local BUY_HOOK = "/Script/Pal.PalNetworkShopComponent:RequestBuyProduct_ToServer"
 local SELL_HOOK = "/Script/Pal.PalNetworkShopComponent:RequestSellItems_ToServer"
-
 -- Only Alpha Boss drops, Ancient Relics, and Precious Stones award Technology Points
-local BOSS_DROPS = {
-    AncientCore = 5,
-    PalItem_AncientCore = 5,
-    AncientParts = 1,
-    PalItem_AncientParts = 1,
-    PreciousDragonStone_03 = 6,
-    PalItem_PreciousDragonStone_03 = 6,
-    PreciousDragonStone_02 = 4,
-    PalItem_PreciousDragonStone_02 = 4,
-    PreciousDragonStone_01 = 2,
-    PalItem_PreciousDragonStone_01 = 2,
-    PreciousPelt_03 = 3,
-    PalItem_PreciousPelt_03 = 3,
-    PreciousPelt_02 = 2,
-    PalItem_PreciousPelt_02 = 2,
-    PreciousPelt_01 = 1,
-    PalItem_PreciousPelt_01 = 1,
-    PreciousClaw_03 = 3,
-    PalItem_PreciousClaw_03 = 3,
-    PreciousClaw_02 = 2,
-    PalItem_PreciousClaw_02 = 2,
-    PreciousClaw_01 = 1,
-    PalItem_PreciousClaw_01 = 1,
-    PreciousFang_03 = 3,
-    PalItem_PreciousFang_03 = 3,
-    PreciousFang_02 = 2,
-    PalItem_PreciousFang_02 = 2,
-    PreciousFang_01 = 1,
-    PalItem_PreciousFang_01 = 1,
-    PalUpgradeStone3 = 2,
-    PalUpgradeStone2 = 1,
-    PalUpgradeStone1 = 1,
-    TechnologyBook_G3 = 8,
-    PalItem_TechnologyBook_G3 = 8,
-    TechnologyBook_G2 = 4,
-    PalItem_TechnologyBook_G2 = 4,
-    TechnologyBook_G1 = 2,
-    PalItem_TechnologyBook_G1 = 2,
-    AncientTechnologyPointBook = 5,
-    PalItem_AncientTechnologyPointBook = 5,
-    AncientTechnologyBook_G1 = 5
-}
-
--- State is keyed by the server-owned network shop component. Nothing supplied
 -- by the client is trusted for player identity or balance.
 local sessions = {}
 local consumeHelper = nil
@@ -359,81 +314,6 @@ end
 
 local function sellPre(selfParam, ...)
     local component = unwrap(selfParam)
-    if not alive(component) or not isAuthority(component) then return end
-    local key = objectKey(component)
-    local session = sessions[key]
-    if not session or not session.active then return end
-
-    local _, _, inventory = getPlayerData(component)
-    if not alive(inventory) then return end
-
-    local snapshot = {}
-    for itemId, _ in pairs(BOSS_DROPS) do
-        local count = 0
-        pcall(function() count = tonumber(inventory:CountItemNum(FName(itemId))) or 0 end)
-        if count > 0 then
-            snapshot[itemId] = count
-        end
-    end
-    session.sellSnapshot = snapshot
-end
-
-local function sellPost(selfParam, ...)
-    local component = unwrap(selfParam)
-    if not alive(component) or not isAuthority(component) then return end
-    local key = objectKey(component)
-    local session = sessions[key]
-    if not session or not session.sellSnapshot then return end
-
-    local controller, state, inventory, technology = getPlayerData(component)
-    if not alive(inventory) or not alive(technology) then return end
-
-    local snapshot = session.sellSnapshot
-    session.sellSnapshot = nil
-
-    local totalPoints = 0
-    local breakdown = {}
-
-    for itemId, beforeCount in pairs(snapshot) do
-        local afterCount = 0
-        pcall(function() afterCount = tonumber(inventory:CountItemNum(FName(itemId))) or 0 end)
-        local diff = beforeCount - afterCount
-        if diff > 0 then
-            local rate = BOSS_DROPS[itemId] or 1
-            local pts = diff * rate
-            totalPoints = totalPoints + pts
-            table.insert(breakdown, string.format("%dx %s (+%d TP)", diff, itemId, pts))
-        end
-    end
-
-    if totalPoints > 0 then
-        local curBal = techBalance(technology)
-        setTechBalance(technology, curBal + totalPoints)
-        syncDisplayBalance(component, "recycled boss drops")
-
-        pcall(function()
-            local ChatSubsystem = FindFirstOf("PalChatSubsystem")
-            if ChatSubsystem and ChatSubsystem:IsValid() and alive(controller) then
-                ChatSubsystem:SendSystemChatMessage(controller, FText(string.format("✨ [Technology Merchant] Recycled: %s! Deposited +%d Technology Points.", table.concat(breakdown, ", "), totalPoints)))
-            end
-            local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
-            if PalUtil and PalUtil:IsValid() and alive(controller) then
-                PalUtil:SendSystemAnnounce(controller, string.format("✨ Recycled Boss Drops: +%d Technology Points!", totalPoints))
-            end
-        end)
-        log(string.format("Player recycled boss drops for +%d Technology Points (%s)", totalPoints, table.concat(breakdown, ", ")), true)
-    else
-        pcall(function()
-            local ChatSubsystem = FindFirstOf("PalChatSubsystem")
-            if ChatSubsystem and ChatSubsystem:IsValid() and alive(controller) then
-                ChatSubsystem:SendSystemChatMessage(controller, FText("⚠️ [Technology Merchant] Only Alpha Boss drops, Ancient Relics, and Precious Stones award Technology Points."))
-            end
-        end)
-    end
-end
-
-local function closePre(selfParam, ...)
-    local component = unwrap(selfParam)
     if alive(component) and isAuthority(component) then
         closeSession(component, "merchant closed")
     end
@@ -449,12 +329,9 @@ local function registerHooks()
     local sellOk, sellErr = pcall(function()
         RegisterHook(SELL_HOOK, sellPre, sellPost)
     end)
-
-    log(string.format("hooks setup=%s buy=%s sell=%s", tostring(setupOk), tostring(buyOk), tostring(sellOk)), true)
     if not setupOk then log("Setup hook error: " .. tostring(setupErr), true) end
     if not buyOk then log("Buy hook error: " .. tostring(buyErr), true) end
     if not sellOk then log("Sell hook error: " .. tostring(sellErr), true) end
-end
 
 registerHooks()
 log("Loaded; VC merchant CurrencyItemID must be " .. TOKEN_ID, true)
