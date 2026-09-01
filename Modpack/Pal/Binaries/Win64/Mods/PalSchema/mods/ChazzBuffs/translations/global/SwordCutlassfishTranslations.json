@@ -1,5 +1,0 @@
-{
-	"DT_PalFirstActivatedInfoText":{
-		"PAL_FIRST_SPAWN_DESC_SwordCutlassfish":"While fighting together, increases the Attack of both the player and this Pal by 30%, converts the player's attacks to <img id=|ElemIcon_Water|/><uiCommon id=|COMMON_ELEMENT_NAME_Water| style=|Elem_Water|/>, and increases player's melee weapon attack speed by 20%.\r\nWhen activated, Skutlass becomes the player's katana (Attack: <Status_Up>x{ActiveSkillMainValueByRank}</>). If it does not revert to its normal form quickly, Skutlass will become incapacitated. It will also become incapacitated if Iaigiri is used."
-	}
-}

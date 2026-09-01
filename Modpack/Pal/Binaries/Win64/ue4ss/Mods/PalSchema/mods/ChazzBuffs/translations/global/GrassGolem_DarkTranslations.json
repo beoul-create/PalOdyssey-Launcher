@@ -1,5 +1,0 @@
-{
-	"DT_PalFirstActivatedInfoText":{
-		"PAL_FIRST_SPAWN_DESC_GrassGolem_Dark":"Can be ridden.\r\nWhile mounted, Dualith Noct increases it's and the player's Attack and Defense stat by <Status_Up>{Passive1_EffectValue1}%</>, grants itself a life steal effect that restores <Status_Up>{Passive1_EffectValue3}%</> of damage dealt as Health, and can fire a powerful Dark laser from its right hand."
-	}
-}

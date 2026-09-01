@@ -1,0 +1,26 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "DomeArmorDragon": {
+      "Defense": 145,
+      "Friendship_Defense": 1
+    },
+    "BOSS_DomeArmorDragon": {
+      "Defense": 145,
+      "Friendship_Defense": 1
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_DomeArmorDragon_ExplosiveMissile": {
+      "WazaType": "Unique_DomeArmorDragon_ExplosiveMissile",
+      "Element": "EPalElementType::Earth",
+      "Power": 999,
+      "DisplayPower": 999,
+      "CoolTime": 40.0,
+      "EffectType1": "EPalAdditionalEffectType::Burn",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::Stun",
+      "EffectValue2": 100
+    }
+  }
+}

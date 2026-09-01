@@ -1,5 +1,0 @@
-{
-	"DT_PalFirstActivatedInfoText":{
-		"PAL_FIRST_SPAWN_DESC_GrassGolem":"Can be ridden.\r\nWhile mounted, Dualith increases it's and the player's Attack and Defense stat by <Status_Up>{Passive1_EffectValue1}%</>, reduces own active skill cooldowns by <Status_Up>{Passive1_EffectValue3}%</>, and can fire a powerful Grass laser from its right hand."
-	}
-}

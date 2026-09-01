@@ -1,5 +1,0 @@
-{
-	"DT_PalFirstActivatedInfoText":{
-		"PAL_FIRST_SPAWN_DESC_BlackMetalDragon":"Can be ridden as a flying mount.\r\nIncreases the damage dealt to ores by <Status_Up>{Passive1_EffectValue1}%</>, increases own Max Hp by <Status_Up>{Passive3_EffectValue1}%</>, and you can obtain <Status_Up>{Passive2_EffectValue1}%</> more Ore while mounted."
-	}
-}

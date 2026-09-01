@@ -1,5 +1,0 @@
-{
-	"DT_PalFirstActivatedInfoText":{
-		"PAL_FIRST_SPAWN_DESC_Gorilla_Ground":"While fighting together, increases the Attack of both the player and this Pal by 30% and converts the player's attacks to <img id=|ElemIcon_Ground|/><uiCommon id=|COMMON_ELEMENT_NAME_Earth| style=|Elem_Ground|/>.\r\nWhile in party, increases the player's climbing speed by <Status_Up>{Passive1_EffectValue1}%</>."
-	}
-}

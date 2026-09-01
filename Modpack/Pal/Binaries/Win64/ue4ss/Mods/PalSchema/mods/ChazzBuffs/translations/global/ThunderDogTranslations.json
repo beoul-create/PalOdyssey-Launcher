@@ -1,5 +1,0 @@
-{
-	"DT_PalFirstActivatedInfoText":{
-		"PAL_FIRST_SPAWN_DESC_ThunderDog":"Can be ridden.\r\nCan perform a double jump, increases own <img id=|ElemIcon_Electric|/><uiCommon id=|COMMON_ELEMENT_NAME_Electricity| style=|Elem_Electric|/> damage by <Status_Up>{Passive2_EffectValue1}%</> and increases player and pal's Attack by <Status_Up>{Passive2_EffectValue2}%</> while mounted. This Pal's Movement Speed increases by <Status_Up>{Passive1_EffectValue1}%</> for each other <img id=|ElemIcon_Electric|/><uiCommon id=|COMMON_ELEMENT_NAME_Electricity| style=|Elem_Electric|/> pal in your party. (Excluding Rayhound)"
-	}
-}

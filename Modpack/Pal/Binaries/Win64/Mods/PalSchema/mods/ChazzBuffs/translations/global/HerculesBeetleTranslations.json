@@ -1,5 +1,0 @@
-{
-	"DT_PalFirstActivatedInfoText":{
-		"PAL_FIRST_SPAWN_DESC_HerculesBeetle":"While fighting together, generates a barrier around the player after 5 melee hits are landed within <Status_Up>{Passive1_EffectValue1}</> seconds, increases defense of pal and player by <Status_Up>{Passive1_EffectValue2}%</>, grants the player and pal a life steal effect that restores <Status_Up>{Passive1_EffectValue3}%</> of damage dealt as Health, and increases the player's melee weapon attack speed by <Status_Up>{Passive1_EffectValue4}%</>."
-	}
-}

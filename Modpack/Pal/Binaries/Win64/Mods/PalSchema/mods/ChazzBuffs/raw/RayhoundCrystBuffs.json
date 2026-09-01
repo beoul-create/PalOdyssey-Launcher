@@ -47,6 +47,6 @@
       "CoolTime": 30.0,
       "EffectType1": "EPalAdditionalEffectType::Freeze",
       "EffectValue1": 100
-    },
+    }
   }
 }

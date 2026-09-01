@@ -16,9 +16,9 @@
     "Unique_ChickenPal_ChickenPeck": {
       "WazaType": "EPalWazaID::Unique_ChickenPal_ChickenPeck",
       "Element": "EPalElementType::Normal",
-      "Power": 250,
-      "DisplayPower": 250,
-      "CoolTime": 10.0
+      "Power": 525,
+      "DisplayPower": 525,
+      "CoolTime": 20.0
     }
   }
 }

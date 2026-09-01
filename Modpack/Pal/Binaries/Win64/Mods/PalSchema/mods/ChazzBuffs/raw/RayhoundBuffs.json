@@ -58,6 +58,6 @@
       "CoolTime": 30.0,
       "EffectType1": "EPalAdditionalEffectType::Electrical",
       "EffectValue1": 100
-    },
+    }
   }
 }

@@ -1,5 +1,0 @@
-{
-	"DT_PalFirstActivatedInfoText":{
-		"PAL_FIRST_SPAWN_DESC_DarkMechaDragon":"Can be ridden as a flying mount.\r\nWhile in party, damage done by Partner Skills of weapon-wielding Pals increases by <Status_Up>{Passive1_EffectValue1}%</>.\r\nReduces own active skill cooldowns by <Status_Up>{Passive1_EffectValue2}%</>."
-	}
-}

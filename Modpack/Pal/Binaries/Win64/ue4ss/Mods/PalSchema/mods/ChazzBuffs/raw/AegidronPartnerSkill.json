@@ -1,0 +1,629 @@
+{
+  "DT_PassiveSkill_Main": {
+    "AegisDragon_1": {
+      "EffectType1": "EPalPassiveSkillEffectType::Defense",
+      "EffectValue1": 20,
+      "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType2": "EPalPassiveSkillEffectType::MaxHP",
+      "EffectValue2": 20,
+      "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType3": "EPalPassiveSkillEffectType::no",
+      "EffectValue3": 0,
+      "TargetType3": "EPalPassiveSkillEffectTargetType::None",
+      "EffectType4": "EPalPassiveSkillEffectType::no",
+      "EffectValue4": 0,
+      "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+      "InvokeActiveOtomo": false,
+      "InvokeWorker": false,
+      "InvokeRiding": true,
+      "InvokeReserve": false,
+      "InvokeInOtomo": false,
+      "InvokeAlways": true,
+      "InvokeInBaseCamp": false
+    },
+    "AegisDragon_2": {
+      "EffectType1": "EPalPassiveSkillEffectType::Defense",
+      "EffectValue1": 25,
+      "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType2": "EPalPassiveSkillEffectType::MaxHP",
+      "EffectValue2": 25,
+      "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType3": "EPalPassiveSkillEffectType::no",
+      "EffectValue3": 0,
+      "TargetType3": "EPalPassiveSkillEffectTargetType::None",
+      "EffectType4": "EPalPassiveSkillEffectType::no",
+      "EffectValue4": 0,
+      "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+      "InvokeActiveOtomo": false,
+      "InvokeWorker": false,
+      "InvokeRiding": true,
+      "InvokeReserve": false,
+      "InvokeInOtomo": false,
+      "InvokeAlways": true,
+      "InvokeInBaseCamp": false
+    },
+    "AegisDragon_3": {
+      "EffectType1": "EPalPassiveSkillEffectType::Defense",
+      "EffectValue1": 30,
+      "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType2": "EPalPassiveSkillEffectType::MaxHP",
+      "EffectValue2": 30,
+      "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType3": "EPalPassiveSkillEffectType::no",
+      "EffectValue3": 0,
+      "TargetType3": "EPalPassiveSkillEffectTargetType::None",
+      "EffectType4": "EPalPassiveSkillEffectType::no",
+      "EffectValue4": 0,
+      "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+      "InvokeActiveOtomo": false,
+      "InvokeWorker": false,
+      "InvokeRiding": true,
+      "InvokeReserve": false,
+      "InvokeInOtomo": false,
+      "InvokeAlways": true,
+      "InvokeInBaseCamp": false
+    },
+    "AegisDragon_4": {
+      "EffectType1": "EPalPassiveSkillEffectType::Defense",
+      "EffectValue1": 35,
+      "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType2": "EPalPassiveSkillEffectType::MaxHP",
+      "EffectValue2": 35,
+      "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType3": "EPalPassiveSkillEffectType::no",
+      "EffectValue3": 0,
+      "TargetType3": "EPalPassiveSkillEffectTargetType::None",
+      "EffectType4": "EPalPassiveSkillEffectType::no",
+      "EffectValue4": 0,
+      "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+      "InvokeActiveOtomo": false,
+      "InvokeWorker": false,
+      "InvokeRiding": true,
+      "InvokeReserve": false,
+      "InvokeInOtomo": false,
+      "InvokeAlways": true,
+      "InvokeInBaseCamp": false
+    },
+    "AegisDragon_5": {
+      "EffectType1": "EPalPassiveSkillEffectType::Defense",
+      "EffectValue1": 40,
+      "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType2": "EPalPassiveSkillEffectType::MaxHP",
+      "EffectValue2": 40,
+      "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+      "EffectType3": "EPalPassiveSkillEffectType::no",
+      "EffectValue3": 0,
+      "TargetType3": "EPalPassiveSkillEffectTargetType::None",
+      "EffectType4": "EPalPassiveSkillEffectType::no",
+      "EffectValue4": 0,
+      "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+      "InvokeActiveOtomo": false,
+      "InvokeWorker": false,
+      "InvokeRiding": true,
+      "InvokeReserve": false,
+      "InvokeInOtomo": false,
+      "InvokeAlways": true,
+      "InvokeInBaseCamp": false
+    }
+  },
+  "DT_PartnerSkillParameter": {
+    "DomeArmorDragon": {
+      "RestrictionItems": [
+        {
+          "Key": "SkillUnlock_DomeArmorDragon"
+        }
+      ],
+      "ActiveSkill": {
+        "SkillName": "Unknown",
+        "WazaID": "EPalWazaID::None",
+        "bIdlelCostDecreaseEveryFrame": false,
+        "bIsExecSkillContinuation": false,
+        "bIsOneShotRideAction": false,
+        "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+        "IsRidingActiveSkillNotWeapon": false,
+        "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+        "bIsToggleRidingActiveSkillNotWeapon": false,
+        "ActiveSkill_MainValueByRank": [],
+        "ActiveSkill_OverWriteCoolTimeByRank": [],
+        "ActiveSkill_OverWriteEffectTimeByRank": []
+      },
+      "PassiveSkills": [
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DomeArmorDragon_PartnerSkill_1"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "AegisDragon_1"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DomeArmorDragon_PartnerSkill_2"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "AegisDragon_2"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DomeArmorDragon_PartnerSkill_3"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "AegisDragon_3"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DomeArmorDragon_PartnerSkill_4"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "AegisDragon_4"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DomeArmorDragon_PartnerSkill_5"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "AegisDragon_5"
+              }
+            }
+          ]
+        }
+      ],
+      "TextReferencePassiveSkills": []
+    },
+    "BOSS_DomeArmorDragon": {
+      "RestrictionItems": [
+        {
+          "Key": "SkillUnlock_DomeArmorDragon"
+        }
+      ],
+      "ActiveSkill": {
+        "SkillName": "Unknown",
+        "WazaID": "EPalWazaID::None",
+        "bIdlelCostDecreaseEveryFrame": false,
+        "bIsExecSkillContinuation": false,
+        "bIsOneShotRideAction": false,
+        "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+        "IsRidingActiveSkillNotWeapon": false,
+        "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+        "bIsToggleRidingActiveSkillNotWeapon": false,
+        "ActiveSkill_MainValueByRank": [],
+        "ActiveSkill_OverWriteCoolTimeByRank": [],
+        "ActiveSkill_OverWriteEffectTimeByRank": []
+      },
+      "PassiveSkills": [
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DomeArmorDragon_PartnerSkill_1"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "AegisDragon_1"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DomeArmorDragon_PartnerSkill_2"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "AegisDragon_2"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DomeArmorDragon_PartnerSkill_3"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "AegisDragon_3"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DomeArmorDragon_PartnerSkill_4"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "AegisDragon_4"
+              }
+            }
+          ]
+        },
+        {
+          "SkillAndParametersArray": [
+            {
+              "SkillName": {
+                "Key": "DomeArmorDragon_PartnerSkill_5"
+              },
+              "Parameters": {
+                "DelayTime": 0,
+                "WorkType": "EPalWorkType::None",
+                "bAssignPassiveIgnoreCurrentWorkType": false,
+                "MapObjectId": [],
+                "ItemId": [],
+                "AssignOthers": true,
+                "TargetElementType": "EPalElementType::None",
+                "PalTribeIds": [],
+                "bNotAssignSelf": false,
+                "TriggerParam": {
+                  "TargetTribeIds": []
+                },
+                "ItemParam": {
+                  "ItemTypeA": "EPalItemTypeA::None",
+                  "ItemTypeB": "EPalItemTypeB::None",
+                  "ItemIds": [],
+                  "ExcludedItemIds": [],
+                  "bIsContainNoItemId": false,
+                  "WeaponType": "EPalWeaponType::None",
+                  "WeaponTypes": [],
+                  "bMeleeOnly": false
+                },
+                "RegeneParam": {
+                  "Interval": 0
+                },
+                "OtherOtomoConditionParam": {
+                  "TargetElementType": "EPalElementType::None",
+                  "TargetElementTypes": [],
+                  "PalTribeIds": []
+                },
+                "FloatValue1": 0
+              }
+            },
+            {
+              "SkillName": {
+                "Key": "AegisDragon_5"
+              }
+            }
+          ]
+        }
+      ],
+      "TextReferencePassiveSkills": []
+    }
+  }
+}
