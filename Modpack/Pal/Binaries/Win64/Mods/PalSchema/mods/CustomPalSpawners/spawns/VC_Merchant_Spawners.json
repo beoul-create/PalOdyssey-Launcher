@@ -1,7 +1,7 @@
 [
     {
         "Type": "MonoNPC",
-        "NPCID": "Male_Trader01_v04",
+        "NPCID": "Male_Trader01_v10",
         "Level": 5,
         "Location": { "X": -357314.0, "Y": 268922.0, "Z": 7953.0 },
         "Rotation": { "Pitch": 0.0, "Yaw": 180.0, "Roll": 0.0 }

@@ -1,15 +1,15 @@
 {
-  "Version": "2026.09.01.231044",
-  "GeneratedAt": "2026-09-01T23:10:44.881Z",
+  "Version": "2026.09.01.231402",
+  "GeneratedAt": "2026-09-01T23:14:02.631Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 706,
+  "TotalFiles": 708,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Completed TechPointShopBridge transaction bridge for VC Merchant shops.",
+    "ReleaseNotes": "Deployed custom Technology Merchant at Plateau of Beginnings with full Economy inventory.",
     "Mandatory": false
   },
   "Files": [
@@ -1533,7 +1533,7 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/CustomPalSpawners/spawns/VC_Merchant_Spawners.json",
-      "Hash": "02002ce69bb9ef28eed19cf82ef6cd620d78d5845b4d966803f347c03ed2607b",
+      "Hash": "62ee0643dd2febd0e76239f7b6c6a2a52356b8434e51161562e07fba4e10f7c9",
       "Size": 3804,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/CustomPalSpawners/spawns/VC_Merchant_Spawners.json"
     },
@@ -1719,8 +1719,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_gadgets (gold).json",
-      "Hash": "b8f4443f9f35ae3493e1bb32976c8808e4966b656810707e42cd44f77919d902",
-      "Size": 11379,
+      "Hash": "8477f19ec136cd0304f588d81092385c8fe342da084573c52ed66cf9adabece2",
+      "Size": 3344,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_gadgets%20(gold).json"
     },
     {
@@ -1737,8 +1737,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Merchant Currency Adjust.json",
-      "Hash": "e4d61bedd2a57f41e5a2a85cc90efa8050c5056379d3a2bcc2da6807959a2907",
-      "Size": 771,
+      "Hash": "529e03d6969bbc0e18c3b1f6127ccf56e7d8bc0d24a3cfb63dd6de1f18537291",
+      "Size": 850,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Merchant%20Currency%20Adjust.json"
     },
     {
@@ -1803,9 +1803,15 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/spawns/VC_Merchant_Spawners.json",
-      "Hash": "02002ce69bb9ef28eed19cf82ef6cd620d78d5845b4d966803f347c03ed2607b",
+      "Hash": "62ee0643dd2febd0e76239f7b6c6a2a52356b8434e51161562e07fba4e10f7c9",
       "Size": 3804,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/spawns/VC_Merchant_Spawners.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/translations/en/VC_Translation.json",
+      "Hash": "327dc8fb06baffa06f647cae7f686fe9aa0d6b50ca9d8e0f8a01fd98531a5b2f",
+      "Size": 223,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/translations/en/VC_Translation.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalworldTuner/enabled.txt",
@@ -3651,7 +3657,7 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomPalSpawners/spawns/VC_Merchant_Spawners.json",
-      "Hash": "02002ce69bb9ef28eed19cf82ef6cd620d78d5845b4d966803f347c03ed2607b",
+      "Hash": "62ee0643dd2febd0e76239f7b6c6a2a52356b8434e51161562e07fba4e10f7c9",
       "Size": 3804,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomPalSpawners/spawns/VC_Merchant_Spawners.json"
     },
@@ -3837,8 +3843,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_gadgets (gold).json",
-      "Hash": "b8f4443f9f35ae3493e1bb32976c8808e4966b656810707e42cd44f77919d902",
-      "Size": 11379,
+      "Hash": "8477f19ec136cd0304f588d81092385c8fe342da084573c52ed66cf9adabece2",
+      "Size": 3344,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_gadgets%20(gold).json"
     },
     {
@@ -3855,8 +3861,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Merchant Currency Adjust.json",
-      "Hash": "e4d61bedd2a57f41e5a2a85cc90efa8050c5056379d3a2bcc2da6807959a2907",
-      "Size": 771,
+      "Hash": "529e03d6969bbc0e18c3b1f6127ccf56e7d8bc0d24a3cfb63dd6de1f18537291",
+      "Size": 850,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Merchant%20Currency%20Adjust.json"
     },
     {
@@ -3921,9 +3927,15 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/spawns/VC_Merchant_Spawners.json",
-      "Hash": "02002ce69bb9ef28eed19cf82ef6cd620d78d5845b4d966803f347c03ed2607b",
+      "Hash": "62ee0643dd2febd0e76239f7b6c6a2a52356b8434e51161562e07fba4e10f7c9",
       "Size": 3804,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/spawns/VC_Merchant_Spawners.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/translations/en/VC_Translation.json",
+      "Hash": "327dc8fb06baffa06f647cae7f686fe9aa0d6b50ca9d8e0f8a01fd98531a5b2f",
+      "Size": 223,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/translations/en/VC_Translation.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalworldTuner/enabled.txt",

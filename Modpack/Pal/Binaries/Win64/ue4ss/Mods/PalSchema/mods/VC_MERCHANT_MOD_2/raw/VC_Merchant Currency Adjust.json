@@ -32,7 +32,9 @@
     },
     "Caravan_Shop_9": {
       "CurrencyItemID": "Ruby"
+    },
+    "Caravan_Shop_10": {
+      "CurrencyItemID": "PalOdyssey_TechPointToken"
     }
-    
   }
 }
