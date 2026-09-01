@@ -1,15 +1,15 @@
 {
-  "Version": "2026.09.01.233004",
-  "GeneratedAt": "2026-09-01T23:30:04.965Z",
+  "Version": "2026.09.01.233148",
+  "GeneratedAt": "2026-09-01T23:31:48.945Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 712,
+  "TotalFiles": 694,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Configured Technology Merchant Sell Tab to exclusively recycle Alpha Boss drops into Technology Points.",
+    "ReleaseNotes": "Cleaned up obsolete EconomySystem and UniPalUI while retaining DarnMenu & DarnToasts for Living Arsenal prestige.",
     "Mandatory": false
   },
   "Files": [
@@ -164,42 +164,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DarnToasts/Scripts/ToastLib.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/EconomySystem/config.json",
-      "Hash": "f12939d6744ec4a4333566b3645c64b4108e8732a513c7df5eeffdf7834651de",
-      "Size": 7266,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/EconomySystem/config.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/EconomySystem/enabled.txt",
-      "Hash": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
-      "Size": 2,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/EconomySystem/enabled.txt"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/EconomySystem/Scripts/chat_commands.lua",
-      "Hash": "2124ce20a473a575d0228d41fea069f5a3a790298de9adf9392f819d368bdf68",
-      "Size": 14153,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/EconomySystem/Scripts/chat_commands.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/EconomySystem/Scripts/gacha_engine.lua",
-      "Hash": "64c8fd2157a72cb8233bcc2b5cf4f7c1af4b0855f6d373a1a4bea87dc5711519",
-      "Size": 693,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/EconomySystem/Scripts/gacha_engine.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "9471b3e557e15e3ea30fd4a55a437093b680bd3c10d4600ad165e85cb544b234",
-      "Size": 44965,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/EconomySystem/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/EconomySystem/Scripts/shop_catalog.lua",
-      "Hash": "ad2ffe3f766489732db2cacd06ac54edf44c490590f29d3308292cba95023699",
-      "Size": 382,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/EconomySystem/Scripts/shop_catalog.lua"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/ExpeditionXP/config.lua",
       "Hash": "8a686302d84fe43b26374b4a2cdabf23d857481d9cf537e332af7a3bf9bb00f8",
       "Size": 819,
@@ -321,8 +285,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/mods.txt",
-      "Hash": "21373822a4775568438f4b1b0b33a8ae1ac8a053aca0df15906a18f0640430d9",
-      "Size": 409,
+      "Hash": "108fe45a786b12d8e71dd741095ae43c88120e93781ccb7e9e5392d6877d5368",
+      "Size": 375,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/mods.txt"
     },
     {
@@ -1952,24 +1916,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/TechPointShopBridge/Scripts/main.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/UniPalUI/enabled.txt",
-      "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "Size": 0,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/UniPalUI/enabled.txt"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/UniPalUI/Info.json",
-      "Hash": "4cd2eaaa7491568fccb22b1c56fa038c271eb7cfaf4e76a44510fb299ec6d594",
-      "Size": 226,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/UniPalUI/Info.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/UniPalUI/Scripts/main.lua",
-      "Hash": "4fe67e4919efe6c45e7f1d936963a051fe5927227137f4fa60d6f41ca69597d5",
-      "Size": 9218,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/UniPalUI/Scripts/main.lua"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/WeaponProficiency/enabled.txt",
       "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "Size": 0,
@@ -2300,42 +2246,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/ToastLib.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json",
-      "Hash": "f12939d6744ec4a4333566b3645c64b4108e8732a513c7df5eeffdf7834651de",
-      "Size": 7266,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/config.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/enabled.txt",
-      "Hash": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
-      "Size": 2,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/enabled.txt"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/chat_commands.lua",
-      "Hash": "2124ce20a473a575d0228d41fea069f5a3a790298de9adf9392f819d368bdf68",
-      "Size": 14153,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/chat_commands.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/gacha_engine.lua",
-      "Hash": "64c8fd2157a72cb8233bcc2b5cf4f7c1af4b0855f6d373a1a4bea87dc5711519",
-      "Size": 693,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/gacha_engine.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "140d6691fe4c85359eeca1bf471fb92fe9b334052de548b8f8e836a68804ddc3",
-      "Size": 43709,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/shop_catalog.lua",
-      "Hash": "ad2ffe3f766489732db2cacd06ac54edf44c490590f29d3308292cba95023699",
-      "Size": 382,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/shop_catalog.lua"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/ExpeditionXP/config.lua",
       "Hash": "8a686302d84fe43b26374b4a2cdabf23d857481d9cf537e332af7a3bf9bb00f8",
       "Size": 819,
@@ -2457,8 +2367,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/mods.txt",
-      "Hash": "21373822a4775568438f4b1b0b33a8ae1ac8a053aca0df15906a18f0640430d9",
-      "Size": 409,
+      "Hash": "108fe45a786b12d8e71dd741095ae43c88120e93781ccb7e9e5392d6877d5368",
+      "Size": 375,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/mods.txt"
     },
     {
@@ -4086,24 +3996,6 @@
       "Hash": "382772fc2cfdf08f99db864bfa5fc7a81e1255a5670f8537eb8bc165541fb930",
       "Size": 16811,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/TechPointShopBridge/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/enabled.txt",
-      "Hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "Size": 0,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/enabled.txt"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/Info.json",
-      "Hash": "4cd2eaaa7491568fccb22b1c56fa038c271eb7cfaf4e76a44510fb299ec6d594",
-      "Size": 226,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/Info.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/Scripts/main.lua",
-      "Hash": "4fe67e4919efe6c45e7f1d936963a051fe5927227137f4fa60d6f41ca69597d5",
-      "Size": 9218,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/Scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/enabled.txt",

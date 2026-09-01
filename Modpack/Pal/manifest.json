@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.232158",
-  "GeneratedAt": "2026-09-01T23:21:58.311Z",
+  "Version": "2026.09.01.233004",
+  "GeneratedAt": "2026-09-01T23:30:04.965Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Added item recycling & selling support to Technology Merchant for Technology Points.",
+    "ReleaseNotes": "Configured Technology Merchant Sell Tab to exclusively recycle Alpha Boss drops into Technology Points.",
     "Mandatory": false
   },
   "Files": [
@@ -1947,8 +1947,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/TechPointShopBridge/Scripts/main.lua",
-      "Hash": "14495f004599e7301ffd2387fe766b6f9391420269d301cc3c4a6b9281176675",
-      "Size": 12292,
+      "Hash": "382772fc2cfdf08f99db864bfa5fc7a81e1255a5670f8537eb8bc165541fb930",
+      "Size": 16811,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/TechPointShopBridge/Scripts/main.lua"
     },
     {
@@ -4083,8 +4083,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/TechPointShopBridge/Scripts/main.lua",
-      "Hash": "14495f004599e7301ffd2387fe766b6f9391420269d301cc3c4a6b9281176675",
-      "Size": 12292,
+      "Hash": "382772fc2cfdf08f99db864bfa5fc7a81e1255a5670f8537eb8bc165541fb930",
+      "Size": 16811,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/TechPointShopBridge/Scripts/main.lua"
     },
     {
