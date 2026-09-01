@@ -46,13 +46,12 @@ function ServerModule.apply(cfg)
         ExecuteConsole("p.ClothPhysics 0")
         ExecuteConsole("ai.MaxSimultaneousPathRequests 250")
 
-        -- 3. C2ME Concurrent Async World Streaming & Actor Spawning
-        if not (_G.FastConnect and _G.FastConnect.Config and _G.FastConnect.Config.accelerateLoadingScreens) then
-            ExecuteConsole("s.AsyncLoadingThreadEnabled 1")
-            ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 5.0")
-            ExecuteConsole("s.PriorityAsyncLoadingExtraTime 15.0")
-            ExecuteConsole("s.AsyncLoadingTimeLimit 5.0")
-        end
+        -- 3. C2ME Concurrent Async World Streaming & Fast Level Ingestion
+        ExecuteConsole("s.AsyncLoadingThreadEnabled 1")
+        ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 15.0")
+        ExecuteConsole("s.PriorityAsyncLoadingExtraTime 30.0")
+        ExecuteConsole("s.AsyncLoadingTimeLimit 20.0")
+        ExecuteConsole("s.AsyncLoadingUseFullTimeLimit 0")
 
         -- 4. Anti-Rubberband Momentum Tolerances & Network Movement Smoothing
         ExecuteConsole("net.ClientMoveCorrectionThreshold 200.0")

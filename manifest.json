@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.133124",
-  "GeneratedAt": "2026-09-01T13:31:24.154Z",
+  "Version": "2026.09.01.133419",
+  "GeneratedAt": "2026-09-01T13:34:19.186Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Fixed world boss spawning pipeline and protected abstract class instantiation.",
+    "ReleaseNotes": "Fast server boot with UObject caching and 4x accelerated async level loading.",
     "Mandatory": false
   },
   "Files": [
@@ -291,8 +291,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/server.lua",
-      "Hash": "aafa020871035a4b0a58d2768065c61aa7d4c6887049fd0e078ae3a8489aed5c",
-      "Size": 4227,
+      "Hash": "c2c816d2665caeff292c9e38d008c4f3bb9eba39f59979029539808b5d17b659",
+      "Size": 4152,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/server.lua"
     },
     {
@@ -1989,8 +1989,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/UE4SS-settings.ini",
-      "Hash": "ec534813a14f4340d41c59550a81a56bcc27a35aa3bc5f66c3d93a2f8399b44f",
-      "Size": 1616,
+      "Hash": "0c8f89456aaea8064646424577240d89e9944a40ba752ccd94b8a36b926973be",
+      "Size": 1612,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/UE4SS-settings.ini"
     },
     {
@@ -2277,8 +2277,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/server.lua",
-      "Hash": "aafa020871035a4b0a58d2768065c61aa7d4c6887049fd0e078ae3a8489aed5c",
-      "Size": 4227,
+      "Hash": "c2c816d2665caeff292c9e38d008c4f3bb9eba39f59979029539808b5d17b659",
+      "Size": 4152,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/server.lua"
     },
     {
@@ -3969,8 +3969,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/UE4SS-settings.ini",
-      "Hash": "ec534813a14f4340d41c59550a81a56bcc27a35aa3bc5f66c3d93a2f8399b44f",
-      "Size": 1616,
+      "Hash": "0c8f89456aaea8064646424577240d89e9944a40ba752ccd94b8a36b926973be",
+      "Size": 1612,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/UE4SS-settings.ini"
     },
     {
