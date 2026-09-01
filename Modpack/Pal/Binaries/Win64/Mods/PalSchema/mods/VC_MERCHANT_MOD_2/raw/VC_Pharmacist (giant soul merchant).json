@@ -1,0 +1,119 @@
+{
+    "DT_ItemShopCreateData": {
+
+        "Caravan_Shop_15": {
+            "productDataArray": {
+                "Action": "Clear",
+                    "Items": [
+
+          {
+            "StaticItemId": "Fruit__defense_01",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Fruit_hp_01",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Fruit_attack_01",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Rankup_Arbitrary",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 10,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "LvUP_01",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 10,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Potion_Extreme",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "AffectionFruit_01",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 10,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Herbs",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 20,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Medicines",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 10,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "LuxuryMedicines",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "MindControlDrug",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Opium",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Narcotic",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "StatusPointResetSan",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "PalGenderReverse",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 10,
+            "Stock": 0
+          }
+          ]
+         }
+       }
+    }
+    
+  }

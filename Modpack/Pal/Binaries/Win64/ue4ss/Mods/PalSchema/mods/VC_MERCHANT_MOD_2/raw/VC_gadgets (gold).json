@@ -1,0 +1,398 @@
+{
+    "DT_ItemShopCreateData": {
+
+        "Caravan_Shop_10": {
+            "productDataArray": {
+                "Action": "Clear",
+                    "Items": [
+
+          {
+            "StaticItemId": "CompoundBow_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 250000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "HandGun_Default_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "HomingSphereLauncher",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 80000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Wood",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Lantern",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Spear_ForestBoss",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "DogCoin",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 10000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Cake",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 10000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "CaveMushroom",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Honey",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 24000,
+            "ProductNum": 12,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "egg",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 600,
+            "ProductNum": 12,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Berries",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 600,
+            "ProductNum": 12,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Wheat",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2000,
+            "ProductNum": 10,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Milk",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 600,
+            "ProductNum": 12,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "HandgunBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 16,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Poppy",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 52,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Salad",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Sweet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head001_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head002_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head003_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head004_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head005_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head006_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head007_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head008_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head009_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head010_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head011_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head012_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head013_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head014_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head015_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head016_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Head017_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "HeadEquip001_purple",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "HeadEquip023",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "HeadEquip024",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "HeadEquip025_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "GYM_Head_Desert",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "GYM_Head_Electric",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "GYM_Head_Forest",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "GYM_Head_Grass",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "GYM_Head_Sakurajima",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "GYM_Head_Snow",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "GasMask",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "HeadEquip026_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "HeadEquip027",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "HeadEquip028_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "HeadEquip029",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "HeadEquip030",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "HeadEquip031_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          }
+
+
+
+
+          ]
+         }
+       }
+    }
+    
+  }

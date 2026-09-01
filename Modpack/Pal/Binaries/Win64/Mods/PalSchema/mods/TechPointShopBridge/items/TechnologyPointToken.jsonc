@@ -1,0 +1,20 @@
+{
+  "PalOdyssey_TechPointToken": {
+    "Name": "Technology Points",
+    "Description": "Temporary shop balance backed by unallocated Technology Points. This item is removed when the merchant closes.",
+    "Type": "Generic",
+    "IconTexture": "/Game/Others/InventoryItemIcon/Texture/T_itemicon_Material_PalPassiveSkillChange_Consumable.T_itemicon_Material_PalPassiveSkillChange_Consumable",
+    "TypeA": "EPalItemTypeA::Consume",
+    "TypeB": "EPalItemTypeB::ConsumePassiveSkillChange",
+    "Rank": 0,
+    "Rarity": 2,
+    "Price": 0,
+    "MaxStackCount": 9999,
+    "SortID": 59999,
+    "Weight": 0.0,
+    "CorruptionFactor": 0.0,
+    "bEnableHandcraft": false,
+    "bInTreasureBox": false,
+    "bLegalInGame": false
+  }
+}

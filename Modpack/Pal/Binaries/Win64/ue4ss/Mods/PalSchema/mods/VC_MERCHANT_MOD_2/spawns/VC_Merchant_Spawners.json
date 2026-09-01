@@ -1,0 +1,119 @@
+[
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v04",
+        "Level": 5,
+        "Location": { "X": -357314.0, "Y": 268922.0, "Z": 7953.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 180.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v21",
+        "Level": 8,
+        "Location": { "X": -336952.0, "Y": 230205.0, "Z": -1767.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v21",
+        "Level": 10,
+        "Location": { "X": -342333.0, "Y": 193155.0, "Z": -959.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v05",
+        "Level": 10,
+        "Location": { "X": -346899.0, "Y": 191162.0, "Z": -220.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 90.0, "Roll": 0.0 }
+    }, 
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v06",
+        "Level": 35,
+        "Location": { "X": -312456.0, "Y": 187368.0, "Z": 3359.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 90.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v09",
+        "OtomoId": "VenusFlytrap",
+        "Level": 55,
+        "Location": { "X": 41954.0, "Y": 314687.0, "Z": 1607.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v09",
+        "OtomoId": "VenusFlytrap",
+        "Level": 25,
+        "Location": { "X": -311426.0, "Y": 193155.0, "Z": -959.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v24",
+        "OtomoId": "BOSS_Mutant",
+        "Level": 35,
+        "Location": { "X": -399977.0, "Y": 71359.0, "Z": -1756.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v06",
+        "OtomoId": "Ronin",
+        "Level": 20,
+        "Location": { "X": -468256.628, "Y": -61135.433, "Z": -1698.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v08",
+        "Level": 20,
+        "Location": { "X": -313678.0, "Y": 187843.0, "Z": 3364.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v07",
+        "Level": 20,
+        "Location": { "X": -313069.0, "Y": 188213.0, "Z": 3359.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "GrassBoss",
+        "Level": 18,
+        "Location": { "X": -311925.0, "Y": 187937.0, "Z": 3359.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 180.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "ForestBoss",
+        "Level": 19,
+        "Location": { "X": -312015.0, "Y": 188397.0, "Z": 3359.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 180.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v07",
+        "Level": 55,
+        "Location": { "X": 37715.0, "Y": 315811.0, "Z": 1608.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v08",
+        "Level": 55,
+        "Location": { "X": 36922.0, "Y": 316337.864, "Z": 1608.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    },
+        {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v06",
+        "Level": 55,
+        "Location": { "X": 38088.446, "Y": 315609.012, "Z": 1607.0 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    }
+    
+]

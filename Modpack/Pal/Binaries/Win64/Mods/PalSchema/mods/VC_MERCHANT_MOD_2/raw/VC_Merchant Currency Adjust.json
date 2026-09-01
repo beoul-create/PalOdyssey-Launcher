@@ -1,0 +1,38 @@
+{
+  "DT_ItemShopSettingData": {
+    "Medal_Shop_1": {
+      "CurrencyItemID": "Dogcoin"
+    },
+    "Bounty_Shop_1": {
+      "CurrencyItemID": "BountyProof_1"
+    },
+    "Arena_Shop_1": {
+      "CurrencyItemID": "BattleTicket"
+    },
+    "Caravan_Shop_15": {
+      "CurrencyItemID": "PalUpgradeStone4"
+    },
+    "Caravan_Shop_8": {
+      "CurrencyItemID": "Ruby"
+    },
+    "Volcano_Shop_1": {
+      "CurrencyItemID": "Sapphire"
+    },
+    "Volcano_Shop_2": {
+      "CurrencyItemID": "Eemerald"
+    },
+    "Desert_Shop_1": {
+      "CurrencyItemID": "Diamond"
+    },
+    "Caravan_Shop_22": {
+      "CurrencyItemID": "Sapphire"
+    },
+    "Caravan_Shop_18": {
+      "CurrencyItemID": "Eemerald"
+    },
+    "Caravan_Shop_9": {
+      "CurrencyItemID": "Ruby"
+    }
+    
+  }
+}

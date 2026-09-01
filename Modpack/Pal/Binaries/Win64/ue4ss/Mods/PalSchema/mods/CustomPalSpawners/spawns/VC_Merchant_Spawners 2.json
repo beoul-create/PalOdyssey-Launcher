@@ -1,0 +1,30 @@
+[
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v24",
+        "Level": 25,
+        "Location": { "X": -758648.516, "Y": 3631.453, "Z": 43428.234 },
+        "Rotation": { "Pitch": 0.0, "Yaw": -144.8, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "SakurajimaBoss",
+        "Level": 25,
+        "Location": { "X": -312478.359, "Y": 188668.055, "Z": 3359.465 },
+        "Rotation": { "Pitch": 0.0, "Yaw": -85.4, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v13",
+        "Level": 1,
+        "Location": { "X": -312124.617, "Y": 188964.18, "Z": 3359.551 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 67.1, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v14",
+        "Level": 1,
+        "Location": { "X": -306864.195, "Y": 185033.844, "Z": 4809.761 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    }
+]

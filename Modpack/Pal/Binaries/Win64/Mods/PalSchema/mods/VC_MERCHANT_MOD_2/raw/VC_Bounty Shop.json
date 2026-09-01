@@ -1,0 +1,139 @@
+{
+    "DT_ItemShopCreateData": {
+
+        "Bounty_Shop_1": {
+            "productDataArray": {
+                "Action": "Clear",
+                    "Items": [
+
+          {
+            "StaticItemId": "Pickaxe_Steal",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 10,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "LvUP_01",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+           {
+            "StaticItemId": "DogCoin",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 100,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Rankup_Arbitrary",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TechnologyBook_G3",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "AncientTechnologyBook_G1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Shield_04",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "AncientParts2",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 3,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "AncientParts3",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 10,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Potion_High",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "PalSphere_Legend",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "GrapplingGun5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkyBeamSword_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TreasureMap01",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TreasureMap02",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TreasureMap03",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 3,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TreasureMap04",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TreasureMap05",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5,
+            "ProductNum": 1,
+            "Stock": 0
+          }
+        ]
+      }
+    }      
+  }
+}

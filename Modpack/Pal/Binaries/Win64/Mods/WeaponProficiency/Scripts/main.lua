@@ -598,8 +598,10 @@ function HudBar.posModeSync()
     if HudBar.reanchor then HudBar.reanchor() end
   end
 end
--- Player editing of Living Arsenal in DarnMenu disabled per server configuration
-if false then
+-- Register Living Arsenal's settings page when the Darn UI suite is installed.
+-- UE4SS gives every Lua mod its own state, so ToastLib bridges this registration
+-- through Mods/shared for DarnMenu to discover when the ESC menu is opened.
+if DARN then
 ToastLib.registerMenuSchema("WeaponProficiency", 38, [==[
 -- Weapon Proficiency options page (registered by the mod; regenerated on version bump)
 return {

@@ -1,0 +1,182 @@
+{
+    "DT_ItemShopCreateData": {
+
+        "Caravan_Shop_8": {
+            "productDataArray": {
+                "Action": "Clear",
+                    "Items": [
+
+          {
+            "StaticItemId": "DogCoin",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 50,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Sapphire",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Eemerald",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 16,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "AncientParts2",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Chromium",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 10,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "StainlessSteel",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "NightStone",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 50,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "PalDarkParts",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 10,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "YakushimaIngot001",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 10,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "ManganeseOre",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 20,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Pal_crystal_S",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 200,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "PalSphere_Exotic",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_HeatColdResist_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 6,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_JumpPower_Increase",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 6,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_JumpCount_Increase1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 6,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_AirDash1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 6,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_NonkChecker_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 6,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TechnologyBook_G1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "LaserMiningTool",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TreasureMap01",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TreasureMap02",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TreasureMap03",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TreasureMap04",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 8,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TreasureMap05",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 12,
+            "ProductNum": 1,
+            "Stock": 0
+          }
+          ]
+         }
+       }
+    }
+    
+  }
