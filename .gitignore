@@ -4,3 +4,5 @@ release-*/
 *.dll
 *.pdb
 *.zip
+tools/liveboard-bot/.env
+

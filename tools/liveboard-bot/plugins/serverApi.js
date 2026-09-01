@@ -93,41 +93,86 @@ export function initServerApi(options = {}) {
         });
     });
 
+    function resolvePalServerExe(configuredPath) {
+        const candidates = [
+            configuredPath,
+            'C:\\SteamLibrary\\steamapps\\common\\PalServer\\PalServer.exe',
+            'C:\\SteamLibrary\\steamapps\\common\\PalServer\\Pal\\Binaries\\Win64\\PalServer-Win64-Shipping.exe',
+            'C:\\Program Files (x86)\\Steam\\steamapps\\common\\PalServer\\PalServer.exe',
+            'C:\\Program Files\\Steam\\steamapps\\common\\PalServer\\PalServer.exe',
+            'D:\\SteamLibrary\\steamapps\\common\\PalServer\\PalServer.exe',
+            'E:\\SteamLibrary\\steamapps\\common\\PalServer\\PalServer.exe'
+        ];
+
+        for (const c of candidates) {
+            if (c && fs.existsSync(c)) {
+                return path.resolve(c);
+            }
+        }
+        return null;
+    }
+
     app.post('/api/server/start', authGuard, async (req, res) => {
         let isAlreadyRunning = serverChildProcess !== null && !serverChildProcess.killed;
         if (!isAlreadyRunning) {
-            isAlreadyRunning = await isProcessRunningSilent('PalServer-Win64-Shipping.exe');
+            isAlreadyRunning = (await isProcessRunningSilent('PalServer-Win64-Shipping.exe')) ||
+                               (await isProcessRunningSilent('PalServer.exe'));
         }
 
         if (isAlreadyRunning) {
             return res.status(400).json({ success: false, message: 'Server is already running.' });
         }
 
-        if (!fs.existsSync(palExe)) {
-            return res.status(500).json({ success: false, message: `Executable not found at: ${palExe}` });
+        const targetExe = resolvePalServerExe(palExe);
+        if (!targetExe) {
+            return res.status(500).json({
+                success: false,
+                message: `PalServer executable not found. Checked: ${palExe} and standard Steam library directories.`
+            });
         }
 
-        let workingDir = path.dirname(palExe);
-        if (workingDir.replace(/\\/g, '/').toLowerCase().endsWith('/pal/binaries/win64')) {
-            workingDir = path.resolve(workingDir, '../../..');
+        let workingDir = path.dirname(targetExe);
+        let finalArgs = [...palArgs];
+
+        if (targetExe.toLowerCase().endsWith('palserver.exe')) {
+            workingDir = path.dirname(targetExe);
+            if (finalArgs.length === 0) {
+                finalArgs = ['-useperfthreads', '-NoAsyncLoadingThread', '-port=8211'];
+            }
+        } else if (targetExe.toLowerCase().endsWith('palserver-win64-shipping.exe')) {
+            workingDir = path.dirname(targetExe);
+            if (!finalArgs.includes('Pal')) {
+                finalArgs = ['Pal', ...finalArgs];
+            }
         }
 
-        serverChildProcess = spawn(palExe, palArgs, {
-            cwd: workingDir,
-            detached: true,
-            stdio: 'ignore',
-            windowsHide: true
-        });
+        try {
+            serverChildProcess = spawn(targetExe, finalArgs, {
+                cwd: workingDir,
+                detached: true,
+                stdio: 'ignore',
+                windowsHide: false
+            });
 
-        serverChildProcess.on('exit', (code) => {
-            console.log(`[Server API] Process exited with code ${code}`);
-            serverChildProcess = null;
-        });
+            serverChildProcess.on('exit', (code) => {
+                console.log(`[Server API] Process exited with code ${code}`);
+                serverChildProcess = null;
+            });
 
-        serverChildProcess.unref();
-        console.log(`[Server API] Spawned PalServer from ${workingDir} (PID: ${serverChildProcess.pid})`);
+            serverChildProcess.unref();
+            console.log(`[Server API] Spawned PalServer from ${workingDir} with exe ${targetExe} (PID: ${serverChildProcess.pid})`);
 
-        return res.json({ success: true, message: 'Server started.', pid: serverChildProcess.pid });
+            return res.json({
+                success: true,
+                message: `PalServer started successfully (PID: ${serverChildProcess.pid}).`,
+                pid: serverChildProcess.pid
+            });
+        } catch (spawnErr) {
+            return res.status(500).json({
+                success: false,
+                message: `Failed to spawn process: ${spawnErr.message}`
+            });
+        }
     });
 
     app.post('/api/server/stop', authGuard, async (req, res) => {
