@@ -254,12 +254,51 @@ namespace PalLauncher.Services
             }
         }
 
+        public string? NormalizeGameDirectory(string? path)
+        {
+            if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path)) return null;
+            if (IsValidGameDirectory(path)) return path;
+
+            // If user selected Pal\Binaries\Win64
+            var dir = new DirectoryInfo(path);
+            if (dir.Name.Equals("Win64", StringComparison.OrdinalIgnoreCase) &&
+                dir.Parent?.Name.Equals("Binaries", StringComparison.OrdinalIgnoreCase) == true &&
+                dir.Parent?.Parent?.Name.Equals("Pal", StringComparison.OrdinalIgnoreCase) == true)
+            {
+                var root = dir.Parent?.Parent?.Parent?.FullName;
+                if (root != null && IsValidGameDirectory(root)) return root;
+            }
+
+            // If user selected Pal
+            if (dir.Name.Equals("Pal", StringComparison.OrdinalIgnoreCase))
+            {
+                var root = dir.Parent?.FullName;
+                if (root != null && IsValidGameDirectory(root)) return root;
+            }
+
+            return null;
+        }
+
         /// <summary>
-        /// Attempts to auto-detect the Palworld game installation directory via Steam Registry and VDF library files.
+        /// Attempts to auto-detect the Palworld game installation directory via Steam Registry, VDF library files, and system drives.
         /// </summary>
         public string? DetectGameDirectory()
         {
-            // 1. Check Steam Registry
+            // 1. Check Windows Steam App Uninstall Registry (Direct, instant & 100% authoritative)
+            try
+            {
+                using var uninstallKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 1623730") ??
+                                         Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 1623730") ??
+                                         Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 1623730");
+                if (uninstallKey?.GetValue("InstallLocation") is string installLoc && Directory.Exists(installLoc))
+                {
+                    if (IsValidGameDirectory(installLoc))
+                        return installLoc;
+                }
+            }
+            catch { }
+
+            // 2. Check Steam Registry
             var steamPath = GetSteamInstallPath();
             if (!string.IsNullOrEmpty(steamPath) && Directory.Exists(steamPath))
             {
@@ -282,13 +321,16 @@ namespace PalLauncher.Services
                 }
             }
 
-            // 2. Fallback: Search common drive roots
-            var standardPaths = new[]
+            // 3. Fallback: Search common drive roots across all logical drives
+            var standardPaths = new List<string>
             {
+                @"C:\SteamLibrary\steamapps\common\Palworld",
                 @"C:\Program Files (x86)\Steam\steamapps\common\Palworld",
                 @"C:\Program Files\Steam\steamapps\common\Palworld",
-                @"C:\SteamLibrary\steamapps\common\Palworld",
+                @"C:\Games\Palworld",
+                @"C:\Palworld",
                 @"D:\SteamLibrary\steamapps\common\Palworld",
+                @"D:\Games\steamapps\common\Palworld",
                 @"D:\Steam\steamapps\common\Palworld",
                 @"E:\SteamLibrary\steamapps\common\Palworld",
                 @"E:\Steam\steamapps\common\Palworld",
@@ -296,7 +338,21 @@ namespace PalLauncher.Services
                 @"G:\SteamLibrary\steamapps\common\Palworld"
             };
 
-            foreach (var path in standardPaths)
+            try
+            {
+                foreach (var drive in DriveInfo.GetDrives())
+                {
+                    if (!drive.IsReady) continue;
+                    string d = drive.RootDirectory.FullName;
+                    standardPaths.Add(Path.Combine(d, "SteamLibrary", "steamapps", "common", "Palworld"));
+                    standardPaths.Add(Path.Combine(d, "Steam", "steamapps", "common", "Palworld"));
+                    standardPaths.Add(Path.Combine(d, "Games", "steamapps", "common", "Palworld"));
+                    standardPaths.Add(Path.Combine(d, "Palworld"));
+                }
+            }
+            catch { }
+
+            foreach (var path in standardPaths.Distinct())
             {
                 if (IsValidGameDirectory(path))
                     return path;
@@ -310,8 +366,25 @@ namespace PalLauncher.Services
             if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
                 return false;
 
-            string exePath = Path.Combine(path, ExecutableRelativePath);
-            return File.Exists(exePath);
+            // 1. Root Palworld.exe (Standard Steam / Epic install)
+            if (File.Exists(Path.Combine(path, "Palworld.exe")))
+                return true;
+
+            // 2. Direct shipping executable
+            if (File.Exists(Path.Combine(path, ExecutableRelativePath)))
+                return true;
+
+            // 3. Direct Win64 folder selection
+            if (File.Exists(Path.Combine(path, "Palworld-Win64-Shipping.exe")))
+                return true;
+
+            // 4. Alternate Game Pass / MS Store names
+            if (File.Exists(Path.Combine(path, "Pal.exe")) ||
+                File.Exists(Path.Combine(path, "Palworld-WinGDK-Shipping.exe")) ||
+                File.Exists(Path.Combine(path, "gamelaunchhelper.exe")))
+                return true;
+
+            return false;
         }
 
         private static string? GetSteamInstallPath()

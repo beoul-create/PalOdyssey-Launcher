@@ -9,7 +9,7 @@
       "PalLauncher.Tests/1.0.0": {
         "dependencies": {
           "Microsoft.NET.Test.Sdk": "17.9.0",
-          "PalLauncher": "1.0.0",
+          "PalLauncher": "2.0.1",
           "xunit": "2.7.0",
           "xunit.runner.visualstudio": "2.5.7"
         },
@@ -369,14 +369,14 @@
         }
       },
       "xunit.runner.visualstudio/2.5.7": {},
-      "PalLauncher/1.0.0": {
+      "PalLauncher/2.0.1": {
         "dependencies": {
           "DiscordRichPresence": "1.2.1.24"
         },
         "runtime": {
           "PalLauncher.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
+            "assemblyVersion": "2.0.1",
+            "fileVersion": "2.0.1.0"
           }
         }
       }
@@ -521,7 +521,7 @@
       "path": "xunit.runner.visualstudio/2.5.7",
       "hashPath": "xunit.runner.visualstudio.2.5.7.nupkg.sha512"
     },
-    "PalLauncher/1.0.0": {
+    "PalLauncher/2.0.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

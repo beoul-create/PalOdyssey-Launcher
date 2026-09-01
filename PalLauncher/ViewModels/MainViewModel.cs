@@ -694,16 +694,21 @@ namespace PalLauncher.ViewModels
             if (dialog.ShowDialog() == true)
             {
                 string selectedPath = dialog.FolderName;
-                if (_gameProcessService.IsValidGameDirectory(selectedPath))
+                string? validPath = _gameProcessService.NormalizeGameDirectory(selectedPath) ??
+                                    (_gameProcessService.IsValidGameDirectory(selectedPath) ? selectedPath : null);
+
+                if (!string.IsNullOrEmpty(validPath))
                 {
-                    GamePath = selectedPath;
+                    GamePath = validPath;
+                    _config.GamePath = validPath;
+                    _config.Save();
                     StatusMessage = "GAME LOCATED";
-                    SubStatusMessage = selectedPath;
+                    SubStatusMessage = validPath;
                 }
                 else
                 {
                     MessageBox.Show(
-                        "The selected folder does not contain 'Pal\\Binaries\\Win64\\Palworld-Win64-Shipping.exe'. Please choose the main Palworld installation folder.",
+                        "The selected folder does not contain 'Palworld.exe' or 'Pal\\Binaries\\Win64\\Palworld-Win64-Shipping.exe'. Please choose your Palworld installation folder.",
                         "Invalid Palworld Path",
                         MessageBoxButton.OK,
                         MessageBoxImage.Warning);
