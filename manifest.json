@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.132655",
-  "GeneratedAt": "2026-09-01T13:26:55.498Z",
+  "Version": "2026.09.01.133124",
+  "GeneratedAt": "2026-09-01T13:31:24.154Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Configurable polygon reduction & skeletal LOD bias optimization for all PC hardware tiers.",
+    "ReleaseNotes": "Fixed world boss spawning pipeline and protected abstract class instantiation.",
     "Mandatory": false
   },
   "Files": [
@@ -1977,8 +1977,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/world_boss.lua",
-      "Hash": "88ff800335fad51b4af9e1800691610e84f1d49e00a042aa6cce9dd0248a6076",
-      "Size": 14419,
+      "Hash": "b61bc8ec3c2ae7e87d4dd09a7306b2f8397528a0bc53531bde251318574289ae",
+      "Size": 14457,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/world_boss.lua"
     },
     {
@@ -3963,8 +3963,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/world_boss.lua",
-      "Hash": "88ff800335fad51b4af9e1800691610e84f1d49e00a042aa6cce9dd0248a6076",
-      "Size": 14419,
+      "Hash": "b61bc8ec3c2ae7e87d4dd09a7306b2f8397528a0bc53531bde251318574289ae",
+      "Size": 14457,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/world_boss.lua"
     },
     {

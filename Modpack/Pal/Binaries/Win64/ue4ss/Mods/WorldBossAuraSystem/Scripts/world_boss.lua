@@ -125,8 +125,8 @@ function WorldBoss.SpawnEvent()
                 if world and world:IsValid() and type(world.SpawnActor) == "function" then
                     local bpPaths = {
                         string.format("/Game/Pal/Blueprint/Character/Monster/%s/BP_%s.BP_%s_C", PalId, PalId, PalId),
-                        string.format("/Game/Pal/Blueprint/Character/Monster/%s/BP_%s", PalId, PalId),
-                        string.format("/Script/Pal.PalCharacter")
+                        string.format("/Game/Pal/Blueprint/Character/Monster/%s/BP_%s_C", PalId, PalId),
+                        string.format("/Game/Pal/Blueprint/Character/Monster/%s/BP_%s", PalId, PalId)
                     }
                     for _, bpPath in ipairs(bpPaths) do
                         local palClass = StaticFindObject(bpPath)
