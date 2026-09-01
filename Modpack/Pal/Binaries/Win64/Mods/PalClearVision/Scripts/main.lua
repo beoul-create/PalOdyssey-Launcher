@@ -100,8 +100,8 @@ local function ApplyVisualTweaks()
             ExecuteConsole("r.TextureStreaming 1")
             ExecuteConsole("r.Streaming.AmortizeCPUWork 1")
             ExecuteConsole("r.Streaming.AmortizeCPUToGPUCopy 1")
-            ExecuteConsole("r.Streaming.FramesForFullUpdate 25")
-            ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 6")
+            ExecuteConsole("r.Streaming.FramesForFullUpdate 20")
+            ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 40")
             ExecuteConsole("r.Streaming.HLODStrategy 1")
             ExecuteConsole("r.Streaming.DefragDynamicBounds 1")
             ExecuteConsole("r.Streaming.LimitPoolSizeToVRAM 1")
@@ -109,7 +109,7 @@ local function ApplyVisualTweaks()
 
         -- 6. Frame Pacing & Low-Latency Sync
         if Config.framePacingReflex then
-            ExecuteConsole("r.GTSyncType 1")
+            ExecuteConsole("r.GTSyncType 0")
             ExecuteConsole("r.OneFrameThreadLag 1")
             ExecuteConsole("r.FinishCurrentFrame 0")
         end

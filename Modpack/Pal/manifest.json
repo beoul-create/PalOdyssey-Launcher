@@ -1,6 +1,6 @@
 {
-  "Version": "2026.08.31.220311",
-  "GeneratedAt": "2026-08-31T22:03:11.220Z",
+  "Version": "2026.09.01.123332",
+  "GeneratedAt": "2026-09-01T12:33:32.961Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,19 +9,19 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "In-app self-updater, zero-stutter Pal mounting, and dismount cable restorer.",
+    "ReleaseNotes": "In-app self-updater, universal cable resetter, and zero-stutter mount profile.",
     "Mandatory": false
   },
   "News": [
     {
+      "title": "⚡ Universal Multi-Strategy Cable Particle Reset & Zero-Stutter Mount Pipeline",
+      "date": "Sep 01, 2026",
+      "summary": "Universal FindAllOf and component scanning cable particle restorer active on all mount/weapon events. Harmonized 40 texture/frame streaming and asynchronous frame pacing."
+    },
+    {
       "title": "🔥 Updated ChazzBuffs Balance & Partner Skill Overhaul",
       "date": "Aug 31, 2026",
       "summary": "Integrated the latest ChazzBuffs release with reworked element attack/defense scaling, new partner skill multipliers, and multi-language translation dictionaries."
-    },
-    {
-      "title": "⚡ Total Mount Lag & Fishing Rod Cable Physics Cure",
-      "date": "Aug 31, 2026",
-      "summary": "Purged all legacy LineTrace and debug mods, deployed multi-target (Player + Mount + Weapon + Sockets) CableReset on dismount, and locked in steady-state streaming limits."
     },
     {
       "title": "✨ Azomer Passive Skill Name Key Alias & Translation Fix",
@@ -236,8 +236,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalClearVision/Scripts/main.lua",
-      "Hash": "3d69d0b5906d670fa52eb9e41f1332f6ce41c7faa4ee05078f537857c2bba102",
-      "Size": 5503,
+      "Hash": "2ea373328e37a8fe7f0f20469e9ccb24cdc1cdcc1f3c78d40f7892887395af7a",
+      "Size": 5504,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalClearVision/Scripts/main.lua"
     },
     {
@@ -278,8 +278,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "a3a0268ca9c209b330065bb35a1a3f071bb4f7f626d37213ccfc91d130b98e66",
-      "Size": 7738,
+      "Hash": "57262db47154df02c5fe4ac6573d8057deec484f1ba544b4b6baaf86f6074e06",
+      "Size": 7698,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -1730,8 +1730,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalworldTuner/Scripts/cable_reset.lua",
-      "Hash": "c7d62913793192b77695da2d152f12cade772b9fd3b942e9fe0acf52c29ce4f2",
-      "Size": 3803,
+      "Hash": "a4f881f37c0da8108a786b3f135ec8daa8274af6c1205e8e6fec9d5a34a61375",
+      "Size": 4933,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalworldTuner/Scripts/cable_reset.lua"
     },
     {
@@ -2222,8 +2222,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalClearVision/Scripts/main.lua",
-      "Hash": "3d69d0b5906d670fa52eb9e41f1332f6ce41c7faa4ee05078f537857c2bba102",
-      "Size": 5503,
+      "Hash": "2ea373328e37a8fe7f0f20469e9ccb24cdc1cdcc1f3c78d40f7892887395af7a",
+      "Size": 5504,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalClearVision/Scripts/main.lua"
     },
     {
@@ -2264,8 +2264,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "a3a0268ca9c209b330065bb35a1a3f071bb4f7f626d37213ccfc91d130b98e66",
-      "Size": 7738,
+      "Hash": "57262db47154df02c5fe4ac6573d8057deec484f1ba544b4b6baaf86f6074e06",
+      "Size": 7698,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -3716,8 +3716,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalworldTuner/Scripts/cable_reset.lua",
-      "Hash": "c7d62913793192b77695da2d152f12cade772b9fd3b942e9fe0acf52c29ce4f2",
-      "Size": 3803,
+      "Hash": "a4f881f37c0da8108a786b3f135ec8daa8274af6c1205e8e6fec9d5a34a61375",
+      "Size": 4933,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalworldTuner/Scripts/cable_reset.lua"
     },
     {
