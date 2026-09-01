@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.135947",
-  "GeneratedAt": "2026-09-01T13:59:47.873Z",
+  "Version": "2026.09.01.140511",
+  "GeneratedAt": "2026-09-01T14:05:11.658Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Reliable chat ingress (!shop, !gacha, !balance), clean F6/F7/F8 shortcuts, and no cursor trapping.",
+    "ReleaseNotes": "Comprehensive client & server chat message delivery pipelines.",
     "Mandatory": false
   },
   "Files": [
@@ -69,8 +69,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "b182dea5808124ee8143160cc02ec8bb1ef953a4ffaaad6fc50c532f29718c7d",
-      "Size": 43078,
+      "Hash": "140d6691fe4c85359eeca1bf471fb92fe9b334052de548b8f8e836a68804ddc3",
+      "Size": 43709,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/EconomySystem/Scripts/main.lua"
     },
     {
@@ -1875,8 +1875,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "b182dea5808124ee8143160cc02ec8bb1ef953a4ffaaad6fc50c532f29718c7d",
-      "Size": 43078,
+      "Hash": "140d6691fe4c85359eeca1bf471fb92fe9b334052de548b8f8e836a68804ddc3",
+      "Size": 43709,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua"
     },
     {

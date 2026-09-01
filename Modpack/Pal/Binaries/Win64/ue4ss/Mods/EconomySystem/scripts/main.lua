@@ -226,19 +226,30 @@ local function SendPlayerMessage(Player, Text)
             or (GetWorldContext and GetWorldContext()) or nil
         local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
 
-        local sent = false
-        if PalUtil and PalUtil:IsValid() and world and ps and ps:IsValid() and ps.PlayerUId then
-            pcall(function()
-                PalUtil:SendSystemToPlayerChat(world, str, ps.PlayerUId)
-                sent = true
-            end)
+        -- 1. PalChatSubsystem
+        local chatSubsystem = FindFirstOf("PalChatSubsystem")
+        if chatSubsystem and chatSubsystem:IsValid() then
+            if type(chatSubsystem.SendSystemChatMessage) == "function" and pc then
+                pcall(function() chatSubsystem:SendSystemChatMessage(pc, FText(str)) end)
+            end
+            if type(chatSubsystem.BroadcastChatMessage) == "function" then
+                pcall(function() chatSubsystem:BroadcastChatMessage(FText(str)) end)
+            end
         end
 
-        if not sent then
-            local gs = FindFirstOf("PalGameStateInGame")
-            if gs and gs:IsValid() and type(gs.BroadcastChatMessage) == "function" then
-                pcall(function() gs:BroadcastChatMessage(str) end)
+        -- 2. Direct PlayerController RPC
+        if pc and pc:IsValid() then
+            if type(pc.ClientReceiveChatMessage) == "function" then
+                pcall(function() pc:ClientReceiveChatMessage(str) end)
             end
+            if type(pc.Client_SendSystemAnnounce) == "function" then
+                pcall(function() pc:Client_SendSystemAnnounce(str) end)
+            end
+        end
+
+        -- 3. PalUtility SendSystemToPlayerChat
+        if PalUtil and PalUtil:IsValid() and world and ps and ps:IsValid() and ps.PlayerUId then
+            pcall(function() PalUtil:SendSystemToPlayerChat(world, str, ps.PlayerUId) end)
         end
     end)
     print("[EconomySystem] " .. tostring(Text))
