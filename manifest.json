@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.135140",
-  "GeneratedAt": "2026-09-01T13:51:40.512Z",
+  "Version": "2026.09.01.135513",
+  "GeneratedAt": "2026-09-01T13:55:13.828Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Full F6 in-game Shop Catalog & Balance integration.",
+    "ReleaseNotes": "Replaced linear UObject table sweeps with O(1) cached player controllers for zero-lag hotkeys.",
     "Mandatory": false
   },
   "Files": [
@@ -69,8 +69,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "f268ede1d4a6c793b6e2c15fab2b3211ddd471cb8a72da85fb2120201187545e",
-      "Size": 42380,
+      "Hash": "db8188d56e11ce1024343378241a6d69056eaa6b56b93de07e335964e2aed037",
+      "Size": 42789,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/EconomySystem/Scripts/main.lua"
     },
     {
@@ -1635,8 +1635,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/UniPalUI/Scripts/main.lua",
-      "Hash": "04bbca4fbbe5d8534e6d7e5d1c7d16576f1be56f1b83e9ea5ae0d7edfb9c10ad",
-      "Size": 9110,
+      "Hash": "80191cbb351fe4992573bf9e01c5f803e39e259b75713245501d18e667777f7c",
+      "Size": 9365,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/UniPalUI/Scripts/main.lua"
     },
     {
@@ -1875,8 +1875,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "f268ede1d4a6c793b6e2c15fab2b3211ddd471cb8a72da85fb2120201187545e",
-      "Size": 42380,
+      "Hash": "db8188d56e11ce1024343378241a6d69056eaa6b56b93de07e335964e2aed037",
+      "Size": 42789,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua"
     },
     {
@@ -3441,8 +3441,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/Scripts/main.lua",
-      "Hash": "04bbca4fbbe5d8534e6d7e5d1c7d16576f1be56f1b83e9ea5ae0d7edfb9c10ad",
-      "Size": 9110,
+      "Hash": "80191cbb351fe4992573bf9e01c5f803e39e259b75713245501d18e667777f7c",
+      "Size": 9365,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/UniPalUI/Scripts/main.lua"
     },
     {

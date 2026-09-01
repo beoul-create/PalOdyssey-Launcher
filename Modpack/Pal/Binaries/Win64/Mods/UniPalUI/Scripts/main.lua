@@ -36,12 +36,24 @@ function UniPalUI.RegisterTab(tabName, onDrawCallback, onInputCallback)
     print(string.format("[UniPalUI] Registered tab '%s' (Total Tabs: %d)", tabName, #UniPalUI.Tabs))
 end
 
+local CachedPC = nil
+local function GetPC()
+    if CachedPC and CachedPC.IsValid and CachedPC:IsValid() then return CachedPC end
+    if UEHelpers and type(UEHelpers.GetPlayerController) == "function" then
+        local p = UEHelpers.GetPlayerController()
+        if p and p:IsValid() then CachedPC = p; return p end
+    end
+    local p = FindFirstOf("PalPlayerController") or FindFirstOf("PlayerController")
+    if p and p:IsValid() then CachedPC = p; return p end
+    return nil
+end
+
 function UniPalUI.Open()
     UniPalUI.IsOpen = true
     pcall(function()
-        local controllers = FindAllOf("PalPlayerController") or {}
-        if #controllers > 0 and controllers[1]:IsValid() then
-            controllers[1].bShowMouseCursor = true
+        local pc = GetPC()
+        if pc and pc:IsValid() then
+            pc.bShowMouseCursor = true
         end
     end)
 end
@@ -49,9 +61,9 @@ end
 function UniPalUI.Close()
     UniPalUI.IsOpen = false
     pcall(function()
-        local controllers = FindAllOf("PalPlayerController") or {}
-        if #controllers > 0 and controllers[1]:IsValid() then
-            controllers[1].bShowMouseCursor = false
+        local pc = GetPC()
+        if pc and pc:IsValid() then
+            pc.bShowMouseCursor = false
         end
     end)
 end
@@ -90,8 +102,7 @@ function UniPalUI.DispatchPointerInput(InputX, InputY)
     local handled = false
 
     pcall(function()
-        local controllers = FindAllOf("PalPlayerController") or {}
-        local pc = controllers[1]
+        local pc = GetPC()
         if not pc or not pc:IsValid() then return end
 
         local mouseX, mouseY = tonumber(InputX), tonumber(InputY)

@@ -148,19 +148,33 @@ local CanvasFont = nil
 local HudDrawErrorReported = false
 
 -- Core Game State Accessors
+local CachedPC = nil
 local function GetPlayerController(Context)
     if Context and Context.IsA and Context:IsA("/Script/Pal.PalPlayerController") then
+        CachedPC = Context
         return Context
     end
     if Context and type(Context.get) == "function" then
         local obj = Context:get()
         if obj and obj.IsA and obj:IsA("/Script/Pal.PalPlayerController") then
+            CachedPC = obj
             return obj
         end
     end
-    local controllers = FindAllOf("PalPlayerController") or {}
-    if #controllers > 0 and controllers[1]:IsValid() then
-        return controllers[1]
+    if CachedPC and CachedPC.IsValid and CachedPC:IsValid() then
+        return CachedPC
+    end
+    if UEHelpers and type(UEHelpers.GetPlayerController) == "function" then
+        local pc = UEHelpers.GetPlayerController()
+        if pc and pc:IsValid() then
+            CachedPC = pc
+            return pc
+        end
+    end
+    local pc = FindFirstOf("PalPlayerController") or FindFirstOf("PlayerController")
+    if pc and pc:IsValid() then
+        CachedPC = pc
+        return pc
     end
     return nil
 end
