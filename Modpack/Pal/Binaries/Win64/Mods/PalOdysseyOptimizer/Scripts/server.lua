@@ -38,13 +38,15 @@ function ServerModule.apply(cfg)
             end
         end)
 
-        -- 2. Lithium & ServerCore Entity Activation Range / Tick Throttling
+        -- 2. Lithium & ServerCore Entity Activation Range, Pathfinding & Physics Solver
         ExecuteConsole("a.URO.Enable 1")
         ExecuteConsole("a.URO.TickDistanceScale 1.0")
-        ExecuteConsole("a.URO.VisibilityBasedAnimTickRate 0")
-        ExecuteConsole("a.URO.ForceAnimRate 0")
-        ExecuteConsole("p.ClothPhysics 0")
-        ExecuteConsole("ai.MaxSimultaneousPathRequests 250")
+        ExecuteConsole("a.URO.VisibilityBasedAnimTickRate 1")
+        ExecuteConsole("a.URO.Interpolation 1")
+        ExecuteConsole("ai.MaxSimultaneousPathRequests 500")
+        ExecuteConsole("ai.PathfindingBudgetInMilliseconds 4.0")
+        ExecuteConsole("p.PhysX.SolverIterations 4")
+        ExecuteConsole("p.RigidBodyLODSubStepping 0")
 
         -- 3. C2ME Concurrent Async World Streaming & Fast Level Ingestion
         ExecuteConsole("s.AsyncLoadingThreadEnabled 1")
@@ -53,12 +55,18 @@ function ServerModule.apply(cfg)
         ExecuteConsole("s.AsyncLoadingTimeLimit 20.0")
         ExecuteConsole("s.AsyncLoadingUseFullTimeLimit 0")
 
-        -- 4. Anti-Rubberband Momentum Tolerances & Network Movement Smoothing
+        -- 4. Anti-Rubberband Momentum Tolerances, Zero-Delay Movement & Network Scaling
         ExecuteConsole("net.ClientMoveCorrectionThreshold 200.0")
         ExecuteConsole("p.NetCorrectionThreshold 200.0")
         ExecuteConsole("p.NetEnableMoveErrorSimulation 0")
         ExecuteConsole("p.NetMovementSmoothing 1")
-        ExecuteConsole("net.PackageMap.MaxNetGUIDsPerFrame 2000")
+        ExecuteConsole("p.NetEnableMoveCombining 0")
+        ExecuteConsole("net.DormancyEnable 1")
+        ExecuteConsole("net.PackageMap.MaxNetGUIDsPerFrame 15000")
+        ExecuteConsole("net.MaxRPCPerSecond 2000")
+        ExecuteConsole("gc.CreateGCClusters 1")
+        ExecuteConsole("gc.MergeGCClusters 1")
+        ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 300")
 
         if not appliedOnce then
             print("[PalOdysseyOptimizer:Server] All server CVars dispatched successfully.")
