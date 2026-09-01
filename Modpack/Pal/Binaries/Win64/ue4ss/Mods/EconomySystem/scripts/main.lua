@@ -146,6 +146,15 @@ local LastChatCommand = ""
 local LastChatCommandTime = 0
 local CanvasFont = nil
 local HudDrawErrorReported = false
+local IsUniPalTabRegistered = false
+
+local function RunOnGameThread(action)
+    if type(ExecuteInGameThread) == "function" then
+        local ok = pcall(ExecuteInGameThread, function() pcall(action) end)
+        if ok then return end
+    end
+    pcall(action)
+end
 
 -- Core Game State Accessors
 local CachedPC = nil
@@ -549,16 +558,40 @@ local function HandleBalance(Player)
     SendPlayerMessage(Player, string.format("💳 Technology Points: %d  |  Ancient Tech Points: %d", normPts, ancPts))
 end
 
--- Toggle Interactive Window & Display Shop Catalog
-local function ToggleShopWindow()
+local function SetStandaloneShopOpen(shouldOpen)
+    IsShopWindowOpen = shouldOpen == true
     pcall(function()
         local pc = GetPlayerController()
         if pc and pc:IsValid() then
-            PrintHelp(pc)
+            pc.bShowMouseCursor = IsShopWindowOpen
         end
     end)
-    if UniPalUI and type(UniPalUI.OpenTab) == "function" then
+end
+
+local function IsTechnologyShopActive()
+    if not UniPalUI or not UniPalUI.IsOpen then return false end
+    local tab = UniPalUI.Tabs and UniPalUI.Tabs[UniPalUI.ActiveTab]
+    return tab and tab.Name == "🛒 Technology Shop"
+end
+
+-- Open requests (including chat commands) are idempotent. F6 remains a toggle.
+local function OpenShopWindow()
+    if IsUniPalTabRegistered and UniPalUI and type(UniPalUI.OpenTab) == "function" then
+        SetStandaloneShopOpen(false)
+        if not IsTechnologyShopActive() then
+            UniPalUI.OpenTab("🛒 Technology Shop")
+        end
+    else
+        SetStandaloneShopOpen(true)
+    end
+end
+
+local function ToggleShopWindow()
+    if IsUniPalTabRegistered and UniPalUI and type(UniPalUI.OpenTab) == "function" then
+        SetStandaloneShopOpen(false)
         UniPalUI.OpenTab("🛒 Technology Shop")
+    else
+        SetStandaloneShopOpen(not IsShopWindowOpen)
     end
 end
 
@@ -899,6 +932,7 @@ local function ProcessChatMessage(Context, Param1, Param2)
 
     if Command == "shop" or Command == "store" or Command == "gui" or Command == "help" then
         HandleShopList(pc)
+        RunOnGameThread(OpenShopWindow)
         return
     end
 
@@ -943,10 +977,13 @@ print(string.format("[EconomySystem] %d chat ingress hook(s) registered.", chatH
 pcall(function()
     local function BindKey(k, action)
         if not k then return end
+        local wrapped = function()
+            RunOnGameThread(action)
+        end
         if type(RegisterKeyBind) == "function" then
-            pcall(RegisterKeyBind, k, action)
+            pcall(RegisterKeyBind, k, wrapped)
         elseif type(RegisterKeyBindAsync) == "function" then
-            pcall(RegisterKeyBindAsync, k, {}, action)
+            pcall(RegisterKeyBindAsync, k, {}, wrapped)
         end
     end
 
@@ -975,6 +1012,7 @@ pcall(function()
         end, function(X, Y)
             return HandleScreenClick(X, Y, true)
         end)
+        IsUniPalTabRegistered = true
         print("[EconomySystem] Registered tab with UniPalUI Framework [F5].")
     end
 end)

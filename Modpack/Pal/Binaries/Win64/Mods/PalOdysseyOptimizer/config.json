@@ -31,6 +31,7 @@
   "cpu": {
     "enabled": true,
     "limitBackgroundCpu": true,
+    "backgroundMaxFPS": 30,
     "taskGraphTasksPerTick": 60,
     "gcIntervalSeconds": 90
   },

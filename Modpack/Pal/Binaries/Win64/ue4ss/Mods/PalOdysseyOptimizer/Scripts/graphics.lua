@@ -117,18 +117,21 @@ function GraphicsModule.apply(cfg, cpuCfg)
         ExecuteConsole("r.ParticleLODBias 1")
         ExecuteConsole("r.Emitter.FastPool 1")
 
-        -- 8. UI & Slate Fluidity (Instant Zero-Lag Menu Redraw)
+        -- 8. UI & Slate Fluidity. Keep the engine's normal Slate sleep intervals;
+        -- forcing them to zero makes the unfocused window busy-spin.
         ExecuteConsole("Slate.CacheRenderData 0")
         ExecuteConsole("Slate.EnableAsyncDraw 0")
         ExecuteConsole("Slate.AllowSlateUIInViewport 1")
-        ExecuteConsole("Slate.SleepInterval 0")
-        ExecuteConsole("Slate.SleepIntervalWithUserInteraction 0")
 
         -- 9. Frame Pacing, Low-Latency Sync & Dynamic Upscaling (Option B: 85% TSR)
         ExecuteConsole("r.GTSyncType 0")
         ExecuteConsole("r.OneFrameThreadLag 1")
         ExecuteConsole("r.FinishCurrentFrame 0")
-        ExecuteConsole("t.UnfocusedMaxFPS 0")
+        local backgroundFps = 0
+        if cpuCfg and cpuCfg.limitBackgroundCpu ~= false then
+            backgroundFps = math.max(5, math.min(60, tonumber(cpuCfg.backgroundMaxFPS) or 30))
+        end
+        ExecuteConsole("t.UnfocusedMaxFPS " .. tostring(backgroundFps))
         ExecuteConsole("r.ScreenPercentage 85")
         ExecuteConsole("r.TemporalAA.Upsampling 1")
         ExecuteConsole("r.TSR.ShadingRejection.Flickering 1")

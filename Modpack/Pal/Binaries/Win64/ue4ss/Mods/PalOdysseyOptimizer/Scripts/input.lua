@@ -48,9 +48,6 @@ function InputModule.apply(cfg)
             "Slate.EnableRenderHardwareCursor 1",
             "Slate.UseHardwareCursor 1",
             "Slate.AllowHardwareCursor 1",
-            "Slate.CursorRenderRate 0",
-            "Slate.SleepInterval 0",
-            "Slate.SleepIntervalWithUserInteraction 0",
             "r.Slate.EnableMouseCapture 0"
         }
 
