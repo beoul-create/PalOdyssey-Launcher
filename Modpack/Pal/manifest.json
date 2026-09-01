@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.231842",
-  "GeneratedAt": "2026-09-01T23:18:42.398Z",
+  "Version": "2026.09.01.231953",
+  "GeneratedAt": "2026-09-01T23:19:53.868Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Added Movement Speed buffs, Swift/Runner/Legend implants, and Air Dash/Super Jump mobility to Technology Merchant.",
+    "ReleaseNotes": "Reverted extra items to keep clean player stat buffs (Might, Vitality, Stamina, Speed, Burden) in Technology Merchant.",
     "Mandatory": false
   },
   "Files": [
@@ -1731,8 +1731,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_gadgets (gold).json",
-      "Hash": "1662ee3eae94dd403517f4dc3ef0a52c15710ec76ce49e27a5fc5570dacc354a",
-      "Size": 5000,
+      "Hash": "bb34f5bebda1d699ff4a492f1176f5e5de766bcdfdbd3d1a9d46bce0c9c8741b",
+      "Size": 3817,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_gadgets%20(gold).json"
     },
     {
@@ -3867,8 +3867,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_gadgets (gold).json",
-      "Hash": "1662ee3eae94dd403517f4dc3ef0a52c15710ec76ce49e27a5fc5570dacc354a",
-      "Size": 5000,
+      "Hash": "bb34f5bebda1d699ff4a492f1176f5e5de766bcdfdbd3d1a9d46bce0c9c8741b",
+      "Size": 3817,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_gadgets%20(gold).json"
     },
     {

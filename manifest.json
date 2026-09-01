@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.231953",
-  "GeneratedAt": "2026-09-01T23:19:53.868Z",
+  "Version": "2026.09.01.232158",
+  "GeneratedAt": "2026-09-01T23:21:58.311Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Reverted extra items to keep clean player stat buffs (Might, Vitality, Stamina, Speed, Burden) in Technology Merchant.",
+    "ReleaseNotes": "Added item recycling & selling support to Technology Merchant for Technology Points.",
     "Mandatory": false
   },
   "Files": [
@@ -273,8 +273,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/GuildBuildingLimits/Scripts/limit_checker.lua",
-      "Hash": "4947976ff9a395026090f2a468417fea84f617d94f16029f9521854873890349",
-      "Size": 16674,
+      "Hash": "28f0f90433b8485ddfceb16b0a15f9480095767434f9cb9d468b203a147df6b3",
+      "Size": 11922,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/GuildBuildingLimits/Scripts/limit_checker.lua"
     },
     {
@@ -1947,8 +1947,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/TechPointShopBridge/Scripts/main.lua",
-      "Hash": "6e9c7c0f5c655012eaa85050d9cab6580eb4035eb4bfb5fbaa8d56f022292fa4",
-      "Size": 11565,
+      "Hash": "14495f004599e7301ffd2387fe766b6f9391420269d301cc3c4a6b9281176675",
+      "Size": 12292,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/TechPointShopBridge/Scripts/main.lua"
     },
     {
@@ -4083,8 +4083,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/TechPointShopBridge/Scripts/main.lua",
-      "Hash": "bbc0986157e13f1cc90072ca6a58fe3e17d6ea56176a451530d6f7e8249c137f",
-      "Size": 12450,
+      "Hash": "14495f004599e7301ffd2387fe766b6f9391420269d301cc3c4a6b9281176675",
+      "Size": 12292,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/TechPointShopBridge/Scripts/main.lua"
     },
     {

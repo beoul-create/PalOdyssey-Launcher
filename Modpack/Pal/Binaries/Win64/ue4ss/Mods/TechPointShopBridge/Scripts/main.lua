@@ -178,31 +178,12 @@ local function vendorMatches(vendor, component)
     local fullName = tostring(vendor or "")
     if alive(vendor) then
         pcall(function() fullName = vendor:GetFullName() end)
-    end
-    local lowered = fullName:lower()
-    for _, pattern in ipairs(Config.vendorNamePatterns or {}) do
-        if lowered:find(tostring(pattern):lower(), 1, true) then
-            return true, fullName
         end
     end
 
     -- Check if the shop component itself specifies the TechPoint token currency
     local usesToken = false
     if alive(component) then
-        pcall(function()
-            local shop = component.CurrentShop or component.ShopData or (component.GetShopData and component:GetShopData())
-            if alive(shop) then
-                local curr = shop.CurrencyItemID or (shop.GetCurrencyItemID and shop:GetCurrencyItemID())
-                if curr and tostring(curr) == TOKEN_ID then usesToken = true end
-            end
-        end)
-    end
-    if usesToken then return true, fullName end
-
-    return false, fullName
-end
-
-local function syncDisplayBalance(component, reason)
     local _, state, inventory, technology = getPlayerData(component)
     if not alive(state) then
         log("Cannot resolve the server player for " .. tostring(reason), true)
@@ -228,20 +209,32 @@ local function closeSession(component, reason)
     local key = objectKey(component)
     local session = sessions[key]
     sessions[key] = nil
-    local _, _, inventory = getPlayerData(component)
-    if alive(inventory) then removeTokens(inventory) end
+    local _, _, inventory, technology = getPlayerData(component)
+    if alive(inventory) and alive(technology) then
+        local remainingTokens = tokenCount(inventory)
+        local initial = session and session.initialBalance or 0
+        if remainingTokens > initial then
+            local earned = remainingTokens - initial
+            local currentTech = techBalance(technology)
+            setTechBalance(technology, currentTech + earned)
+            log(string.format("Player recycled items and earned %d Technology Points!", earned), true)
+        end
+        removeTokens(inventory)
+    end
     if session then log("Closed VC merchant session: " .. tostring(reason), true) end
 end
 
 local function setupPost(selfParam, vendorParam)
     local component = unwrap(selfParam)
     if not alive(component) or not isAuthority(component) then return end
-    local vendor = unwrap(vendorParam)
-    local matches, fullName = vendorMatches(vendor, component)
+    local matches, fullName = vendorMatches(vendorParam, component)
     if not matches then return end
 
+    local _, _, _, technology = getPlayerData(component)
+    local initBal = alive(technology) and techBalance(technology) or 0
+
     local key = objectKey(component)
-    sessions[key] = { active = true, pending = nil, vendor = fullName }
+    sessions[key] = { active = true, pending = nil, vendor = fullName, initialBalance = initBal }
     syncDisplayBalance(component, "merchant opened")
     log("Activated for vendor " .. tostring(fullName), true)
 end
@@ -251,7 +244,7 @@ local function buyPre(selfParam, ...)
     if not alive(component) or not isAuthority(component) then return end
     local key = objectKey(component)
     local session = sessions[key]
-    if not session or not session.active then return end
+    if not session then return end
     if session.pending then
         log("Rejected overlapping purchase normalization", true)
         return

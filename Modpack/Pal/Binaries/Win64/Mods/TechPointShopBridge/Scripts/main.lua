@@ -206,29 +206,45 @@ local function vendorMatches(vendor, component)
 end
 
 local function closeSession(component, reason)
+    local key = objectKey(component)
     local session = sessions[key]
     sessions[key] = nil
-    local _, _, inventory = getPlayerData(component)
-    if alive(inventory) then removeTokens(inventory) end
+    local _, _, inventory, technology = getPlayerData(component)
+    if alive(inventory) and alive(technology) then
+        local remainingTokens = tokenCount(inventory)
+        local initial = session and session.initialBalance or 0
+        if remainingTokens > initial then
+            local earned = remainingTokens - initial
+            local currentTech = techBalance(technology)
+            setTechBalance(technology, currentTech + earned)
+            log(string.format("Player recycled items and earned %d Technology Points!", earned), true)
+        end
+        removeTokens(inventory)
+    end
     if session then log("Closed VC merchant session: " .. tostring(reason), true) end
 end
 
 local function setupPost(selfParam, vendorParam)
     local component = unwrap(selfParam)
     if not alive(component) or not isAuthority(component) then return end
-    local matches, fullName = vendorMatches(vendor, component)
+    local matches, fullName = vendorMatches(vendorParam, component)
     if not matches then return end
 
+    local _, _, _, technology = getPlayerData(component)
+    local initBal = alive(technology) and techBalance(technology) or 0
+
     local key = objectKey(component)
-    sessions[key] = { active = true, pending = nil, vendor = fullName }
+    sessions[key] = { active = true, pending = nil, vendor = fullName, initialBalance = initBal }
     syncDisplayBalance(component, "merchant opened")
     log("Activated for vendor " .. tostring(fullName), true)
+end
 
 local function buyPre(selfParam, ...)
     local component = unwrap(selfParam)
     if not alive(component) or not isAuthority(component) then return end
     local key = objectKey(component)
     local session = sessions[key]
+    if not session then return end
     if session.pending then
         log("Rejected overlapping purchase normalization", true)
         return
