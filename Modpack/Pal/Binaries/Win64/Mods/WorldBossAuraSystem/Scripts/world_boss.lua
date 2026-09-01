@@ -117,79 +117,70 @@ function WorldBoss.SpawnEvent()
         return false
     end
 
-    -- Attempt each native method independently so a bad signature cannot suppress fallbacks.
-    pcall(function()
-        local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
-        local world = (UEHelpers and UEHelpers.GetWorldContextObject and UEHelpers.GetWorldContextObject())
-            or (GetWorldContext and GetWorldContext()) or nil
-        if PalUtil and PalUtil:IsValid() then
-            if type(PalUtil.SpawnPal_Server) == "function" then
-                TrySpawn("PalUtility.SpawnPal_Server", function()
-                    return PalUtil:SpawnPal_Server(world, FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 }, nil, 100, 100, true)
-                end)
-            end
-            if not BossActor and type(PalUtil.SpawnIndividualPal) == "function" then
-                TrySpawn("PalUtility.SpawnIndividualPal", function()
-                    return PalUtil:SpawnIndividualPal(world, FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
-                end)
-            end
-        end
-
+        -- 1. Direct UE5 World:SpawnActor with Monster Blueprint Class
         if not BossActor or not BossActor:IsValid() then
-            local SpawnerSubsystem = FindFirstOf("PalSpawnerSubsystem") or FindFirstOf("PalWildPalSpawner")
-            if SpawnerSubsystem and SpawnerSubsystem:IsValid() then
-                if type(SpawnerSubsystem.SpawnIndividualPal) == "function" then
-                    TrySpawn("PalSpawnerSubsystem.SpawnIndividualPal", function()
-                        return SpawnerSubsystem:SpawnIndividualPal(FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
-                    end)
-                end
-            end
-        end
-
-        if not BossActor or not BossActor:IsValid() then
-            local NPCManager = FindFirstOf("PalNPCManager")
-            if NPCManager and NPCManager:IsValid() and type(NPCManager.SpawnIndividualPal) == "function" then
-                TrySpawn("PalNPCManager.SpawnIndividualPal", function()
-                    return NPCManager:SpawnIndividualPal(FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
-                end)
-            end
-        end
-    end)
-
-    -- v0.3.5 exposes spawning through UPalCheatManager. It creates the Pal
-    -- synchronously near the selected online player, so diff the actor set to
-    -- recover the newly spawned native actor for boss initialization.
-    if not BossActor or not BossActor:IsValid() then
-        pcall(function()
-            for _, pc in ipairs(FindAllOf("PalPlayerController") or {}) do
-                if pc and pc:IsValid() then
-                    if (not pc.CheatManager or not pc.CheatManager:IsValid()) and type(pc.EnableCheats) == "function" then
-                        pc:EnableCheats()
-                    end
-                    local manager = pc.CheatManager
-                    if manager and manager:IsValid() and type(manager.SpawnMonster) == "function" then
-                        manager:SpawnMonster(FName(PalId), tonumber(Config.BossLevel) or 100)
-                        for _, actor in ipairs(FindAllOf("PalCharacter") or {}) do
-                            local address = actor and actor:IsValid() and tostring(actor:GetAddress()) or ""
-                            if address ~= "" and not actorsBefore[address] then
-                                BossActor = actor
-                                break
-                            end
+            pcall(function()
+                local world = (UEHelpers and UEHelpers.GetWorldContextObject and UEHelpers.GetWorldContextObject())
+                    or (GetWorldContext and GetWorldContext()) or (UEHelpers and UEHelpers.GetWorld and UEHelpers.GetWorld()) or nil
+                if world and world:IsValid() and type(world.SpawnActor) == "function" then
+                    local bpPaths = {
+                        string.format("/Game/Pal/Blueprint/Character/Monster/%s/BP_%s.BP_%s_C", PalId, PalId, PalId),
+                        string.format("/Game/Pal/Blueprint/Character/Monster/%s/BP_%s", PalId, PalId),
+                        string.format("/Script/Pal.PalCharacter")
+                    }
+                    for _, bpPath in ipairs(bpPaths) do
+                        local palClass = StaticFindObject(bpPath)
+                        if palClass and palClass:IsValid() then
+                            TrySpawn("World:SpawnActor " .. bpPath, function()
+                                return world:SpawnActor(palClass, SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
+                            end)
+                            if BossActor and BossActor:IsValid() then break end
                         end
-                        if BossActor then
-                            local location = BossActor:GetActorLocation()
-                            if location then
-                                SpawnLoc = { X = location.X, Y = location.Y, Z = location.Z }
-                                Point = { Name = "Near an online player", X = location.X, Y = location.Y, Z = location.Z }
-                            end
-                            print("[WorldBossAuraSystem] Spawned through PalCheatManager.SpawnMonster fallback.")
-                        end
-                        break
                     end
                 end
-            end
-        end)
-    end
+            end)
+        end
+
+        -- 2. Native PalUtility / SpawnerSubsystem / NPCManager
+        if not BossActor or not BossActor:IsValid() then
+            pcall(function()
+                local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+                local world = (UEHelpers and UEHelpers.GetWorldContextObject and UEHelpers.GetWorldContextObject()) or (GetWorldContext and GetWorldContext()) or nil
+                if PalUtil and PalUtil:IsValid() then
+                    if type(PalUtil.SpawnPal_Server) == "function" then
+                        TrySpawn("PalUtility.SpawnPal_Server", function()
+                            return PalUtil:SpawnPal_Server(world, FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 }, nil, 100, 100, true)
+                        end)
+                    end
+                    if not BossActor and type(PalUtil.SpawnIndividualPal) == "function" then
+                        TrySpawn("PalUtility.SpawnIndividualPal", function()
+                            return PalUtil:SpawnIndividualPal(world, FName(PalId), SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
+                        end)
+                    end
+                end
+            end)
+        end
+
+        -- 3. Wild Pal Promotion Fallback (Promote existing wild Pal into World Boss)
+        if not BossActor or not BossActor:IsValid() then
+            pcall(function()
+                for _, actor in ipairs(FindAllOf("PalCharacter") or {}) do
+                    if actor and actor:IsValid() and not actor.IsPlayer and not actor.IsPlayerPal then
+                        local name = actor:GetClass():GetName()
+                        if name:find(PalId) or name:find("Monster") or name:find("PalCharacter") then
+                            BossActor = actor
+                            local loc = actor:K2_GetActorLocation() or actor:GetActorLocation()
+                            if loc then
+                                SpawnLoc = { X = loc.X, Y = loc.Y, Z = loc.Z }
+                                Point = { Name = "Wild Encounter Location", X = loc.X, Y = loc.Y, Z = loc.Z }
+                            end
+                            print(string.format("[WorldBossAuraSystem] Promoted live wild %s to World Boss!", name))
+                            break
+                        end
+                    end
+                end
+            end)
+        end
 
     if BossActor and BossActor:IsValid() then
         -- 1. Apply 3.0x Visual Scale

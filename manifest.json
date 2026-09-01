@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.125732",
-  "GeneratedAt": "2026-09-01T12:57:32.222Z",
+  "Version": "2026.09.01.130713",
+  "GeneratedAt": "2026-09-01T13:07:13.869Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Dedicated server headless stability guards and client/server side separation.",
+    "ReleaseNotes": "F6 Economy GUI, Custom Subspecies BPClass fixes, World Boss SpawnActor pipeline, and Zero-Delay network replication.",
     "Mandatory": false
   },
   "Files": [
@@ -69,8 +69,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "5161eb6ca2f9668b3bac3beebab538a1211e8057232461402b5659a8a922ff10",
-      "Size": 42184,
+      "Hash": "e3870d59a707726138b465c127dc541a9bedaa7a7ae7a5d782181209bb6644af",
+      "Size": 42307,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/EconomySystem/Scripts/main.lua"
     },
     {
@@ -135,8 +135,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/FastConnect/Scripts/main.lua",
-      "Hash": "60be8879d3396d9a1f2a717b46da9226db3ad0fdbf53922d68c1e0253eb79e30",
-      "Size": 7111,
+      "Hash": "4531ccb832e76c79250c9b359982a11f4055ba9fff1c3c4016db71fc2c057c55",
+      "Size": 7151,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/FastConnect/Scripts/main.lua"
     },
     {
@@ -1593,14 +1593,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/CustomSubspeciesBreeding/pals/SubspeciesPals.jsonc",
-      "Hash": "311f8d3cb06dc7cd1d0d35b3faaef34ecd3722f5c0cc125ce2a89e9c3a7e2dfc",
-      "Size": 12724,
+      "Hash": "ee620f5f1aac7877ac115f16974eb9bcfda432589fa391b90057e62cd450e08c",
+      "Size": 12639,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/CustomSubspeciesBreeding/pals/SubspeciesPals.jsonc"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/CustomSubspeciesBreeding/raw/DT_PalCombiParameter.jsonc",
-      "Hash": "5841de8e8bd3849d3dec45b7ae28a50412763323d3724c192102bf823cf13298",
-      "Size": 6697,
+      "Hash": "293009d63b26e40c9be9eedb427494896229e207b1d709629187e4e4234fa8d4",
+      "Size": 6689,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/CustomSubspeciesBreeding/raw/DT_PalCombiParameter.jsonc"
     },
     {
@@ -1977,8 +1977,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/world_boss.lua",
-      "Hash": "fbf7aed210bdbfa8abcec64d644ce6bf51ef38875d855513a54cb8a0cb556af3",
-      "Size": 14655,
+      "Hash": "88ff800335fad51b4af9e1800691610e84f1d49e00a042aa6cce9dd0248a6076",
+      "Size": 14419,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/world_boss.lua"
     },
     {
@@ -2055,8 +2055,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "5161eb6ca2f9668b3bac3beebab538a1211e8057232461402b5659a8a922ff10",
-      "Size": 42184,
+      "Hash": "e3870d59a707726138b465c127dc541a9bedaa7a7ae7a5d782181209bb6644af",
+      "Size": 42307,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua"
     },
     {
@@ -2121,8 +2121,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/FastConnect/Scripts/main.lua",
-      "Hash": "60be8879d3396d9a1f2a717b46da9226db3ad0fdbf53922d68c1e0253eb79e30",
-      "Size": 7111,
+      "Hash": "4531ccb832e76c79250c9b359982a11f4055ba9fff1c3c4016db71fc2c057c55",
+      "Size": 7151,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/FastConnect/Scripts/main.lua"
     },
     {
@@ -3579,14 +3579,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/pals/SubspeciesPals.jsonc",
-      "Hash": "311f8d3cb06dc7cd1d0d35b3faaef34ecd3722f5c0cc125ce2a89e9c3a7e2dfc",
-      "Size": 12724,
+      "Hash": "ee620f5f1aac7877ac115f16974eb9bcfda432589fa391b90057e62cd450e08c",
+      "Size": 12639,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/pals/SubspeciesPals.jsonc"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/raw/DT_PalCombiParameter.jsonc",
-      "Hash": "5841de8e8bd3849d3dec45b7ae28a50412763323d3724c192102bf823cf13298",
-      "Size": 6697,
+      "Hash": "293009d63b26e40c9be9eedb427494896229e207b1d709629187e4e4234fa8d4",
+      "Size": 6689,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/raw/DT_PalCombiParameter.jsonc"
     },
     {
@@ -3963,8 +3963,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/world_boss.lua",
-      "Hash": "fbf7aed210bdbfa8abcec64d644ce6bf51ef38875d855513a54cb8a0cb556af3",
-      "Size": 14655,
+      "Hash": "88ff800335fad51b4af9e1800691610e84f1d49e00a042aa6cce9dd0248a6076",
+      "Size": 14419,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/world_boss.lua"
     },
     {

@@ -59,13 +59,14 @@ local function ApplyFastNetworkRates()
         if not Config.ultraFastNetworkRates then return end
 
         -- Maximum network bandwidth for instant server handshake and world snapshot replication
-        ExecuteConsole("net.IpNetDriver.MaxClientRate 300000")
-        ExecuteConsole("net.PackageMap.MaxNetGUIDsPerFrame 10000")
-        ExecuteConsole("net.MaxRPCPerSecond 1500")
+        ExecuteConsole("net.IpNetDriver.MaxClientRate 400000")
+        ExecuteConsole("net.PackageMap.MaxNetGUIDsPerFrame 15000")
+        ExecuteConsole("net.MaxRPCPerSecond 2000")
         ExecuteConsole("net.ReliableBufferSize 8388608")
         ExecuteConsole("net.TrackNetBandwidth 0")
         ExecuteConsole("net.TickRate 60")
-        Log("Ultra-fast network replication and high-throughput server handshake bandwidth applied.")
+        ExecuteConsole("p.NetEnableMoveCombining 0")
+        Log("Ultra-fast low-latency network replication & zero-delay movement applied.")
     end)
 end
 

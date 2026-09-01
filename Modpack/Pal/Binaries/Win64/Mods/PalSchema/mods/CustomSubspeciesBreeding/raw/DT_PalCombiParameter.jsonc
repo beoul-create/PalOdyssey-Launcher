@@ -12,7 +12,7 @@
         },
         "Lamball_Ignis_Combi": {
             "TribeA": "EPalTribeID::SheepBall",
-            "TribeB": "EPalTribeID::FireKitsunebi",
+            "TribeB": "EPalTribeID::Kitsunebi",
             "Child": "EPalTribeID::Lamball_Ignis"
         },
         "Lamball_Ignis_Self": {
@@ -122,7 +122,7 @@
         },
         "Lyleen_Ignis_Combi": {
             "TribeA": "EPalTribeID::LilyQueen",
-            "TribeB": "EPalTribeID::FireKitsunebi",
+            "TribeB": "EPalTribeID::Kitsunebi",
             "Child": "EPalTribeID::Lyleen_Ignis"
         },
         "Lyleen_Ignis_Self": {

@@ -711,17 +711,18 @@ end
 
 local isServer = string.find(debug.getinfo(1, "S").source:lower():gsub("\\", "/"), "/palserver/") ~= nil
 if not isServer then
-    local hudOk, hudPreId = pcall(RegisterHook, "/Script/Engine.HUD:ReceiveDrawHUD", OnHudDraw)
-    if hudOk and hudPreId then
-        print("[EconomySystem] Native HUD draw hook registered.")
-    else
-        print("[EconomySystem] Native HUD hook unavailable; arming delayed Pal HUD hook.")
-        pcall(NotifyOnNewObject, "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C", function()
-            local ok, preId = pcall(RegisterHook,
-                "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C:ReceiveDrawHUD", OnHudDraw)
-            if ok and preId then print("[EconomySystem] Delayed Pal HUD draw hook registered.") end
-        end)
-    end
+    pcall(RegisterHook, "/Script/Engine.HUD:ReceiveDrawHUD", OnHudDraw)
+    pcall(RegisterHook, "/Script/Pal.PalHUDInGame:ReceiveDrawHUD", OnHudDraw)
+    pcall(RegisterHook, "/Script/Pal.PalHUD:ReceiveDrawHUD", OnHudDraw)
+    pcall(RegisterHook, "/Script/Engine.GameViewportClient:PostRender", function(Context, Canvas)
+        if Canvas and Canvas:IsValid() then
+            OnHudDraw(Canvas)
+        end
+    end)
+    pcall(NotifyOnNewObject, "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C", function()
+        pcall(RegisterHook, "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C:ReceiveDrawHUD", OnHudDraw)
+    end)
+    print("[EconomySystem] Multi-layer HUD draw hooks registered.")
 end
 
 -- Screen Click Handler
@@ -745,13 +746,16 @@ local function HandleScreenClick(InputX, InputY, ForceInput)
                 mouseX, mouseY = tonumber(a), tonumber(b)
             end
         end
+
         if not mouseX or not mouseY then return end
 
         for _, btn in ipairs(ClickableButtons) do
             if mouseX >= btn.x1 and mouseX <= btn.x2 and mouseY >= btn.y1 and mouseY <= btn.y2 then
-                btn.action()
-                clicked = true
-                return
+                if type(btn.action) == "function" then
+                    btn.action()
+                    clicked = true
+                    break
+                end
             end
         end
     end)
