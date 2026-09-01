@@ -23,7 +23,8 @@ local function Log(msg)
     end
 end
 
-if not Config.enabled then return end
+local isServer = string.find(debug.getinfo(1, "S").source:lower():gsub("\\", "/"), "/palserver/") ~= nil
+if isServer or not Config.enabled then return end
 
 local function ExecuteConsole(cmd)
     pcall(function()

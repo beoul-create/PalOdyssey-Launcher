@@ -1,3 +1,6 @@
+local isServer = string.find(debug.getinfo(1, "S").source:lower():gsub("\\", "/"), "/palserver/") ~= nil
+if isServer then return {} end
+
 -- PalOdysseyOptimizer - FPS Boost & GPU Assist Subsystem (Ultra-Performance Option B Profile)
 local GraphicsModule = {}
 local ExecuteConsole = require("console")

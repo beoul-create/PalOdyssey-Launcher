@@ -1,7 +1,5 @@
--- ============================================================================
--- PalworldTuner - Cable & Fishing Rod Dismount Physics Restorer
--- Universal Multi-Strategy Cable Particle Reset (FindAllOf + Direct Scans)
--- ============================================================================
+local isServer = string.find(debug.getinfo(1, "S").source:lower():gsub("\\", "/"), "/palserver/") ~= nil
+if isServer then return {} end
 
 local CableReset = {}
 

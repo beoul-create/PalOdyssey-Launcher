@@ -1,7 +1,8 @@
--- ============================================================================
--- UniPalUI - Unified Palworld User Interface Framework
--- Safe Viewport UMG & Canvas Menu Coordinator
--- ============================================================================
+local isServer = string.find(debug.getinfo(1, "S").source:lower():gsub("\\", "/"), "/palserver/") ~= nil
+if isServer then
+    print("[UniPalUI] Headless server detected. Disabling client UI subsystem.")
+    return
+end
 
 print("[UniPalUI] Initializing UniPalUI Framework v1.0.0...")
 

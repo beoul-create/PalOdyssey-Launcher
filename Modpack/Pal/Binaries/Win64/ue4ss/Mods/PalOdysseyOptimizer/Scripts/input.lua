@@ -1,3 +1,6 @@
+local isServer = string.find(debug.getinfo(1, "S").source:lower():gsub("\\", "/"), "/palserver/") ~= nil
+if isServer then return {} end
+
 -- PalOdysseyOptimizer - Raw Mouse Input & Fluid Hardware Menu Cursor (2000Hz - 8000Hz Ultra-Low Latency)
 local InputModule = {}
 local ExecuteConsole = require("console")

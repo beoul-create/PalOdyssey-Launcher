@@ -709,16 +709,19 @@ local function OnHudDraw(Context)
     end
 end
 
-local hudOk, hudPreId = pcall(RegisterHook, "/Script/Engine.HUD:ReceiveDrawHUD", OnHudDraw)
-if hudOk and hudPreId then
-    print("[EconomySystem] Native HUD draw hook registered.")
-else
-    print("[EconomySystem] Native HUD hook unavailable; arming delayed Pal HUD hook.")
-    pcall(NotifyOnNewObject, "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C", function()
-        local ok, preId = pcall(RegisterHook,
-            "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C:ReceiveDrawHUD", OnHudDraw)
-        if ok and preId then print("[EconomySystem] Delayed Pal HUD draw hook registered.") end
-    end)
+local isServer = string.find(debug.getinfo(1, "S").source:lower():gsub("\\", "/"), "/palserver/") ~= nil
+if not isServer then
+    local hudOk, hudPreId = pcall(RegisterHook, "/Script/Engine.HUD:ReceiveDrawHUD", OnHudDraw)
+    if hudOk and hudPreId then
+        print("[EconomySystem] Native HUD draw hook registered.")
+    else
+        print("[EconomySystem] Native HUD hook unavailable; arming delayed Pal HUD hook.")
+        pcall(NotifyOnNewObject, "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C", function()
+            local ok, preId = pcall(RegisterHook,
+                "/Game/Pal/Blueprint/UI/BP_PalHUD_InGame.BP_PalHUD_InGame_C:ReceiveDrawHUD", OnHudDraw)
+            if ok and preId then print("[EconomySystem] Delayed Pal HUD draw hook registered.") end
+        end)
+    end
 end
 
 -- Screen Click Handler
