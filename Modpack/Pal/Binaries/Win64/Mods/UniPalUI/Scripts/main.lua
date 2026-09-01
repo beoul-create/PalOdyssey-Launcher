@@ -232,15 +232,13 @@ pcall(function()
     end
 
     local f5Key = (Key and Key.F5) or 0x74
-    local f6Key = (Key and Key.F6) or 0x75
     local lmbKey = (Key and Key.LeftMouseButton) or 0x01
 
     BindKey(f5Key, UniPalUI.Toggle)
-    BindKey(f6Key, function() UniPalUI.OpenTab("🛒 Technology Shop") end)
     BindKey(lmbKey, function()
         if UniPalUI.IsOpen then UniPalUI.DispatchPointerInput() end
     end)
-    print("[UniPalUI] Hotkeys registered: [F5] Toggle Dashboard, [F6] Open Technology Shop.")
+    print("[UniPalUI] Hotkey registered: [F5] Toggle Dashboard.")
 end)
 
 print("[UniPalUI] UniPalUI Framework initialized successfully.")

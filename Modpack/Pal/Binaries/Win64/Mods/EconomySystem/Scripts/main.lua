@@ -222,11 +222,23 @@ local function SendPlayerMessage(Player, Text)
         local str = tostring(Text or "")
         local pc = Player or GetPlayerController()
         local ps = pc and pc.PlayerState
-        local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
         local world = (UEHelpers and UEHelpers.GetWorldContextObject and UEHelpers.GetWorldContextObject())
             or (GetWorldContext and GetWorldContext()) or nil
-        if PalUtil and PalUtil:IsValid() and world and ps and ps:IsValid() then
-            PalUtil:SendSystemToPlayerChat(world, str, ps.PlayerUId)
+        local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
+
+        local sent = false
+        if PalUtil and PalUtil:IsValid() and world and ps and ps:IsValid() and ps.PlayerUId then
+            pcall(function()
+                PalUtil:SendSystemToPlayerChat(world, str, ps.PlayerUId)
+                sent = true
+            end)
+        end
+
+        if not sent then
+            local gs = FindFirstOf("PalGameStateInGame")
+            if gs and gs:IsValid() and type(gs.BroadcastChatMessage) == "function" then
+                pcall(function() gs:BroadcastChatMessage(str) end)
+            end
         end
     end)
     print("[EconomySystem] " .. tostring(Text))
@@ -855,9 +867,11 @@ local function ProcessChatMessage(Context, Param1, Param2)
     if not Text or Text == "" then return end
     local cleanText = Text:gsub("^%s+", "")
     local prefix = cleanText:sub(1, 1)
-    if prefix ~= "/" and prefix ~= "!" then return end
+    local body = cleanText
+    if prefix == "!" or prefix == "." or prefix == "/" or prefix == "#" then
+        body = cleanText:sub(2):gsub("^%s+", "")
+    end
 
-    local body = cleanText:sub(2):gsub("^%s+", "")
     local Args = {}
     for word in body:gmatch("%S+") do
         table.insert(Args, word)
@@ -872,10 +886,8 @@ local function ProcessChatMessage(Context, Param1, Param2)
 
     print(string.format("[EconomySystem] Command: %s (args: %d)", Command, #Args - 1))
 
-    if Command == "shop" or Command == "store" or Command == "gui" then
-        -- The menu is client-local; dedicated servers have no viewport.
-        local viewport = FindFirstOf("GameViewportClient")
-        if viewport and viewport:IsValid() then ToggleShopWindow() end
+    if Command == "shop" or Command == "store" or Command == "gui" or Command == "help" then
+        HandleShopList(pc)
         return
     end
 
