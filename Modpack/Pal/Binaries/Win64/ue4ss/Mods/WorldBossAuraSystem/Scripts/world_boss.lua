@@ -28,8 +28,22 @@ end
 function WorldBoss.HasOnlinePlayer()
     local found = false
     pcall(function()
+        -- 1. Check Player Controllers
         for _, pc in ipairs(FindAllOf("PalPlayerController") or {}) do
-            local ps = pc and pc:IsValid() and pc.PlayerState or nil
+            if pc and pc:IsValid() then
+                found = true
+                return
+            end
+        end
+        -- 2. Check Player Characters
+        for _, ch in ipairs(FindAllOf("PalPlayerCharacter") or {}) do
+            if ch and ch:IsValid() then
+                found = true
+                return
+            end
+        end
+        -- 3. Check Player States
+        for _, ps in ipairs(FindAllOf("PalPlayerState") or {}) do
             if ps and ps:IsValid() then
                 found = true
                 return
@@ -39,7 +53,8 @@ function WorldBoss.HasOnlinePlayer()
     return found
 end
 
-local function BroadcastInGame(Text)
+local function BroadcastInGame(Text, PalDisplayName, SelectedAura, LocationName, Pos)
+    -- 1. Native Chat / System Broadcast
     pcall(function()
         local controllers = FindAllOf("PalPlayerController") or {}
         local PalUtil = StaticFindObject("/Script/Pal.Default__PalUtility")
@@ -51,10 +66,31 @@ local function BroadcastInGame(Text)
                 local ps = pc.PlayerState
                 if PalUtil and PalUtil:IsValid() and world and ps and ps:IsValid() then
                     PalUtil:SendSystemToPlayerChat(world, Text, ps.PlayerUId)
+                    if type(PalUtil.SendSystemAnnounce) == "function" then
+                        PalUtil:SendSystemAnnounce(world, Text, 10.0)
+                    end
                 end
             end
         end
     end)
+
+    -- 2. On-Screen Visual HUD Banner via DarnToasts
+    pcall(function()
+        local ToastLib = nil
+        pcall(function() ToastLib = require("ToastLib") end)
+        if not ToastLib then
+            pcall(function() ToastLib = require("DarnToasts.Scripts.ToastLib") end)
+        end
+        if ToastLib and type(ToastLib.show) == "function" then
+            ToastLib.show("WorldBoss", {
+                text = string.format("⚠️ WORLD BOSS SPAWNED: %s (%s Aura)!", tostring(PalDisplayName), tostring(SelectedAura)),
+                sub = string.format("Location: %s (Coords: %.0f, %.0f)", tostring(LocationName), Pos.X, Pos.Y),
+                duration = 12.0,
+                style = "panel"
+            })
+        end
+    end)
+
     print("[WorldBossAuraSystem] Broadcast: " .. tostring(Text))
 end
 
@@ -117,7 +153,7 @@ function WorldBoss.SpawnEvent()
         return false
     end
 
-        -- 1. Direct UE5 World:SpawnActor with Monster Blueprint Class
+        -- 1. Direct UE5 World:SpawnActor with Monster Blueprint Class (Dynamic Asset Loader)
         if not BossActor or not BossActor:IsValid() then
             pcall(function()
                 local world = (UEHelpers and UEHelpers.GetWorldContextObject and UEHelpers.GetWorldContextObject())
@@ -130,9 +166,33 @@ function WorldBoss.SpawnEvent()
                     }
                     for _, bpPath in ipairs(bpPaths) do
                         local palClass = StaticFindObject(bpPath)
+                        if (not palClass or not palClass:IsValid()) and type(LoadAsset) == "function" then
+                            local ok, loaded = pcall(LoadAsset, bpPath)
+                            if ok and loaded then palClass = loaded end
+                        end
+                        if (not palClass or not palClass:IsValid()) and type(StaticLoadObject) == "function" then
+                            local ok, loaded = pcall(StaticLoadObject, bpPath)
+                            if ok and loaded then palClass = loaded end
+                        end
                         if palClass and palClass:IsValid() then
                             TrySpawn("World:SpawnActor " .. bpPath, function()
                                 return world:SpawnActor(palClass, SpawnLoc, { Pitch=0, Yaw=0, Roll=0 })
+                            end)
+                            if BossActor and BossActor:IsValid() then break end
+                        end
+                    end
+                end
+            end)
+        end
+
+        -- 1.5. Native CheatManager SpawnMonster
+        if not BossActor or not BossActor:IsValid() then
+            pcall(function()
+                for _, pc in ipairs(FindAllOf("PalPlayerController") or {}) do
+                    if pc and pc:IsValid() and pc.CheatManager and pc.CheatManager:IsValid() then
+                        if type(pc.CheatManager.SpawnMonster) == "function" then
+                            TrySpawn("CheatManager.SpawnMonster", function()
+                                return pc.CheatManager:SpawnMonster(FName(PalId), tonumber(Config.BossLevel) or 100)
                             end)
                             if BossActor and BossActor:IsValid() then break end
                         end
@@ -166,13 +226,13 @@ function WorldBoss.SpawnEvent()
             pcall(function()
                 for _, actor in ipairs(FindAllOf("PalCharacter") or {}) do
                     if actor and actor:IsValid() and not actor.IsPlayer and not actor.IsPlayerPal then
-                        local name = actor:GetClass():GetName()
-                        if name:find(PalId) or name:find("Monster") or name:find("PalCharacter") then
+                        local name = tostring(actor:GetClass():GetName())
+                        if name:find(PalId) or name:find("Monster") or name:find("BP_") then
                             BossActor = actor
                             local loc = actor:K2_GetActorLocation() or actor:GetActorLocation()
                             if loc then
                                 SpawnLoc = { X = loc.X, Y = loc.Y, Z = loc.Z }
-                                Point = { Name = "Wild Encounter Location", X = loc.X, Y = loc.Y, Z = loc.Z }
+                                Point = { Name = "Wild Encounter Zone", X = loc.X, Y = loc.Y, Z = loc.Z }
                             end
                             print(string.format("[WorldBossAuraSystem] Promoted live wild %s to World Boss!", name))
                             break
@@ -219,7 +279,7 @@ function WorldBoss.SpawnEvent()
         }
 
         -- 5. Broadcast to in-game chat and HUD
-        BroadcastInGame(string.format("⚠️ WORLD BOSS SPAWNED: [%s (%s Aura)] has appeared at %s! (Coords: %.0f, %.0f)", PalDisplayName, SelectedAura, Point.Name, Point.X, Point.Y))
+        BroadcastInGame(string.format("⚠️ WORLD BOSS SPAWNED: [%s (%s Aura)] has appeared at %s! (Coords: %.0f, %.0f)", PalDisplayName, SelectedAura, Point.Name, Point.X, Point.Y), PalDisplayName, SelectedAura, Point.Name, SpawnLoc)
 
         -- 6. Discord & Liveboard
         WorldBoss.BroadcastDiscord(PalDisplayName, SelectedAura, Point.Name, SpawnLoc)
