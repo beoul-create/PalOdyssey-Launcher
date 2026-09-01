@@ -1,0 +1,68 @@
+{
+    "TechnologyBook_G1": {
+        "Recipe": {
+            "Product_Count": 5,
+            "WorkAmount": 20.0,
+            "Material1_Count": 1,
+            "Material1_Id": "AncientTechnologyBook_G1"
+        }
+    },
+    "AncientTechnologyBook_G1": {
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 20.0,
+            "Material1_Count": 5,
+            "Material1_Id": "TechnologyBook_G1"
+        }
+    },
+    "Schematic_Handgun_Default_4": {
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 50.0,
+            "Material1_Count": 3,
+            "Material1_Id": "TechnologyBook_G1",
+            "Material2_Count": 20000,
+            "Material2_Id": "Money"
+        }
+    },
+    "Schematic_AssaultRifle_Default_4": {
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 100.0,
+            "Material1_Count": 8,
+            "Material1_Id": "TechnologyBook_G1",
+            "Material2_Count": 50000,
+            "Material2_Id": "Money"
+        }
+    },
+    "Schematic_Shotgun_Pump_4": {
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 100.0,
+            "Material1_Count": 8,
+            "Material1_Id": "TechnologyBook_G1",
+            "Material2_Count": 50000,
+            "Material2_Id": "Money"
+        }
+    },
+    "Schematic_RocketLauncher_4": {
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 150.0,
+            "Material1_Count": 15,
+            "Material1_Id": "AncientTechnologyBook_G1",
+            "Material2_Count": 100000,
+            "Material2_Id": "Money"
+        }
+    },
+    "PalUpgradeStone3": {
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 30.0,
+            "Material1_Count": 2,
+            "Material1_Id": "AncientTechnologyBook_G1",
+            "Material2_Count": 10000,
+            "Material2_Id": "Money"
+        }
+    }
+}

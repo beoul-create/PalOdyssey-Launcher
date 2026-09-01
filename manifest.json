@@ -1,15 +1,15 @@
 {
-  "Version": "2026.09.01.140511",
-  "GeneratedAt": "2026-09-01T14:05:11.658Z",
+  "Version": "2026.09.01.140833",
+  "GeneratedAt": "2026-09-01T14:08:33.580Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 602,
+  "TotalFiles": 604,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Comprehensive client & server chat message delivery pipelines.",
+    "ReleaseNotes": "Native In-Game Workbench Economy Shop & Tech Point Conversions.",
     "Mandatory": false
   },
   "Files": [
@@ -1434,6 +1434,12 @@
       "Hash": "9f495f746df00ffcc4d255842771027e183acc1de8df4edd7139cbe8b929f7a0",
       "Size": 3189,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/CustomSubspeciesBreeding/translations/en/translations.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/EconomyShop/items/ShopItems.jsonc",
+      "Hash": "bf1e65f5a99c98867a3f925785ac3fc70403dd5910326966ea1d6b4be61ac70a",
+      "Size": 1921,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/EconomyShop/items/ShopItems.jsonc"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/PalworldTuner/metadata.json",
@@ -3240,6 +3246,12 @@
       "Hash": "9f495f746df00ffcc4d255842771027e183acc1de8df4edd7139cbe8b929f7a0",
       "Size": 3189,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/translations/en/translations.jsonc"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/EconomyShop/items/ShopItems.jsonc",
+      "Hash": "bf1e65f5a99c98867a3f925785ac3fc70403dd5910326966ea1d6b4be61ac70a",
+      "Size": 1921,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/EconomyShop/items/ShopItems.jsonc"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/PalworldTuner/metadata.json",
