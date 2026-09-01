@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.134621",
-  "GeneratedAt": "2026-09-01T13:46:21.666Z",
+  "Version": "2026.09.01.135140",
+  "GeneratedAt": "2026-09-01T13:51:40.512Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Direct F6 binding into UniPalUI Technology Shop dashboard with tab navigation.",
+    "ReleaseNotes": "Full F6 in-game Shop Catalog & Balance integration.",
     "Mandatory": false
   },
   "Files": [
@@ -69,8 +69,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "d0b81ed7d2db5c693e904b044e50be03af2ceda4a1525f2c841c4a0ce3e8a8a2",
-      "Size": 42441,
+      "Hash": "f268ede1d4a6c793b6e2c15fab2b3211ddd471cb8a72da85fb2120201187545e",
+      "Size": 42380,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/EconomySystem/Scripts/main.lua"
     },
     {
@@ -1875,8 +1875,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua",
-      "Hash": "d0b81ed7d2db5c693e904b044e50be03af2ceda4a1525f2c841c4a0ce3e8a8a2",
-      "Size": 42441,
+      "Hash": "f268ede1d4a6c793b6e2c15fab2b3211ddd471cb8a72da85fb2120201187545e",
+      "Size": 42380,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/EconomySystem/Scripts/main.lua"
     },
     {

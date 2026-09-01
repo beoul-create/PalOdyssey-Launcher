@@ -512,19 +512,17 @@ local function HandleBalance(Player)
     SendPlayerMessage(Player, string.format("💳 Technology Points: %d  |  Ancient Tech Points: %d", normPts, ancPts))
 end
 
--- Toggle Interactive Window
+-- Toggle Interactive Window & Display Shop Catalog
 local function ToggleShopWindow()
-    if UniPalUI and type(UniPalUI.OpenTab) == "function" then
-        UniPalUI.OpenTab("🛒 Technology Shop")
-        return
-    end
-    IsShopWindowOpen = not IsShopWindowOpen
     pcall(function()
         local pc = GetPlayerController()
         if pc and pc:IsValid() then
-            pc.bShowMouseCursor = IsShopWindowOpen
+            PrintHelp(pc)
         end
     end)
+    if UniPalUI and type(UniPalUI.OpenTab) == "function" then
+        UniPalUI.OpenTab("🛒 Technology Shop")
+    end
 end
 
 local function GetCanvasFont()
