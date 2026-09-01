@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.233414",
-  "GeneratedAt": "2026-09-01T23:34:14.025Z",
+  "Version": "2026.09.01.233627",
+  "GeneratedAt": "2026-09-01T23:36:27.556Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,9 +9,26 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Fixed mount/dismount frame lag by resolving URO bone reconciliation stalls, texture streaming FOV spike, and LevelLock repossession disk hits.",
+    "ReleaseNotes": "Technology Merchant at Plateau of Beginnings, Boss drop recycling into Tech Points, Guild Expansion vouchers, and zero-stutter mount/dismount pipeline.",
     "Mandatory": false
   },
+  "News": [
+    {
+      "title": "✨ Technology Merchant, Boss Drop Recycling & Zero-Stutter Mounts",
+      "date": "Sep 01, 2026",
+      "summary": "Introduced the custom Technology Merchant at the Plateau of Beginnings! Spend Tech Points on stat elixirs & Guild Expansion Vouchers, or recycle Alpha Boss drops into Technology Points. Fixed mount/dismount frame drops with optimized skeletal bone ticking and FOV texture streaming."
+    },
+    {
+      "title": "🏛️ Guild Expansion Vouchers & Streamlined Economy",
+      "date": "Sep 01, 2026",
+      "summary": "Guild Base, Breeding Farm, and Ranch expansion vouchers are now available at the Technology Merchant and redeem instantly upon purchase. Obsolete canvas menu mods retired for seamless native gameplay."
+    },
+    {
+      "title": "🚀 Server Performance & Stutter Elimination",
+      "date": "Sep 01, 2026",
+      "summary": "Disabled server memory eviction hitches, optimized AI pathfinding budgets, and deployed More Culling & Smart Animation rendering for maximum framerates."
+    }
+  ],
   "Files": [
     {
       "RelativePath": "Pal/Binaries/Win64/dwmapi.dll",
