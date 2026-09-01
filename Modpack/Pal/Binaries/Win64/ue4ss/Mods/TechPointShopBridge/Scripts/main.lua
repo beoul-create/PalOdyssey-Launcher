@@ -174,16 +174,31 @@ local function addTokens(inventory, amount)
     return true
 end
 
-local function vendorMatches(vendor)
-    if not alive(vendor) then return false end
-    local fullName = tostring(vendor)
-    pcall(function() fullName = vendor:GetFullName() end)
+local function vendorMatches(vendor, component)
+    local fullName = tostring(vendor or "")
+    if alive(vendor) then
+        pcall(function() fullName = vendor:GetFullName() end)
+    end
     local lowered = fullName:lower()
     for _, pattern in ipairs(Config.vendorNamePatterns or {}) do
         if lowered:find(tostring(pattern):lower(), 1, true) then
             return true, fullName
         end
     end
+
+    -- Check if the shop component itself specifies the TechPoint token currency
+    local usesToken = false
+    if alive(component) then
+        pcall(function()
+            local shop = component.CurrentShop or component.ShopData or (component.GetShopData and component:GetShopData())
+            if alive(shop) then
+                local curr = shop.CurrencyItemID or (shop.GetCurrencyItemID and shop:GetCurrencyItemID())
+                if curr and tostring(curr) == TOKEN_ID then usesToken = true end
+            end
+        end)
+    end
+    if usesToken then return true, fullName end
+
     return false, fullName
 end
 
@@ -205,7 +220,7 @@ local function syncDisplayBalance(component, reason)
         removeTokens(inventory)
         return false
     end
-    log(string.format("Synced %d Technology Point token(s): %s", balance, tostring(reason)))
+    log(string.format("Synced %d Technology Point token(s): %s", balance, tostring(reason)), true)
     return true
 end
 
@@ -215,20 +230,20 @@ local function closeSession(component, reason)
     sessions[key] = nil
     local _, _, inventory = getPlayerData(component)
     if alive(inventory) then removeTokens(inventory) end
-    if session then log("Closed VC merchant session: " .. tostring(reason)) end
+    if session then log("Closed VC merchant session: " .. tostring(reason), true) end
 end
 
 local function setupPost(selfParam, vendorParam)
     local component = unwrap(selfParam)
     if not alive(component) or not isAuthority(component) then return end
     local vendor = unwrap(vendorParam)
-    local matches, fullName = vendorMatches(vendor)
+    local matches, fullName = vendorMatches(vendor, component)
     if not matches then return end
 
     local key = objectKey(component)
     sessions[key] = { active = true, pending = nil, vendor = fullName }
     syncDisplayBalance(component, "merchant opened")
-    log("Activated for vendor " .. tostring(fullName))
+    log("Activated for vendor " .. tostring(fullName), true)
 end
 
 local function buyPre(selfParam, ...)

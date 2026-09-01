@@ -4,12 +4,16 @@ return {
     -- VC Merchant Mod 2 must use this exact value for CurrencyItemID.
     currencyItemId = "PalOdyssey_TechPointToken",
 
-    -- The bridge is activated only for vendors whose full object name contains
-    -- one of these strings (case-insensitive). Add the exact VC vendor blueprint
-    -- name here if its release uses a different prefix.
+    -- The bridge is activated for vendors matching any of these patterns:
     vendorNamePatterns = {
         "VC_Merchant",
-        "VCMerchant"
+        "VCMerchant",
+        "Male_Trader",
+        "Female_Trader",
+        "Trader",
+        "Merchant",
+        "Shop",
+        "PalNPC"
     },
 
     diagnostics = true,

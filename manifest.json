@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.230732",
-  "GeneratedAt": "2026-09-01T23:07:32.135Z",
+  "Version": "2026.09.01.231044",
+  "GeneratedAt": "2026-09-01T23:10:44.881Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,7 +9,7 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Server anti-stutter optimizations, More Culling, and OptiFine Smart Animations.",
+    "ReleaseNotes": "Completed TechPointShopBridge transaction bridge for VC Merchant shops.",
     "Mandatory": false
   },
   "Files": [
@@ -1911,8 +1911,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/TechPointShopBridge/config.lua",
-      "Hash": "414582330ac905865bff48f9e66bc90b09727f7b3e89c3061365afb93527d7bd",
-      "Size": 508,
+      "Hash": "58c4211fc5b91970624edc6644022e013479a567f9331ca2f20076769c6ac65b",
+      "Size": 484,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/TechPointShopBridge/config.lua"
     },
     {
@@ -1929,8 +1929,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/TechPointShopBridge/Scripts/main.lua",
-      "Hash": "a8c4ba9c1784eea46ef0255741e75ef0a1aae260c6e5fa7ad549d81bfca08b6e",
-      "Size": 11820,
+      "Hash": "bbc0986157e13f1cc90072ca6a58fe3e17d6ea56176a451530d6f7e8249c137f",
+      "Size": 12450,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/TechPointShopBridge/Scripts/main.lua"
     },
     {
@@ -4029,8 +4029,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/TechPointShopBridge/config.lua",
-      "Hash": "414582330ac905865bff48f9e66bc90b09727f7b3e89c3061365afb93527d7bd",
-      "Size": 508,
+      "Hash": "58c4211fc5b91970624edc6644022e013479a567f9331ca2f20076769c6ac65b",
+      "Size": 484,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/TechPointShopBridge/config.lua"
     },
     {
@@ -4047,8 +4047,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/TechPointShopBridge/Scripts/main.lua",
-      "Hash": "a8c4ba9c1784eea46ef0255741e75ef0a1aae260c6e5fa7ad549d81bfca08b6e",
-      "Size": 11820,
+      "Hash": "bbc0986157e13f1cc90072ca6a58fe3e17d6ea56176a451530d6f7e8249c137f",
+      "Size": 12450,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/TechPointShopBridge/Scripts/main.lua"
     },
     {
