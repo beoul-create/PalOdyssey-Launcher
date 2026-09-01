@@ -29,11 +29,11 @@ function ServerModule.apply(cfg)
                 local fastConnectActive = _G.FastConnect and _G.FastConnect.Config and _G.FastConnect.Config.ultraFastNetworkRates
                 netDriver.MaxClientRate = fastConnectActive and 300000 or 1048576
                 netDriver.MaxInternetClientRate = 1048576
-                netDriver.MinNetUpdateFrequency = 30.0
-                netDriver.MaxNetUpdateFrequency = 60.0
-                netDriver.NetServerMaxTickRate = 60
+                netDriver.MinNetUpdateFrequency = 10.0
+                netDriver.MaxNetUpdateFrequency = 33.0
+                netDriver.NetServerMaxTickRate = 33
                 if not appliedOnce then
-                    print("[PalOdysseyOptimizer:Server] NetDriver tuned: 1MB/s bandwidth, 60-tick netrate.")
+                    print("[PalOdysseyOptimizer:Server] NetDriver tuned: 1MB/s bandwidth, 33-tick stable netrate.")
                 end
             end
         end)
@@ -42,8 +42,8 @@ function ServerModule.apply(cfg)
         ExecuteConsole("a.URO.TickDistanceScale 1.0")
         ExecuteConsole("a.URO.VisibilityBasedAnimTickRate 1")
         ExecuteConsole("a.URO.Interpolation 1")
-        ExecuteConsole("ai.MaxSimultaneousPathRequests 150")
-        ExecuteConsole("ai.PathfindingBudgetInMilliseconds 2.0")
+        ExecuteConsole("ai.MaxSimultaneousPathRequests 60")
+        ExecuteConsole("ai.PathfindingBudgetInMilliseconds 1.0")
         ExecuteConsole("p.PhysX.SolverIterations 4")
         ExecuteConsole("p.PhysX.Substepping 0")
         ExecuteConsole("p.ClothPhysics 0")
@@ -53,13 +53,13 @@ function ServerModule.apply(cfg)
 
         -- 3. Anti-Rubberband Momentum Tolerances, Zero-Delay Movement & Network Scaling
         ExecuteConsole("net.DormancyEnable 1")
-        ExecuteConsole("net.ClientMoveCorrectionThreshold 200.0")
-        ExecuteConsole("p.NetCorrectionThreshold 200.0")
+        ExecuteConsole("net.ClientMoveCorrectionThreshold 100.0")
+        ExecuteConsole("p.NetCorrectionThreshold 100.0")
         ExecuteConsole("p.NetEnableMoveErrorSimulation 0")
         ExecuteConsole("p.NetMovementSmoothing 1")
-        ExecuteConsole("p.NetEnableMoveCombining 0")
-        ExecuteConsole("net.PackageMap.MaxNetGUIDsPerFrame 15000")
-        ExecuteConsole("net.MaxRPCPerSecond 2000")
+        ExecuteConsole("p.NetEnableMoveCombining 1")
+        ExecuteConsole("net.PackageMap.MaxNetGUIDsPerFrame 5000")
+        ExecuteConsole("net.MaxRPCPerSecond 500")
         ExecuteConsole("gc.CreateGCClusters 1")
         ExecuteConsole("gc.MergeGCClusters 1")
         ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 300")

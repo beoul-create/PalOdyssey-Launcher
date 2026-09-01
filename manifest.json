@@ -1,6 +1,6 @@
 {
-  "Version": "2026.09.01.233627",
-  "GeneratedAt": "2026-09-01T23:36:27.556Z",
+  "Version": "2026.09.01.234847",
+  "GeneratedAt": "2026-09-01T23:48:47.859Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -9,24 +9,24 @@
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
-    "ReleaseNotes": "Technology Merchant at Plateau of Beginnings, Boss drop recycling into Tech Points, Guild Expansion vouchers, and zero-stutter mount/dismount pipeline.",
+    "ReleaseNotes": "Optimized CPU frame pacing (OneFrameThreadLag, texture streaming, network 33-tick stability) for maximum FPS and lowest ping.",
     "Mandatory": false
   },
   "News": [
     {
+      "title": "⚡ CPU, FPS & Latency Optimization Overhaul",
+      "date": "Sep 01, 2026",
+      "summary": "Decoupled CPU render thread with OneFrameThreadLag, tuned texture streaming scan frequency to 30 frames, and calibrated NetDriver to 33 Hz to eliminate network queuing, ping spikes, and frame drops."
+    },
+    {
       "title": "✨ Technology Merchant, Boss Drop Recycling & Zero-Stutter Mounts",
       "date": "Sep 01, 2026",
-      "summary": "Introduced the custom Technology Merchant at the Plateau of Beginnings! Spend Tech Points on stat elixirs & Guild Expansion Vouchers, or recycle Alpha Boss drops into Technology Points. Fixed mount/dismount frame drops with optimized skeletal bone ticking and FOV texture streaming."
+      "summary": "Introduced the custom Technology Merchant at the Plateau of Beginnings! Spend Tech Points on stat elixirs & Guild Expansion Vouchers, or recycle Alpha Boss drops into Technology Points."
     },
     {
       "title": "🏛️ Guild Expansion Vouchers & Streamlined Economy",
       "date": "Sep 01, 2026",
-      "summary": "Guild Base, Breeding Farm, and Ranch expansion vouchers are now available at the Technology Merchant and redeem instantly upon purchase. Obsolete canvas menu mods retired for seamless native gameplay."
-    },
-    {
-      "title": "🚀 Server Performance & Stutter Elimination",
-      "date": "Sep 01, 2026",
-      "summary": "Disabled server memory eviction hitches, optimized AI pathfinding budgets, and deployed More Culling & Smart Animation rendering for maximum framerates."
+      "summary": "Guild Base, Breeding Farm, and Ranch expansion vouchers are now available at the Technology Merchant and redeem instantly upon purchase."
     }
   ],
   "Files": [
@@ -362,8 +362,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "1148053052e8ba79c225e973176c50e51cf12d8ba4d30277d5ef78b6129694e8",
-      "Size": 8675,
+      "Hash": "7234fed61bd3c3951712902b1eaf90ff59d89f339ec9e24c2a55e5691d358d48",
+      "Size": 8764,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -392,8 +392,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/server.lua",
-      "Hash": "5b8ea73444fd7262e3ba1da8c60d292095b6c115966664cbad435243851e60c8",
-      "Size": 4229,
+      "Hash": "ace9187c471ec56c96c2d4c8098a94bc514d2383214bde3f186193e26e311578",
+      "Size": 4233,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/server.lua"
     },
     {
@@ -2444,8 +2444,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "1148053052e8ba79c225e973176c50e51cf12d8ba4d30277d5ef78b6129694e8",
-      "Size": 8675,
+      "Hash": "7234fed61bd3c3951712902b1eaf90ff59d89f339ec9e24c2a55e5691d358d48",
+      "Size": 8764,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -2474,8 +2474,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/server.lua",
-      "Hash": "5b8ea73444fd7262e3ba1da8c60d292095b6c115966664cbad435243851e60c8",
-      "Size": 4229,
+      "Hash": "ace9187c471ec56c96c2d4c8098a94bc514d2383214bde3f186193e26e311578",
+      "Size": 4233,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/server.lua"
     },
     {
