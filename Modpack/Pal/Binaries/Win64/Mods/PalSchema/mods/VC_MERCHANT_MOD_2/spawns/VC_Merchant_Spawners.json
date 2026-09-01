@@ -2,22 +2,8 @@
     {
         "Type": "MonoNPC",
         "NPCID": "Male_Trader01_v10",
-        "Level": 5,
-        "Location": { "X": -357314.0, "Y": 268922.0, "Z": 7953.0 },
-        "Rotation": { "Pitch": 0.0, "Yaw": 180.0, "Roll": 0.0 }
-    },
-    {
-        "Type": "MonoNPC",
-        "NPCID": "Male_Trader01_v10",
-        "Level": 10,
+        "Level": 20,
         "Location": { "X": -336952.0, "Y": 230205.0, "Z": -1767.0 },
-        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
-    },
-    {
-        "Type": "MonoNPC",
-        "NPCID": "Male_Trader01_v10",
-        "Level": 10,
-        "Location": { "X": -342333.0, "Y": 193155.0, "Z": -959.0 },
         "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
     },
     {
@@ -108,12 +94,39 @@
         "Location": { "X": 36922.0, "Y": 316337.864, "Z": 1608.0 },
         "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
     },
-        {
+    {
         "Type": "MonoNPC",
         "NPCID": "Male_Trader01_v06",
         "Level": 55,
         "Location": { "X": 38088.446, "Y": 315609.012, "Z": 1607.0 },
         "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v24",
+        "Level": 25,
+        "Location": { "X": -758648.516, "Y": 3631.453, "Z": 43428.234 },
+        "Rotation": { "Pitch": 0.0, "Yaw": -144.8, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "SakurajimaBoss",
+        "Level": 25,
+        "Location": { "X": -312478.359, "Y": 188668.055, "Z": 3359.465 },
+        "Rotation": { "Pitch": 0.0, "Yaw": -85.4, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v13",
+        "Level": 1,
+        "Location": { "X": -312124.617, "Y": 188964.18, "Z": 3359.551 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 67.1, "Roll": 0.0 }
+    },
+    {
+        "Type": "MonoNPC",
+        "NPCID": "Male_Trader01_v14",
+        "Level": 1,
+        "Location": { "X": -306864.195, "Y": 185033.844, "Z": 4809.761 },
+        "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
     }
-    
 ]
