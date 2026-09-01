@@ -41,15 +41,18 @@ function GraphicsModule.apply(cfg, cpuCfg)
         local nanitePix = tonumber(cfg and cfg.naniteMaxPixelsPerEdge) or 4.0
 
         ExecuteConsole("a.URO.Enable 1")
-        ExecuteConsole("a.URO.TickDistanceScale 1.0")
+        ExecuteConsole("a.URO.ForceAnimRate 1")
+        ExecuteConsole("a.URO.TickDistanceScale 0.75")
         ExecuteConsole("a.URO.Interpolation 1")
         ExecuteConsole("a.URO.VisibilityBasedAnimTickRate 1")
+        ExecuteConsole("a.URO.VisibilityBasedAnimTickOption 3")
+        ExecuteConsole("p.ClothPhysics.CullDistance 3000")
         ExecuteConsole("r.SkeletalMeshLODBias " .. tostring(lodBias))
         ExecuteConsole("p.RigidBodyLODSubStepping 0")
         ExecuteConsole("r.DrawDebug 0")
         ExecuteConsole("p.VisualizeLineTraces 0")
 
-        -- 3. Seamless Distance Falloff & Continuous Landscape CDLOD
+        -- 3. More Culling: Seamless Distance Falloff & Occlusion Bounds
         ExecuteConsole("r.DitheredLODTransition 1")
         ExecuteConsole("landscape.LODDistanceFactor 2.50")
         ExecuteConsole("landscape.LOD0DistributionScale 0.50")
@@ -57,19 +60,21 @@ function GraphicsModule.apply(cfg, cpuCfg)
         ExecuteConsole("r.MeshLODRange 0.80")
         ExecuteConsole("r.Nanite.MaxPixelsPerEdge " .. tostring(nanitePix))
         ExecuteConsole("r.SkyAtmosphere.AerialPerspectiveLUT.FastSkyLUT 1")
-        ExecuteConsole("foliage.CullDistanceScale 0.75")
+        ExecuteConsole("foliage.CullDistanceScale 0.70")
+        ExecuteConsole("r.CullDistanceScale 0.80")
         ExecuteConsole("r.ViewDistanceScale 0.90")
 
-        -- FastConnect owns streaming and handshake GC CVars when installed.
+        -- 4. Smart On-Demand Viewport Texture Streaming
         if not (_G.FastConnect and _G.FastConnect.Config and _G.FastConnect.Config.accelerateLoadingScreens) then
             ExecuteConsole("r.TextureStreaming 1")
             ExecuteConsole("r.Streaming.AmortizeCPUWork 1")
             ExecuteConsole("r.Streaming.AmortizeCPUToGPUCopy 1")
             ExecuteConsole("r.Streaming.FramesForFullUpdate 20")
-            ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 40")
+            ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 4")
             ExecuteConsole("r.Streaming.DefragDynamicBounds 1")
             ExecuteConsole("r.Streaming.LimitPoolSizeToVRAM 1")
             ExecuteConsole("r.Streaming.UseFixedPoolSize 1")
+            ExecuteConsole("r.Streaming.UsePerTextureBias 1")
             ExecuteConsole("r.Streaming.HLODStrategy 1")
             ExecuteConsole("r.Streaming.PoolSize 2048")
             ExecuteConsole("r.Streaming.Boost 1.5")
