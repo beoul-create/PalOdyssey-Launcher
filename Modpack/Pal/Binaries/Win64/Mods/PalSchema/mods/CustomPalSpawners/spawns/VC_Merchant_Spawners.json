@@ -8,14 +8,14 @@
     },
     {
         "Type": "MonoNPC",
-        "NPCID": "Male_Trader01_v21",
-        "Level": 8,
+        "NPCID": "Male_Trader01_v10",
+        "Level": 10,
         "Location": { "X": -336952.0, "Y": 230205.0, "Z": -1767.0 },
         "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
     },
     {
         "Type": "MonoNPC",
-        "NPCID": "Male_Trader01_v21",
+        "NPCID": "Male_Trader01_v10",
         "Level": 10,
         "Location": { "X": -342333.0, "Y": 193155.0, "Z": -959.0 },
         "Rotation": { "Pitch": 0.0, "Yaw": 0.0, "Roll": 0.0 }
