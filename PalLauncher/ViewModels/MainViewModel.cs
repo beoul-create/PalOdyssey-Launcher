@@ -339,6 +339,7 @@ namespace PalLauncher.ViewModels
 
         public GameProcessService GameProcessService => _gameProcessService;
         public RemoteServerService RemoteServerService => _remoteServerService;
+        public AudioService AudioService => _audioService;
         public LauncherConfig Config => _config;
 
         public string RemoteServerApiUrl
