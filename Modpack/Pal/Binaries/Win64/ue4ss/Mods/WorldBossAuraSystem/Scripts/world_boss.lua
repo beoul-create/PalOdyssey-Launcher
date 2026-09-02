@@ -118,13 +118,13 @@ end
 function WorldBoss.BroadcastDiscord(PalName, AuraType, LocationName, Pos)
     if not Config.DiscordWebhookURL or Config.DiscordWebhookURL == "YOUR_DISCORD_WEBHOOK_URL_HERE" or Config.DiscordWebhookURL == "" then return end
     pcall(function()
-        local color = 16711680 -- Red for Fiery
-        if tostring(AuraType):find("Corrupt") then color = 10181046 end -- Purple
-        if tostring(AuraType):find("Celestial") then color = 3447003 end -- Blue/Electric
+        local meta = AuraSystem.GetMetadata and AuraSystem.GetMetadata(AuraType)
+        local color = (meta and meta.Color) or 16724736
+        local perkDesc = (meta and meta.Desc) or ""
 
         local payload = string.format(
-            '{"embeds":[{"title":"⚠️ WORLD BOSS SPAWNED!","description":"**%s (%s Aura)** has appeared!\\n**Location:** %s\\n**Coords:** X: %.0f, Y: %.0f","color":%d,"footer":{"text":"PalOdyssey World Boss Alert System"}}]}',
-            tostring(PalName), tostring(AuraType), tostring(LocationName), Pos.X, Pos.Y, color
+            '{"embeds":[{"title":"⚠️ WORLD BOSS SPAWNED!","description":"**%s (%s Aura)** has appeared!\\n*%s*\\n\\n**Location:** %s\\n**Coords:** X: %.0f, Y: %.0f","color":%d,"footer":{"text":"PalOdyssey World Boss Alert System"}}]}',
+            tostring(PalName), tostring(AuraType), perkDesc, tostring(LocationName), Pos.X, Pos.Y, color
         )
         
         local tempPath = os.getenv("TEMP") or os.getenv("TMP") or "."
@@ -165,7 +165,7 @@ function WorldBoss.SpawnEvent()
     local Point = Config.SpawnPoints[math.random(#Config.SpawnPoints)]
     local PalId = Config.BossPalPool[math.random(#Config.BossPalPool)]
     local PalDisplayName = PalDisplayNames[PalId] or PalId
-    local Auras = { "Fiery", "Corrupted", "Celestial" }
+    local Auras = (AuraSystem.GetAllAuras and AuraSystem.GetAllAuras()) or { "Fiery", "Glacial", "Celestial", "Corrupted", "Verdant", "Tidal", "Draconic", "Radiant" }
     local SelectedAura = Auras[math.random(#Auras)]
     local SpawnLoc = { X = Point.X, Y = Point.Y, Z = Point.Z }
 
@@ -401,6 +401,14 @@ function WorldBoss.InitHooks()
                 IndividualParam:SetTalentHP(200)
                 IndividualParam:SetTalentShotAttack(200)
                 IndividualParam:SetTalentDefense(200)
+
+                -- Grant Aura Elemental Emperor / Legend Passive Perk
+                local meta = AuraSystem.GetMetadata and AuraSystem.GetMetadata(bossData.Aura)
+                if meta and meta.Passive and type(IndividualParam.AddPassiveSkill) == "function" then
+                    pcall(function()
+                        IndividualParam:AddPassiveSkill(FName(meta.Passive))
+                    end)
+                end
             end
 
             -- Extract Capturing Player Name
