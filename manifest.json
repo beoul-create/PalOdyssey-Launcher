@@ -1,6 +1,6 @@
 {
-  "Version": "20260902015822",
-  "GeneratedAt": "2026-09-02T01:58:22.014Z",
+  "Version": "20260902020031",
+  "GeneratedAt": "2026-09-02T02:00:31.113Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -362,8 +362,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "5f1cd5d6a9d3a70e1681c73dbe376ccb3b458b348660d4b483fe514138cd88fb",
-      "Size": 8941,
+      "Hash": "d5baab40d0c34bdd0b57bf51bf8d8d3444ec7f0d1c2c284c8d782b6a26f48069",
+      "Size": 9001,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -2540,8 +2540,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "5f1cd5d6a9d3a70e1681c73dbe376ccb3b458b348660d4b483fe514138cd88fb",
-      "Size": 8941,
+      "Hash": "d5baab40d0c34bdd0b57bf51bf8d8d3444ec7f0d1c2c284c8d782b6a26f48069",
+      "Size": 9001,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
