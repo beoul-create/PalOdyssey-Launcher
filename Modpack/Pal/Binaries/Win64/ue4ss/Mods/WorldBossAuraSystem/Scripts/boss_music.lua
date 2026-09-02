@@ -200,6 +200,15 @@ local function RefreshBaseCaches()
             if boxes then
                 for _, b in ipairs(boxes) do
                     if b and b:IsValid() then
+                        local loc = b:K2_GetActorLocation()
+                        if loc then table.insert(list, { X = loc.X, Y = loc.Y }) end
+                    end
+                end
+            end
+        end
+        local camps = FindAllOf and FindAllOf("PalBaseCampModel")
+        if camps then
+            for _, c in ipairs(camps) do
                 if c and c:IsValid() and type(c.GetLocation) == "function" then
                     local loc = c:GetLocation()
                     if loc then table.insert(list, { X = loc.X, Y = loc.Y }) end
@@ -213,6 +222,9 @@ local function RefreshBaseCaches()
 end
 
 local function DetermineRegionTrack(playerLoc, player)
+    -- 1. Check if inside Dungeon / Underground Cave instance
+    if playerLoc.Z < -30000.0 then
+        return "dungeon_weird_place.mp3", 0.65
     end
 
     -- 2. Base Camp Detection (Checks cached coordinates without hitching)
@@ -226,6 +238,12 @@ local function DetermineRegionTrack(playerLoc, player)
     elseif (nowClock - LastBaseScan > 30.0) then
         LastBaseScan = nowClock
         RefreshBaseCaches()
+    end
+
+    for _, bLoc in ipairs(CachedBases) do
+        local dx = playerLoc.X - bLoc.X
+        local dy = playerLoc.Y - bLoc.Y
+        if (dx*dx + dy*dy) <= (3800.0 * 3800.0) then
             inBase = true
             break
         end
@@ -600,6 +618,8 @@ function BossMusic.Init()
                 ActiveNearBoss = false
                 if player and player:IsValid() then
                     IsInTitle = false
+                else
+                    IsInTitle = true
 
                     local pLoc = player:K2_GetActorLocation()
                     if pLoc then
@@ -668,3 +688,5 @@ function BossMusic.Init()
 end
 
 return BossMusic
+
+
