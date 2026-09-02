@@ -85,6 +85,18 @@ function BossMusic.PlayVictoryFanfare()
     BossMusic.SetTrack("victory_fanfare.mp3", false, 0.75)
 end
 
+function BossMusic.PlayHeadshotSFX()
+    pcall(function()
+        EnsureJukeboxRunning()
+        local pipe = io.open([[\.\pipe\PalHeadshotPipe]], "w")
+        if pipe then
+            pipe:write("1")
+            pipe:flush()
+            pipe:close()
+        end
+    end)
+end
+
 local function OnTitleScreen()
     IsInTitle = true
     IsConnecting = false
@@ -256,11 +268,57 @@ function BossMusic.Init()
         OnJoinedWorld()
     end)
 
-    -- 2. Damage hooks to detect Combat
+    -- 2. Headshot / Weak-Point Detection Helpers
+    local function CheckHeadshotBone(bone)
+        if not bone then return false end
+        local str = ""
+        pcall(function()
+            if type(bone.ToString) == "function" then str = bone:ToString():lower()
+            else str = tostring(bone):lower() end
+        end)
+        return str:find("head") or str:find("neck") or str:find("face") or str:find("jaw") or str:find("skull") or str:find("horn")
+    end
+
+    -- Hook Point Damage (e.g. projectile headshots)
+    pcall(RegisterHook, "/Script/Engine.Actor:ReceivePointDamage", function(Context, Damage, DamageType, HitLocation, HitNormal, HitComponent, BoneName, ShotFromDirection, InstigatedBy, DamageCauser, HitInfo)
+        pcall(function()
+            local b = BoneName and BoneName.get and BoneName:get() or BoneName
+            if CheckHeadshotBone(b) then
+                BossMusic.PlayHeadshotSFX()
+            end
+        end)
+    end)
+
+    -- Hook PalUIDamageText:Setup (triggers when critical/weakpoint damage numbers appear)
+    pcall(RegisterHook, "/Script/Pal.PalUIDamageText:Setup", function(Context, Damage, bCritical, bWeakPoint)
+        pcall(function()
+            local crit = bCritical and (bCritical.get and bCritical:get() or bCritical == true)
+            local weak = bWeakPoint and (bWeakPoint.get and bWeakPoint:get() or bWeakPoint == true)
+            if crit or weak then
+                BossMusic.PlayHeadshotSFX()
+            end
+        end)
+    end)
+
+    -- Hook PalCharacter:OnDamage for combat music & headshot detection
     pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDamage", function(Context, DamageInfo)
         pcall(function()
             local victim = Context and Context.get and Context:get() or Context
             if not victim or not victim:IsValid() then return end
+
+            local di = DamageInfo and DamageInfo.get and DamageInfo:get() or DamageInfo
+            if di then
+                local isCrit = false
+                if di.bWeakPoint == true or di.bIsWeakPoint == true or di.bCritical == true then
+                    isCrit = true
+                end
+                if not isCrit and di.HitInfo and di.HitInfo.BoneName then
+                    if CheckHeadshotBone(di.HitInfo.BoneName) then isCrit = true end
+                end
+                if isCrit then
+                    BossMusic.PlayHeadshotSFX()
+                end
+            end
 
             local isMajor = false
             local isField = false

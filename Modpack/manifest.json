@@ -1,11 +1,11 @@
 {
-  "Version": "20260902010143",
-  "GeneratedAt": "2026-09-02T01:01:43.031Z",
+  "Version": "20260902010642",
+  "GeneratedAt": "2026-09-02T01:06:42.369Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 724,
+  "TotalFiles": 726,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -2084,8 +2084,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe",
-      "Hash": "1d36510bbc045fa83639b5fc900344eb04540d3d7f92789314555af744e2871d",
-      "Size": 162430,
+      "Hash": "2207c12506eb4fae950513f2f84c7caf5fd4b8b2b3da778351101aa05f2fe36e",
+      "Size": 162942,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe"
     },
     {
@@ -2117,6 +2117,12 @@
       "Hash": "062a778f903c63ceabce29e522a4fdfc15d1b97ecea536271211796abddf2b53",
       "Size": 2017940,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_volcano.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/rust_headshot.wav",
+      "Hash": "37807e33051906e3241fcdeb85d794a39e5584374148f258b9d53b5cdf2cbe19",
+      "Size": 176206,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/rust_headshot.wav"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/title_perfect_time.mp3",
@@ -2156,8 +2162,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua",
-      "Hash": "738c33d172a3bd7eec25682419338025d144a826eb6714d6e1e6b35a4019ce28",
-      "Size": 12505,
+      "Hash": "b90662f29d0167590519e3f943e1197db319a4a843742eff775bd824f20b6571",
+      "Size": 14907,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua"
     },
     {
@@ -4256,8 +4262,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe",
-      "Hash": "1d36510bbc045fa83639b5fc900344eb04540d3d7f92789314555af744e2871d",
-      "Size": 162430,
+      "Hash": "2207c12506eb4fae950513f2f84c7caf5fd4b8b2b3da778351101aa05f2fe36e",
+      "Size": 162942,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe"
     },
     {
@@ -4289,6 +4295,12 @@
       "Hash": "062a778f903c63ceabce29e522a4fdfc15d1b97ecea536271211796abddf2b53",
       "Size": 2017940,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_volcano.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/rust_headshot.wav",
+      "Hash": "37807e33051906e3241fcdeb85d794a39e5584374148f258b9d53b5cdf2cbe19",
+      "Size": 176206,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/rust_headshot.wav"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/title_perfect_time.mp3",
@@ -4328,8 +4340,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/boss_music.lua",
-      "Hash": "738c33d172a3bd7eec25682419338025d144a826eb6714d6e1e6b35a4019ce28",
-      "Size": 12505,
+      "Hash": "b90662f29d0167590519e3f943e1197db319a4a843742eff775bd824f20b6571",
+      "Size": 14907,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/boss_music.lua"
     },
     {
