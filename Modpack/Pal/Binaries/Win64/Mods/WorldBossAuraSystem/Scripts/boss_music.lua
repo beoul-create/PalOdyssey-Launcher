@@ -418,6 +418,45 @@ function BossMusic.Init()
         end)
     end
 
+    local function OnTitleScreen()
+        IsInTitle = true
+        IsConnecting = false
+        ActiveMajorBossCombat = false
+        ActiveFieldBossCombat = false
+        ActiveNearBoss = false
+        pcall(function()
+            local settings = FindFirstOf("PalGameLocalSettings")
+            if settings and settings:IsValid() and settings.AudioSettings then
+                settings.AudioSettings.BGM = 0.0
+            end
+        end)
+        BossMusic.SetTrack("title_perfect_time.mp3", true, 0.70)
+    end
+
+    local function OnConnectingToServer()
+        IsInTitle = false
+        IsConnecting = true
+        BossMusic.FadeOut(2.0)
+    end
+
+    local function OnJoinedWorld()
+        IsInTitle = false
+        IsConnecting = false
+        pcall(function()
+            local settings = FindFirstOf("PalGameLocalSettings")
+            if settings and settings:IsValid() and settings.AudioSettings then
+                settings.AudioSettings.BGM = 0.0
+            end
+        end)
+        local delay = ExecuteInGameThreadWithDelay or ExecuteWithDelay
+        if delay then
+            delay(500, UpdateMusicState)
+            delay(2000, UpdateMusicState)
+        else
+            UpdateMusicState()
+        end
+    end
+
     -- 2. Title Screen & Connection Hooks
     pcall(function()
         NotifyOnNewObject("/Script/Pal.PalGameStateInTitle", function()
