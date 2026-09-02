@@ -1,11 +1,11 @@
 {
-  "Version": "2026.09.01.234847",
-  "GeneratedAt": "2026-09-01T23:48:47.859Z",
+  "Version": "20260902002040",
+  "GeneratedAt": "2026-09-02T00:20:40.089Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 694,
+  "TotalFiles": 695,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -14,19 +14,19 @@
   },
   "News": [
     {
+      "title": "🌌 Mythic Auras: Transmigrator & Regressor Awakened",
+      "date": "Sep 01, 2026",
+      "summary": "Encounter the Transmigrator (unlimited level cap, 2x movement speed) and the Regressor (4x stats, 100% skill cooldown reduction). Base Pals now transform into transportable floating soul flames."
+    },
+    {
       "title": "⚡ CPU, FPS & Latency Optimization Overhaul",
       "date": "Sep 01, 2026",
-      "summary": "Decoupled CPU render thread with OneFrameThreadLag, tuned texture streaming scan frequency to 30 frames, and calibrated NetDriver to 33 Hz to eliminate network queuing, ping spikes, and frame drops."
+      "summary": "Decoupled CPU render thread with OneFrameThreadLag, tuned texture streaming scan frequency to 30 frames, and calibrated NetDriver to 33 Hz."
     },
     {
-      "title": "✨ Technology Merchant, Boss Drop Recycling & Zero-Stutter Mounts",
+      "title": "✨ Technology Merchant & Arena Bosses",
       "date": "Sep 01, 2026",
-      "summary": "Introduced the custom Technology Merchant at the Plateau of Beginnings! Spend Tech Points on stat elixirs & Guild Expansion Vouchers, or recycle Alpha Boss drops into Technology Points."
-    },
-    {
-      "title": "🏛️ Guild Expansion Vouchers & Streamlined Economy",
-      "date": "Sep 01, 2026",
-      "summary": "Guild Base, Breeding Farm, and Ranch expansion vouchers are now available at the Technology Merchant and redeem instantly upon purchase."
+      "summary": "Single Technology Merchant anchored at Plateau of Beginnings with stat elixirs and Guild Expansion Vouchers."
     }
   ],
   "Files": [
@@ -290,8 +290,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/LevelLock/Scripts/main.lua",
-      "Hash": "3caad2bfb1ad19bab3f7a62f4b20998565b5469eee445c989ce9d5c085563d73",
-      "Size": 97528,
+      "Hash": "bab666f584604ce42aa61e207f90217dcb8703bc68b36cac06f3451825fc30cf",
+      "Size": 98035,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/LevelLock/Scripts/main.lua"
     },
     {
@@ -1507,18 +1507,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/WhiteAlienDragonTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/CustomPalSpawners/spawns/VC_Merchant_Spawners 2.json",
-      "Hash": "9a083666bfddd1026980ddb968748ef2242b1584f970a042c192a35dff0f37af",
-      "Size": 942,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/CustomPalSpawners/spawns/VC_Merchant_Spawners%202.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/CustomPalSpawners/spawns/VC_Merchant_Spawners.json",
-      "Hash": "62ee0643dd2febd0e76239f7b6c6a2a52356b8434e51161562e07fba4e10f7c9",
-      "Size": 3804,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/CustomPalSpawners/spawns/VC_Merchant_Spawners.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/CustomSubspeciesBreeding/mod.json",
       "Hash": "53e29ae1e6e7633de9f488320ee78bf2aa0d368149d471ade8f11c59aa2d7ebd",
       "Size": 212,
@@ -1565,6 +1553,18 @@
       "Hash": "60eee0167d3f55cd4e5497aacb2bfeb7b6f31353ce5db900cdd716dcd9a318b3",
       "Size": 172,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/GuildBuildingLimits/metadata.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/MythicAuras/metadata.json",
+      "Hash": "1ab2d9c2d421160577a23297027ec6a1d78e61d02b9a222ef325b1412c7787bb",
+      "Size": 232,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/MythicAuras/metadata.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/MythicAuras/raw/MythicAuras.json",
+      "Hash": "0d9e5f73ac78b7e7309146185768834126f400a01e75ad5e8485acdce4e66c1d",
+      "Size": 1381,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/MythicAuras/raw/MythicAuras.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/PalworldTuner/metadata.json",
@@ -1796,8 +1796,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/spawns/VC_Merchant_Spawners.json",
-      "Hash": "62ee0643dd2febd0e76239f7b6c6a2a52356b8434e51161562e07fba4e10f7c9",
-      "Size": 3804,
+      "Hash": "5c71cc7b757af7b63fa0752d4a3b3060f98792a40873ac00d6603fa3d49a7ddd",
+      "Size": 4276,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/spawns/VC_Merchant_Spawners.json"
     },
     {
@@ -2048,8 +2048,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/config.json",
-      "Hash": "ed21e2b1e65f6499a495cc44792bd33be5b323ef3a983827e7bd520d17c6828e",
-      "Size": 694,
+      "Hash": "f3fca9257c7dbcb95f2754914554da946c7794053c072e429a9a58304e629de2",
+      "Size": 786,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/config.json"
     },
     {
@@ -2060,8 +2060,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/aura_system.lua",
-      "Hash": "025d419076014a276688fc776d70ed8d801d566821a82c5c7d48dd28caf7359b",
-      "Size": 2062,
+      "Hash": "239a3fcf617aa5d78c0757b1c1ff96e89504352a83082c364f5294a183902430",
+      "Size": 5807,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/aura_system.lua"
     },
     {
@@ -2078,20 +2078,20 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/main.lua",
-      "Hash": "2f7ee78e2c8678bc5ead50f8a81b8daee20ae9647fbe0535d600cb2c5682cb92",
-      "Size": 5550,
+      "Hash": "2287c34df4f4c054954675c8589d01e4044fa7c7c79c48c6a91908aa1d5214c8",
+      "Size": 5601,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/sao_death.lua",
-      "Hash": "777f4d2d12b7844e45f8294adf575817e02a82720898ad72000f4d05bc804505",
-      "Size": 6496,
+      "Hash": "8075464e38a876fd4a6e253d054cdad41cb2f249d4fd43a4eb32fcb2ec6ba144",
+      "Size": 13787,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/sao_death.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/world_boss.lua",
-      "Hash": "b61bc8ec3c2ae7e87d4dd09a7306b2f8397528a0bc53531bde251318574289ae",
-      "Size": 14457,
+      "Hash": "f83f98e5493bfeef481e7776daca00ad22a893b8c35b80a8d271569a68f4f42b",
+      "Size": 26336,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/world_boss.lua"
     },
     {
@@ -2335,16 +2335,16 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/enabled.txt"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/limit_checker.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/scripts/limit_checker.lua",
       "Hash": "4947976ff9a395026090f2a468417fea84f617d94f16029f9521854873890349",
       "Size": 16674,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/limit_checker.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/scripts/limit_checker.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/main.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/scripts/main.lua",
       "Hash": "38e8101070cb2d6f7d39964a33c84de1989fe2d46861831d98061c8289e8cea8",
       "Size": 2308,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/main.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/Keybinds/Scripts/main.lua",
@@ -2372,8 +2372,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua",
-      "Hash": "3caad2bfb1ad19bab3f7a62f4b20998565b5469eee445c989ce9d5c085563d73",
-      "Size": 97528,
+      "Hash": "bab666f584604ce42aa61e207f90217dcb8703bc68b36cac06f3451825fc30cf",
+      "Size": 98035,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua"
     },
     {
@@ -3589,18 +3589,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/WhiteAlienDragonTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomPalSpawners/spawns/VC_Merchant_Spawners 2.json",
-      "Hash": "9a083666bfddd1026980ddb968748ef2242b1584f970a042c192a35dff0f37af",
-      "Size": 942,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomPalSpawners/spawns/VC_Merchant_Spawners%202.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomPalSpawners/spawns/VC_Merchant_Spawners.json",
-      "Hash": "62ee0643dd2febd0e76239f7b6c6a2a52356b8434e51161562e07fba4e10f7c9",
-      "Size": 3804,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomPalSpawners/spawns/VC_Merchant_Spawners.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/CustomSubspeciesBreeding/mod.json",
       "Hash": "53e29ae1e6e7633de9f488320ee78bf2aa0d368149d471ade8f11c59aa2d7ebd",
       "Size": 212,
@@ -3647,6 +3635,18 @@
       "Hash": "60eee0167d3f55cd4e5497aacb2bfeb7b6f31353ce5db900cdd716dcd9a318b3",
       "Size": 172,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/GuildBuildingLimits/metadata.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/MythicAuras/metadata.json",
+      "Hash": "1ab2d9c2d421160577a23297027ec6a1d78e61d02b9a222ef325b1412c7787bb",
+      "Size": 232,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/MythicAuras/metadata.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/MythicAuras/raw/MythicAuras.json",
+      "Hash": "0d9e5f73ac78b7e7309146185768834126f400a01e75ad5e8485acdce4e66c1d",
+      "Size": 1381,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/MythicAuras/raw/MythicAuras.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/PalworldTuner/metadata.json",
@@ -3878,8 +3878,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/spawns/VC_Merchant_Spawners.json",
-      "Hash": "62ee0643dd2febd0e76239f7b6c6a2a52356b8434e51161562e07fba4e10f7c9",
-      "Size": 3804,
+      "Hash": "5c71cc7b757af7b63fa0752d4a3b3060f98792a40873ac00d6603fa3d49a7ddd",
+      "Size": 4276,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/spawns/VC_Merchant_Spawners.json"
     },
     {
@@ -4130,8 +4130,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/config.json",
-      "Hash": "ed21e2b1e65f6499a495cc44792bd33be5b323ef3a983827e7bd520d17c6828e",
-      "Size": 694,
+      "Hash": "f3fca9257c7dbcb95f2754914554da946c7794053c072e429a9a58304e629de2",
+      "Size": 786,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/config.json"
     },
     {
@@ -4141,40 +4141,40 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/enabled.txt"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/aura_system.lua",
-      "Hash": "025d419076014a276688fc776d70ed8d801d566821a82c5c7d48dd28caf7359b",
-      "Size": 2062,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/aura_system.lua"
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/aura_system.lua",
+      "Hash": "239a3fcf617aa5d78c0757b1c1ff96e89504352a83082c364f5294a183902430",
+      "Size": 5807,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/aura_system.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/auto_shutdown.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/auto_shutdown.lua",
       "Hash": "fd54b06f1ede24f53a98a6ed7bbe593d523a38920803240185a4bb816dfecf9f",
       "Size": 4085,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/auto_shutdown.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/auto_shutdown.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/liveboard_export.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/liveboard_export.lua",
       "Hash": "8da0b53f229d8e6062be971b5a8c613d207ed3c156b3ba2359af698e0016160f",
       "Size": 6276,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/liveboard_export.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/liveboard_export.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/main.lua",
-      "Hash": "2f7ee78e2c8678bc5ead50f8a81b8daee20ae9647fbe0535d600cb2c5682cb92",
-      "Size": 5550,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/main.lua"
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua",
+      "Hash": "2287c34df4f4c054954675c8589d01e4044fa7c7c79c48c6a91908aa1d5214c8",
+      "Size": 5601,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/sao_death.lua",
-      "Hash": "777f4d2d12b7844e45f8294adf575817e02a82720898ad72000f4d05bc804505",
-      "Size": 6496,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/sao_death.lua"
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/sao_death.lua",
+      "Hash": "8075464e38a876fd4a6e253d054cdad41cb2f249d4fd43a4eb32fcb2ec6ba144",
+      "Size": 13787,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/sao_death.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/world_boss.lua",
-      "Hash": "b61bc8ec3c2ae7e87d4dd09a7306b2f8397528a0bc53531bde251318574289ae",
-      "Size": 14457,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/world_boss.lua"
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/world_boss.lua",
+      "Hash": "f83f98e5493bfeef481e7776daca00ad22a893b8c35b80a8d271569a68f4f42b",
+      "Size": 26336,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/world_boss.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/UE4SS-settings.ini",
@@ -4193,6 +4193,12 @@
       "Hash": "8387f4641e09038931f8cff595c23cc3663918707ae509cb16447bc2482bc987",
       "Size": 643404,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Content/Paks/~mods/Catch%20All%20PREDATOR%20Bosses_P.pak"
+    },
+    {
+      "RelativePath": "version.json",
+      "Hash": "ae902a96d7acb92b77832f67c1dd10c7c18a9a7f315c92c234e035c2e504624a",
+      "Size": 127713,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/version.json"
     }
   ]
 }
