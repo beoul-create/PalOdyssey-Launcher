@@ -79,7 +79,6 @@ local function HandleSAODeath(Character)
                 if type(Mesh.SetSimulatePhysics) == "function" then Mesh:SetSimulatePhysics(false) end
                 if type(Mesh.SetCollisionEnabled) == "function" then Mesh:SetCollisionEnabled(0) end
                 Mesh:SetVisibility(false, true)
-                pcall(function() Mesh:SetHiddenInGame(true, true) end)
             end
 
             -- Suppress child mesh attachments
@@ -88,7 +87,6 @@ local function HandleSAODeath(Character)
                 for _, comp in ipairs(Character:K2_GetComponentsByClass(skelClass) or {}) do
                     if comp and comp:IsValid() and comp ~= Mesh then
                         comp:SetVisibility(false, true)
-                        pcall(function() comp:SetHiddenInGame(true, true) end)
                     end
                 end
             end
@@ -161,7 +159,6 @@ local function HandleSAODeath(Character)
 
             -- C. Hide Mesh instantly propagating to all attached equipment/props
             Mesh:SetVisibility(false, true)
-            pcall(function() Mesh:SetHiddenInGame(true, true) end)
         end
 
         -- Suppress all attached child Skeletal Mesh components (Hair, Armor, Saddles, Weapons)
@@ -174,7 +171,6 @@ local function HandleSAODeath(Character)
                         if type(comp.SetSimulatePhysics) == "function" then comp:SetSimulatePhysics(false) end
                         if type(comp.SetCollisionEnabled) == "function" then comp:SetCollisionEnabled(0) end
                         comp:SetVisibility(false, true)
-                        pcall(function() comp:SetHiddenInGame(true, true) end)
                     end
                 end
             end
@@ -223,21 +219,41 @@ local function RestoreCharacter(Character)
         local Mesh = Character.Mesh or (type(Character.GetMesh) == "function" and Character:GetMesh())
         if Mesh and Mesh:IsValid() then
             Mesh:SetVisibility(true, true)
-            pcall(function() Mesh:SetHiddenInGame(false, true) end)
             if type(Mesh.SetCollisionEnabled) == "function" then Mesh:SetCollisionEnabled(state.meshCollision or 1) end
             if type(Mesh.SetSimulatePhysics) == "function" then Mesh:SetSimulatePhysics(state.meshPhysics == true) end
         end
-        -- Ensure all non-mesh primitive components (ArrowComponent, CapsuleComponent, etc.) are strictly hidden
+
+        -- Recursively ensure all debug/editor collision primitives (ArrowComponent, SphereComponent, CapsuleComponent, etc.) are strictly hidden
         pcall(function()
-            local primClass = StaticFindObject("/Script/Engine.PrimitiveComponent")
-            if primClass and type(Character.K2_GetComponentsByClass) == "function" then
-                for _, comp in ipairs(Character:K2_GetComponentsByClass(primClass) or {}) do
-                    if comp and comp:IsValid() then
-                        local cName = tostring(comp:GetClass():GetName())
-                        if cName ~= "SkeletalMeshComponent" and cName ~= "StaticMeshComponent" and cName ~= "PalSkeletalMeshComponent" then
-                            comp:SetHiddenInGame(true, false)
-                        end
-                    end
+            local function HideIfDebug(comp)
+                if not comp or not comp:IsValid() then return end
+                local cName = tostring(comp:GetClass():GetName())
+                if cName:find("Arrow") or cName:find("Sphere") or cName:find("Capsule") or cName:find("Box") or cName:find("Frustum") or cName:find("Spline") or cName:find("Debug") then
+                    pcall(function() comp:SetHiddenInGame(true, true) end)
+                    pcall(function() comp:SetVisibility(false, true) end)
+                end
+            end
+
+            -- 1. Actor components
+            local compClass = StaticFindObject("/Script/Engine.ActorComponent")
+            if compClass and type(Character.GetComponentsByClass) == "function" then
+                for _, comp in ipairs(Character:GetComponentsByClass(compClass) or {}) do
+                    HideIfDebug(comp)
+                end
+            end
+
+            -- 2. Mesh child components
+            if Mesh and Mesh:IsValid() and type(Mesh.GetChildrenComponents) == "function" then
+                for _, child in ipairs(Mesh:GetChildrenComponents(true) or {}) do
+                    HideIfDebug(child)
+                end
+            end
+
+            -- 3. RootComponent child components
+            local root = Character:K2_GetRootComponent() or Character.RootComponent
+            if root and root:IsValid() and type(root.GetChildrenComponents) == "function" then
+                for _, child in ipairs(root:GetChildrenComponents(true) or {}) do
+                    HideIfDebug(child)
                 end
             end
         end)

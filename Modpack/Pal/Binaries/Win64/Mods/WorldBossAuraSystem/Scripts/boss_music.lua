@@ -556,19 +556,37 @@ function BossMusic.Init()
                 if player and player:IsValid() then
                     IsInTitle = false
 
-                    -- Ensure debug primitives (ArrowComponent at feet, CapsuleComponent wireframe, look vector lines) are strictly hidden
+                    -- Recursively ensure debug primitives (ArrowComponent, SphereComponent, CapsuleComponent, etc.) are strictly hidden
                     pcall(function()
-                        local primClass = StaticFindObject("/Script/Engine.PrimitiveComponent")
-                        if primClass and type(player.K2_GetComponentsByClass) == "function" then
-                            for _, comp in ipairs(player:K2_GetComponentsByClass(primClass) or {}) do
-                                if comp and comp:IsValid() then
-                                    local cName = tostring(comp:GetClass():GetName())
-                                    if cName ~= "SkeletalMeshComponent" and cName ~= "StaticMeshComponent" and cName ~= "PalSkeletalMeshComponent" then
-                                        if not comp.bHiddenInGame then
-                                            pcall(function() comp:SetHiddenInGame(true, false) end)
-                                        end
-                                    end
+                        local function HideIfDebug(comp)
+                            if not comp or not comp:IsValid() then return end
+                            local cName = tostring(comp:GetClass():GetName())
+                            if cName:find("Arrow") or cName:find("Sphere") or cName:find("Capsule") or cName:find("Box") or cName:find("Frustum") or cName:find("Spline") or cName:find("Debug") then
+                                if not comp.bHiddenInGame then
+                                    pcall(function() comp:SetHiddenInGame(true, true) end)
                                 end
+                                pcall(function() comp:SetVisibility(false, true) end)
+                            end
+                        end
+
+                        local compClass = StaticFindObject("/Script/Engine.ActorComponent")
+                        if compClass and type(player.GetComponentsByClass) == "function" then
+                            for _, comp in ipairs(player:GetComponentsByClass(compClass) or {}) do
+                                HideIfDebug(comp)
+                            end
+                        end
+
+                        local pMesh = player.Mesh or (type(player.GetMesh) == "function" and player:GetMesh())
+                        if pMesh and pMesh:IsValid() and type(pMesh.GetChildrenComponents) == "function" then
+                            for _, child in ipairs(pMesh:GetChildrenComponents(true) or {}) do
+                                HideIfDebug(child)
+                            end
+                        end
+
+                        local pRoot = player:K2_GetRootComponent() or player.RootComponent
+                        if pRoot and pRoot:IsValid() and type(pRoot.GetChildrenComponents) == "function" then
+                            for _, child in ipairs(pRoot:GetChildrenComponents(true) or {}) do
+                                HideIfDebug(child)
                             end
                         end
                     end)

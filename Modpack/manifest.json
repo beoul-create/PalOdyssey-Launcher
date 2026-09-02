@@ -1,6 +1,6 @@
 {
-  "Version": "20260902014002",
-  "GeneratedAt": "2026-09-02T01:40:02.255Z",
+  "Version": "20260902014904",
+  "GeneratedAt": "2026-09-02T01:49:04.110Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -2162,8 +2162,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua",
-      "Hash": "020a7a7c84846307de25166e65bc8712929b517db41085d2c91a49fa76d46730",
-      "Size": 22458,
+      "Hash": "cac934b4baa0f0e0fd44414c7a3bf0ee957487c29c0d2b011c72aea143a698f5",
+      "Size": 23487,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua"
     },
     {
@@ -2180,8 +2180,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/sao_death.lua",
-      "Hash": "426cdf352bbe661c4d9a156d04966cb704acbff6a2e7f2e0207d356b54b12911",
-      "Size": 14464,
+      "Hash": "69b81a4850e491d907c8956551cfc01416f642a94f3e16ea0aac7488ba7588ee",
+      "Size": 15045,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/sao_death.lua"
     },
     {
@@ -4340,8 +4340,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/boss_music.lua",
-      "Hash": "020a7a7c84846307de25166e65bc8712929b517db41085d2c91a49fa76d46730",
-      "Size": 22458,
+      "Hash": "cac934b4baa0f0e0fd44414c7a3bf0ee957487c29c0d2b011c72aea143a698f5",
+      "Size": 23487,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/boss_music.lua"
     },
     {
@@ -4358,8 +4358,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/sao_death.lua",
-      "Hash": "426cdf352bbe661c4d9a156d04966cb704acbff6a2e7f2e0207d356b54b12911",
-      "Size": 14464,
+      "Hash": "69b81a4850e491d907c8956551cfc01416f642a94f3e16ea0aac7488ba7588ee",
+      "Size": 15045,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/sao_death.lua"
     },
     {
