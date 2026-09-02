@@ -2,7 +2,7 @@
   "SpawnIntervalSeconds": 900,
   "MaxActiveBosses": 1,
   "SpawnCommandCooldownSeconds": 60,
-  "DiscordWebhookURL": "YOUR_DISCORD_WEBHOOK_URL_HERE",
+  "DiscordWebhookURL": "https://discord.com/api/webhooks/1544497011552813058/-JRFrdXfYYvFn4A0KLY06sw6VD4BACjDiZByQXdljcRcYPDGz4zTjUnoQfyQTtdcGM4v",
   "BossPalPool": [
     "Kitsunebi",
     "ThunderDragonMan",

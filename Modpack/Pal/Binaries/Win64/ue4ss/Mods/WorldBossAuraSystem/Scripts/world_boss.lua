@@ -95,14 +95,27 @@ local function BroadcastInGame(Text, PalDisplayName, SelectedAura, LocationName,
 end
 
 function WorldBoss.BroadcastDiscord(PalName, AuraType, LocationName, Pos)
-    if not Config.DiscordWebhookURL or Config.DiscordWebhookURL == "YOUR_DISCORD_WEBHOOK_URL_HERE" then return end
+    if not Config.DiscordWebhookURL or Config.DiscordWebhookURL == "YOUR_DISCORD_WEBHOOK_URL_HERE" or Config.DiscordWebhookURL == "" then return end
     pcall(function()
-        local Payload = string.format(
-            '{"embeds":[{"title":"⚠️ WORLD BOSS SPAWNED!","description":"**%s (%s Aura)** has appeared!\\n**Location:** %s\\n**Coords:** X: %.0f, Y: %.0f","color":16711680}]}',
-            PalName, AuraType, LocationName, Pos.X, Pos.Y
+        local color = 16711680 -- Red for Fiery
+        if tostring(AuraType):find("Corrupt") then color = 10181046 end -- Purple
+        if tostring(AuraType):find("Celestial") then color = 3447003 end -- Blue/Electric
+
+        local payload = string.format(
+            '{"embeds":[{"title":"⚠️ WORLD BOSS SPAWNED!","description":"**%s (%s Aura)** has appeared!\\n**Location:** %s\\n**Coords:** X: %.0f, Y: %.0f","color":%d,"footer":{"text":"PalOdyssey World Boss Alert System"}}]}',
+            tostring(PalName), tostring(AuraType), tostring(LocationName), Pos.X, Pos.Y, color
         )
-        if type(ExecuteConsoleCommand) == "function" then
-            ExecuteConsoleCommand(string.format('curl -s -H "Content-Type: application/json" -X POST -d \'%s\' %s', Payload, Config.DiscordWebhookURL))
+        
+        local tempPath = os.getenv("TEMP") or os.getenv("TMP") or "."
+        local filePath = tempPath .. "\\pal_wb_discord.json"
+        local f = io.open(filePath, "w")
+        if f then
+            f:write(payload)
+            f:close()
+            local cmd = string.format('start /B curl.exe -s -H "Content-Type: application/json" -X POST --data-binary @"%s" "%s"', filePath, Config.DiscordWebhookURL)
+            if os.execute then
+                os.execute(cmd)
+            end
         end
     end)
 end
