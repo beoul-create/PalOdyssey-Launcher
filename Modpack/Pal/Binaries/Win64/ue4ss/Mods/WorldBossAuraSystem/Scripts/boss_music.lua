@@ -194,12 +194,15 @@ local LastBaseScan = 0
 local function RefreshBaseCaches()
     pcall(function()
         local list = {}
-        local boxes = FindAllOf and FindAllOf("BP_PalBox_C")
-        if boxes then
-            for _, b in ipairs(boxes) do
-                if b and b:IsValid() then
-                    local loc = b:K2_GetActorLocation()
-                    if loc then table.insert(list, { X = loc.X, Y = loc.Y }) end
+        local boxClasses = { "BP_PalBox_C", "PalMapObjectBaseCampPoint", "BP_BaseCampPoint_C" }
+        for _, cls in ipairs(boxClasses) do
+            local boxes = FindAllOf and FindAllOf(cls)
+            if boxes then
+                for _, b in ipairs(boxes) do
+                    if b and b:IsValid() then
+                        local loc = b:K2_GetActorLocation()
+                        if loc then table.insert(list, { X = loc.X, Y = loc.Y }) end
+                    end
                 end
             end
         end
@@ -212,7 +215,9 @@ local function RefreshBaseCaches()
                 end
             end
         end
-        CachedBases = list
+        if #list > 0 then
+            CachedBases = list
+        end
     end)
 end
 
@@ -225,7 +230,12 @@ local function DetermineRegionTrack(playerLoc, player)
     -- 2. Base Camp Detection (Checks cached coordinates without hitching)
     local inBase = false
     local nowClock = os.clock()
-    if #CachedBases == 0 or (nowClock - LastBaseScan > 30.0) then
+    if #CachedBases == 0 then
+        if (nowClock - LastBaseScan > 2.0) then
+            LastBaseScan = nowClock
+            RefreshBaseCaches()
+        end
+    elseif (nowClock - LastBaseScan > 30.0) then
         LastBaseScan = nowClock
         RefreshBaseCaches()
     end
@@ -233,7 +243,7 @@ local function DetermineRegionTrack(playerLoc, player)
     for _, bLoc in ipairs(CachedBases) do
         local dx = playerLoc.X - bLoc.X
         local dy = playerLoc.Y - bLoc.Y
-        if (dx*dx + dy*dy) <= (3600.0 * 3600.0) then
+        if (dx*dx + dy*dy) <= (3800.0 * 3800.0) then
             inBase = true
             break
         end
@@ -246,20 +256,19 @@ local function DetermineRegionTrack(playerLoc, player)
     -- 3. Biome Coordinates Mapping (Based on verified Palworld world grid)
     local X = playerLoc.X
     local Y = playerLoc.Y
-    local Z = playerLoc.Z
 
-    -- Astral Mountains (Frozen North / Snow Peak: High elevation or Far North)
-    if Z > 8000.0 or (X < -200000 and Y > 100000) then
+    -- Astral Mountains (Frozen North / Arctic Tundra - Far Northwest only)
+    if X < -280000 and Y > 200000 then
         return "region_snow.mp3", 0.60
     end
 
     -- Mount Obsidian (Volcano: Far Southwest)
-    if X > 50000 and Y > 150000 then
+    if X < -80000 and Y < -160000 then
         return "region_volcano.mp3", 0.65
     end
 
     -- Desolate Dunes (Far Northeast Desert)
-    if X < -200000 and Y < -100000 then
+    if X > 100000 and Y > 60000 then
         return "region_desert.mp3", 0.60
     end
 
