@@ -140,24 +140,115 @@ local function DetermineRegionTrack(playerLoc, player)
         return "dungeon_weird_place.mp3", 0.65
     end
 
-    -- 2. Check if in Player Base Camp
+    -- 2. Check if in Player Base Camp (multi-method detection)
     local inBase = false
+
+    -- Method A: Palbox / Base Camp Point Actors
     pcall(function()
-        if player and player:IsValid() then
-            if type(player.IsInBaseCamp) == "function" and player:IsInBaseCamp() then inBase = true end
-            if not inBase and player.CharacterParameterComponent and player.CharacterParameterComponent:IsValid() then
-                local assigned = player.CharacterParameterComponent:GetAssignedBaseCamp()
-                if assigned and assigned:IsValid() then
-                    local bLoc = assigned:K2_GetActorLocation()
-                    if bLoc then
-                        local dx = playerLoc.X - bLoc.X
-                        local dy = playerLoc.Y - bLoc.Y
-                        if (dx*dx + dy*dy) < (4500.0 * 4500.0) then inBase = true end
+        local boxClasses = { "BP_PalBox_C", "PalMapObjectBaseCampPoint", "BP_BaseCampPoint_C" }
+        for _, cls in ipairs(boxClasses) do
+            local boxes = FindAllOf and FindAllOf(cls)
+            if boxes and #boxes > 0 then
+                for _, b in ipairs(boxes) do
+                    if b and b:IsValid() then
+                        local bLoc = b:K2_GetActorLocation()
+                        if bLoc then
+                            local dx = playerLoc.X - bLoc.X
+                            local dy = playerLoc.Y - bLoc.Y
+                            if (dx*dx + dy*dy) <= (4800.0 * 4800.0) then
+                                inBase = true
+                                return
+                            end
+                        end
                     end
                 end
             end
         end
     end)
+
+    -- Method B: Check Nearby Base Camp Worker Pals
+    if not inBase then
+        pcall(function()
+            local pals = FindAllOf and (FindAllOf("PalCharacter") or FindAllOf("Character"))
+            if pals then
+                for _, p in ipairs(pals) do
+                    if p and p:IsValid() and p ~= player then
+                        local isBasePal = false
+                        if p.CharacterParameterComponent and p.CharacterParameterComponent:IsValid() then
+                            local param = p.CharacterParameterComponent
+                            if type(param.IsBaseCampPal) == "function" and param:IsBaseCampPal() then
+                                isBasePal = true
+                            elseif type(param.GetAssignedBaseCamp) == "function" and param:GetAssignedBaseCamp() then
+                                isBasePal = true
+                            end
+                        end
+                        if isBasePal then
+                            local loc = p:K2_GetActorLocation()
+                            if loc then
+                                local dx = playerLoc.X - loc.X
+                                local dy = playerLoc.Y - loc.Y
+                                if (dx*dx + dy*dy) <= (3800.0 * 3800.0) then
+                                    inBase = true
+                                    return
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+
+    -- Method C: Check Player-Built Structures Cluster (PalBuildObject)
+    if not inBase then
+        pcall(function()
+            local builds = FindAllOf and FindAllOf("PalBuildObject")
+            if builds and #builds >= 2 then
+                local nearCount = 0
+                for _, b in ipairs(builds) do
+                    if b and b:IsValid() then
+                        local loc = b:K2_GetActorLocation()
+                        if loc then
+                            local dx = playerLoc.X - loc.X
+                            local dy = playerLoc.Y - loc.Y
+                            if (dx*dx + dy*dy) <= (3800.0 * 3800.0) then
+                                nearCount = nearCount + 1
+                                if nearCount >= 2 then
+                                    inBase = true
+                                    return
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+
+    -- Method D: PalBaseCampModel centers
+    if not inBase then
+        pcall(function()
+            local camps = FindAllOf and FindAllOf("PalBaseCampModel")
+            if camps then
+                for _, camp in ipairs(camps) do
+                    if camp and camp:IsValid() then
+                        local cLoc = (type(camp.GetLocation) == "function" and camp:GetLocation())
+                            or (type(camp.GetRawLocation) == "function" and camp:GetRawLocation())
+                            or camp.CenterLocation
+                        if cLoc then
+                            local dx = playerLoc.X - cLoc.X
+                            local dy = playerLoc.Y - cLoc.Y
+                            if (dx*dx + dy*dy) <= (4500.0 * 4500.0) then
+                                inBase = true
+                                return
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+
     if inBase then
         return "base_the_first_town.mp3", 0.60
     end
