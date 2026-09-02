@@ -222,13 +222,17 @@ local function RestoreCharacter(Character)
 
         local state = OriginalState[Character] or {}
         Character:SetActorEnableCollision(state.actorCollision ~= false)
-        pcall(function() Character:SetActorHiddenInGame(false) end)
         local Mesh = Character.Mesh or (type(Character.GetMesh) == "function" and Character:GetMesh())
         if Mesh and Mesh:IsValid() then
             Mesh:SetVisibility(true, true)
             pcall(function() Mesh:SetHiddenInGame(false, true) end)
             if type(Mesh.SetCollisionEnabled) == "function" then Mesh:SetCollisionEnabled(state.meshCollision or 1) end
             if type(Mesh.SetSimulatePhysics) == "function" then Mesh:SetSimulatePhysics(state.meshPhysics == true) end
+        end
+        -- Keep collision capsule invisible so red debug wireframe is never rendered
+        local Capsule = Character.CapsuleComponent or (type(Character.GetRootComponent) == "function" and Character:GetRootComponent())
+        if Capsule and Capsule:IsValid() and type(Capsule.SetHiddenInGame) == "function" then
+            pcall(function() Capsule:SetHiddenInGame(true, false) end)
         end
         OriginalState[Character] = nil
     end)

@@ -481,6 +481,13 @@ function BossMusic.Init()
                 ActiveNearBoss = false
                 if player and player:IsValid() then
                     IsInTitle = false
+
+                    -- Ensure capsule collision wireframe is never rendered on player
+                    local cap = player.CapsuleComponent or (type(player.GetRootComponent) == "function" and player:GetRootComponent())
+                    if cap and cap:IsValid() and type(cap.SetHiddenInGame) == "function" then
+                        pcall(function() cap:SetHiddenInGame(true, false) end)
+                    end
+
                     local pLoc = player:K2_GetActorLocation()
                     if pLoc then
                         local wb = package.loaded["world_boss"]
