@@ -65,6 +65,8 @@ namespace PalLauncher.Views
             {
                 // Fallback gradient remains visible
             }
+
+            UpdateBackgroundActivity();
         }
 
         private void InitializeServerManagement()

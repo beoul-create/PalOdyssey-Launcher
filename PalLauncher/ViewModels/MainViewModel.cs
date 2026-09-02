@@ -126,7 +126,6 @@ namespace PalLauncher.ViewModels
 
             // Initialize services
             _audioService.Initialize();
-            _audioService.StartBgm();
             if (_isDiscordRpcEnabled)
             {
                 _discordRpcService.Initialize();
@@ -340,7 +339,6 @@ namespace PalLauncher.ViewModels
 
         public GameProcessService GameProcessService => _gameProcessService;
         public RemoteServerService RemoteServerService => _remoteServerService;
-        public AudioService AudioService => _audioService;
         public LauncherConfig Config => _config;
 
         public string RemoteServerApiUrl
@@ -661,10 +659,6 @@ namespace PalLauncher.ViewModels
                 StatusMessage = "LAUNCH FAILED";
                 SubStatusMessage = ex.Message;
                 MessageBox.Show($"Failed to launch Palworld:\n{ex.Message}", "Launch Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                if (IsSoundEnabled)
-                {
-                    _audioService.StartBgm();
-                }
             }
         }
 
@@ -689,10 +683,6 @@ namespace PalLauncher.ViewModels
                 if (_isDiscordRpcEnabled)
                 {
                     _discordRpcService.SetLauncherPresence(ServerName);
-                }
-                if (IsSoundEnabled)
-                {
-                    _audioService.StartBgm();
                 }
             });
         }
