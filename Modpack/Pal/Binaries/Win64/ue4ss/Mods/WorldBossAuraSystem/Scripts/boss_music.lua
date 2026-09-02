@@ -490,6 +490,7 @@ function BossMusic.Init()
 
                     local pLoc = player:K2_GetActorLocation()
                     if pLoc then
+                        -- 1. Check custom WorldBossAuraSystem active bosses
                         local wb = package.loaded["world_boss"]
                         if wb and wb.GetActiveBosses then
                             for _, data in pairs(wb.GetActiveBosses()) do
@@ -502,6 +503,39 @@ function BossMusic.Init()
                                     end
                                 end
                             end
+                        end
+
+                        -- 2. Check nearby native Alpha Pals & Field Bosses in the world
+                        if not ActiveNearBoss then
+                            pcall(function()
+                                local monsters = FindAllOf and (FindAllOf("PalMonsterCharacter") or FindAllOf("PalCharacter"))
+                                if monsters then
+                                    for _, m in ipairs(monsters) do
+                                        if m and m:IsValid() and m ~= player then
+                                            local isBoss = false
+                                            if type(m.IsBoss) == "function" and m:IsBoss() then isBoss = true end
+                                            if not isBoss and type(m.IsTowerBoss) == "function" and m:IsTowerBoss() then isBoss = true end
+                                            if not isBoss and type(m.IsRarePal) == "function" and m:IsRarePal() then isBoss = true end
+                                            if not isBoss and m.CharacterParameterComponent and m.CharacterParameterComponent:IsValid() then
+                                                local cp = m.CharacterParameterComponent
+                                                if type(cp.IsBoss) == "function" and cp:IsBoss() then isBoss = true end
+                                                if not isBoss and type(cp.IsRarePal) == "function" and cp:IsRarePal() then isBoss = true end
+                                            end
+                                            if isBoss then
+                                                local mLoc = m:K2_GetActorLocation()
+                                                if mLoc then
+                                                    local dx = pLoc.X - mLoc.X
+                                                    local dy = pLoc.Y - mLoc.Y
+                                                    if (dx*dx + dy*dy) < (6500.0 * 6500.0) then
+                                                        ActiveNearBoss = true
+                                                        break
+                                                    end
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end)
                         end
                     end
                 end
