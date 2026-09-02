@@ -200,15 +200,6 @@ local function RefreshBaseCaches()
             if boxes then
                 for _, b in ipairs(boxes) do
                     if b and b:IsValid() then
-                        local loc = b:K2_GetActorLocation()
-                        if loc then table.insert(list, { X = loc.X, Y = loc.Y }) end
-                    end
-                end
-            end
-        end
-        local camps = FindAllOf and FindAllOf("PalBaseCampModel")
-        if camps then
-            for _, c in ipairs(camps) do
                 if c and c:IsValid() and type(c.GetLocation) == "function" then
                     local loc = c:GetLocation()
                     if loc then table.insert(list, { X = loc.X, Y = loc.Y }) end
@@ -222,9 +213,6 @@ local function RefreshBaseCaches()
 end
 
 local function DetermineRegionTrack(playerLoc, player)
-    -- 1. Check if inside Dungeon / Underground Cave instance
-    if playerLoc.Z < -30000.0 then
-        return "dungeon_weird_place.mp3", 0.65
     end
 
     -- 2. Base Camp Detection (Checks cached coordinates without hitching)
@@ -238,12 +226,6 @@ local function DetermineRegionTrack(playerLoc, player)
     elseif (nowClock - LastBaseScan > 30.0) then
         LastBaseScan = nowClock
         RefreshBaseCaches()
-    end
-
-    for _, bLoc in ipairs(CachedBases) do
-        local dx = playerLoc.X - bLoc.X
-        local dy = playerLoc.Y - bLoc.Y
-        if (dx*dx + dy*dy) <= (3800.0 * 3800.0) then
             inBase = true
             break
         end
@@ -252,7 +234,6 @@ local function DetermineRegionTrack(playerLoc, player)
     if inBase then
         return "base_the_first_town.mp3", 0.60
     end
-
     -- 3. Biome Coordinates Mapping (Based on verified Palworld world grid)
     local X = playerLoc.X
     local Y = playerLoc.Y
@@ -276,13 +257,52 @@ local function DetermineRegionTrack(playerLoc, player)
     return "region_aincrad.mp3", 0.60
 end
 
+local CachedTimeManager = nil
+local function IsNightTime()
+    local isNight = false
+    pcall(function()
+        if not CachedTimeManager or not CachedTimeManager:IsValid() then
+            CachedTimeManager = FindFirstOf("PalTimeManager") or FindFirstOf("PalWorldTimeManager")
+        end
+        if CachedTimeManager and CachedTimeManager:IsValid() then
+            if type(CachedTimeManager.IsNight) == "function" then
+                isNight = CachedTimeManager:IsNight()
+                return
+            end
+            if type(CachedTimeManager.IsDay) == "function" then
+                isNight = not CachedTimeManager:IsDay()
+                return
+            end
+        end
+
+        local gs = FindFirstOf("PalGameStateInGame")
+        if gs and gs:IsValid() then
+            if type(gs.IsNight) == "function" then
+                isNight = gs:IsNight()
+                return
+            end
+            local tm = gs.TimeManager or gs.WorldTimeManager
+            if tm and tm:IsValid() then
+                if type(tm.IsNight) == "function" then
+                    isNight = tm:IsNight()
+                    return
+                end
+                if type(tm.IsDay) == "function" then
+                    isNight = not tm:IsDay()
+                    return
+                end
+            end
+        end
+    end)
+    return isNight
+end
+
 local function UpdateMusicState()
     local now = os.time()
     if now < VictoryTimer then
         return -- Fanfare is currently playing
     end
 
-    -- Priority 0: Title Screen
     if IsInTitle then
         BossMusic.SetTrack("title_perfect_time.mp3", true, 0.70)
         return
@@ -290,6 +310,12 @@ local function UpdateMusicState()
 
     -- Priority 0.5: Connecting to server (silence / faded out)
     if IsConnecting then
+        return
+    end
+
+    -- Priority 0.8: Night Time Theme (Overrides all boss, base, and regional songs)
+    if IsNightTime() then
+        BossMusic.SetTrack("night_theme.mp3", true, 0.65)
         return
     end
 
