@@ -30,6 +30,33 @@ local function FindFirstValidAsset(candidates)
     return nil
 end
 
+local ActiveSoulFlames = setmetatable({}, { __mode = "k" })
+
+local function IsBaseCampPal(Character)
+    local isBase = false
+    pcall(function()
+        if not Character or not Character:IsValid() then return end
+        local param = Character.CharacterParameterComponent
+        if param and param:IsValid() then
+            if type(param.GetAssignedBaseCamp) == "function" then
+                local base = param:GetAssignedBaseCamp()
+                if base and base:IsValid() then isBase = true return end
+            end
+            if type(param.IsBaseCampPal) == "function" and param:IsBaseCampPal() then
+                isBase = true return
+            end
+        end
+        local ind = (type(Character.GetIndividualParameter) == "function" and Character:GetIndividualParameter())
+        if ind and ind:IsValid() then
+            if type(ind.GetSlotID) == "function" then
+                local slot = ind:GetSlotID()
+                if slot and tostring(slot):find("Base") then isBase = true return end
+            end
+        end
+    end)
+    return isBase
+end
+
 local function HandleSAODeath(Character)
     if not Character or not Character:IsValid() then return end
     local now = os.clock()
@@ -40,6 +67,61 @@ local function HandleSAODeath(Character)
         local Location = Character:K2_GetActorLocation()
         local Rotation = Character:K2_GetActorRotation()
         local World = Character:GetWorld()
+
+        -- BASE CAMP PAL SPECIAL HANDLING: Floating Soul Flame!
+        if IsBaseCampPal(Character) then
+            local Mesh = Character.Mesh or (type(Character.GetMesh) == "function" and Character:GetMesh())
+            if Mesh and Mesh:IsValid() then
+                local AnimInstance = Mesh:GetAnimInstance()
+                if AnimInstance and AnimInstance:IsValid() and type(AnimInstance.Montage_Stop) == "function" then
+                    AnimInstance:Montage_Stop(0.0)
+                end
+                if type(Mesh.SetSimulatePhysics) == "function" then Mesh:SetSimulatePhysics(false) end
+                if type(Mesh.SetCollisionEnabled) == "function" then Mesh:SetCollisionEnabled(0) end
+                Mesh:SetVisibility(false, true)
+                pcall(function() Mesh:SetHiddenInGame(true, true) end)
+            end
+
+            -- Suppress child mesh attachments
+            local skelClass = StaticFindObject("/Script/Engine.SkeletalMeshComponent")
+            if skelClass and type(Character.K2_GetComponentsByClass) == "function" then
+                for _, comp in ipairs(Character:K2_GetComponentsByClass(skelClass) or {}) do
+                    if comp and comp:IsValid() and comp ~= Mesh then
+                        comp:SetVisibility(false, true)
+                        pcall(function() comp:SetHiddenInGame(true, true) end)
+                    end
+                end
+            end
+
+            -- IMPORTANT: Preserve Actor and Collision so other Base Pals can pick up and carry the soul flame!
+            Character:SetActorEnableCollision(true)
+            pcall(function() Character:SetActorHiddenInGame(false) end)
+
+            -- Spawn & Attach Floating Soul Flame Particle
+            if not ActiveSoulFlames[Character] then
+                local NiagaraFunc = StaticFindObject("/Script/Niagara.Default__NiagaraFunctionLibrary")
+                local SoulFlameParticles = {
+                    "/Game/Pal/Effect/Niagara/Common/NS_Status_Fire.NS_Status_Fire",
+                    "/Game/Pal/Effect/Niagara/Common/NS_Status_Electric.NS_Status_Electric",
+                    "/Game/Pal/Effect/Niagara/Common/NS_Status_Dark.NS_Status_Dark"
+                }
+                local FlameAsset = FindFirstValidAsset(SoulFlameParticles)
+                local RootComp = Character:K2_GetRootComponent() or Character.RootComponent or Mesh
+                if NiagaraFunc and NiagaraFunc:IsValid() and FlameAsset and FlameAsset:IsValid() and RootComp then
+                    local soulEmitter = NiagaraFunc:SpawnSystemAttached(
+                        FlameAsset,
+                        RootComp,
+                        FName("pelvis"),
+                        { X = 0, Y = 0, Z = 40 },
+                        { Pitch = 0, Yaw = 0, Roll = 0 },
+                        1, -- EAttachLocation::KeepRelativeOffset
+                        true, true, 0, true
+                    )
+                    ActiveSoulFlames[Character] = soulEmitter
+                end
+            end
+            return
+        end
 
         -- 1. Disable Actor Collision & Suppress Ragdoll Physics across all components
         local Mesh = Character.Mesh or (type(Character.GetMesh) == "function" and Character:GetMesh())
@@ -126,11 +208,25 @@ local function RestoreCharacter(Character)
     pcall(function()
         if not Character or not Character:IsValid() then return end
         RecentlyHandled[Character] = nil
+
+        -- Extinguish Soul Flame if active on Base Pal
+        if ActiveSoulFlames[Character] then
+            pcall(function()
+                local emitter = ActiveSoulFlames[Character]
+                if emitter and emitter:IsValid() and type(emitter.Deactivate) == "function" then
+                    emitter:Deactivate()
+                end
+            end)
+            ActiveSoulFlames[Character] = nil
+        end
+
         local state = OriginalState[Character] or {}
         Character:SetActorEnableCollision(state.actorCollision ~= false)
-        local Mesh = Character.Mesh
+        pcall(function() Character:SetActorHiddenInGame(false) end)
+        local Mesh = Character.Mesh or (type(Character.GetMesh) == "function" and Character:GetMesh())
         if Mesh and Mesh:IsValid() then
             Mesh:SetVisibility(true, true)
+            pcall(function() Mesh:SetHiddenInGame(false, true) end)
             if type(Mesh.SetCollisionEnabled) == "function" then Mesh:SetCollisionEnabled(state.meshCollision or 1) end
             if type(Mesh.SetSimulatePhysics) == "function" then Mesh:SetSimulatePhysics(state.meshPhysics == true) end
         end
@@ -168,14 +264,29 @@ function SAODeath.Init()
         end)
     end)
 
+    -- Hooks to restore/revive characters and extinguish soul flames when placed on bed or revived
     pcall(RegisterHook, "/Script/Pal.PalCharacter:OnRevive", function(Context)
         RestoreCharacter(Context and Context.get and Context:get() or Context)
+    end)
+    pcall(RegisterHook, "/Script/Pal.PalCharacter:OnSleeping", function(Context)
+        RestoreCharacter(Context and Context.get and Context:get() or Context)
+    end)
+    pcall(RegisterHook, "/Script/Pal.PalCharacterParameterComponent:OnUpdateHP", function(Context, PrevHP, NowHP)
+        pcall(function()
+            local nowVal = NowHP and NowHP.get and NowHP:get() or NowHP
+            if type(nowVal) == "number" and nowVal > 0 then
+                local comp = Context and Context.get and Context:get() or Context
+                if comp and comp:IsValid() and comp.GetOwner then
+                    RestoreCharacter(comp:GetOwner())
+                end
+            end
+        end)
     end)
     pcall(RegisterHook, "/Script/Engine.PlayerController:ClientRestart", function(Context, NewPawn)
         RestoreCharacter(NewPawn and NewPawn.get and NewPawn:get() or NewPawn)
     end)
 
-    print("[WorldBossAuraSystem] Universal SAO Death Disintegration initialized (Pals, NPCs, and Players).")
+    print("[WorldBossAuraSystem] Universal SAO Death Disintegration & Base Pal Soul Flames initialized.")
 end
 
 return SAODeath
