@@ -2,6 +2,8 @@ using System;
 using System.Buffers.Binary;
 using System.IO;
 using System.Media;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace PalLauncher.Services
 {
@@ -9,12 +11,15 @@ namespace PalLauncher.Services
     {
         private SoundPlayer? _hoverPlayer;
         private SoundPlayer? _clickPlayer;
+        private MediaPlayer? _bgmPlayer;
+        private DispatcherTimer? _fadeTimer;
         private MemoryStream? _hoverStream;
         private MemoryStream? _clickStream;
         private bool _isLoaded;
 
         public bool IsSoundEnabled { get; set; } = true;
-        public float Volume { get; set; } = 0.20f; // 20% Volume limit
+        public float Volume { get; set; } = 0.20f; // 20% Sound effect volume
+        public float BgmVolume { get; set; } = 0.15f; // 15% Launcher BGM volume
 
         public void Initialize()
         {
@@ -25,6 +30,7 @@ namespace PalLauncher.Services
                 string baseDir = AppDomain.CurrentDomain.BaseDirectory;
                 string hoverPath = Path.Combine(baseDir, "Assets", "hover.wav");
                 string clickPath = Path.Combine(baseDir, "Assets", "click.wav");
+                string bgmPath = Path.Combine(baseDir, "Assets", "launcher_bgm.mp3");
 
                 if (File.Exists(hoverPath))
                 {
@@ -38,6 +44,21 @@ namespace PalLauncher.Services
                     _clickStream = LoadScaledWavStream(clickPath, Volume);
                     _clickPlayer = new SoundPlayer(_clickStream);
                     _clickPlayer.LoadAsync();
+                }
+
+                if (File.Exists(bgmPath))
+                {
+                    _bgmPlayer = new MediaPlayer();
+                    _bgmPlayer.Open(new Uri(bgmPath));
+                    _bgmPlayer.Volume = BgmVolume;
+                    _bgmPlayer.MediaEnded += (s, e) =>
+                    {
+                        if (IsSoundEnabled && _bgmPlayer != null)
+                        {
+                            _bgmPlayer.Position = TimeSpan.Zero;
+                            _bgmPlayer.Play();
+                        }
+                    };
                 }
 
                 _isLoaded = true;
@@ -91,12 +112,81 @@ namespace PalLauncher.Services
             try { _clickPlayer.Play(); } catch { }
         }
 
+        public void StartBgm()
+        {
+            if (!IsSoundEnabled || _bgmPlayer == null) return;
+
+            try
+            {
+                _fadeTimer?.Stop();
+                _bgmPlayer.Volume = BgmVolume;
+                _bgmPlayer.Position = TimeSpan.Zero;
+                _bgmPlayer.Play();
+            }
+            catch { }
+        }
+
+        public void StopBgm()
+        {
+            try
+            {
+                _fadeTimer?.Stop();
+                _bgmPlayer?.Stop();
+            }
+            catch { }
+        }
+
+        public void FadeOutBgm(double durationSeconds = 1.5)
+        {
+            if (_bgmPlayer == null) return;
+
+            try
+            {
+                _fadeTimer?.Stop();
+                double startVol = _bgmPlayer.Volume;
+                int steps = 25;
+                double stepDurationMs = (durationSeconds * 1000.0) / steps;
+                double volDelta = startVol / steps;
+
+                _fadeTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(stepDurationMs) };
+                _fadeTimer.Tick += (s, e) =>
+                {
+                    if (_bgmPlayer == null)
+                    {
+                        _fadeTimer?.Stop();
+                        return;
+                    }
+
+                    double next = _bgmPlayer.Volume - volDelta;
+                    if (next <= 0.01)
+                    {
+                        _bgmPlayer.Volume = 0;
+                        _bgmPlayer.Stop();
+                        _fadeTimer?.Stop();
+                    }
+                    else
+                    {
+                        _bgmPlayer.Volume = next;
+                    }
+                };
+                _fadeTimer.Start();
+            }
+            catch
+            {
+                StopBgm();
+            }
+        }
+
         public void Dispose()
         {
+            _fadeTimer?.Stop();
+            _bgmPlayer?.Close();
             _hoverPlayer?.Dispose();
             _clickPlayer?.Dispose();
             _hoverStream?.Dispose();
             _clickStream?.Dispose();
+            _bgmPlayer = null;
+            _fadeTimer = null;
             _hoverPlayer = null;
             _clickPlayer = null;
             _hoverStream = null;

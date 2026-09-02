@@ -8,17 +8,22 @@
     <UseWPF>true</UseWPF>
     <RootNamespace>PalLauncher</RootNamespace>
     <AssemblyName>PalLauncher</AssemblyName>
-    <Version>2.0.1</Version>
-    <FileVersion>2.0.1.0</FileVersion>
-    <AssemblyVersion>2.0.1.0</AssemblyVersion>
+
+    <!-- Keep audit/staging copies out of the SDK's recursive default item glob. -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);scratch\**;PalOdyssey-ModpackStaging\**</DefaultItemExcludes>
+
+    <!-- Runtime-focused release settings: precompile framework-heavy WPF paths and
+         allow dynamic PGO to optimize the launcher's recurring hot paths. -->
+    <TieredCompilation>true</TieredCompilation>
+    <TieredPGO>true</TieredPGO>
 
     <!-- Standalone Single-File Optimization Properties -->
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
-    <PublishReadyToRun>false</PublishReadyToRun>
+    <EnableCompressionInSingleFile>false</EnableCompressionInSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
@@ -47,6 +52,10 @@
   <ItemGroup>
     <None Update="Assets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\background_loop.mp4">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </None>
     <None Update="manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

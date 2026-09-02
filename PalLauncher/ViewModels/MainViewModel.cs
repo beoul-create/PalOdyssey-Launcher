@@ -126,6 +126,7 @@ namespace PalLauncher.ViewModels
 
             // Initialize services
             _audioService.Initialize();
+            _audioService.StartBgm();
             if (_isDiscordRpcEnabled)
             {
                 _discordRpcService.Initialize();
@@ -300,6 +301,8 @@ namespace PalLauncher.ViewModels
                 if (SetProperty(ref _isSoundEnabled, value))
                 {
                     _audioService.IsSoundEnabled = value;
+                    if (value) _audioService.StartBgm();
+                    else _audioService.StopBgm();
                     _config.SoundEnabled = value;
                     _config.Save();
                 }
@@ -638,6 +641,8 @@ namespace PalLauncher.ViewModels
                     _discordRpcService.SetInGamePresence(ServerName);
                 }
 
+                _audioService.FadeOutBgm(1.5);
+
                 await _gameProcessService.LaunchGameAsync(
                     GamePath,
                     _config.ServerIp,
@@ -655,6 +660,10 @@ namespace PalLauncher.ViewModels
                 StatusMessage = "LAUNCH FAILED";
                 SubStatusMessage = ex.Message;
                 MessageBox.Show($"Failed to launch Palworld:\n{ex.Message}", "Launch Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (IsSoundEnabled)
+                {
+                    _audioService.StartBgm();
+                }
             }
         }
 
@@ -664,6 +673,7 @@ namespace PalLauncher.ViewModels
             Application.Current?.Dispatcher.Invoke(() =>
             {
                 CurrentState = LauncherState.GameRunning;
+                _audioService.FadeOutBgm(1.0);
             });
         }
 
@@ -678,6 +688,10 @@ namespace PalLauncher.ViewModels
                 if (_isDiscordRpcEnabled)
                 {
                     _discordRpcService.SetLauncherPresence(ServerName);
+                }
+                if (IsSoundEnabled)
+                {
+                    _audioService.StartBgm();
                 }
             });
         }
