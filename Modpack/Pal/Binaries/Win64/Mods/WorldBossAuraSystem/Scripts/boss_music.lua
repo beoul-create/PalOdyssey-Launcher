@@ -30,18 +30,70 @@ local function EnsureJukeboxRunning()
     end)
 end
 
+local CurrentMasterVolume = 0.15
+local CurrentBaseVolume = 0.60
+local CurrentLoop = true
+local LastUnmutedVolume = 0.15
+
 local function GetMasterVolume()
-    local vol = 0.40
+    local vol = CurrentMasterVolume
     pcall(function()
         local f = io.open(ScriptDir .. "../config.json", "r")
         if f then
             local txt = f:read("*all")
             f:close()
             local m = txt:match('"MusicMasterVolume"%s*:%s*([%d%.]+)')
-            if m then vol = tonumber(m) or 0.40 end
+            if m then
+                vol = tonumber(m) or vol
+                CurrentMasterVolume = vol
+            end
         end
     end)
     return math.max(0.0, math.min(1.0, vol))
+end
+
+function BossMusic.SetMasterVolume(vol)
+    vol = math.max(0.0, math.min(1.0, vol))
+    CurrentMasterVolume = vol
+    if vol > 0.01 then LastUnmutedVolume = vol end
+
+    -- 1. Save to config.json
+    pcall(function()
+        local cfgPath = ScriptDir .. "../config.json"
+        local f = io.open(cfgPath, "r")
+        local content = f and f:read("*all") or ""
+        if f then f:close() end
+
+        if content:find('"MusicMasterVolume"') then
+            content = content:gsub('"MusicMasterVolume"%s*:%s*[%d%.]+', string.format('"MusicMasterVolume": %.2f', vol))
+        else
+            content = content:gsub("^{", string.format('{\n  "MusicMasterVolume": %.2f,', vol))
+        end
+        local wf = io.open(cfgPath, "w")
+        if wf then wf:write(content); wf:close() end
+    end)
+
+    -- 2. Immediately update playing volume in music_state.json
+    pcall(function()
+        if CurrentTrack ~= "" and CurrentState == "play" then
+            local finalVol = math.max(0.0, math.min(1.0, CurrentBaseVolume * vol))
+            local f = io.open(StateFile, "w")
+            if f then
+                f:write(string.format('{"state":"play","track":"%s","loop":%s,"volume":%.2f}', CurrentTrack, CurrentLoop and "true" or "false", finalVol))
+                f:close()
+            end
+        end
+    end)
+
+    print(string.format("[WorldBossAuraSystem] 🎵 Master Volume set to: %d%%", math.floor(vol * 100 + 0.5)))
+end
+
+function BossMusic.ToggleMute()
+    if CurrentMasterVolume > 0.01 then
+        BossMusic.SetMasterVolume(0.0)
+    else
+        BossMusic.SetMasterVolume(LastUnmutedVolume > 0.05 and LastUnmutedVolume or 0.15)
+    end
 end
 
 function BossMusic.SetTrack(trackName, loop, volume)
@@ -49,9 +101,11 @@ function BossMusic.SetTrack(trackName, loop, volume)
     EnsureJukeboxRunning()
     CurrentTrack = trackName
     CurrentState = "play"
+    CurrentBaseVolume = volume or 0.65
+    CurrentLoop = loop and true or false
 
     local master = GetMasterVolume()
-    local finalVol = math.max(0.01, math.min(1.0, (volume or 0.65) * master))
+    local finalVol = math.max(0.0, math.min(1.0, CurrentBaseVolume * master))
 
     pcall(function()
         local f = io.open(StateFile, "w")
@@ -338,7 +392,61 @@ function BossMusic.Init()
         return
     end
 
-    -- 1. Title Screen & Connection Hooks
+    -- 1. In-Game Volume Chat Commands: /vol <0-100>, /mute, /unmute
+    local function ProcessVolumeChat(Context, Param1, Param2)
+        local function TryGetStr(val)
+            if not val then return "" end
+            local s = ""
+            pcall(function()
+                if type(val.ToString) == "function" then s = val:ToString()
+                else s = tostring(val) end
+            end)
+            return s
+        end
+
+        local text = TryGetStr(Param1)
+        if text == "" then text = TryGetStr(Param2) end
+        if text == "" and Context and Context.Message then text = TryGetStr(Context.Message) end
+        text = text:lower():match("^%s*(.-)%s*$") or ""
+
+        local volNum = text:match("^/[vV][oO][lL]%s+(%d+)") or text:match("^/[vV][oO][lL][uU][mM][eE]%s+(%d+)") or text:match("^/[mM][uU][sS][iI][cC]%s+(%d+)")
+        if volNum then
+            local n = tonumber(volNum)
+            if n then
+                BossMusic.SetMasterVolume(n / 100.0)
+            end
+        elseif text == "/mute" then
+            BossMusic.SetMasterVolume(0.0)
+        elseif text == "/unmute" then
+            BossMusic.ToggleMute()
+        end
+    end
+
+    pcall(RegisterHook, "/Script/Pal.PalPlayerState:EnterChat", ProcessVolumeChat)
+    pcall(RegisterHook, "/Script/Pal.PalGameStateInGame:BroadcastChatMessage", ProcessVolumeChat)
+
+    -- In-Game Volume Hotkeys: [ (Vol Down), ] (Vol Up), \ (Mute)
+    if type(RegisterKeyBindAsync) == "function" and Key then
+        pcall(function()
+            if Key.OPEN_BRACKET then
+                RegisterKeyBindAsync(Key.OPEN_BRACKET, {}, function()
+                    BossMusic.SetMasterVolume(CurrentMasterVolume - 0.03)
+                end)
+            end
+            if Key.CLOSE_BRACKET then
+                RegisterKeyBindAsync(Key.CLOSE_BRACKET, {}, function()
+                    BossMusic.SetMasterVolume(CurrentMasterVolume + 0.03)
+                end)
+            end
+            if Key.BACKSLASH then
+                RegisterKeyBindAsync(Key.BACKSLASH, {}, function()
+                    BossMusic.ToggleMute()
+                end)
+            end
+        end)
+    end
+
+    -- 2. Title Screen & Connection Hooks
     pcall(function()
         NotifyOnNewObject("/Script/Pal.PalGameStateInTitle", function()
             OnTitleScreen()
@@ -490,7 +598,6 @@ function BossMusic.Init()
 
                     local pLoc = player:K2_GetActorLocation()
                     if pLoc then
-                        -- 1. Check custom WorldBossAuraSystem active bosses
                         local wb = package.loaded["world_boss"]
                         if wb and wb.GetActiveBosses then
                             for _, data in pairs(wb.GetActiveBosses()) do
@@ -503,39 +610,6 @@ function BossMusic.Init()
                                     end
                                 end
                             end
-                        end
-
-                        -- 2. Check nearby native Alpha Pals & Field Bosses in the world
-                        if not ActiveNearBoss then
-                            pcall(function()
-                                local monsters = FindAllOf and (FindAllOf("PalMonsterCharacter") or FindAllOf("PalCharacter"))
-                                if monsters then
-                                    for _, m in ipairs(monsters) do
-                                        if m and m:IsValid() and m ~= player then
-                                            local isBoss = false
-                                            if type(m.IsBoss) == "function" and m:IsBoss() then isBoss = true end
-                                            if not isBoss and type(m.IsTowerBoss) == "function" and m:IsTowerBoss() then isBoss = true end
-                                            if not isBoss and type(m.IsRarePal) == "function" and m:IsRarePal() then isBoss = true end
-                                            if not isBoss and m.CharacterParameterComponent and m.CharacterParameterComponent:IsValid() then
-                                                local cp = m.CharacterParameterComponent
-                                                if type(cp.IsBoss) == "function" and cp:IsBoss() then isBoss = true end
-                                                if not isBoss and type(cp.IsRarePal) == "function" and cp:IsRarePal() then isBoss = true end
-                                            end
-                                            if isBoss then
-                                                local mLoc = m:K2_GetActorLocation()
-                                                if mLoc then
-                                                    local dx = pLoc.X - mLoc.X
-                                                    local dy = pLoc.Y - mLoc.Y
-                                                    if (dx*dx + dy*dy) < (6500.0 * 6500.0) then
-                                                        ActiveNearBoss = true
-                                                        break
-                                                    end
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
-                            end)
                         end
                     end
                 end
