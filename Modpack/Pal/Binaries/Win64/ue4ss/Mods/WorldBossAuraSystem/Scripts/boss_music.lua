@@ -5,8 +5,21 @@ local AudioDir = ScriptDir .. "../audio/"
 local StateFile = AudioDir .. "music_state.json"
 local JukeboxExe = AudioDir .. "PalBossJukebox.exe"
 
-local IsMusicPlaying = false
+local CurrentTrack = ""
+local CurrentState = "idle"
 local JukeboxStarted = false
+local VictoryTimer = 0
+
+-- Priority Levels:
+-- 4: World / Raid Boss (One Punch Man)
+-- 3: Field Boss Combat / Near Field Boss (Luminous Sword)
+-- 2: Victory Fanfare (SAO Victory)
+-- 1: Dungeon / Cave (Weird Place)
+-- 0: Base Camp / Regional Exploration (The First Town, Aincrad, Snow, Desert, Volcano)
+
+local ActiveMajorBossCombat = false
+local ActiveFieldBossCombat = false
+local ActiveNearBoss = false
 
 local function EnsureJukeboxRunning()
     if JukeboxStarted then return end
@@ -16,24 +29,26 @@ local function EnsureJukeboxRunning()
     end)
 end
 
-function BossMusic.Play()
-    if IsMusicPlaying then return end
-    IsMusicPlaying = true
+function BossMusic.SetTrack(trackName, loop, volume)
+    if CurrentTrack == trackName and CurrentState == "play" then return end
     EnsureJukeboxRunning()
+    CurrentTrack = trackName
+    CurrentState = "play"
 
     pcall(function()
         local f = io.open(StateFile, "w")
         if f then
-            f:write('{"state":"play"}')
+            f:write(string.format('{"state":"play","track":"%s","loop":%s,"volume":%.2f}', trackName, loop and "true" or "false", volume or 0.65))
             f:close()
         end
     end)
-    print("[WorldBossAuraSystem] 🎵 One Punch Man Boss Battle Theme started!")
+    print(string.format("[WorldBossAuraSystem] 🎵 Jukebox playing: %s (Loop: %s, Vol: %.2f)", trackName, tostring(loop), volume or 0.65))
 end
 
 function BossMusic.FadeOut()
-    if not IsMusicPlaying then return end
-    IsMusicPlaying = false
+    if CurrentState == "fade_out" then return end
+    CurrentTrack = ""
+    CurrentState = "fade_out"
 
     pcall(function()
         local f = io.open(StateFile, "w")
@@ -42,37 +57,157 @@ function BossMusic.FadeOut()
             f:close()
         end
     end)
-    print("[WorldBossAuraSystem] 🎵 One Punch Man Boss Battle Theme fading out.")
+end
+
+function BossMusic.PlayVictoryFanfare()
+    ActiveMajorBossCombat = false
+    ActiveFieldBossCombat = false
+    VictoryTimer = os.time() + 6 -- 6 seconds fanfare
+    BossMusic.SetTrack("victory_fanfare.mp3", false, 0.75)
+end
+
+local function GetLocalPlayer()
+    local player = nil
+    pcall(function()
+        if UEHelpers and UEHelpers.GetPlayerController then
+            local pc = UEHelpers.GetPlayerController()
+            if pc and pc:IsValid() and pc.Pawn and pc.Pawn:IsValid() then
+                player = pc.Pawn
+                return
+            end
+        end
+        local p = FindFirstOf("PalPlayerCharacter")
+        if p and p:IsValid() then player = p end
+    end)
+    return player
+end
+
+local function DetermineRegionTrack(playerLoc, player)
+    -- 1. Check if inside Dungeon / Underground Cave instance
+    if playerLoc.Z < -30000.0 then
+        return "dungeon_weird_place.mp3", 0.65
+    end
+
+    -- 2. Check if in Player Base Camp
+    local inBase = false
+    pcall(function()
+        if player and player:IsValid() then
+            if type(player.IsInBaseCamp) == "function" and player:IsInBaseCamp() then inBase = true end
+            if not inBase and player.CharacterParameterComponent and player.CharacterParameterComponent:IsValid() then
+                local assigned = player.CharacterParameterComponent:GetAssignedBaseCamp()
+                if assigned and assigned:IsValid() then
+                    local bLoc = assigned:K2_GetActorLocation()
+                    if bLoc then
+                        local dx = playerLoc.X - bLoc.X
+                        local dy = playerLoc.Y - bLoc.Y
+                        if (dx*dx + dy*dy) < (4500.0 * 4500.0) then inBase = true end
+                    end
+                end
+            end
+        end
+    end)
+    if inBase then
+        return "base_the_first_town.mp3", 0.60
+    end
+
+    -- 3. Biome Coordinates Mapping
+    local X = playerLoc.X
+    local Y = playerLoc.Y
+
+    -- Astral Mountains (Northwest Snow Biome)
+    if X < -50000 and Y > 80000 then
+        return "region_snow.mp3", 0.60
+    end
+
+    -- Mount Obsidian (Southwest Volcano Biome)
+    if X < -60000 and Y < -160000 then
+        return "region_volcano.mp3", 0.65
+    end
+
+    -- Desolate Dunes (Northeast Desert Biome)
+    if X > 120000 and Y > 40000 then
+        return "region_desert.mp3", 0.60
+    end
+
+    -- Windswept Hills / Grassy Plains / Bamboo Forests (Central & Starting Islands)
+    return "region_aincrad.mp3", 0.60
+end
+
+local function UpdateMusicState()
+    local now = os.time()
+    if now < VictoryTimer then
+        return -- Fanfare is currently playing
+    end
+
+    -- Priority 1: 5-Minute Aura World Boss / Tower Boss / Raid Boss Combat
+    if ActiveMajorBossCombat then
+        BossMusic.SetTrack("boss_theme_opm.mp3", true, 0.80)
+        return
+    end
+
+    -- Priority 2: Field Boss Combat or Proximity (< 6000 units)
+    if ActiveFieldBossCombat or ActiveNearBoss then
+        BossMusic.SetTrack("boss_luminous_sword.mp3", true, 0.75)
+        return
+    end
+
+    -- Priority 3: Regional / Dungeon / Base Camp Music
+    local player = GetLocalPlayer()
+    if player and player:IsValid() then
+        local pLoc = player:K2_GetActorLocation()
+        if pLoc then
+            local track, vol = DetermineRegionTrack(pLoc, player)
+            BossMusic.SetTrack(track, true, vol)
+            return
+        end
+    end
 end
 
 function BossMusic.Init()
-    -- 1. Hook Damage on Bosses to trigger combat music
+    -- 1. Damage hooks to detect Combat
     pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDamage", function(Context, DamageInfo)
         pcall(function()
             local victim = Context and Context.get and Context:get() or Context
             if not victim or not victim:IsValid() then return end
 
-            local isBoss = false
-            if victim.IsBoss and type(victim.IsBoss) == "function" and victim:IsBoss() then isBoss = true end
-            if not isBoss and victim.IsRarePal and type(victim.IsRarePal) == "function" and victim:IsRarePal() then isBoss = true end
-            if not isBoss and victim.IsTowerBoss and type(victim.IsTowerBoss) == "function" and victim:IsTowerBoss() then isBoss = true end
-            if not isBoss and victim.CharacterParameterComponent and victim.CharacterParameterComponent:IsValid() then
-                local level = victim.CharacterParameterComponent:GetLevel() or 1
-                if level >= 50 then isBoss = true end
+            local isMajor = false
+            local isField = false
+
+            if victim.IsTowerBoss and type(victim.IsTowerBoss) == "function" and victim:IsTowerBoss() then isMajor = true end
+            if not isMajor and victim.IsBoss and type(victim.IsBoss) == "function" and victim:IsBoss() then
+                local level = 1
+                if victim.CharacterParameterComponent and victim.CharacterParameterComponent:IsValid() then
+                    level = victim.CharacterParameterComponent:GetLevel() or 1
+                end
+                if level >= 50 then isMajor = true else isField = true end
+            end
+            if not isMajor and not isField and victim.IsRarePal and type(victim.IsRarePal) == "function" and victim:IsRarePal() then
+                isField = true
             end
 
-            if isBoss and not IsMusicPlaying then
-                BossMusic.Play()
+            if isMajor then
+                ActiveMajorBossCombat = true
+                ActiveFieldBossCombat = false
+                BossMusic.SetTrack("boss_theme_opm.mp3", true, 0.80)
+            elseif isField then
+                ActiveFieldBossCombat = true
+                BossMusic.SetTrack("boss_luminous_sword.mp3", true, 0.75)
             end
         end)
     end)
 
-    -- 2. Hook Boss HP UI display
+    -- 2. Boss HP UI Show
     pcall(RegisterHook, "/Script/Pal.PalUIBossHP:Show", function(Context)
-        BossMusic.Play()
+        ActiveFieldBossCombat = true
+        BossMusic.SetTrack("boss_luminous_sword.mp3", true, 0.75)
     end)
 
-    -- 3. Hook Boss Death -> Fade Out
+    -- 3. Capture Success -> Victory Fanfare
+    pcall(RegisterHook, "/Script/Pal.PalCaptureSubsystem:OnCaptureSuccess", function(Context)
+        BossMusic.PlayVictoryFanfare()
+    end)
+
+    -- 4. Boss Death -> Victory Fanfare
     pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDead", function(Context)
         pcall(function()
             local dead = Context and Context.get and Context:get() or Context
@@ -82,23 +217,48 @@ function BossMusic.Init()
                 if not isBoss and dead.IsRarePal and type(dead.IsRarePal) == "function" and dead:IsRarePal() then isBoss = true end
                 if not isBoss and dead.IsTowerBoss and type(dead.IsTowerBoss) == "function" and dead:IsTowerBoss() then isBoss = true end
                 if isBoss then
-                    BossMusic.FadeOut()
+                    BossMusic.PlayVictoryFanfare()
                 end
             end
         end)
     end)
 
-    -- 4. Hook Capture Success -> Fade Out
-    pcall(RegisterHook, "/Script/Pal.PalCaptureSubsystem:OnCaptureSuccess", function(Context)
-        BossMusic.FadeOut()
-    end)
+    -- 5. Periodic Background Loop (Checks location & proximity every 2.5s with zero tick overhead)
+    local delayFunc = ExecuteInGameThreadWithDelay or ExecuteWithDelay
+    if delayFunc then
+        local function MusicLoop()
+            pcall(function()
+                -- Check proximity to World Bosses or Field Bosses
+                local player = GetLocalPlayer()
+                ActiveNearBoss = false
+                if player and player:IsValid() then
+                    local pLoc = player:K2_GetActorLocation()
+                    if pLoc then
+                        -- Check World Boss distance
+                        local wb = package.loaded["world_boss"]
+                        if wb and wb.GetActiveBosses then
+                            for _, data in pairs(wb.GetActiveBosses()) do
+                                if data.Coords then
+                                    local dx = pLoc.X - data.Coords.X
+                                    local dy = pLoc.Y - data.Coords.Y
+                                    if (dx*dx + dy*dy) < (8000.0 * 8000.0) then
+                                        ActiveNearBoss = true
+                                        break
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
 
-    -- 5. Hook Dungeon / Tower Battle End
-    pcall(RegisterHook, "/Script/Pal.PalBossBattleSequencer:EndBattle", function(Context)
-        BossMusic.FadeOut()
-    end)
+                UpdateMusicState()
+            end)
+            delayFunc(2500, MusicLoop)
+        end
+        delayFunc(3000, MusicLoop)
+    end
 
-    print("[WorldBossAuraSystem] Boss Battle Music System initialized.")
+    print("[WorldBossAuraSystem] Universal Regional, Dungeon & Boss Music System initialized.")
 end
 
 return BossMusic

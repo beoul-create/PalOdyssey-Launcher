@@ -1,11 +1,11 @@
 {
-  "Version": "20260902003735",
-  "GeneratedAt": "2026-09-02T00:37:35.349Z",
+  "Version": "20260902004417",
+  "GeneratedAt": "2026-09-02T00:44:17.277Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 707,
+  "TotalFiles": 723,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -2047,10 +2047,28 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/WEAPONS.md"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/base_the_first_town.mp3",
+      "Hash": "f71f5c796cadc3c2004812ba7fd6025099a52eab9c72d9c48089c38923774ebf",
+      "Size": 1854908,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/base_the_first_town.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/boss_luminous_sword.mp3",
+      "Hash": "b47caafd677d2563a240580876d535c79aaac693cd5b2055d368c00b5e20da5f",
+      "Size": 2375756,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/boss_luminous_sword.mp3"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/boss_theme_opm.mp3",
       "Hash": "b65b38a03a2d3bde9057c504b2b92c7ca82b5567eb0a3ae796f5d44aac9f3726",
       "Size": 5136860,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/boss_theme_opm.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/dungeon_weird_place.mp3",
+      "Hash": "d707092c71e653e2f5f4535ecd029ec9b65bbd828d04a125a1442c29463c085b",
+      "Size": 1817804,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/dungeon_weird_place.mp3"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.deps.json",
@@ -2066,8 +2084,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe",
-      "Hash": "b34b2837004e9cdf979becdad250a901bca8d8bf8f78aa8465e48e78f4f79fea",
-      "Size": 160894,
+      "Hash": "aabd5bdd44368b34faf6a01b4d14a2135337a5e4b3f9382f119c5558f45d1793",
+      "Size": 161918,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe"
     },
     {
@@ -2075,6 +2093,36 @@
       "Hash": "c71152bf25e40d647b2440c5b39be157a3d356106be9d5b678ab97bb87b4e782",
       "Size": 458,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.runtimeconfig.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_aincrad.mp3",
+      "Hash": "b5ec54809ec7d73feb887a16475aa48ecfc72d1c726ef8cd5086004eea1e8c2e",
+      "Size": 1513316,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_aincrad.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_desert.mp3",
+      "Hash": "ff927142dba9fc31828b7020f8a43e497679d6860728b1cf3dfed18b01fc1196",
+      "Size": 1759604,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_desert.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_snow.mp3",
+      "Hash": "fc05d5e41d3450c2795da1fa7afa51ac419e70786a86953fbd022b7ab23265d1",
+      "Size": 1449428,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_snow.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_volcano.mp3",
+      "Hash": "062a778f903c63ceabce29e522a4fdfc15d1b97ecea536271211796abddf2b53",
+      "Size": 2017940,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_volcano.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/victory_fanfare.mp3",
+      "Hash": "eec187bdcaf2b8db9b5133e4569b3d7fe99918eea8e78f098f9c4e0563d69551",
+      "Size": 1426532,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/victory_fanfare.mp3"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/config.json",
@@ -2102,8 +2150,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua",
-      "Hash": "f82f36ec7d0dd4a7b8be22f6b8e30934af850fdee0f8c4e7b1b2246193f59e32",
-      "Size": 3801,
+      "Hash": "2b503fbfe625cf18e7cd5211f8a06add9a1eb832fde7297ddb92cf1632a5d65a",
+      "Size": 9664,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua"
     },
     {
@@ -4165,10 +4213,28 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/WEAPONS.md"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/base_the_first_town.mp3",
+      "Hash": "f71f5c796cadc3c2004812ba7fd6025099a52eab9c72d9c48089c38923774ebf",
+      "Size": 1854908,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/base_the_first_town.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/boss_luminous_sword.mp3",
+      "Hash": "b47caafd677d2563a240580876d535c79aaac693cd5b2055d368c00b5e20da5f",
+      "Size": 2375756,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/boss_luminous_sword.mp3"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/boss_theme_opm.mp3",
       "Hash": "b65b38a03a2d3bde9057c504b2b92c7ca82b5567eb0a3ae796f5d44aac9f3726",
       "Size": 5136860,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/boss_theme_opm.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/dungeon_weird_place.mp3",
+      "Hash": "d707092c71e653e2f5f4535ecd029ec9b65bbd828d04a125a1442c29463c085b",
+      "Size": 1817804,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/dungeon_weird_place.mp3"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.deps.json",
@@ -4184,8 +4250,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe",
-      "Hash": "b34b2837004e9cdf979becdad250a901bca8d8bf8f78aa8465e48e78f4f79fea",
-      "Size": 160894,
+      "Hash": "aabd5bdd44368b34faf6a01b4d14a2135337a5e4b3f9382f119c5558f45d1793",
+      "Size": 161918,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe"
     },
     {
@@ -4193,6 +4259,36 @@
       "Hash": "c71152bf25e40d647b2440c5b39be157a3d356106be9d5b678ab97bb87b4e782",
       "Size": 458,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.runtimeconfig.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_aincrad.mp3",
+      "Hash": "b5ec54809ec7d73feb887a16475aa48ecfc72d1c726ef8cd5086004eea1e8c2e",
+      "Size": 1513316,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_aincrad.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_desert.mp3",
+      "Hash": "ff927142dba9fc31828b7020f8a43e497679d6860728b1cf3dfed18b01fc1196",
+      "Size": 1759604,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_desert.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_snow.mp3",
+      "Hash": "fc05d5e41d3450c2795da1fa7afa51ac419e70786a86953fbd022b7ab23265d1",
+      "Size": 1449428,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_snow.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_volcano.mp3",
+      "Hash": "062a778f903c63ceabce29e522a4fdfc15d1b97ecea536271211796abddf2b53",
+      "Size": 2017940,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_volcano.mp3"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/victory_fanfare.mp3",
+      "Hash": "eec187bdcaf2b8db9b5133e4569b3d7fe99918eea8e78f098f9c4e0563d69551",
+      "Size": 1426532,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/victory_fanfare.mp3"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/config.json",
@@ -4220,8 +4316,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/boss_music.lua",
-      "Hash": "f82f36ec7d0dd4a7b8be22f6b8e30934af850fdee0f8c4e7b1b2246193f59e32",
-      "Size": 3801,
+      "Hash": "2b503fbfe625cf18e7cd5211f8a06add9a1eb832fde7297ddb92cf1632a5d65a",
+      "Size": 9664,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/boss_music.lua"
     },
     {
