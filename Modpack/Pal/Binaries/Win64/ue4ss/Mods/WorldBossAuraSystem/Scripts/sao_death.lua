@@ -95,7 +95,6 @@ local function HandleSAODeath(Character)
 
             -- IMPORTANT: Preserve Actor and Collision so other Base Pals can pick up and carry the soul flame!
             Character:SetActorEnableCollision(true)
-            pcall(function() Character:SetActorHiddenInGame(false) end)
 
             -- Spawn & Attach Floating Soul Flame Particle
             if not ActiveSoulFlames[Character] then
@@ -131,9 +130,8 @@ local function HandleSAODeath(Character)
         pcall(function() if Mesh then state.meshPhysics = Mesh:IsSimulatingPhysics() end end)
         OriginalState[Character] = state
 
-        -- Stop Actor Collision & Hide Root Actor
+        -- Stop Actor Collision (Do NOT hide actor as it reveals debug primitives like Arrow/Capsule)
         Character:SetActorEnableCollision(false)
-        pcall(function() Character:SetActorHiddenInGame(true) end)
 
         -- Suppress Ragdoll Component
         if Character.PalDeadRagdollComponent and Character.PalDeadRagdollComponent:IsValid() then
@@ -229,11 +227,20 @@ local function RestoreCharacter(Character)
             if type(Mesh.SetCollisionEnabled) == "function" then Mesh:SetCollisionEnabled(state.meshCollision or 1) end
             if type(Mesh.SetSimulatePhysics) == "function" then Mesh:SetSimulatePhysics(state.meshPhysics == true) end
         end
-        -- Keep collision capsule invisible so red debug wireframe is never rendered
-        local Capsule = Character.CapsuleComponent or (type(Character.GetRootComponent) == "function" and Character:GetRootComponent())
-        if Capsule and Capsule:IsValid() and type(Capsule.SetHiddenInGame) == "function" then
-            pcall(function() Capsule:SetHiddenInGame(true, false) end)
-        end
+        -- Ensure all non-mesh primitive components (ArrowComponent, CapsuleComponent, etc.) are strictly hidden
+        pcall(function()
+            local primClass = StaticFindObject("/Script/Engine.PrimitiveComponent")
+            if primClass and type(Character.K2_GetComponentsByClass) == "function" then
+                for _, comp in ipairs(Character:K2_GetComponentsByClass(primClass) or {}) do
+                    if comp and comp:IsValid() then
+                        local cName = tostring(comp:GetClass():GetName())
+                        if cName ~= "SkeletalMeshComponent" and cName ~= "StaticMeshComponent" and cName ~= "PalSkeletalMeshComponent" then
+                            comp:SetHiddenInGame(true, false)
+                        end
+                    end
+                end
+            end
+        end)
         OriginalState[Character] = nil
     end)
 end

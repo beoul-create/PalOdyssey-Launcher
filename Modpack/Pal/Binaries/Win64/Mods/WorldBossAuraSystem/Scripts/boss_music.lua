@@ -590,11 +590,22 @@ function BossMusic.Init()
                 if player and player:IsValid() then
                     IsInTitle = false
 
-                    -- Ensure capsule collision wireframe is never rendered on player
-                    local cap = player.CapsuleComponent or (type(player.GetRootComponent) == "function" and player:GetRootComponent())
-                    if cap and cap:IsValid() and type(cap.SetHiddenInGame) == "function" then
-                        pcall(function() cap:SetHiddenInGame(true, false) end)
-                    end
+                    -- Ensure debug primitives (ArrowComponent at feet, CapsuleComponent wireframe, look vector lines) are strictly hidden
+                    pcall(function()
+                        local primClass = StaticFindObject("/Script/Engine.PrimitiveComponent")
+                        if primClass and type(player.K2_GetComponentsByClass) == "function" then
+                            for _, comp in ipairs(player:K2_GetComponentsByClass(primClass) or {}) do
+                                if comp and comp:IsValid() then
+                                    local cName = tostring(comp:GetClass():GetName())
+                                    if cName ~= "SkeletalMeshComponent" and cName ~= "StaticMeshComponent" and cName ~= "PalSkeletalMeshComponent" then
+                                        if not comp.bHiddenInGame then
+                                            pcall(function() comp:SetHiddenInGame(true, false) end)
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end)
 
                     local pLoc = player:K2_GetActorLocation()
                     if pLoc then
