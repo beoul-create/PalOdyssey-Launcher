@@ -1,11 +1,11 @@
 {
-  "Version": "20260902004746",
-  "GeneratedAt": "2026-09-02T00:47:46.409Z",
+  "Version": "20260902005028",
+  "GeneratedAt": "2026-09-02T00:50:28.839Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 725,
+  "TotalFiles": 724,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -4373,12 +4373,6 @@
       "Hash": "8387f4641e09038931f8cff595c23cc3663918707ae509cb16447bc2482bc987",
       "Size": 643404,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Content/Paks/~mods/Catch%20All%20PREDATOR%20Bosses_P.pak"
-    },
-    {
-      "RelativePath": "version.json",
-      "Hash": "ae902a96d7acb92b77832f67c1dd10c7c18a9a7f315c92c234e035c2e504624a",
-      "Size": 127713,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/version.json"
     }
   ]
 }
