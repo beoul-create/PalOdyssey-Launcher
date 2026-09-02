@@ -1,11 +1,11 @@
 {
-  "Version": "20260902004417",
-  "GeneratedAt": "2026-09-02T00:44:17.277Z",
+  "Version": "20260902004646",
+  "GeneratedAt": "2026-09-02T00:46:46.471Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
   "GameVersion": "v0.3.5 Modded",
-  "TotalFiles": 723,
+  "TotalFiles": 725,
   "Launcher": {
     "Version": "2.0.1",
     "DownloadUrl": "https://github.com/beoul-create/PalOdyssey-Launcher/releases/latest/download/PalLauncher.exe",
@@ -2119,6 +2119,12 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_volcano.mp3"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/title_perfect_time.mp3",
+      "Hash": "20b72b7d9bac4c11002e8cb58cfe05ab1768e43fb64374dd192b4249df1eecc2",
+      "Size": 4784444,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/title_perfect_time.mp3"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/victory_fanfare.mp3",
       "Hash": "eec187bdcaf2b8db9b5133e4569b3d7fe99918eea8e78f098f9c4e0563d69551",
       "Size": 1426532,
@@ -2150,8 +2156,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua",
-      "Hash": "2b503fbfe625cf18e7cd5211f8a06add9a1eb832fde7297ddb92cf1632a5d65a",
-      "Size": 9664,
+      "Hash": "3b48f22b4094eff9c36404455631b7b0255c496372cdbb45fd3d86ae5d03d515",
+      "Size": 10930,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua"
     },
     {
@@ -4285,6 +4291,12 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_volcano.mp3"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/title_perfect_time.mp3",
+      "Hash": "20b72b7d9bac4c11002e8cb58cfe05ab1768e43fb64374dd192b4249df1eecc2",
+      "Size": 4784444,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/title_perfect_time.mp3"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/victory_fanfare.mp3",
       "Hash": "eec187bdcaf2b8db9b5133e4569b3d7fe99918eea8e78f098f9c4e0563d69551",
       "Size": 1426532,
@@ -4316,8 +4328,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/boss_music.lua",
-      "Hash": "2b503fbfe625cf18e7cd5211f8a06add9a1eb832fde7297ddb92cf1632a5d65a",
-      "Size": 9664,
+      "Hash": "3b48f22b4094eff9c36404455631b7b0255c496372cdbb45fd3d86ae5d03d515",
+      "Size": 10930,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/boss_music.lua"
     },
     {

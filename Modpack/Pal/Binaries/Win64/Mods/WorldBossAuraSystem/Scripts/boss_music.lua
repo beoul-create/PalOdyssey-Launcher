@@ -10,13 +10,9 @@ local CurrentState = "idle"
 local JukeboxStarted = false
 local VictoryTimer = 0
 
--- Priority Levels:
--- 4: World / Raid Boss (One Punch Man)
--- 3: Field Boss Combat / Near Field Boss (Luminous Sword)
--- 2: Victory Fanfare (SAO Victory)
--- 1: Dungeon / Cave (Weird Place)
--- 0: Base Camp / Regional Exploration (The First Town, Aincrad, Snow, Desert, Volcano)
-
+-- State tracking
+local IsInTitle = true
+local IsConnecting = false
 local ActiveMajorBossCombat = false
 local ActiveFieldBossCombat = false
 local ActiveNearBoss = false
@@ -57,6 +53,7 @@ function BossMusic.FadeOut()
             f:close()
         end
     end)
+    print("[WorldBossAuraSystem] 🎵 Jukebox fading out.")
 end
 
 function BossMusic.PlayVictoryFanfare()
@@ -64,6 +61,27 @@ function BossMusic.PlayVictoryFanfare()
     ActiveFieldBossCombat = false
     VictoryTimer = os.time() + 6 -- 6 seconds fanfare
     BossMusic.SetTrack("victory_fanfare.mp3", false, 0.75)
+end
+
+local function OnTitleScreen()
+    IsInTitle = true
+    IsConnecting = false
+    ActiveMajorBossCombat = false
+    ActiveFieldBossCombat = false
+    BossMusic.SetTrack("title_perfect_time.mp3", true, 0.70)
+end
+
+local function OnConnectingToServer()
+    if IsConnecting then return end
+    IsConnecting = true
+    IsInTitle = false
+    print("[WorldBossAuraSystem] 🌐 Connecting to server... fading title music.")
+    BossMusic.FadeOut()
+end
+
+local function OnJoinedWorld()
+    IsConnecting = false
+    IsInTitle = false
 end
 
 local function GetLocalPlayer()
@@ -139,6 +157,17 @@ local function UpdateMusicState()
         return -- Fanfare is currently playing
     end
 
+    -- Priority 0: Title Screen
+    if IsInTitle then
+        BossMusic.SetTrack("title_perfect_time.mp3", true, 0.70)
+        return
+    end
+
+    -- Priority 0.5: Connecting to server (silence / faded out)
+    if IsConnecting then
+        return
+    end
+
     -- Priority 1: 5-Minute Aura World Boss / Tower Boss / Raid Boss Combat
     if ActiveMajorBossCombat then
         BossMusic.SetTrack("boss_theme_opm.mp3", true, 0.80)
@@ -164,7 +193,28 @@ local function UpdateMusicState()
 end
 
 function BossMusic.Init()
-    -- 1. Damage hooks to detect Combat
+    -- 1. Title Screen & Connection Hooks
+    pcall(function()
+        NotifyOnNewObject("/Script/Pal.PalGameStateInTitle", function()
+            OnTitleScreen()
+        end)
+    end)
+
+    pcall(function()
+        NotifyOnNewObject("/Script/Engine.NetConnection", function()
+            OnConnectingToServer()
+        end)
+    end)
+
+    pcall(RegisterHook, "/Script/Engine.PlayerController:ClientTravel", function(Context)
+        OnConnectingToServer()
+    end)
+
+    pcall(RegisterHook, "/Script/Engine.PlayerController:ClientRestart", function(Context)
+        OnJoinedWorld()
+    end)
+
+    -- 2. Damage hooks to detect Combat
     pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDamage", function(Context, DamageInfo)
         pcall(function()
             local victim = Context and Context.get and Context:get() or Context
@@ -196,18 +246,18 @@ function BossMusic.Init()
         end)
     end)
 
-    -- 2. Boss HP UI Show
+    -- 3. Boss HP UI Show
     pcall(RegisterHook, "/Script/Pal.PalUIBossHP:Show", function(Context)
         ActiveFieldBossCombat = true
         BossMusic.SetTrack("boss_luminous_sword.mp3", true, 0.75)
     end)
 
-    -- 3. Capture Success -> Victory Fanfare
+    -- 4. Capture Success -> Victory Fanfare
     pcall(RegisterHook, "/Script/Pal.PalCaptureSubsystem:OnCaptureSuccess", function(Context)
         BossMusic.PlayVictoryFanfare()
     end)
 
-    -- 4. Boss Death -> Victory Fanfare
+    -- 5. Boss Death -> Victory Fanfare
     pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDead", function(Context)
         pcall(function()
             local dead = Context and Context.get and Context:get() or Context
@@ -223,18 +273,25 @@ function BossMusic.Init()
         end)
     end)
 
-    -- 5. Periodic Background Loop (Checks location & proximity every 2.5s with zero tick overhead)
+    -- Initial startup: Check if player exists or at title
+    local initP = GetLocalPlayer()
+    if not initP then
+        OnTitleScreen()
+    else
+        IsInTitle = false
+    end
+
+    -- 6. Periodic Background Loop
     local delayFunc = ExecuteInGameThreadWithDelay or ExecuteWithDelay
     if delayFunc then
         local function MusicLoop()
             pcall(function()
-                -- Check proximity to World Bosses or Field Bosses
                 local player = GetLocalPlayer()
                 ActiveNearBoss = false
                 if player and player:IsValid() then
+                    IsInTitle = false
                     local pLoc = player:K2_GetActorLocation()
                     if pLoc then
-                        -- Check World Boss distance
                         local wb = package.loaded["world_boss"]
                         if wb and wb.GetActiveBosses then
                             for _, data in pairs(wb.GetActiveBosses()) do
@@ -258,7 +315,7 @@ function BossMusic.Init()
         delayFunc(3000, MusicLoop)
     end
 
-    print("[WorldBossAuraSystem] Universal Regional, Dungeon & Boss Music System initialized.")
+    print("[WorldBossAuraSystem] Universal Title, Regional, Dungeon & Boss Music System initialized.")
 end
 
 return BossMusic
