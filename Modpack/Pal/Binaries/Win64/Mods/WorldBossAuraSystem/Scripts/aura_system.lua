@@ -37,6 +37,16 @@ local AuraMap = {
         "/Game/Pal/Effect/Niagara/Common/NS_LevelUp_01.NS_LevelUp_01",
         "/Game/Pal/Effect/Niagara/Common/NS_Capture_Success.NS_Capture_Success",
         "/Game/Pal/Effect/Niagara/Common/NS_Pal_Revive.NS_Pal_Revive"
+    },
+    ["Transmigrator"] = {
+        "/Game/Pal/Effect/Niagara/Common/NS_Pal_Vanish.NS_Pal_Vanish",
+        "/Game/Pal/Effect/Niagara/Skill/Dark/NS_Skill_Dark_Laser_01.NS_Skill_Dark_Laser_01",
+        "/Game/Pal/Effect/Niagara/Common/NS_Capture_Success.NS_Capture_Success"
+    },
+    ["Regressor"] = {
+        "/Game/Pal/Effect/Niagara/Common/NS_LevelUp_01.NS_LevelUp_01",
+        "/Game/Pal/Effect/Niagara/Common/NS_Common_Hit_Critical.NS_Common_Hit_Critical",
+        "/Game/Pal/Effect/Niagara/Common/NS_Status_Fire.NS_Status_Fire"
     }
 }
 
@@ -48,7 +58,19 @@ local AuraMetadata = {
     ["Verdant"] = { Passive = "SpiritEmperor", Color = 3066993, Desc = "Blooming with primal flora essence (+20% Grass Damage)" },
     ["Tidal"] = { Passive = "LordOfSea", Color = 2003199, Desc = "Surging with high-pressure ocean currents (+20% Water Damage)" },
     ["Draconic"] = { Passive = "DivineDragon", Color = 15277667, Desc = "Empowered by ancient dragon majesty (+20% Dragon Damage)" },
-    ["Radiant"] = { Passive = "Legend", Color = 15844367, Desc = "Blessed by divine celestial light (+20% Atk, +20% Def, +15% Speed)" }
+    ["Radiant"] = { Passive = "Legend", Color = 15844367, Desc = "Blessed by divine celestial light (+20% Atk, +20% Def, +15% Speed)" },
+    ["Transmigrator"] = {
+        Passive = "Passive_Transmigrator",
+        SecondaryPassives = { "Swift", "Runner" },
+        Color = 10840509,
+        Desc = "🌌 Transcends dimensional boundaries: Unlimited Level Cap & 2x Movement Speed!"
+    },
+    ["Regressor"] = {
+        Passive = "Passive_Regressor",
+        SecondaryPassives = { "Passive_Regressor_Cooldown", "CoolTimeReduction_Up_1", "CoolTimeReduction_Up_2" },
+        Color = 16718105,
+        Desc = "⏳ Relives infinite temporal loops: 4x Stats & 100% Skill Cooldown Reduction!"
+    }
 }
 
 function AuraSystem.GetMetadata(auraType)
@@ -56,7 +78,7 @@ function AuraSystem.GetMetadata(auraType)
 end
 
 function AuraSystem.GetAllAuras()
-    return { "Fiery", "Glacial", "Celestial", "Corrupted", "Verdant", "Tidal", "Draconic", "Radiant" }
+    return { "Fiery", "Glacial", "Celestial", "Corrupted", "Verdant", "Tidal", "Draconic", "Radiant", "Transmigrator", "Regressor" }
 end
 
 local function FindValidAura(auraType)

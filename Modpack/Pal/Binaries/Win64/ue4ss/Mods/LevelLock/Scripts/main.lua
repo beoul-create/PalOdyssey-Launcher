@@ -1131,7 +1131,21 @@ local function clampToCap(selfObj, cap, isPlayer, source)
 
     local sp = selfObj.SaveParameter
 
-    if level < cap then
+    -- Transmigrator Pals are exempt from all level caps (Unlimited level cap!)
+    if not isPlayer and sp then
+        local isTransmigrator = false
+        pcall(function()
+            if sp.PassiveSkillList then
+                for _, s in ipairs(sp.PassiveSkillList) do
+                    local str = tostring(s)
+                    if str:find("Transmigrator") then isTransmigrator = true break end
+                end
+            end
+        end)
+        if isTransmigrator then
+            return level
+        end
+    end
         frozenExp[key] = nil
         -- below the cap is where the bank pays out
         if isPlayer and sp then restSpend(selfObj, sp, key, cap, isPlayer) end

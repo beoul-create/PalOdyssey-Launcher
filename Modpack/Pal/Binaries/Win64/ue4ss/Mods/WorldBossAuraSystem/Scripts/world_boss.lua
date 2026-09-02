@@ -283,15 +283,22 @@ function WorldBoss.SpawnEvent()
             BossActor:SetActorScale3D({ X = WorldScale, Y = WorldScale, Z = WorldScale })
         end)
 
-        -- 2. Apply 100x HP and 2x Combat Parameters
+        -- 2. Apply Combat Parameters (Special scaling for Regressor 4x and Transmigrator 2x speed)
         pcall(function()
             local Param = BossActor.CharacterParameterComponent
             if Param and Param:IsValid() then
+                local hpMult = (SelectedAura == "Regressor" and 400) or 100
+                local combatMult = (SelectedAura == "Regressor" and 8) or 2
                 local BaseHP = Param:GetMaxHP() or 5000
-                Param:SetMaxHP(BaseHP * 100)
-                Param:SetHP(BaseHP * 100)
-                if type(Param.SetAttack) == "function" then Param:SetAttack((Param:GetAttack() or 100) * 2) end
-                if type(Param.SetDefense) == "function" then Param:SetDefense((Param:GetDefense() or 100) * 2) end
+                Param:SetMaxHP(BaseHP * hpMult)
+                Param:SetHP(BaseHP * hpMult)
+                if type(Param.SetAttack) == "function" then Param:SetAttack((Param:GetAttack() or 100) * combatMult) end
+                if type(Param.SetDefense) == "function" then Param:SetDefense((Param:GetDefense() or 100) * combatMult) end
+            end
+            if SelectedAura == "Transmigrator" and BossActor.CharacterMovement and BossActor.CharacterMovement:IsValid() then
+                local cm = BossActor.CharacterMovement
+                if cm.MaxWalkSpeed then cm.MaxWalkSpeed = cm.MaxWalkSpeed * 2.0 end
+                if cm.MaxFlySpeed then cm.MaxFlySpeed = cm.MaxFlySpeed * 2.0 end
             end
         end)
 
@@ -402,11 +409,44 @@ function WorldBoss.InitHooks()
                 IndividualParam:SetTalentShotAttack(200)
                 IndividualParam:SetTalentDefense(200)
 
-                -- Grant Aura Elemental Emperor / Legend Passive Perk
+                -- Grant Aura Elemental Emperor / Legend / Mythic Passive Perks
                 local meta = AuraSystem.GetMetadata and AuraSystem.GetMetadata(bossData.Aura)
                 if meta and meta.Passive and type(IndividualParam.AddPassiveSkill) == "function" then
                     pcall(function()
                         IndividualParam:AddPassiveSkill(FName(meta.Passive))
+                    end)
+                end
+                if meta and meta.SecondaryPassives and type(IndividualParam.AddPassiveSkill) == "function" then
+                    for _, sec in ipairs(meta.SecondaryPassives) do
+                        pcall(function()
+                            IndividualParam:AddPassiveSkill(FName(sec))
+                        end)
+                    end
+                end
+
+                -- Special Mechanics for Transmigrator (2x MoveSpeed)
+                if bossData.Aura == "Transmigrator" then
+                    pcall(function()
+                        if Pal.CharacterMovement and Pal.CharacterMovement:IsValid() then
+                            local cm = Pal.CharacterMovement
+                            if cm.MaxWalkSpeed then cm.MaxWalkSpeed = cm.MaxWalkSpeed * 2.0 end
+                            if cm.MaxFlySpeed then cm.MaxFlySpeed = cm.MaxFlySpeed * 2.0 end
+                            if cm.MaxSwimSpeed then cm.MaxSwimSpeed = cm.MaxSwimSpeed * 2.0 end
+                        end
+                    end)
+                end
+
+                -- Special Mechanics for Regressor (4x Base Stats)
+                if bossData.Aura == "Regressor" then
+                    pcall(function()
+                        local charParam = Pal.CharacterParameterComponent
+                        if charParam and charParam:IsValid() then
+                            local hp = charParam:GetMaxHP() or 5000
+                            charParam:SetMaxHP(hp * 4)
+                            charParam:SetHP(hp * 4)
+                            if type(charParam.SetAttack) == "function" then charParam:SetAttack((charParam:GetAttack() or 100) * 4) end
+                            if type(charParam.SetDefense) == "function" then charParam:SetDefense((charParam:GetDefense() or 100) * 4) end
+                        end
                     end)
                 end
             end
