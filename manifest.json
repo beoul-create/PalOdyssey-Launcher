@@ -1,6 +1,6 @@
 {
-  "Version": "20260902005028",
-  "GeneratedAt": "2026-09-02T00:50:28.839Z",
+  "Version": "20260902005623",
+  "GeneratedAt": "2026-09-02T00:56:23.944Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -2132,8 +2132,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/config.json",
-      "Hash": "f3fca9257c7dbcb95f2754914554da946c7794053c072e429a9a58304e629de2",
-      "Size": 786,
+      "Hash": "0ba617e8a500e1455f8bdfb62a5c30f4e8ca78ac8e6fdd379e28258829380ada",
+      "Size": 815,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/config.json"
     },
     {
@@ -2156,8 +2156,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua",
-      "Hash": "048a969ef5e25cb99c9614f57c9608ba79f2dfef51bec60986767382afe6039f",
-      "Size": 11969,
+      "Hash": "738c33d172a3bd7eec25682419338025d144a826eb6714d6e1e6b35a4019ce28",
+      "Size": 12505,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/Scripts/boss_music.lua"
     },
     {
@@ -4304,8 +4304,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/config.json",
-      "Hash": "f3fca9257c7dbcb95f2754914554da946c7794053c072e429a9a58304e629de2",
-      "Size": 786,
+      "Hash": "0ba617e8a500e1455f8bdfb62a5c30f4e8ca78ac8e6fdd379e28258829380ada",
+      "Size": 815,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/config.json"
     },
     {
@@ -4328,8 +4328,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/boss_music.lua",
-      "Hash": "048a969ef5e25cb99c9614f57c9608ba79f2dfef51bec60986767382afe6039f",
-      "Size": 11969,
+      "Hash": "738c33d172a3bd7eec25682419338025d144a826eb6714d6e1e6b35a4019ce28",
+      "Size": 12505,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/boss_music.lua"
     },
     {

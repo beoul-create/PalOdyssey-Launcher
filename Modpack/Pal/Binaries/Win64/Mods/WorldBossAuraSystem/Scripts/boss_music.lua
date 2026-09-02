@@ -30,20 +30,37 @@ local function EnsureJukeboxRunning()
     end)
 end
 
+local function GetMasterVolume()
+    local vol = 0.40
+    pcall(function()
+        local f = io.open(ScriptDir .. "../config.json", "r")
+        if f then
+            local txt = f:read("*all")
+            f:close()
+            local m = txt:match('"MusicMasterVolume"%s*:%s*([%d%.]+)')
+            if m then vol = tonumber(m) or 0.40 end
+        end
+    end)
+    return math.max(0.0, math.min(1.0, vol))
+end
+
 function BossMusic.SetTrack(trackName, loop, volume)
     if CurrentTrack == trackName and CurrentState == "play" then return end
     EnsureJukeboxRunning()
     CurrentTrack = trackName
     CurrentState = "play"
 
+    local master = GetMasterVolume()
+    local finalVol = math.max(0.01, math.min(1.0, (volume or 0.65) * master))
+
     pcall(function()
         local f = io.open(StateFile, "w")
         if f then
-            f:write(string.format('{"state":"play","track":"%s","loop":%s,"volume":%.2f}', trackName, loop and "true" or "false", volume or 0.65))
+            f:write(string.format('{"state":"play","track":"%s","loop":%s,"volume":%.2f}', trackName, loop and "true" or "false", finalVol))
             f:close()
         end
     end)
-    print(string.format("[WorldBossAuraSystem] 🎵 Jukebox playing: %s (Loop: %s, Vol: %.2f)", trackName, tostring(loop), volume or 0.65))
+    print(string.format("[WorldBossAuraSystem] 🎵 Jukebox playing: %s (Loop: %s, Vol: %.2f [Master: %.2f])", trackName, tostring(loop), finalVol, master))
 end
 
 function BossMusic.FadeOut()

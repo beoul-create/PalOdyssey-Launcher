@@ -1,4 +1,5 @@
 {
+  "MusicMasterVolume": 0.35,
   "SpawnIntervalSeconds": 900,
   "MaxActiveBosses": 1,
   "SpawnCommandCooldownSeconds": 60,
