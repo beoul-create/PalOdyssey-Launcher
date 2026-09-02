@@ -459,7 +459,7 @@
     "C:\\Users\\jackt\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "2.0.1",
+    "version": "1.0.0",
     "restore": {
       "projectUniqueName": "C:\\PalOdyssey Launcher 2.0\\scratch\\github-audit-20260829\\launcher\\PalLauncher\\PalLauncher.csproj",
       "projectName": "PalLauncher",
@@ -522,6 +522,10 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
+            "version": "[8.0.30, 8.0.30]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Crossgen2.win-x64",
             "version": "[8.0.30, 8.0.30]"
           },
           {

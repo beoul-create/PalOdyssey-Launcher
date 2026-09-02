@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "SrqJ7SBoYhE=",
+  "dgSpecHash": "KQuUYOKSs/A=",
   "success": true,
   "projectFilePath": "C:\\PalOdyssey Launcher 2.0\\scratch\\github-audit-20260829\\launcher\\PalLauncher\\PalLauncher.csproj",
   "expectedPackageFiles": [
@@ -13,7 +13,8 @@
     "C:\\Users\\jackt\\.nuget\\packages\\system.security.principal.windows\\4.5.0\\system.security.principal.windows.4.5.0.nupkg.sha512",
     "C:\\Users\\jackt\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\8.0.30\\microsoft.netcore.app.runtime.win-x64.8.0.30.nupkg.sha512",
     "C:\\Users\\jackt\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\8.0.30\\microsoft.windowsdesktop.app.runtime.win-x64.8.0.30.nupkg.sha512",
-    "C:\\Users\\jackt\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.30\\microsoft.aspnetcore.app.runtime.win-x64.8.0.30.nupkg.sha512"
+    "C:\\Users\\jackt\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.30\\microsoft.aspnetcore.app.runtime.win-x64.8.0.30.nupkg.sha512",
+    "C:\\Users\\jackt\\.nuget\\packages\\microsoft.netcore.app.crossgen2.win-x64\\8.0.30\\microsoft.netcore.app.crossgen2.win-x64.8.0.30.nupkg.sha512"
   ],
   "logs": []
 }

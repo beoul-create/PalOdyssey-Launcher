@@ -618,9 +618,6 @@ function BossMusic.Init()
                 ActiveNearBoss = false
                 if player and player:IsValid() then
                     IsInTitle = false
-                else
-                    IsInTitle = true
-
                     local pLoc = player:K2_GetActorLocation()
                     if pLoc then
                         -- Check expiry of combat music (15s after last combat hit)
@@ -644,11 +641,13 @@ function BossMusic.Init()
                             end
                         end
                     end
+                else
+                    IsInTitle = true
                 end
 
                 UpdateMusicState()
             end)
-            delayFunc(5000, MusicLoop)
+            delayFunc(3000, MusicLoop)
         end
         delayFunc(4000, MusicLoop)
     end
