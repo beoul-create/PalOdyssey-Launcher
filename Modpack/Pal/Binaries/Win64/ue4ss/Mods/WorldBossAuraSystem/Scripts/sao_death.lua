@@ -41,15 +41,19 @@ local function HandleSAODeath(Character)
         local Rotation = Character:K2_GetActorRotation()
         local World = Character:GetWorld()
 
-        -- 1. Disable Actor Collision & Ragdoll Physics across all components
-        local Mesh = Character.Mesh
+        -- 1. Disable Actor Collision & Suppress Ragdoll Physics across all components
+        local Mesh = Character.Mesh or (type(Character.GetMesh) == "function" and Character:GetMesh())
         local state = { actorCollision = true, meshCollision = 1, meshPhysics = false }
         pcall(function() state.actorCollision = Character:GetActorEnableCollision() end)
         pcall(function() if Mesh then state.meshCollision = Mesh:GetCollisionEnabled() end end)
         pcall(function() if Mesh then state.meshPhysics = Mesh:IsSimulatingPhysics() end end)
         OriginalState[Character] = state
-        Character:SetActorEnableCollision(false)
 
+        -- Stop Actor Collision & Hide Root Actor
+        Character:SetActorEnableCollision(false)
+        pcall(function() Character:SetActorHiddenInGame(true) end)
+
+        -- Suppress Ragdoll Component
         if Character.PalDeadRagdollComponent and Character.PalDeadRagdollComponent:IsValid() then
             Character.PalDeadRagdollComponent.bEnablePhysics = false
             if type(Character.PalDeadRagdollComponent.Deactivate) == "function" then
@@ -57,15 +61,44 @@ local function HandleSAODeath(Character)
             end
         end
 
+        -- Suppress Primary Mesh
         if Mesh and Mesh:IsValid() then
+            -- A. Stop active death animation / collapse montage
+            pcall(function()
+                local AnimInstance = Mesh:GetAnimInstance()
+                if AnimInstance and AnimInstance:IsValid() and type(AnimInstance.Montage_Stop) == "function" then
+                    AnimInstance:Montage_Stop(0.0)
+                end
+            end)
+
+            -- B. Stop physics calculations and cut collision
             if type(Mesh.SetSimulatePhysics) == "function" then
                 Mesh:SetSimulatePhysics(false)
             end
             if type(Mesh.SetCollisionEnabled) == "function" then
                 Mesh:SetCollisionEnabled(0) -- ECollisionEnabled::NoCollision
             end
+
+            -- C. Hide Mesh instantly propagating to all attached equipment/props
             Mesh:SetVisibility(false, true)
+            pcall(function() Mesh:SetHiddenInGame(true, true) end)
         end
+
+        -- Suppress all attached child Skeletal Mesh components (Hair, Armor, Saddles, Weapons)
+        pcall(function()
+            local skelClass = StaticFindObject("/Script/Engine.SkeletalMeshComponent")
+            if skelClass and type(Character.K2_GetComponentsByClass) == "function" then
+                local components = Character:K2_GetComponentsByClass(skelClass) or {}
+                for _, comp in ipairs(components) do
+                    if comp and comp:IsValid() then
+                        if type(comp.SetSimulatePhysics) == "function" then comp:SetSimulatePhysics(false) end
+                        if type(comp.SetCollisionEnabled) == "function" then comp:SetCollisionEnabled(0) end
+                        comp:SetVisibility(false, true)
+                        pcall(function() comp:SetHiddenInGame(true, true) end)
+                    end
+                end
+            end
+        end)
 
         -- 2. Spawn Crystal Polygon Burst (SAO Shatter Effect)
         local NiagaraFunc = StaticFindObject("/Script/Niagara.Default__NiagaraFunctionLibrary")
