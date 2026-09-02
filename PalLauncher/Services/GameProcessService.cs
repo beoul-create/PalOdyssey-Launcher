@@ -548,6 +548,15 @@ namespace PalLauncher.Services
                 detectedProcess?.Dispose();
                 IsGameRunning = false;
                 GameExited?.Invoke();
+
+                try
+                {
+                    foreach (var jb in Process.GetProcessesByName("PalBossJukebox"))
+                    {
+                        try { jb.Kill(); jb.Dispose(); } catch { }
+                    }
+                }
+                catch { }
             }
         }
     }

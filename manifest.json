@@ -1,6 +1,6 @@
 {
-  "Version": "20260902005623",
-  "GeneratedAt": "2026-09-02T00:56:23.944Z",
+  "Version": "20260902010143",
+  "GeneratedAt": "2026-09-02T01:01:43.031Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -2084,8 +2084,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe",
-      "Hash": "aabd5bdd44368b34faf6a01b4d14a2135337a5e4b3f9382f119c5558f45d1793",
-      "Size": 161918,
+      "Hash": "1d36510bbc045fa83639b5fc900344eb04540d3d7f92789314555af744e2871d",
+      "Size": 162430,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe"
     },
     {
@@ -4256,8 +4256,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe",
-      "Hash": "aabd5bdd44368b34faf6a01b4d14a2135337a5e4b3f9382f119c5558f45d1793",
-      "Size": 161918,
+      "Hash": "1d36510bbc045fa83639b5fc900344eb04540d3d7f92789314555af744e2871d",
+      "Size": 162430,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/PalBossJukebox.exe"
     },
     {
