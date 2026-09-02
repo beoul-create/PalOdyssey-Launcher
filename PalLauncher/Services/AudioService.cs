@@ -18,8 +18,8 @@ namespace PalLauncher.Services
         private bool _isLoaded;
 
         public bool IsSoundEnabled { get; set; } = true;
-        public float Volume { get; set; } = 0.20f; // 20% Sound effect volume
-        public float BgmVolume { get; set; } = 0.15f; // 15% Launcher BGM volume
+        public float Volume { get; set; } = 0.15f; // 15% Sound effect volume
+        public float BgmVolume { get; set; } = 0.05f; // 5% Launcher BGM volume (subtle, gentle background)
 
         public void Initialize()
         {
@@ -124,6 +124,15 @@ namespace PalLauncher.Services
                 _bgmPlayer.Play();
             }
             catch { }
+        }
+
+        public void SetBgmVolume(float volume)
+        {
+            BgmVolume = Math.Clamp(volume, 0.0f, 1.0f);
+            if (_bgmPlayer != null)
+            {
+                _bgmPlayer.Volume = BgmVolume;
+            }
         }
 
         public void StopBgm()
