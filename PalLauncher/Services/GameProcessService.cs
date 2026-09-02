@@ -509,6 +509,7 @@ namespace PalLauncher.Services
             {
                 if (directProcess != null && !directProcess.HasExited)
                 {
+                    try { directProcess.PriorityClass = ProcessPriorityClass.High; } catch { }
                     await directProcess.WaitForExitAsync(cancellationToken);
                 }
                 else

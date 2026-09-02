@@ -188,119 +188,85 @@ local function GetLocalPlayer()
     return player
 end
 
+local CachedBasePoints = {}
+local LastBaseDiscoveryTime = 0
+
 local function DetermineRegionTrack(playerLoc, player)
     -- 1. Check if inside Dungeon / Underground Cave instance
     if playerLoc.Z < -30000.0 then
         return "dungeon_weird_place.mp3", 0.65
     end
 
-    -- 2. Check if in Player Base Camp (multi-method detection)
+    -- 2. Fast Coordinate Check against Cached Base Camps (0% CPU overhead)
     local inBase = false
+    local nowClock = os.clock()
 
-    -- Method A: Palbox / Base Camp Point Actors
-    pcall(function()
-        local boxClasses = { "BP_PalBox_C", "PalMapObjectBaseCampPoint", "BP_BaseCampPoint_C" }
-        for _, cls in ipairs(boxClasses) do
-            local boxes = FindAllOf and FindAllOf(cls)
-            if boxes and #boxes > 0 then
-                for _, b in ipairs(boxes) do
-                    if b and b:IsValid() then
-                        local bLoc = b:K2_GetActorLocation()
-                        if bLoc then
-                            local dx = playerLoc.X - bLoc.X
-                            local dy = playerLoc.Y - bLoc.Y
-                            if (dx*dx + dy*dy) <= (4800.0 * 4800.0) then
-                                inBase = true
-                                return
+    for _, pt in ipairs(CachedBasePoints) do
+        local dx = playerLoc.X - pt.X
+        local dy = playerLoc.Y - pt.Y
+        if (dx*dx + dy*dy) <= (pt.Radius * pt.Radius) then
+            inBase = true
+            break
+        end
+    end
+
+    -- Low-frequency discovery scan (runs at most once every 45s or if no bases cached)
+    if not inBase and (nowClock - LastBaseDiscoveryTime > 45.0 or #CachedBasePoints == 0) then
+        LastBaseDiscoveryTime = nowClock
+        pcall(function()
+            local boxClasses = { "BP_PalBox_C", "PalMapObjectBaseCampPoint", "BP_BaseCampPoint_C" }
+            for _, cls in ipairs(boxClasses) do
+                local boxes = FindAllOf and FindAllOf(cls)
+                if boxes and #boxes > 0 then
+                    for _, b in ipairs(boxes) do
+                        if b and b:IsValid() then
+                            local bLoc = b:K2_GetActorLocation()
+                            if bLoc then
+                                local exists = false
+                                for _, pt in ipairs(CachedBasePoints) do
+                                    local ddx = pt.X - bLoc.X
+                                    local ddy = pt.Y - bLoc.Y
+                                    if (ddx*ddx + ddy*ddy) < (1000.0 * 1000.0) then exists = true break end
+                                end
+                                if not exists then
+                                    table.insert(CachedBasePoints, { X = bLoc.X, Y = bLoc.Y, Radius = 4800.0 })
+                                end
                             end
                         end
                     end
                 end
+            end
+
+            local camps = FindAllOf and FindAllOf("PalBaseCampModel")
+            if camps and #camps > 0 then
+                for _, camp in ipairs(camps) do
+                    if camp and camp:IsValid() and type(camp.GetLocation) == "function" then
+                        local cLoc = camp:GetLocation()
+                        if cLoc then
+                            local exists = false
+                            for _, pt in ipairs(CachedBasePoints) do
+                                local ddx = pt.X - cLoc.X
+                                local ddy = pt.Y - cLoc.Y
+                                if (ddx*ddx + ddy*ddy) < (1000.0 * 1000.0) then exists = true break end
+                            end
+                            if not exists then
+                                table.insert(CachedBasePoints, { X = cLoc.X, Y = cLoc.Y, Radius = 4500.0 })
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+
+        -- Re-check with freshly updated cache
+        for _, pt in ipairs(CachedBasePoints) do
+            local dx = playerLoc.X - pt.X
+            local dy = playerLoc.Y - pt.Y
+            if (dx*dx + dy*dy) <= (pt.Radius * pt.Radius) then
+                inBase = true
+                break
             end
         end
-    end)
-
-    -- Method B: Check Nearby Base Camp Worker Pals
-    if not inBase then
-        pcall(function()
-            local pals = FindAllOf and (FindAllOf("PalCharacter") or FindAllOf("Character"))
-            if pals then
-                for _, p in ipairs(pals) do
-                    if p and p:IsValid() and p ~= player then
-                        local isBasePal = false
-                        if p.CharacterParameterComponent and p.CharacterParameterComponent:IsValid() then
-                            local param = p.CharacterParameterComponent
-                            if type(param.IsBaseCampPal) == "function" and param:IsBaseCampPal() then
-                                isBasePal = true
-                            elseif type(param.GetAssignedBaseCamp) == "function" and param:GetAssignedBaseCamp() then
-                                isBasePal = true
-                            end
-                        end
-                        if isBasePal then
-                            local loc = p:K2_GetActorLocation()
-                            if loc then
-                                local dx = playerLoc.X - loc.X
-                                local dy = playerLoc.Y - loc.Y
-                                if (dx*dx + dy*dy) <= (3800.0 * 3800.0) then
-                                    inBase = true
-                                    return
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-
-    -- Method C: Check Player-Built Structures Cluster (PalBuildObject)
-    if not inBase then
-        pcall(function()
-            local builds = FindAllOf and FindAllOf("PalBuildObject")
-            if builds and #builds >= 2 then
-                local nearCount = 0
-                for _, b in ipairs(builds) do
-                    if b and b:IsValid() then
-                        local loc = b:K2_GetActorLocation()
-                        if loc then
-                            local dx = playerLoc.X - loc.X
-                            local dy = playerLoc.Y - loc.Y
-                            if (dx*dx + dy*dy) <= (3800.0 * 3800.0) then
-                                nearCount = nearCount + 1
-                                if nearCount >= 2 then
-                                    inBase = true
-                                    return
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-
-    -- Method D: PalBaseCampModel centers
-    if not inBase then
-        pcall(function()
-            local camps = FindAllOf and FindAllOf("PalBaseCampModel")
-            if camps then
-                for _, camp in ipairs(camps) do
-                    if camp and camp:IsValid() then
-                        local cLoc = (type(camp.GetLocation) == "function" and camp:GetLocation())
-                            or (type(camp.GetRawLocation) == "function" and camp:GetRawLocation())
-                            or camp.CenterLocation
-                        if cLoc then
-                            local dx = playerLoc.X - cLoc.X
-                            local dy = playerLoc.Y - cLoc.Y
-                            if (dx*dx + dy*dy) <= (4500.0 * 4500.0) then
-                                inBase = true
-                                return
-                            end
-                        end
-                    end
-                end
-            end
-        end)
     end
 
     if inBase then

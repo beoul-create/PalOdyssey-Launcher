@@ -33,22 +33,25 @@ function GraphicsModule.apply(cfg, cpuCfg)
         ExecuteConsole("r.SkinCache.Mode 0")
         ExecuteConsole("r.SkinCache.CompileShaders 0")
         ExecuteConsole("r.SkinCache.RecomputeTangents 0")
-        ExecuteConsole("r.HZBOcclusion 0")
+        ExecuteConsole("r.HZBOcclusion 1")
         ExecuteConsole("r.AllowOcclusionQueries 1")
-        ExecuteConsole("r.Occlusion.MaxQueriesPerFrame 300")
+        ExecuteConsole("r.Occlusion.MaxQueriesPerFrame 120")
 
-        -- 2. Skeletal URO + Pose Interpolation + Low-Spec Pal Polygon Optimization
-        local lodBias = tonumber(cfg and cfg.skeletalLODBias) or 1
+        -- 2. Skeletal URO + Pose Interpolation + Low-Spec Pal Polygon Optimization (Max CPU Conservation)
+        local lodBias = tonumber(cfg and cfg.skeletalLODBias) or 2
         local meshDist = tonumber(cfg and cfg.staticMeshLODDistanceScale) or 0.70
         local nanitePix = tonumber(cfg and cfg.naniteMaxPixelsPerEdge) or 4.0
 
         ExecuteConsole("a.URO.Enable 1")
-        ExecuteConsole("a.URO.ForceAnimRate 1")
-        ExecuteConsole("a.URO.TickDistanceScale 0.75")
+        ExecuteConsole("a.URO.ForceAnimRate 2")
+        ExecuteConsole("a.URO.TickDistanceScale 0.50")
         ExecuteConsole("a.URO.Interpolation 1")
         ExecuteConsole("a.URO.VisibilityBasedAnimTickRate 1")
-        ExecuteConsole("a.URO.VisibilityBasedAnimTickOption 0")
-        ExecuteConsole("p.ClothPhysics.CullDistance 3000")
+        ExecuteConsole("a.URO.VisibilityBasedAnimTickOption 1")
+        ExecuteConsole("p.ClothPhysics 0")
+        ExecuteConsole("p.ClothPhysics.CullDistance 1200")
+        ExecuteConsole("p.Chaos.CullDistance 2500")
+        ExecuteConsole("p.Chaos.Solver.SubStepping 0")
         ExecuteConsole("r.SkeletalMeshLODBias " .. tostring(lodBias))
         ExecuteConsole("p.RigidBodyLODSubStepping 0")
         ExecuteConsole("r.DrawDebug 0")
