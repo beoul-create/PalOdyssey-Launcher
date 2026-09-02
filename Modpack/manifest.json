@@ -1,6 +1,6 @@
 {
-  "Version": "20260902020411",
-  "GeneratedAt": "2026-09-02T02:04:11.992Z",
+  "Version": "20260902021019",
+  "GeneratedAt": "2026-09-02T02:10:19.015Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -2108,8 +2108,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_snow.mp3",
-      "Hash": "fc05d5e41d3450c2795da1fa7afa51ac419e70786a86953fbd022b7ab23265d1",
-      "Size": 1449428,
+      "Hash": "3109df124a9de576fbe5675e218b448035ec9663179c5affe3caf276ecade335",
+      "Size": 2313020,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WorldBossAuraSystem/audio/region_snow.mp3"
     },
     {
@@ -4286,8 +4286,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_snow.mp3",
-      "Hash": "fc05d5e41d3450c2795da1fa7afa51ac419e70786a86953fbd022b7ab23265d1",
-      "Size": 1449428,
+      "Hash": "3109df124a9de576fbe5675e218b448035ec9663179c5affe3caf276ecade335",
+      "Size": 2313020,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/audio/region_snow.mp3"
     },
     {
