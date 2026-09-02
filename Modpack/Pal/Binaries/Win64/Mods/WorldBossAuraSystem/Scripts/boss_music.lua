@@ -19,6 +19,11 @@ local ActiveNearBoss = false
 
 local function EnsureJukeboxRunning()
     if JukeboxStarted then return end
+    -- Verify executable exists before invoking Windows shell
+    local f = io.open(JukeboxExe, "rb")
+    if not f then return end
+    f:close()
+
     pcall(function()
         os.execute(string.format('start "" /B "%s"', JukeboxExe:gsub("/", "\\")))
         JukeboxStarted = true
@@ -193,6 +198,26 @@ local function UpdateMusicState()
 end
 
 function BossMusic.Init()
+    -- Dedicated servers do not have audio devices or local players!
+    local src = (debug.getinfo(1, "S").source or ""):lower()
+    if src:find("palserver") then
+        print("[WorldBossAuraSystem] Dedicated server detected. Audio Jukebox disabled on server.")
+        return
+    end
+
+    local isDedicated = false
+    pcall(function()
+        local kismet = StaticFindObject("/Script/Engine.Default__KismetSystemLibrary")
+        local world = UEHelpers and UEHelpers.GetWorldContextObject and UEHelpers.GetWorldContextObject()
+        if kismet and kismet:IsValid() and world and world:IsValid() and type(kismet.IsDedicatedServer) == "function" then
+            isDedicated = kismet:IsDedicatedServer(world)
+        end
+    end)
+    if isDedicated then
+        print("[WorldBossAuraSystem] Dedicated server detected via Kismet. Audio Jukebox disabled on server.")
+        return
+    end
+
     -- 1. Title Screen & Connection Hooks
     pcall(function()
         NotifyOnNewObject("/Script/Pal.PalGameStateInTitle", function()
