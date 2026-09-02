@@ -30,6 +30,7 @@ namespace PalLauncher.Views
             Loaded += MainWindow_Loaded;
             Closing += MainWindow_Closing;
             StateChanged += MainWindow_StateChanged;
+            IsVisibleChanged += (_, _) => UpdateBackgroundActivity();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -146,6 +147,18 @@ namespace PalLauncher.Views
         private void UpdateBackgroundActivity()
         {
             bool shouldRun = !_isGameRunning && WindowState != WindowState.Minimized && IsVisible;
+            if (DataContext is MainViewModel vm)
+            {
+                if (shouldRun && vm.IsSoundEnabled)
+                {
+                    vm.AudioService.StartBgm();
+                }
+                else
+                {
+                    vm.AudioService.StopBgm();
+                }
+            }
+
             if (shouldRun)
             {
                 BackgroundVideo.Play();
@@ -257,31 +270,9 @@ namespace PalLauncher.Views
                         remoteStarted = await _remoteServerService.StartRemoteServerAsync(_config.RemoteServerApiUrl, _config.RemoteAdminKey);
                     }
 
-                    if (!remoteStarted)
+                    if (!remoteStarted && !string.IsNullOrEmpty(_detectedServerPath))
                     {
-                        string? serverPath = _detectedServerPath;
-                        if (string.IsNullOrEmpty(serverPath) || !_gameProcessService.IsValidServerDirectory(serverPath))
-                        {
-                            serverPath = _gameProcessService.DetectServerPath(_config.ServerInstallPath);
-                            _detectedServerPath = serverPath;
-                        }
-
-                        if (!string.IsNullOrEmpty(serverPath))
-                        {
-                            bool localStarted = _gameProcessService.StartDedicatedServer(serverPath, _config.ServerLaunchArguments);
-                            if (localStarted)
-                            {
-                                ServerDetailText.Text = "Local server started successfully.";
-                            }
-                            else
-                            {
-                                ServerDetailText.Text = "Failed to launch server process.";
-                            }
-                        }
-                        else
-                        {
-                            ServerDetailText.Text = "Server directory not found. Please set path in Settings.";
-                        }
+                        _gameProcessService.StartDedicatedServer(_detectedServerPath, _config.ServerLaunchArguments);
                     }
 
                     await Task.Delay(2000);
@@ -352,7 +343,12 @@ namespace PalLauncher.Views
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            if (DataContext is MainViewModel vm)
+            {
+                vm.AudioService.StopBgm();
+            }
             Close();
+            Application.Current?.Shutdown();
         }
 
         private void PlayHoverSound(object sender, MouseEventArgs e)
@@ -365,6 +361,11 @@ namespace PalLauncher.Views
 
         private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (DataContext is MainViewModel vm)
+            {
+                vm.AudioService.StopBgm();
+            }
+
             _serverPollTimer?.Stop();
 
             if (_gameProcessService != null)
@@ -380,6 +381,8 @@ namespace PalLauncher.Views
             {
                 disposableVm.Dispose();
             }
+
+            Application.Current?.Shutdown();
         }
     }
 }
