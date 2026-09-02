@@ -3,7 +3,6 @@
     "Passive_Transmigrator": {
       "Rank": 4,
       "LotteryWeight": 0,
-      "OverrideNameMsgID": "Transmigrator",
       "OverrideDescMsgID": "Dimensional Transmigrator: Unlimited level limits, doubled movement speed (+100%).",
       "EffectType1": "EPalPassiveSkillEffectType::MoveSpeed",
       "EffectValue1": 100,
@@ -12,9 +11,8 @@
     "Passive_Regressor": {
       "Rank": 4,
       "LotteryWeight": 0,
-      "OverrideNameMsgID": "Regressor",
       "OverrideDescMsgID": "Infinite Regressor: All stats quadrupled (+300% HP, ATK, DEF), 100% skill cooldown reduction.",
-      "EffectType1": "EPalPassiveSkillEffectType::Attack",
+      "EffectType1": "EPalPassiveSkillEffectType::ShotAttack",
       "EffectValue1": 300,
       "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
       "EffectType2": "EPalPassiveSkillEffectType::Defense",
@@ -27,8 +25,7 @@
     "Passive_Regressor_Cooldown": {
       "Rank": 4,
       "LotteryWeight": 0,
-      "OverrideNameMsgID": "Temporal Loop",
-      "OverrideDescMsgID": "100% Active Skill Cooldown Reduction.",
+      "OverrideDescMsgID": "Temporal Loop: 100% Active Skill Cooldown Reduction.",
       "EffectType1": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
       "EffectValue1": 100,
       "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf"
