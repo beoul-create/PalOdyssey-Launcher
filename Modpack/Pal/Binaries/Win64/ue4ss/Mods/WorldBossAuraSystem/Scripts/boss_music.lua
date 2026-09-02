@@ -188,111 +188,76 @@ local function GetLocalPlayer()
     return player
 end
 
-local CachedBasePoints = {}
-local LastBaseDiscoveryTime = 0
-
 local function DetermineRegionTrack(playerLoc, player)
     -- 1. Check if inside Dungeon / Underground Cave instance
     if playerLoc.Z < -30000.0 then
         return "dungeon_weird_place.mp3", 0.65
     end
 
-    -- 2. Fast Coordinate Check against Cached Base Camps (0% CPU overhead)
+    -- 2. Base Camp Detection (Strictly true Palbox or Base Camp Model)
+    -- Never check generic MapObjectBaseCampPoint as it matches Fast Travel statues!
     local inBase = false
-    local nowClock = os.clock()
-
-    for _, pt in ipairs(CachedBasePoints) do
-        local dx = playerLoc.X - pt.X
-        local dy = playerLoc.Y - pt.Y
-        if (dx*dx + dy*dy) <= (pt.Radius * pt.Radius) then
-            inBase = true
-            break
-        end
-    end
-
-    -- Low-frequency discovery scan (runs at most once every 45s or if no bases cached)
-    if not inBase and (nowClock - LastBaseDiscoveryTime > 45.0 or #CachedBasePoints == 0) then
-        LastBaseDiscoveryTime = nowClock
-        pcall(function()
-            local boxClasses = { "BP_PalBox_C", "PalMapObjectBaseCampPoint", "BP_BaseCampPoint_C" }
-            for _, cls in ipairs(boxClasses) do
-                local boxes = FindAllOf and FindAllOf(cls)
-                if boxes and #boxes > 0 then
-                    for _, b in ipairs(boxes) do
-                        if b and b:IsValid() then
-                            local bLoc = b:K2_GetActorLocation()
-                            if bLoc then
-                                local exists = false
-                                for _, pt in ipairs(CachedBasePoints) do
-                                    local ddx = pt.X - bLoc.X
-                                    local ddy = pt.Y - bLoc.Y
-                                    if (ddx*ddx + ddy*ddy) < (1000.0 * 1000.0) then exists = true break end
-                                end
-                                if not exists then
-                                    table.insert(CachedBasePoints, { X = bLoc.X, Y = bLoc.Y, Radius = 4800.0 })
-                                end
-                            end
+    pcall(function()
+        local boxes = FindAllOf and FindAllOf("BP_PalBox_C")
+        if boxes and #boxes > 0 then
+            for _, b in ipairs(boxes) do
+                if b and b:IsValid() then
+                    local bLoc = b:K2_GetActorLocation()
+                    if bLoc then
+                        local dx = playerLoc.X - bLoc.X
+                        local dy = playerLoc.Y - bLoc.Y
+                        if (dx*dx + dy*dy) <= (3600.0 * 3600.0) then
+                            inBase = true
+                            return
                         end
                     end
                 end
             end
+        end
 
-            local camps = FindAllOf and FindAllOf("PalBaseCampModel")
-            if camps and #camps > 0 then
-                for _, camp in ipairs(camps) do
-                    if camp and camp:IsValid() and type(camp.GetLocation) == "function" then
-                        local cLoc = camp:GetLocation()
-                        if cLoc then
-                            local exists = false
-                            for _, pt in ipairs(CachedBasePoints) do
-                                local ddx = pt.X - cLoc.X
-                                local ddy = pt.Y - cLoc.Y
-                                if (ddx*ddx + ddy*ddy) < (1000.0 * 1000.0) then exists = true break end
-                            end
-                            if not exists then
-                                table.insert(CachedBasePoints, { X = cLoc.X, Y = cLoc.Y, Radius = 4500.0 })
-                            end
+        local camps = FindAllOf and FindAllOf("PalBaseCampModel")
+        if camps and #camps > 0 then
+            for _, c in ipairs(camps) do
+                if c and c:IsValid() and type(c.GetLocation) == "function" then
+                    local cLoc = c:GetLocation()
+                    if cLoc then
+                        local dx = playerLoc.X - cLoc.X
+                        local dy = playerLoc.Y - cLoc.Y
+                        if (dx*dx + dy*dy) <= (3600.0 * 3600.0) then
+                            inBase = true
+                            return
                         end
                     end
                 end
             end
-        end)
-
-        -- Re-check with freshly updated cache
-        for _, pt in ipairs(CachedBasePoints) do
-            local dx = playerLoc.X - pt.X
-            local dy = playerLoc.Y - pt.Y
-            if (dx*dx + dy*dy) <= (pt.Radius * pt.Radius) then
-                inBase = true
-                break
-            end
         end
-    end
+    end)
 
     if inBase then
         return "base_the_first_town.mp3", 0.60
     end
 
-    -- 3. Biome Coordinates Mapping
+    -- 3. Biome Coordinates Mapping (Based on verified Palworld world grid)
     local X = playerLoc.X
     local Y = playerLoc.Y
+    local Z = playerLoc.Z
 
-    -- Astral Mountains (Northwest Snow Biome)
-    if X < -50000 and Y > 80000 then
+    -- Astral Mountains (Frozen North / Snow Peak: High elevation or Far North)
+    if Z > 8000.0 or (X < -200000 and Y > 100000) then
         return "region_snow.mp3", 0.60
     end
 
-    -- Mount Obsidian (Southwest Volcano Biome)
-    if X < -60000 and Y < -160000 then
+    -- Mount Obsidian (Volcano: Far Southwest)
+    if X > 50000 and Y > 150000 then
         return "region_volcano.mp3", 0.65
     end
 
-    -- Desolate Dunes (Northeast Desert Biome)
-    if X > 120000 and Y > 40000 then
+    -- Desolate Dunes (Far Northeast Desert)
+    if X < -200000 and Y < -100000 then
         return "region_desert.mp3", 0.60
     end
 
-    -- Windswept Hills / Grassy Plains / Bamboo Forests (Central & Starting Islands)
+    -- Windswept Hills / Grassy Plains / Starting Plateau / Central Islands
     return "region_aincrad.mp3", 0.60
 end
 
@@ -593,15 +558,45 @@ function BossMusic.Init()
 
                     local pLoc = player:K2_GetActorLocation()
                     if pLoc then
-                        local wb = package.loaded["world_boss"]
-                        if wb and wb.GetActiveBosses then
-                            for _, data in pairs(wb.GetActiveBosses()) do
-                                if data.Coords then
-                                    local dx = pLoc.X - data.Coords.X
-                                    local dy = pLoc.Y - data.Coords.Y
-                                    if (dx*dx + dy*dy) < (8000.0 * 8000.0) then
-                                        ActiveNearBoss = true
-                                        break
+                        -- A. Wild Alpha Pal / Field Boss proximity detection (within 7,000 units)
+                        pcall(function()
+                            local monsters = FindAllOf and FindAllOf("PalMonsterCharacter")
+                            if monsters and #monsters > 0 then
+                                for _, m in ipairs(monsters) do
+                                    if m and m:IsValid() and m ~= player then
+                                        local isBoss = false
+                                        if type(m.IsBoss) == "function" and m:IsBoss() then isBoss = true end
+                                        if not isBoss and type(m.IsRarePal) == "function" and m:IsRarePal() then isBoss = true end
+                                        if not isBoss and type(m.IsTowerBoss) == "function" and m:IsTowerBoss() then isBoss = true end
+                                        if isBoss then
+                                            local mLoc = m:K2_GetActorLocation()
+                                            if mLoc then
+                                                local dx = pLoc.X - mLoc.X
+                                                local dy = pLoc.Y - mLoc.Y
+                                                local dz = pLoc.Z - mLoc.Z
+                                                if (dx*dx + dy*dy + dz*dz) <= (7000.0 * 7000.0) then
+                                                    ActiveNearBoss = true
+                                                    break
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end)
+
+                        -- B. 5-Minute Aura World Boss proximity detection
+                        if not ActiveNearBoss then
+                            local wb = package.loaded["world_boss"]
+                            if wb and wb.GetActiveBosses then
+                                for _, data in pairs(wb.GetActiveBosses()) do
+                                    if data.Coords then
+                                        local dx = pLoc.X - data.Coords.X
+                                        local dy = pLoc.Y - data.Coords.Y
+                                        if (dx*dx + dy*dy) < (8000.0 * 8000.0) then
+                                            ActiveNearBoss = true
+                                            break
+                                        end
                                     end
                                 end
                             end
@@ -615,6 +610,17 @@ function BossMusic.Init()
         end
         delayFunc(3000, MusicLoop)
     end
+
+    -- Fast-Travel & Teleport Hooks: Instantly re-evaluate music upon arriving
+    pcall(RegisterHook, "/Script/Engine.PlayerController:ClientRestart", function(Context)
+        local delay = ExecuteInGameThreadWithDelay or ExecuteWithDelay
+        if delay then
+            delay(500, UpdateMusicState)
+            delay(1500, UpdateMusicState)
+        else
+            UpdateMusicState()
+        end
+    end)
 
     print("[WorldBossAuraSystem] Universal Title, Regional, Dungeon & Boss Music System initialized.")
 end
