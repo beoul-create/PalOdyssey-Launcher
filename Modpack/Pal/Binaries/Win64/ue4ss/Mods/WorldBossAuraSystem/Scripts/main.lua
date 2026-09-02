@@ -141,8 +141,9 @@ local function StartGameThreadLoop(intervalMs, callback)
     end)
 end
 
--- Both callbacks touch UObjects and must be marshalled onto the game thread.
+-- Periodic background checks (Liveboard, Spawns, Despawns)
 StartGameThreadLoop(LiveboardIntervalMs, function()
     LiveboardExport.DumpState(WorldBoss.GetActiveBosses(), Config)
 end)
 StartGameThreadLoop(BossIntervalMs, function() WorldBoss.SpawnEvent() end)
+StartGameThreadLoop(30000, function() WorldBoss.CheckDespawns() end)

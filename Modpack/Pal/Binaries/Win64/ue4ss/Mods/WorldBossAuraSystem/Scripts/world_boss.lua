@@ -94,6 +94,27 @@ local function BroadcastInGame(Text, PalDisplayName, SelectedAura, LocationName,
     print("[WorldBossAuraSystem] Broadcast: " .. tostring(Text))
 end
 
+function WorldBoss.BroadcastDiscordEvent(title, description, color)
+    if not Config.DiscordWebhookURL or Config.DiscordWebhookURL == "YOUR_DISCORD_WEBHOOK_URL_HERE" or Config.DiscordWebhookURL == "" then return end
+    pcall(function()
+        local payload = string.format(
+            '{"embeds":[{"title":"%s","description":"%s","color":%d,"footer":{"text":"PalOdyssey World Boss Alert System"}}]}',
+            tostring(title), tostring(description), tonumber(color) or 3447003
+        )
+        local tempPath = os.getenv("TEMP") or os.getenv("TMP") or "."
+        local filePath = tempPath .. "\\pal_wb_discord.json"
+        local f = io.open(filePath, "w")
+        if f then
+            f:write(payload)
+            f:close()
+            local cmd = string.format('start /B curl.exe -s -H "Content-Type: application/json" -X POST --data-binary @"%s" "%s"', filePath, Config.DiscordWebhookURL)
+            if os.execute then
+                os.execute(cmd)
+            end
+        end
+    end)
+end
+
 function WorldBoss.BroadcastDiscord(PalName, AuraType, LocationName, Pos)
     if not Config.DiscordWebhookURL or Config.DiscordWebhookURL == "YOUR_DISCORD_WEBHOOK_URL_HERE" or Config.DiscordWebhookURL == "" then return end
     pcall(function()
@@ -285,10 +306,13 @@ function WorldBoss.SpawnEvent()
         end)
         ActiveBosses[uid] = {
             PalId = PalId,
+            PalDisplayName = PalDisplayName,
             Aura = SelectedAura,
             LocationName = Point.Name,
             Coords = { X = Point.X, Y = Point.Y },
-            SpawnTime = os.time()
+            SpawnTime = os.time(),
+            BossActor = BossActor,
+            Address = tostring(BossActor:get_address())
         }
 
         -- 5. Broadcast to in-game chat and HUD
@@ -307,14 +331,68 @@ function WorldBoss.SpawnEvent()
     end
 end
 
+function WorldBoss.CheckDespawns()
+    local now = os.time()
+    local maxLifespan = tonumber(Config.BossLifespanSeconds) or 1800 -- 30 minutes default
+    for uid, data in pairs(ActiveBosses) do
+        local elapsed = now - (data.SpawnTime or now)
+        local actorInvalid = false
+        pcall(function()
+            if not data.BossActor or not data.BossActor:IsValid() then
+                actorInvalid = true
+            elseif data.BossActor.IsDead and data.BossActor:IsDead() then
+                actorInvalid = true
+            end
+        end)
+
+        if elapsed >= maxLifespan or actorInvalid then
+            local bossName = data.PalDisplayName or data.PalId or "World Boss"
+            local aura = data.Aura or "Elemental"
+            local msg = string.format("💨 [%s (%s Aura)] has vanished back into the wild.", bossName, aura)
+
+            pcall(function()
+                if data.BossActor and data.BossActor:IsValid() then
+                    data.BossActor:K2_DestroyActor()
+                end
+            end)
+
+            ActiveBosses[uid] = nil
+            LiveboardExport.DumpState(ActiveBosses, Config)
+
+            BroadcastInGame(msg, string.format("💨 %s FLED", bossName), aura, "Vanished from " .. tostring(data.LocationName), { X = 0, Y = 0 })
+
+            WorldBoss.BroadcastDiscordEvent(
+                "💨 WORLD BOSS DESPAWNED",
+                string.format("⏳ **%s (%s Aura)** was not defeated in time and has fled from **%s**!", bossName, aura, tostring(data.LocationName)),
+                9807270 -- Gray
+            )
+        end
+    end
+end
+
 function WorldBoss.InitHooks()
-    -- Hook Capture Event to Downscale to 2x size and normalize stats
+    local function FindBossMatch(Pal)
+        if not Pal or not Pal:IsValid() then return nil, nil end
+        local palUid = nil
+        pcall(function() palUid = Pal:GetUniqueID() end)
+        local palAddr = nil
+        pcall(function() palAddr = tostring(Pal:get_address()) end)
+
+        for uid, data in pairs(ActiveBosses) do
+            if (palUid and uid == palUid) or (data.BossActor and data.BossActor:IsValid() and data.BossActor == Pal) or (data.Address and data.Address == palAddr) then
+                return uid, data
+            end
+        end
+        return nil, nil
+    end
+
+    -- Hook Capture Event to Downscale to 2x size, normalize stats, and announce capturer
     pcall(RegisterHook, "/Script/Pal.PalCaptureSubsystem:OnCaptureSuccess", function(Context, TargetPal, PlayerActor)
         local Pal = TargetPal and TargetPal.get and TargetPal:get() or TargetPal
         if not Pal or not Pal:IsValid() then return end
 
-        local UID = Pal:GetUniqueID()
-        if ActiveBosses[UID] then
+        local uid, bossData = FindBossMatch(Pal)
+        if bossData then
             local CapturedScale = tonumber(Config.BossScaleCaptured) or 2.0
             Pal:SetActorScale3D({ X = CapturedScale, Y = CapturedScale, Z = CapturedScale })
 
@@ -325,9 +403,36 @@ function WorldBoss.InitHooks()
                 IndividualParam:SetTalentDefense(200)
             end
 
-            ActiveBosses[UID] = nil
+            -- Extract Capturing Player Name
+            local playerName = "A brave adventurer"
+            pcall(function()
+                local p = PlayerActor and PlayerActor.get and PlayerActor:get() or PlayerActor
+                if p and p:IsValid() then
+                    if p.CharacterParameterComponent and p.CharacterParameterComponent:IsValid() then
+                        local nick = p.CharacterParameterComponent:GetNickName()
+                        if nick and nick.ToString then playerName = nick:ToString() end
+                    end
+                    if (not playerName or playerName == "A brave adventurer") and p.PlayerState and p.PlayerState:IsValid() then
+                        local psName = p.PlayerState:GetPlayerName()
+                        if psName and psName.ToString then playerName = psName:ToString() end
+                    end
+                end
+            end)
+
+            local bossName = bossData.PalDisplayName or bossData.PalId or "World Boss"
+            local aura = bossData.Aura or "Elemental"
+            local msg = string.format("🎉 %s has captured [%s (%s Aura)]!", playerName, bossName, aura)
+
+            ActiveBosses[uid] = nil
             LiveboardExport.DumpState(ActiveBosses, Config)
-            BroadcastInGame("🎉 A World Boss has been captured!")
+
+            BroadcastInGame(msg, string.format("🎉 %s CAPTURED!", bossName), aura, string.format("Captured by %s", playerName), { X = 0, Y = 0 })
+
+            WorldBoss.BroadcastDiscordEvent(
+                "🎉 WORLD BOSS CAPTURED!",
+                string.format("🏆 **%s** has successfully captured **%s (%s Aura)**!", playerName, bossName, aura),
+                65280 -- Emerald Green
+            )
         end
     end)
 
@@ -335,11 +440,22 @@ function WorldBoss.InitHooks()
         local Pal = Context and Context.get and Context:get() or Context
         if not Pal or not Pal:IsValid() then return end
 
-        local UID = Pal:GetUniqueID()
-        if ActiveBosses[UID] then
-            ActiveBosses[UID] = nil
+        local uid, bossData = FindBossMatch(Pal)
+        if bossData then
+            local bossName = bossData.PalDisplayName or bossData.PalId or "World Boss"
+            local aura = bossData.Aura or "Elemental"
+            local msg = string.format("⚔️ [%s (%s Aura)] has been defeated in battle!", bossName, aura)
+
+            ActiveBosses[uid] = nil
             LiveboardExport.DumpState(ActiveBosses, Config)
-            BroadcastInGame("⚔️ A World Boss has been defeated!")
+
+            BroadcastInGame(msg, string.format("⚔️ %s DEFEATED!", bossName), aura, "Fallen in combat", { X = 0, Y = 0 })
+
+            WorldBoss.BroadcastDiscordEvent(
+                "⚔️ WORLD BOSS DEFEATED!",
+                string.format("💀 **%s (%s Aura)** has fallen in battle!", bossName, aura),
+                15158332 -- Amber/Red
+            )
         end
     end)
 
