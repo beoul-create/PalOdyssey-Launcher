@@ -188,50 +188,56 @@ local function GetLocalPlayer()
     return player
 end
 
+local CachedBases = {}
+local LastBaseScan = 0
+
+local function RefreshBaseCaches()
+    pcall(function()
+        local list = {}
+        local boxes = FindAllOf and FindAllOf("BP_PalBox_C")
+        if boxes then
+            for _, b in ipairs(boxes) do
+                if b and b:IsValid() then
+                    local loc = b:K2_GetActorLocation()
+                    if loc then table.insert(list, { X = loc.X, Y = loc.Y }) end
+                end
+            end
+        end
+        local camps = FindAllOf and FindAllOf("PalBaseCampModel")
+        if camps then
+            for _, c in ipairs(camps) do
+                if c and c:IsValid() and type(c.GetLocation) == "function" then
+                    local loc = c:GetLocation()
+                    if loc then table.insert(list, { X = loc.X, Y = loc.Y }) end
+                end
+            end
+        end
+        CachedBases = list
+    end)
+end
+
 local function DetermineRegionTrack(playerLoc, player)
     -- 1. Check if inside Dungeon / Underground Cave instance
     if playerLoc.Z < -30000.0 then
         return "dungeon_weird_place.mp3", 0.65
     end
 
-    -- 2. Base Camp Detection (Strictly true Palbox or Base Camp Model)
-    -- Never check generic MapObjectBaseCampPoint as it matches Fast Travel statues!
+    -- 2. Base Camp Detection (Checks cached coordinates without hitching)
     local inBase = false
-    pcall(function()
-        local boxes = FindAllOf and FindAllOf("BP_PalBox_C")
-        if boxes and #boxes > 0 then
-            for _, b in ipairs(boxes) do
-                if b and b:IsValid() then
-                    local bLoc = b:K2_GetActorLocation()
-                    if bLoc then
-                        local dx = playerLoc.X - bLoc.X
-                        local dy = playerLoc.Y - bLoc.Y
-                        if (dx*dx + dy*dy) <= (3600.0 * 3600.0) then
-                            inBase = true
-                            return
-                        end
-                    end
-                end
-            end
-        end
+    local nowClock = os.clock()
+    if #CachedBases == 0 or (nowClock - LastBaseScan > 30.0) then
+        LastBaseScan = nowClock
+        RefreshBaseCaches()
+    end
 
-        local camps = FindAllOf and FindAllOf("PalBaseCampModel")
-        if camps and #camps > 0 then
-            for _, c in ipairs(camps) do
-                if c and c:IsValid() and type(c.GetLocation) == "function" then
-                    local cLoc = c:GetLocation()
-                    if cLoc then
-                        local dx = playerLoc.X - cLoc.X
-                        local dy = playerLoc.Y - cLoc.Y
-                        if (dx*dx + dy*dy) <= (3600.0 * 3600.0) then
-                            inBase = true
-                            return
-                        end
-                    end
-                end
-            end
+    for _, bLoc in ipairs(CachedBases) do
+        local dx = playerLoc.X - bLoc.X
+        local dy = playerLoc.Y - bLoc.Y
+        if (dx*dx + dy*dy) <= (3600.0 * 3600.0) then
+            inBase = true
+            break
         end
-    end)
+    end
 
     if inBase then
         return "base_the_first_town.mp3", 0.60
@@ -521,82 +527,24 @@ function BossMusic.Init()
                 if player and player:IsValid() then
                     IsInTitle = false
 
-                    -- Recursively ensure debug primitives (ArrowComponent, SphereComponent, CapsuleComponent, etc.) are strictly hidden
-                    pcall(function()
-                        local function HideIfDebug(comp)
-                            if not comp or not comp:IsValid() then return end
-                            local cName = tostring(comp:GetClass():GetName())
-                            if cName:find("Arrow") or cName:find("Sphere") or cName:find("Capsule") or cName:find("Box") or cName:find("Frustum") or cName:find("Spline") or cName:find("Debug") then
-                                if not comp.bHiddenInGame then
-                                    pcall(function() comp:SetHiddenInGame(true, true) end)
-                                end
-                                pcall(function() comp:SetVisibility(false, true) end)
-                            end
-                        end
-
-                        local compClass = StaticFindObject("/Script/Engine.ActorComponent")
-                        if compClass and type(player.GetComponentsByClass) == "function" then
-                            for _, comp in ipairs(player:GetComponentsByClass(compClass) or {}) do
-                                HideIfDebug(comp)
-                            end
-                        end
-
-                        local pMesh = player.Mesh or (type(player.GetMesh) == "function" and player:GetMesh())
-                        if pMesh and pMesh:IsValid() and type(pMesh.GetChildrenComponents) == "function" then
-                            for _, child in ipairs(pMesh:GetChildrenComponents(true) or {}) do
-                                HideIfDebug(child)
-                            end
-                        end
-
-                        local pRoot = player:K2_GetRootComponent() or player.RootComponent
-                        if pRoot and pRoot:IsValid() and type(pRoot.GetChildrenComponents) == "function" then
-                            for _, child in ipairs(pRoot:GetChildrenComponents(true) or {}) do
-                                HideIfDebug(child)
-                            end
-                        end
-                    end)
-
                     local pLoc = player:K2_GetActorLocation()
                     if pLoc then
-                        -- A. Wild Alpha Pal / Field Boss proximity detection (within 7,000 units)
-                        pcall(function()
-                            local monsters = FindAllOf and FindAllOf("PalMonsterCharacter")
-                            if monsters and #monsters > 0 then
-                                for _, m in ipairs(monsters) do
-                                    if m and m:IsValid() and m ~= player then
-                                        local isBoss = false
-                                        if type(m.IsBoss) == "function" and m:IsBoss() then isBoss = true end
-                                        if not isBoss and type(m.IsRarePal) == "function" and m:IsRarePal() then isBoss = true end
-                                        if not isBoss and type(m.IsTowerBoss) == "function" and m:IsTowerBoss() then isBoss = true end
-                                        if isBoss then
-                                            local mLoc = m:K2_GetActorLocation()
-                                            if mLoc then
-                                                local dx = pLoc.X - mLoc.X
-                                                local dy = pLoc.Y - mLoc.Y
-                                                local dz = pLoc.Z - mLoc.Z
-                                                if (dx*dx + dy*dy + dz*dz) <= (7000.0 * 7000.0) then
-                                                    ActiveNearBoss = true
-                                                    break
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
-                            end
-                        end)
+                        -- Check expiry of combat music (15s after last combat hit)
+                        local now = os.time()
+                        if ActiveFieldBossCombat and (now - (LastFieldBossCombatTime or 0) > 15) then
+                            ActiveFieldBossCombat = false
+                        end
 
-                        -- B. 5-Minute Aura World Boss proximity detection
-                        if not ActiveNearBoss then
-                            local wb = package.loaded["world_boss"]
-                            if wb and wb.GetActiveBosses then
-                                for _, data in pairs(wb.GetActiveBosses()) do
-                                    if data.Coords then
-                                        local dx = pLoc.X - data.Coords.X
-                                        local dy = pLoc.Y - data.Coords.Y
-                                        if (dx*dx + dy*dy) < (8000.0 * 8000.0) then
-                                            ActiveNearBoss = true
-                                            break
-                                        end
+                        -- Aura World Boss proximity (static coordinate math, 0% CPU)
+                        local wb = package.loaded["world_boss"]
+                        if wb and wb.GetActiveBosses then
+                            for _, data in pairs(wb.GetActiveBosses()) do
+                                if data.Coords then
+                                    local dx = pLoc.X - data.Coords.X
+                                    local dy = pLoc.Y - data.Coords.Y
+                                    if (dx*dx + dy*dy) < (8000.0 * 8000.0) then
+                                        ActiveNearBoss = true
+                                        break
                                     end
                                 end
                             end
@@ -606,10 +554,30 @@ function BossMusic.Init()
 
                 UpdateMusicState()
             end)
-            delayFunc(2500, MusicLoop)
+            delayFunc(5000, MusicLoop)
         end
-        delayFunc(3000, MusicLoop)
+        delayFunc(4000, MusicLoop)
     end
+
+    -- Event-Driven Combat Music: Fires instantly when attacking or taking damage from a Boss
+    pcall(RegisterHook, "/Script/Pal.PalCharacter:OnDamage", function(Context, DamageResult)
+        pcall(function()
+            local target = Context and Context.get and Context:get() or Context
+            if target and target:IsValid() then
+                local isBoss = false
+                if type(target.IsBoss) == "function" and target:IsBoss() then isBoss = true end
+                if not isBoss and type(target.IsRarePal) == "function" and target:IsRarePal() then isBoss = true end
+                if not isBoss and type(target.IsTowerBoss) == "function" and target:IsTowerBoss() then isBoss = true end
+                if isBoss then
+                    LastFieldBossCombatTime = os.time()
+                    if not ActiveFieldBossCombat then
+                        ActiveFieldBossCombat = true
+                        UpdateMusicState()
+                    end
+                end
+            end
+        end)
+    end)
 
     -- Fast-Travel & Teleport Hooks: Instantly re-evaluate music upon arriving
     pcall(RegisterHook, "/Script/Engine.PlayerController:ClientRestart", function(Context)
