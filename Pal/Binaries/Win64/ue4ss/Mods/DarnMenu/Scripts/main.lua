@@ -1,7 +1,3 @@
--- DarnMenu disabled to ensure 100% ESC menu stability
-if true then return {} end
-
-
 -- ui.lua lives in the DarnUI foundation mod (the shared UMG widget kit). Load it
 -- through Darn.requireUI(), which owns the package.path dance. This was hand-rolled
 -- here, which is exactly what darn.lua tells consumers never to do -- two ways to
@@ -3239,11 +3235,8 @@ NotifyOnNewObject(MENU_CLASS, onMenuConstructed)
 pcall(function() NotifyOnNewObject("WBP_MenuESC_C", onMenuConstructed) end)
 
 -- Polling fallback: ensures ESC menu is injected even if NotifyOnNewObject missed the blueprint path
-LoopAsync(5000, function()
-  if serverDisabled then return true end
-  local hasInstance = false
-  for _ in pairs(instances) do hasInstance = true; break end
-  if hasInstance then return false end
+LoopAsync(300, function()
+  if serverDisabled then return false end
   pcall(function()
     local escMenu = FindFirstOf("WBP_MenuESC_C")
     if escMenu and escMenu:IsValid() and UI.alive(escMenu) then
