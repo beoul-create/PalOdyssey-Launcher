@@ -500,7 +500,7 @@ local Config = {
   panelXOffset = 16,      -- px from that edge (center: nudge off middle)
   panelYFrac   = 0.545,   -- vertical spot as a fraction of screen height (0 top, 1 bottom)
   panelYOffset = 0,       -- px added after panelYFrac, for fine tuning
-  nameplateInfo = true,   -- EXPERIMENT: append "Lv N  +X%" to the vanilla lower-right
+  nameplateInfo = false,   -- EXPERIMENT: append "Lv N  +X%" to the vanilla lower-right (Disabled to eliminate 11-77ms census freeze frame)
                           -- weapon nameplate (the hotbar's weapon name band).
   dataValidate = true,    -- boot-time truth pass: compare weapondata's base/mag/dur
                           -- against the game's OWN item definitions and auto-correct

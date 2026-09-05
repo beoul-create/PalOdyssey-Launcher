@@ -616,7 +616,7 @@ return {
                durabilityMaxMult = 3.0, magMaxMultiplier = 1, curvePower = 0.5,
                targetXp = true, progressScope = "instance", persistBoost = true,
                restoreToStock = false, bootReport = true,
-               panelAutoHide = true, panelIdleSec = 2, nameplateInfo = true, barColor = "gold",
+               panelAutoHide = true, panelIdleSec = 2, nameplateInfo = false, barColor = "gold",
                panelOnAim = true,
                panelOpacity = 100, gradeEdge = 0, tierEdge = 0.05, skipUntestedWeapons = false,
                applyUnsupported = false,

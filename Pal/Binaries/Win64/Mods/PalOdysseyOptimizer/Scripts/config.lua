@@ -28,7 +28,7 @@ Config.current = {
         limitBackgroundCpu = true,
         backgroundMaxFPS = 30,
         taskGraphTasksPerTick = 100,
-        gcIntervalSeconds = 60
+        gcIntervalSeconds = 600
     },
     memory = {
         enabled = true,

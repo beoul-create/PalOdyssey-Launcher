@@ -87,14 +87,16 @@ local function ApplyLoadingOptimizations()
         ExecuteConsole("r.Streaming.Boost 2")
         ExecuteConsole("r.Streaming.PoolSize 2048")
         ExecuteConsole("r.Streaming.LimitPoolSizeToVRAM 1")
-        ExecuteConsole("r.Streaming.FramesForFullUpdate 20")
+        ExecuteConsole("r.Streaming.FramesForFullUpdate 45")
 
         if Config.prewarmShaderPipelines then
             ExecuteConsole("r.CreateShadersOnLoad 1")
             ExecuteConsole("r.Shaders.Optimize 1")
         end
 
-        ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 120")
+        ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 600")
+    ExecuteConsole("gc.IncrementalBeginDestroyEnabled 1")
+    ExecuteConsole("gc.MinDesiredFrameRate 60")
         ExecuteConsole("gc.CreateGCClusters 1")
         
         Log("Smooth world loading and shader streaming parameters applied.")
@@ -117,12 +119,14 @@ local function ApplySteadyStateStreaming()
     ExecuteConsole("s.PriorityAsyncLoadingExtraTime 2.0")
     ExecuteConsole("s.LevelStreamingActorsUpdateTimeLimit 3.0")
     ExecuteConsole("s.UnregisterComponentsTimeLimit 1.0")
-    ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 20")
+    ExecuteConsole("r.Streaming.MaxNumTexturesToStreamPerFrame 12")
     ExecuteConsole("r.Streaming.HLODStrategy 1")
     ExecuteConsole("r.Streaming.DefragDynamicBounds 0")
     ExecuteConsole("r.Streaming.Boost 1.5")
-    ExecuteConsole("r.Streaming.FramesForFullUpdate 20")
-    ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 120")
+    ExecuteConsole("r.Streaming.FramesForFullUpdate 45")
+    ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 600")
+    ExecuteConsole("gc.IncrementalBeginDestroyEnabled 1")
+    ExecuteConsole("gc.MinDesiredFrameRate 60")
     Log("Steady-state gameplay streaming activated (Zero game-thread async loading stalls).")
 end
 

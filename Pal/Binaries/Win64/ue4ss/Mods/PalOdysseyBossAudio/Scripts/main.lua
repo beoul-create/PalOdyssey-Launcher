@@ -244,11 +244,56 @@ if Key then
     end)
 end
 
--- 4. Environment & Combat Music Resolver
+-- 4. Environment & Combat Music Resolver (Zero-Hitch Cached Architecture)
+local cachedTimeMgr = nil
+local lastTimeMgrScan = 0
+local cachedPlayerChar = nil
+local lastPlayerCharScan = 0
+local cachedStageMgr = nil
+local lastStageMgrScan = 0
+
+local function GetCachedTimeMgr()
+    if cachedTimeMgr and cachedTimeMgr:IsValid() then return cachedTimeMgr end
+    local now = os.clock()
+    if now - lastTimeMgrScan > 10.0 then
+        lastTimeMgrScan = now
+        pcall(function() cachedTimeMgr = FindFirstOf("PalTimeManager") end)
+    end
+    return (cachedTimeMgr and cachedTimeMgr:IsValid()) and cachedTimeMgr or nil
+end
+
+local function GetCachedPlayerChar()
+    if cachedPlayerChar and cachedPlayerChar:IsValid() then return cachedPlayerChar end
+    local pc = UEHelpers and UEHelpers.GetPlayerController and UEHelpers.GetPlayerController()
+    if pc and pc:IsValid() then
+        local pawn = pc.Pawn or pc.AcknowledgedPawn or pc.Character
+        if pawn and pawn:IsValid() then
+            cachedPlayerChar = pawn
+            return pawn
+        end
+    end
+    local now = os.clock()
+    if now - lastPlayerCharScan > 10.0 then
+        lastPlayerCharScan = now
+        pcall(function() cachedPlayerChar = FindFirstOf("PalPlayerCharacter") end)
+    end
+    return (cachedPlayerChar and cachedPlayerChar:IsValid()) and cachedPlayerChar or nil
+end
+
+local function GetCachedStageMgr()
+    if cachedStageMgr and cachedStageMgr:IsValid() then return cachedStageMgr end
+    local now = os.clock()
+    if now - lastStageMgrScan > 10.0 then
+        lastStageMgrScan = now
+        pcall(function() cachedStageMgr = FindFirstOf("PalStageManager") end)
+    end
+    return (cachedStageMgr and cachedStageMgr:IsValid()) and cachedStageMgr or nil
+end
+
 local function GetDirectDayNight()
     local time = "Day"
     pcall(function()
-        local timeMgr = FindFirstOf("PalTimeManager")
+        local timeMgr = GetCachedTimeMgr()
         if timeMgr and timeMgr:IsValid() then
             if type(timeMgr.IsNight) == "function" and timeMgr:IsNight() then
                 time = "Night"
@@ -268,17 +313,12 @@ end
 local function GetDirectIsDungeon()
     local inDungeon = false
     pcall(function()
-        local char = FindFirstOf("PalPlayerCharacter")
+        local char = GetCachedPlayerChar()
         if char and char:IsValid() and type(char.IsInStage) == "function" then
             inDungeon = char:IsInStage()
             return
         end
-        local ps = FindFirstOf("PalPlayerState")
-        if ps and ps:IsValid() and type(ps.IsInStage) == "function" then
-            inDungeon = ps:IsInStage()
-            return
-        end
-        local sm = FindFirstOf("PalStageManager")
+        local sm = GetCachedStageMgr()
         if sm and sm:IsValid() and type(sm.IsInStage) == "function" then
             local pc = UEHelpers and UEHelpers.GetPlayerController and UEHelpers.GetPlayerController()
             if pc and pc:IsValid() then
@@ -292,7 +332,7 @@ end
 local function GetDirectTemperature()
     local temp = "Normal"
     pcall(function()
-        local char = FindFirstOf("PalPlayerCharacter")
+        local char = GetCachedPlayerChar()
         if char and char:IsValid() then
             local param = char.CharacterParameterComponent
             if param and param:IsValid() and type(param.GetBodyTemperature) == "function" then
@@ -306,7 +346,16 @@ local function GetDirectTemperature()
     return temp
 end
 
+local cachedAmbientTrack = "region_aincrad.mp3"
+local lastAmbientCheckTime = 0
+
 local function ResolveAmbientTrack()
+    local now = os.clock()
+    if now - lastAmbientCheckTime < 6.0 and cachedAmbientTrack then
+        return cachedAmbientTrack
+    end
+    lastAmbientCheckTime = now
+
     local dungeon = GetDirectIsDungeon()
     local time = GetDirectDayNight()
     local temp = GetDirectTemperature()
@@ -325,19 +374,18 @@ local function ResolveAmbientTrack()
         end
     end)
 
+    local track = "region_aincrad.mp3"
     if dungeon then
-        return "dungeon_weird_place.mp3"
+        track = "dungeon_weird_place.mp3"
+    elseif temp == "Hot" then
+        track = "region_desert.mp3"
+    elseif temp == "Cold" then
+        track = "region_snow.mp3"
+    elseif time == "Night" then
+        track = "night_theme.mp3"
     end
-    if temp == "Hot" then
-        return "region_desert.mp3"
-    end
-    if temp == "Cold" then
-        return "region_snow.mp3"
-    end
-    if time == "Night" then
-        return "night_theme.mp3"
-    end
-    return "region_aincrad.mp3"
+    cachedAmbientTrack = track
+    return track
 end
 
 -- 5. Game State & Combat Detection
@@ -475,29 +523,14 @@ end)
 
 -- Title Screen & Transitions
 local function CheckIsInWorld()
+    local char = GetCachedPlayerChar()
+    if char and char:IsValid() then return true end
     local inWorld = false
     pcall(function()
         local gs = FindFirstOf("PalGameStateInGame")
-        if gs and gs:IsValid() then
-            inWorld = true
-            return
-        end
-        local pc = UEHelpers and UEHelpers.GetPlayerController and UEHelpers.GetPlayerController()
-        if pc and pc:IsValid() then
-            local pawn = pc.Pawn or pc.AcknowledgedPawn or pc.Character
-            if pawn and pawn:IsValid() then
-                inWorld = true
-                return
-            end
-        end
-        local playerChar = FindFirstOf("PalPlayerCharacter")
-        if playerChar and playerChar:IsValid() then
-            inWorld = true
-            return
-        end
+        if gs and gs:IsValid() then inWorld = true end
     end)
     if inWorld then return true end
-
     pcall(function()
         local f = io.open(AdaptiveStateFile, "r")
         if f then
@@ -536,10 +569,7 @@ pcall(function()
     end)
 end)
 
-pcall(RegisterHook, "/Script/Engine.PlayerController:ClientRestart", function()
-    OnJoinedWorld()
-end)
-
+-- Removed ClientRestart hook: mounting/dismounting does not need audio reset
 pcall(RegisterHook, "/Script/Pal.PalPlayerController:ClientTravel", function()
     OnJoinedWorld()
 end)
@@ -567,9 +597,9 @@ if delayFunc then
 
             UpdateMusicState()
         end)
-        delayFunc(1500, MonitorLoop)
+        delayFunc(5000, MonitorLoop)
     end
-    delayFunc(2000, MonitorLoop)
+    delayFunc(3500, MonitorLoop)
 end
 
 -- Initial Check on Mod Load

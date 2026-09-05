@@ -869,15 +869,16 @@ function A.ownedWeapons()
 end
 
 function A.meleeSweep()
-  -- NO LIVE-PICK PIN (2026-08-08). This used to early-return while the cached pick's
-  -- actor was alive -- and the Terraprisma's actor stays alive as long as its summons
-  -- are out, so the cache stayed LOCKED on the blade while Maiq swung the club and the
-  -- Metal Bat at the dummy: every swing was counted as a Terraprisma hit and the bats'
-  -- careers never started. The sweep now re-picks every 3s regardless; between sweeps
-  -- the cache still serves every hot-path read, so the added cost is one bounded
-  -- FindAllOf per 3s -- less than the census does per second.
   local now = os.clock()
-  if (now - meleeRes.sweepAt) < 10 then return end
+  if (now - meleeRes.sweepAt) < 15 then return end
+  -- If currently cached weapon is valid and actively held, skip sweeping GUObjectArray
+  if alive(meleeRes.weapon) and meleeRes.key then
+    local hidden = safe(function() return meleeRes.weapon:IsHidden() end)
+    if hidden == false then
+      meleeRes.sweepAt = now
+      return
+    end
+  end
   meleeRes.sweepAt = now
   meleeRes.weapon, meleeRes.key = nil, nil
   local me = A.localPawn(); if not alive(me) then return end
