@@ -90,11 +90,12 @@ function GraphicsModule.apply(cfg, cpuCfg)
         end
 
         -- 5. Asynchronous Shader Compilation, PSO Caching & Stutter Elimination (C2ME Equivalent)
-        ExecuteConsole("r.CreateShadersOnLoad 1")
+        ExecuteConsole("r.CreateShadersOnLoad 0")
         ExecuteConsole("r.Shaders.Optimize 1")
         ExecuteConsole("r.ShaderPipelineCache.Enabled 1")
         ExecuteConsole("r.ShaderPipelineCache.StartupMode 1")
-        ExecuteConsole("r.ShaderPipelineCache.BatchTime 2.0")
+        ExecuteConsole("r.ShaderPipelineCache.BatchTime 0.5")
+        ExecuteConsole("r.ShaderPipelineCache.BackgroundBatchTime 3.0")
 
         -- 6. High-Fidelity Optimized Shadows & Depth (Crisp 2048p CSM, 4 Cascades, Contact Shadows & Distance Fields)
         ExecuteConsole("r.VolumetricCloud 0")
@@ -144,7 +145,7 @@ function GraphicsModule.apply(cfg, cpuCfg)
         ExecuteConsole("Slate.AllowSlateUIInViewport 1")
 
         -- 9. Frame Pacing, Low-Latency Sync & Dynamic Upscaling (Ultra-Clean 80% TSR Upscaling)
-        ExecuteConsole("r.GTSyncType 0")
+        ExecuteConsole("r.GTSyncType 1")
         ExecuteConsole("r.OneFrameThreadLag 1")
         ExecuteConsole("r.FinishCurrentFrame 0")
         local backgroundFps = 0

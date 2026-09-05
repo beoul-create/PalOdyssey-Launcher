@@ -90,8 +90,11 @@ local function ApplyLoadingOptimizations()
         ExecuteConsole("r.Streaming.FramesForFullUpdate 45")
 
         if Config.prewarmShaderPipelines then
-            ExecuteConsole("r.CreateShadersOnLoad 1")
+            ExecuteConsole("r.CreateShadersOnLoad 0")
             ExecuteConsole("r.Shaders.Optimize 1")
+            ExecuteConsole("r.ShaderPipelineCache.Enabled 1")
+            ExecuteConsole("r.ShaderPipelineCache.BatchTime 0.5")
+            ExecuteConsole("r.ShaderPipelineCache.BackgroundBatchTime 3.0")
         end
 
         ExecuteConsole("gc.TimeBetweenPurgingPendingKillObjects 600")

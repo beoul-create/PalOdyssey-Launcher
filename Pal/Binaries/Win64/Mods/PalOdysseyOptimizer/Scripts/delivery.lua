@@ -43,18 +43,42 @@ local function getQueueFilePaths()
     return paths
 end
 
+local cachedQueuePath = nil
 local function findQueueFile()
+    if cachedQueuePath then return cachedQueuePath end
     for _, path in ipairs(getQueueFilePaths()) do
         local ok, f = pcall(io.open, path, "r")
         if ok and f then
             f:close()
+            cachedQueuePath = path
             return path
         end
     end
-    return "Mods/PalOdysseyOptimizer/pending-deliveries.csv"
+    cachedQueuePath = "Mods/PalOdysseyOptimizer/pending-deliveries.csv"
+    return cachedQueuePath
+end
+
+local function is_dedicated_server_process()
+    local command = string.lower(tostring(os.getenv("CMDCMDLINE") or ""))
+    if string.find(command, "dedicated", 1, true) or string.find(command, "palserver", 1, true) then
+        return true
+    end
+    local source = debug.getinfo(1, "S").source:lower():gsub("\\", "/")
+    if string.find(source, "/palserver/") ~= nil then
+        return true
+    end
+    local ok, engine = pcall(function() return FindFirstOf("GameEngine") end)
+    if ok and engine ~= nil then
+        local ok_net, net_mode = pcall(function() return engine.NetMode end)
+        if ok_net and type(net_mode) == "number" and net_mode == 3 then
+            return true
+        end
+    end
+    return false
 end
 
 local function exportLivePlayerData()
+    if not is_dedicated_server_process() then return end
     local players = {}
 
     local function processPlayerState(ps, controller)
@@ -286,7 +310,7 @@ local function processQueue()
     -- Object enumeration plus four telemetry writes is the expensive part of
     -- this loop. Five-second data does not require doing that on every queue poll.
     local now = os.time()
-    if now - lastPlayerExport >= 5 then
+    if is_dedicated_server_process() and (now - lastPlayerExport >= 30) then
         pcall(exportLivePlayerData)
         lastPlayerExport = now
     end
@@ -621,9 +645,9 @@ function DeliveryModule.apply()
 
     -- Keep deliveries responsive without continuously hitting the filesystem.
     if type(LoopInGameThreadWithDelay) == "function" then
-        LoopInGameThreadWithDelay(2000, function() pcall(processQueue) end)
+        LoopInGameThreadWithDelay(10000, function() pcall(processQueue) end)
     else
-        LoopAsync(2000, function()
+        LoopAsync(10000, function()
             if type(ExecuteInGameThread) == "function" then ExecuteInGameThread(function() pcall(processQueue) end)
             else pcall(processQueue) end
             return false

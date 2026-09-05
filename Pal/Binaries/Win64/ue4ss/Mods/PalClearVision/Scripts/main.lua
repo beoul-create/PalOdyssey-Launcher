@@ -110,7 +110,7 @@ local function ApplyVisualTweaks()
 
         -- 6. Frame Pacing & Low-Latency Sync
         if Config.framePacingReflex then
-            ExecuteConsole("r.GTSyncType 0")
+            ExecuteConsole("r.GTSyncType 1")
             ExecuteConsole("r.OneFrameThreadLag 1")
             ExecuteConsole("r.FinishCurrentFrame 0")
             ExecuteConsole("t.UnfocusedMaxFPS 30")

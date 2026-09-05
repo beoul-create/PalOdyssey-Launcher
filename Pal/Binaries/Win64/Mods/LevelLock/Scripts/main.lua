@@ -2268,12 +2268,15 @@ end
 
 local initializedControllers = setmetatable({}, { __mode = "k" })
 
+local cachedHasAuthority = nil
 local function hasServerAuthority()
+    if cachedHasAuthority ~= nil then return cachedHasAuthority end
     local auth = false
     pcall(function()
         local gm = FindFirstOf("PalGameMode")
         if gm and gm:IsValid() then auth = true end
     end)
+    cachedHasAuthority = auth
     return auth
 end
 
