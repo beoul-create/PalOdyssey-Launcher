@@ -1,6 +1,6 @@
 {
-  "Version": "20260905221420",
-  "GeneratedAt": "2026-09-05T22:14:20.641Z",
+  "Version": "20260905231836",
+  "GeneratedAt": "2026-09-05T23:18:36.025Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -110,8 +110,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/DarnMenu/Scripts/main.lua",
-      "Hash": "812bc4821df6a59dc1df71b848773c3b28e74abece059e90e9ac5820e3547f68",
-      "Size": 176569,
+      "Hash": "33312c7587048cbe973d41d67a79aff20211db6538b5f5cfdad3e0e514a484a0",
+      "Size": 176576,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DarnMenu/Scripts/main.lua"
     },
     {
@@ -175,16 +175,16 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DarnToasts/Scripts/main.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/DarnToasts/Scripts/ToastLib_config_example.lua",
-      "Hash": "282f71b998d525e25ac6f1333a213221281397ef14e79605bf60c7a08a6c6d96",
-      "Size": 3302,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DarnToasts/Scripts/ToastLib_config_example.lua"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/DarnToasts/Scripts/ToastLib.lua",
       "Hash": "479d7395538b576a6011b52f3427109f6f43c532e1b1766ae6e333026a62315f",
       "Size": 69308,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DarnToasts/Scripts/ToastLib.lua"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/DarnToasts/Scripts/ToastLib_config_example.lua",
+      "Hash": "282f71b998d525e25ac6f1333a213221281397ef14e79605bf60c7a08a6c6d96",
+      "Size": 3302,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DarnToasts/Scripts/ToastLib_config_example.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/DekModConfigMenu/enabled.txt",
@@ -254,8 +254,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/FastConnect/Scripts/main.lua",
-      "Hash": "57134dd1597a0c4f45ab48b8a38da29d821c498abe4adb4d11b2f2278a6bdc3c",
-      "Size": 7413,
+      "Hash": "9a13a2f001d7493362b50115daf76272531f996cf5ec37b6535ad1e5a2fc4f2c",
+      "Size": 7829,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/FastConnect/Scripts/main.lua"
     },
     {
@@ -308,8 +308,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/LevelLock/Scripts/main.lua",
-      "Hash": "61d1a0ebaa638cef3d7b3a8e94c938f0b27127ccb0b12c622306bd2c85590245",
-      "Size": 98479,
+      "Hash": "e5b6bd0468c150225621050203764a45b6fbb79d350d3ca1d9854efaf3b8c085",
+      "Size": 98608,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/LevelLock/Scripts/main.lua"
     },
     {
@@ -338,15 +338,9 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalClearVision/Scripts/main.lua",
-      "Hash": "5ced85371b3bfc77bc6c0cceef111b83e79d07bc04c92c9eee25963b1177f4cf",
-      "Size": 5749,
+      "Hash": "b4b73ffb733fc1283f7a0b501d7f4423e3f47bb547447787673a6f1a26e837c3",
+      "Size": 5994,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalClearVision/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/audio_state.json",
-      "Hash": "f116b00d49dfef943f72154146253708e2885ca8dc9c80deb209fa2d0a3577e2",
-      "Size": 191,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/audio_state.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/audio/boss_luminous_sword.mp3",
@@ -379,6 +373,12 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/audio/victory_fanfare.mp3"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/audio_state.json",
+      "Hash": "f116b00d49dfef943f72154146253708e2885ca8dc9c80deb209fa2d0a3577e2",
+      "Size": 191,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/audio_state.json"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/config.json",
       "Hash": "4289583e731ad25de8b53d31784584c429c177e70b58e1c8a02034ca5232411d",
       "Size": 39,
@@ -398,8 +398,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/Scripts/main.lua",
-      "Hash": "df04cc63c48e463c946a91958493441b157f333a37b5f1e4069fd1f8594d3434",
-      "Size": 19896,
+      "Hash": "6ad394b226f7e54612ff0da087eb9bbed4e493f6113c394c1faed6f1f7fd81e2",
+      "Size": 21171,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyBossAudio/Scripts/main.lua"
     },
     {
@@ -422,8 +422,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/config.lua",
-      "Hash": "b28e95c406d26257fb8b1a34a1f0a442d76f4f5d28d85e205763ea8568d1d644",
-      "Size": 2117,
+      "Hash": "5c1b67b59909ab9126f122e6ee5cf37a9b8fd1ea2968ff064d454de962674170",
+      "Size": 2118,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/config.lua"
     },
     {
@@ -434,14 +434,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/delivery.lua",
-      "Hash": "95b1de47e55bfd96e9d16917a9d2a57b8b020b196a376332fd77e648d89ead58",
-      "Size": 27722,
+      "Hash": "badceb9ee17214e6a52ea2de625973305cd038f2b768a8dc87039315c1b94772",
+      "Size": 28702,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/delivery.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "c25eff2db71499a90ea5043f0e314a787be6fa5c9a64fd9dc94468f42ff5e882",
-      "Size": 9404,
+      "Hash": "feca3e8564e17fbdac4405ee5bb16849877e0d1461fba657068bf04839c7ab2b",
+      "Size": 9885,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -493,30 +493,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/LICENSE"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/metadata.json",
-      "Hash": "c8375547acd4521bad7c9fe52e546ea0f842d8bb8b59101391829d4d4d708a2d",
-      "Size": 261,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/metadata.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/raw/APSE_FoP.json",
-      "Hash": "e28c616d65fd3209174a6ecec970f2c074b41bf22bc67f45b5c76e605890f771",
-      "Size": 86272,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/raw/APSE_FoP.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/translations/en/APSE_Translation.json",
-      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
-      "Size": 468413,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/translations/en/APSE_Translation.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/translations/global/APSE_Translation.json",
-      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
-      "Size": 468413,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/translations/global/APSE_Translation.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE/blueprints/Silvegis.jsonc",
       "Hash": "a556bb5b9c4e1513fb3fb41d350e7571c8bdf00a587654ee9bb57153cde882e5",
       "Size": 2584,
@@ -563,6 +539,30 @@
       "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
       "Size": 468413,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE/translations/global/APSE_Translation.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/metadata.json",
+      "Hash": "c8375547acd4521bad7c9fe52e546ea0f842d8bb8b59101391829d4d4d708a2d",
+      "Size": 261,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/metadata.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/raw/APSE_FoP.json",
+      "Hash": "e28c616d65fd3209174a6ecec970f2c074b41bf22bc67f45b5c76e605890f771",
+      "Size": 86272,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/raw/APSE_FoP.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/translations/en/APSE_Translation.json",
+      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
+      "Size": 468413,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/translations/en/APSE_Translation.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/translations/global/APSE_Translation.json",
+      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
+      "Size": 468413,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/APSE-FoP/translations/global/APSE_Translation.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/metadata.json",
@@ -1417,12 +1417,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkMechaDragonTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpion_GroundTranslations.json",
-      "Hash": "2f49e29d747d7e248e3dda32cc14cdf063eeffcd32d528ab31f617f0e5fa901f",
-      "Size": 603,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpion_GroundTranslations.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpionPredatorTranslations.json",
       "Hash": "3c4162a7fb680d6b2b36ac664d33205cc769d60145d2a152b5473aea49f849b1",
       "Size": 656,
@@ -1433,6 +1427,12 @@
       "Hash": "7f7e4b2afeb306aa1fc860065b12406a031505a65f9edc59cd39aa8f4840776f",
       "Size": 575,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpionTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpion_GroundTranslations.json",
+      "Hash": "2f49e29d747d7e248e3dda32cc14cdf063eeffcd32d528ab31f617f0e5fa901f",
+      "Size": 603,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpion_GroundTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/DomeArmorDragonTranslations.json",
@@ -1453,28 +1453,28 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/Gorilla_GroundTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassGolem_DarkTranslations.json",
-      "Hash": "cdf3ea58c223677780764bf4dfdcd655b9a7b0a79086100f990c5140e83612d1",
-      "Size": 398,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassGolem_DarkTranslations.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassGolemTranslations.json",
       "Hash": "8be6ba93359b5ea7e975d6bdbb2259b5d66047344e725943df7486191ec796ca",
       "Size": 353,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassGolemTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMammoth_IceTranslations.json",
-      "Hash": "9d9155c24d4acf2173e305c1fb598016f4a640f1ddf9ceda1df4fbabe5df9745",
-      "Size": 536,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMammoth_IceTranslations.json"
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassGolem_DarkTranslations.json",
+      "Hash": "cdf3ea58c223677780764bf4dfdcd655b9a7b0a79086100f990c5140e83612d1",
+      "Size": 398,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassGolem_DarkTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMammothTranslations.json",
       "Hash": "70113939dc7877b71bb63da8823404a3f155607866276d15a45f40f51b9e41d7",
       "Size": 506,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMammothTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMammoth_IceTranslations.json",
+      "Hash": "9d9155c24d4acf2173e305c1fb598016f4a640f1ddf9ceda1df4fbabe5df9745",
+      "Size": 536,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMammoth_IceTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMinotaur_IceTranslations.json",
@@ -1495,16 +1495,16 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerbilTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerculesBeetle_GroundTranslations.json",
-      "Hash": "5f7b6a048c3ca0bc4008d009c38db1c546718009fcea34d39f6ab07dad88e36d",
-      "Size": 434,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerculesBeetle_GroundTranslations.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerculesBeetleTranslations.json",
       "Hash": "981c64aa738e23ea988047d46b2059a3e13d77a752abd64524c7604a153badaa",
       "Size": 530,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerculesBeetleTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerculesBeetle_GroundTranslations.json",
+      "Hash": "5f7b6a048c3ca0bc4008d009c38db1c546718009fcea34d39f6ab07dad88e36d",
+      "Size": 434,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerculesBeetle_GroundTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/KabukiManTranslations.json",
@@ -1555,28 +1555,28 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/SnowTigerBeastmanTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfish_FireTranslations.json",
-      "Hash": "a327f87f4dad0d4deac345bd8cbf89230ceee0d87992dd8f2e302f38dd0d99c8",
-      "Size": 614,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfish_FireTranslations.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfishTranslations.json",
       "Hash": "0b88b903484feab31dda7a8ae04b0afec1563ec0830432dacef93df668504093",
       "Size": 600,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfishTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDog_IceTranslations.json",
-      "Hash": "268c30cfb2fa11f6029760d1d762d650f98a9187f795e01049e24307e66f7128",
-      "Size": 534,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDog_IceTranslations.json"
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfish_FireTranslations.json",
+      "Hash": "a327f87f4dad0d4deac345bd8cbf89230ceee0d87992dd8f2e302f38dd0d99c8",
+      "Size": 614,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfish_FireTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDogTranslations.json",
       "Hash": "2479e61ce6ed158cff11ef70bb382c4a8c3a50dd11dbaddd4943131d98bfaae5",
       "Size": 614,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDogTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDog_IceTranslations.json",
+      "Hash": "268c30cfb2fa11f6029760d1d762d650f98a9187f795e01049e24307e66f7128",
+      "Size": 534,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDog_IceTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/ChazzBuffs/translations/en/WhiteAlienDragonTranslations.json",
@@ -1813,16 +1813,16 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Merchant%20Currency%20Adjust.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Novice Gourmet.json",
-      "Hash": "0089d983629a52d4bb6ac777b607ae61798416b3fc0bd2f8dd56f918f34ae970",
-      "Size": 14481,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Novice%20Gourmet.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Novice Gourmet(buff food).json",
       "Hash": "04febf269ea2f32928cd04076872511f43b8ea78e1baac2ed9b59ddb8a5cd3ed",
       "Size": 2797,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Novice%20Gourmet(buff%20food).json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Novice Gourmet.json",
+      "Hash": "0089d983629a52d4bb6ac777b607ae61798416b3fc0bd2f8dd56f918f34ae970",
+      "Size": 14481,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Novice%20Gourmet.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Pharmacist (giant soul merchant).json",
@@ -2024,14 +2024,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/adapters.lua",
-      "Hash": "7d9c756002bbef23d383849ecc5dbff00e9648b089715e494bb28d1b45fee62b",
-      "Size": 58696,
+      "Hash": "6dc4d790cde37661bed90ad1499ecd85ec74fba0a3f56ea006619f22bc0a5b8d",
+      "Size": 58305,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/adapters.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/config.lua",
-      "Hash": "408278693035ec70ef701caeb6b9563a2c9d30580797a66c65d4d7846133efac",
-      "Size": 36494,
+      "Hash": "b1b6f020e443eb08aec0aed11f595caa90d715e0eec6cf19e897fdf42342b2a7",
+      "Size": 36547,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/config.lua"
     },
     {
@@ -2054,8 +2054,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/main.lua",
-      "Hash": "644f546b8c8db62d02be1db52ae7fb4cfede149c54d5ef3eb7b9caeb3a3578f3",
-      "Size": 95149,
+      "Hash": "df4997cf307f61140fbc98b323176278ad4283f384dc5c4dbf92aa992f1f4b71",
+      "Size": 95151,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/main.lua"
     },
     {
@@ -2191,18 +2191,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/steam_appid.txt"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/UE4SS-settings.ini",
-      "Hash": "0c8f89456aaea8064646424577240d89e9944a40ba752ccd94b8a36b926973be",
-      "Size": 1612,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/UE4SS-settings.ini"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/UE4SS.dll",
-      "Hash": "d0107f63e567313cb6a15c505b5db2bdba38130964a04e019bda7611c6178022",
-      "Size": 16519168,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/UE4SS.dll"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/LICENSE",
       "Hash": "ddc030e25d0ea87aca4ae84c0ed3f868d69273c00c0c12ea1e26f1c6130f5d2e",
       "Size": 1064,
@@ -2282,8 +2270,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/main.lua",
-      "Hash": "812bc4821df6a59dc1df71b848773c3b28e74abece059e90e9ac5820e3547f68",
-      "Size": 176569,
+      "Hash": "33312c7587048cbe973d41d67a79aff20211db6538b5f5cfdad3e0e514a484a0",
+      "Size": 176576,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/main.lua"
     },
     {
@@ -2347,16 +2335,16 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/main.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/ToastLib_config_example.lua",
-      "Hash": "282f71b998d525e25ac6f1333a213221281397ef14e79605bf60c7a08a6c6d96",
-      "Size": 3302,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/ToastLib_config_example.lua"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/ToastLib.lua",
       "Hash": "479d7395538b576a6011b52f3427109f6f43c532e1b1766ae6e333026a62315f",
       "Size": 69308,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/ToastLib.lua"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/ToastLib_config_example.lua",
+      "Hash": "282f71b998d525e25ac6f1333a213221281397ef14e79605bf60c7a08a6c6d96",
+      "Size": 3302,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnToasts/Scripts/ToastLib_config_example.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DekModConfigMenu/enabled.txt",
@@ -2426,8 +2414,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/FastConnect/Scripts/main.lua",
-      "Hash": "57134dd1597a0c4f45ab48b8a38da29d821c498abe4adb4d11b2f2278a6bdc3c",
-      "Size": 7413,
+      "Hash": "9a13a2f001d7493362b50115daf76272531f996cf5ec37b6535ad1e5a2fc4f2c",
+      "Size": 7829,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/FastConnect/Scripts/main.lua"
     },
     {
@@ -2443,16 +2431,16 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/enabled.txt"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/scripts/limit_checker.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/limit_checker.lua",
       "Hash": "8dc7fb49be9d3afaba5351ba986484eea669af52fb15c572e7becfb84caa953c",
       "Size": 16688,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/scripts/limit_checker.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/limit_checker.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/scripts/main.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/main.lua",
       "Hash": "38e8101070cb2d6f7d39964a33c84de1989fe2d46861831d98061c8289e8cea8",
       "Size": 2308,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/scripts/main.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/GuildBuildingLimits/Scripts/main.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/Keybinds/Scripts/main.lua",
@@ -2480,8 +2468,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua",
-      "Hash": "61d1a0ebaa638cef3d7b3a8e94c938f0b27127ccb0b12c622306bd2c85590245",
-      "Size": 98479,
+      "Hash": "e5b6bd0468c150225621050203764a45b6fbb79d350d3ca1d9854efaf3b8c085",
+      "Size": 98608,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/LevelLock/Scripts/main.lua"
     },
     {
@@ -2510,15 +2498,9 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalClearVision/Scripts/main.lua",
-      "Hash": "5ced85371b3bfc77bc6c0cceef111b83e79d07bc04c92c9eee25963b1177f4cf",
-      "Size": 5749,
+      "Hash": "b4b73ffb733fc1283f7a0b501d7f4423e3f47bb547447787673a6f1a26e837c3",
+      "Size": 5994,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalClearVision/Scripts/main.lua"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/audio_state.json",
-      "Hash": "b090d86c57ac8c04bba8e99328743bf4954332413f26809b0166862bfa9a52db",
-      "Size": 187,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/audio_state.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/audio/base_the_first_town.mp3",
@@ -2593,6 +2575,12 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/audio/victory_fanfare.mp3"
     },
     {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/audio_state.json",
+      "Hash": "b090d86c57ac8c04bba8e99328743bf4954332413f26809b0166862bfa9a52db",
+      "Size": 187,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/audio_state.json"
+    },
+    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/config.json",
       "Hash": "4289583e731ad25de8b53d31784584c429c177e70b58e1c8a02034ca5232411d",
       "Size": 39,
@@ -2612,8 +2600,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/Scripts/main.lua",
-      "Hash": "df04cc63c48e463c946a91958493441b157f333a37b5f1e4069fd1f8594d3434",
-      "Size": 19896,
+      "Hash": "6ad394b226f7e54612ff0da087eb9bbed4e493f6113c394c1faed6f1f7fd81e2",
+      "Size": 21171,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyBossAudio/Scripts/main.lua"
     },
     {
@@ -2636,8 +2624,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/config.lua",
-      "Hash": "b28e95c406d26257fb8b1a34a1f0a442d76f4f5d28d85e205763ea8568d1d644",
-      "Size": 2117,
+      "Hash": "5c1b67b59909ab9126f122e6ee5cf37a9b8fd1ea2968ff064d454de962674170",
+      "Size": 2118,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/config.lua"
     },
     {
@@ -2648,14 +2636,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/delivery.lua",
-      "Hash": "95b1de47e55bfd96e9d16917a9d2a57b8b020b196a376332fd77e648d89ead58",
-      "Size": 27722,
+      "Hash": "badceb9ee17214e6a52ea2de625973305cd038f2b768a8dc87039315c1b94772",
+      "Size": 28702,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/delivery.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua",
-      "Hash": "c25eff2db71499a90ea5043f0e314a787be6fa5c9a64fd9dc94468f42ff5e882",
-      "Size": 9404,
+      "Hash": "feca3e8564e17fbdac4405ee5bb16849877e0d1461fba657068bf04839c7ab2b",
+      "Size": 9885,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalOdysseyOptimizer/Scripts/graphics.lua"
     },
     {
@@ -2707,30 +2695,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/LICENSE"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/metadata.json",
-      "Hash": "c8375547acd4521bad7c9fe52e546ea0f842d8bb8b59101391829d4d4d708a2d",
-      "Size": 261,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/metadata.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/raw/APSE_FoP.json",
-      "Hash": "e28c616d65fd3209174a6ecec970f2c074b41bf22bc67f45b5c76e605890f771",
-      "Size": 86272,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/raw/APSE_FoP.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/translations/en/APSE_Translation.json",
-      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
-      "Size": 468413,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/translations/en/APSE_Translation.json"
-    },
-    {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/translations/global/APSE_Translation.json",
-      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
-      "Size": 468413,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/translations/global/APSE_Translation.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE/blueprints/Silvegis.jsonc",
       "Hash": "a556bb5b9c4e1513fb3fb41d350e7571c8bdf00a587654ee9bb57153cde882e5",
       "Size": 2584,
@@ -2777,6 +2741,30 @@
       "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
       "Size": 468413,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE/translations/global/APSE_Translation.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/metadata.json",
+      "Hash": "c8375547acd4521bad7c9fe52e546ea0f842d8bb8b59101391829d4d4d708a2d",
+      "Size": 261,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/metadata.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/raw/APSE_FoP.json",
+      "Hash": "e28c616d65fd3209174a6ecec970f2c074b41bf22bc67f45b5c76e605890f771",
+      "Size": 86272,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/raw/APSE_FoP.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/translations/en/APSE_Translation.json",
+      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
+      "Size": 468413,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/translations/en/APSE_Translation.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/translations/global/APSE_Translation.json",
+      "Hash": "aed66f995e6fff47ca393a53cda32e04945f902140ca2ad1e1a29d5028abebea",
+      "Size": 468413,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/APSE-FoP/translations/global/APSE_Translation.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/metadata.json",
@@ -3631,12 +3619,6 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkMechaDragonTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpion_GroundTranslations.json",
-      "Hash": "2f49e29d747d7e248e3dda32cc14cdf063eeffcd32d528ab31f617f0e5fa901f",
-      "Size": 603,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpion_GroundTranslations.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpionPredatorTranslations.json",
       "Hash": "3c4162a7fb680d6b2b36ac664d33205cc769d60145d2a152b5473aea49f849b1",
       "Size": 656,
@@ -3647,6 +3629,12 @@
       "Hash": "7f7e4b2afeb306aa1fc860065b12406a031505a65f9edc59cd39aa8f4840776f",
       "Size": 575,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpionTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpion_GroundTranslations.json",
+      "Hash": "2f49e29d747d7e248e3dda32cc14cdf063eeffcd32d528ab31f617f0e5fa901f",
+      "Size": 603,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DarkScorpion_GroundTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/DomeArmorDragonTranslations.json",
@@ -3667,28 +3655,28 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/Gorilla_GroundTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassGolem_DarkTranslations.json",
-      "Hash": "cdf3ea58c223677780764bf4dfdcd655b9a7b0a79086100f990c5140e83612d1",
-      "Size": 398,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassGolem_DarkTranslations.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassGolemTranslations.json",
       "Hash": "8be6ba93359b5ea7e975d6bdbb2259b5d66047344e725943df7486191ec796ca",
       "Size": 353,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassGolemTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMammoth_IceTranslations.json",
-      "Hash": "9d9155c24d4acf2173e305c1fb598016f4a640f1ddf9ceda1df4fbabe5df9745",
-      "Size": 536,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMammoth_IceTranslations.json"
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassGolem_DarkTranslations.json",
+      "Hash": "cdf3ea58c223677780764bf4dfdcd655b9a7b0a79086100f990c5140e83612d1",
+      "Size": 398,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassGolem_DarkTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMammothTranslations.json",
       "Hash": "70113939dc7877b71bb63da8823404a3f155607866276d15a45f40f51b9e41d7",
       "Size": 506,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMammothTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMammoth_IceTranslations.json",
+      "Hash": "9d9155c24d4acf2173e305c1fb598016f4a640f1ddf9ceda1df4fbabe5df9745",
+      "Size": 536,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMammoth_IceTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/GrassMinotaur_IceTranslations.json",
@@ -3709,16 +3697,16 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerbilTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerculesBeetle_GroundTranslations.json",
-      "Hash": "5f7b6a048c3ca0bc4008d009c38db1c546718009fcea34d39f6ab07dad88e36d",
-      "Size": 434,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerculesBeetle_GroundTranslations.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerculesBeetleTranslations.json",
       "Hash": "981c64aa738e23ea988047d46b2059a3e13d77a752abd64524c7604a153badaa",
       "Size": 530,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerculesBeetleTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerculesBeetle_GroundTranslations.json",
+      "Hash": "5f7b6a048c3ca0bc4008d009c38db1c546718009fcea34d39f6ab07dad88e36d",
+      "Size": 434,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/HerculesBeetle_GroundTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/KabukiManTranslations.json",
@@ -3769,28 +3757,28 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/SnowTigerBeastmanTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfish_FireTranslations.json",
-      "Hash": "a327f87f4dad0d4deac345bd8cbf89230ceee0d87992dd8f2e302f38dd0d99c8",
-      "Size": 614,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfish_FireTranslations.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfishTranslations.json",
       "Hash": "0b88b903484feab31dda7a8ae04b0afec1563ec0830432dacef93df668504093",
       "Size": 600,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfishTranslations.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDog_IceTranslations.json",
-      "Hash": "268c30cfb2fa11f6029760d1d762d650f98a9187f795e01049e24307e66f7128",
-      "Size": 534,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDog_IceTranslations.json"
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfish_FireTranslations.json",
+      "Hash": "a327f87f4dad0d4deac345bd8cbf89230ceee0d87992dd8f2e302f38dd0d99c8",
+      "Size": 614,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/SwordCutlassfish_FireTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDogTranslations.json",
       "Hash": "2479e61ce6ed158cff11ef70bb382c4a8c3a50dd11dbaddd4943131d98bfaae5",
       "Size": 614,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDogTranslations.json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDog_IceTranslations.json",
+      "Hash": "268c30cfb2fa11f6029760d1d762d650f98a9187f795e01049e24307e66f7128",
+      "Size": 534,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/ThunderDog_IceTranslations.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/ChazzBuffs/translations/en/WhiteAlienDragonTranslations.json",
@@ -4027,16 +4015,16 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Merchant%20Currency%20Adjust.json"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Novice Gourmet.json",
-      "Hash": "0089d983629a52d4bb6ac777b607ae61798416b3fc0bd2f8dd56f918f34ae970",
-      "Size": 14481,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Novice%20Gourmet.json"
-    },
-    {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Novice Gourmet(buff food).json",
       "Hash": "04febf269ea2f32928cd04076872511f43b8ea78e1baac2ed9b59ddb8a5cd3ed",
       "Size": 2797,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Novice%20Gourmet(buff%20food).json"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Novice Gourmet.json",
+      "Hash": "0089d983629a52d4bb6ac777b607ae61798416b3fc0bd2f8dd56f918f34ae970",
+      "Size": 14481,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Novice%20Gourmet.json"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/PalSchema/mods/VC_MERCHANT_MOD_2/raw/VC_Pharmacist (giant soul merchant).json",
@@ -4238,14 +4226,14 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/adapters.lua",
-      "Hash": "7d9c756002bbef23d383849ecc5dbff00e9648b089715e494bb28d1b45fee62b",
-      "Size": 58696,
+      "Hash": "6dc4d790cde37661bed90ad1499ecd85ec74fba0a3f56ea006619f22bc0a5b8d",
+      "Size": 58305,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/adapters.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/config.lua",
-      "Hash": "408278693035ec70ef701caeb6b9563a2c9d30580797a66c65d4d7846133efac",
-      "Size": 36494,
+      "Hash": "b1b6f020e443eb08aec0aed11f595caa90d715e0eec6cf19e897fdf42342b2a7",
+      "Size": 36547,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/config.lua"
     },
     {
@@ -4268,8 +4256,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/main.lua",
-      "Hash": "644f546b8c8db62d02be1db52ae7fb4cfede149c54d5ef3eb7b9caeb3a3578f3",
-      "Size": 95149,
+      "Hash": "df4997cf307f61140fbc98b323176278ad4283f384dc5c4dbf92aa992f1f4b71",
+      "Size": 95151,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/main.lua"
     },
     {
@@ -4345,46 +4333,46 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/enabled.txt"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/aura_system.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/aura_system.lua",
       "Hash": "5c2e0a5e502ed3af041f47d47fa66b5a95d025a2af7351e679957a9d91e9dd23",
       "Size": 8006,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/aura_system.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/aura_system.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/auto_shutdown.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/auto_shutdown.lua",
       "Hash": "2fb5edeead5d4742ce6925f2cf969998107fd1ba3d524b9bfe98c790e518971f",
       "Size": 5713,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/auto_shutdown.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/auto_shutdown.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/liveboard_export.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/liveboard_export.lua",
       "Hash": "9edbe920c9820ebde9fec3b8f00a6776c2bc49f4ee11e6ebf4f154f2646eeb8c",
       "Size": 8185,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/liveboard_export.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/liveboard_export.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/main.lua",
       "Hash": "1095507ecf784846e32ce25ac2e394c8c5b8cc0d25adcd9a21e8517c5ecc0bd4",
       "Size": 6491,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/main.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/main.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/performance.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/performance.lua",
       "Hash": "df3dda34d78a73e9724cd02345b6dd2b163951d11a8781519cac083046c5a66f",
       "Size": 2320,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/performance.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/performance.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/sao_death.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/sao_death.lua",
       "Hash": "e08f915c4784ce89808afc2308b24cf9fb1fbaebb2becf7b1e93f83c29a683e4",
       "Size": 18564,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/sao_death.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/sao_death.lua"
     },
     {
-      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/world_boss.lua",
+      "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/world_boss.lua",
       "Hash": "1ffb0eb18a64944bbd9b48d220a60bfb4a916fc15c6ed9326179c675fcc97019",
       "Size": 36445,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/scripts/world_boss.lua"
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WorldBossAuraSystem/Scripts/world_boss.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/UE4SS-settings.ini",
@@ -4399,10 +4387,16 @@
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/UE4SS.dll"
     },
     {
-      "RelativePath": "Pal/Content/Paks/~mods/Catch All PREDATOR Bosses_P.pak",
-      "Hash": "8387f4641e09038931f8cff595c23cc3663918707ae509cb16447bc2482bc987",
-      "Size": 643404,
-      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Content/Paks/~mods/Catch%20All%20PREDATOR%20Bosses_P.pak"
+      "RelativePath": "Pal/Binaries/Win64/UE4SS-settings.ini",
+      "Hash": "0c8f89456aaea8064646424577240d89e9944a40ba752ccd94b8a36b926973be",
+      "Size": 1612,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/UE4SS-settings.ini"
+    },
+    {
+      "RelativePath": "Pal/Binaries/Win64/UE4SS.dll",
+      "Hash": "d0107f63e567313cb6a15c505b5db2bdba38130964a04e019bda7611c6178022",
+      "Size": 16519168,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/UE4SS.dll"
     },
     {
       "RelativePath": "Pal/Content/Paks/LogicMods/AdaptiveBGM.modconfig.json",
@@ -4415,6 +4409,12 @@
       "Hash": "8ba71cb40e98c9a55d0c883d4d0b12b1a47765979fbaa77eeefc933015468b51",
       "Size": 12092638,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Content/Paks/LogicMods/DekModConfigMenu_P.pak"
+    },
+    {
+      "RelativePath": "Pal/Content/Paks/~mods/Catch All PREDATOR Bosses_P.pak",
+      "Hash": "8387f4641e09038931f8cff595c23cc3663918707ae509cb16447bc2482bc987",
+      "Size": 643404,
+      "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Content/Paks/~mods/Catch%20All%20PREDATOR%20Bosses_P.pak"
     }
   ]
 }

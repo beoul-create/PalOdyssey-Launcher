@@ -3235,8 +3235,11 @@ NotifyOnNewObject(MENU_CLASS, onMenuConstructed)
 pcall(function() NotifyOnNewObject("WBP_MenuESC_C", onMenuConstructed) end)
 
 -- Polling fallback: ensures ESC menu is injected even if NotifyOnNewObject missed the blueprint path
-LoopAsync(300, function()
+LoopAsync(2500, function()
   if serverDisabled then return false end
+  for _, inst in pairs(instances) do
+    if not inst.disposed then return false end
+  end
   pcall(function()
     local escMenu = FindFirstOf("WBP_MenuESC_C")
     if escMenu and escMenu:IsValid() and UI.alive(escMenu) then

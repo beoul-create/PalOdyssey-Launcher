@@ -116,11 +116,16 @@ local function ApplyVisualTweaks()
             ExecuteConsole("t.UnfocusedMaxFPS 30")
         end
 
-        -- 7. Enhanced Upscaling Reconstruction & Anti-Aliasing (Option B: 85% TSR)
+        -- 7. Hardware NVIDIA DLSS 3 Reconstruction & Tensor Upscaling
         if Config.enhancedUpscaling then
-            ExecuteConsole("r.ScreenPercentage 85")
-            ExecuteConsole("r.TSR.ShadingRejection.Flickering 1")
-            ExecuteConsole("r.TemporalAA.Upsampling 1")
+            ExecuteConsole("r.NGX.DLSS.Enable 1")
+            ExecuteConsole("r.NGX.DLSS.Quality 1")
+            ExecuteConsole("r.NGX.DLSS.Sharpness 0.25")
+            ExecuteConsole("r.Streamline.DLSSG.Enable 1")
+            ExecuteConsole("r.Reflex.Enable 1")
+            ExecuteConsole("r.Reflex.Boost 1")
+            ExecuteConsole("r.TemporalAA.Upsampling 0")
+            ExecuteConsole("r.TSR.ShadingRejection.Flickering 0")
         end
 
         Log("Applied comprehensive Option B visual, lighting, LOD, and upscaling enhancements.")
