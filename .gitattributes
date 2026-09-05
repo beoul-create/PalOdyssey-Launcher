@@ -1,9 +1,0 @@
-﻿* text=auto eol=lf
-*.pak binary
-*.dll binary
-*.exe binary
-*.zip binary
-*.7z binary
-*.png binary
-*.jpg binary
-*.ico binary

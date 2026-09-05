@@ -1,0 +1,14 @@
+# Audio binaries
+*.wav
+*.mp3
+*.ogg
+*.flac
+*.bank
+*.fsb
+
+# Ignore media/audio folders
+**/Assets/Audio/**
+**/Sounds/**
+**/Music/**
+**/Content/Audio/**
+**/audio/**

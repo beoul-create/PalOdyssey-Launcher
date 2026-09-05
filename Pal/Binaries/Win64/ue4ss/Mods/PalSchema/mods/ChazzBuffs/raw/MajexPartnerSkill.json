@@ -1,0 +1,74 @@
+{
+	"DT_PassiveSkill_Main": {
+		"DarkFlameFox_PartnerSkill_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerInflictEffect_AttackBurning_ApplyFireVortex",
+			"EffectValue1": 20,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 15,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::DamageRateIfDefender_Burn",
+			"EffectValue3": 100,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"DarkFlameFox_PartnerSkill_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerInflictEffect_AttackBurning_ApplyFireVortex",
+			"EffectValue1": 25,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 18,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::DamageRateIfDefender_Burn",
+			"EffectValue3": 110,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"DarkFlameFox_PartnerSkill_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerInflictEffect_AttackBurning_ApplyFireVortex",
+			"EffectValue1": 30,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 21,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::DamageRateIfDefender_Burn",
+			"EffectValue3": 120,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"DarkFlameFox_PartnerSkill_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerInflictEffect_AttackBurning_ApplyFireVortex",
+			"EffectValue1": 35,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 24,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::DamageRateIfDefender_Burn",
+			"EffectValue3": 130,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"DarkFlameFox_PartnerSkill_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::PlayerInflictEffect_AttackBurning_ApplyFireVortex",
+			"EffectValue1": 40,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ActiveSkillCoolTime_Decrease",
+			"EffectValue2": 30,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::DamageRateIfDefender_Burn",
+			"EffectValue3": 150,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		}
+	}
+}

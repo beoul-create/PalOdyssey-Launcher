@@ -1,0 +1,652 @@
+{
+    "DT_ItemShopCreateData": {
+        "Medal_Shop_1": {
+            "productDataArray": {
+                "Action": "Clear",
+                "Items": [
+                    {
+                        "StaticItemId": "Elixir_attack_01",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 1500,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "Elixir_hp_01",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 3000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "Elixir_weight_02",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 40,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "Elixir_stamina_02",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 20,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "Elixir_workspeed_02",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 80,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "Rankup_Arbitrary",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 500,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "PalUpgradeStone4",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 50,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "WorkSuitability_AddTicket_EmitFlame",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 150,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "WorkSuitability_AddTicket_Watering",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 150,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "WorkSuitability_AddTicket_Seeding",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 50,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "WorkSuitability_AddTicket_GenerateElectricity",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 150,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "WorkSuitability_AddTicket_Handcraft",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 150,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "WorkSuitability_AddTicket_Collection",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 50,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "WorkSuitability_AddTicket_Deforest",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 20,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+
+                    {
+                        "StaticItemId": "WorkSuitability_AddTicket_Mining",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 150,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "WorkSuitability_AddTicket_ProductMedicine",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 20,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "WorkSuitability_AddTicket_Cool",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 20,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "WorkSuitability_AddTicket_Transport",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 20,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "WorkSuitability_AddTicket_MonsterFarm",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 150,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "HeadEquip032_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "HeadEquip033",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "HeadEquip041",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "PalSummon_KingBahamut_Dragon",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 5,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "PalSummon_KingBahamut_Dragon_2",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 5,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "PalSummon_NightLady",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 5,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "PalSummon_NightLady_Dark",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 5,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "PalSummon_NightLady_Dark_2",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 5,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "PalSummon_DarkMechaDragon",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 5,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "PalSummon_DarkMechaDragon_2",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 5,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "PalSummon_LegendDeer",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 5,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "TechnologyBook_G3",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 300,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "AncientTechnologyBook_G1",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 600,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "PalSphere_Legend",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 100,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "UnlockEquipmentSlot_Accessory_01",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 50,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "UnlockEquipmentSlot_Accessory_02",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 300,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PlasticArmor_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 30000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PlasticArmorCold_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 30000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PlasticArmorHeat_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 30000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "PlasticHelmet_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 20000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "HandGun_Default_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "LaserRifle_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 40000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "LaserBullet",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 1,
+                        "ProductNum": 10,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "GatlingGun_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 60000,
+                        "ProductNum": 4,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "GatlingBullet",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 100,
+                        "ProductNum": 1000,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "LaserGatlingGun_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 200000,
+                        "ProductNum": 4,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "LaserGatlingBullet",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 1000,
+                        "ProductNum": 1000,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "EnergyRocketLauncher_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 400000,
+                        "ProductNum": 4,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "EnergyLauncherBullet",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 500,
+                        "ProductNum": 25,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "YakushimaHeadEquip006",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 100000,
+                        "ProductNum": 4,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "YakushimaHeadEquip005",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 100000,
+                        "ProductNum": 4,
+                        "Stock": 0
+                    },
+                          {
+                        "StaticItemId": "PalPassiveSkillChange_PAL_ALLAttack_up2",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 250,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_Noukin",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 500,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_PAL_ALLAttack_up3",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 5000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_Deffence_up1",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 100,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_Deffence_up2",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 100,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_Deffence_up3",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 500,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_CraftSpeed_up1",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 250,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_PAL_CorporateSlave",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 500,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_CraftSpeed_up2",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 1000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_CraftSpeed_up3",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 2000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_MoveSpeed_up_1",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 200,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_MoveSpeed_up_2",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 500,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_MoveSpeed_up_3",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 2000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_PAL_FullStomach_Down_1",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 50,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_PAL_FullStomach_Down_2",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 200,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_PAL_FullStomach_Down_3",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 400,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_PAL_Sanity_Down_1",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 50,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_PAL_Sanity_Down_2",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 200,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_PAL_Sanity_Down_3",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 400,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_NonKilling",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 10,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_Nocturnal",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 10,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_Stamina_Up_2",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 1,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_Stamina_Up_3",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 10,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_HatchingSpeed_Up",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 10,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                     {
+                        "StaticItemId": "PalPassiveSkillChange_TrainerATK_UP_1",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 1000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                     {
+                        "StaticItemId": "PalPassiveSkillChange_TrainerDEF_UP_1",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 1000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                     {
+                        "StaticItemId": "PalPassiveSkillChange_TrainerWorkSpeed_UP_1",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 100,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_SalePrice_Up_2",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 100,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                     {
+                        "StaticItemId": "PalPassiveSkillChange_SalePrice_Up_1",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 1000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_SwimSpeed_up_1",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 10,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                     {
+                        "StaticItemId": "PalPassiveSkillChange_SwimSpeed_up_2",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 100,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_PlayerSP_DecreaseRate_Passive",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 200,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_AutoHPRegeneRate_Passive",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 200,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_ReloadSpeedUp_Passive",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 200,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_TrainerMining_up1",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 200,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    },
+                    {
+                        "StaticItemId": "PalPassiveSkillChange_TrainerLogging_up1",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 50,
+                        "ProductNum": 1,
+                        "Stock": 0
+                    }
+
+
+
+                    
+                ]
+            }
+        }
+    }
+}

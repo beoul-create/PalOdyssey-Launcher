@@ -1,0 +1,23 @@
+
+{
+  "DT_WazaDataTable": {
+    "Unique_BlackGriffon_TackleLaser": {
+      "WazaType": "EPalWazaID::Unique_BlackGriffon_TackleLaser",
+      "Element": "EPalElementType::Dark",
+      "Power": 700,
+      "DisplayPower": 700,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Burn",
+      "EffectValue1": 100
+    },
+    "Unique_BlackGriffon_TackleLaser2": {
+      "WazaType": "EPalWazaID::Unique_BlackGriffon_TackleLaser2",
+      "Element": "EPalElementType::Dark",
+      "Power": 700,
+      "DisplayPower": 700,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Burn",
+      "EffectValue1": 100
+    }
+  }
+}

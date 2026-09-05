@@ -1,0 +1,31 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "NightBlueHorse_Neutral": {
+      "MeleeAttack": 115,
+      "ShotAttack": 115,
+      "Defense": 110,
+      "Friendship_ShotAttack": 1.9,
+      "Friendship_Defense": 2.1
+    },
+    "BOSS_NightBlueHorse_Neutral": {
+      "MeleeAttack": 115,
+      "ShotAttack": 115,
+      "Defense": 110,
+      "Friendship_ShotAttack": 1.9,
+      "Friendship_Defense": 2.1
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_NightBlueHorse_Neutral_AirStep": {
+      "WazaType": "EPalWazaID::Unique_NightBlueHorse_Neutral_AirStep",
+      "Element": "EPalElementType::Normal",
+      "Power": 999,
+      "DisplayPower": 999,
+      "CoolTime": 40.0,
+      "EffectType1": "EPalAdditionalEffectType::Stun",
+      "EffectValue1": 100
+    }
+  }
+}

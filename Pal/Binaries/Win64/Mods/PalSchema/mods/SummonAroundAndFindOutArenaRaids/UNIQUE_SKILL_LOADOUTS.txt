@@ -1,0 +1,134 @@
+EARLY PROGRESSION - UNIQUE SKILL LOADOUT PASS
+================================================
+
+Only Early Progression was changed.
+
+GOALS
+-----
+- Stop bosses/minions from recycling the same templates.
+- Give every boss a distinct full loadout.
+- Give every boss one signature move that no other boss receives.
+- Vary boss skill counts from 4 through 10.
+- Vary minions from 4 through 7 skills instead of every minion having the same 4.
+- Use ONLY generic Waza IDs present in the supplied 100%-working original mod.
+
+Known-good generic Waza pool from working reference: 37 IDs
+Bosses: 20
+Minions: 20
+Total skill rows: 248
+
+BOSS LOADOUTS
+-------------
+Lv033 - Sir Clucks-a-Lot
+Boss skills (4): LineThunder, LightningStrike, Thunderbolt, LockonLaser
+Exclusive signature: LineThunder
+Emergency Chickens skills (4): LineThunder, LockonLaser, CommetRain, PredatorWave
+
+Lv035 - Lifmunk, Certified Nut Auditor
+Boss skills (5): SolarBeam, AirBlade, RaidCutter, PredatorBeam, CommetRain
+Exclusive signature: SolarBeam
+Acorn Accounting Dept. skills (5): SolarBeam, PredatorBeam, CommetRain, WindBurst, AirBlade
+
+Lv037 - Depresso, Employee of the Month
+Boss skills (6): PoisonFog, PredatorBeam, PredatorWave, LockonLaser, DarkLaser, DarkWave
+Exclusive signature: PoisonFog
+The Night Shift skills (4): PoisonFog, LockonLaser, DarkLaser, DarkWave
+
+Lv038 - Dinossom, Zero Chill
+Boss skills (4): StarMine, AirBlade, RaidCutter, LockonLaser
+Exclusive signature: StarMine
+Tail-Stepping Witnesses skills (6): StarMine, LockonLaser, CommetRain, PredatorBeam, PredatorWave, AirBlade
+
+Lv040 - Jolthog Cryst, Pocket Freezer
+Boss skills (7): DoubleIcicleThrow, PredatorBeam, WindBurst, AirBlade, RaidCutter, CommetRain, SandTwister
+Exclusive signature: DoubleIcicleThrow
+Frozen Lawn Darts skills (5): DoubleIcicleThrow, AirBlade, RaidCutter, CommetRain, PredatorBeam
+
+Lv041 - Celaray, The Angry Bedsheet
+Boss skills (5): RipTide, PredatorBeam, SeaGush, WindBurst, AirBlade
+Exclusive signature: RipTide
+Flying Laundry skills (4): RipTide, WindBurst, AirBlade, RaidCutter
+
+Lv043 - Professor Hoot N. Holler
+Boss skills (8): ShokeiLaser, DarkWave, PredatorBeam, PredatorWave, LockonLaser, DarkLaser, FireBall, FlareTornado
+Exclusive signature: ShokeiLaser
+Tenured Hooters skills (6): ShokeiLaser, PredatorWave, LockonLaser, DarkLaser, DarkWave, PredatorBeam
+
+Lv045 - Caprity, Regional Berry Manager
+Boss skills (6): RootLance, RaidCutter, PredatorBeam, CommetRain, WindBurst, AirBlade
+Exclusive signature: RootLance
+Berry Department Interns skills (5): RootLance, CommetRain, WindBurst, AirBlade, RaidCutter
+
+Lv046 - Eikthyrdeer, Head of Branch Management
+Boss skills (9): RockBeat, RaidCutter, PredatorWave, RockLance, SandTornado, SandTwister, PredatorBeam, SeaGush, Thunderbolt
+Exclusive signature: RockBeat
+Junior Branch Managers skills (4): RockBeat, RockLance, SandTornado, SandTwister
+
+Lv048 - Nox, The 3 A.M. Problem
+Boss skills (7): ShadowBall, LockonLaser, DarkLaser, DarkWave, PredatorBeam, PredatorWave, RockLance
+Exclusive signature: ShadowBall
+Questionable Night Noises skills (6): ShadowBall, DarkWave, PredatorBeam, PredatorWave, LockonLaser, DarkLaser
+
+Lv049 - Jolthog, OSHA Violation
+Boss skills (10): RangeThunder, LightningStrike, Thunderbolt, LockonLaser, CommetRain, PredatorWave, SeaGush, WindBurst, AirBlade, DarkLaser
+Exclusive signature: RangeThunder
+Unlicensed Electricians skills (5): RangeThunder, LockonLaser, CommetRain, PredatorWave, LightningStrike
+
+Lv051 - Dinossom, Anger Management Dropout
+Boss skills (8): HolyBlast, LockonLaser, CommetRain, PredatorBeam, PredatorWave, AirBlade, RaidCutter, DarkLaser
+Exclusive signature: HolyBlast
+Court-Ordered Support Group skills (4): HolyBlast, PredatorBeam, PredatorWave, AirBlade
+
+Lv053 - Tombat, Ceiling Fan Inspector
+Boss skills (6): DarkLegion, PredatorBeam, PredatorWave, LockonLaser, DarkLaser, DarkWave
+Exclusive signature: DarkLegion
+Uninvited Attic Guests skills (7): DarkLegion, LockonLaser, DarkLaser, DarkWave, PredatorBeam, PredatorWave, WindBurst
+
+Lv054 - Sparkit, Licensed Electrician-ish
+Boss skills (9): Railbolt, CommetRain, PredatorWave, LightningStrike, Thunderbolt, LockonLaser, PredatorBeam, RaidCutter, RockLance
+Exclusive signature: Railbolt
+Extension Cord Enthusiasts skills (5): Railbolt, LightningStrike, Thunderbolt, LockonLaser, CommetRain
+
+Lv056 - Rooby, Mildly On Fire
+Boss skills (7): FlameWall, WindBurst, FireBall, FlareTornado, CommetRain, PredatorWave, RaidCutter
+Exclusive signature: FlameWall
+Portable Space Heaters skills (4): FlameWall, FlareTornado, CommetRain, PredatorWave
+
+Lv057 - Bristla, Thornado Supreme
+Boss skills (10): WindEdge, WindBurst, AirBlade, RaidCutter, PredatorBeam, CommetRain, SandTornado, SandTwister, SeaGush, Thunderbolt
+Exclusive signature: WindEdge
+Aggressive Landscaping skills (6): WindEdge, RaidCutter, PredatorBeam, CommetRain, WindBurst, AirBlade
+
+Lv059 - Eikthyrdeer, Senior Branch Manager
+Boss skills (8): Tremor, SandTornado, SandTwister, RaidCutter, PredatorWave, RockLance, Thunderbolt, WindBurst
+Exclusive signature: Tremor
+Mandatory Team Meeting skills (5): Tremor, RaidCutter, PredatorWave, RockLance, SandTornado
+
+Lv060 - Foxparks, Definitely House Trained
+Boss skills (9): FlameFunnel, CommetRain, PredatorWave, WindBurst, FireBall, FlareTornado, DarkLaser, DarkWave, LightningStrike
+Exclusive signature: FlameFunnel
+Tiny Fire Hazards skills (4): FlameFunnel, WindBurst, FireBall, FlareTornado
+
+Lv062 - Jolthog Cryst, Freezer Burn
+Boss skills (10): CrossWind, CommetRain, PredatorBeam, WindBurst, AirBlade, RaidCutter, FireBall, FlareTornado, LightningStrike, LockonLaser
+Exclusive signature: CrossWind
+Frozen OSHA Violations skills (6): CrossWind, WindBurst, AirBlade, RaidCutter, CommetRain, PredatorBeam
+
+Lv063 - Tocotoco, Safety Manual Optional
+Boss skills (10): Eruption, WindBurst, FireBall, FlareTornado, CommetRain, PredatorWave, LockonLaser, PredatorBeam, RaidCutter, RockLance
+Exclusive signature: Eruption
+Explosive Bird Committee skills (5): Eruption, FlareTornado, CommetRain, PredatorWave, WindBurst
+
+VALIDATION
+----------
+All 20 boss loadouts unique: PASS
+All 20 minion loadouts unique: PASS
+Boss skill-count range 4-10: PASS
+Every count from 4 through 10 represented: PASS
+Every boss has an exclusive signature skill: PASS
+No duplicate skill on any Pal: PASS
+Every WazaID exists in supplied working reference: PASS
+Raid levels/names/descriptions unchanged: PASS
+Boss/minion stats unchanged: PASS
+Rewards unchanged: PASS
+Slab IDs/order/costs unchanged: PASS

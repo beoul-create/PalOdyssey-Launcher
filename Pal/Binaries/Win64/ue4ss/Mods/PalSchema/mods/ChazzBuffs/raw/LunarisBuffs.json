@@ -1,0 +1,25 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "Mutant": {
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7
+    },
+    "BOSS_Mutant": {
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7
+    }
+  },
+    "DT_WazaMasterLevel": {
+        "Mutant80":{
+			"PalId": "Mutant",
+            "WazaID": "EPalWazaID::Psychokinesis",
+			"Level": 80
+        },
+        "Boss_Mutant80":{
+			"PalId": "BOSS_Mutant",
+            "WazaID": "EPalWazaID::Psychokinesis",
+			"Level": 80
+        }
+    }
+}

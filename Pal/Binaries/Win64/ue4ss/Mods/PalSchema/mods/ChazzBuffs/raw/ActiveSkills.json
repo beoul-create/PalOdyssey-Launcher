@@ -1,0 +1,35 @@
+
+{
+  "DT_WazaDataTable": {
+    "Eruption": {
+      "WazaType": "EPalWazaID::Eruption",
+      "Element": "EPalElementType::Fire",
+      "Power": 400,
+      "DisplayPower": 400,
+      "CoolTime": 20.0,
+      "EffectType1": "EPalAdditionalEffectType::Burn",
+      "EffectValue1": 100
+    },
+    "PredatorBeam": {
+      "WazaType": "EPalWazaID::PredatorBeam",
+      "Element": "EPalElementType::Normal",
+      "Power": 900,
+      "DisplayPower": 900,
+      "CoolTime": 30.0
+    },
+    "PredatorLockon": {
+      "WazaType": "EPalWazaID::PredatorLockon",
+      "Element": "EPalElementType::Normal",
+      "Power": 800,
+      "DisplayPower": 800,
+      "CoolTime": 30.0
+    },
+    "PredatorWave": {
+      "WazaType": "EPalWazaID::PredatorWave",
+      "Element": "EPalElementType::Normal",
+      "Power": 500,
+      "DisplayPower": 500,
+      "CoolTime": 20.0
+    }
+  }
+}

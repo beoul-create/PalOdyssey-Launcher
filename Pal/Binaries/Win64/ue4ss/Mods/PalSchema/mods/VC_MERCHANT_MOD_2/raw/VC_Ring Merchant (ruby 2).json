@@ -1,0 +1,470 @@
+{
+    "DT_ItemShopCreateData": {
+
+        "Caravan_Shop_9": {
+            "productDataArray": {
+                "Action": "Clear",
+                    "Items": [
+
+          {
+            "StaticItemId": "Dogcoin",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 50,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Sapphire",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Eemerald",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 16,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_Nonkilling",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_PalConfidence_Increase_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_HeatColdResist_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 6,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_DFNormal_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_DFFire_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_DFWater_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_DFElectricity_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_DFLeaf_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_DFIce_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_DFEarth_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_DFDark_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_DFDragon_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_HeatFire_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_ColdIce_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_Otomo_Fire_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_Otomo_Water_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_Otomo_Electricity_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_Otomo_Earth_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_Otomo_Leaf_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_Otomo_Dark_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_Otomo_Dargon_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_Otomo_Fire_2",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_Avoid_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 300,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ElementBoost_Normal_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ElementBoost_Fire_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ElementBoost_Water_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ElementBoost_Electricity_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ElementBoost_Leaf_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ElementBoost_Ice_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ElementBoost_Earth_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ElementBoost_Dark_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ElementBoost_Dragon_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_PalExp_Increase_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 300,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_NormalResist_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_FireResist_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_AquaResist_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_ThunderResist_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_LeafResist_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Accessory_EarthResist_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Accessory_DarkResist_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Accessory_DragonResist_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Accessory_NonkChecker_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 30,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "SphereModule_Homing",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "SphereModule_Sniper2",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "SphereModule_Sniper",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "SphereModule_Heavy",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 25,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Blueprint_LilyQueenStatue",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Blueprint_Hunter_GangFlag",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Blueprint_ConservationGroupBannerA",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Blueprint_Wire_Fence",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Blueprint_WoodenBarricade",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Blueprint_WallTorch02",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Blueprint_FireStand",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Blueprint_CandleStand",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+                 {
+            "StaticItemId": "Blueprint_LanternTop",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Blueprint_Shrine_Lantern",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Blueprint_GuardianDogStatue",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Blueprint_SF_Desk",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "Blueprint_SF_Chair",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 4,
+            "ProductNum": 1,
+            "Stock": 0
+          }
+
+
+          ]
+         }
+       }
+    }
+    
+  }

@@ -1,0 +1,21 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "NegativeKoala": {
+      "ShotAttack": 80,
+      "Friendship_ShotAttack": 4.3,
+      "WalkSpeed": 20,
+      "RunSpeed": 600,
+      "RideSprintSpeed": 800,
+      "TransportSpeed": 600
+    },
+    "BOSS_NegativeKoala": {
+      "ShotAttack": 80,
+      "Friendship_ShotAttack": 4.3,
+      "WalkSpeed": 20,
+      "RunSpeed": 600,
+      "RideSprintSpeed": 800,
+      "TransportSpeed": 600
+    }
+  }
+}

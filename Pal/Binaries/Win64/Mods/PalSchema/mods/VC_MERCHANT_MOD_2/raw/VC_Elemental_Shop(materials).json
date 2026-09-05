@@ -1,0 +1,211 @@
+{
+    "DT_ItemShopCreateData": {
+
+        "Caravan_Shop_24": {
+            "productDataArray": {
+                "Action": "Clear",
+                    "Items": [
+          
+          {
+            "StaticItemId": "Diamond",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2000000,
+            "ProductNum": 80,
+            "Stock": 0
+          },
+
+          {
+            "StaticItemId": "wool",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 250,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "leather",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 250,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Fiber",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 250,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Wood",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 250,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "stone",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 250,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "CopperOre",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 300,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "coal",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 300,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "sulfur",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 300,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "quartz",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 500,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "polymer",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1300,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "MachineParts2",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2500,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Wood_Fine",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 500,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Wood_WorldTree",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "RainbowCrystal",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 800,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "CopperIngot",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 800,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "IronIngot",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "StealIngot",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "PalOil",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 500,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "CrudeOil",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Plastic",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 10000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "FireOrgan",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "IceOrgan",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "ElectricOrgan",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Venom",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "PalFluid",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Bone",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 9,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Horn",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 5,
+            "Stock": 0
+          }
+          ]
+         }
+       }
+    }
+    
+  }

@@ -1,0 +1,26 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "CubeTurtle": {
+      "Defense": 145,
+      "Friendship_Defense": 1
+    },
+    "BOSS_CubeTurtle": {
+      "Defense": 145,
+      "Friendship_Defense": 1
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_CubeTurtle_CubePress": {
+      "WazaType": "EPalWazaID::Unique_CubeTurtle_CubePress",
+      "Element": "EPalElementType::Earth",
+      "Power": 700,
+      "DisplayPower": 700,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Muddy",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::Stun",
+      "EffectValue2": 100
+    }
+  }
+}

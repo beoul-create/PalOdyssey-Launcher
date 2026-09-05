@@ -1,0 +1,15 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "WhiteMoth": {
+      "MeleeAttack": 100,
+      "ShotAttack": 100,
+      "Friendship_ShotAttack": 2.5
+    },
+    "BOSS_WhiteMoth": {
+      "MeleeAttack": 100,
+      "ShotAttack": 100,
+      "Friendship_ShotAttack": 2.5
+    }
+  }
+}

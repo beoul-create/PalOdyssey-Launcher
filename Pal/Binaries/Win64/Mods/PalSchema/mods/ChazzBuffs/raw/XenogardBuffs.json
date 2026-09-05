@@ -1,0 +1,31 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "WhiteAlienDragon": {
+      "Defense": 140,
+      "Friendship_Defense": 1,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    },
+    "BOSS_WhiteAlienDragon": {
+      "Defense": 140,
+      "Friendship_Defense": 1,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    }
+  },
+    "DT_WazaMasterLevel": {
+        "WhiteAlienDragon70":{
+			"PalId": "WhiteAlienDragon",
+            "WazaID": "EPalWazaID::StarMine",
+			"Level": 70
+        },
+        "Boss_WhiteAlienDragon70":{
+			"PalId": "BOSS_WhiteAlienDragon",
+            "WazaID": "EPalWazaID::StarMine",
+			"Level": 70
+        }
+    }
+}

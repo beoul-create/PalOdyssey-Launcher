@@ -1,0 +1,1036 @@
+// Combined partner skill: Splatterina
+// Passive sources: Dupin
+{
+	// Effect slots per rank for Splatterina (slot order = 1..4)
+	"DT_PassiveSkill_Main": {
+		// Rank 1: Dupin: AttackRateHPThreshold 30
+		"GrimGirl_CombinedPartnerSkill_1": {
+        "Rank": 1,
+        "LotteryWeight": 100,
+        "OverrideDescMsgID": "None",
+        "TargetElementType": "EPalElementType::None",
+        "EffectType1": "EPalPassiveSkillEffectType::AttackRateHPThreshold",
+        "EffectValue1": 120.0,
+        "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType2": "EPalPassiveSkillEffectType::no",
+        "EffectValue2": 0.0,
+        "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType3": "EPalPassiveSkillEffectType::no",
+        "EffectValue3": 0.0,
+        "TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType4": "EPalPassiveSkillEffectType::no",
+        "EffectValue4": 0.0,
+        "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+        "InvokeActiveOtomo": false,
+        "InvokeWorker": false,
+        "InvokeRiding": false,
+        "InvokeReserve": false,
+        "InvokeInOtomo": true,
+        "InvokeAlways": false,
+        "InvokeInBaseCamp": false,
+        "AddInvokeTriggerType_1": "EPalPassiveAddTriggerType::None",
+        "AddInvokeTriggerType_2": "EPalPassiveAddTriggerType::None",
+        "AddPal": false,
+        "AddRarePal": false,
+        "AddWorldTreePal": false,
+        "AddMutationPal": false,
+        "AddShotWeapon": false,
+        "AddMeleeWeapon": false,
+        "AddArmor": false,
+        "AddAccessory": false,
+        "IsStackablePartnerSkillBySameTribe": false,
+        "OverrideNameTextID": "None",
+        "OverrideSummaryTextId": "None",
+        "Category": "EPalPassiveCategory::SortNotDisplayable",
+        "SortKeyJP": "-"
+		},
+		// Rank 2: Dupin: AttackRateHPThreshold 35
+		"GrimGirl_CombinedPartnerSkill_2": {
+        "Rank": 1,
+        "LotteryWeight": 100,
+        "OverrideDescMsgID": "None",
+        "TargetElementType": "EPalElementType::None",
+        "EffectType1": "EPalPassiveSkillEffectType::AttackRateHPThreshold",
+        "EffectValue1": 140.0,
+        "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType2": "EPalPassiveSkillEffectType::no",
+        "EffectValue2": 0.0,
+        "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType3": "EPalPassiveSkillEffectType::no",
+        "EffectValue3": 0.0,
+        "TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType4": "EPalPassiveSkillEffectType::no",
+        "EffectValue4": 0.0,
+        "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+        "InvokeActiveOtomo": false,
+        "InvokeWorker": false,
+        "InvokeRiding": false,
+        "InvokeReserve": false,
+        "InvokeInOtomo": true,
+        "InvokeAlways": false,
+        "InvokeInBaseCamp": false,
+        "AddInvokeTriggerType_1": "EPalPassiveAddTriggerType::None",
+        "AddInvokeTriggerType_2": "EPalPassiveAddTriggerType::None",
+        "AddPal": false,
+        "AddRarePal": false,
+        "AddWorldTreePal": false,
+        "AddMutationPal": false,
+        "AddShotWeapon": false,
+        "AddMeleeWeapon": false,
+        "AddArmor": false,
+        "AddAccessory": false,
+        "IsStackablePartnerSkillBySameTribe": false,
+        "OverrideNameTextID": "None",
+        "OverrideSummaryTextId": "None",
+        "Category": "EPalPassiveCategory::SortNotDisplayable",
+        "SortKeyJP": "-"
+		},
+		// Rank 3: Dupin: AttackRateHPThreshold 40
+		"GrimGirl_CombinedPartnerSkill_3": {
+        "Rank": 1,
+        "LotteryWeight": 100,
+        "OverrideDescMsgID": "None",
+        "TargetElementType": "EPalElementType::None",
+        "EffectType1": "EPalPassiveSkillEffectType::AttackRateHPThreshold",
+        "EffectValue1": 160.0,
+        "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType2": "EPalPassiveSkillEffectType::no",
+        "EffectValue2": 0.0,
+        "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType3": "EPalPassiveSkillEffectType::no",
+        "EffectValue3": 0.0,
+        "TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType4": "EPalPassiveSkillEffectType::no",
+        "EffectValue4": 0.0,
+        "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+        "InvokeActiveOtomo": false,
+        "InvokeWorker": false,
+        "InvokeRiding": false,
+        "InvokeReserve": false,
+        "InvokeInOtomo": true,
+        "InvokeAlways": false,
+        "InvokeInBaseCamp": false,
+        "AddInvokeTriggerType_1": "EPalPassiveAddTriggerType::None",
+        "AddInvokeTriggerType_2": "EPalPassiveAddTriggerType::None",
+        "AddPal": false,
+        "AddRarePal": false,
+        "AddWorldTreePal": false,
+        "AddMutationPal": false,
+        "AddShotWeapon": false,
+        "AddMeleeWeapon": false,
+        "AddArmor": false,
+        "AddAccessory": false,
+        "IsStackablePartnerSkillBySameTribe": false,
+        "OverrideNameTextID": "None",
+        "OverrideSummaryTextId": "None",
+        "Category": "EPalPassiveCategory::SortNotDisplayable",
+        "SortKeyJP": "-"
+		},
+		// Rank 4: Dupin: AttackRateHPThreshold 45
+		"GrimGirl_CombinedPartnerSkill_4": {
+        "Rank": 1,
+        "LotteryWeight": 100,
+        "OverrideDescMsgID": "None",
+        "TargetElementType": "EPalElementType::None",
+        "EffectType1": "EPalPassiveSkillEffectType::AttackRateHPThreshold",
+        "EffectValue1": 180.0,
+        "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType2": "EPalPassiveSkillEffectType::no",
+        "EffectValue2": 0.0,
+        "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType3": "EPalPassiveSkillEffectType::no",
+        "EffectValue3": 0.0,
+        "TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType4": "EPalPassiveSkillEffectType::no",
+        "EffectValue4": 0.0,
+        "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+        "InvokeActiveOtomo": false,
+        "InvokeWorker": false,
+        "InvokeRiding": false,
+        "InvokeReserve": false,
+        "InvokeInOtomo": true,
+        "InvokeAlways": false,
+        "InvokeInBaseCamp": false,
+        "AddInvokeTriggerType_1": "EPalPassiveAddTriggerType::None",
+        "AddInvokeTriggerType_2": "EPalPassiveAddTriggerType::None",
+        "AddPal": false,
+        "AddRarePal": false,
+        "AddWorldTreePal": false,
+        "AddMutationPal": false,
+        "AddShotWeapon": false,
+        "AddMeleeWeapon": false,
+        "AddArmor": false,
+        "AddAccessory": false,
+        "IsStackablePartnerSkillBySameTribe": false,
+        "OverrideNameTextID": "None",
+        "OverrideSummaryTextId": "None",
+        "Category": "EPalPassiveCategory::SortNotDisplayable",
+        "SortKeyJP": "-"
+		},
+		// Rank 5: Dupin: AttackRateHPThreshold 50
+		"GrimGirl_CombinedPartnerSkill_5": {
+        "Rank": 1,
+        "LotteryWeight": 100,
+        "OverrideDescMsgID": "None",
+        "TargetElementType": "EPalElementType::None",
+        "EffectType1": "EPalPassiveSkillEffectType::AttackRateHPThreshold",
+        "EffectValue1": 200.0,
+        "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType2": "EPalPassiveSkillEffectType::no",
+        "EffectValue2": 0.0,
+        "TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType3": "EPalPassiveSkillEffectType::no",
+        "EffectValue3": 0.0,
+        "TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType4": "EPalPassiveSkillEffectType::no",
+        "EffectValue4": 0.0,
+        "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+        "InvokeActiveOtomo": false,
+        "InvokeWorker": false,
+        "InvokeRiding": false,
+        "InvokeReserve": false,
+        "InvokeInOtomo": true,
+        "InvokeAlways": false,
+        "InvokeInBaseCamp": false,
+        "AddInvokeTriggerType_1": "EPalPassiveAddTriggerType::None",
+        "AddInvokeTriggerType_2": "EPalPassiveAddTriggerType::None",
+        "AddPal": false,
+        "AddRarePal": false,
+        "AddWorldTreePal": false,
+        "AddMutationPal": false,
+        "AddShotWeapon": false,
+        "AddMeleeWeapon": false,
+        "AddArmor": false,
+        "AddAccessory": false,
+        "IsStackablePartnerSkillBySameTribe": false,
+        "OverrideNameTextID": "None",
+        "OverrideSummaryTextId": "None",
+        "Category": "EPalPassiveCategory::SortNotDisplayable",
+        "SortKeyJP": "-"
+		}
+	},
+	// Rewires Splatterina's partner skill assignment:
+	//   - PassiveSkills now reference the combined key(s) above
+	//   - Also re-lists 5 of the target's other native skill(s) so they aren't lost
+	"DT_PartnerSkillParameter": {
+		// Splatterina (GrimGirl)
+		"GrimGirl": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GrimGirl_CombinedPartnerSkill_1"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 50.0
+                }
+              },
+						{
+							"SkillName": {
+								"Key": "MeatCut_01"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GrimGirl_CombinedPartnerSkill_2"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 50.0
+                }
+              },
+						{
+							"SkillName": {
+								"Key": "MeatCut_02"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GrimGirl_CombinedPartnerSkill_3"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 50.0
+                }
+              },
+						{
+							"SkillName": {
+								"Key": "MeatCut_03"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GrimGirl_CombinedPartnerSkill_4"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 50.0
+                }
+              },
+						{
+							"SkillName": {
+								"Key": "MeatCut_04"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GrimGirl_CombinedPartnerSkill_5"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 50.0
+                }
+              },
+						{
+							"SkillName": {
+								"Key": "MeatCut_05"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          }
+	]
+		},
+		// BOSS_GrimGirl — variant of Splatterina, same patch mirrored here
+		"BOSS_GrimGirl": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GrimGirl_CombinedPartnerSkill_1"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 50.0
+                }
+              },
+						{
+							"SkillName": {
+								"Key": "MeatCut_01"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GrimGirl_CombinedPartnerSkill_2"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 50.0
+                }
+              },
+						{
+							"SkillName": {
+								"Key": "MeatCut_02"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GrimGirl_CombinedPartnerSkill_3"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 50.0
+                }
+              },
+						{
+							"SkillName": {
+								"Key": "MeatCut_03"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GrimGirl_CombinedPartnerSkill_4"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 50.0
+                }
+              },
+						{
+							"SkillName": {
+								"Key": "MeatCut_04"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          },
+
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GrimGirl_CombinedPartnerSkill_5"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 50.0
+                }
+              },
+						{
+							"SkillName": {
+								"Key": "MeatCut_05"
+							},
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              }
+            ]
+          }
+	]
+
+		}
+	}
+}

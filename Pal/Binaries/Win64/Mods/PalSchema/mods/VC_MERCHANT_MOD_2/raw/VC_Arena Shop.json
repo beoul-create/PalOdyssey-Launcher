@@ -1,0 +1,294 @@
+{
+    "DT_ItemShopCreateData": {
+
+        "Arena_Shop_1": {
+            "productDataArray": {
+                "Action": "Clear",
+                    "Items": [
+                      {
+                        "StaticItemId": "EnergyRocketLauncher_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 1000,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "ChargeLaserRifle_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 800,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "GuidedMissileLauncher_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 600,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "GrenadeLauncher_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 400,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "YakushimaGun001_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 200,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "AffectionFruit_01",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 4,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_CopperHelmet_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 5,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_IronHelmet_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_StealHelmet_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 25,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_PlasticHelmet_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 50,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_SFHelmet_2",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 100,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_CopperArmor_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 10,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_IronArmor_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 25,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_StealArmorHeat_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 50,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_PlasticArmorHeat_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 75,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_SFArmorHeat_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 150,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_StealArmorCold_5",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 50,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_PlasticArmorCold_5",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 75,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_SFArmorCold_5",
+                        "ProductType": "EPalItemShopProductType::OnlyPurchaseOne",
+                        "OverridePrice": 150,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_YakushimaHeadEquip001_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 100,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Blueprint_YakushimaHeadEquip004_5",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 100,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "Dogcoin",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 1,
+                        "ProductNum": 50,
+                        "Stock": 0
+                      },   
+                      {
+                        "StaticItemId": "SkillCard_HolyBlast",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 9,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_SelfDestruct",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 6,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_DarkLegion",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 9,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_Apocalypse",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 6,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_DragonMeteor",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 9,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_ChargeCanon",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 6,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_IceAge",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 9,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_IciclePierce",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 6,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_FireBall",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 9,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_FlameFunnel",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 6,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_RipTide",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 9,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_HydroSlicer",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 6,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_ThunderStorm",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 9,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_RangeThunder",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 6,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_RockBeat",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 9,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_SandTwister",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 6,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_CrossWind",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 9,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      },
+                      {
+                        "StaticItemId": "SkillCard_ReflectiveShuriken",
+                        "ProductType": "EPalItemShopProductType::Normal",
+                        "OverridePrice": 6,
+                        "ProductNum": 1,
+                        "Stock": 0
+                      }
+                  
+          
+        ]
+      }
+    }      
+  }
+}

@@ -1,0 +1,31 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "PandaGirl": {
+      "MeleeAttack": 120,
+      "ShotAttack": 120,
+      "Defense": 100,
+      "Friendship_ShotAttack": 1.7,
+      "Friendship_Defense": 2.5
+    },
+    "BOSS_PandaGirl": {
+      "MeleeAttack": 120,
+      "ShotAttack": 120,
+      "Defense": 100,
+      "Friendship_ShotAttack": 1.7,
+      "Friendship_Defense": 2.5
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_PandaGirl_RapidKick": {
+      "WazaType": "EPalWazaID::Unique_PandaGirl_RapidKick",
+      "Element": "EPalElementType::Leaf",
+      "Power": 300,
+      "DisplayPower": 300,
+      "CoolTime": 12.0,
+      "EffectType1": "EPalAdditionalEffectType::IvyCling",
+      "EffectValue1": 100
+    }
+  }
+}

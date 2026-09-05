@@ -1,0 +1,45 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "KabukiMan": {
+      "Defense": 130,
+      "Friendship_Defense": 1.3
+    },
+    "BOSS_KabukiMan": {
+      "Defense": 130,
+      "Friendship_Defense": 1.3
+    }
+  },
+    "DT_WazaMasterLevel": {
+        "KabukiMan45":{
+			"PalId": "KabukiMan",
+            "WazaID": "EPalWazaID::RootLance",
+			"Level": 45
+        },
+        "Boss_KabukiMan45":{
+			"PalId": "BOSS_KabukiMan",
+            "WazaID": "EPalWazaID::RootLance",
+			"Level": 45
+        },
+        "KabukiMan60":{
+			"PalId": "KabukiMan",
+            "WazaID": "EPalWazaID::SolarBeam",
+			"Level": 60
+        },
+        "Boss_KabukiMan60":{
+			"PalId": "BOSS_KabukiMan",
+            "WazaID": "EPalWazaID::SolarBeam",
+			"Level": 60
+        },
+        "KabukiMan70":{
+			"PalId": "KabukiMan",
+            "WazaID": "EPalWazaID::StarMine",
+			"Level": 70
+        },
+        "Boss_KabukiMan70":{
+			"PalId": "BOSS_KabukiMan",
+            "WazaID": "EPalWazaID::StarMine",
+			"Level": 70
+        }
+    }
+}

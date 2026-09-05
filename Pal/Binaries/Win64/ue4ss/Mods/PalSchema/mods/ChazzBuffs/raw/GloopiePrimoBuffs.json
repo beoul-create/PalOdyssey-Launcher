@@ -1,0 +1,21 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "OctopusGirl_Neutral": {
+      "Hp": 95,
+      "ShotAttack": 95,
+      "Defense": 80,
+      "Friendship_HP": 5.3,
+      "Friendship_ShotAttack": 3.7,
+      "Friendship_Defense": 4.3
+    },
+    "BOSS_OctopusGirl_Neutral": {
+      "Hp": 114,
+      "ShotAttack": 95,
+      "Defense": 80,
+      "Friendship_HP": 4.3,
+      "Friendship_ShotAttack": 3.7,
+      "Friendship_Defense": 4.3
+    }
+  }
+}

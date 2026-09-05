@@ -1,0 +1,10 @@
+{
+  "bgm_state": "play",
+  "bgm_track": "title_perfect_time.mp3",
+  "bgm_loop": true,
+  "bgm_volume": 0.25,
+  "fade_seconds": 1,
+  "sfx_track": "",
+  "sfx_volume": 0.75,
+  "sfx_sequence": 0
+}

@@ -1,0 +1,17 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "HerculesBeetle_Ground": {
+      "ShotAttack": 115,
+      "Defense": 130,
+      "Friendship_ShotAttack": 1.9,
+      "Friendship_Defense": 1.3
+    },
+    "BOSS_HerculesBeetle": {
+      "ShotAttack": 115,
+      "Defense": 130,
+      "Friendship_ShotAttack": 1.9,
+      "Friendship_Defense": 1.3
+    }
+  }
+}

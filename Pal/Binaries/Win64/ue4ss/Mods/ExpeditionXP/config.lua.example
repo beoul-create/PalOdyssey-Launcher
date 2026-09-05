@@ -1,0 +1,175 @@
+-- ============================================================================
+--  Expedition XP -- OPTIONAL server config.
+--
+--  RENAME THIS FILE TO  config.lua  (drop the .example) to use it.
+--  It lives beside Info.json, in the mod folder:
+--      ue4ss/Mods/ExpeditionXP/config.lua
+--
+--  Everything here is optional. Delete any line you do not care about and the
+--  shipped default is used. Anything the mod cannot understand is REJECTED and
+--  named in UE4SS.log -- it never silently falls back, so if you mistype a key
+--  you will see it. Check the log for a line starting "config.lua loaded".
+--
+--  main.lua is overwritten by every update. THIS FILE IS NOT -- that is the
+--  whole reason it exists, so your tuning survives.
+-- ============================================================================
+return {
+
+  -- ---- LEVEL EXTENDER MODS -------------------------------------------------
+  -- If you run a max-level extender, this is the section you want.
+  --
+  -- The mod ships tuned for the vanilla cap of 80. Three things stop a modded
+  -- server working, and you need all three to move together -- raising only the
+  -- cap makes pals ELIGIBLE and still earns them zero:
+  --   * maxLevel               -- pals at or above it are skipped entirely
+  --   * the expedition anchors -- a run rated 80 pays nothing to a level-140 pal
+  --   * overDecay              -- ~7 levels past an anchor and the grant is 0
+  --
+  -- The easy way: state your cap and let everything scale with it.
+  --
+  --   maxLevel = 200,
+  --   scaleAnchorsToMaxLevel = true,
+  --
+  -- That stretches the tower ladder and every expedition anchor proportionally,
+  -- keeping their spacing. With maxLevel 200 the anchors become roughly
+  -- 75/125/138/170/185/200 instead of 30/50/55/68/74/80.
+  --
+  -- 255 IS THE CEILING. Above that the GAME crashes -- players and pals alike
+  -- (reported by LordAnorak, Nexus, 2026-07-28). Values over 255 are rejected.
+
+  -- maxLevel = 200,
+  -- scaleAnchorsToMaxLevel = true,
+
+  -- ---- WHICH LEVEL EACH EXPEDITION IS RATED FOR -----------------------------
+  -- Merged over the defaults, so you only list the ones you want to move.
+  -- Ids appear in UE4SS.log and accumulate in missions.txt as you run them.
+  --
+  -- anchors = {
+  --   DUNGEON_FOREST     = 30,
+  --   DUNGEON_VOLCANO    = 50,
+  --   DUNGEON_SNOW       = 55,
+  --   DUNGEON_DARKISLAND = 68,
+  --   DUNGEON_SKYISLAND  = 74,
+  --   DUNGEON_WORLDTREE  = 80,
+  --   DUNGEON_GRASSHARD  = 80,
+  -- },
+
+  -- ---- EXPEDITIONS THAT NEVER STOP PAYING -----------------------------------
+  -- Normally a pal "ages out" of an expedition: once it is well above the
+  -- anchor the grant decays to nothing. List ids here to switch that off for
+  -- them -- however high the pal, it earns the full amount. Handy for making
+  -- the last expedition worthwhile forever on a high-cap server.
+  --
+  -- uncapped = { DUNGEON_WORLDTREE = true },
+
+  -- ---- THE TOWER LADDER -----------------------------------------------------
+  -- Only needed if your server changes when towers unlock. Sorted ascending.
+  --
+  -- ladder = { 15, 30, 45, 50, 55, 62, 68, 74, 80 },
+
+  -- ---- OBEY THE SERVER'S XP RATE -------------------------------------------
+  -- This mod writes pal XP directly, so it never passes through the game's XP
+  -- pipeline -- which is why a 0.25x world still pays FULL-rate expedition XP.
+  -- Set this true and every grant is multiplied by your world's ExpRate.
+  --
+  -- Off by default because turning it on re-prices an existing world: at 0.1x,
+  -- expeditions become worth a tenth of what your players expect.
+  --
+  -- The rate is read from the live world settings, falling back to
+  -- PalWorldSettings.ini. If neither can be read the grant is left UNSCALED and
+  -- the log says so -- it never silently pays zero. The log names which source
+  -- answered, so check there if the number surprises you.
+  --
+  -- respectServerExpRate = true,
+
+  -- ---- RATE ----------------------------------------------------------------
+  -- Turn these DOWN for less XP, UP for more. NOTE: these stack with
+  -- respectServerExpRate above -- bandPct 0.5 on a 0.25x server is 0.125x total.
+  --
+  -- What a pal earns is  max(band, floor)  -- whichever of the two is larger:
+  --
+  --   bandPct       -- THE MAIN LEVER. A known expedition pays this many levels'
+  --                    worth of exp, priced at the ANCHOR's level: 1.0 = about one
+  --                    level at the dungeon's tier per run. 0 turns the band off
+  --                    and reverts to the old flat lump.
+  --   minPctOfLevel -- the floor, as a fraction of the pal's OWN next level. For a
+  --                    pal well above a low anchor this is the bigger of the two,
+  --                    because its next level costs far more than a level at the
+  --                    anchor does.
+  --
+  -- SO: HALVING bandPct ALONE DOES NOT HALVE EVERYONE'S XP -- the floor is
+  -- untouched and keeps paying those pals the same. Scale both by the same factor
+  -- and the result is exactly scaled for every pal, whatever the exp curve. Add
+  -- xpPerAnchorLevel if you also want unknown expeditions cut.
+  --
+  -- Half XP, for example:
+  --   bandPct = 0.5, minPctOfLevel = 0.075, xpPerAnchorLevel = 60,
+  --
+  -- bandPct        = 1.0,
+  -- minPctOfLevel  = 0.15,
+  --
+  --   bandWidth      -- how far either side of the anchor full wages reach. Past
+  --                     this far OVER, the run pays nothing and it is time to move
+  --                     up a tier.
+  --   bandUnderBonus -- multiplier for pals MORE than bandWidth UNDER the anchor.
+  --                     1 = OFF, and that is the default from 1.7.0: a pal far below the
+  --                     tier earns the same wage as one inside the band. It used to be 1.5
+  --                     ("babies carried by a strong crew catch up fastest"), but that
+  --                     multiplied a payout already priced at the DUNGEON'S tier, so it
+  --                     paid most to the pals that fitted the run worst. Set it to 1.5 to
+  --                     get the old behaviour back.
+  --
+  -- bandWidth      = 10,
+  -- bandUnderBonus = 1,
+  --
+  --   maxLevelsPerRun -- OPTIONAL CAP, OFF BY DEFAULT (0). A run pays the cost of one
+  --                      level AT THE DUNGEON'S TIER, which is right for a pal near that
+  --                      tier and generous to a pal far below it: the same top-tier payout
+  --                      that is one level to a level-74 pal is fifty-odd levels to a
+  --                      level-15 one. Set this and a run grants at most that many of the
+  --                      PAL'S OWN levels instead.
+  --                      It cannot change an in-band run -- near the tier the pal's own
+  --                      next level costs about what the tier's does, so the cap never
+  --                      binds. Leave it at 0 to keep sending babies out for a big payday.
+  --
+  -- maxLevelsPerRun = 0,
+  --
+  --   xpPerAnchorLevel -- flat-lump scaler, used ONLY for expeditions the mod does
+  --                       not recognise (no anchor, so no tier to price against).
+  --
+  -- xpPerAnchorLevel = 120,
+
+  -- ---- CURVE SHAPE (advanced) ----------------------------------------------
+  --   underBonus / underCap -- how much faster pals BELOW the anchor level
+  --   overDecay             -- how fast pals ABOVE it age out. Set 0 to turn
+  --                            ageing-out off completely, everywhere.
+  --
+  -- underBonus = 0.08,
+  -- underCap   = 10,
+  -- overDecay  = 0.15,
+
+  -- ---- CANCELLED EXPEDITIONS ------------------------------------------------
+  -- A cancelled expedition must not pay XP, or starting-and-cancelling on repeat
+  -- becomes free levels. Two things stop it, and either one alone refuses a run:
+  -- the game's own cancel request, and this -- the minimum time a run we watched
+  -- START has to have been going before we will believe it finished.
+  --
+  -- 300 seconds is a sixth of the SHORTEST expedition in the game (they run
+  -- 1800-3600 seconds, 7200 on hard mode), so no genuine completion can land
+  -- under it. Lower it only if you run something that shortens expeditions.
+  -- 0 switches this guard off entirely.
+  --
+  -- The guard can only ever refuse a run whose start the mod saw for itself.
+  -- One that was already under way the first time it looked is always paid --
+  -- withholding XP from someone who finished the run is the worse mistake, and
+  -- it is the one that got reported.
+  --
+  -- minInProgressSeconds = 1200,
+
+  -- ---- TESTING -------------------------------------------------------------
+  -- dryRun = true logs "WOULD GRANT ..." and writes nothing. Good for checking
+  -- your numbers before letting them touch real pals.
+  --
+  -- enabled = true,
+  -- dryRun  = false,
+}

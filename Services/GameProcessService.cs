@@ -1,0 +1,570 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Win32;
+
+namespace PalLauncher.Services
+{
+    public class GameProcessService
+    {
+        public const string PalworldAppId = "1623730";
+        public const string PalServerAppId = "2394010";
+        public const string ExecutableRelativePath = @"Pal\Binaries\Win64\Palworld-Win64-Shipping.exe";
+        public const string ServerExecutableRelativePath = @"Pal\Binaries\Win64\PalServer-Win64-Shipping.exe";
+        public const string MainProcessName = "Palworld-Win64-Shipping";
+        public const string AlternateProcessName = "Palworld";
+        public const string ServerProcessName = "PalServer-Win64-Shipping";
+        public const string AlternateServerProcessName = "PalServer";
+
+        private Process? _serverProcess;
+
+        public event Action? GameStarted;
+        public event Action? GameExited;
+        public event Action<bool>? ServerStateChanged;
+
+        public bool IsGameRunning { get; private set; }
+        public bool IsServerRunning
+        {
+            get
+            {
+                if (_serverProcess != null && !_serverProcess.HasExited) return true;
+                try
+                {
+                    return AnyProcessRunning(ServerProcessName) || AnyProcessRunning(AlternateServerProcessName);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
+        private static bool AnyProcessRunning(string processName)
+        {
+            var processes = Process.GetProcessesByName(processName);
+            try
+            {
+                return processes.Any(process => !process.HasExited);
+            }
+            finally
+            {
+                foreach (var process in processes) process.Dispose();
+            }
+        }
+
+        public string? DetectGamePath() => DetectGameDirectory();
+
+        public string? DetectServerPath(string? explicitPath = null)
+        {
+            // 1. Check user-configured explicit path
+            if (!string.IsNullOrWhiteSpace(explicitPath) && Directory.Exists(explicitPath))
+            {
+                if (File.Exists(Path.Combine(explicitPath, "PalServer.exe")) ||
+                    File.Exists(Path.Combine(explicitPath, ServerExecutableRelativePath)))
+                    return explicitPath;
+            }
+
+            // 2. Check Steam libraries
+            var steamPath = GetSteamInstallPath();
+            if (!string.IsNullOrEmpty(steamPath) && Directory.Exists(steamPath))
+            {
+                var serverCandidates = new[]
+                {
+                    Path.Combine(steamPath, "steamapps", "common", "PalServer"),
+                    Path.Combine(steamPath, "steamapps", "common", "Palworld Dedicated Server")
+                };
+
+                foreach (var sc in serverCandidates)
+                {
+                    if (IsValidServerDirectory(sc)) return sc;
+                }
+
+                string libraryFoldersVdf = Path.Combine(steamPath, "steamapps", "libraryfolders.vdf");
+                if (File.Exists(libraryFoldersVdf))
+                {
+                    var extraLibraries = ParseLibraryFolders(libraryFoldersVdf);
+                    foreach (var lib in extraLibraries)
+                    {
+                        var libCandidates = new[]
+                        {
+                            Path.Combine(lib, "steamapps", "common", "PalServer"),
+                            Path.Combine(lib, "steamapps", "common", "Palworld Dedicated Server")
+                        };
+
+                        foreach (var sc in libCandidates)
+                        {
+                            if (IsValidServerDirectory(sc)) return sc;
+                        }
+                    }
+                }
+            }
+
+            // 3. Fallback: Search standard drive paths
+            var standardServerPaths = new[]
+            {
+                @"C:\SteamLibrary\steamapps\common\PalServer",
+                @"C:\Program Files (x86)\Steam\steamapps\common\PalServer",
+                @"C:\Program Files\Steam\steamapps\common\PalServer",
+                @"C:\PalworldServer",
+                @"D:\SteamLibrary\steamapps\common\PalServer",
+                @"D:\Steam\steamapps\common\PalServer",
+                @"D:\PalworldServer",
+                @"E:\SteamLibrary\steamapps\common\PalServer",
+                @"E:\PalworldServer",
+                @"F:\SteamLibrary\steamapps\common\PalServer"
+            };
+
+            foreach (var path in standardServerPaths)
+            {
+                if (IsValidServerDirectory(path))
+                    return path;
+            }
+
+            // 4. Fallback: Check if PalServer.exe exists in game client directory
+            var clientPath = DetectGameDirectory();
+            if (!string.IsNullOrWhiteSpace(clientPath) && IsValidServerDirectory(clientPath))
+            {
+                return clientPath;
+            }
+
+            return null;
+        }
+
+        public bool IsValidServerDirectory(string? path)
+        {
+            if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
+                return false;
+
+            return File.Exists(Path.Combine(path, "PalServer.exe")) ||
+                   File.Exists(Path.Combine(path, ServerExecutableRelativePath));
+        }
+
+        public bool StartDedicatedServer(string serverDirectory, string arguments)
+        {
+            if (IsServerRunning) return true;
+            _serverProcess?.Dispose();
+            _serverProcess = null;
+
+            string palServerExe = Path.Combine(serverDirectory, "PalServer.exe");
+            string shippingExe = Path.Combine(serverDirectory, ServerExecutableRelativePath);
+
+            string exePath;
+            string workingDir;
+            string launchArgs;
+
+            if (File.Exists(palServerExe))
+            {
+                exePath = palServerExe;
+                workingDir = serverDirectory;
+                launchArgs = string.IsNullOrWhiteSpace(arguments) 
+                    ? "-useperfthreads -NoAsyncLoadingThread -USEALLAVAILABLECORES" 
+                    : $"{arguments} -useperfthreads -NoAsyncLoadingThread -USEALLAVAILABLECORES";
+            }
+            else if (File.Exists(shippingExe))
+            {
+                exePath = shippingExe;
+                workingDir = Path.GetDirectoryName(shippingExe) ?? serverDirectory;
+                launchArgs = string.IsNullOrWhiteSpace(arguments) 
+                    ? "Pal -useperfthreads -NoAsyncLoadingThread -USEALLAVAILABLECORES" 
+                    : $"Pal {arguments} -useperfthreads -NoAsyncLoadingThread -USEALLAVAILABLECORES";
+            }
+            else
+            {
+                return false;
+            }
+
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = exePath,
+                Arguments = launchArgs,
+                WorkingDirectory = workingDir,
+                UseShellExecute = true
+            };
+
+            try
+            {
+                _serverProcess = Process.Start(startInfo);
+                if (_serverProcess != null)
+                {
+                    try
+                    {
+                        _serverProcess.EnableRaisingEvents = true;
+                        _serverProcess.Exited += (s, e) =>
+                        {
+                            ServerStateChanged?.Invoke(false);
+                        };
+                    }
+                    catch { }
+
+                    ServerStateChanged?.Invoke(true);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to start dedicated server: {ex.Message}");
+                return false;
+            }
+
+            return false;
+        }
+
+        public void StopDedicatedServer()
+        {
+            try
+            {
+                if (_serverProcess != null && !_serverProcess.HasExited)
+                {
+                    _serverProcess.Kill(entireProcessTree: true);
+                    _serverProcess.Dispose();
+                    _serverProcess = null;
+                }
+
+                // Also kill any lingering PalServer / PalServer-Win64-Shipping processes
+                var processes = Process.GetProcessesByName(ServerProcessName)
+                    .Concat(Process.GetProcessesByName(AlternateServerProcessName))
+                    .ToArray();
+
+                foreach (var p in processes)
+                {
+                    try
+                    {
+                        if (!p.HasExited)
+                        {
+                            p.Kill(entireProcessTree: true);
+                        }
+                    }
+                    catch { }
+                    finally
+                    {
+                        p.Dispose();
+                    }
+                }
+            }
+            catch { }
+            finally
+            {
+                ServerStateChanged?.Invoke(false);
+            }
+        }
+
+        public string? NormalizeGameDirectory(string? path)
+        {
+            if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path)) return null;
+            if (IsValidGameDirectory(path)) return path;
+
+            // If user selected Pal\Binaries\Win64
+            var dir = new DirectoryInfo(path);
+            if (dir.Name.Equals("Win64", StringComparison.OrdinalIgnoreCase) &&
+                dir.Parent?.Name.Equals("Binaries", StringComparison.OrdinalIgnoreCase) == true &&
+                dir.Parent?.Parent?.Name.Equals("Pal", StringComparison.OrdinalIgnoreCase) == true)
+            {
+                var root = dir.Parent?.Parent?.Parent?.FullName;
+                if (root != null && IsValidGameDirectory(root)) return root;
+            }
+
+            // If user selected Pal
+            if (dir.Name.Equals("Pal", StringComparison.OrdinalIgnoreCase))
+            {
+                var root = dir.Parent?.FullName;
+                if (root != null && IsValidGameDirectory(root)) return root;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Attempts to auto-detect the Palworld game installation directory via Steam Registry, VDF library files, and system drives.
+        /// </summary>
+        public string? DetectGameDirectory()
+        {
+            // 1. Check Windows Steam App Uninstall Registry (Direct, instant & 100% authoritative)
+            try
+            {
+                using var uninstallKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 1623730") ??
+                                         Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 1623730") ??
+                                         Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 1623730");
+                if (uninstallKey?.GetValue("InstallLocation") is string installLoc && Directory.Exists(installLoc))
+                {
+                    if (IsValidGameDirectory(installLoc))
+                        return installLoc;
+                }
+            }
+            catch { }
+
+            // 2. Check Steam Registry
+            var steamPath = GetSteamInstallPath();
+            if (!string.IsNullOrEmpty(steamPath) && Directory.Exists(steamPath))
+            {
+                // Check primary library
+                string primaryGameDir = Path.Combine(steamPath, "steamapps", "common", "Palworld");
+                if (IsValidGameDirectory(primaryGameDir))
+                    return primaryGameDir;
+
+                // Parse libraryfolders.vdf
+                string libraryFoldersVdf = Path.Combine(steamPath, "steamapps", "libraryfolders.vdf");
+                if (File.Exists(libraryFoldersVdf))
+                {
+                    var extraLibraries = ParseLibraryFolders(libraryFoldersVdf);
+                    foreach (var lib in extraLibraries)
+                    {
+                        string gameDir = Path.Combine(lib, "steamapps", "common", "Palworld");
+                        if (IsValidGameDirectory(gameDir))
+                            return gameDir;
+                    }
+                }
+            }
+
+            // 3. Fallback: Search common drive roots across all logical drives
+            var standardPaths = new List<string>
+            {
+                @"C:\SteamLibrary\steamapps\common\Palworld",
+                @"C:\Program Files (x86)\Steam\steamapps\common\Palworld",
+                @"C:\Program Files\Steam\steamapps\common\Palworld",
+                @"C:\Games\Palworld",
+                @"C:\Palworld",
+                @"D:\SteamLibrary\steamapps\common\Palworld",
+                @"D:\Games\steamapps\common\Palworld",
+                @"D:\Steam\steamapps\common\Palworld",
+                @"E:\SteamLibrary\steamapps\common\Palworld",
+                @"E:\Steam\steamapps\common\Palworld",
+                @"F:\SteamLibrary\steamapps\common\Palworld",
+                @"G:\SteamLibrary\steamapps\common\Palworld"
+            };
+
+            try
+            {
+                foreach (var drive in DriveInfo.GetDrives())
+                {
+                    if (!drive.IsReady) continue;
+                    string d = drive.RootDirectory.FullName;
+                    standardPaths.Add(Path.Combine(d, "SteamLibrary", "steamapps", "common", "Palworld"));
+                    standardPaths.Add(Path.Combine(d, "Steam", "steamapps", "common", "Palworld"));
+                    standardPaths.Add(Path.Combine(d, "Games", "steamapps", "common", "Palworld"));
+                    standardPaths.Add(Path.Combine(d, "Palworld"));
+                }
+            }
+            catch { }
+
+            foreach (var path in standardPaths.Distinct())
+            {
+                if (IsValidGameDirectory(path))
+                    return path;
+            }
+
+            return null;
+        }
+
+        public bool IsValidGameDirectory(string? path)
+        {
+            if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
+                return false;
+
+            // 1. Root Palworld.exe (Standard Steam / Epic install)
+            if (File.Exists(Path.Combine(path, "Palworld.exe")))
+                return true;
+
+            // 2. Direct shipping executable
+            if (File.Exists(Path.Combine(path, ExecutableRelativePath)))
+                return true;
+
+            // 3. Direct Win64 folder selection
+            if (File.Exists(Path.Combine(path, "Palworld-Win64-Shipping.exe")))
+                return true;
+
+            // 4. Alternate Game Pass / MS Store names
+            if (File.Exists(Path.Combine(path, "Pal.exe")) ||
+                File.Exists(Path.Combine(path, "Palworld-WinGDK-Shipping.exe")) ||
+                File.Exists(Path.Combine(path, "gamelaunchhelper.exe")))
+                return true;
+
+            return false;
+        }
+
+        private static string? GetSteamInstallPath()
+        {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return null;
+
+            try
+            {
+                using var key = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
+                if (key?.GetValue("SteamPath") is string steamPath)
+                    return steamPath.Replace('/', '\\');
+
+                using var localKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Valve\Steam") ??
+                                     Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\Valve\Steam");
+                if (localKey?.GetValue("InstallPath") is string installPath)
+                    return installPath.Replace('/', '\\');
+            }
+            catch (Exception)
+            {
+                // Registry read permission or missing key
+            }
+
+            return null;
+        }
+
+        private static List<string> ParseLibraryFolders(string vdfPath)
+        {
+            var libraries = new List<string>();
+            try
+            {
+                string text = File.ReadAllText(vdfPath);
+                // Matches "path"		"D:\\SteamLibrary"
+                var matches = Regex.Matches(text, @"\""path\""\s+\""([^\""]+)\""", RegexOptions.IgnoreCase);
+                foreach (Match match in matches)
+                {
+                    if (match.Groups.Count > 1)
+                    {
+                        string path = match.Groups[1].Value.Replace(@"\\", @"\");
+                        if (Directory.Exists(path))
+                        {
+                            libraries.Add(path);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Ignore parse errors
+            }
+
+            return libraries.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        }
+
+        /// <summary>
+        /// Launches the Palworld game executable directly or via Steam URI protocol, and monitors its lifecycle.
+        /// </summary>
+        public Task<bool> LaunchGameAsync(
+            string gameDirectory,
+            string? serverIp = null,
+            int serverPort = 8211,
+            bool useSteamProtocol = false,
+            CancellationToken cancellationToken = default)
+        {
+            if (IsGameRunning)
+                return Task.FromResult(false);
+
+            string palworldExe = Path.Combine(gameDirectory, "Palworld.exe");
+            string shippingExe = Path.Combine(gameDirectory, ExecutableRelativePath);
+            // Always prefer Palworld-Win64-Shipping.exe directly.
+            // Spawning BootstrapPackagedGame (Palworld.exe) with custom arguments from an external launcher
+            // causes heuristic scanners (like BitDefender Advanced Threat Control) to flag parent-child debugger evasion (T1622).
+            string exePath = File.Exists(shippingExe) ? shippingExe : palworldExe;
+            Process? gameProcess = null;
+
+            try
+            {
+                if (!useSteamProtocol && File.Exists(exePath))
+                {
+                    // Launch with multi-threaded performance flags
+                    string extraArgs = "-useperfthreads -NoAsyncLoadingThread -USEALLAVAILABLECORES";
+                    string arguments = string.IsNullOrWhiteSpace(serverIp)
+                        ? extraArgs
+                        : $"{serverIp}:{serverPort} {extraArgs}";
+
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = exePath,
+                        Arguments = arguments,
+                        WorkingDirectory = Path.GetDirectoryName(exePath) ?? gameDirectory,
+                        UseShellExecute = false
+                    };
+                    startInfo.EnvironmentVariables["SteamAppId"] = PalworldAppId;
+                    startInfo.EnvironmentVariables["SteamGameId"] = PalworldAppId;
+
+                    gameProcess = Process.Start(startInfo);
+                }
+                else
+                {
+                    // Fallback to Steam URI Protocol
+                    string steamUri = $"steam://rungameid/{PalworldAppId}";
+                    using var steamLauncherProcess = Process.Start(new ProcessStartInfo
+                    {
+                        FileName = steamUri,
+                        UseShellExecute = true
+                    });
+                }
+
+                IsGameRunning = true;
+                GameStarted?.Invoke();
+
+                // Monitor process in background
+                _ = MonitorGameProcessAsync(gameProcess, cancellationToken);
+                return Task.FromResult(true);
+            }
+            catch (Exception)
+            {
+                IsGameRunning = false;
+                throw;
+            }
+        }
+
+        private async Task MonitorGameProcessAsync(Process? directProcess, CancellationToken cancellationToken)
+        {
+            Process? detectedProcess = null;
+            try
+            {
+                if (directProcess != null && !directProcess.HasExited)
+                {
+                    try { directProcess.PriorityClass = ProcessPriorityClass.High; } catch { }
+                    await directProcess.WaitForExitAsync(cancellationToken);
+                }
+                else
+                {
+                    // Wait for process to appear if launched via Steam URI
+                    for (int i = 0; i < 30; i++)
+                    {
+                        if (cancellationToken.IsCancellationRequested) break;
+                        await Task.Delay(1000, cancellationToken);
+
+                        var processes = Process.GetProcessesByName(MainProcessName)
+                            .Concat(Process.GetProcessesByName(AlternateProcessName))
+                            .ToArray();
+
+                        if (processes.Length > 0)
+                        {
+                            detectedProcess = processes[0];
+                            foreach (var process in processes.Skip(1)) process.Dispose();
+                            break;
+                        }
+                    }
+
+                    if (detectedProcess != null)
+                    {
+                        try { detectedProcess.PriorityClass = ProcessPriorityClass.High; } catch { }
+                        await detectedProcess.WaitForExitAsync(cancellationToken);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Process monitor ended or was cancelled
+            }
+            finally
+            {
+                directProcess?.Dispose();
+                detectedProcess?.Dispose();
+                IsGameRunning = false;
+                GameExited?.Invoke();
+
+                try
+                {
+                    foreach (var audioPlayer in Process.GetProcessesByName("PalOdysseyAudioPlayer"))
+                    {
+                        try { audioPlayer.Kill(); audioPlayer.Dispose(); } catch { }
+                    }
+                }
+                catch { }
+
+            }
+        }
+    }
+}

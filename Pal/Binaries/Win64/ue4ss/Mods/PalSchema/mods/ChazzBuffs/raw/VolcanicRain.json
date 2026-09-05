@@ -1,0 +1,14 @@
+
+{
+  "DT_WazaDataTable": {
+    "Eruption": {
+      "WazaType": "EPalWazaID::Eruption",
+      "Element": "EPalElementType::Fire",
+      "Power": 400,
+      "DisplayPower": 400,
+      "CoolTime": 20.0,
+      "EffectType1": "EPalAdditionalEffectType::Burn",
+      "EffectValue1": 100
+    }
+  }
+}

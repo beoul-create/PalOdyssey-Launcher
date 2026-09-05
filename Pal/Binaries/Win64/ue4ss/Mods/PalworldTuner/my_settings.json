@@ -1,0 +1,37 @@
+{
+  "app": "PalworldTuner",
+  "v": 1,
+  "agg": "off",
+  "ranges": {
+    "carry": "1",
+    "tech": "1",
+    "regHp": "3",
+    "regDmg": "2.5",
+    "regTk": "0.6",
+    "alpHp": "5",
+    "alpDmg": "3",
+    "alpTk": "0.5",
+    "bosHp": "3",
+    "bosDmg": "2.2",
+    "bosTk": "0.6",
+    "raiHp": "3",
+    "raiDmg": "2.2",
+    "raiTk": "0.6",
+    "humHp": "3.5",
+    "humDmg": "2.8",
+    "humTk": "0.55",
+    "hbsHp": "3",
+    "hbsDmg": "2.2",
+    "hbsTk": "0.6",
+    "stackVal": "99999",
+    "workVal": "3",
+    "runVal": "1000",
+    "rideVal": "2000"
+  },
+  "toggles": {
+    "humOn": true,
+    "stackOn": false,
+    "workOn": false,
+    "speedOn": false
+  }
+}

@@ -1,0 +1,14 @@
+
+{
+  "DT_WazaDataTable": {
+    "Unique_VolcanoDragon_Ice_IcicleSpit": {
+      "WazaType": "EPalWazaID::Unique_VolcanoDragon_Ice_IcicleSpit",
+      "Element": "EPalElementType::Ice",
+      "Power": 600,
+      "DisplayPower": 600,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Freeze",
+      "EffectValue1": 5
+    }
+  }
+}

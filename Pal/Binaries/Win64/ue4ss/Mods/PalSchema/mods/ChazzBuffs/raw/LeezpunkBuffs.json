@@ -1,0 +1,43 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "LizardMan": {
+      "ElementType2": "Electricity",
+      "WorkSuitability_GenerateElectricity": 2,
+      "ShotAttack": 100,
+      "Friendship_ShotAttack": 2.5,
+      "Defense": 80,
+      "Friendship_Defense": 3.3
+    },
+    "BOSS_LizardMan": {
+      "ElementType2": "Electricity",
+      "WorkSuitability_GenerateElectricity": 2,
+      "ShotAttack": 100,
+      "Friendship_ShotAttack": 2.5,
+      "Defense": 80,
+      "Friendship_Defense": 3.3
+    }
+  },
+    "DT_WazaMasterLevel": {
+        "LizardMan35":{
+			"PalId": "LizardMan",
+            "WazaID": "EPalWazaID::LineThunder",
+			"Level": 35
+        },
+        "Boss_LizardMan35":{
+			"PalId": "BOSS_LizardMan",
+            "WazaID": "EPalWazaID::LineThunder",
+			"Level": 35
+        },
+        "LizardMan60":{
+			"PalId": "LizardMan",
+            "WazaID": "EPalWazaID::Railbolt",
+			"Level": 70
+        },
+        "Boss_LizardMan60":{
+			"PalId": "BOSS_LizardMan",
+            "WazaID": "EPalWazaID::Railbolt",
+			"Level": 70
+        }
+    }
+}

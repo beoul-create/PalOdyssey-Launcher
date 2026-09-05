@@ -1,0 +1,34 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "OctopusGirl": {
+      "Hp": 90,
+      "ShotAttack": 95,
+      "Defense": 80,
+      "Friendship_HP": 5.5,
+      "Friendship_ShotAttack": 3.7,
+      "Friendship_Defense": 4.3
+    },
+    "BOSS_OctopusGirl": {
+      "Hp": 108,
+      "ShotAttack": 95,
+      "Defense": 80,
+      "Friendship_HP": 4.6,
+      "Friendship_ShotAttack": 3.7,
+      "Friendship_Defense": 4.3
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_OctopursGirl_InkJet": {
+      "WazaType": "EPalWazaID::Unique_OctopursGirl_InkJet",
+      "Element": "EPalElementType::Water",
+      "Power": 300,
+      "DisplayPower": 300,
+      "CoolTime": 10.0,
+      "EffectType1": "EPalAdditionalEffectType::Wetness",
+      "EffectValue1": 100,
+      "EffectType2": "EPalAdditionalEffectType::Darkness",
+      "EffectValue2": 999
+    }
+  }
+}

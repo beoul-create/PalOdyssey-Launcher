@@ -1,0 +1,168 @@
+{
+    "DT_ItemShopCreateData": {
+
+        "Caravan_Shop_18": {
+            "productDataArray": {
+                "Action": "Clear",
+                    "Items": [
+
+          {
+            "StaticItemId": "DogCoin",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 800,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "ruby",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 16,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Sapphire",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 4,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Diamond",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 16,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "AncientParts2",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 4,
+            "Stock": 20
+          },
+          {
+            "StaticItemId": "Accessory_PPAT_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 40,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_PPDF_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_HCHP_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_ExplosionResist",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_DFHP_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ATNormal_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 40,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ATFire_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 40,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ATWater_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 40,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ATElectricity_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 40,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ATLeaf_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 40,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ATIce_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 40,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ATEarth_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 40,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ATDark_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 40,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Otomo_ATDragon_ElementBoost_1",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 40,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_JumpAir_2",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Accessory_SuperJumpAir_2",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TechnologyBook_G3",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 6,
+            "Stock": 0
+          }
+          
+        ]
+      }
+    }      
+  }
+}

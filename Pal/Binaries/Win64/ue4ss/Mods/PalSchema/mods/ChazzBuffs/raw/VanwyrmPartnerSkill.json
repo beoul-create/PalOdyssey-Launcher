@@ -1,0 +1,74 @@
+{
+	"DT_PassiveSkill_Main": {
+		"WeakDamage_ActiveOtomo_BirdDragon_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::BodyPartsWeakDamage",
+			"EffectValue1": 15,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"WeakDamage_ActiveOtomo_BirdDragon_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::BodyPartsWeakDamage",
+			"EffectValue1": 18,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"WeakDamage_ActiveOtomo_BirdDragon_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::BodyPartsWeakDamage",
+			"EffectValue1": 21,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"WeakDamage_ActiveOtomo_BirdDragon_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::BodyPartsWeakDamage",
+			"EffectValue1": 24,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"WeakDamage_ActiveOtomo_BirdDragon_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::BodyPartsWeakDamage",
+			"EffectValue1": 30,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		}
+	}
+}

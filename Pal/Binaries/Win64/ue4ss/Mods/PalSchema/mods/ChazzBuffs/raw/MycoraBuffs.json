@@ -1,0 +1,29 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "MushroomLady": {
+      "ShotAttack": 105,
+      "Defense": 105,
+      "Friendship_ShotAttack": 2.3,
+      "Friendship_Defense": 2.3
+    },
+    "BOSS_MushroomLady": {
+      "ShotAttack": 105,
+      "Defense": 105,
+      "Friendship_ShotAttack": 2.3,
+      "Friendship_Defense": 2.3
+    }
+  },
+    "DT_WazaMasterLevel": {
+        "MushroomLady70":{
+			"PalId": "MushroomLady",
+            "WazaID": "EPalWazaID::DarkLegion",
+			"Level": 70
+        },
+        "Boss_MushroomLady70":{
+			"PalId": "BOSS_MushroomLady",
+            "WazaID": "EPalWazaID::DarkLegion",
+			"Level": 70
+        }
+    }
+}

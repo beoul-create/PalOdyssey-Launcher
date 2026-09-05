@@ -1,0 +1,175 @@
+{
+	"DT_PassiveSkill_Main": {
+		"GroundRat": {
+			"EffectType1": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue1": 30,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementEarth",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+		"Gorilla_Ground": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ClimbSpeedUp_1"
+							}
+						},
+						{
+							"SkillName": {
+								"Key": "GroundRat"
+							}
+						}
+					]
+				},
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ClimbSpeedUp_2"
+							}
+						},
+						{
+							"SkillName": {
+								"Key": "GroundRat"
+							}
+						}
+					]
+				},
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ClimbSpeedUp_3"
+							}
+						},
+						{
+							"SkillName": {
+								"Key": "GroundRat"
+							}
+						}
+					]
+				},
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ClimbSpeedUp_4"
+							}
+						},
+						{
+							"SkillName": {
+								"Key": "GroundRat"
+							}
+						}
+					]
+				},
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ClimbSpeedUp_5"
+							}
+						},
+						{
+							"SkillName": {
+								"Key": "GroundRat"
+							}
+						}
+					]
+				}
+			]
+		},
+		"BOSS_Gorilla_Ground": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ClimbSpeedUp_1"
+							}
+						},
+						{
+							"SkillName": {
+								"Key": "GroundRat"
+							}
+						}
+					]
+				},
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ClimbSpeedUp_2"
+							}
+						},
+						{
+							"SkillName": {
+								"Key": "GroundRat"
+							}
+						}
+					]
+				},
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ClimbSpeedUp_3"
+							}
+						},
+						{
+							"SkillName": {
+								"Key": "GroundRat"
+							}
+						}
+					]
+				},
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ClimbSpeedUp_4"
+							}
+						},
+						{
+							"SkillName": {
+								"Key": "GroundRat"
+							}
+						}
+					]
+				},
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ClimbSpeedUp_5"
+							}
+						},
+						{
+							"SkillName": {
+								"Key": "GroundRat"
+							}
+						}
+					]
+				}
+			]
+		}
+	}
+}

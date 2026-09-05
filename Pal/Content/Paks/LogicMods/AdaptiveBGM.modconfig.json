@@ -1,0 +1,635 @@
+{
+  "Enabled": {
+    "desc": "Enable or disable AdaptiveBGM playback.",
+    "init": false,
+    "live": false,
+    "type": "boolean"
+  },
+  "Global Volume": {
+    "desc": "Global AdaptiveBGM volume percentage.",
+    "init": 10,
+    "live": 10,
+    "opts": {
+      "min": 0,
+      "max": 100,
+      "step": 1
+    },
+    "type": "float"
+  },
+  "Minimum Long Silence Seconds": {
+    "desc": "Minimum long silence after a completed song batch.",
+    "init": 60,
+    "live": 60,
+    "opts": {
+      "min": 0,
+      "max": 600,
+      "step": 1
+    },
+    "type": "float"
+  },
+  "Maximum Long Silence Seconds": {
+    "desc": "Maximum long silence after a completed song batch.",
+    "init": 90,
+    "live": 90,
+    "opts": {
+      "min": 0,
+      "max": 600,
+      "step": 1
+    },
+    "type": "float"
+  },
+  "Minimum Tracks Before Long Silence": {
+    "desc": "Minimum consecutive songs before a long silence.",
+    "init": 6,
+    "live": 6,
+    "opts": {
+      "min": 0,
+      "max": 50,
+      "step": 1
+    },
+    "type": "integer"
+  },
+  "Maximum Tracks Before Long Silence": {
+    "desc": "Maximum consecutive songs before a long silence.",
+    "init": 8,
+    "live": 8,
+    "opts": {
+      "min": 0,
+      "max": 50,
+      "step": 1
+    },
+    "type": "integer"
+  },
+  "State Change Grace Seconds": {
+    "desc": "How long an ineligible current song keeps playing after a normal state change.",
+    "init": 7,
+    "live": 7,
+    "opts": {
+      "min": 0,
+      "max": 180,
+      "step": 1
+    },
+    "type": "float"
+  },
+  "State Transition Silence Seconds": {
+    "type": "float",
+    "desc": "Silence between songs after state changes or loading.",
+    "opts": {
+      "min": 0,
+      "max": 30,
+      "step": 1
+    },
+    "init": 8,
+    "live": 8
+  },
+  "Condition Recheck Seconds": {
+    "desc": "How often cached bridge state is re-evaluated. Does not trigger Unreal reflection polling.",
+    "init": 2,
+    "live": 2,
+    "opts": {
+      "min": 1,
+      "max": 60,
+      "step": 1
+    },
+    "type": "float"
+  },
+  "Fade Seconds": {
+    "desc": "Fade duration when starting or stopping a track.",
+    "init": 1.25,
+    "live": 1.25,
+    "opts": {
+      "min": 0,
+      "max": 10,
+      "step": 0.25
+    },
+    "type": "float"
+  },
+  "Repeat History Size": {
+    "desc": "Number of recent tracks excluded when alternatives exist.",
+    "init": 1,
+    "live": 1,
+    "opts": {
+      "min": 0,
+      "max": 100,
+      "step": 1
+    },
+    "type": "integer"
+  },
+  "Tracks": {
+    "type": "object",
+    "desc": "",
+    "data": {
+      "base_the_first_town.mp3": {
+        "type": "object",
+        "desc": "Former base theme; used during normal-temperature exploration on foot.",
+        "data": {
+          "Enabled": {
+            "type": "boolean",
+            "desc": "Enable or disable this track.",
+            "init": true,
+            "live": true
+          },
+          "Volume": {
+            "type": "float",
+            "desc": "Individual volume percentage for this track.",
+            "init": 40,
+            "live": 40,
+            "opts": {
+              "min": 0,
+              "max": 200,
+              "step": 1
+            }
+          },
+          "Weight": {
+            "type": "float",
+            "desc": "Relative random-selection weight.",
+            "init": 5,
+            "live": 5,
+            "opts": {
+              "min": 1,
+              "max": 20,
+              "step": 1
+            }
+          },
+          "Day / Night / Dungeon": {
+            "type": "option",
+            "desc": "Overworld day/night or dungeon eligibility.",
+            "init": "Day + Night",
+            "live": "Day + Night",
+            "opts": [
+              "Day",
+              "Night",
+              "Dungeon",
+              "Night + Dungeon",
+              "Day + Night"
+            ]
+          },
+          "Temperature": {
+            "type": "option",
+            "desc": "Temperature eligibility.",
+            "init": "Normal",
+            "live": "Normal",
+            "opts": [
+              "All",
+              "Hot",
+              "Normal",
+              "Cold"
+            ]
+          },
+          "Riding": {
+            "type": "option",
+            "desc": "Mount eligibility.",
+            "init": "Not Riding",
+            "live": "Not Riding",
+            "opts": [
+              "Riding",
+              "Flying",
+              "Riding + Flying",
+              "Not Riding",
+              "All"
+            ]
+          }
+        }
+      },
+      "dungeon_weird_place.mp3": {
+        "type": "object",
+        "desc": "Dungeon exploration theme.",
+        "data": {
+          "Enabled": {
+            "type": "boolean",
+            "desc": "Enable or disable this track.",
+            "init": true,
+            "live": true
+          },
+          "Volume": {
+            "type": "float",
+            "desc": "Individual volume percentage for this track.",
+            "init": 40,
+            "live": 40,
+            "opts": {
+              "min": 0,
+              "max": 200,
+              "step": 1
+            }
+          },
+          "Weight": {
+            "type": "float",
+            "desc": "Relative random-selection weight.",
+            "init": 10,
+            "live": 10,
+            "opts": {
+              "min": 1,
+              "max": 20,
+              "step": 1
+            }
+          },
+          "Day / Night / Dungeon": {
+            "type": "option",
+            "desc": "Overworld day/night or dungeon eligibility.",
+            "init": "Dungeon",
+            "live": "Dungeon",
+            "opts": [
+              "Day",
+              "Night",
+              "Dungeon",
+              "Night + Dungeon",
+              "Day + Night"
+            ]
+          },
+          "Temperature": {
+            "type": "option",
+            "desc": "Temperature eligibility.",
+            "init": "All",
+            "live": "All",
+            "opts": [
+              "All",
+              "Hot",
+              "Normal",
+              "Cold"
+            ]
+          },
+          "Riding": {
+            "type": "option",
+            "desc": "Mount eligibility.",
+            "init": "All",
+            "live": "All",
+            "opts": [
+              "Riding",
+              "Flying",
+              "Riding + Flying",
+              "Not Riding",
+              "All"
+            ]
+          }
+        }
+      },
+      "night_theme.mp3": {
+        "type": "object",
+        "desc": "Night exploration theme.",
+        "data": {
+          "Enabled": {
+            "type": "boolean",
+            "desc": "Enable or disable this track.",
+            "init": true,
+            "live": true
+          },
+          "Volume": {
+            "type": "float",
+            "desc": "Individual volume percentage for this track.",
+            "init": 40,
+            "live": 40,
+            "opts": {
+              "min": 0,
+              "max": 200,
+              "step": 1
+            }
+          },
+          "Weight": {
+            "type": "float",
+            "desc": "Relative random-selection weight.",
+            "init": 10,
+            "live": 10,
+            "opts": {
+              "min": 1,
+              "max": 20,
+              "step": 1
+            }
+          },
+          "Day / Night / Dungeon": {
+            "type": "option",
+            "desc": "Overworld day/night or dungeon eligibility.",
+            "init": "Night",
+            "live": "Night",
+            "opts": [
+              "Day",
+              "Night",
+              "Dungeon",
+              "Night + Dungeon",
+              "Day + Night"
+            ]
+          },
+          "Temperature": {
+            "type": "option",
+            "desc": "Temperature eligibility.",
+            "init": "All",
+            "live": "All",
+            "opts": [
+              "All",
+              "Hot",
+              "Normal",
+              "Cold"
+            ]
+          },
+          "Riding": {
+            "type": "option",
+            "desc": "Mount eligibility.",
+            "init": "All",
+            "live": "All",
+            "opts": [
+              "Riding",
+              "Flying",
+              "Riding + Flying",
+              "Not Riding",
+              "All"
+            ]
+          }
+        }
+      },
+      "region_aincrad.mp3": {
+        "type": "object",
+        "desc": "Normal-climate exploration theme.",
+        "data": {
+          "Enabled": {
+            "type": "boolean",
+            "desc": "Enable or disable this track.",
+            "init": true,
+            "live": true
+          },
+          "Volume": {
+            "type": "float",
+            "desc": "Individual volume percentage for this track.",
+            "init": 40,
+            "live": 40,
+            "opts": {
+              "min": 0,
+              "max": 200,
+              "step": 1
+            }
+          },
+          "Weight": {
+            "type": "float",
+            "desc": "Relative random-selection weight.",
+            "init": 10,
+            "live": 10,
+            "opts": {
+              "min": 1,
+              "max": 20,
+              "step": 1
+            }
+          },
+          "Day / Night / Dungeon": {
+            "type": "option",
+            "desc": "Overworld day/night or dungeon eligibility.",
+            "init": "Day",
+            "live": "Day",
+            "opts": [
+              "Day",
+              "Night",
+              "Dungeon",
+              "Night + Dungeon",
+              "Day + Night"
+            ]
+          },
+          "Temperature": {
+            "type": "option",
+            "desc": "Temperature eligibility.",
+            "init": "Normal",
+            "live": "Normal",
+            "opts": [
+              "All",
+              "Hot",
+              "Normal",
+              "Cold"
+            ]
+          },
+          "Riding": {
+            "type": "option",
+            "desc": "Mount eligibility.",
+            "init": "All",
+            "live": "All",
+            "opts": [
+              "Riding",
+              "Flying",
+              "Riding + Flying",
+              "Not Riding",
+              "All"
+            ]
+          }
+        }
+      },
+      "region_desert.mp3": {
+        "type": "object",
+        "desc": "Hot-climate exploration theme.",
+        "data": {
+          "Enabled": {
+            "type": "boolean",
+            "desc": "Enable or disable this track.",
+            "init": true,
+            "live": true
+          },
+          "Volume": {
+            "type": "float",
+            "desc": "Individual volume percentage for this track.",
+            "init": 40,
+            "live": 40,
+            "opts": {
+              "min": 0,
+              "max": 200,
+              "step": 1
+            }
+          },
+          "Weight": {
+            "type": "float",
+            "desc": "Relative random-selection weight.",
+            "init": 10,
+            "live": 10,
+            "opts": {
+              "min": 1,
+              "max": 20,
+              "step": 1
+            }
+          },
+          "Day / Night / Dungeon": {
+            "type": "option",
+            "desc": "Overworld day/night or dungeon eligibility.",
+            "init": "Day",
+            "live": "Day",
+            "opts": [
+              "Day",
+              "Night",
+              "Dungeon",
+              "Night + Dungeon",
+              "Day + Night"
+            ]
+          },
+          "Temperature": {
+            "type": "option",
+            "desc": "Temperature eligibility.",
+            "init": "Hot",
+            "live": "Hot",
+            "opts": [
+              "All",
+              "Hot",
+              "Normal",
+              "Cold"
+            ]
+          },
+          "Riding": {
+            "type": "option",
+            "desc": "Mount eligibility.",
+            "init": "All",
+            "live": "All",
+            "opts": [
+              "Riding",
+              "Flying",
+              "Riding + Flying",
+              "Not Riding",
+              "All"
+            ]
+          }
+        }
+      },
+      "region_snow.mp3": {
+        "type": "object",
+        "desc": "Cold-climate exploration theme.",
+        "data": {
+          "Enabled": {
+            "type": "boolean",
+            "desc": "Enable or disable this track.",
+            "init": true,
+            "live": true
+          },
+          "Volume": {
+            "type": "float",
+            "desc": "Individual volume percentage for this track.",
+            "init": 40,
+            "live": 40,
+            "opts": {
+              "min": 0,
+              "max": 200,
+              "step": 1
+            }
+          },
+          "Weight": {
+            "type": "float",
+            "desc": "Relative random-selection weight.",
+            "init": 10,
+            "live": 10,
+            "opts": {
+              "min": 1,
+              "max": 20,
+              "step": 1
+            }
+          },
+          "Day / Night / Dungeon": {
+            "type": "option",
+            "desc": "Overworld day/night or dungeon eligibility.",
+            "init": "Day",
+            "live": "Day",
+            "opts": [
+              "Day",
+              "Night",
+              "Dungeon",
+              "Night + Dungeon",
+              "Day + Night"
+            ]
+          },
+          "Temperature": {
+            "type": "option",
+            "desc": "Temperature eligibility.",
+            "init": "Cold",
+            "live": "Cold",
+            "opts": [
+              "All",
+              "Hot",
+              "Normal",
+              "Cold"
+            ]
+          },
+          "Riding": {
+            "type": "option",
+            "desc": "Mount eligibility.",
+            "init": "All",
+            "live": "All",
+            "opts": [
+              "Riding",
+              "Flying",
+              "Riding + Flying",
+              "Not Riding",
+              "All"
+            ]
+          }
+        }
+      },
+      "region_volcano.mp3": {
+        "type": "object",
+        "desc": "Hot-climate exploration theme.",
+        "data": {
+          "Enabled": {
+            "type": "boolean",
+            "desc": "Enable or disable this track.",
+            "init": true,
+            "live": true
+          },
+          "Volume": {
+            "type": "float",
+            "desc": "Individual volume percentage for this track.",
+            "init": 40,
+            "live": 40,
+            "opts": {
+              "min": 0,
+              "max": 200,
+              "step": 1
+            }
+          },
+          "Weight": {
+            "type": "float",
+            "desc": "Relative random-selection weight.",
+            "init": 10,
+            "live": 10,
+            "opts": {
+              "min": 1,
+              "max": 20,
+              "step": 1
+            }
+          },
+          "Day / Night / Dungeon": {
+            "type": "option",
+            "desc": "Overworld day/night or dungeon eligibility.",
+            "init": "Day",
+            "live": "Day",
+            "opts": [
+              "Day",
+              "Night",
+              "Dungeon",
+              "Night + Dungeon",
+              "Day + Night"
+            ]
+          },
+          "Temperature": {
+            "type": "option",
+            "desc": "Temperature eligibility.",
+            "init": "Hot",
+            "live": "Hot",
+            "opts": [
+              "All",
+              "Hot",
+              "Normal",
+              "Cold"
+            ]
+          },
+          "Riding": {
+            "type": "option",
+            "desc": "Mount eligibility.",
+            "init": "All",
+            "live": "All",
+            "opts": [
+              "Riding",
+              "Flying",
+              "Riding + Flying",
+              "Not Riding",
+              "All"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "note": "Generated by AdaptiveBGM. Edit through DekModConfigMenu when possible.",
+  "meta": {
+    "game": true,
+    "vers": "0.1.0",
+    "auth": "AdaptiveBGM",
+    "desc": "Conditional external music for Palworld"
+  }
+}

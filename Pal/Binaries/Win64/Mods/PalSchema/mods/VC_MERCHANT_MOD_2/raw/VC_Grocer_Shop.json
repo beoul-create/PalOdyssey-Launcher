@@ -1,0 +1,127 @@
+{
+    "DT_ItemShopCreateData": {
+
+        "Caravan_Shop_12": {
+            "productDataArray": {
+                "Action": "Clear",
+                    "Items": [
+
+          {
+            "StaticItemId": "Diamond",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2000000,
+            "ProductNum": 80,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Honey",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 24000,
+            "ProductNum": 12,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "egg",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 600,
+            "ProductNum": 12,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "milk",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 600,
+            "ProductNum": 12,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Berries",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 600,
+            "ProductNum": 12,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "wheat",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1000,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "lettuce",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1500,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "carrot",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1500,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Onion",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 2000,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Berryseeds",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "WheatSeeds",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Carrotseeds",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "TomatoSeeds",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "LettuceSeeds",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Poppy",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Salad",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 0,
+            "ProductNum": 1,
+            "Stock": 0
+          }
+        
+           ]
+         }
+       }
+    }
+    
+  }

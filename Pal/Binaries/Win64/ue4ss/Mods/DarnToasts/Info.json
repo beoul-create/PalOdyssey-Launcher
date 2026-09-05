@@ -1,0 +1,25 @@
+{
+  "ModName": "DarnToasts + Panels",
+  "PackageName": "DarnToasts",
+  "Thumbnail": "thumbnail.png",
+  "Version": "2.7.1",
+  "DebugMode": false,
+  "MinRevision": 82182,
+  "Author": "A New Darn",
+  "Dependencies": [
+    "UE4SSExperimentalPW"
+  ],
+  "Tags": [
+    "UE4SS",
+    "Utilities",
+    "User Interface"
+  ],
+  "InstallRule": [
+    {
+      "Type": "Lua",
+      "Targets": [
+        "./Scripts"
+      ]
+    }
+  ]
+}

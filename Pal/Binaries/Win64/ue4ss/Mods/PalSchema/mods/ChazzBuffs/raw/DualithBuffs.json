@@ -1,0 +1,35 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "GrassGolem": {
+      "Hp": 130,
+      "Friendship_HP": 2.5
+    },
+    "BOSS_GrassGolem": {
+      "Hp": 156,
+      "Friendship_HP": 1.2
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_GrassGolem_RocketPunch": {
+      "WazaType": "EPalWazaID::Unique_GrassGolem_RocketPunch",
+      "Element": "EPalElementType::Earth",
+      "Power": 800,
+      "DisplayPower": 800,
+      "CoolTime": 34.0,
+      "EffectType1": "EPalAdditionalEffectType::Muddy",
+      "EffectValue1": 200,
+      "EffectType2": "EPalAdditionalEffectType::Stun",
+      "EffectValue2": 100
+    },
+    "Unique_GrassGolem_ArmCannon": {
+      "WazaType": "EPalWazaID::Unique_GrassGolem_ArmCannon",
+      "Element": "EPalElementType::Leaf",
+      "Power": 999,
+      "DisplayPower": 999,
+      "CoolTime": 40.0,
+      "EffectType1": "EPalAdditionalEffectType::IvyCling",
+      "EffectValue1": 100
+    }
+  }
+}

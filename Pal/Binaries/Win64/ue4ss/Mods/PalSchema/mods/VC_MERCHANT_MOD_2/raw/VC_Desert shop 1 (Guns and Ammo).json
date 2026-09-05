@@ -1,0 +1,176 @@
+{
+    "DT_ItemShopCreateData": {
+
+        "Desert_Shop_1": {
+            "productDataArray": {
+                "Action": "Clear",
+                    "Items": [
+
+          {
+            "StaticItemId": "ChargeLaserRifleBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "EnergyLauncherBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "GatlingBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 150,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "LaserGatlingBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 75,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "BeamLauncherBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "ElectricArcAssaultRifleBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 10,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "WidePenetrateShotgunBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 10,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "ReinforcedArrow",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 200,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "ExplosiveBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 5,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "AssaultRifleBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 200,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "ShotgunBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 200,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "RifleBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 200,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "HandgunBullet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1,
+            "ProductNum": 400,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "YakushimaBlade003",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 40000000,
+            "ProductNum": 4,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "BeamLauncher_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 40000,
+            "ProductNum": 4,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "ElectricArcAssaultRifle_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 32000,
+            "ProductNum": 4,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "WidePenetrateShotgun_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 32000,
+            "ProductNum": 4,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "YakushimaGun001",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 20000,
+            "ProductNum": 4,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "CompoundBow",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 8000,
+            "ProductNum": 4,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "Launcher_Default_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 400,
+            "ProductNum": 4,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "AssaultRifle_Default5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 300,
+            "ProductNum": 4,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "PumpActionShotgun_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 200,
+            "ProductNum": 4,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SingleShotRifle_5",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 100,
+            "ProductNum": 4,
+            "Stock": 0
+          }
+         
+          
+        ]
+      }
+    }      
+  }
+}

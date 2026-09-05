@@ -1,0 +1,74 @@
+{
+	"DT_PassiveSkill_Main": {
+		"AdditionalEffect_Burn_PartnerSkill_KabukiMan_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::AdditionalEffect_Burn",
+			"EffectValue1": 2,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementFire",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::ElementBoost_Fire",
+			"EffectValue3": 15,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"AdditionalEffect_Burn_PartnerSkill_KabukiMan_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::AdditionalEffect_Burn",
+			"EffectValue1": 3,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementFire",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::ElementBoost_Fire",
+			"EffectValue3": 18,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"AdditionalEffect_Burn_PartnerSkill_KabukiMan_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::AdditionalEffect_Burn",
+			"EffectValue1": 4,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementFire",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::ElementBoost_Fire",
+			"EffectValue3": 21,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"AdditionalEffect_Burn_PartnerSkill_KabukiMan_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::AdditionalEffect_Burn",
+			"EffectValue1": 5,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementFire",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::ElementBoost_Fire",
+			"EffectValue3": 24,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		},
+		"AdditionalEffect_Burn_PartnerSkill_KabukiMan_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::AdditionalEffect_Burn",
+			"EffectValue1": 6,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementFire",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::ElementBoost_Fire",
+			"EffectValue3": 30,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None"
+		}
+	}
+}

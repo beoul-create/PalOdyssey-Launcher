@@ -1,0 +1,78 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "ElecPanda": {
+      "ElementType2": "Normal",
+      "ShotAttack": 125,
+      "Defense": 120,
+      "Friendship_ShotAttack": 1.5,
+      "Friendship_Defense": 1.7,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    },
+    "BOSS_ElecPanda": {
+      "ElementType2": "Normal",
+      "ShotAttack": 125,
+      "Defense": 120,
+      "Friendship_ShotAttack": 1.5,
+      "Friendship_Defense": 1.7,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    },
+    "BOSS_ElecPanda_BossRush": {
+      "ElementType2": "Normal",
+      "ShotAttack": 125,
+      "Defense": 120,
+      "Friendship_ShotAttack": 1.5,
+      "Friendship_Defense": 1.7,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    },
+    "GYM_ElecPanda": {
+      "ElementType2": "Normal"
+    },
+    "GYM_ElecPanda_2": {
+      "ElementType2": "Normal",
+      "ShotAttack": 125,
+      "Defense": 120,
+      "Friendship_ShotAttack": 1.5,
+      "Friendship_Defense": 1.7,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    },
+    "GYM_ElecPanda_Otomo": {
+      "ElementType2": "Normal",
+      "ShotAttack": 130,
+      "Defense": 120,
+      "Friendship_ShotAttack": 1.3,
+      "Friendship_Defense": 1.7,
+      "IgnoreLeanBack": true,
+      "IgnoreBlowAway": true,
+      "IgnoreStun": true
+    }
+  },
+  "DT_WazaDataTable": {
+    "Unique_ElecPanda_ElecScratch": {
+      "WazaType": "EPalWazaID::Unique_ElecPanda_ElecScratch",
+      "Element": "EPalElementType::Electricity",
+      "Power": 450,
+      "DisplayPower": 450,
+      "CoolTime": 20.0,
+      "EffectType1": "EPalAdditionalEffectType::Electrical",
+      "EffectValue1": 100
+    },
+    "Unique_ElecPanda_GatlingAttack": {
+      "WazaType": "EPalWazaID::Unique_ElecPanda_GatlingAttack",
+      "Element": "EPalElementType::Electricity",
+      "Power": 999,
+      "DisplayPower": 999,
+      "CoolTime": 40.0,
+      "EffectType1": "EPalAdditionalEffectType::Electrical",
+      "EffectValue1": 100
+    }
+  }
+}

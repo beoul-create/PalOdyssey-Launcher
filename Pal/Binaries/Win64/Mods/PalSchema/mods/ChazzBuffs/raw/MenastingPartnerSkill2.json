@@ -1,0 +1,142 @@
+{
+	"DT_PassiveSkill_Main": {
+		"MenastingPredatorBoost": {
+			"EffectType1": "EPalPassiveSkillEffectType::Defense",
+			"EffectValue1": 20,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ShotAttack",
+			"EffectValue2": 20,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 15,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+      "PREDATOR_DarkScorpion": {
+        "RestrictionItems": [],
+        "ActiveSkill": {
+          "SkillName": "Unknown",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [],
+          "ActiveSkill_OverWriteCoolTimeByRank": [],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ElementAddDrop_Thunder_1_PAL"
+							}
+                                                },
+                                                {
+							"SkillName": {
+								"Key": "TrainerDEF_UP_PartnerSkill_Otomo_1"
+							}
+                                                },
+                                                {
+							"SkillName": {
+								"Key": "MenastingPredatorBoost"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ElementAddDrop_Thunder_2_PAL"
+							}
+                                                },
+                                                {
+							"SkillName": {
+								"Key": "TrainerDEF_UP_PartnerSkill_Otomo_2"
+							}
+                                                },
+                                                {
+							"SkillName": {
+								"Key": "MenastingPredatorBoost"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ElementAddDrop_Thunder_3_PAL"
+							}
+                                                },
+                                                {
+							"SkillName": {
+								"Key": "TrainerDEF_UP_PartnerSkill_Otomo_3"
+							}
+                                                },
+                                                {
+							"SkillName": {
+								"Key": "MenastingPredatorBoost"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ElementAddDrop_Thunder_4_PAL"
+							}
+                                                },
+                                                {
+							"SkillName": {
+								"Key": "TrainerDEF_UP_PartnerSkill_Otomo_4"
+							}
+                                                },
+                                                {
+							"SkillName": {
+								"Key": "MenastingPredatorBoost"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "ElementAddDrop_Thunder_5_PAL"
+							}
+                                                },
+                                                {
+							"SkillName": {
+								"Key": "TrainerDEF_UP_PartnerSkill_Otomo_5"
+							}
+                                                },
+                                                {
+							"SkillName": {
+								"Key": "MenastingPredatorBoost"
+							}
+                                                }
+                                              ]
+                                             }
+                                           ],
+        "TextReferencePassiveSkills": []
+      }
+    }
+}

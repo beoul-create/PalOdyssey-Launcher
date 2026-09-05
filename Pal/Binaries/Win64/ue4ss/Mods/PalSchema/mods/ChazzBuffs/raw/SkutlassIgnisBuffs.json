@@ -1,0 +1,15 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "SwordCutlassfish_Fire": {
+      "MeleeAttack": 130,
+      "ShotAttack": 130,
+      "Friendship_ShotAttack": 1.3
+    },
+    "BOSS_SwordCutlassfish_Fire": {
+      "MeleeAttack": 130,
+      "ShotAttack": 130,
+      "Friendship_ShotAttack": 1.3
+    }
+  }
+}

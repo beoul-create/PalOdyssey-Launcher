@@ -1,0 +1,17 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "ElecSnail_Ground": {
+      "ShotAttack": 100,
+      "Defense": 155,
+      "Friendship_ShotAttack": 2.5,
+      "Friendship_Defense": 1
+    },
+    "BOSS_ElecSnail_Ground": {
+      "ShotAttack": 100,
+      "Defense": 155,
+      "Friendship_ShotAttack": 2.5,
+      "Friendship_Defense": 1
+    }
+  }
+}

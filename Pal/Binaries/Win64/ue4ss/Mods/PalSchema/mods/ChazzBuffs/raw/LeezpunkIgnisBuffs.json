@@ -1,0 +1,17 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "LizardMan_Fire": {
+      "ShotAttack": 105,
+      "Friendship_ShotAttack": 2.3,
+      "Defense": 80,
+      "Friendship_Defense": 3.3
+    },
+    "BOSS_LizardMan_Fire": {
+      "ShotAttack": 105,
+      "Friendship_ShotAttack": 2.3,
+      "Defense": 80,
+      "Friendship_Defense": 3.3
+    }
+  }
+}

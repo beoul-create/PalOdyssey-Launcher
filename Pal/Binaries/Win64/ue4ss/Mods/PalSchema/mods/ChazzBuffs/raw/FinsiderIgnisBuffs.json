@@ -1,0 +1,25 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "StuffedShark_Fire": {
+      "ShotAttack": 105,
+      "Friendship_ShotAttack": 2.3
+    },
+    "BOSS_StuffedShark_Fire": {
+      "ShotAttack": 105,
+      "Friendship_ShotAttack": 2.3
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_StuffedShark_HiddenWeapon": {
+      "WazaType": "EPalWazaID::Unique_StuffedShark_HiddenWeapon",
+      "Element": "EPalElementType::Water",
+      "Power": 500,
+      "DisplayPower": 500,
+      "CoolTime": 20.0,
+      "EffectType1": "EPalAdditionalEffectType::Wetness",
+      "EffectValue1": 100
+    }
+  }
+}

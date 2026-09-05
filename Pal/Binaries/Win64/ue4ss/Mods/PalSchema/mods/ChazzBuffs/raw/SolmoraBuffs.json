@@ -1,0 +1,13 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "KingSunfish": {
+      "HP": 130,
+      "Friendship_HP": 2.5
+    },
+    "BOSS_KingSunfish": {
+      "HP": 156,
+      "Friendship_HP": 1.2
+    }
+  }
+}

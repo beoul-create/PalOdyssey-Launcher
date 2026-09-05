@@ -1,0 +1,209 @@
+{
+	"DT_PassiveSkill_Main": {
+		"HerbilPower_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::AutoHPRegeneRate",
+			"EffectValue1": 50,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::DamageRateIfDefender_IvyCling",
+			"EffectValue2": 50,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"HerbilPower_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::AutoHPRegeneRate",
+			"EffectValue1": 60,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::DamageRateIfDefender_IvyCling",
+			"EffectValue2": 53,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"HerbilPower_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::AutoHPRegeneRate",
+			"EffectValue1": 70,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::DamageRateIfDefender_IvyCling",
+			"EffectValue2": 56,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"HerbilPower_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::AutoHPRegeneRate",
+			"EffectValue1": 80,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::DamageRateIfDefender_IvyCling",
+			"EffectValue2": 59,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		},
+		"HerbilPower_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::AutoHPRegeneRate",
+			"EffectValue1": 100,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType2": "EPalPassiveSkillEffectType::DamageRateIfDefender_IvyCling",
+			"EffectValue2": 65,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelfAndTrainer",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": true,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": false,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+		"LeafMomonga": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "HerbilPower_1"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "HerbilPower_2"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "HerbilPower_3"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "HerbilPower_4"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "HerbilPower_5"
+							}
+                                                }
+                                              ]
+                                             }
+                                             ]
+                                           },
+		"BOSS_LeafMomonga": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "HerbilPower_1"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "HerbilPower_2"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "HerbilPower_3"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "HerbilPower_4"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "HerbilPower_5"
+							}
+                                                }
+                                              ]
+                                             }
+                                             ]
+                                           }
+                                        }
+                                       }

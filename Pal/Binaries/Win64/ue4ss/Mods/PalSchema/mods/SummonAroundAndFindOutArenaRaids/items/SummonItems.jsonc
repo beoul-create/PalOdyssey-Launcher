@@ -1,0 +1,322 @@
+{
+    "PalSummon_MRB8_001_Lv033_SparkOfChaos": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 33000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_002_Lv035_WildSprouts": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 35000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_003_Lv037_NightCurrent": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 37000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_004_Lv038_DragonEmbers": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 38000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_005_Lv040_FrozenRoots": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 40000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_006_Lv041_StormTide": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 41000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_007_Lv043_ShadowFlame": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 43000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_008_Lv045_VerdantSky": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 45000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_009_Lv046_StoneTempest": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 46000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_010_Lv048_FrostedAbyss": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 48000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_011_Lv049_PrimalSpark": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 49000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_012_Lv051_WyrmTide": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 51000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_013_Lv053_NightBloom": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 53000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_014_Lv054_ThunderStone": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 54000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_015_Lv056_InfernalFrost": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 56000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_016_Lv057_LivingStorm": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 57000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_017_Lv059_AbyssalEarth": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 59000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_018_Lv060_SkyfireTorrent": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 60000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_019_Lv062_ElementalCrown": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 62000,
+            "Material1_Id": "Money"
+        }
+    },
+    "PalSummon_MRB8_020_Lv063_TrialOfEight": {
+        "Type": "Generic",
+        "IconTexture": "$resource/SummonAroundAndFindOutArenaRaids/Slab",
+        "TypeA": "Consume",
+        "TypeB": "ConsumeOther",
+        "Rank": 1,
+        "Rarity": 4,
+        "Price": 1,
+        "MaxStackCount": 9999,
+        "Recipe": {
+            "Product_Count": 1,
+            "WorkAmount": 500.0,
+            "Material1_Count": 63000,
+            "Material1_Id": "Money"
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+  "RestrictedBuildings": {
+    "Farm_Breed": {
+      "DisplayName": "Breeding Farm",
+      "MaxPerGuild": 1,
+      "BuildingTypeIds": [
+        "Build_Farm_Breed",
+        "Farm_Breed"
+      ]
+    },
+    "Farm_Pasture": {
+      "DisplayName": "Ranch",
+      "MaxPerGuild": 1,
+      "BuildingTypeIds": [
+        "Build_Farm_Pasture",
+        "Farm_Pasture"
+      ]
+    }
+  },
+  "NotificationMessage": "❌ Guild building limit reached: Your guild is capped at %d %s(s) to maintain server economy balance."
+}

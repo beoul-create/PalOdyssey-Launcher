@@ -1,0 +1,35 @@
+{
+  "DT_ItemShopCreateData": {
+    "Caravan_Shop_10": {
+      "productDataArray": {
+        "Action": "Clear",
+        "Items": [
+          { "StaticItemId": "PalOdyssey_Voucher_Breeding", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 4, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "PalOdyssey_Voucher_Ranch", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 4, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "PalOdyssey_Voucher_Base", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 5, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "AncientTechnologyBook_G1", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 5, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "TechnologyBook_G1", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 1, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "PlayerLotus_Attack", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 2, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "PlayerLotus_HP", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 2, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "PlayerLotus_Stamina", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 2, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "PlayerLotus_WorkSpeed", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 2, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "PlayerLotus_Weight", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 2, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "StatResetMedicine", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 15, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "APSE_Uniplant2", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 1, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "APSE_Uniplant3", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 2, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "APSE_Uniplant4", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 5, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "APSE_Uniplant5", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 10, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "APSE_UniplantMutation", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 15, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "Schematic_RocketLauncher_4", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 15, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "Schematic_AssaultRifle_Default_4", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 8, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "Schematic_PumpActionShotgun_4", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 8, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "Schematic_Handgun_Default_4", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 3, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "PalUpgradeStone3", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 2, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "PalUpgradeStone2", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 1, "ProductNum": 1, "Stock": 0 },
+          { "StaticItemId": "DogCoin", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 1, "ProductNum": 25, "Stock": 0 },
+          { "StaticItemId": "Money", "ProductType": "EPalItemShopProductType::Normal", "OverridePrice": 1, "ProductNum": 10000, "Stock": 0 }
+        ]
+      }
+    }
+  }
+}

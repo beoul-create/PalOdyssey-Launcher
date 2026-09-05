@@ -1,0 +1,636 @@
+{
+    "DT_ItemShopCreateData": {
+
+        "Desert_Shop_2": {
+            "productDataArray": {
+                "Action": "Clear",
+                    "Items": [
+
+          {
+            "StaticItemId": "Diamond",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 250000,
+            "ProductNum": 10,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_HyperBeam",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_HolyBlast",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_SolarBeam",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_RootLance",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_ReflectiveShuriken",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_CrossWind",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_WindBurst",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_HydroPump",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_WallSplash",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_HydroSlicer",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_RipTide",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_SeaGush",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_FireBall",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_Inferno",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_Eruption",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_FlameFunnel",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_Thunderbolt",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_LightningStrike",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_ThunderRain",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_ThunderStorm",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_RangeThunder",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_RockLance",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_RockBeat",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_SandTwister",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_IcicleThrow",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_IcicleLine",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_Psychokinesis",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_DarkLaser",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_DragonMeteor",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_Tremor",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_DiamondFall",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_Apocalypse",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_DarkLegion",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_PowerBall",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 10000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_SelfDestruct",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 10000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_AirBlade",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 10000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_GrassTornado",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_RootAttack",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_SeedMine",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_WaterBall",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_BubbleShot",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_AcidRain",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_LineGeyser",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_DiversionLaser",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_Flamethrower",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_FlareTornado",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_FlameWall",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_LineThunder",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_LockonLaser",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_ThreeThunder",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_TriSpark",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_SandTornado",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_BlizzardLance",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_FrostBreath",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_IceWall",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_IciclePierce",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_ShadowBall",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_DarkArrow",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_DragonBreath",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_Commet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_BlastCanon",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 50000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_PowerShot",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_AirCanon",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 1000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_WindCutter",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_SeedMachinegun",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_WaterGun",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_AquaJet",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_FireBlast",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_FlareArrow",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_FireSeed",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_ElecWave",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_ThunderFunnel",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_ThunderSpear",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_SpreadPulse",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_ThunderBall",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_ThrowRock",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_MudShot",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_StoneShotgun",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_IceMissile",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_IceBlade",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_DarkWave",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_PoisonShot",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_GhostFlame",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_DragonCanon",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_DragonWave",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_DarkCanon",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_DarkPulse",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          },
+          {
+            "StaticItemId": "SkillCard_GravityShot",
+            "ProductType": "EPalItemShopProductType::Normal",
+            "OverridePrice": 5000,
+            "ProductNum": 1,
+            "Stock": 0
+          }
+        ]
+      }
+    }
+  }
+}

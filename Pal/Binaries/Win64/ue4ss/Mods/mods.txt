@@ -1,0 +1,24 @@
+BPML_GenericFunctions : 1
+BPModLoaderMod : 1
+PalSchema : 1
+RamTrimMod : 0
+PalworldTuner : 1
+ExpeditionXP : 1
+DarnToasts : 1
+DarnMenu : 1
+LevelLock : 1
+WeaponProficiency : 1
+PalOdysseyOptimizer : 1
+StuckPalRescuer : 1
+PalClearVision : 1
+FastConnect : 1
+WorldBossAuraSystem : 1
+DekModConfigMenu : 1
+AdaptiveBGM : 0
+PalOdysseyAudioEvents : 1
+TechPointShopBridge : 1
+GuildBuildingLimits : 1
+
+; Built-in keybinds, do not move up!
+PalOdysseyBossAudio : 1
+Keybinds : 1

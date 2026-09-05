@@ -1,0 +1,90 @@
+name: Build, Test & Release PalLauncher
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers on semantic version tags like v1.0.0, v1.0.1, etc.
+
+permissions:
+  contents: write # Required to create releases and upload release assets
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ⚙️ Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: 🧪 Execute Unit Test Suite
+        run: |
+          dotnet test tests/PalLauncher.Tests.csproj -c Release --verbosity normal
+
+      - name: 🔨 Compile & Publish Standalone Launcher (win-x64)
+        run: |
+          dotnet publish PalLauncher.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:EnableCompressionInSingleFile=true `
+            -p:PublishReadyToRun=true `
+            -o publish/Release
+
+      - name: 📦 Generate Updated manifest.json
+        shell: pwsh
+        run: |
+          $repo = "${{ github.repository }}"
+          $tag = "${{ github.ref_name }}"
+          $baseUrl = "https://raw.githubusercontent.com/$repo/$tag/PalOdyssey-ModpackStaging"
+
+          # Fallback to Pal directory if PalOdyssey-ModpackStaging is not in repo root
+          $stagingPath = "PalOdyssey-ModpackStaging"
+          if (-not (Test-Path $stagingPath)) {
+            $stagingPath = "Pal"
+          }
+
+          pwsh -File tools/Generate-Manifest.ps1 `
+            -ModpackStagingPath $stagingPath `
+            -BaseDownloadUrl $baseUrl `
+            -OutputPath "$stagingPath/manifest.json"
+
+          Copy-Item -Path "$stagingPath/manifest.json" -Destination "publish/Release/manifest.json" -Force
+
+      - name: 🗜️ Package Launcher Client ZIP
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          # Package the executable, config, manifest, and companion media assets
+          Compress-Archive -Path publish/Release/* -DestinationPath "PalLauncher-$tag.zip" -CompressionLevel Optimal
+
+      - name: 🗜️ Package Complete Modpack Staging ZIP
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $stagingPath = "PalOdyssey-ModpackStaging"
+          if (-not (Test-Path $stagingPath)) {
+            $stagingPath = "Pal"
+          }
+          Compress-Archive -Path "$stagingPath/*" -DestinationPath "PalOdyssey-Modpack-$tag.zip" -CompressionLevel Optimal
+
+      - name: 🚀 Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "PalOdyssey Launcher & Modpack ${{ github.ref_name }}"
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            PalLauncher-${{ github.ref_name }}.zip
+            PalOdyssey-Modpack-${{ github.ref_name }}.zip
+            publish/Release/manifest.json
+            publish/Release/PalLauncher.exe

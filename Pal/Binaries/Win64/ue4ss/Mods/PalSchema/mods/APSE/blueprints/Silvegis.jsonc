@@ -1,0 +1,89 @@
+{
+"/Game/Pal/Blueprint/Character/Monster/PalActorBP/WhiteShieldDragon/BP_WhiteShieldDragon.BP_WhiteShieldDragon_C": {
+	"CharacterMovement": {
+      "GravityScale": 4.0,
+      "JumpZVelocity": 1500.0
+	}
+},
+"/Game/Pal/Blueprint/Character/Monster/PalActorBP/WhiteDeer/BP_WhiteDeer.BP_WhiteDeer_C": {
+    "JumpMaxCount": 3,
+	"CharacterMovement": {
+      "JumpZVelocity": 1700.0,
+      "AirControl": 1.0
+	}
+},
+"/Game/Pal/Blueprint/Spawner/SheetsVariant/BP_PalSpawner_Sheets_yamijima_plateau_purple_BOSS_2.BP_PalSpawner_Sheets_yamijima_plateau_purple_BOSS_2_C": {
+        "SpawnGroupList": [
+            {
+                "PalList": [
+                {
+                    "PalId": {
+                        "Key": "None"
+                    },
+                    "Level": 0,
+                    "Level_Max": 0,
+                    "Num": 0,
+                    "Num_Max": 0
+                }
+                ]
+            }
+        ],
+		"SpawnerType": "EPalSpawnedCharacterType::Common"
+    },
+"/Game/Pal/Blueprint/Spawner/SheetsVariant/BP_PalSpawner_Sheets_yamijima_forest_pink_D_WhiteDeer.BP_PalSpawner_Sheets_yamijima_forest_pink_D_WhiteDeer_C": {
+
+        "SpawnGroupList": [
+            {
+                "PalList": [
+                {
+                    "PalId": {
+                        "Key": "APSE_WhiteDeer"
+                    },
+                    "Level": 65,
+                    "Level_Max": 65,
+                    "Num": 1,
+                    "Num_Max": 1
+                }
+                ]
+            }
+        ]
+    },
+"/Game/Pal/Blueprint/Spawner/SheetsVariant/BP_PalSpawner_Sheets_worldtree_9_11_N_FBOSS_1.BP_PalSpawner_Sheets_worldtree_9_11_N_FBOSS_1_C": {
+
+      "SpawnGroupList": [
+        {
+          "OriginalRowName": "None",
+          "OriginalSpawnerName": "None",
+          "Weight": 10,
+          "OnlyTime": "EPalOneDayTimeType::Undefined",
+          "OnlyWeather": "EPalWeatherConditionType::Undefined",
+          "PalList": [
+            {
+              "PalId": {
+                "Key": "APSE_WhiteDeer_Dark"
+              },
+              "NPCID": {
+                "Key": "None"
+              },
+              "Level": 79,
+              "Level_Max": 79,
+              "Num": 1,
+              "Num_Max": 1
+            },
+            {
+              "PalId": {
+                "Key": "APSE_WhiteDeer2"
+              },
+              "NPCID": {
+                "Key": "None"
+              },
+              "Level": 79,
+              "Level_Max": 79,
+              "Num": 1,
+              "Num_Max": 1
+            }
+          ]
+        }
+	  ]
+    }
+}

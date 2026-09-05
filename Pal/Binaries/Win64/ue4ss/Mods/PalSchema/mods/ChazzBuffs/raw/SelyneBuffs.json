@@ -1,0 +1,27 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "MoonQueen": {
+      "MeleeAttack": 120,
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7
+    },
+    "BOSS_MoonQueen": {
+      "MeleeAttack": 120,
+      "ShotAttack": 120,
+      "Friendship_ShotAttack": 1.7
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_MoonQueen_MoonBeam": {
+      "WazaType": "EPalWazaID::Unique_MoonQueen_MoonBeam",
+      "Element": "EPalElementType::Normal",
+      "Power": 700,
+      "DisplayPower": 700,
+      "CoolTime": 30.0,
+      "EffectType1": "EPalAdditionalEffectType::Burn",
+      "EffectValue1": 100
+    }
+  }
+}

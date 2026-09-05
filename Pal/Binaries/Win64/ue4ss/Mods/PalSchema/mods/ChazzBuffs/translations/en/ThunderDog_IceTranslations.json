@@ -1,0 +1,5 @@
+{
+	"DT_PalFirstActivatedInfoText":{
+		"PAL_FIRST_SPAWN_DESC_ThunderDog_Ice":"Can be ridden.\r\nCan perform a double jump, increases own <img id=|ElemIcon_Ice|/><uiCommon id=|COMMON_ELEMENT_NAME_Ice| style=|Elem_Ice|/> damage by <Status_Up>{Passive3_EffectValue1}%</> and increases player and pal's Defense by <Status_Up>{Passive3_EffectValue2}%</> while mounted. While in party, increases Defense of <img id=|ElemIcon_Ice|/><uiCommon id=|COMMON_ELEMENT_NAME_Ice| style=|Elem_Ice|/> Pals by <Status_Up>{Passive1_EffectValue1}%</>"
+	}
+}

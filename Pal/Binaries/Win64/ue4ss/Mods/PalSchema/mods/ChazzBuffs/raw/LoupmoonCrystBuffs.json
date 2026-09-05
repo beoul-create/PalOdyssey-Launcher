@@ -1,0 +1,29 @@
+
+{
+  "DT_PalMonsterParameter": {
+    "Werewolf_Ice": {
+      "Hp": 100,
+      "Defense": 90,
+      "Friendship_HP": 4,
+      "Friendship_Defense": 2.9
+    },
+    "BOSS_Werewolf_Ice": {
+      "Hp": 120,
+      "Defense": 90,
+      "Friendship_HP": 3,
+      "Friendship_Defense": 2.9
+    }
+  },
+
+  "DT_WazaDataTable": {
+    "Unique_Werewolf_Ice_SnowScratch": {
+      "WazaType": "EPalWazaID::Unique_Werewolf_Ice_SnowScratch",
+      "Element": "EPalElementType::Ice",
+      "Power": 360,
+      "DisplayPower": 360,
+      "CoolTime": 20.0,
+      "EffectType1": "EPalAdditionalEffectType::Freeze",
+      "EffectValue1": 100
+    }
+  }
+}

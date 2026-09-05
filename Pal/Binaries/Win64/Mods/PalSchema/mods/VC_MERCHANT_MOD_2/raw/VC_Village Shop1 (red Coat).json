@@ -1,0 +1,315 @@
+{
+    "DT_ItemShopCreateData": {
+        "Village_Shop_1": {
+            "productDataArray": {
+                "Action": "Clear",
+                "Items": [
+
+              {
+                "StaticItemId": "Diamond",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 25000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "LvUP_01",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 100000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "WeakerBow_5",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 30000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "MakeshiftHandgun_5",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 150000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "Musket_5",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 75000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "PalSphere",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 100,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "PalSphere_Mega",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 500,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "PalSphere_Giga",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 2000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "PalSphere_Tera",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 5000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "PalSphere_Master",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 15000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "PalSphere_Legend",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 25000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "PalSphere_Ultimate",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 50000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "PalSphere_Exotic",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 100000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+               {
+                "StaticItemId": "PalSphere_Ancient_1",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 250000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "PalSphere_Ancient_2",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 500000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "Pal_crystal_S",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 800,
+                "ProductNum": 10,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "Accessory_MaxWeightUp_03",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 20000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "Accessory_Nonkilling",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 30000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "Accessory_TalentChecker",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 50000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+               {
+                "StaticItemId": "Accessory_WorkSpeed_3",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 50000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "FurArmor_5",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 100000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "IronHelmet_5",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 500000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "RoughBullet",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 10,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "HandgunBullet",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 10,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "RifleBullet",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 10,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "ShotgunBullet",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 10,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "AssaultRifleBullet",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 30,
+                "Stock": 0
+              },
+              
+              {
+                "StaticItemId": "TreasureBoxKey01",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 100,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "TreasureBoxKey02",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 500,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "TreasureBoxKey03",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 1000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "Egg",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 450,
+                "ProductNum": 9,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "Milk",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 450,
+                "ProductNum": 9,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "FireOrgan",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 5,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "Bone",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 9,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "Horn",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 9,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "PalFluid",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 5,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "PalOil",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 5,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "IceOrgan",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 5,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "ElectricOrgan",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 5,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "Venom",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 5,
+                "Stock": 0
+              },    
+              {
+                "StaticItemId": "wool",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 0,
+                "ProductNum": 5,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "Axe_Steal",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 100000,
+                "ProductNum": 1,
+                "Stock": 0
+              },
+              {
+                "StaticItemId": "GrapplingGun5",
+                "ProductType": "EPalItemShopProductType::Normal",
+                "OverridePrice": 100000,
+                "ProductNum": 1,
+                "Stock": 0
+              }                                            
+          ]
+        } 
+     }
+  }
+}
+

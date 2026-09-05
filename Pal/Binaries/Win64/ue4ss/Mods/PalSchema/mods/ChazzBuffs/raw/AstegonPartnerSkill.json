@@ -1,0 +1,1087 @@
+{
+	"DT_PassiveSkill_Main": {
+		"AbyssDragon_PartnerSkill_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::MaxHP",
+			"EffectValue1": 10,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"AbyssDragon_PartnerSkill_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::MaxHP",
+			"EffectValue1": 20,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"AbyssDragon_PartnerSkill_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::MaxHP",
+			"EffectValue1": 30,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"AbyssDragon_PartnerSkill_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::MaxHP",
+			"EffectValue1": 40,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"AbyssDragon_PartnerSkill_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::MaxHP",
+			"EffectValue1": 50,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::no",
+			"EffectValue2": 0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType3": "EPalPassiveSkillEffectType::no",
+			"EffectValue3": 0,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::None",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+      "WarsectBuiltInFireRes": {
+        "Rank": 4,
+        "LotteryWeight": 3,
+        "OverrideDescMsgID": "None",
+        "TargetElementType": "EPalElementType::None",
+        "EffectType1": "EPalPassiveSkillEffectType::ElementResist_Fire",
+        "EffectValue1": 30.0,
+        "TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+        "EffectType2": "EPalPassiveSkillEffectType::no",
+        "EffectValue2": 0.0,
+        "TargetType2": "EPalPassiveSkillEffectTargetType::None",
+        "EffectType3": "EPalPassiveSkillEffectType::no",
+        "EffectValue3": 0.0,
+        "TargetType3": "EPalPassiveSkillEffectTargetType::None",
+        "EffectType4": "EPalPassiveSkillEffectType::no",
+        "EffectValue4": 0.0,
+        "TargetType4": "EPalPassiveSkillEffectTargetType::None",
+		"InvokeActiveOtomo": false,
+        "InvokeWorker": false,
+        "InvokeRiding": false,
+        "InvokeReserve": false,
+        "InvokeInOtomo": false,
+        "InvokeAlways": true,
+        "InvokeInBaseCamp": false,
+        "AddInvokeTriggerType_1": "EPalPassiveAddTriggerType::None",
+        "AddInvokeTriggerType_2": "EPalPassiveAddTriggerType::None",
+        "AddPal": false,
+        "AddRarePal": false,
+        "AddWorldTreePal": false,
+        "AddMutationPal": false,
+        "AddShotWeapon": false,
+        "AddMeleeWeapon": false,
+        "AddArmor": false,
+        "AddAccessory": false,
+        "IsStackablePartnerSkillBySameTribe": false,
+        "OverrideNameTextID": "None",
+        "OverrideSummaryTextId": "None",
+        "Category": "EPalPassiveCategory::SortNotDisplayable",
+        "SortKeyJP": "-"
+      }
+   },
+	"DT_PartnerSkillParameter": {
+      "BOSS_BlackMetalDragon": {
+        "RestrictionItems": [
+          {
+            "Key": "SkillUnlock_BlackMetalDragon"
+          }
+        ],
+        "ActiveSkill": {
+          "SkillName": "Unknown",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [],
+          "ActiveSkill_OverWriteCoolTimeByRank": [],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+        "PassiveSkills": [
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "Mining_up4_Otomo_only"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "CollectItemDrop_PartnerSkill_Ride_1"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "CopperOre"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+{
+							"SkillName": {
+								"Key": "AbyssDragon_PartnerSkill_1"
+							}
+}
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "Mining_up5_Otomo_only"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "CollectItemDrop_PartnerSkill_Ride_2"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "CopperOre"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+{
+							"SkillName": {
+								"Key": "AbyssDragon_PartnerSkill_2"
+							}
+}
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "Mining_up6_Otomo_only"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "CollectItemDrop_PartnerSkill_Ride_3"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "CopperOre"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+{
+							"SkillName": {
+								"Key": "AbyssDragon_PartnerSkill_3"
+							}
+}
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "Mining_up7_Otomo_only"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "CollectItemDrop_PartnerSkill_Ride_4"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "CopperOre"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+{
+							"SkillName": {
+								"Key": "AbyssDragon_PartnerSkill_4"
+							}
+}
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "Mining_up8_Otomo_only"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "CollectItemDrop_PartnerSkill_Ride_5"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "CopperOre"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+{
+							"SkillName": {
+								"Key": "AbyssDragon_PartnerSkill_5"
+							}
+}
+            ]
+          }
+        ]
+      },
+      "BlackMetalDragon": {
+        "RestrictionItems": [
+          {
+            "Key": "SkillUnlock_BlackMetalDragon"
+          }
+        ],
+        "ActiveSkill": {
+          "SkillName": "Unknown",
+          "WazaID": "EPalWazaID::None",
+          "bIdlelCostDecreaseEveryFrame": false,
+          "bIsExecSkillContinuation": false,
+          "bIsOneShotRideAction": false,
+          "ActiveSkill_MainValue_Overview_EditorOnly": "None",
+          "IsRidingActiveSkillNotWeapon": false,
+          "RidingActiveSkillNotWeaponCondition": "EPalRidingActiveSkillNotWeaponCondition::None",
+          "bIsToggleRidingActiveSkillNotWeapon": false,
+          "ActiveSkill_MainValueByRank": [],
+          "ActiveSkill_OverWriteCoolTimeByRank": [],
+          "ActiveSkill_OverWriteEffectTimeByRank": []
+        },
+        "PassiveSkills": [
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "Mining_up4_Otomo_only"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "CollectItemDrop_PartnerSkill_Ride_1"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "CopperOre"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+{
+							"SkillName": {
+								"Key": "AbyssDragon_PartnerSkill_1"
+							}
+}
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "Mining_up5_Otomo_only"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "CollectItemDrop_PartnerSkill_Ride_2"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "CopperOre"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+{
+							"SkillName": {
+								"Key": "AbyssDragon_PartnerSkill_2"
+							}
+}
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "Mining_up6_Otomo_only"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "CollectItemDrop_PartnerSkill_Ride_3"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "CopperOre"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+{
+							"SkillName": {
+								"Key": "AbyssDragon_PartnerSkill_3"
+							}
+}
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "Mining_up7_Otomo_only"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "CollectItemDrop_PartnerSkill_Ride_4"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "CopperOre"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+{
+							"SkillName": {
+								"Key": "AbyssDragon_PartnerSkill_4"
+							}
+}
+            ]
+          },
+          {
+            "SkillAndParametersArray": [
+              {
+                "SkillName": {
+                  "Key": "Mining_up8_Otomo_only"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+              {
+                "SkillName": {
+                  "Key": "CollectItemDrop_PartnerSkill_Ride_5"
+                },
+                "Parameters": {
+                  "DelayTime": 0.0,
+                  "WorkType": "EPalWorkType::None",
+                  "bAssignPassiveIgnoreCurrentWorkType": false,
+                  "MapObjectId": [],
+                  "ItemId": [],
+                  "AssignOthers": false,
+                  "TargetElementType": "EPalElementType::None",
+                  "PalTribeIds": [],
+                  "bNotAssignSelf": false,
+                  "TriggerParam": {
+                    "TargetTribeIds": []
+                  },
+                  "ItemParam": {
+                    "ItemTypeA": "EPalItemTypeA::None",
+                    "ItemTypeB": "EPalItemTypeB::None",
+                    "ItemIds": [
+                      {
+                        "Key": "CopperOre"
+                      }
+                    ],
+                    "ExcludedItemIds": [],
+                    "bIsContainNoItemId": false,
+                    "WeaponType": "EPalWeaponType::None",
+                    "WeaponTypes": [],
+                    "bMeleeOnly": false
+                  },
+                  "RegeneParam": {
+                    "Interval": 0
+                  },
+                  "OtherOtomoConditionParam": {
+                    "TargetElementType": "EPalElementType::None",
+                    "TargetElementTypes": [],
+                    "PalTribeIds": []
+                  },
+                  "FloatValue1": 0.0
+                }
+              },
+{
+							"SkillName": {
+								"Key": "AbyssDragon_PartnerSkill_5"
+							}
+}
+            ]
+          }
+         ]
+        }
+       }
+}

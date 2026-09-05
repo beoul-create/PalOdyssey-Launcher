@@ -1,0 +1,209 @@
+{
+	"DT_PassiveSkill_Main": {
+		"GoddessDark_1": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 15,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementDark",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 1,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"GoddessDark_2": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 18,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementDark",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 2,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"GoddessDark_3": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 21,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementDark",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 3,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"GoddessDark_4": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 24,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementDark",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 4,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		},
+		"GoddessDark_5": {
+			"EffectType1": "EPalPassiveSkillEffectType::ElementBoost_Dark",
+			"EffectValue1": 30,
+			"TargetType1": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType2": "EPalPassiveSkillEffectType::ElementDark",
+			"EffectValue2": 1.0,
+			"TargetType2": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType3": "EPalPassiveSkillEffectType::LifeSteal",
+			"EffectValue3": 5,
+			"TargetType3": "EPalPassiveSkillEffectTargetType::ToSelf",
+			"EffectType4": "EPalPassiveSkillEffectType::no",
+			"EffectValue4": 0,
+			"TargetType4": "EPalPassiveSkillEffectTargetType::None",
+                        "InvokeActiveOtomo": false,
+                        "InvokeWorker": false,
+                        "InvokeRiding": false,
+                        "InvokeReserve": false,
+                        "InvokeInOtomo": false,
+                        "InvokeAlways": true,
+                        "InvokeInBaseCamp": false
+		}
+	},
+	"DT_PartnerSkillParameter": {
+		"LilyQueen_Dark": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessDark_1"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessDark_2"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessDark_3"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessDark_4"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessDark_5"
+							}
+                                                }
+                                              ]
+                                             }
+                                             ]
+                                           },
+		"BOSS_LilyQueen_Dark": {
+			"PassiveSkills": [
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessDark_1"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessDark_2"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessDark_3"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessDark_4"
+							}
+                                                }
+                                              ]
+                                             },
+				{
+					"SkillAndParametersArray": [
+						{
+							"SkillName": {
+								"Key": "GoddessDark_5"
+							}
+                                                }
+                                              ]
+                                             }
+                                             ]
+                                           }
+                                        }
+                                       }
