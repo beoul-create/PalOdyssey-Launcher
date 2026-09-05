@@ -3006,6 +3006,8 @@ end
 -- injection
 -- ---------------------------------------------------------------------------
 local function isDedicated(worldContext)
+  local isDedicatedServerProcess = string.find(debug.getinfo(1, "S").source:lower():gsub("\\", "/"), "/palserver/") ~= nil
+  if not isDedicatedServerProcess then return false end
   local ok, v = pcall(function()
     local lib = StaticFindObject("/Script/Engine.Default__KismetSystemLibrary")
     return lib and lib:IsValid() and lib:IsDedicatedServer(worldContext) == true
@@ -3237,9 +3239,6 @@ pcall(function() NotifyOnNewObject("WBP_MenuESC_C", onMenuConstructed) end)
 -- Polling fallback: ensures ESC menu is injected even if NotifyOnNewObject missed the blueprint path
 LoopAsync(2500, function()
   if serverDisabled then return false end
-  for _, inst in pairs(instances) do
-    if not inst.disposed then return false end
-  end
   pcall(function()
     local escMenu = FindFirstOf("WBP_MenuESC_C")
     if escMenu and escMenu:IsValid() and UI.alive(escMenu) then

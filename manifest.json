@@ -1,6 +1,6 @@
 {
-  "Version": "20260905231836",
-  "GeneratedAt": "2026-09-05T23:18:36.025Z",
+  "Version": "20260905234921",
+  "GeneratedAt": "2026-09-05T23:49:21.014Z",
   "ServerName": "PalOdyssey Official Modded Realm",
   "ServerAddress": "palodyssey.duckdns.org",
   "ServerPort": 8211,
@@ -110,8 +110,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/DarnMenu/Scripts/main.lua",
-      "Hash": "33312c7587048cbe973d41d67a79aff20211db6538b5f5cfdad3e0e514a484a0",
-      "Size": 176576,
+      "Hash": "22f228864abd3bd688aad92ab8dbc3074453b8db20edb52d413d152dfd7e9360",
+      "Size": 176665,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DarnMenu/Scripts/main.lua"
     },
     {
@@ -128,8 +128,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/DarnMenu/Scripts/ui.lua",
-      "Hash": "a4904258b2aa7936a3ff5dc6d4f685136722ff41875a23b1375efa804d2cf287",
-      "Size": 195595,
+      "Hash": "f693f5d300fd9ffe0aa95f9218340578659f90ee2e2bae938b4267831b08f341",
+      "Size": 195513,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/DarnMenu/Scripts/ui.lua"
     },
     {
@@ -1958,8 +1958,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/shared/WeaponProficiency_user.lua",
-      "Hash": "f05e76c6a08728397c4691a000c7d873a3901cbcfca57d78091b05088976f3dd",
-      "Size": 94,
+      "Hash": "0b18d0248103294722fc8e7a7f385ad213b3046dc45a3e36dc85e2432920ad0c",
+      "Size": 118,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/shared/WeaponProficiency_user.lua"
     },
     {
@@ -2024,20 +2024,20 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/adapters.lua",
-      "Hash": "6dc4d790cde37661bed90ad1499ecd85ec74fba0a3f56ea006619f22bc0a5b8d",
-      "Size": 58305,
+      "Hash": "5d1448b4e1b0eab8860ce93166a88d3e71e4696afa61eab1f2848cdc38f54779",
+      "Size": 58437,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/adapters.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/config.lua",
-      "Hash": "b1b6f020e443eb08aec0aed11f595caa90d715e0eec6cf19e897fdf42342b2a7",
-      "Size": 36547,
+      "Hash": "414308010fc2a6b3ef63a91e203eeb2728a571eaeb372dc8aa85b8ada8045354",
+      "Size": 36546,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/config.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/counting.lua",
-      "Hash": "1b0784283b82091def19c6146e6f28e508ecc82593d237b63876b231b37b8077",
-      "Size": 69848,
+      "Hash": "af686ca92aecc1a93be67d256ba0968c72fb9230118d95865433c32e207376d3",
+      "Size": 68811,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/counting.lua"
     },
     {
@@ -2102,8 +2102,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/ui.lua",
-      "Hash": "3e0e93a0244329bd00a462ed9f67c77dff008eeb6659aae6f3b8019d8d99fa50",
-      "Size": 194977,
+      "Hash": "cd9e6ae8ff0702113919eff14d34be7ac87d058223c569f0d4bbe4bea7fa9f7c",
+      "Size": 194895,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/Mods/WeaponProficiency/Scripts/ui.lua"
     },
     {
@@ -2270,8 +2270,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/main.lua",
-      "Hash": "33312c7587048cbe973d41d67a79aff20211db6538b5f5cfdad3e0e514a484a0",
-      "Size": 176576,
+      "Hash": "22f228864abd3bd688aad92ab8dbc3074453b8db20edb52d413d152dfd7e9360",
+      "Size": 176665,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/main.lua"
     },
     {
@@ -2288,8 +2288,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/ui.lua",
-      "Hash": "a4904258b2aa7936a3ff5dc6d4f685136722ff41875a23b1375efa804d2cf287",
-      "Size": 195595,
+      "Hash": "f693f5d300fd9ffe0aa95f9218340578659f90ee2e2bae938b4267831b08f341",
+      "Size": 195513,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/DarnMenu/Scripts/ui.lua"
     },
     {
@@ -4160,8 +4160,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/shared/WeaponProficiency_user.lua",
-      "Hash": "f05e76c6a08728397c4691a000c7d873a3901cbcfca57d78091b05088976f3dd",
-      "Size": 94,
+      "Hash": "0b18d0248103294722fc8e7a7f385ad213b3046dc45a3e36dc85e2432920ad0c",
+      "Size": 118,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/shared/WeaponProficiency_user.lua"
     },
     {
@@ -4226,20 +4226,20 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/adapters.lua",
-      "Hash": "6dc4d790cde37661bed90ad1499ecd85ec74fba0a3f56ea006619f22bc0a5b8d",
-      "Size": 58305,
+      "Hash": "5d1448b4e1b0eab8860ce93166a88d3e71e4696afa61eab1f2848cdc38f54779",
+      "Size": 58437,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/adapters.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/config.lua",
-      "Hash": "b1b6f020e443eb08aec0aed11f595caa90d715e0eec6cf19e897fdf42342b2a7",
-      "Size": 36547,
+      "Hash": "414308010fc2a6b3ef63a91e203eeb2728a571eaeb372dc8aa85b8ada8045354",
+      "Size": 36546,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/config.lua"
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/counting.lua",
-      "Hash": "1b0784283b82091def19c6146e6f28e508ecc82593d237b63876b231b37b8077",
-      "Size": 69848,
+      "Hash": "af686ca92aecc1a93be67d256ba0968c72fb9230118d95865433c32e207376d3",
+      "Size": 68811,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/counting.lua"
     },
     {
@@ -4304,8 +4304,8 @@
     },
     {
       "RelativePath": "Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/ui.lua",
-      "Hash": "3e0e93a0244329bd00a462ed9f67c77dff008eeb6659aae6f3b8019d8d99fa50",
-      "Size": 194977,
+      "Hash": "cd9e6ae8ff0702113919eff14d34be7ac87d058223c569f0d4bbe4bea7fa9f7c",
+      "Size": 194895,
       "DownloadUrl": "https://raw.githubusercontent.com/beoul-create/PalOdessey-Modpack/main/Pal/Binaries/Win64/ue4ss/Mods/WeaponProficiency/Scripts/ui.lua"
     },
     {

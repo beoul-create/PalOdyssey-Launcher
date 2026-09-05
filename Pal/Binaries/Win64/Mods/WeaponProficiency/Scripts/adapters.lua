@@ -331,26 +331,30 @@ end
 
 
 function A.getWorldId()
-  -- PalGameStateInGame FIRST, and it is the only one that works away from single-player.
-  -- PalWorldSaveGame is server-side: a dedicated-server client never sees it, so the old
-  -- read returned "default" on every server and the per-world bucketing below it silently
-  -- collapsed into one shared pile. GameState replicates, and GetWorldSaveDirectoryName is
-  -- unique per save. Confirmed in play rather than from the header dump -- StandingOrders
-  -- ships this same call and keys its live jobs store with it on the self-host server.
-  -- The old read stays as the fallback: it is what works in single-player.
   local gs = safe(function() return FindFirstOf("PalGameStateInGame") end)
   if gs then
     local raw = safe(function() return gs:GetWorldSaveDirectoryName() end)
     if raw then
       local ss = safe(function() return raw:ToString() end)
       if ss == nil and type(raw) == "string" then ss = raw end
-      if ss and ss ~= "" then return ss end
+      if ss and ss ~= "" and ss ~= "None" then return ss end
     end
   end
   local ws = safe(function() return FindFirstOf("PalWorldSaveGame") end)
   if ws then
     local id = safe(function() return ws.WorldSaveId end) or safe(function() return ws.WorldId end)
-    if id then local s = safe(function() return id:ToString() end); if s and s ~= "" then return s end end
+    if id then local s = safe(function() return id:ToString() end); if s and s ~= "" and s ~= "None" then return s end end
+  end
+  local world = type(UEHelpers) == "table" and (UEHelpers.GetWorld() or UEHelpers.GetWorldContextObject())
+  if world and world:IsValid() and world.NetDriver and world.NetDriver:IsValid() then
+    local serverConn = safe(function() return world.NetDriver.ServerConnection end)
+    if serverConn and serverConn:IsValid() then
+      local host = safe(function() return serverConn.URL.Host:ToString() end) or safe(function() return tostring(serverConn.URL.Host) end)
+      local port = safe(function() return tostring(serverConn.URL.Port) end)
+      if host and host ~= "" and host ~= "nil" and host ~= "None" then
+        return "srv_" .. host:gsub("[^%w_%-%.]", "_") .. "_" .. (port or "8211")
+      end
+    end
   end
   return "default"
 end

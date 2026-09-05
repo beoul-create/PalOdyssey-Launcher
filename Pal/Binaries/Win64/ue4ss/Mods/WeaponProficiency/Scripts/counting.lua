@@ -390,38 +390,17 @@ local function persistThrottled() dirty = true end
 -- "default" bucket into it so no existing progress is stranded. Entries already
 -- present under the real id always win (we only fill gaps).
 local DEFAULT_KEY = "default"
-local migratedDefault = false
 local function ensureWorldKey()
   if not states then return end
-  -- OFF = stay on the shared bucket. Every existing player's progress lives under
-  -- DEFAULT_KEY because the world id never resolved on a dedicated server, so resolving
-  -- it now would silently rehome their whole store on the next launch. The setting is the
-  -- consent for that move, and the options page confirms before setting it.
   if not cfg.scopeToServer then return end
   local id = safe(function() return A.getWorldId() end)
-  -- nil/"default" = no world loaded (main menu, or mid-transition). Keep the
-  -- bucket we are on rather than thrashing back to "default".
   if not id or id == "" or id == DEFAULT_KEY then return end
   if id == worldKey then return end                  -- steady state: cheap no-op
   states[id] = states[id] or {}
-  -- One-time rescue of the pre-1.4.4 shared bucket, into the FIRST real world
-  -- seen. Only fills gaps -- anything already under the real id wins.
-  local moved = 0
-  if not migratedDefault and worldKey == DEFAULT_KEY then
-    migratedDefault = true
-    local from = states[DEFAULT_KEY]
-    if type(from) == "table" then
-      for k, v in pairs(from) do
-        if states[id][k] == nil then states[id][k] = v; moved = moved + 1 end
-      end
-      states[DEFAULT_KEY] = nil
-    end
-  end
+  -- Server isolation: do NOT copy legacy default progress into dedicated servers
   worldKey = id
   persistThrottled()
-  log(string.format("world -> %s%s", id,
-    (moved > 0) and string.format("  (migrated %d entr%s from '%s')",
-      moved, (moved == 1) and "y" or "ies", DEFAULT_KEY) or ""))
+  log(string.format("world -> %s (scoped to server)", id))
 end
 M.ensureWorldKey = ensureWorldKey
 

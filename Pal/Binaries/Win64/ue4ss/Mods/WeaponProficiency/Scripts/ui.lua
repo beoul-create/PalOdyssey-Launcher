@@ -1,7 +1,3 @@
--- DarnUI disabled to ensure 100% ESC menu stability
-if true then return {} end
-
-
 local UI = {}
 
 -- VENDORED, like darn.lua. Single source: workshop-publish/shared-src/ui.lua; copies are

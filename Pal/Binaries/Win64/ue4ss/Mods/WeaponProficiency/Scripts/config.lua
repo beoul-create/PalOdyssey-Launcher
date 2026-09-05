@@ -277,7 +277,7 @@ local Config = {
   -- resolves and leaves every other world empty, which is why the option confirms first.
   -- Defaults ON for a fresh install and OFF for anyone grandfathered in; resolved once
   -- at first boot and written to the user file, so it never re-decides.
-  scopeToServer = false,
+  scopeToServer = true,
 
   -- Clamp the APPLIED bonus to the wielder's level. Distinct from capToPlayerLevel
   -- below, which only discards XP at award time and so cannot touch a weapon that is
